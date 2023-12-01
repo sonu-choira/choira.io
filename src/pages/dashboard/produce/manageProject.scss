@@ -1,0 +1,214 @@
+.disableButton {
+    background-color: #b58d00;
+}
+
+
+
+
+.trackMainBox {
+    margin-top: 100px;
+   
+
+    .iconFolder {
+        width: 78px;
+    }
+    label{
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .showMasterFolder {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+
+        .folderHover {
+            cursor: pointer;
+            padding: 10px;
+
+            // div {
+            //     text-align: left;
+            //     display: flex;
+            //     justify-content: flex-start;
+            //     align-content: center;
+            // }
+
+
+            // &:hover {
+            //     background: #FFC701;
+            //     border-radius: 10px;
+            // }
+        }
+    }
+
+   
+    .showFolder {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        gap: 20px;
+        padding-top: 10px;
+        padding-bottom: 90px;
+
+        .folderBox {
+            text-align: left;
+            padding: 20px;
+            transition: all 0.5s;
+            cursor: pointer;
+
+            svg {
+                margin-right: 10px;
+            }
+
+            // &:hover {
+            //     background: #FFC701;
+            //     border-radius: 10px;
+            // }
+        }
+    }
+}
+.highcontent{
+    margin-top: 111px;
+    .contentdata{
+        margin:12px;
+        // width: 50%;
+        .sidebar1{
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            label{
+                padding: 28px;
+                font-size: 18px;
+            }
+        }
+        //  div {
+        //         text-align: left;
+        //         display: flex;
+        //         justify-content: flex-start;
+        //         align-content: center;
+        //     }
+    }
+}
+
+.rowshow:after {
+    content: "";
+    display: table;
+    clear: both;
+    margin-top: 91px;
+  }
+  .columnshow {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    // height: 300px; /* Should be removed. Only for demonstration */
+  }
+  .textcontext1{
+    // font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // float: left;
+    label{
+        color: #D1D1D1;
+    }
+    }
+.textstyle{
+    // width: 50%;
+    .textcontext{
+    font-weight: 600;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    // float: left;
+    }
+
+    label{
+        padding: 28px;
+        font-size: 18px;
+    }
+
+}
+
+.linecontent{
+// position: absolute;
+// width: 1118.58px;
+height: 0px;
+left: 268px;
+top: 274px;
+
+// border: 1px solid #D1D1D1;
+  border:1px solid #d1d1d1eb
+}
+.contentheading{
+    position: absolute;
+width: 1118.58px;
+height: 153px;
+left: 274px;
+top: 308px;
+
+.contentimage{
+    position: absolute;
+left: 19.03%;
+right: 77.68%;
+top: 34.22%;
+bottom: 61.44%;
+
+// background: #BBBBBB;
+}
+.contentimage1{
+    position: absolute;
+right: 78.12%;
+    top: 46.22%;
+    bottom: 61.44%;
+
+// background: #BBBBBB;
+}
+}
+.bigdata2{
+
+    display: flex;
+    // margin: 14px;
+
+    .inputbox{
+        padding: 5px;
+      width: 100%;
+      border: 1px;
+      }
+  
+
+  }
+
+
+@media screen and (max-width: 900px) {
+    .trackMainBox .showMasterFolder {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto auto auto;
+        /* grid-template-columns: auto auto; */
+    }
+    .content__heading{
+        h1{
+            padding: 15px;
+        }
+       
+    }
+    .btn-primary{
+      margin-left: 15px;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .trackMainBox .showMasterFolder {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto auto ;
+        /* grid-template-columns: auto auto; */
+    }
+    .btn-primary{
+      margin-left: 15px;
+    }
+  }
+
+ 
+
+  

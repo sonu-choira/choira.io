@@ -1,0 +1,300 @@
+
+
+  .cart-border{
+
+    border: 2px solid white;
+    border-radius: 12px;
+    background-color:#2d2300;
+  }
+
+  .panel-style{
+    padding-bottom: 24px;
+    border-bottom: 2px solid;
+    background-color:#2d2300;
+    // color: #ffc701;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid white;
+    margin: 2px;
+   
+  }
+
+  .dropdownstyle{
+   
+    select{
+    padding: 8px;
+    width: 100%;
+    float: left;
+    font-weight: 700;
+    border: 2px solid black;
+    border-radius: 7px;
+
+  
+    }
+}
+.dropdownstyle1{
+   
+  select{
+    margin: 12px;
+  padding: 8px;
+  width: 25%;
+  font-weight: 700;
+  border: 2px solid black;
+  border-radius: 7px;
+
+
+  }
+}
+
+  input{
+    border-radius: 10px;
+  }
+  
+  th, td{
+    text-align: left;
+    padding: 8px;
+    color:white;
+    border-bottom: white;
+  }
+
+  // .tables{
+  //   overflow-x:auto;
+  // }
+  .headrclear{
+    margin-right: 907px;
+  }
+
+  .column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 229px; /* Should be removed. Only for demonstration */
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  input{
+    width: 90%;
+    padding: 11px;
+  }
+
+  label{
+    // float: left;
+    margin-top: 9px;
+  }
+
+  @media screen and (max-width: 1000px) {
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      /* width: 100%; */
+      /* border: 1px solid white; */
+      margin: 1px;
+      font-size: 10px;
+    }
+    .card {
+    padding: 3px;
+    }
+    .inputetype{
+    width: 85%;
+    padding: 5px;
+    }
+    .panel-style {
+      padding-bottom: 20px;
+      border-bottom: 2px solid;
+      background-color: #2d2300;
+      font-size: 12px;
+    }
+  th, td {
+    text-align: left;
+    padding: 5px;
+    color: white;
+    border-bottom: white;
+}
+
+.btn-primary {
+  font-size: 14px;
+  line-height: auto;
+  padding: 3px 15px;
+}
+
+}
+
+.inputfield{
+  border: 2px solid #615f5f;
+  border-radius: 7px;
+  width: 100%;
+  padding: 10px;
+  margin-top:5px;
+  margin-bottom: 12px;
+  // width: 100%;
+}
+.inputfield:hover{
+  border: 1 px solid black;
+}
+
+.tabstyle{
+  float: left;
+    margin: 12px;
+    padding: 13px;
+
+    button{
+      margin-right: 9px;
+    }
+}
+
+.modal-contents {
+  position: relative;
+  // background-color: #fefefe;
+  // margin: 10% auto; /* 15% from the top and centered */
+  margin: auto;
+  margin-top: 3%;
+  padding: 0;
+  border: 1px solid #202020;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 39%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  animation-name: animatetop;
+  animation-duration: 0.6s;
+  z-index: 10;
+
+  .modal-header {
+    padding: 2px 16px;
+    background-color: #221b00;
+    color: white;
+
+    // The H2 Box
+    h2 {
+      margin-top: 6%;
+    }
+
+    // The Logo button
+    .logoModel {
+      margin-bottom: 6%;
+    }
+    
+    /* The Close Button */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  }
+  
+  /* Modal Body */
+  .modal-body {
+    padding: 2px 16px;
+    background-color: #443501;
+
+    .screenOne {
+      cursor: pointer;
+
+      .ssoClass {
+        padding: 30px;
+
+        .screenLogin {
+          display: grid;
+          grid-template-columns: 20% 80%;
+          padding: 12px 0px;
+          border-radius: 20px;
+          margin-top: 20px;
+
+          .logo {
+            height: 20px;
+
+            img {
+              height: 20px;
+            }
+          }
+
+          .brandName {
+            text-align: left;
+          }
+        }
+
+        .googleLogin {
+          border: 1px solid #000;
+
+          .brandName {
+            color: #828282;
+          }
+        }
+
+        .facebookLogin {
+          background: #18B00B;
+          
+          .brandName {
+            color: #ffffff;
+          }
+        }
+
+        .spottyLogin {
+          background: #4B6BAB;
+          
+          .brandName {
+            color: #ffffff;
+          }
+        }
+
+        .mailLogin {
+          background: #F9C747;
+          margin-top: 30px;
+
+          .brandName {
+            color: #ffffff;
+          }
+        }
+
+        .loginNow {
+          margin-top: 20px;
+        }
+      }
+    }
+
+    .screenTwo {
+      height: 100%;
+      text-align: left;
+      animation-name: animatetop;
+      animation-duration: 0.6s;
+
+      .cancelNow {
+        text-align: center;
+        margin: 10px;
+
+        .button {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  
+  /* Modal Footer */
+  .modal-footer {
+    padding: 2px 16px;
+    background-color: #F5F5F5;
+    color: rgb(0, 0, 0);
+
+    p {
+      margin: 9% auto;
+    }
+  }
+}
+
+  

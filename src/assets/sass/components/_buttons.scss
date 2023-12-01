@@ -1,0 +1,22 @@
+// ------------> BUTTONS
+.btn-primary{
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0em;
+    color: #1A1A1A;
+    padding: 11px 21px;
+    border-radius: 6px;
+    background-color: $color-primary;
+    transition: $transition-btn;
+
+    &:hover{
+        background-color: $color-primary-dark;
+    }
+
+    @media #{$small} {
+        font-size: 14px;
+        line-height: auto;
+        padding: 8px 20px;
+    }
+}

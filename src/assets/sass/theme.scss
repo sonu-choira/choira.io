@@ -1,0 +1,42 @@
+// [IMPORT]
+// ------------>FONTS
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+
+// ------------> FONT AWESOME
+@import url('../icons/font-awesome/all.css');
+
+
+// ------------> UTILITIES
+@import "utilities/variables";
+@import "utilities/mixins";
+
+// ------------> BASIC
+@import "basic/reset";
+@import "basic/base";
+@import "basic/typography";
+
+
+// Utilities classes
+@import "utilities/utilities";
+
+
+// ------------>COMPONENETS
+@import "components/buttons";
+@import "components/dropdown";
+@import "components/popup";
+
+
+
+// ------------> LAYOUT
+@import "layout/navbar";
+@import "layout/sidebar";
+@import "layout/header";
+@import "layout/footer";
+
+
+// [PAGES]
+// ------------> HOMEPAGE
+@import "pages/home/default";
+@import "pages/home/responsive";

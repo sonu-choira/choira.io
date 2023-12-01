@@ -1,0 +1,35 @@
+.video-player {
+  position: relative;
+  display: flex;
+  video {
+    max-height: 98vh;
+  }
+  .controls {
+    display: none;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    bottom: 0;
+
+    #seek-bar {
+      display: block;
+      position: absolute;
+      bottom: 5%;
+      width: 95%;
+      cursor: pointer;
+    }
+    .pause-icon, .play-icon {
+      width: 50px;
+      cursor: pointer;
+    }
+    &.paused {
+      display: flex;
+    }
+  }
+  &:hover {
+    .controls {
+      display: flex;
+    }
+  }
+}

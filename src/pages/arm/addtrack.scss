@@ -1,0 +1,126 @@
+
+
+  .cart-border{
+
+    border: 2px solid white;
+    border-radius: 12px;
+    background-color:#2d2300;
+  }
+
+  .panel-style{
+    padding-bottom: 24px;
+    border-bottom: 2px solid;
+    background-color:#2d2300;
+    // color: #ffc701;
+  }
+
+ 
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 97%;
+    border: 1px solid white;
+    margin: 21px;
+   
+  }
+
+  div button.active-link {
+    border: 1.5px solid #01ff16;
+    background-color: #ffc701;
+    font-weight: 600;
+    border-radius: 5px;
+  }
+  
+  input:disabled {
+    color: #fff;
+}
+  // th, td{
+  //   text-align: left;
+  //   padding: 8px;
+  //   color:white;
+  //   border-bottom: white;
+  // }
+
+  // .tables{
+  //   overflow-x:auto;
+  // }
+  // .headrclear{
+  //   margin-right: 907px;
+  // }
+
+  .column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 229px; /* Should be removed. Only for demonstration */
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .column1 {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 450px; /* Should be removed. Only for demonstration */
+  }
+  
+  /* Clear floats after the columns */
+  .row1:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .textstyle{
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  label{
+    // float: left;
+    margin-top: 9px;
+  }
+
+  @media screen and (max-width: 1000px) {
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      /* width: 100%; */
+      /* border: 1px solid white; */
+      margin: 1px;
+      font-size: 10px;
+      overflow-wrap: anywhere;
+    }
+    .card {
+    padding: 3px;
+    }
+    .inputetype{
+    width: 85%;
+    padding: 5px;
+    }
+    .panel-style {
+      padding-bottom: 20px;
+      border-bottom: 2px solid;
+      background-color: #2d2300;
+      font-size: 12px;
+    }
+//   th, td {
+//     text-align: left;
+//     padding: 10px;
+//     color: white;
+//     border-bottom: white;
+// }
+
+.btn-primary {
+  font-size: 14px;
+  line-height: auto;
+  padding: 3px 15px;
+}
+
+}
+  

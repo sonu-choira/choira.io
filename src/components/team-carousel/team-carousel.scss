@@ -1,0 +1,135 @@
+.team-carousel-container {
+  position: relative;
+  background: #212122;
+  border-radius: 0 12rem;
+  display: flex;
+  justify-content: center;
+  padding: 90px;
+  padding-left: 145px;
+  min-height: 640px;
+
+  div.carousel-item {
+    display: none;
+    width: 100%;
+
+    &.content {
+      display: flex;
+      justify-content: space-around;
+      // background-color: black;
+      // border-radius: 0 12rem;
+
+      .left {
+        width: 50%;
+        text-align: left;
+        color: #ffffff;
+        h2 {
+          font-size: 54px;
+          margin-top: 0;
+          margin-bottom: 26px;
+        }
+        p {
+          font-size: 20px;
+        }
+        div.action {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          font-size: 24px;
+          font-weight: 600;
+          margin-top: 60px;
+          span {
+            // margin-bottom: 6px;
+            margin-right: 15px;
+          }
+        }
+      }
+      .right {
+        width: 50%;
+        // padding: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+
+        .img-container {
+          height: 470px;
+          width: 100%;
+          margin-left: 70px;
+          border-radius: 0 127px;
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+
+          &.bg-contain {
+            background-size: contain;
+          }
+        }
+        img {
+          height: 100%;
+          // border-radius: 0 5rem;
+        }
+      }
+
+      @media screen and (max-width: 1000px) {
+        flex-direction: column;
+        .left,
+        .right {
+          width: 100%;
+          padding: 0;
+          margin: 0;
+        }
+        .right {
+          margin-top: 2rem;
+          img {
+            width: 100%;
+          }
+          .img-container {
+            margin-left: 0px;
+          }
+          
+        }
+        
+      }
+      @media screen and (max-width: 600px) {
+        .left {
+          h2 {
+            font-size: 1.8rem;
+          }
+          p,
+          a.action {
+            font-size: 1rem;
+            img {
+              width: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .indicators {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+
+    .indicator {
+      width: 15px;
+      height: 15px;
+      background: rgba(255, 199, 1, 0.15);
+      border: 1px solid #ffc701;
+      padding: 5px;
+      border-radius: 50%;
+      margin: 5px;
+      cursor: pointer;
+
+      &.active {
+        background-color: #ffc701;
+      }
+    }
+  }
+  @media screen and (max-width: 1000px) {
+    padding: 4rem 1rem;
+  }
+  @media screen and (max-width: 600px) {
+    border-radius: 0 5rem;
+  }
+}

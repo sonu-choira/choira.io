@@ -1,0 +1,118 @@
+.flexSet {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .messageBody {
+        width: 100%;
+        flex: 1;
+        overflow-y: scroll;
+        display: block;
+        // grid-template-columns: 30% 70%;
+        // grid-template-columns: 100%;
+
+        // .msgBox {
+        //     height: 100%;
+        //     background: #F5F7F8;
+        //     border-radius: 10px;
+        //     padding: 10px;
+        //     overflow-y: scroll;
+
+        //     .profileBox {
+        //         display: grid;
+        //         grid-template-columns: 30% 70%;
+
+        //         .profilePic {
+        //             padding: 10px;
+
+        //             img {
+        //                 width: 100%;
+        //                 height: 100%;
+        //                 border-radius: 50px;
+        //             }
+        //         }
+
+        //         .profileDetails {
+        //             text-align: left;
+        //             padding-top: 20px;
+
+        //             b {
+        //                 font-size: x-large;
+        //             }
+
+        //             div {
+        //                 font-size: small;
+        //                 margin-top: 5px;
+        //             }
+        //         }
+        //     }
+
+        //     .active {
+        //         background-color: #FFF;
+        //         border-radius: 20px;
+        //     }
+        // }
+
+        .chatBox {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column; 
+
+            // .showChat {
+            //     flex: 1;
+            //     padding: 20px;
+            //     overflow-y: scroll;
+
+            //     .showChatArea {
+            //         width: 100%;
+            //         height: 100%;
+
+            //         .clientBox {
+            //             margin-top: 30px;
+            //             text-align: left;
+            //             padding: 10px;
+
+            //             span {
+            //                 background: #F5F7F8;
+            //                 color: #333333;
+            //                 padding: 20px;
+            //                 border-radius: 5px;
+            //             }
+            //         }
+
+            //         .armBox {
+            //             margin-top: 30px;
+            //             text-align: right;
+            //             padding: 10px;
+
+            //             span {
+            //                 background: #dbdbdb;
+            //                 color: #333333;
+            //                 padding: 20px;
+            //                 border-radius: 5px;
+            //             }
+            //         }
+            //     }
+            // }
+
+            // .sendChat {
+            //     padding: 10px;
+
+            //     input {
+            //         width: 100%;
+            //         border: hidden;
+            //         height: 40px;
+            //         background: #F5F7F8;
+            //         border-radius: 20px;
+            //         padding-left: 20px;
+            //     }
+
+            //     input:focus {
+            //         outline: none;
+            //     }
+            // }
+        }
+    }
+}

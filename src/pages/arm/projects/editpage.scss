@@ -1,0 +1,233 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+* {
+  box-sizing: border-box;
+}
+#title {
+  text-align: center;
+  font-family: arial, sans-serif;
+}
+
+.card-body{
+  text-align: center;
+}
+
+header {
+  margin-bottom: 30px;
+  margin-top: 15px;
+  border: solid 1px rgba(0, 0, 0, 0.08);
+}
+
+header:hover {
+  box-shadow: 0 0 12px 3px rgb(0 0 0 / 8%);
+}
+.col-md-4 {
+  margin-bottom: 30px;
+}
+
+.col-xs-2{
+  margin-top: 20px;
+}
+
+.col-md-1 {
+  margin-bottom: 15px;
+}
+.paddi{
+  padding: 4px
+}
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.card {
+  padding: 10px;
+  border: solid 1px rgba(0, 0, 0, 0.08);
+  // cursor: pointer;
+  text-align: justify;
+  background: linear-gradient(45deg, #443501, #0f0c00);
+  color: white;
+  border-radius: 10px;
+  ol,ul{
+    padding: 8px;
+    span{
+      padding: 8px;
+      font-family: 'Inter';
+      color: darkgrey;
+    }
+  }
+}
+.card:hover {
+  box-shadow: 0 0 12px 3px rgb(0 0 0 / 54%);
+}
+.card-title {
+  margin-top: 20px;
+  color: white;
+}
+.card-text {
+  font-size: 14px;
+  color: white;
+}
+.card-text .fa {
+  font-size: 26px;
+}
+.avatar {
+  width: 140px;
+  margin: auto;
+}
+.avatar img {
+  border: solid 6px transparent;
+  border-radius: 20%;
+}
+.card:hover .avatar img {
+  border-color: rgb(134, 34, 3);
+}
+.card-img-top{
+  width: 130px;
+  height: 130px;
+}
+.btn-small{
+  height: 36px;
+}
+.btn-smaller{
+  height: 10px;
+}
+.btn {
+  border-radius: 25px;
+  border: 3px solid brown;
+  font-weight: 600;
+  width: 100%;
+}
+
+.btn_align{
+  text-align: -webkit-right;
+  margin-top: -30px;
+}
+
+.btn-align-down{
+  text-align: -webkit-right;
+  margin-bottom: -25px;
+}
+
+.text-align-right{
+  text-align: -webkit-right;
+}
+.text-align-center{
+  text-align: -webkit-center;
+}
+.btn_margin{
+  padding: 25px;
+}
+
+footer p {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+footer {
+  height: 150px;
+  margin-bottom: 5px;
+  border: solid 1px rgba(0, 0, 0, 0.08);
+}
+
+footer p a,
+footer p a:hover {
+  color: rgb(99, 204, 131);
+}
+
+@media (min-width: 1200px) {
+  .container {
+    margin: 0px 25px;
+  }
+}
+
+//table
+#title {
+  text-align: center;
+  font-family: arial, sans-serif;
+}
+.modalClass {  
+  text-align: center;  
+  margin-top: 100px;  
+}  
+
+#projects {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  border: 2px solid #ddd;
+  width: 97%;
+  margin: 0px 20px;
+}
+
+.justify{
+  justify-content: right;
+}
+#projects td, #projects th {
+  border: 1px solid rgb(206, 204, 204);
+  padding: 5px;
+  background-color: #322701;
+  // text-align: -webkit-center;
+}
+
+#projects tr:nth-child(even){background-color: #f2f2f2;}
+
+#projects tr:hover {background-color: #ddd;}
+
+#projects th {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  background-color: #221b00;
+  color: white;
+  font-variant: all-petite-caps;
+}
+
+.my-svg-edit {
+  background-image: url('../../../assets/edit-icon.png');
+  width: 35px;
+  height: 35px;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+.my-svg-delete {
+  background-image: url('../../../assets/delete-icon.png');
+  width: 35px;
+  height: 35px;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+  // background-color: white;
+  border-radius: 5px;
+}
+
+textarea{
+  width: 90%;
+  height: 150px;
+  margin-left: 60px;
+  border-radius: 10px;
+}
+
+.btn-bottom-margin{
+  text-align: -webkit-right;
+  margin-top: -50px;
+}
+
+.input {
+  margin: 5px 0 10px 0;
+  padding: 10px;
+  border: 1px solid #bfbfbf;
+  border-radius: 30px;
+  box-sizing: border-box;
+  width: 80%;
+}

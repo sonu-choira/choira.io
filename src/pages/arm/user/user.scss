@@ -1,0 +1,260 @@
+.panel-style{
+   padding-bottom: 24px;
+    // height: 400px;
+    border-radius: 23px;
+    border-bottom: 2px solid;
+    background-color:#2d2300;
+    color: white;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    
+    padding: 10px;
+  }
+  .grid-item {
+    
+    padding: 20px;
+    font-size: 17px;
+    text-align: left;
+  }
+
+  .modal-content {
+    position: relative;
+    // background-color: #fefefe;
+    // margin: 10% auto; /* 15% from the top and centered */
+    margin: auto;
+    margin-top: 5%;
+    padding: 0;
+    border: 1px solid #202020;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 30%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    animation-name: animatetop;
+    animation-duration: 0.6s;
+    z-index: 10;
+
+    .modal-header {
+      padding: 2px 16px;
+      background-color: #202020;
+      color: white;
+
+      // The H2 Box
+      h2 {
+        margin-top: 6%;
+      }
+
+      // The Logo button
+      .logoModel {
+        margin-bottom: 6%;
+      }
+      
+      /* The Close Button */
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    }
+    
+    /* Modal Body */
+    .modal-body {
+      padding: 2px 16px;
+      background-color: #fefefe;
+
+      .screenOne {
+        cursor: pointer;
+
+        .ssoClass {
+          padding: 30px;
+
+          .screenLogin {
+            display: grid;
+            grid-template-columns: 20% 80%;
+            padding: 12px 0px;
+            border-radius: 20px;
+            margin-top: 20px;
+
+            .logo {
+              height: 20px;
+
+              img {
+                height: 20px;
+              }
+            }
+
+            .brandName {
+              text-align: left;
+            }
+          }
+
+          .googleLogin {
+            border: 1px solid #000;
+
+            .brandName {
+              color: #828282;
+            }
+          }
+
+          .facebookLogin {
+            background: #18B00B;
+            
+            .brandName {
+              color: #ffffff;
+            }
+          }
+
+          .spottyLogin {
+            background: #4B6BAB;
+            
+            .brandName {
+              color: #ffffff;
+            }
+          }
+
+          .mailLogin {
+            background: #F9C747;
+            margin-top: 30px;
+
+            .brandName {
+              color: #ffffff;
+            }
+          }
+
+          .loginNow {
+            margin-top: 20px;
+          }
+        }
+      }
+
+      .screenTwo {
+        height: 100%;
+        text-align: left;
+        animation-name: animatetop;
+        animation-duration: 0.6s;
+
+        .cancelNow {
+          text-align: center;
+          margin: 10px;
+
+          .button {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    
+    /* Modal Footer */
+    .modal-footer {
+      padding: 2px 16px;
+      background-color: #F5F5F5;
+      color: rgb(0, 0, 0);
+
+      p {
+        margin: 9% auto;
+      }
+    }
+  }
+
+  .headstyle{
+    padding: 10px;
+    background-color: #2d2300;
+    margin: 2px;
+    color: #ffc701;
+    border-radius: 10px;
+  }
+
+
+  .column {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .cart-border{
+
+    border: 2px solid white;
+    border-radius: 12px;
+    background-color:#2d2300;
+  }
+
+  .panel-style{
+    padding: 12px;
+    border-bottom: 2px solid;
+    background-color:#2d2300;
+    // color: #ffc701;
+  }
+
+
+
+  .grid-contain {
+    display: grid;
+    // grid-template-columns: auto auto auto;
+    padding: 10px;
+  }
+  .grid-i {
+    // padding: 15px;
+    font-size: 19px;
+    padding: 14px 893px 16px 0px;
+    
+  }
+  
+  
+
+  // table {
+  //   border-collapse: collapse;
+  //   border-spacing: 0;
+  //   width: 100%;
+  //   border: 1px solid white;
+  //   margin: 21px;
+   
+  // }
+
+  // input{
+  //   border-radius: 10px;
+  // }
+  
+  // th, td{
+  //   text-align: left;
+  //   padding: 8px;
+  //   color:white;
+  //   border-bottom: white;
+  // }
+
+  // .tables{
+  //   overflow-x:auto;
+  // }
+  .headrclear{
+    margin-right: 897px;
+  }
+  @media screen and (max-width: 1000px) {
+    span{
+      font-size: 10px;
+      float: left;
+    }
+    .grid-item {
+      padding: 10px;
+      font-size: 10px;
+      text-align: left;
+  }
+
+  }
+  

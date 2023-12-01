@@ -1,0 +1,63 @@
+// [FONTS VARIABLES]
+$font-primary: 'Inter', sans-serif;
+
+
+// [COLORS]
+$color-primary-light: #F9F9F9;
+$color-primary: #FFC701;
+$color-primary-dark: darken($color-primary, 5%);
+
+$gray-1: #333333;
+$gray-2: #4F4F4F;
+$gray-3: #828282;
+$gray-4: #BDBDBD;
+
+$color-text-darker: $gray-2;
+$color-text-darker: $gray-1;
+$color-text: $gray-3;
+$color-text-light: $gray-4;
+
+
+$color-white: #fff;
+$color-black: #000;
+
+
+// ------------> GRADIENT
+$side-gradient:  linear-gradient(180deg, #000000 0%, #FFC701 365.22%);;
+
+
+// [TRANSITION]
+$transition-btn: all .3s ease-in;
+
+
+// _______________________________________
+//     Break Points For Media Queries
+// _______________________________________
+$bp-1200: 75em;
+$bp-1150: 71.875em;
+$bp-1100: 68.75em;
+$bp-1050: 65.625em;
+$bp-1000: 62.5em;
+$bp-950: 59.375em;
+$bp-900: 56.25em;
+$bp-850: 53.125em;
+$bp-800: 50em;
+$bp-750: 46.875em;
+$bp-700: 43.75em;
+$bp-650: 40.625em;
+$bp-600: 37.5em;
+$bp-550: 34.375em;
+$bp-500: 31.25em;
+$bp-450: 28.125em;
+$bp-400: 25em;
+$bp-350: 21.875em;
+$bp-300: 18.75em;
+
+
+// [VARIABLES]
+$mobile: (max-width: 550px);
+$small: (max-width: 700px);
+$tablet: (max-width: 850px);
+$laptop: (max-width: 1024px);
+$desktop: (max-width: 1280px);
+$xl: (max-width: 1600px);

@@ -1,0 +1,99 @@
+.testimonial-carousel-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background-color: #ffc701;
+  display: flex;
+  justify-content: center;
+  padding: 120px 0 180px;
+
+  div.carousel-item {
+    > .left,
+    > .right {
+      max-width: 450px;
+      margin: 0 1rem;
+    }
+    .left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .header {
+        text-align: left;
+        position: relative;
+        z-index: 1;
+        .quote-icon {
+          position: absolute;
+          top: -55px;
+          left: -90px;
+          z-index: -1;
+        }
+        .title {
+          font-size: 3rem;
+          color: #333333;
+          margin: 0;
+          font-weight: 800;
+        }
+        p {
+          color: #18191f;
+          font-size: 1.1rem;
+        }
+      }
+    }
+    .right {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    @media screen and (max-width: 1000px) {
+      flex-direction: column;
+      align-items: center;
+    }
+    @media screen and (max-width: 600px) {
+      .left {
+        margin: 0;
+        .header {
+          .title {
+            font-size: 2rem;
+          }
+          p {
+            font-size: 0.8rem;
+          }
+          .quote-icon {
+            top: -28px;
+            left: -10px;
+            width: 80px;
+          }
+        }
+      }
+      > .right {
+        margin: 0;
+      }
+    }
+  }
+  .indicators {
+    position: absolute;
+    bottom: 75px;
+    display: flex;
+
+    .indicator {
+      width: 15px;
+      height: 15px;
+      background: rgba(51, 51, 51, 0.4);
+
+      border: 1px solid #333333;
+      padding: 5px;
+      border-radius: 50%;
+      margin: 5px;
+      cursor: pointer;
+
+      &.active {
+        background: #464646;
+      }
+    }
+  }
+  @media screen and (max-width: 600px) {
+    padding: 3rem 1rem;
+  }
+}
