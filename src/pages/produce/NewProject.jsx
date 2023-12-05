@@ -7,6 +7,7 @@ import CreateNewProject from "../../components/chooseProject/CreateNewProject";
 import ChooseType from "../../components/chooseProject/ChooseType";
 import ChooseGenre from "../../components/chooseProject/ChooseGenre";
 import ChooseMusicians from "../../components/chooseProject/ChooseMusicians";
+import ChooseBudget from "../../components/chooseProject/ChooseBudget";
 
 function NewProject() {
   const navigate = useNavigate();
@@ -25,7 +26,8 @@ function NewProject() {
             {/* <CreateNewProject /> */}
             {/* <ChooseType /> */}
             {/* <ChooseGenre /> */}
-            <ChooseMusicians />
+            {/* <ChooseMusicians /> */}
+            <ChooseBudget />
           </div>
         </div>
       </form>
