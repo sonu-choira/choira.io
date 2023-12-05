@@ -7,6 +7,8 @@ import c4 from "../../assets/img/content-img/c4.png";
 import c5 from "../../assets/img/content-img/c5.png";
 import c6 from "../../assets/img/content-img/c6.png";
 import c7 from "../../assets/img/content-img/c7.png";
+import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleLeft } from "react-icons/fa6";
 
 const contentData = [
   { imageSrc: c1, title: "Muskurane ki wajah tum ho OST" },
@@ -30,20 +32,27 @@ const chunkArray = (array, chunkSize) => {
   }
   return chunks;
 };
-function Menu() {
+function Menu({ setShowMenu, showMenu }) {
   const chunkedData = chunkArray(contentData, 4);
   console.log(chunkedData);
+  const goBack = () => {
+    setShowMenu(false);
+  };
   return (
     <>
       <div className="menu">
-        <div className="back">
-          <h3> {"<"} Back</h3>
+        <div className="back" onClick={goBack}>
+          <h3>
+            <FaAngleLeft /> Back
+          </h3>
         </div>
         <div>
           <div className="content-main">
             <div className="content">
               <div>
-                <h3>Tv Serial {">"}</h3>
+                <h3>
+                  Tv Serial <FaAngleRight />
+                </h3>
               </div>
 
               <div>

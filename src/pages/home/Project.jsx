@@ -4,6 +4,7 @@ import logo from "../../assets/img/logo-choira.svg";
 import o4 from "../../assets/img/o4.png";
 import Slider from "../../components/project-slider/Slider";
 import Menu from "../../components/project-slider/Menu";
+import { useNavigate } from "react-router-dom";
 
 // import arrow from "../../assets/img/sliderImg/arrow.png";
 
@@ -22,6 +23,10 @@ function Project() {
       setCombinedClasses((prevClasses) => prevClasses + " smalllist");
     }
   };
+  const navigate = useNavigate();
+  const gotoDashboard = () => {
+    navigate("/dashboard");
+  };
 
   return (
     <>
@@ -38,7 +43,7 @@ function Project() {
             <h3>Home</h3>
             <h3>Soundtracks</h3>
             <h3>Jam</h3>
-            <h3>Projects</h3>
+            <h3 onClick={gotoDashboard}>Projects</h3>
             <h3>Signin</h3>
 
             <img className="o4" src={o4} alt="" onClick={smallNav} />
@@ -49,7 +54,7 @@ function Project() {
             {showMenu ? (
               <Menu showMenu={showMenu} setShowMenu={setShowMenu} />
             ) : (
-              <Slider />
+              <Slider showMenu={showMenu} setShowMenu={setShowMenu} />
             )}
 
             {/* <Menu /> */}

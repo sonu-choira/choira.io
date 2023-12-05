@@ -6,57 +6,62 @@ import img4 from "../../assets/img/sliderImg/img4.png";
 import img5 from "../../assets/img/sliderImg/img5.png";
 import arrow from "../../assets/img/sliderImg/arrow.png";
 
-const swiperData = [
-  {
-    title: "Tv Serial",
-    imgSrc: img1,
-    // onClick: () => {
-    //   gotoMenu;
-    // },
-  },
-  {
-    title: "Bollywood",
-    imgSrc: img2,
-    onClick: () => console.log("Clicked on img2"),
-  },
-  {
-    title: "Music Company",
-    imgSrc: img3,
-    onClick: () => console.log("Clicked on img3"),
-  },
-  {
-    title: "Soloist",
-    imgSrc: img4,
-    onClick: () => console.log("Clicked on img4"),
-  },
-  {
-    title: "Short Film",
-    imgSrc: img5,
-    onClick: () => console.log("Clicked on img5"),
-  },
-  {
-    title: "Bollywood",
-    imgSrc: img2,
-    onClick: () => console.log("Clicked on img2 again"),
-  },
-  {
-    title: "Music Company",
-    imgSrc: img3,
-    onClick: () => console.log("Clicked on img3 again"),
-  },
-  {
-    title: "Soloist",
-    imgSrc: img4,
-    onClick: () => console.log("Clicked on img4 again"),
-  },
-  {
-    title: "Short Film",
-    imgSrc: img5,
-    onClick: () => console.log("Clicked on img5 again"),
-  },
-];
+function Slider({ setShowMenu, showMenu }) {
+  console.log(setShowMenu);
 
-function Slider(props) {
+  const gotoMenu = () => {
+    setShowMenu(true);
+  };
+  const swiperData = [
+    {
+      title: "Tv Serial",
+      imgSrc: img1,
+      onClick: () => {
+        gotoMenu();
+      },
+    },
+    {
+      title: "Bollywood",
+      imgSrc: img2,
+      onClick: () => console.log("Clicked on img2"),
+    },
+    {
+      title: "Music Company",
+      imgSrc: img3,
+      onClick: () => console.log("Clicked on img3"),
+    },
+    {
+      title: "Soloist",
+      imgSrc: img4,
+      onClick: () => console.log("Clicked on img4"),
+    },
+    {
+      title: "Short Film",
+      imgSrc: img5,
+      onClick: () => console.log("Clicked on img5"),
+    },
+    {
+      title: "Bollywood",
+      imgSrc: img2,
+      onClick: () => console.log("Clicked on img2 again"),
+    },
+    {
+      title: "Music Company",
+      imgSrc: img3,
+      onClick: () => console.log("Clicked on img3 again"),
+    },
+    {
+      title: "Soloist",
+      imgSrc: img4,
+      onClick: () => console.log("Clicked on img4 again"),
+    },
+    {
+      title: "Short Film",
+      imgSrc: img5,
+      onClick: () => console.log("Clicked on img5 again"),
+    },
+  ];
+
   const [menu, setMenu] = useState(false);
   useEffect(() => {
     var swiper = new window.Swiper(".mySwiper", {
@@ -77,9 +82,7 @@ function Slider(props) {
         prevEl: ".swiper-button-prev",
       },
     });
-    // const gotoMenu = () => {
-    //   props.setMenu(true);
-    // };
+
     // Cleanup Swiper instance on component unmount
     return () => {
       swiper.destroy();

@@ -22,6 +22,9 @@ const RefundPolicy = lazy(() => import("./pages/home/refundpolicy"));
 const Signin = lazy(() => import("./pages/home/Signin.jsx"));
 const Signup = lazy(() => import("./pages/home/Signup.jsx"));
 const Project = lazy(() => import("./pages/home/Project.jsx"));
+const Dashboard = lazy(() => import("./pages/produce/Dashboard.jsx"));
+const NewProject = lazy(() => import("./pages/produce/NewProject.jsx"));
+
 
 
 
@@ -34,6 +37,8 @@ const Routing = () => {
           <Route exact path='/signin' element={<Signin/>} />
           <Route exact path='/signup' element={<Signup/>} />
           <Route exact path='/project' element={<Project/>} />
+          <Route exact path='/dashboard' element={<Dashboard/>} />
+          <Route exact path='/newproject' element={<NewProject/>} />
           <Route exact path='/userHome' element={<UserHome/>}/> 
           <Route exact path='/adminHome' element={<AdminHome/>}/> 
           <Route exact path='/armHome' element={<ArmHome/>}/> 

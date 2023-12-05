@@ -1133,7 +1133,7 @@
     "core-js-pure" "^3.0.0"
     "regenerator-runtime" "^0.13.4"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.21.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.21.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   "integrity" "sha512-NdUTHcPe4C99WxPub+K9l9tK5/lV4UXIoaHSYgzco9BCyjKAAwzdBI+wWtYqHt7LJdbo74ZjRPJgzVweq1sz0w=="
   "resolved" "https://registry.npmjs.org/@babel/runtime/-/runtime-7.23.5.tgz"
   "version" "7.23.5"
@@ -1977,6 +1977,11 @@
     "redux" "^4.1.0"
     "redux-thunk" "^2.3.0"
     "reselect" "^4.0.0"
+
+"@remix-run/router@1.13.1":
+  "integrity" "sha512-so+DHzZKsoOcoXrILB4rqDkMDy7NLMErRdOxvzvOKb507YINKUP4Di+shbTZDhSE/pBZ+vr7XGIpcOO0VLSA+Q=="
+  "resolved" "https://registry.npmjs.org/@remix-run/router/-/router-1.13.1.tgz"
+  "version" "1.13.1"
 
 "@rollup/plugin-node-resolve@^7.1.1":
   "integrity" "sha512-RxtSL3XmdTAE2byxekYLnx+98kEUOrPHF/KRVjLH+DEIHy6kjIw7YINQzn+NXiH/NTrQLAwYs0GWB+csWygA9Q=="
@@ -6197,13 +6202,6 @@
   "resolved" "https://registry.npmjs.org/hex-color-regex/-/hex-color-regex-1.1.0.tgz"
   "version" "1.1.0"
 
-"history@^5.1.0":
-  "integrity" "sha512-zPuQgPacm2vH2xdORvGGz1wQMuHSIB56yNAy5FnLuwOwgSYyPKptJtcMm6Ev+hRGeS+GzhbmRacHzvlESbFwDg=="
-  "resolved" "https://registry.npmjs.org/history/-/history-5.1.0.tgz"
-  "version" "5.1.0"
-  dependencies:
-    "@babel/runtime" "^7.7.6"
-
 "hmac-drbg@^1.0.1":
   "integrity" "sha1-0nRXAQJabHdabFRXk+1QL8DGSaE="
   "resolved" "https://registry.npmjs.org/hmac-drbg/-/hmac-drbg-1.0.1.tgz"
@@ -10103,6 +10101,11 @@
   "resolved" "https://registry.npmjs.org/react-ga/-/react-ga-3.3.1.tgz"
   "version" "3.3.1"
 
+"react-icons@^4.12.0":
+  "integrity" "sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw=="
+  "resolved" "https://registry.npmjs.org/react-icons/-/react-icons-4.12.0.tgz"
+  "version" "4.12.0"
+
 "react-is@^16.4.2":
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
@@ -10191,20 +10194,20 @@
   "resolved" "https://registry.npmjs.org/react-refresh/-/react-refresh-0.8.3.tgz"
   "version" "0.8.3"
 
-"react-router-dom@^6.0.2":
-  "integrity" "sha512-cOpJ4B6raFutr0EG8O/M2fEoyQmwvZWomf1c6W2YXBZuFBx8oTk/zqjXghwScyhfrtnt0lANXV2182NQblRxFA=="
-  "resolved" "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.0.2.tgz"
-  "version" "6.0.2"
+"react-router-dom@^6.20.1":
+  "integrity" "sha512-npzfPWcxfQN35psS7rJgi/EW0Gx6EsNjfdJSAk73U/HqMEJZ2k/8puxfwHFgDQhBGmS3+sjnGbMdMSV45axPQw=="
+  "resolved" "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.20.1.tgz"
+  "version" "6.20.1"
   dependencies:
-    "history" "^5.1.0"
-    "react-router" "6.0.2"
+    "@remix-run/router" "1.13.1"
+    "react-router" "6.20.1"
 
-"react-router@6.0.2":
-  "integrity" "sha512-8/Wm3Ed8t7TuedXjAvV39+c8j0vwrI5qVsYqjFr5WkJjsJpEvNSoLRUbtqSEYzqaTUj1IV+sbPJxvO+accvU0Q=="
-  "resolved" "https://registry.npmjs.org/react-router/-/react-router-6.0.2.tgz"
-  "version" "6.0.2"
+"react-router@6.20.1":
+  "integrity" "sha512-ccvLrB4QeT5DlaxSFFYi/KR8UMQ4fcD8zBcR71Zp1kaYTC5oJKYAp1cbavzGrogwxca+ubjkd7XjFZKBW8CxPA=="
+  "resolved" "https://registry.npmjs.org/react-router/-/react-router-6.20.1.tgz"
+  "version" "6.20.1"
   dependencies:
-    "history" "^5.1.0"
+    "@remix-run/router" "1.13.1"
 
 "react-scripts@4.0.3":
   "integrity" "sha512-S5eO4vjUzUisvkIPB7jVsKtuH2HhWcASREYWHAQ1FP5HyCv3xgn+wpILAEWkmy+A+tTNbSZClhxjT3qz6g4L1A=="
@@ -11699,6 +11702,11 @@
   "integrity" "sha512-C0TFp0VLxgx+PmhJ0mL8qzx+iYjnCLdDbvQHKY6KAGI+xwawMvLkStPgw2LmJl6itaDhR/qLQStPFIbr1VK9Ow=="
   "resolved" "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.3.0.tgz"
   "version" "11.3.0"
+
+"swiper@^11.0.5":
+  "integrity" "sha512-rhCwupqSyRnWrtNzWzemnBLMoyYuoDgGgspAm/8iBD3jCvAWycPLH4Z3TB0O5520DHLzMx94yUMH/B9Efpa48w=="
+  "resolved" "https://registry.npmjs.org/swiper/-/swiper-11.0.5.tgz"
+  "version" "11.0.5"
 
 "symbol-tree@^3.2.4":
   "integrity" "sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw=="
