@@ -27,14 +27,12 @@ const contentData = [
 const chunkArray = (array, chunkSize) => {
   const chunks = [];
   for (let i = 0; i < array.length; i += chunkSize) {
-    console.log("----", array.slice(i, i + chunkSize));
     chunks.push(array.slice(i, i + chunkSize));
   }
   return chunks;
 };
 function Menu({ setShowMenu, showMenu }) {
   const chunkedData = chunkArray(contentData, 4);
-  console.log(chunkedData);
   const goBack = () => {
     setShowMenu(false);
   };

@@ -53,7 +53,14 @@ const cardData = [
   },
 ];
 
-export default function ChooseType() {
+export default function ChooseType({ onNext }) {
+  const handleContinue = () => {
+    // Perform any necessary actions in this component
+    // ...
+
+    // Call the callback to trigger navigation to the next component
+    onNext();
+  };
   return (
     <>
       <div className="project-div2">
@@ -86,7 +93,7 @@ export default function ChooseType() {
         </div>
 
         <div className="project-div2-btn">
-          <button>
+          <button onClick={handleContinue}>
             Continue <FaAngleRight />
           </button>
         </div>

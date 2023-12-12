@@ -62,15 +62,15 @@ function SignUpDetails(props) {
             <h5>Date of Birth</h5>
           </div>
           <div className="date-input">
-            <input type="date" placeholder="DD/MM/YYYY" />
             <input
-              style={{ display: "none" }}
               type="date"
               name="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               required
+              placeholder="DD/MM/YYYY"
             />
+            {/* <input style={{ display: "none" }} type="date" /> */}
           </div>
         </div>
       </div>

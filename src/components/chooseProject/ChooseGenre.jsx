@@ -47,7 +47,14 @@ const cardData = [
   },
 ];
 
-export default function ChooseGenre() {
+export default function ChooseGenre({ onNext }) {
+  const handleContinue = () => {
+    // Perform any necessary actions in this component
+    // ...
+
+    // Call the callback to trigger navigation to the next component
+    onNext();
+  };
   return (
     <>
       <div className="project-div2">
@@ -80,7 +87,7 @@ export default function ChooseGenre() {
         </div>
 
         <div className="project-div2-btn">
-          <button>
+          <button onClick={handleContinue}>
             Continue <FaAngleRight />
           </button>
         </div>

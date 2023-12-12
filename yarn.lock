@@ -10158,10 +10158,10 @@
   "resolved" "https://registry.npmjs.org/react-onclickoutside/-/react-onclickoutside-6.13.0.tgz"
   "version" "6.13.0"
 
-"react-player@^2.9.0":
-  "integrity" "sha512-jNUkTfMmUhwPPAktAdIqiBcVUKsFKrVGH6Ocutj6535CNfM91yrvWxHg6fvIX8Y/fjYUPoejddwh7qboNV9vGA=="
-  "resolved" "https://registry.npmjs.org/react-player/-/react-player-2.9.0.tgz"
-  "version" "2.9.0"
+"react-player@^2.13.0":
+  "integrity" "sha512-gkY7ZdbVFztlKFFhCPcnDrFQm+L399b8fhWsKatZ+b2wpKJwfUHBXQFMRxqYQGT0ic1/wQ7D7EZEWy7ZBqk2pw=="
+  "resolved" "https://registry.npmjs.org/react-player/-/react-player-2.13.0.tgz"
+  "version" "2.13.0"
   dependencies:
     "deepmerge" "^4.0.0"
     "load-script" "^1.0.0"

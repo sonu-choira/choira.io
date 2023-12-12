@@ -4,10 +4,18 @@ import { FaAngleRight } from "react-icons/fa6";
 import { FaAngleLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateNewProject() {
+export default function CreateNewProject({ onNext }) {
   const navigate = useNavigate();
   const gotoDashboard = () => {
     navigate("/dashboard");
+  };
+
+  const handleContinue = () => {
+    // Perform any necessary actions in this component
+    // ...
+
+    // Call the callback to trigger navigation to the next component
+    onNext();
   };
   return (
     <>
@@ -30,7 +38,7 @@ export default function CreateNewProject() {
           <button onClick={gotoDashboard}>
             <FaAngleLeft /> Back
           </button>
-          <button>
+          <button onClick={handleContinue}>
             Continue
             <FaAngleRight />
           </button>

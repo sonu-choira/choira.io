@@ -9,6 +9,10 @@ const OptVerify = ({
   redicrectToDetail,
   setSignup_checkOtp,
   signup_checkOtp,
+  setDeletepopup,
+  deletecheckOtp,
+  setDeleteCheckOtp,
+  setDeleteAccount,
 }) => {
   const [seconds, setSeconds] = useState(30);
   const [generatedOTP, setGeneratedOTP] = useState("");
@@ -82,6 +86,23 @@ const OptVerify = ({
       }
     }
   }, [checkOtp]);
+  // this is for DeleteAccount page
+  useEffect(() => {
+    if (deletecheckOtp === false) {
+      if (enteredOTP === generatedOTP) {
+        console.log("OTP is correct. Redirect or perform another action.");
+        alert("OTP is correct.");
+        // setDeletepopup(true);
+
+        setDeleteCheckOtp(false);
+        setDeleteAccount(3);
+      } else {
+        console.log("Incorrect OTP. Please try again.");
+        alert("Incorrect OTP. Please try again.");
+        setDeleteCheckOtp(true);
+      }
+    }
+  }, [deletecheckOtp]);
 
   //This part is for signup page
   useEffect(() => {

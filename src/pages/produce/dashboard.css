@@ -134,16 +134,50 @@ body {
   width: 100%;
   height: 25%;
   border-bottom: 2px solid #e0e0e0;
+  /* border: 2px solid green; */
 
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.produce-section-main2 {
+  width: 90%;
+  height: 100%;
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+  gap: 3.33%;
+}
+.produce-section-main2 > div:first-child {
+  border-bottom: 2px solid rgba(128, 128, 128, 0.438);
+}
+.produce-section-main2 > div {
+  width: 100%;
+  height: 30%;
+
+  display: flex;
+  align-items: center;
+}
+.produce-section-tabs {
+  width: 70% !important;
+}
+.produce-section-tabs > div {
+  display: flex;
+  align-items: end;
+  gap: 2%;
+  font-size: 1.5vmax;
+  width: 25%;
+  height: 100%;
+  border-bottom: 2px solid rgba(128, 128, 128, 0.438);
+}
+.produce-section-tabs > div img {
+  width: 10%;
+}
 .produce-section-main p {
   color: #828282;
 }
 .produce-section-main {
-  /* border: 2px solid green; */
+  /* border: 2px solid red; */
   width: 95%;
   height: 90%;
 }
@@ -171,6 +205,114 @@ body {
 }
 .produce-section-main > div:first-child img {
   height: 50%;
+}
+.choira-test-project-section {
+  /* border: 2px solid blue; */
+  height: 75%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.choira-test-project-section-main {
+  /* border: 2px solid green; */
+  width: 90%;
+  height: 98%;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.choira-test-project-section-main span {
+  color: #828282;
+}
+.choira-test-project-section-main > div > div {
+  line-height: 25px;
+}
+
+.choira-test-project-section-main > div {
+  /* border: 2px solid black; */
+  display: flex;
+  flex-direction: column;
+  gap: 2%;
+
+  width: 90%;
+  height: 95%;
+  overflow-y: auto;
+}
+
+.choira-test-details {
+  width: 90%;
+  height: 40%;
+  /* border: 2px solid red; */
+}
+.choira-test-details > h4 {
+  overflow-y: auto;
+  width: 100%;
+  height: 50px;
+  /* border: 2px solid red; */
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+.choira-test-details > div > div:first-child {
+  background-color: #fff4cc;
+  color: #ffc701;
+  border-radius: 5px;
+  width: 12%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+}
+.choira-test-details > div > div:nth-child(2) {
+  background-color: #ffdad8;
+  color: #ff473b;
+  border-radius: 5px;
+  width: 12%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+}
+.choira-test-details > div {
+  display: flex;
+  gap: 5%;
+  /* border: 2px solid red; */
+  height: 30%;
+  width: 100%;
+}
+.choira-test-demoFile {
+  width: 80%;
+  height: 30%;
+  /* border: 2px solid red; */
+}
+.choira-test-demoFile-main {
+  height: 75% !important;
+  width: 90% !important;
+  /* border: 2px solid blue; */
+  gap: 3.33%;
+
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.choira-test-demoFile-main > div {
+  width: 15%;
+  height: 100%;
+  border: 2px solid #828282;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.choira-test-demoFile-main > div > img {
+  height: 50%;
+  width: 60%;
 }
 .project-section {
   /* border: 2px solid red; */
@@ -213,4 +355,65 @@ body {
 .project-main-content {
   /* border: 2px solid green; */
   height: 90%;
+}
+.hrline {
+  width: 100%;
+  border: 2px solid yellow;
+  height: 0%;
+}
+
+.choira-test-btn > div:first-child {
+  width: 80%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.choira-test-btn > div:first-child > button {
+  width: 10%;
+  height: 70%;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background-color: #ffc701;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.choira-test-btn > div:first-child > button:hover {
+  background-color: #ffb301;
+}
+.choira-test-btn > div:nth-child(2) {
+  width: 20%;
+  /* border: 2px solid red; */
+  display: flex;
+  height: 90%;
+  align-items: center;
+  justify-content: space-between;
+}
+.choira-test-btn > div:nth-child(2) > div {
+  width: 45%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  /* border: 2px solid blue; */
+}
+.choira-test-btn > div:nth-child(2) > div button {
+  height: 80%;
+  width: 100%;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffc701;
+  color: black;
+  gap: 8%;
+  font-size: 1vmax;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.choira-test-btn > div:nth-child(2) > div button:hover {
+  background-color: #ffb301;
 }

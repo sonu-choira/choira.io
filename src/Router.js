@@ -19,11 +19,13 @@ const Disclaimer = lazy(() => import("./pages/home/Disclaimer"));
 const Contactus = lazy(() => import("./pages/home/Contactus"));
 const About = lazy(() => import("./pages/home/about"));
 const RefundPolicy = lazy(() => import("./pages/home/refundpolicy"));
+const DeleteAccount = lazy(() => import("./pages/home/DeleteAccount.jsx"));
 const Signin = lazy(() => import("./pages/home/Signin.jsx"));
 const Signup = lazy(() => import("./pages/home/Signup.jsx"));
 const Project = lazy(() => import("./pages/home/Project.jsx"));
 const Dashboard = lazy(() => import("./pages/produce/Dashboard.jsx"));
 const NewProject = lazy(() => import("./pages/produce/NewProject.jsx"));
+const ChoiraTest = lazy(() => import("./pages/produce/ChoiraTest.jsx"));
 
 
 
@@ -36,9 +38,11 @@ const Routing = () => {
         <Route exact path='/' element={<Home/>} />
           <Route exact path='/signin' element={<Signin/>} />
           <Route exact path='/signup' element={<Signup/>} />
+          <Route exact path='/deleteAccount' element={<DeleteAccount/>} />
           <Route exact path='/project' element={<Project/>} />
           <Route exact path='/dashboard' element={<Dashboard/>} />
           <Route exact path='/newproject' element={<NewProject/>} />
+          <Route exact path='/choiratest' element={<ChoiraTest/>} />
           <Route exact path='/userHome' element={<UserHome/>}/> 
           <Route exact path='/adminHome' element={<AdminHome/>}/> 
           <Route exact path='/armHome' element={<ArmHome/>}/> 

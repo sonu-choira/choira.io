@@ -455,13 +455,12 @@ function Signup() {
       <div className="wrapper">
         <form
           action=""
-          //   onSubmit={(e) => {
-          //     e.preventDefault();
-          //     if (email === "sonu@gmail.com") {
-          //       alert("this email is already present");
-          //     }
-          //   }
-          // }
+          onSubmit={(e) => {
+            e.preventDefault();
+            // if (email === "sonu@gmail.com") {
+            //   alert("this email is already present");
+            // }
+          }}
         >
           <div className="main">
             <div className="singer">

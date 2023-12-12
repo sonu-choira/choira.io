@@ -55,6 +55,17 @@ h6 {
   height: 100%;
   text-align: start;
 }
+.deleteAccount {
+  /* border: 2px solid green; */
+  width: 50%;
+  height: 100%;
+  text-align: start;
+}
+.deleteAccount > img {
+  height: 100%;
+  width: 87%;
+  /* border: 2px solid green; */
+}
 .singer > img {
   height: 100%;
   width: 70%;
@@ -90,6 +101,13 @@ h6 {
   display: flex;
   justify-content: space-between;
 }
+.delete-header h1 {
+  color: #ffc701;
+}
+.delete-header {
+  display: flex;
+  justify-content: space-between;
+}
 .signup-header > div {
   /* border: 2px solid green; */
   height: 10%;
@@ -121,6 +139,7 @@ h6 {
   height: 22%;
 }
 .enter-mob-input {
+  /*  */
   /* border: 2px solid orange; */
   display: flex;
   align-items: start;
@@ -129,9 +148,24 @@ h6 {
   width: 100%;
   height: 76%;
 }
+.enter-email-input {
+  width: 100%;
+  height: 40%;
+  /* border: 2px solid green; */
+}
+.enter-email-input > input {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  padding-left: 2%;
+  font-weight: 600;
+}
 .enter-mob-inner-div {
   height: 100%;
   width: 100%;
+  /* border: 2px solid red; */
 }
 .mobpin2 input {
   padding-left: 38px;
@@ -354,6 +388,9 @@ h6 {
 .visiblity {
   display: none;
 }
+.visiblity2 {
+  visibility: hidden;
+}
 
 .verify-continue2 {
   margin-top: 55%;
@@ -437,7 +474,101 @@ h6 {
 .date-input input {
   text-transform: uppercase;
 }
+.delete-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: #09090981;
+  top: -100%;
+  transition: 1s ease;
+}
+.delete-overlay-after {
+  top: 0%;
+  transition: 1s ease;
+}
+.delete-Popup {
+  left: 50%;
+  top: -100%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: 80%;
+  /* border: 2px solid red; */
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  background-color: #262727;
+  transition: 1s ease;
+}
+.delete-Popup-after {
+  top: 50%;
 
+  transition: 1s ease;
+}
+.cancelPopup {
+  width: 100%;
+  height: 10%;
+  /* border: 2px solid yellow; */
+  color: white;
+  display: flex;
+  align-items: start;
+  justify-content: end;
+  padding-top: 5%;
+  padding-right: 3%;
+  font-size: 2vmax;
+}
+.cancelPopup:hover {
+  color: #ffaf01;
+}
+.popupTitle {
+  width: 100%;
+  height: 15%;
+  /* border: 2px solid green; */
+  font-size: 2vmax;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffc701;
+}
+.popupDecription {
+  width: 100%;
+  height: 20%;
+  /* border: 2px solid blue; */
+  text-align: center;
+}
+.popupImg {
+  width: 100%;
+  height: 35%;
+  /* border: 2px solid #fff9e3; */
+  display: flex;
+  justify-content: center;
+}
+.popupImg > img {
+  height: 100%;
+  width: 60%;
+}
+.popupbtn {
+  width: 100%;
+  height: 20%;
+  /* border: 2px solid pink; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.popupbtn button:hover {
+  background-color: #ffaf01;
+}
+.popupbtn button {
+  width: 80%;
+  height: 45%;
+  border: none;
+  outline: none;
+  background-color: #ffc701;
+  color: black;
+  font-size: 1.2vmax;
+  border-radius: 10px;
+  font-weight: 600;
+}
 /* @media only screen and (max-width: 600px) {
   .singer {
     display: none;
