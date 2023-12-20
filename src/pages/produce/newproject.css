@@ -81,6 +81,18 @@ body {
   color: white;
   color: white;
 }
+.project-div2-title-musican {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  gap: 10%;
+
+  color: white;
+  color: white;
+  /* border: 2px solid red; */
+  height: 20%;
+}
 /* .project-div2-title p {
   margin-top: -2%;
 } */
@@ -115,6 +127,7 @@ p {
   display: flex;
   justify-content: center;
   margin-bottom: 1%;
+  cursor: pointer;
 
   /* border: 2px solid green; */
   gap: 6%;

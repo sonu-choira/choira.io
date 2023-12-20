@@ -14,14 +14,28 @@ const formatValue = (value) => {
   }
 };
 
-export default function ChooseBudget({ onNext }) {
+export default function ChooseBudget({ onNext, setUserProjectData }) {
+  const [checkIfBudgetIsSelected, setCheckIfBudgetIsSelected] = useState(false);
   const handleContinue = () => {
-    // Perform any necessary actions in this component
-    // ...
+    if (checkIfBudgetIsSelected == true) {
+      let budget = `₹${formatValue(minRange)} - ₹${formatValue(maxRange)}`;
+      setUserProjectData((prevData) => ({
+        ...prevData,
+        Budget: budget,
+      }));
+
+      // alert(
+      //   `Selected Budget: ₹${formatValue(minRange)} - ₹${formatValue(maxRange)}`
+      // );
+      onNext();
+    } else {
+      alert("Please Select Budgect");
+    }
+    // Display alert with selected budget values
 
     // Call the callback to trigger navigation to the next component
-    onNext();
   };
+
   const [minRange, setMinRange] = useState(1000);
   const [maxRange, setMaxRange] = useState(500000);
 
@@ -74,6 +88,7 @@ export default function ChooseBudget({ onNext }) {
                 value={minRange}
                 step="1000"
                 onChange={handleInputChange}
+                onClick={() => setCheckIfBudgetIsSelected(true)}
               />
               <input
                 type="range"
@@ -83,6 +98,7 @@ export default function ChooseBudget({ onNext }) {
                 value={maxRange}
                 step="1000"
                 onChange={handleInputChange}
+                onClick={() => setCheckIfBudgetIsSelected(true)}
               />
 
               <div

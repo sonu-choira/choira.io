@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaAngleRight } from "react-icons/fa6";
 import song from "../../assets/img/chooseType-img/song.gif";
-const GoodName = ({ onNext }) => {
+const GoodName = ({ onNext, setUserProjectData }) => {
+  const [goodName, setGoodName] = useState("");
   const handleContinue = () => {
-    // Perform any necessary actions in this component
-    // ...
-
-    // Call the callback to trigger navigation to the next component
-    onNext();
+    if (goodName != "") {
+      setUserProjectData((prevData) => ({
+        ...prevData,
+        NameOFProject: goodName,
+      }));
+      // alert("project Name is " + goodName);
+      onNext();
+    } else {
+      alert("Please give a Name to Your Project");
+    }
   };
 
   return (
@@ -21,7 +27,14 @@ const GoodName = ({ onNext }) => {
             <img src={song} alt="" />
           </div>
           <div>
-            <input type="text" placeholder="Enter Project name" />
+            <input
+              type="text"
+              placeholder="Enter Project 
+            name"
+              onChange={(e) => {
+                setGoodName(e.target.value);
+              }}
+            />
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaAngleRight } from "react-icons/fa6";
 import cg1 from "../../assets/img/chooseType-img/cg1.jpeg";
 import cg2 from "../../assets/img/chooseType-img/cg1.jpeg";
@@ -47,13 +47,25 @@ const cardData = [
   },
 ];
 
-export default function ChooseGenre({ onNext }) {
-  const handleContinue = () => {
-    // Perform any necessary actions in this component
-    // ...
+export default function ChooseGenre({ onNext, setUserProjectData }) {
+  const [selectedCard, setSelectedCard] = useState(null);
 
-    // Call the callback to trigger navigation to the next component
-    onNext();
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+  };
+  const handleContinue = () => {
+    if (selectedCard) {
+      // Show alert with the selected card's name
+      // alert(`Selected Card: ${selectedCard.title}`);
+      setUserProjectData((prevData) => ({
+        ...prevData,
+        GenreOfMusic: selectedCard.title,
+      }));
+
+      onNext();
+    } else {
+      alert("Please choose type of music before continuing.");
+    }
   };
   return (
     <>
@@ -73,7 +85,17 @@ export default function ChooseGenre({ onNext }) {
             .map((row, rowIndex) => (
               <div className="choose-type-div-card" key={rowIndex}>
                 {row.map((card, cardIndex) => (
-                  <div key={cardIndex}>
+                  <div
+                    key={cardIndex}
+                    style={{
+                      border:
+                        selectedCard && selectedCard.title === card.title
+                          ? "2px solid #FFC701"
+                          : "none",
+                    }}
+                    id={`card-${card.title}`}
+                    onClick={() => handleCardClick(card)}
+                  >
                     <div style={{ backgroundImage: `url(${card.image})` }}>
                       <div className="card-overlay">
                         <p>{card.description}</p>

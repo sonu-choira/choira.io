@@ -4,13 +4,34 @@ import upload from "../../assets/img/chooseType-img/upload.svg";
 import music from "../../assets/img/chooseType-img/Music.svg";
 import cross from "../../assets/img/chooseType-img/cross.svg";
 
-export default function ShareLink({ onNext }) {
-  const handleContinue = () => {
-    // Perform any necessary actions in this component
-    // ...
+export default function ShareLink({ onNext, setUserProjectData }) {
+  const [projectDetails, setProjectDetails] = useState("");
 
-    // Call the callback to trigger navigation to the next component
-    onNext();
+  const handleContinue = () => {
+    if (projectDetails != "") {
+      const linkNames = links
+        .map((link) =>
+          link.length > 15 ? `${link.substring(0, 15)}...` : link
+        )
+        .join(", ");
+      const fileNames = uploadedFiles
+        .map((file) => displayFileName(file.name))
+        .join(", ");
+      // const alertMessage = `Links: ${linkNames}\nFiles: ${fileNames}\n Project Details :${projectDetails}`;
+      setUserProjectData((prevData) => ({
+        ...prevData,
+        LinksForSimilarTrack: [...prevData.LinksForSimilarTrack, links],
+        DemoFiles: [...prevData.DemoFiles, fileNames],
+        DetailsOfProject: projectDetails,
+      }));
+
+      // alert(alertMessage);
+
+      // Call the callback to trigger navigation to the next component
+      onNext();
+    } else {
+      alert("Please Tell us more about the project");
+    }
   };
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [is6FileUploaded, setIs6FileUploaded] = useState(false);
@@ -18,7 +39,7 @@ export default function ShareLink({ onNext }) {
   useEffect(() => {
     if (uploadedFiles.length === 6) {
       setIs6FileUploaded(true);
-      alert("completeddd");
+      alert("Maximum 6 file can be uploaded ");
     } else {
       setIs6FileUploaded(false);
     }
@@ -223,6 +244,9 @@ export default function ShareLink({ onNext }) {
               placeholder="Enter text here..."
               draggable="false"
               style={{ resize: "none" }}
+              onChange={(e) => {
+                setProjectDetails(e.target.value);
+              }}
             ></textarea>
           </div>
         </div>

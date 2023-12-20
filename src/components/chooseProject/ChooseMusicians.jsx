@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaAngleRight } from "react-icons/fa6";
 import cm1 from "../../assets/img/chooseType-img/cm1.jpeg";
 import cm2 from "../../assets/img/chooseType-img/cm2.jpeg";
@@ -45,26 +45,71 @@ const cardData = [
     description:
       "Microcontent/reel songs are short musical compositions less than a minute long for social media, featuring catchy hooks and upbeat rhythms, created by indie artists and popular on platforms like Instagram, TikTok.",
   },
-  {
-    image: cm6,
-    title: "FULL PRODUCTION TEAM",
-    description:
-      "Microcontent/reel songs are short musical compositions less than a minute long for social media, featuring catchy hooks and upbeat rhythms, created by indie artists and popular on platforms like Instagram, TikTok.",
-  },
 ];
+// ... (previous imports and code)
 
-export default function ChooseMusicians({ onNext }) {
-  const handleContinue = () => {
-    // Perform any necessary actions in this component
-    // ...
+export default function ChooseMusicians({ onNext, setUserProjectData }) {
+  const [selectedFullProductionTeam, setSelectedFullProductionTeam] =
+    useState(false);
+  const [selectedMusicians, setSelectedMusicians] = useState([]);
 
-    // Call the callback to trigger navigation to the next component
-    onNext();
+  const handleMusicianClick = (musician) => {
+    if (musician.title === "FULL PRODUCTION TEAM") {
+      // If FULL PRODUCTION TEAM is selected, select both "FULL PRODUCTION TEAM" and the musician
+      setSelectedMusicians([musician]);
+      setSelectedFullProductionTeam(true);
+    } else if (selectedFullProductionTeam) {
+      // If FULL PRODUCTION TEAM is already selected, unselect it and select the new musician
+      setSelectedMusicians([musician]);
+      setSelectedFullProductionTeam(false);
+    } else {
+      // If other musicians are selected, unselect FULL PRODUCTION TEAM
+      setSelectedMusicians((prevSelected) => {
+        if (prevSelected.includes(musician)) {
+          return prevSelected.filter(
+            (selectedMusician) => selectedMusician !== musician
+          );
+        } else {
+          return [...prevSelected, musician];
+        }
+      });
+    }
   };
+
+  const handleContinue = () => {
+    if (selectedMusicians.length === 5) {
+      // If all other musicians are selected, automatically select FULL PRODUCTION TEAM
+      setSelectedMusicians([]);
+      setSelectedFullProductionTeam(true);
+    }
+
+    if (selectedFullProductionTeam || selectedMusicians.length > 0) {
+      // Show alert with the selected musicians' names
+      const selectedMusicianTitles = selectedFullProductionTeam
+        ? ["FULL PRODUCTION TEAM"]
+        : selectedMusicians.map((musician) => musician.title);
+
+      // alert(`Selected Musicians: ${selectedMusicianTitles.join(", ")}`);
+
+      // You can update your user data or perform other actions as needed
+      setUserProjectData((prevData) => ({
+        ...prevData,
+        MusicianForProject: [
+          ...prevData.MusicianForProject,
+          selectedMusicianTitles,
+        ],
+      }));
+
+      onNext();
+    } else {
+      alert("Please choose at least one musician before continuing.");
+    }
+  };
+
   return (
     <>
       <div className="project-div2">
-        <div className="project-div2-title">
+        <div className="project-div2-title-musican">
           <h2>Choose Musician for your project</h2>
           <p>
             (You can select multiple musician based on your selection your
@@ -73,23 +118,35 @@ export default function ChooseMusicians({ onNext }) {
         </div>
         <div className="choose-type-div">
           {cardData
-            .reduce((rows, card, index) => {
+            .reduce((rows, musician, index) => {
               if (index % 4 === 0) {
                 rows.push([]);
               }
-              rows[rows.length - 1].push(card);
+              rows[rows.length - 1].push(musician);
               return rows;
             }, [])
             .map((row, rowIndex) => (
               <div className="choose-type-div-card" key={rowIndex}>
-                {row.map((card, cardIndex) => (
-                  <div key={cardIndex}>
-                    <div style={{ backgroundImage: `url(${card.image})` }}>
+                {row.map((musician, musicianIndex) => (
+                  <div
+                    key={musicianIndex}
+                    style={{
+                      border:
+                        selectedMusicians.includes(musician) ||
+                        (selectedFullProductionTeam &&
+                          musician.title !== "FULL PRODUCTION TEAM")
+                          ? "2px solid #FFC701"
+                          : "none",
+                    }}
+                    id={`musician-${musician.title}`}
+                    onClick={() => handleMusicianClick(musician)}
+                  >
+                    <div style={{ backgroundImage: `url(${musician.image})` }}>
                       <div className="card-overlay">
-                        <p>{card.description}</p>
+                        <p>{musician.description}</p>
                       </div>
                     </div>
-                    <h3>{card.title}</h3>
+                    <h3>{musician.title}</h3>
                   </div>
                 ))}
               </div>

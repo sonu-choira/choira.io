@@ -1,12 +1,11 @@
 import React from "react";
 
-const AlmostDone = ({ onNext }) => {
-  const handleContinue = () => {
-    // Perform any necessary actions in this component
-    // ...
-
-    // Call the callback to trigger navigation to the next component
-    onNext();
+const AlmostDone = ({ onNext, setUserProjectData, setCurrentStep }) => {
+  const ConnectNow = () => {
+    setCurrentStep(10);
+  };
+  const ShedualLater = () => {
+    setCurrentStep(9);
   };
   return (
     <>
@@ -30,8 +29,10 @@ const AlmostDone = ({ onNext }) => {
         </div>
 
         <div className="almostDone-btn">
-          <button className="almostDone-btn1">Schedule for later</button>
-          <button onClick={handleContinue}>Connect now</button>
+          <button className="almostDone-btn1" onClick={ShedualLater}>
+            Schedule for later
+          </button>
+          <button onClick={ConnectNow}>Connect now</button>
         </div>
       </div>
     </>

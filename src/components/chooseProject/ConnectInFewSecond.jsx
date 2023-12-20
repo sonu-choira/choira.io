@@ -5,8 +5,14 @@ import img2 from "../../assets/img/chooseType-img/connect2.jpg";
 import img3 from "../../assets/img/chooseType-img/connect3.jpg";
 import img4 from "../../assets/img/chooseType-img/cg1.jpeg";
 import timer from "../../assets/img/chooseType-img/timer.gif";
+import { useNavigate } from "react-router-dom";
 
-const ConnectInFewSecond = () => {
+const ConnectInFewSecond = ({
+  setUserProjectData,
+  userProjectData,
+  onUserProjectDataUpdate,
+  setConnectedPersonName,
+}) => {
   const images = [img1, img2, img3, img4];
   const usernames = ["soni", "kajal", "ravi", "sonu"];
   const intervalTime = 1500; // in milliseconds
@@ -39,6 +45,23 @@ const ConnectInFewSecond = () => {
     // Clear interval on component unmount
     return () => clearInterval(intervalIdRef.current);
   }, [intervalTime, totalDuration, rightIndex, images.length, usernames]);
+  // const [dataUpdatedNavigateNow, setDataUpdatedNavigateNow] = useState(false);
+  const navigate = useNavigate();
+
+  const joinNow = () => {
+    setConnectedPersonName(currentUsername);
+
+    // setDataUpdatedNavigateNow(true);.
+    onUserProjectDataUpdate();
+  };
+  // useEffect(() => {
+  //   // Check if userProjectData has been updated by child components
+  //   if (dataUpdatedNavigateNow) {
+  //     navigate("/choiratest", { state: { userProjectData } });
+  //     // Reset the flag after navigation
+  //     setDataUpdatedNavigateNow(false);
+  //   }
+  // }, [dataUpdatedNavigateNow, userProjectData, navigate]);
 
   return (
     <>
@@ -73,7 +96,7 @@ const ConnectInFewSecond = () => {
 
         <div className="project-div2-btn">
           {wait ? (
-            <button>
+            <button onClick={joinNow}>
               Join Now <FaAngleRight />
             </button>
           ) : (

@@ -2,16 +2,11 @@ import React, { useState } from "react";
 import { FaAngleRight } from "react-icons/fa6";
 // import "./ProjectDelivery.css"; // Import your CSS file
 
-const ProjectDelivery = ({ onNext }) => {
-  const handleContinue = () => {
-    // Perform any necessary actions in this component
-    // ...
-
-    // Call the callback to trigger navigation to the next component
-    onNext();
-  };
-  const [selectedDate, setSelectedDate] = useState(null);
+const ProjectDelivery = ({ onNext, setUserProjectData }) => {
+  const [selectedDate, setSelectedDate] = useState("");
   const [selectedDatesAndPrices, setSelectedDatesAndPrices] = useState([]);
+
+  const [selectedPrice, setSelectedPrice] = useState(0);
 
   const calculateDeliveryDate = (days) => {
     const currentDate = new Date();
@@ -28,18 +23,30 @@ const ProjectDelivery = ({ onNext }) => {
 
   const handleDateSelection = (days) => {
     const selectedDeliveryDate = calculateDeliveryDate(days);
-    const selectedPrice =
-      days === 7 ? 0 : days === 6 ? 2500 : days === 5 ? 5000 : 0; // Adjust as needed
+    const price = days === 7 ? 0 : days === 6 ? 2500 : days === 5 ? 5000 : 0;
 
     setSelectedDate(selectedDeliveryDate);
+    setSelectedPrice(price);
     setSelectedDatesAndPrices((prevDatesAndPrices) => [
       ...prevDatesAndPrices,
-      { date: selectedDeliveryDate, price: selectedPrice },
+      { date: selectedDeliveryDate, price: price },
     ]);
 
-    alert(
-      `Selected Date: ${selectedDeliveryDate}\nPrice: + ₹ ${selectedPrice}`
-    );
+    // alert(`Selected Date: ${selectedDeliveryDate}\nPrice: + ₹ ${price}`);
+  };
+
+  const handleContinue = () => {
+    if (selectedDate != "") {
+      setUserProjectData((prevData) => ({
+        ...prevData,
+        ProjectDeliveryDate: selectedDate,
+        ExtraAmountToPay: `₹${selectedPrice}`,
+      }));
+      // alert(`Selected Date: ${selectedDate}\nPrice: + ₹ ${selectedPrice}`);
+      onNext();
+    } else {
+      alert("Please select Delivery Date");
+    }
   };
 
   return (

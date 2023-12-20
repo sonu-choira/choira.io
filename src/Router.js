@@ -26,6 +26,7 @@ const Project = lazy(() => import("./pages/home/Project.jsx"));
 const Dashboard = lazy(() => import("./pages/produce/Dashboard.jsx"));
 const NewProject = lazy(() => import("./pages/produce/NewProject.jsx"));
 const ChoiraTest = lazy(() => import("./pages/produce/ChoiraTest.jsx"));
+const LandingPage = lazy(() => import("./pages/NewLandingPage/LandingPage.jsx"));
 
 
 
@@ -53,6 +54,7 @@ const Routing = () => {
           <Route exact path='/about' element={<About/>}/> 
           <Route exact path='/refundPolicy' element={<RefundPolicy/>}/> 
           <Route exact path='/home' element={<Home/>}/>
+          <Route exact path='/landingpage' element={<LandingPage/>}/>
           {/* <Route exact path='/signup' element={<Signup/>}/> */}
         </Routes>
       </Suspense>

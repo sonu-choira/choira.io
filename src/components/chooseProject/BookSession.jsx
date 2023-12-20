@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
-const BookSession = ({ onNext }) => {
-  const handleContinue = () => {
-    // Perform any necessary actions in this component
-    // ...
-
-    // Call the callback to trigger navigation to the next component
-    onNext();
-  };
+const BookSession = ({ onNext, setCurrentStep }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [selectedSlotData, setSelectedSlotData] = useState(null);
@@ -74,12 +67,12 @@ const BookSession = ({ onNext }) => {
     // Store the selected slot in the state
     setSelectedSlot(slot);
 
-    // Store the content of todaysDate and bookSession-month
+    // Store the content of todaysDate and bookSession-month in the state
     const todaysDateContent = document.querySelector(".todaysDate").textContent;
     const bookSessionMonthContent =
       document.querySelector(".bookSession-month").textContent;
 
-    // Store the selected slot data
+    // Store the selected slot data in the state
     setSelectedSlotData({
       slot: slot,
       todaysDate: todaysDateContent,
@@ -87,9 +80,25 @@ const BookSession = ({ onNext }) => {
     });
 
     // Show an alert with the selected slot and additional data
-    alert(
-      `Selected Slot: ${slot}\n Selected Date: ${todaysDateContent}\nBook Session Month: ${bookSessionMonthContent}`
-    );
+    // alert(
+    //   `Selected Slot: ${slot}\n Selected Date: ${todaysDateContent}\nBook Session Month: ${bookSessionMonthContent}`
+    // );
+  };
+
+  const handleContinue = () => {
+    if (selectedSlotData !== null) {
+      const { slot, todaysDate, bookSessionMonth } = selectedSlotData;
+      setCurrentStep(10);
+
+      // alert(
+      //   `Selected Slot: ${slot}\n Selected Date: ${todaysDate}\nBook Session Month: ${bookSessionMonth}`
+      // );
+    } else {
+      alert("Please Select A Slot");
+    }
+  };
+  const backTOAlmostDone = () => {
+    setCurrentStep(8);
   };
 
   const timeSlotsData = [
@@ -139,7 +148,7 @@ const BookSession = ({ onNext }) => {
       <div className="project-div2">
         <div className="BookSession-title">
           <div>
-            <button>
+            <button onClick={backTOAlmostDone}>
               <FaAngleLeft />
               Back
             </button>

@@ -19,14 +19,38 @@ import { useState } from "react";
 
 function NewProject() {
   const navigate = useNavigate();
+  const [connectedPersonName, setConnectedPersonName] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
+  const [userProjectData, setUserProjectData] = useState({
+    TypeOfMusic: "",
+    GenreOfMusic: "",
+    MusicianForProject: [],
+    Budget: "",
+    LinksForSimilarTrack: [],
+    DemoFiles: [],
+    DetailsOfProject: "",
+    ProjectDeliveryDate: "",
+    ExtraAmountToPay: "",
+    NameOFProject: "",
+    ConnectedPerson: connectedPersonName,
+    TimeSlots: {
+      SelectedSlots: "",
+      SelectedDate: "",
+      BookSessionMonth: "",
+    },
+  });
 
   const handleNext = () => {
     // Increment the current step when the user clicks "Continue"
     setCurrentStep(currentStep + 1);
+    // alert(JSON.stringify(userProjectData, null, 2));
   };
   // const [userProjectData, setUserProjectData] = useState({});
-
+  const handleUserProjectDataUpdate = () => {
+    // This function will be called by the child component
+    // when userProjectData is updated
+    navigate("/choiratest", { state: { userProjectData } });
+  };
   const gotoHome = () => {
     navigate("/");
   };
@@ -42,17 +66,77 @@ function NewProject() {
             <img src={logo} onClick={gotoHome} alt="" />
           </div>
           <div className="new-project-main">
-            {currentStep === 0 && <CreateNewProject onNext={handleNext} />}
-            {currentStep === 1 && <ChooseType onNext={handleNext} />}
-            {currentStep === 2 && <ChooseGenre onNext={handleNext} />}
-            {currentStep === 3 && <ChooseMusicians onNext={handleNext} />}
-            {currentStep === 4 && <ChooseBudget onNext={handleNext} />}
-            {currentStep === 5 && <ShareLink onNext={handleNext} />}
-            {currentStep === 6 && <ProjectDelivery onNext={handleNext} />}
-            {currentStep === 7 && <GoodName onNext={handleNext} />}
-            {currentStep === 8 && <AlmostDone onNext={handleNext} />}
-            {currentStep === 9 && <BookSession onNext={handleNext} />}
-            {currentStep === 10 && <ConnectInFewSecond onNext={handleNext} />}
+            {currentStep === 0 && (
+              <CreateNewProject
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+              />
+            )}
+            {currentStep === 1 && (
+              <ChooseType
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+              />
+            )}
+            {currentStep === 2 && (
+              <ChooseGenre
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+              />
+            )}
+            {currentStep === 3 && (
+              <ChooseMusicians
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+              />
+            )}
+            {currentStep === 4 && (
+              <ChooseBudget
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+              />
+            )}
+            {currentStep === 5 && (
+              <ShareLink
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+              />
+            )}
+            {currentStep === 6 && (
+              <ProjectDelivery
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+              />
+            )}
+            {currentStep === 7 && (
+              <GoodName
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+              />
+            )}
+            {currentStep === 8 && (
+              <AlmostDone
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+                setCurrentStep={setCurrentStep}
+              />
+            )}
+            {currentStep === 9 && (
+              <BookSession
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+                setCurrentStep={setCurrentStep}
+              />
+            )}
+            {currentStep === 10 && (
+              <ConnectInFewSecond
+                onNext={handleNext}
+                setUserProjectData={setUserProjectData}
+                userProjectData={userProjectData}
+                onUserProjectDataUpdate={handleUserProjectDataUpdate}
+                setConnectedPersonName={setConnectedPersonName}
+              />
+            )}
           </div>
         </div>
       </form>
