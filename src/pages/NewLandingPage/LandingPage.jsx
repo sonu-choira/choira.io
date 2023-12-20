@@ -15,7 +15,7 @@ import trusted from "../../assets/img/landingPageImg/trusted.png";
 import best from "../../assets/img/landingPageImg/best.png";
 import produce from "../../assets/img/landingPageImg/Produce.png";
 import ai from "../../assets/img/landingPageImg/AI.png";
-// import ai from "../../assets/img/landingPageImg/AI.png";
+// import ai from "../../assets/img/landingPageImg/AI.png";;
 import jamming from "../../assets/img/landingPageImg/Jamming.png";
 import studio from "../../assets/img/landingPageImg/studio.png";
 
