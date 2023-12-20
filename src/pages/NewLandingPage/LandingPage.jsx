@@ -18,6 +18,9 @@ import ai from "../../assets/img/landingPageImg/AI.png";
 // import ai from "../../assets/img/landingPageImg/AI.png";;sonu333
 import jamming from "../../assets/img/landingPageImg/Jamming.png";
 import studio from "../../assets/img/landingPageImg/studio.png";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import { useNavigate } from "react-router-dom";
 
@@ -39,6 +42,47 @@ function LandingPage() {
   const navigate = useNavigate();
   const gotoDashboard = () => {
     navigate("/dashboard");
+  };
+
+  const slides = [
+    {
+      title: "Choira create",
+      subtitle: "Sound like a pro. Create Commercial quality tracks.",
+      content: "Lorem ipsum dolor sit amet consectetur. ...",
+      buttonLabel: "Create",
+      image: produce,
+    },
+    {
+      title: "Choira create",
+      subtitle: "Record your next Hit. Book Studio instantly.",
+      content: "Lorem ipsum dolor sit amet consectetur. ...",
+      buttonLabel: "Create",
+      image: studio,
+    },
+    {
+      title: "Choira create",
+      subtitle: "Real-time Jam. Remote jam like you’re in the same room.",
+      content: "Lorem ipsum dolor sit amet consectetur. ...",
+      buttonLabel: "Create",
+      image: jamming,
+    },
+    {
+      title: "Choira create",
+      subtitle: "Turn your words into amazing music with AI music Gen.",
+      content: "Lorem ipsum dolor sit amet consectetur. ...",
+      buttonLabel: "Create",
+      image: ai,
+    },
+  ];
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 100000, // 5 seconds
   };
   return (
     <>
@@ -110,44 +154,33 @@ function LandingPage() {
           </div>
         </div>
       </div>
-      <div className="landing-page-2">
-        <div className="landing-page-2-main">
-          <div>
-            <div>
-              <div className="landing-page-2-content">
-                <div>
-                  <span>Choira create</span>
-                </div>
-                <div>
-                  <p>
-                    Sound like a pro. Create <br />
-                    Commercial quality tracks.
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Sed id id eget
-                    volutpat. Mauris amet leo vulputate massa ultrices velit.
-                    Vel sed quam mattis integer consequat. Consectetur odio
-                    risus venenatis urna non nulla sed. Ultrices tincidunt magna
-                    ut lacus enim ac consequat. Vivamus vel massa elit gravida
-                    hendrerit mi posuere velit. Suspendisse risu.
-                  </p>
-                </div>
-                <div>
-                  <button>create</button>
+      <Slider {...settings}>
+        {slides.map((slide, index) => (
+          <div key={index} className="landing-page-2-main">
+            <div className={index % 2 === 0 ? "" : "rowReverse"}>
+              <div>
+                <div className="landing-page-2-content">
+                  <div>
+                    <span>{slide.title}</span>
+                  </div>
+                  <div>
+                    <p>{slide.subtitle}</p>
+                  </div>
+                  <div>
+                    <p>{slide.content}</p>
+                  </div>
+                  <div>
+                    <button>{slide.buttonLabel}</button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="landing-page-2-img">
-              <img src={produce} alt="" />
+              <div className="landing-page-2-img">
+                <img src={slide.image} alt="" />
+              </div>
             </div>
           </div>
-          <div className="landing-page2-bullets">
-            <input type="radio" id="radioButton" name="radioGroup" />
-          </div>
-        </div>
-      </div>
+        ))}
+      </Slider>
       <div className="landing-page-3">
         <div className="landing-page-3-main">
           <div>

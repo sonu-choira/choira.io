@@ -190,6 +190,9 @@ span {
   display: flex;
   /* flex-direction: row-reverse; */
 }
+.rowReverse {
+  flex-direction: row-reverse;
+}
 .landing-page-2-img {
   display: flex;
   align-items: center;
@@ -199,7 +202,7 @@ span {
   color: #ffc701;
 }
 .landing-page-2-content {
-  /* border: 2px solid white; */
+  border: 2px solid white;
   width: 85%;
   height: 50%;
 }
