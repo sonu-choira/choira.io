@@ -71,6 +71,9 @@ function LandingPage() {
   ];
 
   useEffect(() => {
+    const slides = document.querySelectorAll(".slide");
+    console.log("Slides:", slides);
+
     if (slides) {
       slides.forEach((slide, index) => {
         slide.style.left = `${index * 100}%`;
@@ -96,6 +99,7 @@ function LandingPage() {
   const changeSlide = (count) => {
     setCounter(count);
 
+    const slides = document.querySelectorAll(".slide"); // Ensure you have access to slides
     slides.forEach((slide) => {
       slide.style.transform = `translateX(-${count * 100}%)`;
     });
