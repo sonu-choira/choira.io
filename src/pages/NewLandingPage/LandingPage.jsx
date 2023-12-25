@@ -38,10 +38,39 @@ import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
   const [counter, setCounter] = useState(0);
+  const slides = document.querySelectorAll(".slide");
+  const slidesData = [
+    {
+      title: "Choira create",
+      subtitle: "Sound like a pro. Create Commercial quality tracks.",
+      content:
+        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
+      image: produce,
+    },
+    {
+      title: "Choira create",
+      subtitle: "Record your next Hit. Book Studio instantly.",
+      content:
+        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu",
+      image: studio,
+    },
+    {
+      title: "Choira create",
+      subtitle: "Real-time Jam. Remote jam like you’re in the same room.",
+      content:
+        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
+      image: jamming,
+    },
+    {
+      title: "Choira create",
+      subtitle: "Turn your words into amazing music with AI music Gen.",
+      content:
+        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
+      image: ai,
+    },
+  ];
 
   useEffect(() => {
-    var slides = document.querySelectorAll(".slide");
-
     if (slides) {
       slides.forEach((slide, index) => {
         slide.style.left = `${index * 100}%`;
@@ -50,27 +79,27 @@ function LandingPage() {
 
     const intervalId = setInterval(() => {
       setCounter((prevCounter) => {
-        if (prevCounter >= 3) {
-          // Reset counter when it reaches 4
-          return 0;
-        } else {
-          // Increment counter
-          return prevCounter + 1;
-        }
-      });
+        const newCounter = prevCounter >= 3 ? 0 : prevCounter + 1;
 
-      const slideDiv = () => {
         slides.forEach((slide) => {
-          slide.style.transform = `translateX(-${counter * 100}%)`;
+          slide.style.transform = `translateX(-${newCounter * 100}%)`;
         });
-      };
 
-      slideDiv();
-    }, 5000);
+        return newCounter;
+      });
+    }, 8000);
 
     // Clear the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, [counter]);
+  }, []);
+
+  const changeSlide = (count) => {
+    setCounter(count);
+
+    slides.forEach((slide) => {
+      slide.style.transform = `translateX(-${count * 100}%)`;
+    });
+  };
   const [combinedClasses, setCombinedClasses] = useState("list");
 
   const smallNav = () => {
@@ -224,172 +253,46 @@ function LandingPage() {
         </div>
       </div>
       <div className="landing-page-2">
-        {/* SLIDE 1-------------------------------- */}
-        <div className="landing-page-2-main slide">
-          <div>
-            <div>
-              <div className="landing-page-2-content">
-                <div>
-                  <span>Choira create</span>
-                </div>
-                <div>
-                  <p>
-                    Sound like a pro. Create <br />
-                    Commercial quality tracks.
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Sed id id eget
-                    volutpat. Mauris amet leo vulputate massa ultrices velit.
-                    Vel sed quam mattis integer consequat. Consectetur odio
-                    risus venenatis urna non nulla sed. Ultrices tincidunt magna
-                    ut lacus enim ac consequat. Vivamus vel massa elit gravida
-                    hendrerit mi posuere velit. Suspendisse risu.
-                  </p>
-                </div>
-                <div>
-                  <button>create</button>
+        {slidesData.map((slide, index) => (
+          <div
+            key={index}
+            className={`landing-page-2-main slide ${
+              index === counter ? "active" : ""
+            }`}
+          >
+            <div className={index % 2 === 1 ? "rowReverse" : ""}>
+              <div>
+                <div className="landing-page-2-content">
+                  <div>
+                    <span>{slide.title}</span>
+                  </div>
+                  <div>
+                    <p>{slide.subtitle}</p>
+                  </div>
+                  <div>
+                    <p>{slide.content}</p>
+                  </div>
+                  <div>
+                    <button>create</button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="landing-page-2-img">
-              <img src={produce} alt="" />
-            </div>
-          </div>
-          <div className="landing-page2-bullets">
-            <input type="radio" name="radioGroup" checked />
-            <input type="radio" name="radioGroup" />
-            <input type="radio" name="radioGroup" />
-            <input type="radio" name="radioGroup" />
-          </div>
-        </div>
-
-        {/* SLIDE 2----------------------------- */}
-
-        <div className="landing-page-2-main slide">
-          <div className="rowReverse">
-            <div>
-              <div className="landing-page-2-content">
-                <div>
-                  <span>Choira create</span>
-                </div>
-                <div>
-                  <p>
-                    Record your next Hit. Book <br />
-                    Studio instantly.
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Sed id id eget
-                    volutpat. Mauris amet leo vulputate massa ultrices velit.
-                    Vel sed quam mattis integer consequat. Consectetur odio
-                    risus venenatis urna non nulla sed. Ultrices tincidunt magna
-                    ut lacus enim ac consequat. Vivamus vel massa elit gravida
-                    hendrerit mi posuere velit. Suspendisse risu
-                  </p>
-                </div>
-                <div>
-                  <button>create</button>
-                </div>
+              <div className="landing-page-2-img">
+                <img src={slide.image} alt="" />
               </div>
             </div>
-            <div className="landing-page-2-img">
-              <img src={studio} alt="" />
+            <div className="landing-page2-bullets">
+              {slidesData.map((_, i) => (
+                <input
+                  key={i}
+                  type="radio"
+                  name="radioGroup"
+                  onClick={() => changeSlide(i)}
+                />
+              ))}
             </div>
           </div>
-          <div className="landing-page2-bullets">
-            <input type="radio" name="radioGroup" />
-            <input type="radio" name="radioGroup" checked />
-            <input type="radio" name="radioGroup" />
-            <input type="radio" name="radioGroup" />
-          </div>
-        </div>
-
-        {/* SLIDE3----------------------- */}
-
-        <div className="landing-page-2-main slide">
-          <div>
-            <div>
-              <div className="landing-page-2-content">
-                <div>
-                  <span>Choira create</span>
-                </div>
-                <div>
-                  <p>
-                    Real time Jam. Remote jam <br /> like you’re in the same
-                    room.
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Sed id id eget
-                    volutpat. Mauris amet leo vulputate massa ultrices velit.
-                    Vel sed quam mattis integer consequat. Consectetur odio
-                    risus venenatis urna non nulla sed. Ultrices tincidunt magna
-                    ut lacus enim ac consequat. Vivamus vel massa elit gravida
-                    hendrerit mi posuere velit. Suspendisse risu.
-                  </p>
-                </div>
-                <div>
-                  <button>create</button>
-                </div>
-              </div>
-            </div>
-            <div className="landing-page-2-img">
-              <img src={jamming} alt="" />
-            </div>
-          </div>
-          <div className="landing-page2-bullets">
-            <input type="radio" name="radioGroup" />
-            <input type="radio" name="radioGroup" />
-            <input type="radio" name="radioGroup" checked />
-            <input type="radio" name="radioGroup" />
-          </div>
-        </div>
-
-        {/* SLIDE4---------------------------------- */}
-
-        <div className="landing-page-2-main slide">
-          <div className="rowReverse">
-            <div>
-              <div className="landing-page-2-content">
-                <div>
-                  <span>Choira create</span>
-                </div>
-                <div>
-                  <p>
-                    Turn your words into amazing <br /> music with AI music Gen.
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Sed id id eget
-                    volutpat. Mauris amet leo vulputate massa ultrices velit.
-                    Vel sed quam mattis integer consequat. Consectetur odio
-                    risus venenatis urna non nulla sed. Ultrices tincidunt magna
-                    ut lacus enim ac consequat. Vivamus vel massa elit gravida
-                    hendrerit mi posuere velit. Suspendisse risu.
-                  </p>
-                </div>
-                <div>
-                  <button>create</button>
-                </div>
-              </div>
-            </div>
-            <div className="landing-page-2-img">
-              <img src={ai} alt="" />
-            </div>
-          </div>
-          <div className="landing-page2-bullets">
-            <input type="radio" name="radioGroup" />
-            <input type="radio" name="radioGroup" />
-            <input type="radio" name="radioGroup" />
-            <input type="radio" name="radioGroup" checked />
-          </div>
-        </div>
-        {/* SLIDE4   END -------- */}
+        ))}
       </div>
       <div className="landing-page-3">
         <div className="landing-page-3-main">
