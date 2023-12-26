@@ -128,6 +128,8 @@ export default function Home() {
   };
 
   useLayoutEffect(() => {
+    console.log("tttttttttttttttttttttt");
+    console.log("tttttttttttttttttttttt");
     function updateSize() {
       if (window.innerWidth < 1124) {
         setIsMenuOpen(false);

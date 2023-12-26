@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+// import React, {  } from "react-router-dom";
 import "../NewLandingPage/LandingPage.css";
 import logo from "../../assets/img/logo-choira.svg";
 import o4 from "../../assets/img/o4.png";
+import { FaBars } from "react-icons/fa6";
 import page1footer from "../../assets/img/company-footer.svg";
 import stripe from "../../assets/img/stripe.svg";
 import phonepay from "../../assets/img/phonepe.svg";
@@ -31,10 +33,10 @@ import p2 from "../../assets/img/landingPageImg/p2.png";
 import p3 from "../../assets/img/landingPageImg/p3.png";
 import p4 from "../../assets/img/landingPageImg/p4.png";
 import p5 from "../../assets/img/landingPageImg/p5.png";
-
+import { ImCross } from "react-icons/im";
 import { FaChevronRight } from "react-icons/fa";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LandingPage() {
   const [counter, setCounter] = useState(0);
@@ -184,6 +186,8 @@ function LandingPage() {
   ];
 
   const visibleTestimonial = visibleImages[1];
+
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   return (
     <>
       <div id="landing-page1">
@@ -207,6 +211,43 @@ function LandingPage() {
             />
           </div>
         </div>
+        {/* mobile navbar start here------------------- */}
+        <div className="mobile-navbar">
+          <div>
+            <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
+          </div>
+          <div>
+            <FaBars
+              onClick={() => {
+                setSidebarVisible((prevState) => !prevState); // Toggle the state
+              }}
+            />
+          </div>
+        </div>
+
+        {/* mobile navbar end here------------------- */}
+
+        {/* sidebar-----------=-- */}
+        <div className={`lpSidebar ${sidebarVisible ? "lpSidebar-after" : ""}`}>
+          {/* <div className="lpSidebar lpSidebar-after"> */}
+          <div>
+            <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
+            <ImCross
+              onClick={() => {
+                setSidebarVisible((prevState) => !prevState); // Toggle the state
+              }}
+            />
+          </div>
+          <div>
+            <div>Home</div>
+            <div>Studio</div>
+            <div>Jamming</div>
+            <div onClick={gotoDashboard}>AI Music Gen</div>
+            <div>Signin</div>
+          </div>
+        </div>
+        {/* sidebar end -------------------------- */}
+
         <div className="page1-main">
           <div>
             <div className="page1-main-content">
@@ -218,9 +259,9 @@ function LandingPage() {
               </div>
               <div>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur. Metus diam eget mollis
-                  eget in dignissim nibh. In nibh lectus enim eu adipiscing eget
-                  pulvinar.
+                  Lorem ipsum dolor sit amet consectetur. <br /> Metus diam eget
+                  mollis eget in dignissim nibh. <br /> In nibh lectus enim eu
+                  adipiscing eget pulvinar.
                 </p>
               </div>
               <div>
@@ -230,6 +271,7 @@ function LandingPage() {
                 </p>
               </div>
             </div>
+            <div></div>
           </div>
         </div>
         <div className="page1-footer">
@@ -285,19 +327,22 @@ function LandingPage() {
                 <img src={slide.image} alt="" />
               </div>
             </div>
-            <div className="landing-page2-bullets">
-              {slidesData.map((_, i) => (
-                <input
-                  key={i}
-                  type="radio"
-                  name="radioGroup"
-                  onClick={() => changeSlide(i)}
-                />
-              ))}
-            </div>
           </div>
         ))}
       </div>
+      <div className="landing-page2-bullets">
+        {slidesData.map((_, i) => (
+          <div
+            style={{
+              backgroundColor: i === counter ? "#FFC701" : "",
+            }}
+            className="slider-btn"
+            key={i}
+            onClick={() => changeSlide(i)}
+          ></div>
+        ))}
+      </div>
+
       <div className="landing-page-3">
         <div className="landing-page-3-main">
           <div>
@@ -371,7 +416,7 @@ function LandingPage() {
             </div>
           </div>
         </div>
-        <div className="lp4-testinomal">
+        <div id="lp4-testinomal" className="lp4-testinomal">
           <div className="lp4-testinomal-main">
             <div>Testimonial</div>
             <div>What our users say about us?</div>
@@ -439,7 +484,7 @@ function LandingPage() {
           </div>
         </div>
       </div>
-      <div className="landing-page-6">
+      <footer className="landing-page-6">
         <div className="lp6-main">
           <div>
             <div>
@@ -451,10 +496,27 @@ function LandingPage() {
                 tools to jam, <br /> produce and explore music.
               </div>
               <div>
-                <img src={insta} alt="" />
-                <img src={facebook} alt="" />
-                <img src={tweeter} alt="" />
-                <img src={linkedin} alt="" />
+                <a
+                  href="https://www.instagram.com/choiramusic/"
+                  target="_blank"
+                >
+                  <img src={insta} alt="" />
+                </a>
+                <a
+                  href="https://www.facebook.com/Choira-107074321806949"
+                  target="_blank"
+                >
+                  <img src={facebook} alt="" />
+                </a>
+                <a href="https://twitter.com/choiramusic" target="_blank">
+                  <img src={tweeter} alt="" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/choira"
+                  target="_blank"
+                >
+                  <img src={linkedin} alt="" />
+                </a>
               </div>
             </div>
             <div>
@@ -470,10 +532,17 @@ function LandingPage() {
               <div>
                 <h4>Company</h4>
               </div>
-              <div> About us</div>
+              <div>
+                {" "}
+                <a href="#/about">About us</a>
+              </div>
               <div>Blog</div>
-              <div>Our team</div>
-              <div>Customer stories</div>
+              <div>
+                <a href="https://studio.choira.io/#choira_team">Our team</a>
+              </div>
+              <div>
+                <a href="#lp4-testinomal">Customer stories</a>
+              </div>
               <div>Contact us</div>
             </div>
             <div>
@@ -481,10 +550,18 @@ function LandingPage() {
                 <h4>Support</h4>
               </div>
               <div>Help & Support</div>
-              <div>Terms & Conditions</div>
-              <div>Privacy Policy</div>
-              <div>Refund Policy</div>
-              <div>Disclaimer</div>
+              <div>
+                <a href="#/TermsandCondition">Terms & Conditions</a>
+              </div>
+              <div>
+                <a href="#/Privacypolicy">Privacy Policy</a>
+              </div>
+              <div>
+                <a href="#/refundPolicy">Refund Policy</a>
+              </div>
+              <div>
+                <a href="#/Disclaimer">Disclaimer</a>
+              </div>
             </div>
             <div>
               <div>
@@ -495,7 +572,7 @@ function LandingPage() {
           </div>
           <div>© 2023 Choira.io All rights reserved</div>
         </div>
-      </div>
+      </footer>
     </>
   );
 }
