@@ -33,12 +33,16 @@ import p2 from "../../assets/img/landingPageImg/p2.png";
 import p3 from "../../assets/img/landingPageImg/p3.png";
 import p4 from "../../assets/img/landingPageImg/p4.png";
 import p5 from "../../assets/img/landingPageImg/p5.png";
+import mobfooter1 from "../../assets/img/landingPageImg/mopfooter1.png";
+import mobfooter2 from "../../assets/img/landingPageImg/mopfooter2.png";
+
 import { ImCross } from "react-icons/im";
 import { FaChevronRight } from "react-icons/fa";
 
 import { Link, useNavigate } from "react-router-dom";
 
 function LandingPage() {
+  const currentYear = new Date().getFullYear();
   const [counter, setCounter] = useState(0);
   const slides = document.querySelectorAll(".slide");
   const slidesData = [
@@ -275,7 +279,7 @@ function LandingPage() {
           </div>
         </div>
         <div className="page1-footer">
-          <div></div>
+          <div></div> {/* shadow effect div */}
           <div>
             <div>
               <img src={stripe} alt="" />
@@ -289,6 +293,36 @@ function LandingPage() {
             <div>
               <img src={cbs} alt="" />
             </div>
+            <div>
+              <img src={nasa} alt="" />
+            </div>
+            <div>
+              <img src={primeVideo} alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mob-page1-footer">
+        <div></div> {/* shadow effect div */}
+        <div>
+          <div>
+            <div>
+              <img src={stripe} alt="" />
+            </div>
+            <div>
+              <img src={phonepay} alt="" />
+            </div>
+          </div>
+
+          <div>
+            <div>
+              <img src={nbc} alt="" />
+            </div>
+            <div>
+              <img src={cbs} alt="" />
+            </div>
+          </div>
+          <div>
             <div>
               <img src={nasa} alt="" />
             </div>
@@ -364,6 +398,63 @@ function LandingPage() {
           </div>
         </div>
       </div>
+      {/* mobile version  */}
+      <div className="mob-landing-page-4-main">
+        <div>
+          <div>
+            <div>
+              <img src={talented} alt="" />
+            </div>
+            <div>
+              <h3>Top talents</h3>
+              <br />
+            </div>
+          </div>
+          <div>
+            Work with award winning talents across the globe, we deliver an
+            unparalleled combination of timeless expertise, proven results,
+            long-term stability and trust.
+          </div>
+        </div>
+        <div>
+          <div>
+            <div>
+              <img src={trusted} alt="" />
+            </div>
+            <div>
+              <h3>Trusted Studio Profiles</h3>
+              <br />
+            </div>
+          </div>
+          <div>
+            <p>
+              Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
+              mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
+              ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+            </p>
+          </div>
+        </div>
+        <div>
+          <div>
+            <div>
+              <img src={best} alt="" />
+            </div>
+            <div>
+              <h3>Create the best</h3>
+              <br />
+            </div>
+          </div>
+          <div>
+            <p>
+              Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
+              mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
+              ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* pc-version  */}
       <div id="landing-page-4" className="landing-page-4">
         <div className="landing-page-4-main">
           <div>
@@ -484,7 +575,7 @@ function LandingPage() {
           </div>
         </div>
       </div>
-      <footer className="landing-page-6">
+      <div className="landing-page-6">
         <div className="lp6-main">
           <div>
             <div>
@@ -570,9 +661,107 @@ function LandingPage() {
               </div>
             </div>
           </div>
-          <div>© 2023 Choira.io All rights reserved</div>
+          <div style={{ borderTop: "1px solid gray" }}>
+            © {currentYear} Choira.io All rights reserved
+          </div>
         </div>
-      </footer>
+
+        {/* footer for mobile  */}
+      </div>
+      <div className="mob-lp6-main">
+        <div>
+          <div>
+            <div>
+              <div>
+                <img src={logo} alt="" />
+              </div>
+              <div>
+                Choira is an online ecosystem to empower you <br /> with online
+                tools to jam, produce and explore <br /> music.
+              </div>
+              <div className="mob-lp6-social">
+                <a
+                  href="https://www.instagram.com/choiramusic/"
+                  target="_blank"
+                >
+                  <img src={insta} alt="" />
+                </a>
+                <a
+                  href="https://www.facebook.com/Choira-107074321806949"
+                  target="_blank"
+                >
+                  <img src={facebook} alt="" />
+                </a>
+                <a href="https://twitter.com/choiramusic" target="_blank">
+                  <img src={tweeter} alt="" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/choira"
+                  target="_blank"
+                >
+                  <img src={linkedin} alt="" />
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <div>
+                Stay connected to us
+                <input type="text" placeholder="Your email address" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <div>
+                <h4>Products</h4>
+              </div>
+              <div>Create</div>
+              <div>Studio</div>
+              <div>Jam</div>
+              <div>Music-AI</div>
+            </div>
+            <div>
+              <div>
+                <h4>Company</h4>
+              </div>
+              <div>
+                <a href="#/about">About us</a>
+              </div>
+              <div>Blog</div>
+              <div>
+                <a href="https://studio.choira.io/#choira_team">Our team</a>
+              </div>
+              <div>
+                <a href="#lp4-testinomal">Customer stories</a>
+              </div>
+              <div>Contact us</div>
+            </div>
+          </div>
+
+          <div>
+            <div>
+              <h4>Support</h4>
+            </div>
+            <div>Help & Support</div>
+            <div>
+              <a href="#/TermsandCondition">Terms & Conditions</a>
+            </div>
+            <div>
+              <a href="#/Privacypolicy">Privacy Policy</a>
+            </div>
+            <div>
+              <a href="#/refundPolicy">Refund Policy</a>
+            </div>
+            <div>
+              <a href="#/Disclaimer">Disclaimer</a>
+            </div>
+          </div>
+        </div>
+        <div style={{ borderTop: "1px solid gray" }}>
+          © {currentYear} Choira.io All rights reserved
+        </div>
+      </div>
     </>
   );
 }
