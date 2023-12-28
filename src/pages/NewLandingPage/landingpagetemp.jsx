@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+// import React, {  } from "react-router-dom";
+// import "../NewLandingPage/LandingPage.css";
 import "../NewLandingPage/LandingPage.css";
 import logo from "../../assets/img/logo-choira.svg";
 import o4 from "../../assets/img/o4.png";
+import { FaBars } from "react-icons/fa6";
 import page1footer from "../../assets/img/company-footer.svg";
 import stripe from "../../assets/img/stripe.svg";
 import phonepay from "../../assets/img/phonepe.svg";
@@ -31,23 +34,103 @@ import p2 from "../../assets/img/landingPageImg/p2.png";
 import p3 from "../../assets/img/landingPageImg/p3.png";
 import p4 from "../../assets/img/landingPageImg/p4.png";
 import p5 from "../../assets/img/landingPageImg/p5.png";
+import mobfooter1 from "../../assets/img/landingPageImg/mopfooter1.png";
+import mobfooter2 from "../../assets/img/landingPageImg/mopfooter2.png";
 
+import { ImCross } from "react-icons/im";
 import { FaChevronRight } from "react-icons/fa";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LandingPage() {
+  const navigate = useNavigate();
+  const goTosigninPage = () => {
+    navigate("/signin");
+  };
+
+  const currentYear = new Date().getFullYear();
   const [counter, setCounter] = useState(0);
   const slides = document.querySelectorAll(".slide");
+  const slidesData = [
+    {
+      title: "Choira create",
+      subtitle: "Sound like a pro. Create Commercial quality tracks.",
+      content:
+        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
+      image: produce,
+    },
+    {
+      title: "Choira create",
+      subtitle: "Record your next Hit. Book Studio instantly.",
+      content:
+        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu",
+      image: studio,
+    },
+    {
+      title: "Choira create",
+      subtitle: "Real-time Jam. Remote jam like you’re in the same room.",
+      content:
+        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
+      image: jamming,
+    },
+    {
+      title: "Choira create",
+      subtitle: "Turn your words into amazing music with AI music Gen.",
+      content:
+        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
+      image: ai,
+    },
+  ];
 
   useEffect(() => {
-    if (slides) {
-      slides.forEach((slide, index) => {
-        slide.style.left = `${index * 100}%`;
+    const slides = document.querySelectorAll(".slide");
+    slides.forEach((slide, index) => {
+      slide.style.left = `${index * 100}%`;
+    });
+
+    let touchStartX = 0;
+
+    const handleTouchStart = (e) => {
+      touchStartX = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const deltaX = touchEndX - touchStartX;
+
+      if (deltaX < -20) {
+        // Swipe left
+        setCounter((prevCounter) => {
+          const newCounter = prevCounter >= 3 ? 0 : prevCounter + 1;
+          updateSlides(newCounter);
+          return newCounter;
+        });
+      } else if (deltaX > 20) {
+        // Swipe right
+        setCounter((prevCounter) => {
+          const newCounter = prevCounter === 0 ? 3 : prevCounter - 1;
+          updateSlides(newCounter);
+          return newCounter;
+        });
+      }
+    };
+
+    const updateSlides = (newCounter) => {
+      const slides = document.querySelectorAll(".slide");
+      slides.forEach((slide) => {
+        slide.style.transform = `translateX(-${newCounter * 100}%)`;
       });
-    }
+    };
+
+    const container = document.querySelector(".landing-page-2");
+    container.addEventListener("touchstart", handleTouchStart, {
+      passive: true,
+    });
+    container.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     const intervalId = setInterval(() => {
+      handleTouchEnd({ changedTouches: [{ clientX: 1 }] });
+      // Simulate a right swipe
       setCounter((prevCounter) => {
         const newCounter = prevCounter >= 3 ? 0 : prevCounter + 1;
 
@@ -57,15 +140,18 @@ function LandingPage() {
 
         return newCounter;
       });
-    }, 5000);
+    }, 8000);
 
-    // Clear the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, [slides]);
+    return () => {
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchend", handleTouchEnd);
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const changeSlide = (count) => {
     setCounter(count);
-
+    const slides = document.querySelectorAll(".slide");
     slides.forEach((slide) => {
       slide.style.transform = `translateX(-${count * 100}%)`;
     });
@@ -84,7 +170,7 @@ function LandingPage() {
       setCombinedClasses((prevClasses) => prevClasses + " smalllist");
     }
   };
-  const navigate = useNavigate();
+
   const gotoDashboard = () => {
     navigate("/dashboard");
   };
@@ -150,9 +236,11 @@ function LandingPage() {
   ];
 
   const visibleTestimonial = visibleImages[1];
+
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   return (
     <>
-      <div id="landing-page1">
+      <div id="landing-page1" className="landing-page1">
         <div className="navbar">
           <div>
             <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
@@ -162,7 +250,7 @@ function LandingPage() {
             <h3>Studio</h3>
             <h3>Jamming</h3>
             <h3 onClick={gotoDashboard}>AI Music Gen</h3>
-            <h3>Signin</h3>
+            <h3 onClick={goTosigninPage}>Signin</h3>
 
             <img
               className="o4"
@@ -173,6 +261,43 @@ function LandingPage() {
             />
           </div>
         </div>
+        {/* mobile navbar start here------------------- */}
+        <div className="mobile-navbar">
+          <div>
+            <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
+          </div>
+          <div>
+            <FaBars
+              onClick={() => {
+                setSidebarVisible((prevState) => !prevState); // Toggle the state
+              }}
+            />
+          </div>
+        </div>
+
+        {/* mobile navbar end here------------------- */}
+
+        {/* sidebar-----------=-- */}
+        <div className={`lpSidebar ${sidebarVisible ? "lpSidebar-after" : ""}`}>
+          {/* <div className="lpSidebar lpSidebar-after"> */}
+          <div>
+            <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
+            <ImCross
+              onClick={() => {
+                setSidebarVisible((prevState) => !prevState); // Toggle the state
+              }}
+            />
+          </div>
+          <div>
+            <div>Home</div>
+            <div>Studio</div>
+            <div>Jamming</div>
+            <div onClick={gotoDashboard}>AI Music Gen</div>
+            <div>Signin</div>
+          </div>
+        </div>
+        {/* sidebar end -------------------------- */}
+
         <div className="page1-main">
           <div>
             <div className="page1-main-content">
@@ -184,22 +309,23 @@ function LandingPage() {
               </div>
               <div>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur. Metus diam eget mollis
-                  eget in dignissim nibh. In nibh lectus enim eu adipiscing eget
-                  pulvinar.
+                  Lorem ipsum dolor sit amet consectetur. <br /> Metus diam eget
+                  mollis eget in dignissim nibh. <br /> In nibh lectus enim eu
+                  adipiscing eget pulvinar.
                 </p>
               </div>
               <div>
                 <button>Get Started</button>
                 <p style={{ cursor: "pointer" }}>
-                  watch video <FaChevronRight />
+                  Watch video <FaChevronRight />
                 </p>
               </div>
             </div>
+            <div></div>
           </div>
         </div>
         <div className="page1-footer">
-          <div></div>
+          <div></div> {/* shadow effect div */}
           <div>
             <div>
               <img src={stripe} alt="" />
@@ -222,238 +348,156 @@ function LandingPage() {
           </div>
         </div>
       </div>
-      <div className="landing-page-2">
-        {/* SLIDE 1-------------------------------- */}
-        <div className="landing-page-2-main slide">
+      <div className="mob-page1-footer">
+        <div></div> {/* shadow effect div */}
+        <div>
           <div>
             <div>
-              <div className="landing-page-2-content">
-                <div>
-                  <span>Choira create</span>
-                </div>
-                <div>
-                  <p>
-                    Sound like a pro. Create <br />
-                    Commercial quality tracks.
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Sed id id eget
-                    volutpat. Mauris amet leo vulputate massa ultrices velit.
-                    Vel sed quam mattis integer consequat. Consectetur odio
-                    risus venenatis urna non nulla sed. Ultrices tincidunt magna
-                    ut lacus enim ac consequat. Vivamus vel massa elit gravida
-                    hendrerit mi posuere velit. Suspendisse risu.
-                  </p>
-                </div>
-                <div>
-                  <button>create</button>
-                </div>
-              </div>
+              <img src={stripe} alt="" />
             </div>
-            <div className="landing-page-2-img">
-              <img src={produce} alt="" />
-            </div>
-          </div>
-          <div className="landing-page2-bullets">
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(0)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(1)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(2)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(3)}
-            />
-          </div>
-        </div>
-
-        {/* SLIDE 2----------------------------- */}
-
-        <div className="landing-page-2-main slide">
-          <div className="rowReverse">
             <div>
-              <div className="landing-page-2-content">
-                <div>
-                  <span>Choira create</span>
-                </div>
-                <div>
-                  <p>
-                    Record your next Hit. Book <br />
-                    Studio instantly.
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Sed id id eget
-                    volutpat. Mauris amet leo vulputate massa ultrices velit.
-                    Vel sed quam mattis integer consequat. Consectetur odio
-                    risus venenatis urna non nulla sed. Ultrices tincidunt magna
-                    ut lacus enim ac consequat. Vivamus vel massa elit gravida
-                    hendrerit mi posuere velit. Suspendisse risu
-                  </p>
-                </div>
-                <div>
-                  <button>create</button>
-                </div>
-              </div>
-            </div>
-            <div className="landing-page-2-img">
-              <img src={studio} alt="" />
+              <img src={phonepay} alt="" />
             </div>
           </div>
-          <div className="landing-page2-bullets">
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(0)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(1)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(2)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(3)}
-            />
-          </div>
-        </div>
 
-        {/* SLIDE3----------------------- */}
-
-        <div className="landing-page-2-main slide">
           <div>
             <div>
-              <div className="landing-page-2-content">
-                <div>
-                  <span>Choira create</span>
-                </div>
-                <div>
-                  <p>
-                    Real time Jam. Remote jam <br /> like you’re in the same
-                    room.
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Sed id id eget
-                    volutpat. Mauris amet leo vulputate massa ultrices velit.
-                    Vel sed quam mattis integer consequat. Consectetur odio
-                    risus venenatis urna non nulla sed. Ultrices tincidunt magna
-                    ut lacus enim ac consequat. Vivamus vel massa elit gravida
-                    hendrerit mi posuere velit. Suspendisse risu.
-                  </p>
-                </div>
-                <div>
-                  <button>create</button>
-                </div>
-              </div>
+              <img src={nbc} alt="" />
             </div>
-            <div className="landing-page-2-img">
-              <img src={jamming} alt="" />
-            </div>
-          </div>
-          <div className="landing-page2-bullets">
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(0)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(1)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(2)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(3)}
-            />
-          </div>
-        </div>
-
-        {/* SLIDE4---------------------------------- */}
-
-        <div className="landing-page-2-main slide">
-          <div className="rowReverse">
             <div>
-              <div className="landing-page-2-content">
-                <div>
-                  <span>Choira create</span>
-                </div>
-                <div>
-                  <p>
-                    Turn your words into amazing <br /> music with AI music Gen.
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur. Sed id id eget
-                    volutpat. Mauris amet leo vulputate massa ultrices velit.
-                    Vel sed quam mattis integer consequat. Consectetur odio
-                    risus venenatis urna non nulla sed. Ultrices tincidunt magna
-                    ut lacus enim ac consequat. Vivamus vel massa elit gravida
-                    hendrerit mi posuere velit. Suspendisse risu.
-                  </p>
-                </div>
-                <div>
-                  <button>create</button>
-                </div>
-              </div>
-            </div>
-            <div className="landing-page-2-img">
-              <img src={ai} alt="" />
+              <img src={cbs} alt="" />
             </div>
           </div>
-          <div className="landing-page2-bullets">
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(0)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(1)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(2)}
-            />
-            <input
-              type="radio"
-              name="radioGroup"
-              onClick={() => changeSlide(3)}
-            />
+          <div>
+            <div>
+              <img src={nasa} alt="" />
+            </div>
+            <div>
+              <img src={primeVideo} alt="" />
+            </div>
           </div>
         </div>
-        {/* SLIDE4   END -------- */}
       </div>
+      {window.innerWidth > 600 ? (
+        <>
+          <div className="landing-page-2">
+            {slidesData.map((slide, index) => (
+              <div
+                key={index}
+                className={`landing-page-2-main slide ${
+                  index === counter ? "active" : ""
+                }`}
+              >
+                <div className={index % 2 === 1 ? "rowReverse" : ""}>
+                  <div>
+                    <div className="landing-page-2-content">
+                      <div>
+                        <span>{slide.title}</span>
+                      </div>
+                      <div>
+                        <p>{slide.subtitle}</p>
+                      </div>
+                      <div>
+                        <p>{slide.content}</p>
+                      </div>
+                      {counter === 0 ? (
+                        <div>
+                          <button>create</button>
+                        </div>
+                      ) : counter === 1 ? (
+                        <div>
+                          <button>Book Now</button>
+                        </div>
+                      ) : counter === 2 ? (
+                        <div>
+                          <button>Start Jam</button>
+                        </div>
+                      ) : (
+                        <div>
+                          <button>Generate</button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="landing-page-2-img">
+                    <img src={slide.image} alt="" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="landing-page2-bullets">
+            {slidesData.map((_, i) => (
+              <div
+                style={{
+                  backgroundColor: i === counter ? "#FFC701" : "",
+                }}
+                className="slider-btn"
+                key={i}
+                onClick={() => changeSlide(i)}
+              ></div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="landing-page-2 ">
+            {slidesData.map((slide, index) => (
+              <div
+                key={index}
+                className={`landing-page-2-main-mob slide ${
+                  index === counter ? "active" : ""
+                }`}
+              >
+                <div className="landing-page-2-content-mob">
+                  <div>
+                    <span>{slide.title}</span>
+                  </div>
+                  <div>
+                    <p>{slide.subtitle}</p>
+                  </div>
+                  <div>
+                    <img src={slide.image} alt="" />
+                  </div>
+                  <div>
+                    <p>{slide.content}</p>
+                  </div>
+                  {counter === 0 ? (
+                    <div>
+                      <button>create</button>
+                    </div>
+                  ) : counter === 1 ? (
+                    <div>
+                      <button>Book Now</button>
+                    </div>
+                  ) : counter === 2 ? (
+                    <div>
+                      <button>Start Jam</button>
+                    </div>
+                  ) : (
+                    <div>
+                      <button>Generate</button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="landing-page2-bullets">
+            {slidesData.map((_, i) => (
+              <div
+                style={{
+                  backgroundColor: i === counter ? "#FFC701" : "",
+                }}
+                className="slider-btn"
+                key={i}
+                onClick={() => changeSlide(i)}
+              ></div>
+            ))}
+          </div>
+        </>
+      )}
+
       <div className="landing-page-3">
         <div className="landing-page-3-main">
           <div>
@@ -475,6 +519,63 @@ function LandingPage() {
           </div>
         </div>
       </div>
+      {/* mobile version  */}
+      <div className="mob-landing-page-4-main">
+        <div>
+          <div>
+            <div>
+              <img src={talented} alt="" />
+            </div>
+            <div>
+              <h3>Top talents</h3>
+              <br />
+            </div>
+          </div>
+          <div>
+            Work with award winning talents across the globe, we deliver an
+            unparalleled combination of timeless expertise, proven results,
+            long-term stability and trust.
+          </div>
+        </div>
+        <div>
+          <div>
+            <div>
+              <img src={trusted} alt="" />
+            </div>
+            <div>
+              <h3>Trusted Studio Profiles</h3>
+              <br />
+            </div>
+          </div>
+          <div>
+            <p>
+              Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
+              mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
+              ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+            </p>
+          </div>
+        </div>
+        <div>
+          <div>
+            <div>
+              <img src={best} alt="" />
+            </div>
+            <div>
+              <h3>Create the best</h3>
+              <br />
+            </div>
+          </div>
+          <div>
+            <p>
+              Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
+              mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
+              ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* pc-version  */}
       <div id="landing-page-4" className="landing-page-4">
         <div className="landing-page-4-main">
           <div>
@@ -527,7 +628,7 @@ function LandingPage() {
             </div>
           </div>
         </div>
-        <div className="lp4-testinomal">
+        <div id="lp4-testinomal" className="lp4-testinomal">
           <div className="lp4-testinomal-main">
             <div>Testimonial</div>
             <div>What our users say about us?</div>
@@ -607,10 +708,27 @@ function LandingPage() {
                 tools to jam, <br /> produce and explore music.
               </div>
               <div>
-                <img src={insta} alt="" />
-                <img src={facebook} alt="" />
-                <img src={tweeter} alt="" />
-                <img src={linkedin} alt="" />
+                <a
+                  href="https://www.instagram.com/choiramusic/"
+                  target="_blank"
+                >
+                  <img src={insta} alt="" />
+                </a>
+                <a
+                  href="https://www.facebook.com/Choira-107074321806949"
+                  target="_blank"
+                >
+                  <img src={facebook} alt="" />
+                </a>
+                <a href="https://twitter.com/choiramusic" target="_blank">
+                  <img src={tweeter} alt="" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/choira"
+                  target="_blank"
+                >
+                  <img src={linkedin} alt="" />
+                </a>
               </div>
             </div>
             <div>
@@ -626,10 +744,17 @@ function LandingPage() {
               <div>
                 <h4>Company</h4>
               </div>
-              <div> About us</div>
+              <div>
+                {" "}
+                <a href="#/about">About us</a>
+              </div>
               <div>Blog</div>
-              <div>Our team</div>
-              <div>Customer stories</div>
+              <div>
+                <a href="https://studio.choira.io/#choira_team">Our team</a>
+              </div>
+              <div>
+                <a href="#lp4-testinomal">Customer stories</a>
+              </div>
               <div>Contact us</div>
             </div>
             <div>
@@ -637,10 +762,18 @@ function LandingPage() {
                 <h4>Support</h4>
               </div>
               <div>Help & Support</div>
-              <div>Terms & Conditions</div>
-              <div>Privacy Policy</div>
-              <div>Refund Policy</div>
-              <div>Disclaimer</div>
+              <div>
+                <a href="#/TermsandCondition">Terms & Conditions</a>
+              </div>
+              <div>
+                <a href="#/Privacypolicy">Privacy Policy</a>
+              </div>
+              <div>
+                <a href="#/refundPolicy">Refund Policy</a>
+              </div>
+              <div>
+                <a href="#/Disclaimer">Disclaimer</a>
+              </div>
             </div>
             <div>
               <div>
@@ -649,7 +782,105 @@ function LandingPage() {
               </div>
             </div>
           </div>
-          <div>© 2023 Choira.io All rights reserved</div>
+          <div style={{ borderTop: "1px solid gray" }}>
+            © {currentYear} Choira.io All rights reserved
+          </div>
+        </div>
+
+        {/* footer for mobile  */}
+      </div>
+      <div className="mob-lp6-main">
+        <div>
+          <div>
+            <div>
+              <div>
+                <img src={logo} alt="" />
+              </div>
+              <div>
+                Choira is an online ecosystem to empower you <br /> with online
+                tools to jam, produce and explore <br /> music.
+              </div>
+              <div className="mob-lp6-social">
+                <a
+                  href="https://www.instagram.com/choiramusic/"
+                  target="_blank"
+                >
+                  <img src={insta} alt="" />
+                </a>
+                <a
+                  href="https://www.facebook.com/Choira-107074321806949"
+                  target="_blank"
+                >
+                  <img src={facebook} alt="" />
+                </a>
+                <a href="https://twitter.com/choiramusic" target="_blank">
+                  <img src={tweeter} alt="" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/choira"
+                  target="_blank"
+                >
+                  <img src={linkedin} alt="" />
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <div>
+                Stay connected to us
+                <input type="text" placeholder="Your email address" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <div>
+                <h4>Products</h4>
+              </div>
+              <div>Create</div>
+              <div>Studio</div>
+              <div>Jam</div>
+              <div>Music-AI</div>
+            </div>
+            <div>
+              <div>
+                <h4>Company</h4>
+              </div>
+              <div>
+                <a href="#/about">About us</a>
+              </div>
+              <div>Blog</div>
+              <div>
+                <a href="https://studio.choira.io/#choira_team">Our team</a>
+              </div>
+              <div>
+                <a href="#lp4-testinomal">Customer stories</a>
+              </div>
+              <div>Contact us</div>
+            </div>
+          </div>
+
+          <div>
+            <div>
+              <h4>Support</h4>
+            </div>
+            <div>Help & Support</div>
+            <div>
+              <a href="#/TermsandCondition">Terms & Conditions</a>
+            </div>
+            <div>
+              <a href="#/Privacypolicy">Privacy Policy</a>
+            </div>
+            <div>
+              <a href="#/refundPolicy">Refund Policy</a>
+            </div>
+            <div>
+              <a href="#/Disclaimer">Disclaimer</a>
+            </div>
+          </div>
+        </div>
+        <div style={{ borderTop: "1px solid gray" }}>
+          © {currentYear} Choira.io All rights reserved
         </div>
       </div>
     </>

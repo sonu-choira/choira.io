@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // import React, {  } from "react-router-dom";
+// import "../NewLandingPage/LandingPage.css";
 import "../NewLandingPage/LandingPage.css";
 import logo from "../../assets/img/logo-choira.svg";
 import o4 from "../../assets/img/o4.png";
@@ -42,6 +43,11 @@ import { FaChevronRight } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
 function LandingPage() {
+  const navigate = useNavigate();
+  const goTosigninPage = () => {
+    navigate("/signin");
+  };
+
   const currentYear = new Date().getFullYear();
   const [counter, setCounter] = useState(0);
   const slides = document.querySelectorAll(".slide");
@@ -78,15 +84,53 @@ function LandingPage() {
 
   useEffect(() => {
     const slides = document.querySelectorAll(".slide");
-    console.log("Slides:", slides);
+    slides.forEach((slide, index) => {
+      slide.style.left = `${index * 100}%`;
+    });
 
-    if (slides) {
-      slides.forEach((slide, index) => {
-        slide.style.left = `${index * 100}%`;
+    let touchStartX = 0;
+
+    const handleTouchStart = (e) => {
+      touchStartX = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const deltaX = touchEndX - touchStartX;
+
+      if (deltaX < -20) {
+        // Swipe left
+        setCounter((prevCounter) => {
+          const newCounter = prevCounter >= 3 ? 0 : prevCounter + 1;
+          updateSlides(newCounter);
+          return newCounter;
+        });
+      } else if (deltaX > 20) {
+        // Swipe right
+        setCounter((prevCounter) => {
+          const newCounter = prevCounter === 0 ? 3 : prevCounter - 1;
+          updateSlides(newCounter);
+          return newCounter;
+        });
+      }
+    };
+
+    const updateSlides = (newCounter) => {
+      const slides = document.querySelectorAll(".slide");
+      slides.forEach((slide) => {
+        slide.style.transform = `translateX(-${newCounter * 100}%)`;
       });
-    }
+    };
+
+    const container = document.querySelector(".landing-page-2");
+    container.addEventListener("touchstart", handleTouchStart, {
+      passive: true,
+    });
+    container.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     const intervalId = setInterval(() => {
+      handleTouchEnd({ changedTouches: [{ clientX: 1 }] });
+      // Simulate a right swipe
       setCounter((prevCounter) => {
         const newCounter = prevCounter >= 3 ? 0 : prevCounter + 1;
 
@@ -98,14 +142,16 @@ function LandingPage() {
       });
     }, 8000);
 
-    // Clear the interval when the component unmounts
-    return () => clearInterval(intervalId);
+    return () => {
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchend", handleTouchEnd);
+      clearInterval(intervalId);
+    };
   }, []);
 
   const changeSlide = (count) => {
     setCounter(count);
-
-    const slides = document.querySelectorAll(".slide"); // Ensure you have access to slides
+    const slides = document.querySelectorAll(".slide");
     slides.forEach((slide) => {
       slide.style.transform = `translateX(-${count * 100}%)`;
     });
@@ -124,7 +170,7 @@ function LandingPage() {
       setCombinedClasses((prevClasses) => prevClasses + " smalllist");
     }
   };
-  const navigate = useNavigate();
+
   const gotoDashboard = () => {
     navigate("/dashboard");
   };
@@ -194,7 +240,7 @@ function LandingPage() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   return (
     <>
-      <div id="landing-page1">
+      <div id="landing-page1" className="landing-page1">
         <div className="navbar">
           <div>
             <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
@@ -204,7 +250,7 @@ function LandingPage() {
             <h3>Studio</h3>
             <h3>Jamming</h3>
             <h3 onClick={gotoDashboard}>AI Music Gen</h3>
-            <h3>Signin</h3>
+            <h3 onClick={goTosigninPage}>Signin</h3>
 
             <img
               className="o4"
@@ -271,7 +317,7 @@ function LandingPage() {
               <div>
                 <button>Get Started</button>
                 <p style={{ cursor: "pointer" }}>
-                  watch video <FaChevronRight />
+                  Watch video <FaChevronRight />
                 </p>
               </div>
             </div>
@@ -332,17 +378,78 @@ function LandingPage() {
           </div>
         </div>
       </div>
-      <div className="landing-page-2">
-        {slidesData.map((slide, index) => (
-          <div
-            key={index}
-            className={`landing-page-2-main slide ${
-              index === counter ? "active" : ""
-            }`}
-          >
-            <div className={index % 2 === 1 ? "rowReverse" : ""}>
-              <div>
-                <div className="landing-page-2-content">
+      {window.innerWidth > 600 ? (
+        <>
+          <div className="landing-page-2">
+            {slidesData.map((slide, index) => (
+              <div
+                key={index}
+                className={`landing-page-2-main slide ${
+                  index === counter ? "active" : ""
+                }`}
+              >
+                <div className={index % 2 === 1 ? "rowReverse" : ""}>
+                  <div>
+                    <div className="landing-page-2-content">
+                      <div>
+                        <span>{slide.title}</span>
+                      </div>
+                      <div>
+                        <p>{slide.subtitle}</p>
+                      </div>
+                      <div>
+                        <p>{slide.content}</p>
+                      </div>
+                      {counter === 0 ? (
+                        <div>
+                          <button>create</button>
+                        </div>
+                      ) : counter === 1 ? (
+                        <div>
+                          <button>Book Now</button>
+                        </div>
+                      ) : counter === 2 ? (
+                        <div>
+                          <button>Start Jam</button>
+                        </div>
+                      ) : (
+                        <div>
+                          <button>Generate</button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="landing-page-2-img">
+                    <img src={slide.image} alt="" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="landing-page2-bullets">
+            {slidesData.map((_, i) => (
+              <div
+                style={{
+                  backgroundColor: i === counter ? "#FFC701" : "",
+                }}
+                className="slider-btn"
+                key={i}
+                onClick={() => changeSlide(i)}
+              ></div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="landing-page-2 ">
+            {slidesData.map((slide, index) => (
+              <div
+                key={index}
+                className={`landing-page-2-main-mob slide ${
+                  index === counter ? "active" : ""
+                }`}
+              >
+                <div className="landing-page-2-content-mob">
                   <div>
                     <span>{slide.title}</span>
                   </div>
@@ -350,32 +457,46 @@ function LandingPage() {
                     <p>{slide.subtitle}</p>
                   </div>
                   <div>
-                    <p>{slide.content}</p>
+                    <img src={slide.image} alt="" />
                   </div>
                   <div>
-                    <button>create</button>
+                    <p>{slide.content}</p>
                   </div>
+                  {counter === 0 ? (
+                    <div>
+                      <button>create</button>
+                    </div>
+                  ) : counter === 1 ? (
+                    <div>
+                      <button>Book Now</button>
+                    </div>
+                  ) : counter === 2 ? (
+                    <div>
+                      <button>Start Jam</button>
+                    </div>
+                  ) : (
+                    <div>
+                      <button>Generate</button>
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="landing-page-2-img">
-                <img src={slide.image} alt="" />
-              </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="landing-page2-bullets">
-        {slidesData.map((_, i) => (
-          <div
-            style={{
-              backgroundColor: i === counter ? "#FFC701" : "",
-            }}
-            className="slider-btn"
-            key={i}
-            onClick={() => changeSlide(i)}
-          ></div>
-        ))}
-      </div>
+          <div className="landing-page2-bullets">
+            {slidesData.map((_, i) => (
+              <div
+                style={{
+                  backgroundColor: i === counter ? "#FFC701" : "",
+                }}
+                className="slider-btn"
+                key={i}
+                onClick={() => changeSlide(i)}
+              ></div>
+            ))}
+          </div>
+        </>
+      )}
 
       <div className="landing-page-3">
         <div className="landing-page-3-main">

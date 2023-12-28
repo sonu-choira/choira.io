@@ -1,9 +1,15 @@
 import { lazy, Suspense } from "react";
+// import { BrowserRouter as Router, Route } from 'react-router-dom';
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
     Routes,
     Route,
   } from "react-router-dom";
+// import {
+//   HashRouter as Router,
+//     Routes,
+//     Route,
+//   } from "react-router-dom";
 
   import { ChoiraLoader } from "./components/loader/ChoiraLoader";
 // import Signup from "./pages/home/Signup.jsx";

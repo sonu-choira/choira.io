@@ -9,7 +9,7 @@
 button {
   cursor: pointer;
 }
-#landing-page1 {
+.landing-page1 {
   height: 100vh;
   width: 100vw;
   background-image: url("../../assets/img/hero\ bg.png");
@@ -184,7 +184,7 @@ span {
     #1a1814;
   flex-direction: column;
   position: absolute;
-  transition: 2s ease;
+  transition: 1s ease;
 }
 .landing-page2-bullets {
   width: 100vw;
@@ -294,7 +294,7 @@ span {
 .landing-page-3-main {
   /* border: 2px solid red; */
   width: 60%;
-  height: 95%;
+  height: 96%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -714,14 +714,17 @@ span {
 .mob-lp6-main {
   display: none;
 }
+.mobile-view {
+  display: none;
+}
 @media only screen and (max-width: 600px) {
   /* .navbar {
     padding-right: 2%;
   } */
-  /* p {
+  p {
     font-size: 1.6vmax;
     font-weight: 550;
-  } */
+  }
   .navbar {
     display: none;
   }
@@ -788,23 +791,89 @@ span {
   .page1-main-content {
     width: 100%;
   }
-  .landing-page-2-main > div:first-child > div {
-    flex-direction: row;
+  .mobile-view {
+    display: block;
   }
-  .landing-page-2-main > div:first-child > div {
+  .landing-page-2 {
+    height: 85vh;
+  }
+  .mobile-view-2 {
+    display: none;
+  }
+  .landing-page-2-main-mob {
+    width: 100%;
+    height: 100%;
+    /* border: 2px solid red; */
+    background: linear-gradient(
+        180deg,
+        rgba(255, 199, 1, 0.1) 0%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      #1a1814;
+
+    position: absolute;
+    transition: 1s ease;
+  }
+  .landing-page-2-content-mob {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     width: 100%;
   }
-  .landing-page-2-main > div {
-    flex-direction: column-reverse;
+  .landing-page-2-content-mob > div {
+    border: 10px solid transparent;
   }
-  .landing-page-2-content {
-    height: 70%;
+  .landing-page-2-content-mob > div:nth-child(1) > span {
+    font-size: 2.5vmax;
+    font-weight: 600;
   }
-  .landing-page-2-content > div:nth-child(4) > button {
-    width: 25%;
-    font-size: 1.5vmax;
+  .landing-page-2-content-mob > div:nth-child(1) {
+    height: 10%;
+    display: flex;
+    align-items: center;
   }
-  #landing-page1 {
+  .landing-page-2-content-mob > div:nth-child(2) > p {
+    font-size: 3vmax;
+  }
+  .landing-page-2-content-mob > div:nth-child(2) {
+    height: 15%;
+  }
+  .landing-page-2-content-mob > div:nth-child(3) img {
+    width: 80%;
+    height: 95%;
+  }
+  .landing-page-2-content-mob > div:nth-child(3) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40%;
+  }
+  .landing-page-2-content-mob > div:nth-child(4) p {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .landing-page-2-content-mob > div:nth-child(4) {
+    height: 25%;
+  }
+  .landing-page-2-content-mob > div:nth-child(5) {
+    height: 10%;
+    width: 100%;
+  }
+  .landing-page-2-content-mob > div:nth-child(5) button {
+    width: 40%;
+    height: 100%;
+    border: 2px solid #ffb701;
+    background-color: #ffb701;
+
+    color: black;
+    font-size: 2vmax;
+    font-weight: 600;
+    border-radius: 30px;
+  }
+
+  .landing-page1 {
     background-image: url(../../assets/img/mobilebackground.png);
     background-position: center top;
     background-size: cover;
@@ -848,6 +917,12 @@ span {
     width: 55%;
     height: 40%;
     font-size: 2.5vmax;
+  }
+  .landing-page-2-content > div:nth-child(3) > p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .landing-page-3 {
     height: 60vh;
@@ -920,7 +995,7 @@ span {
       ),
       #1a1814;
     width: 100vw;
-    height: 70vh;
+    height: 75vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -938,11 +1013,18 @@ span {
   }
   .landing-page-4 {
     height: 60vh;
+    /* border: 2px solid green; */
+    margin-bottom: -25%;
   }
   .lp4-testinomal {
     height: 60vh;
+    /* border: 2px solid red; */
+    margin-top: -15%;
   }
-
+  .lp4-testinomal-main > div:nth-child(1) {
+    font-size: 2vmax;
+    font-weight: 550;
+  }
   .lp4-testinomal-main > div:nth-child(6) > div:nth-child(1) {
     /* border: 2px solid yellow; */
     width: 40px;
@@ -989,15 +1071,13 @@ span {
     height: 10%;
   }
   .lp4-testinomal-main > div:nth-child(4) p {
-    border: 5px solid #1e1e1e;
     height: 180px;
     width: 200px;
 
-    overflow: hidden;
     display: -webkit-box;
-    -webkit-box-orient: vertical;
-    line-height: 1.5;
     -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .lp4-testinomal-main > div:nth-child(3) {
     /* border: 2px solid red; */
