@@ -717,6 +717,17 @@ span {
 .mobile-view {
   display: none;
 }
+
+@media only screen and (min-width: 1024px) and (max-width: 1550px) {
+  .landing-page-3 {
+    height: 115vh;
+    /* border: 2px solid red; */
+  }
+  .landing-page-4 {
+    height: 135vh;
+  }
+}
+
 @media only screen and (max-width: 600px) {
   /* .navbar {
     padding-right: 2%;
