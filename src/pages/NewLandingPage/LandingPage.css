@@ -720,7 +720,7 @@ span {
 
 @media only screen and (min-width: 1024px) and (max-width: 1550px) {
   .landing-page-3 {
-    height: 115vh;
+    height: 100vh;
     /* border: 2px solid red; */
   }
   .landing-page-4 {

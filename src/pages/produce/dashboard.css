@@ -132,7 +132,7 @@ body {
 }
 .produce-section {
   width: 100%;
-  height: 25%;
+  height: 22%;
   border-bottom: 2px solid #e0e0e0;
   /* border: 2px solid green; */
 
@@ -208,7 +208,7 @@ body {
 }
 .choira-test-project-section {
   /* border: 2px solid blue; */
-  height: 75%;
+  height: 77%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -442,7 +442,7 @@ body {
 .progress-div {
   width: 85%;
   height: 90%;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
 .progress_main_div {
   width: 100%;
@@ -503,18 +503,157 @@ body {
 .progress_main_div_content {
   width: 100%;
   height: 80%;
-  border: 2px solid green;
+  /* border: 2px solid green; */
 }
 .progress_main_div_content > div {
   width: 100%;
-  height: 20%;
-  border: 2px solid orange;
+  height: 23%;
+  /* border: 2px solid orange; */
+}
+.progress_main_div_content > div:nth-child(3) {
+  height: 31%;
+}
+.progress_main_div_content > div > div > div > div:first-child {
+  color: #ffc701;
+}
+
+.progress_main_div_content > div > div {
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid black; */
 }
 .progress_main_div_content > div > div > div:first-child {
   display: flex;
   width: 100%;
-  height: 10%;
-  border: 2px solid green;
+  height: 30%;
+  /* border: 2px solid green; */
   gap: 1%;
   align-items: center;
+  font-size: 1.5vmax;
+}
+.progress_main_div_content > div > div > div:nth-child(2) {
+  width: 100%;
+  height: 68%;
+  border-left: 5px solid #ffc701;
+  /* border: 2px solid blue; */
+  padding-left: 3%;
+  margin-left: 0.8%;
+}
+.progress_main_div_content button {
+  width: 20%;
+  height: 50%;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 1.2vmax;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2%;
+  background-color: #ffc701;
+  margin-top: 0.5%;
+}
+.overlay {
+  width: 0%;
+  height: 0%;
+  position: absolute;
+  background-color: #09090981;
+  top: 0%;
+  transition: 1s ease;
+}
+.overlay-after {
+  width: 100%;
+  height: 100%;
+  transition: 1s ease;
+}
+.choira_edit_profile {
+  left: 50%;
+  top: -100%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  width: 25%;
+  height: 80%;
+  /* border: 2px solid red; */
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  background-color: #262727;
+  transition: 1s ease;
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+.choira_edit_profile > div {
+  width: 90%;
+  height: 100%;
+}
+.choira_edit_profile > div > div {
+  width: 100%;
+  height: 16%;
+  /* border: 2px solid green; */
+  display: flex;
+  justify-content: space-between;
+}
+.choira_edit_profile > div > div > div {
+  width: 50%;
+  height: 100%;
+  /* border: 2px solid red; */
+}
+
+.choira_edit_profile-after {
+  top: 50%;
+
+  transition: 1s ease;
+}
+.choira_edit_profile > div > div:nth-child(1) {
+  width: 100%;
+  height: 10%;
+  /* border: 2px solid blue; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.choira_edit_profile > div > div:nth-child(1) > div {
+  display: flex;
+  align-items: center;
+}
+.choira_edit_profile > div > div:nth-child(1) > div:nth-child(2) {
+  justify-content: end;
+}
+.choira_edit_profile > div > div:nth-child(2) {
+  height: 25%;
+  justify-content: center;
+  align-items: center;
+}
+.choira_edit_profile > div > div:nth-child(2) img {
+  width: 100%;
+  height: 100%;
+}
+.choira_edit_profile > div > div:nth-child(2) > div {
+  height: 120px;
+  width: 120px;
+  /* border: 2px solid red; */
+  border-radius: 50%;
+  overflow: hidden;
+}
+.choira_edit_profile input,
+select {
+  background-color: transparent;
+  border: 2px solid gray;
+  width: 80%;
+  height: 50%;
+  margin-top: 10px;
+  border-radius: 5px;
+  color: white;
+  padding-left: 5px;
+}
+.choira_edit_profile > div > div:nth-child(6) {
+  align-items: center;
+  justify-content: center;
+}
+.choira_edit_profile > div > div:nth-child(6) button {
+  width: 30%;
+  height: 40%;
+  background-color: #ffc701;
+  border-radius: 10px;
 }
