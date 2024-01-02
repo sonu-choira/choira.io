@@ -14,7 +14,7 @@ import { FiEdit } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import ProjecDetails from "../../components/user-project-detail/ProjecDetails";
-// import ProjecDetails from "../../components/user-project-detail/ProjecDetails";hii
+// import ProjecDetails from "../../components/user-project-detail/ProjecDetails";hh11
 import tickbtn from "../../assets/img/tickbtn.png";
 
 import { FaCheckCircle } from "react-icons/fa";
