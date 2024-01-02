@@ -15,90 +15,66 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import ProjecDetails from "../../components/user-project-detail/ProjecDetails";
 // import ProjecDetails from "../../components/user-project-detail/ProjecDetails";hh11
-import tickbtn from "../../assets/img/tickbtn.png";
 
-import { FaCheckCircle } from "react-icons/fa";
-import { RiRecordCircleFill } from "react-icons/ri";
-
-const CountdownTimer = ({ projectDeliveryDate }) => {
-  const calculateTimeRemaining = () => {
-    const now = new Date().getTime();
-    const deliveryDate = new Date(projectDeliveryDate).getTime();
-    const timeRemaining = deliveryDate - now;
-
-    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    const minutes = Math.floor(
-      (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
-    );
-    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-    return {
-      days: days < 10 ? `0${days}` : days,
-      hours: hours < 10 ? `0${hours}` : hours,
-      minutes: minutes < 10 ? `0${minutes}` : minutes,
-      seconds: seconds < 10 ? `0${seconds}` : seconds,
-    };
-  };
-
-  const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
-
-  useEffect(() => {
-    const timerInterval = setInterval(() => {
-      setTimeRemaining(calculateTimeRemaining());
-    }, 1000);
-
-    return () => clearInterval(timerInterval);
-  }, []);
-
-  return (
-    <div className="progress_main_div_timer">
-      <div>
-        <b>{timeRemaining.days}</b>
-        <div>Days</div>
-      </div>
-      |
-      <div>
-        <b>{timeRemaining.hours}</b>
-        <div>Hours</div>
-      </div>
-      |
-      <div>
-        <b>{timeRemaining.minutes}</b>
-        <div>Minutes</div>
-      </div>
-      |
-      <div>
-        <b>{timeRemaining.seconds}</b>
-        <div>Seconds</div>
-      </div>
-    </div>
-  );
-};
+import { FaPen } from "react-icons/fa6";
+import Progress from "../../components/user-project-detail/Progress";
+import Payment from "../../components/user-project-detail/Payment";
 
 function ChoiraTest() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
   const { userProjectData } = state || {};
-  const {
-    ProjectDeliveryDate,
-    // other destructured properties
-  } = userProjectData || {};
+  const { ProjectDeliveryDate } = userProjectData || {};
 
   const gotoNewproject = () => {
     navigate("/newproject");
   };
+
+  // change profile img
   const [editProfile, setEditProfile] = useState(false);
   const eiditProfileFn = () => {
     setEditProfile(true);
   };
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        setSelectedImage(reader.result);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleLabelClick = (event) => {
+    event.preventDefault();
+    // Trigger the hidden file input
+    const fileInput = document.getElementById("upload-input");
+    fileInput.click();
+  };
+
+  // user data
+  const [projectUserData, setProjectUserData] = useState({
+    name: " tanmay",
+    role: "dj",
+    dateOfBirth: "",
+    gender: "Male",
+    Mob: "1231231230",
+    emal: "sample@gmail.com",
+  });
+  const [tab, setTab] = useState(3);
 
   return (
     <>
-      <div className={`overlay ${editProfile ? "overlay-after" : ""}`}></div>
+      <div
+        className={`test-overlay ${editProfile ? "test-overlay-after" : ""}`}
+      ></div>
       <div
         className={`choira_edit_profile ${
           editProfile ? "choira_edit_profile-after" : ""
@@ -117,9 +93,40 @@ function ChoiraTest() {
             </div>
           </div>
 
-          <div>
+          {/* <div className="chnageimg">
             <div>
               <img src={tanmay} alt="" />
+            </div>
+            <div className="upload_image ">
+              <FaPen />
+            </div>
+          </div> */}
+
+          <div className="edit-profile-container">
+            <div className="change-img">
+              <div>
+                {selectedImage ? (
+                  <img src={selectedImage} alt="Uploaded" />
+                ) : (
+                  <img src={tanmay} alt="Default" />
+                )}
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="upload-input"
+                className="upload-image"
+                onClick={handleLabelClick}
+              >
+                <FaPen />
+              </label>
+              <input
+                type="file"
+                id="upload-input"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
             </div>
           </div>
           <div>
@@ -138,21 +145,27 @@ function ChoiraTest() {
               <input id="bd" type="date" placeholder="Tanmay" />
             </div>
             <div>
-              <label htmlFor="role">Role</label> <br />
-              <select name="" id="">
+              <label htmlFor="Gender">Gender</label> <br />
+              <select name="" id="Gender">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
             </div>
           </div>
           <div>
-            <div>
+            <div className="choira_test_number">
               <label htmlFor="mobile">Mobile Number</label> <br />
               <input id="mobile" type="text" placeholder="Tanmay" />
+              <div>+91 |</div>
             </div>
             <div>
               <label htmlFor="email">Email</label> <br />
-              <input name="email" id="role" type="email" placeholder="Tanmay" />
+              <input
+                name="email"
+                id="email"
+                type="email"
+                placeholder="Tanmay"
+              />
             </div>
           </div>
           <div>
@@ -185,10 +198,14 @@ function ChoiraTest() {
               </div>
             </div>
 
-            <div className="section2">
+            <div className="section2" style={{ cursor: "pointer" }}>
               <div className="section2-main" onClick={eiditProfileFn}>
                 <div>
-                  <img src={tanmay} alt="" />
+                  {selectedImage ? (
+                    <img src={selectedImage} alt="Uploaded" />
+                  ) : (
+                    <img src={tanmay} alt="Default" />
+                  )}
                 </div>
                 <div>
                   <h5>Tanmay</h5>
@@ -205,22 +222,46 @@ function ChoiraTest() {
                 <img src={folder} alt="" /> <h1>Choira-test</h1>
               </div>
               <div className="produce-section-tabs">
-                <div>
+                <div
+                  onClick={() => setTab(1)}
+                  style={{
+                    cursor: "pointer",
+                    borderBottom: tab === 1 ? "5px solid #ffc701" : "",
+                  }}
+                >
                   <img src={folder} alt="" />
                   <h6>Projects</h6>
                 </div>
 
-                <div>
+                <div
+                  onClick={() => setTab(2)}
+                  style={{
+                    cursor: "pointer",
+                    borderBottom: tab === 2 ? "5px solid #ffc701" : "",
+                  }}
+                >
                   <img src={progress} alt="" />
                   <h6>Progress</h6>
                 </div>
 
-                <div>
+                <div
+                  onClick={() => setTab(3)}
+                  style={{
+                    cursor: "pointer",
+                    borderBottom: tab === 3 ? "5px solid #ffc701" : "",
+                  }}
+                >
                   <img src={payment} alt="" />
                   <h6>Payment</h6>
                 </div>
 
-                <div>
+                <div
+                  onClick={() => setTab(4)}
+                  style={{
+                    cursor: "pointer",
+                    borderBottom: tab === 4 ? "5px solid #ffc701" : "",
+                  }}
+                >
                   <img src={message} alt="" />
                   <h6>Message</h6>
                 </div>
@@ -250,93 +291,15 @@ function ChoiraTest() {
           </div>
 
           <div className="choira-test-project-section">
-            {/* <ProjecDetails userProjectData={userProjectData} /> */}
-            <div className="choira-test-project-section-main-2">
-              <div className="progress-div">
-                <div className="progress_main_div">
-                  <div>
-                    <div>Progress</div>
-                    <div>Time left:</div>
-                  </div>
-                  <div>
-                    <div>Under Production </div>
-                    <CountdownTimer projectDeliveryDate={ProjectDeliveryDate} />
-                  </div>
-                </div>
-                <div className="progress_main_div_content">
-                  <div>
-                    <div>
-                      <div>
-                        <div>
-                          <FaCheckCircle />
-                        </div>
-                        <div>Created</div>
-                      </div>
-                      <div>
-                        This is the initial stage where you create a new project
-                        and add the details such as project name, genre, and
-                        other project specifications. You will also have the
-                        option to select from our team of music professionals to
-                        work with you.
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div>
-                        <div>
-                          {/* <RiRecordCircleFill /> */}
-                          <FaCheckCircle />
-                        </div>
-                        <div>Under Production</div>
-                      </div>
-                      <div>
-                        Once you have created the project, our team of music
-                        professionals will start working on it. During this
-                        phase, they will produce the music, mix and master it,
-                        and make necessary edits to create the final version of
-                        your music.
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div>
-                        <div>
-                          <FaCheckCircle />
-                        </div>
-                        <div>Ready for Review</div>
-                      </div>
-                      <div style={{ borderColor: "#E0E0E0" }}>
-                        After the production is completed, your project will
-                        move to the review phase. Here, you can listen to the
-                        final version of your music and provide feedback or
-                        suggestions for any changes you want to make. <br />
-                        <button>
-                          Request Revision <img src={tickbtn} alt="" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div>
-                        <div style={{ color: "#E0E0E0" }}>
-                          <RiRecordCircleFill />
-                        </div>
-                        <div style={{ color: "#E0E0E0" }}>Completed</div>
-                      </div>
-                      <div style={{ color: "#E0E0E0", border: "none" }}>
-                        Once you have reviewed and approved the final version of
-                        your music, the project will be marked as completed. You
-                        can then download the final version and use it for your
-                        intended purpose.
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {tab == 1 ? (
+              <ProjecDetails userProjectData={userProjectData} />
+            ) : tab == 2 ? (
+              <Progress />
+            ) : tab == 3 ? (
+              <Payment />
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

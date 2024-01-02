@@ -514,12 +514,13 @@ body {
   height: 31%;
 }
 .progress_main_div_content > div > div > div > div:first-child {
-  color: #ffc701;
+  color: rgb(224, 224, 224);
 }
 
 .progress_main_div_content > div > div {
   width: 100%;
   height: 100%;
+
   /* border: 2px solid black; */
 }
 .progress_main_div_content > div > div > div:first-child {
@@ -530,11 +531,13 @@ body {
   gap: 1%;
   align-items: center;
   font-size: 1.5vmax;
+  color: rgb(224, 224, 224);
 }
 .progress_main_div_content > div > div > div:nth-child(2) {
   width: 100%;
   height: 68%;
-  border-left: 5px solid #ffc701;
+  border-left: 5px solid rgb(224, 224, 224);
+  color: rgb(224, 224, 224);
   /* border: 2px solid blue; */
   padding-left: 3%;
   margin-left: 0.8%;
@@ -553,18 +556,19 @@ body {
   background-color: #ffc701;
   margin-top: 0.5%;
 }
-.overlay {
-  width: 0%;
-  height: 0%;
+.test-overlay {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
   position: absolute;
   background-color: #09090981;
   top: 0%;
-  transition: 1s ease;
+
+  z-index: -100;
 }
-.overlay-after {
-  width: 100%;
-  height: 100%;
-  transition: 1s ease;
+.test-overlay-after {
+  opacity: 1;
+  z-index: 0;
 }
 .choira_edit_profile {
   left: 50%;
@@ -629,12 +633,29 @@ body {
   width: 100%;
   height: 100%;
 }
-.choira_edit_profile > div > div:nth-child(2) > div {
+.choira_edit_profile > div > div:nth-child(2) > div:first-child {
   height: 120px;
   width: 120px;
   /* border: 2px solid red; */
   border-radius: 50%;
   overflow: hidden;
+  position: relative;
+}
+.choira_edit_profile > div > div:nth-child(2) > div:nth-child(2) {
+  /* border: 2px solid red; */
+  /* border: 2px solid red; */
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 0.6vmax;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 40%;
+  top: 27%;
+  background-color: #ffc701;
+  color: black;
 }
 .choira_edit_profile input,
 select {
@@ -655,5 +676,250 @@ select {
   width: 30%;
   height: 40%;
   background-color: #ffc701;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+.choira_edit_profile > div > div:nth-child(6) button:hover {
+  background-color: #ffb301;
+}
+.choira_edit_profile select option {
+  color: white;
+  background-color: #262727;
+}
+.choira_test_number > input {
+  position: relative;
+}
+.choira_test_number > div {
+  position: absolute;
+  margin-top: -8%;
+  padding-left: 8px;
+  font-size: 0.7vmax;
+}
+.choira_test_number > input {
+  padding-left: 20%;
+}
+
+.choira_test_payment {
+  border: 2px solid green;
+  width: 90%;
+  height: 98%;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ctp_main {
+  width: 85%;
+  height: 90%;
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5%;
+}
+.ctp_main > div {
+  width: 98%;
+  height: 20%;
+  /* border: 2px solid blue; */
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+.ctp_main > div:first-child {
+  width: 98%;
+  height: 30%;
+  box-shadow: none;
+  /* border: 2px solid green; */
+  gap: 2%;
+}
+.ctp_main > div:first-child > div {
+  width: 49%;
+  height: 98%;
+  /* border: 2px solid green; */
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+.price_section > div {
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
+  display: flex;
+}
+.price_section > div > div:first-child {
+  width: 70%;
+  height: 100%;
+  /* border: 2px solid yellow; */
+  display: flex;
+  flex-direction: column;
+  padding-left: 10%;
+  justify-content: center;
+}
+.price_section > div > div:first-child > div:first-child {
+  font-size: 1vmax;
+  font-weight: 700;
+  color: #606060;
+}
+.price_section > div > div:first-child > div:last-child {
+  font-size: 2vmax;
+  font-weight: 700;
+  color: black;
+}
+.price_section > div > div:last-child {
+  width: 30%;
+  height: 100%;
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+  gap: 10%;
+  justify-content: center;
+}
+.price_section > div > div:last-child > div {
+  width: 100%;
+  height: 40%;
+  /* border: 2px solid green; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.price_section > div > div:last-child > div:first-child > div:first-child {
+  font-size: 1vmax;
+  font-weight: 500;
+  color: green;
+}
+.price_section > div > div:last-child > div > div:last-child {
+  font-size: 1.5vmax;
+  font-weight: 500;
+  color: back;
+}
+.price_section > div > div:last-child > div:last-child > div:first-child {
+  color: red;
+  font-size: 1vmax;
+  font-weight: 500;
+}
+.payment_mode {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5%;
+}
+.payment_mode > div {
+  width: 80%;
+  height: 40%;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25);
+}
+.payment_mode > div:first-child {
+  display: flex;
+  align-items: center;
+}
+.payment_mode > div:first-child > div:first-child {
+  width: 7%;
+  height: 50%;
+  border: 2px solid gray;
+  margin-left: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+}
+.payment_mode > div:first-child > div:first-child img {
+  height: 30px;
+}
+.payment_mode > div:first-child > div:nth-child(2) {
+  width: 60%;
+  /* border: 2px solid green; */
+  margin-left: 5%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.payment_mode > div:first-child > div:nth-child(3) {
+  /* border: 2px solid blue; */
+  padding-left: 15%;
+}
+
+.payment_mode > div:last-child {
+  display: flex;
+  align-items: center;
+}
+.payment_mode > div:last-child > div:first-child {
+  width: 7%;
+  height: 50%;
+  border: 2px solid gray;
+  margin-left: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+}
+.payment_mode > div:last-child > div:first-child img {
+  height: 30px;
+}
+.payment_mode > div:last-child > div:nth-child(2) {
+  width: 60%;
+  /* border: 2px solid green; */
+  margin-left: 5%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.payment_mode > div:last-child > div:nth-child(3) {
+  /* border: 2px solid blue; */
+  padding-left: 15%;
+}
+
+.choira_test_pay_status {
+  display: flex;
+  align-items: center;
+}
+.choira_test_pay_status > div:first-child {
+  width: 5%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.choira_test_pay_status > div:first-child > div {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 3px solid #ffc701;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7vmax;
+}
+.choira_test_pay_status > div:nth-child(2) {
+  width: 60%;
+  height: 80%;
+  display: flex;
+
+  justify-content: center;
+  flex-direction: column;
+  gap: 5%;
+}
+.choira_test_pay_status > div:nth-child(3) {
+  width: 10%;
+  font-size: 1vmax;
+  font-weight: 600;
+  margin-left: 10%;
+}
+.choira_test_pay_status > div:nth-child(4) {
+  width: 10%;
+  height: 40%;
+  background-color: var(--Neutral-Neutral-400, #9ca3af);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1vmax;
+  gap: 10%;
   border-radius: 10px;
 }
