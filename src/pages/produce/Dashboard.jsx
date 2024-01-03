@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../produce/dashboard.css";
 import logo from "../../assets/img/logo-choira.svg";
 import create from "../../assets/img/dashboard_img/create.svg";
@@ -17,7 +17,199 @@ function Dashboard() {
   const gotoNewproject = () => {
     navigate("/newproject");
   };
+  const statusColorMap = {
+    new: "#27AE60",
+    "in progress": "#2D9CDB",
+    complete: "green",
+    cancelled: "#EB5757",
+    created: "#2D9CDB",
+    "under production": " #F2994A",
+    "ready for review": "#9B51E0",
+    paid: "#27AE60",
+    pending: "#EB5757",
+    pay: "#FFC701",
+    "pay now": "#FFC701",
+  };
+  const ProjectCard = ({
+    status,
+    name,
+    type,
+    musicianType,
+    createdDate,
+    backgroundColor,
+  }) => (
+    <div className="dasboard_project_tab_card">
+      <div
+        className="project_status"
+        style={{
+          backgroundColor: statusColorMap[status.toLowerCase()] || "yellow",
+        }}
+      >
+        {status}
+      </div>
+      <div className="project_name">{name}</div>
+      <div className="project_type">{type}</div>
+      <div>
+        <div className="musician_type">{musicianType}</div>
+        <div className="project_created_date">{createdDate}</div>
+      </div>
+    </div>
+  );
 
+  const [projects, setProjects] = useState([
+    {
+      status: "New",
+      name: "Choira_Test",
+      type: "Cover Song",
+      musicianType: "Music Production",
+      createdDate: "09/27/2023",
+    },
+    {
+      status: "in progress",
+      name: "Hope_Test",
+      type: "Original Song",
+      musicianType: "Full Production Team",
+      createdDate: "01/04/2023",
+    },
+    // Add more projects as needed
+  ]);
+
+  //progress tab
+  const ProgressCard = ({
+    status,
+    name,
+
+    totalTime,
+    createdDate,
+  }) => (
+    <div className="dasboard_progress_tab_card">
+      <div
+        className="project_status"
+        style={{
+          backgroundColor: statusColorMap[status.toLowerCase()] || "yellow",
+        }}
+      >
+        {status}
+      </div>
+      <div className="project_name">{name}</div>
+
+      <div>
+        <div className="musician_type">{totalTime}</div>
+        <div className="project_created_date">{createdDate}</div>
+      </div>
+    </div>
+  );
+  const [progress, setprogress] = useState([
+    {
+      status: "New",
+      name: "Choira_Test",
+
+      totalTime: "02 Days to go",
+      createdDate: "09/27/2023",
+    },
+    {
+      status: "In progress",
+      name: "Hope_Test",
+
+      totalTime: "02 Days to go",
+      createdDate: "01/04/2023",
+    },
+    // Add more projects as needed
+  ]);
+
+  // payment tab section
+  const PaymentCard = ({
+    status,
+    name,
+    total,
+    paid,
+    pending,
+    paymentStatus,
+    createdDate,
+  }) => (
+    <div className="dasboard_payment_tab_card ">
+      <div
+        className="project_status"
+        style={{
+          backgroundColor: statusColorMap[status.toLowerCase()] || "yellow",
+        }}
+      >
+        {status}
+      </div>
+      <div className="project_name">{name}</div>
+      <div className="project_name">
+        . &nbsp;{total} - <b>Total Amount</b>
+      </div>
+      <div className="project_type">
+        .&nbsp;{paid} - <b>Paid</b>
+      </div>
+      <div className="project_type">
+        .&nbsp;{pending} - <b>pending</b>
+      </div>
+      <div
+        className="project_type"
+        style={{ display: status.toLowerCase() == "paid" ? "none" : "" }}
+      >
+        PayNow
+      </div>
+      <div>
+        <div className="musician_type">{paymentStatus}</div>
+        <div className="project_created_date">{createdDate}</div>
+      </div>
+    </div>
+  );
+
+  const [payments, setPayments] = useState([
+    {
+      status: "PENDING",
+      name: "Choira_Test",
+      total: "25000",
+      paid: "1000",
+      pending: "5000",
+      paymentStatus: "Next payment",
+      createdDate: "09/27/2023",
+    },
+    {
+      status: "paid",
+      name: "Hope_Test",
+      total: "25000",
+      paid: "1000",
+      pending: "5000",
+      paymentStatus: "Payment Completed",
+      createdDate: "01/04/2023",
+    },
+    // Add more projects as needed
+  ]);
+
+  // message tab
+
+  const Messagecard = ({
+    name,
+
+    message,
+  }) => (
+    <div className="dasboard_message_tab_card">
+      <div className="project_name">{name}</div>
+
+      <div className="musician_type">You : {message}</div>
+      <div className="project_created_date">Replay</div>
+    </div>
+  );
+  const [message, setMessage] = useState([
+    {
+      status: "New",
+      name: "Choira_Test",
+
+      message: "Hey Jackson, Thanks for t...",
+    },
+    {
+      status: "In progress",
+      name: "Hope_Test",
+
+      message: "Let’s make a hit togethe...",
+    },
+    // Add more projects as needed
+  ]);
   return (
     <>
       <div className="wrapper">
@@ -87,28 +279,52 @@ function Dashboard() {
                   <img src={folder} alt="" />
                   <h6>Projects</h6>
                 </div>
-                <div className="project-main-content"></div>
+                <div className="project-main-content">
+                  <div className="dasboard_project_tab">
+                    {projects.map((project, index) => (
+                      <ProjectCard key={index} {...project} />
+                    ))}
+                  </div>
+                </div>
               </div>
               <div>
                 <div>
                   <img src={progress} alt="" />
                   <h6>Progress</h6>
                 </div>
-                <div className="project-main-content"></div>
+                <div className="project-main-content">
+                  <div className="dasboard_project_tab">
+                    {progress.map((progress, index) => (
+                      <ProgressCard key={index} {...progress} />
+                    ))}
+                  </div>
+                </div>
               </div>
               <div>
                 <div>
                   <img src={payment} alt="" />
                   <h6>Payment</h6>
                 </div>
-                <div className="project-main-content"></div>
+                <div className="project-main-content">
+                  <div className="dasboard_project_tab">
+                    {payments.map((project, index) => (
+                      <PaymentCard key={index} {...project} />
+                    ))}
+                  </div>
+                </div>
               </div>
               <div>
                 <div>
                   <img src={message} alt="" />
                   <h6>Message</h6>
                 </div>
-                <div className="project-main-content"></div>
+                <div className="project-main-content">
+                  <div className="dasboard_project_tab">
+                    {message.map((message, index) => (
+                      <Messagecard key={index} {...message} />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

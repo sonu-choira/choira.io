@@ -19,6 +19,7 @@ import ProjecDetails from "../../components/user-project-detail/ProjecDetails";
 import { FaPen } from "react-icons/fa6";
 import Progress from "../../components/user-project-detail/Progress";
 import Payment from "../../components/user-project-detail/Payment";
+import Message from "../../components/user-project-detail/Message";
 
 function ChoiraTest() {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ function ChoiraTest() {
     Mob: "1231231230",
     emal: "sample@gmail.com",
   });
-  const [tab, setTab] = useState(3);
+  const [tab, setTab] = useState(4);
 
   return (
     <>
@@ -298,7 +299,7 @@ function ChoiraTest() {
             ) : tab == 3 ? (
               <Payment />
             ) : (
-              ""
+              <Message />
             )}
           </div>
         </div>
