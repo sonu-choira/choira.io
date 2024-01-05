@@ -69,6 +69,7 @@ export default function ChooseBudget({ onNext, setUserProjectData }) {
           <h2>Choose Budget</h2>
         </div>
         <div className="range-slider">
+          <div></div> {/* contain image for mobile view */}
           <div className="double_range_slider_box">
             <div className="double_range_slider">
               <span
@@ -89,6 +90,7 @@ export default function ChooseBudget({ onNext, setUserProjectData }) {
                 step="1000"
                 onChange={handleInputChange}
                 onClick={() => setCheckIfBudgetIsSelected(true)}
+                onTouchStart={() => setCheckIfBudgetIsSelected(true)}
               />
               <input
                 type="range"
@@ -99,6 +101,7 @@ export default function ChooseBudget({ onNext, setUserProjectData }) {
                 step="1000"
                 onChange={handleInputChange}
                 onClick={() => setCheckIfBudgetIsSelected(true)}
+                onTouchStart={() => setCheckIfBudgetIsSelected(true)}
               />
 
               <div

@@ -76,7 +76,9 @@ export default function ChooseGenre({ onNext, setUserProjectData }) {
         <div className="choose-type-div">
           {cardData
             .reduce((rows, card, index) => {
-              if (index % 4 === 0) {
+              if (window.innerWidth >= 768 && index % 4 === 0) {
+                rows.push([]);
+              } else if (window.innerWidth < 768 && index % 2 === 0) {
                 rows.push([]);
               }
               rows[rows.length - 1].push(card);

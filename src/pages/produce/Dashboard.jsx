@@ -65,7 +65,7 @@ function Dashboard() {
       createdDate: "09/27/2023",
     },
     {
-      status: "in progress",
+      status: "in Progress",
       name: "Hope_Test",
       type: "Original Song",
       musicianType: "Full Production Team",
@@ -73,6 +73,19 @@ function Dashboard() {
     },
     // Add more projects as needed
   ]);
+  useEffect(() => {
+    setProjects((p) => {
+      return p.map((pi) => {
+        pi.status = pi.status.toLowerCase();
+        return pi;
+      });
+    });
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    console.log(projects);
+  }, [projects]);
 
   //progress tab
   const ProgressCard = ({

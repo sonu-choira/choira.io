@@ -1,5 +1,6 @@
 body {
   overflow: hidden;
+  box-sizing: border-box;
 }
 .project-wrapper {
   width: 100vw;
@@ -216,6 +217,10 @@ p {
   /* overflow: hidden; */
   background-color: rgba(0, 0, 0, 0.596);
   opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.card-wrapper.clicked .card-overlay {
+  opacity: 1;
 }
 .card-overlay p {
   font-size: 0.8vmax;
@@ -248,6 +253,7 @@ p {
   justify-content: center;
   align-items: center;
   border-radius: 5px;
+  /* border: 2px solid red; */
 }
 
 .double_range_slider {
@@ -991,4 +997,116 @@ p {
 }
 .visibilityHidden {
   visibility: hidden;
+}
+
+@media only screen and (max-width: 768px) {
+  .project-navbar > img {
+    width: 20%;
+  }
+  .project-navbar {
+    /* border: 2px solid red; */
+    height: 5%;
+  }
+  .project-div1 {
+    /* border: 2px solid red; */
+    width: 90%;
+    height: 90%;
+  }
+
+  .project-div1 > div:nth-child(1) h3 {
+    font-size: 3vmax;
+  }
+  .project-div1 > div:nth-child(2) p {
+    font-size: 1.8vmax;
+    line-height: 20px;
+  }
+  .project-div1 > div:nth-child(2) br {
+    display: none;
+  }
+  .project-div1 > div:nth-child(3) img {
+    width: 200px;
+  }
+  .project-div1 > div:nth-child(4) {
+    width: 100%;
+    /* border: 2px solid red; */
+  }
+  .project-div1 > div:nth-child(4) button {
+    width: 28%;
+    height: 30%;
+  }
+  /* // choose type  */
+
+  .project-div2 {
+    width: 98%;
+    height: 95%;
+    /* border: 2px solid red; */
+  }
+  /* .project-div2 > div:first-child > h2 {
+    font-size: 2.5vmax;
+  } */
+  /* .project-div2 > div:first-child {
+    height: 5%;
+    font-size: 1.8vmax;
+    
+  } */
+  .choose-type-div-card > div > h3 {
+    font-size: 1.2vmax;
+  }
+  .choose-type-div {
+    /* border: 2px solid red; */
+    height: 80%;
+    overflow-y: scroll;
+  }
+  .choose-type-div-card {
+    /* border: 2px solid green; */
+    width: 100%;
+    padding-bottom: 40%;
+    margin-bottom: 10%;
+  }
+  .choose-type-div-card > div {
+    width: 45%;
+    height: 250%;
+  }
+
+  .card-overlay:hover {
+    opacity: 0;
+  }
+  .project-div2-btn {
+    width: 100%;
+    /* border: 2px solid red; */
+  }
+  .project-div2-btn button {
+    width: 25%;
+    height: 60%;
+    font-size: 1.7vmax;
+    font-weight: 600;
+  }
+  .project-div2-title-musican {
+    width: 90%;
+    /* border: 2px solid red; */
+    height: 15%;
+  }
+  .project-div2-title-musican p {
+    text-align: center;
+    font-size: 1.5vmax;
+  }
+  .project-div2-title-musican h2 {
+    font-size: 2vmax;
+  }
+
+  /* //choose budget */
+  .range-slider {
+    flex-direction: column;
+    width: 85%;
+  }
+
+  .range-slider > div:first-child {
+    background-image: url(../../assets/img/chooseType-img/budgetsinger.svg);
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    width: 100%;
+    /* border: 2px solid green; */
+    width: 100%;
+    height: 40%;
+  }
 }

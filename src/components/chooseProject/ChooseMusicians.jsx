@@ -118,11 +118,13 @@ export default function ChooseMusicians({ onNext, setUserProjectData }) {
         </div>
         <div className="choose-type-div">
           {cardData
-            .reduce((rows, musician, index) => {
-              if (index % 4 === 0) {
+            .reduce((rows, card, index) => {
+              if (window.innerWidth >= 768 && index % 4 === 0) {
+                rows.push([]);
+              } else if (window.innerWidth < 768 && index % 2 === 0) {
                 rows.push([]);
               }
-              rows[rows.length - 1].push(musician);
+              rows[rows.length - 1].push(card);
               return rows;
             }, [])
             .map((row, rowIndex) => (

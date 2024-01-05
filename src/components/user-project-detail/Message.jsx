@@ -21,7 +21,7 @@ function Message() {
     if (message !== "") {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: message, sentByUser: false },
+        { text: message, sentByUser: true },
       ]);
       // Clear the input after sending the message
       messageInputRef.current.value = "";
