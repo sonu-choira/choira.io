@@ -59,7 +59,9 @@ const ProjectDelivery = ({ onNext, setUserProjectData }) => {
           {[7, 6, 5].map((days, index) => (
             <div key={index}>
               <div>
-                <h3>{`${days} day delivery (standard)`}</h3>
+                {index === 0
+                  ? `${days} day delivery (standard)`
+                  : `${days} day delivery`}
               </div>
               <div>
                 <h4>

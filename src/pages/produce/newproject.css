@@ -1041,6 +1041,7 @@ p {
     height: 95%;
     /* border: 2px solid red; */
   }
+
   /* .project-div2 > div:first-child > h2 {
     font-size: 2.5vmax;
   } */
@@ -1109,4 +1110,104 @@ p {
     width: 100%;
     height: 40%;
   }
+  .mob_share_link_title {
+    font-size: 2.9vmax;
+  }
+  .optional {
+    font-size: 2vmax;
+  }
+  .attach-demo {
+    width: 95%;
+  }
+  .reference-link input {
+    width: 85%;
+    font-size: 1.8vmax;
+  }
+  .attach-demo > div:nth-child(6) textarea {
+    font-size: 1.8vmax;
+  }
+  .add-attach-demo-link {
+    width: 15%;
+  }
+  .project-delivery-main {
+    width: 95%;
+    font-size: 1.8vmax;
+    font-weight: 600;
+  }
+  .project-delivery-main > div > div:nth-child(3) {
+    /* border: 2px solid red; */
+    width: 35%;
+    height: 50%;
+    font-size: 1.4vmax;
+  }
+
+  .goodName-singer {
+    width: 60%;
+  }
+  .goodName-div > div:nth-child(2) {
+    /* border: 2px solid red; */
+    width: 80%;
+    /* height: 15%; */
+  }
+  .goodName-div > div:nth-child(2) input {
+    font-size: 1.8vmax;
+  }
+  .almostDone-div {
+    /* border: 2px solid red; */
+    height: 50%;
+    width: 95%;
+    font-size: 1.6vmax;
+  }
+  .almostDone-div {
+    align-items: start;
+  }
+  .mob-awsome {
+    /* border: 2px solid red; */
+    width: 95%;
+    height: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .almostDone-btn {
+    width: 85%;
+  }
+  .almostDone-btn button {
+    font-size: 2vmax;
+    font-weight: 600;
+  }
+  .connectInFewSecond {
+    /* border: 2px solid red; */
+    width: 100%;
+  }
+  .connect-img {
+    /* border: 2px solid yellow; */
+    gap: 5%;
+  }
+  .right-img,
+  .left-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+  .center-img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+  }
+  .username {
+    font-size: 2vmax;
+  }
+  .connectInFewSecond-details > p {
+    font-size: 2vmax;
+  }
+  .project-div2-btn img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  /* .project-div2-btn p {
+    font-size: 2vmax;
+    padding-left: 2%;
+  } */
 }

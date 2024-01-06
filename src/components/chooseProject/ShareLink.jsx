@@ -125,7 +125,7 @@ export default function ShareLink({ onNext, setUserProjectData }) {
               : "sharelink-title"
           }
         >
-          <h2>
+          <h2 className="mob_share_link_title">
             Share links of similar tracks for inspiration &nbsp;
             <span className="optional">(Optional)</span>
           </h2>

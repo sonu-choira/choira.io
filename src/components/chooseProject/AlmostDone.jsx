@@ -10,7 +10,7 @@ const AlmostDone = ({ onNext, setUserProjectData, setCurrentStep }) => {
   return (
     <>
       <div className="project-div2">
-        <div>
+        <div className="mob-awsome">
           <h2> Awesome! We are almost done</h2>
         </div>
         <div className="almostDone-div">
