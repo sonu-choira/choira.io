@@ -2,6 +2,9 @@ body {
   overflow: hidden;
   box-sizing: border-box;
 }
+button {
+  color: black;
+}
 .project-wrapper {
   width: 100vw;
   height: 100vh;
@@ -1210,4 +1213,41 @@ p {
     font-size: 2vmax;
     padding-left: 2%;
   } */
+
+  .BookSession-title {
+    /* border: 2px solid red; */
+    width: 98%;
+  }
+  .BookSession-title > div:first-child button {
+    width: 80%;
+  }
+  .bookSession-div {
+    /* border: 2px solid red; */
+    width: 98%;
+  }
+  .bookSession-month > h5 {
+    font-size: 2vmax;
+  }
+  .bookSession-month {
+    /* border: 2px solid red; */
+    width: 40%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .book-custom-dates > div {
+    /* border: 2px solid red; */
+    width: 30%;
+  }
+  .book-custom-dates {
+    /* border: 2px solid red; */
+    width: 95%;
+    font-size: 1.8vmax;
+  }
+  .slots div {
+    /* border: 2px solid red; */
+    height: 70%;
+    font-size: 1.5vmax;
+  }
 }

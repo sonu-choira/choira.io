@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../produce/dashboard.css";
+import { FaBars } from "react-icons/fa6";
+
 import logo from "../../assets/img/logo-choira.svg";
 import create from "../../assets/img/dashboard_img/create.svg";
 import produce from "../../assets/img/dashboard_img/produce_selected.svg";
@@ -20,6 +22,11 @@ import { FaPen } from "react-icons/fa6";
 import Progress from "../../components/user-project-detail/Progress";
 import Payment from "../../components/user-project-detail/Payment";
 import Message from "../../components/user-project-detail/Message";
+import { RxCross2 } from "react-icons/rx";
+import { FaFolder } from "react-icons/fa";
+import { TbProgressCheck } from "react-icons/tb";
+import { MdPayments } from "react-icons/md";
+import { LuMessagesSquare } from "react-icons/lu";
 
 function ChoiraTest() {
   const navigate = useNavigate();
@@ -69,8 +76,8 @@ function ChoiraTest() {
     Mob: "1231231230",
     emal: "sample@gmail.com",
   });
-  const [tab, setTab] = useState(4);
-
+  const [tab, setTab] = useState(1);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   return (
     <>
       <div
@@ -174,12 +181,23 @@ function ChoiraTest() {
           </div>
         </div>
       </div>
+
+      {/* mobile sidebar----------  */}
+
+      {/* main section  */}
       <div className="wrapper">
-        <div className="sidebar">
+        <div className={`sidebar  ${sidebarVisible ? "sidebar_after" : ""}`}>
           <div className="sidebar-main">
             <div className="section1">
               <div>
                 <img src={logo} alt="" />
+                <RxCross2
+                  className="mobview"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setSidebarVisible(false);
+                  }}
+                />
               </div>
               <div className="create-btn">
                 <button onClick={gotoNewproject}>
@@ -216,55 +234,87 @@ function ChoiraTest() {
             </div>
           </div>
         </div>
-        <div className="dashboard">
+        <div
+          className={`dashboard ${sidebarVisible ? "dashboard_after" : ""}`}
+          onClick={() => {
+            if (sidebarVisible) {
+              setSidebarVisible(false);
+            }
+          }}
+        >
           <div className="produce-section">
             <div className="produce-section-main2">
               <div>
-                <img src={folder} alt="" /> <h1>Choira-test</h1>
+                <div>
+                  <img src={folder} alt="" /> <h1>Choira-test</h1>
+                </div>
+                <div className="mobview">
+                  <FaBars
+                    onClick={() => {
+                      setSidebarVisible((prevState) => !prevState); // Toggle the state
+                    }}
+                  />
+                </div>
               </div>
               <div className="produce-section-tabs">
-                <div
-                  onClick={() => setTab(1)}
-                  style={{
-                    cursor: "pointer",
-                    borderBottom: tab === 1 ? "5px solid #ffc701" : "",
-                  }}
-                >
-                  <img src={folder} alt="" />
-                  <h6>Projects</h6>
+                <div>
+                  <div
+                    onClick={() => setTab(1)}
+                    style={{
+                      cursor: "pointer",
+                      borderBottom: tab === 1 ? "5px solid #ffc701" : "",
+                      color:
+                        tab === 1 && window.innerWidth <= 768 ? "#ffc701" : "",
+                    }}
+                  >
+                    <FaFolder />
+                    <h6>Projects</h6>
+                  </div>
                 </div>
 
-                <div
-                  onClick={() => setTab(2)}
-                  style={{
-                    cursor: "pointer",
-                    borderBottom: tab === 2 ? "5px solid #ffc701" : "",
-                  }}
-                >
-                  <img src={progress} alt="" />
-                  <h6>Progress</h6>
+                <div>
+                  <div
+                    onClick={() => setTab(2)}
+                    style={{
+                      cursor: "pointer",
+                      borderBottom: tab === 2 ? "5px solid #ffc701" : "",
+                      color:
+                        tab === 2 && window.innerWidth <= 768 ? "#ffc701" : "",
+                    }}
+                  >
+                    <TbProgressCheck />
+                    <h6>Progress</h6>
+                  </div>
                 </div>
 
-                <div
-                  onClick={() => setTab(3)}
-                  style={{
-                    cursor: "pointer",
-                    borderBottom: tab === 3 ? "5px solid #ffc701" : "",
-                  }}
-                >
-                  <img src={payment} alt="" />
-                  <h6>Payment</h6>
+                <div>
+                  <div
+                    onClick={() => setTab(3)}
+                    style={{
+                      cursor: "pointer",
+                      borderBottom: tab === 3 ? "5px solid #ffc701" : "",
+                      color:
+                        tab === 3 && window.innerWidth <= 768 ? "#ffc701" : "",
+                    }}
+                  >
+                    <MdPayments />
+                    <h6>Payment</h6>
+                  </div>
                 </div>
 
-                <div
-                  onClick={() => setTab(4)}
-                  style={{
-                    cursor: "pointer",
-                    borderBottom: tab === 4 ? "5px solid #ffc701" : "",
-                  }}
-                >
-                  <img src={message} alt="" />
-                  <h6>Message</h6>
+                <div>
+                  <div
+                    onClick={() => setTab(4)}
+                    style={{
+                      cursor: "pointer",
+                      borderBottom: tab === 4 ? "5px solid #ffc701" : "",
+                      color:
+                        tab === 4 && window.innerWidth <= 768 ? "#ffc701" : "",
+                    }}
+                  >
+                    <LuMessagesSquare />
+                    <h6>Message</h6>
+                  </div>
                 </div>
               </div>
               <div className="choira-test-btn">
