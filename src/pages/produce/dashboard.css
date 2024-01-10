@@ -1394,4 +1394,7 @@ button {
   .mobview {
     font-size: 2.5vmax;
   }
+  .choira-test-details > div > div:first-child {
+    background-color: #1e1e1e;
+  }
 }

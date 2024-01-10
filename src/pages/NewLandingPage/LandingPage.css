@@ -40,6 +40,7 @@ button {
   display: flex;
   /* border: 2px solid white; */
   border-radius: 30px;
+
   align-items: center;
   width: 62%;
   height: 90%;
@@ -49,19 +50,41 @@ button {
   background-color: rgba(255, 255, 255, 0.103);
   border-color: rgba(255, 255, 255, 0.103);
   overflow: hidden;
-  transition: width 1s ease;
+  transition: width 0.5s ease;
+
   color: #fff;
 }
+.list h3 {
+  font-size: 1vmax;
+  transition: 0.5s ease;
+  /* opacity: 1; */
+}
+
 .smalllist {
   width: 8%;
   overflow: hidden;
   align-items: center;
   justify-content: center;
-  transition: width 1s ease;
+  transition: width 0.5s ease;
+
+  transition: 0.5s ease;
+
+  background-color: transparent;
   /* background-color: transparent; */
 }
 .smalllist h3 {
+  font-size: 0vmax;
+  opacity: 0;
+  /* display: none; */
+  transition: 0.5s ease;
+}
+.smalllist .o4 {
   display: none;
+}
+.testlogo {
+  position: absolute;
+  right: 14.5%;
+  top: 5.3%;
 }
 .list > div {
   border: 2px solid red;
@@ -71,8 +94,14 @@ button {
   cursor: pointer;
 }
 .o4 {
-  height: 30px;
-  width: 30px;
+  height: 35px;
+  width: 35px;
+  /* border: 2px solid red; */
+}
+.o5 {
+  height: 35px;
+  width: 35px;
+  /* border: 2px solid red; */
 }
 span {
   color: #ffc701;
@@ -290,6 +319,7 @@ span {
   align-items: center;
   justify-content: center;
   /* overflow-x: hidden; */
+  overflow: hidden;
 }
 .landing-page-3-main {
   /* border: 2px solid red; */

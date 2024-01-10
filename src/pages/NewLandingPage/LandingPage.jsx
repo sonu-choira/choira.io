@@ -157,10 +157,13 @@ function LandingPage() {
     });
   };
   const [combinedClasses, setCombinedClasses] = useState("list");
+  const [navLogo, setNavLogo] = useState(true);
 
   const smallNav = () => {
     // Check if "smalllist" class is present in the current state
     if (combinedClasses.includes("smalllist")) {
+      setNavLogo(false);
+
       // If present, remove "smalllist"
       setCombinedClasses((prevClasses) =>
         prevClasses.replace(" smalllist", "")
@@ -168,6 +171,7 @@ function LandingPage() {
     } else {
       // If not present, add "smalllist"
       setCombinedClasses((prevClasses) => prevClasses + " smalllist");
+      setNavLogo(true);
     }
   };
 
@@ -251,6 +255,8 @@ function LandingPage() {
             <h3>Jamming</h3>
             <h3 onClick={gotoDashboard}>AI Music Gen</h3>
             <h3 onClick={goTosigninPage}>Signin</h3>
+            <h3 onClick={goTosigninPage}>Signin</h3>
+            <h3 onClick={goTosigninPage}>Signin</h3>
 
             <img
               className="o4"
@@ -260,7 +266,20 @@ function LandingPage() {
               onClick={smallNav}
             />
           </div>
+          <div
+            className="testlogo"
+            style={{ display: navLogo ? "block" : "none" }}
+          >
+            <img
+              className="o5"
+              style={{ cursor: "pointer" }}
+              src={o4}
+              alt=""
+              onClick={smallNav}
+            />
+          </div>
         </div>
+
         {/* mobile navbar start here------------------- */}
         <div className="mobile-navbar">
           <div>
