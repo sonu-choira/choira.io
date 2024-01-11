@@ -89,6 +89,18 @@ function Progress() {
               <CountdownTimer projectDeliveryDate={ProjectDeliveryDate} />
             </div>
           </div>
+
+          {/* timer mobile view  */}
+          <div className="mob_progress_main_div">
+            <div>
+              <div>Time left:</div>
+              <CountdownTimer projectDeliveryDate={ProjectDeliveryDate} />
+            </div>
+            <div>
+              <div>Progress</div>
+              <div> {currentStatus} </div>
+            </div>
+          </div>
           <div className="progress_main_div_content">
             <div>
               <div>

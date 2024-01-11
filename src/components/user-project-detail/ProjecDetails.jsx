@@ -63,35 +63,36 @@ function ProjecDetails({ userProjectData }) {
           <div className="choira-test-demoFile">
             <span>Demo File:</span>
             <div className="choira-test-demoFile-main">
-              {DemoFiles[0].split(",").map((file, index) => (
-                <div key={index}>
-                  {file.trim().toLowerCase().endsWith(".mp3") && (
-                    <img src={musicFolder} alt="" />
-                  )}
-                  {file.trim().toLowerCase().endsWith(".rar") && (
-                    <img src={rarFile} alt="" />
-                  )}
-                  {file.trim().toLowerCase().endsWith(".zip") && (
-                    <img src={zipFile} alt="" />
-                  )}
-                  {!file.trim().toLowerCase().endsWith(".mp3") &&
-                    !file.trim().toLowerCase().endsWith(".rar") &&
-                    !file.trim().toLowerCase().endsWith(".zip") && (
-                      <img src={files} alt="" />
+              {DemoFiles.length === 0 ? (
+                <div>Empty</div>
+              ) : (
+                DemoFiles[0].split(",").map((file, index) => (
+                  <div key={index}>
+                    {file.trim().toLowerCase().endsWith(".mp3") && (
+                      <img src={musicFolder} alt="" />
                     )}
-                  <h4>{file.trim()}</h4>
-                </div>
-              ))}
+                    {file.trim().toLowerCase().endsWith(".rar") && (
+                      <img src={rarFile} alt="" />
+                    )}
+                    {file.trim().toLowerCase().endsWith(".zip") && (
+                      <img src={zipFile} alt="" />
+                    )}
+                    {!file.trim().toLowerCase().endsWith(".mp3") &&
+                      !file.trim().toLowerCase().endsWith(".rar") &&
+                      !file.trim().toLowerCase().endsWith(".zip") && (
+                        <img src={files} alt="" />
+                      )}
+                    {file.trim() ? <h4>{file.trim()}</h4> : <div>Empty</div>}
+                  </div>
+                ))
+              )}
             </div>
           </div>
           <div>
             <span>Reference Links:</span>
             {LinksForSimilarTrack[0].length === 1 &&
             isYouTubeLink(LinksForSimilarTrack[0][0]) ? (
-              <div
-                className="choira-test-player"
-                style={{ width: "450px", height: "250px" }}
-              >
+              <div className="choira-test-player">
                 <ReactPlayer
                   controls
                   url={LinksForSimilarTrack[0][0]}
