@@ -10,16 +10,14 @@ function Payment() {
     return (
       <div className="choira_test_pay_status">
         <div>
-          <div>
-            <FaCheck />
-          </div>
+          <div>{isPaid ? <FaCheck /> : ""}</div>
         </div>
         <div>
           <b>{status} :</b>
           <p>{description}</p>
         </div>
         <div>{`₹ ${amount}`}</div>
-        <div>
+        <div style={{ backgroundColor: isPaid ? "" : "#ffc701" }}>
           {isPaid ? (
             <>
               Paid <img src={pig1} alt="" />

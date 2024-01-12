@@ -105,22 +105,24 @@ function Message() {
           <div className="">
             <div className="chat-messages" ref={chatMessagesRef}>
               {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`chat-message ${getAlignmentClass(message)}`}
-                  style={{
-                    backgroundColor: message.text ? "#DCF8C6" : "transparent",
-                  }}
-                >
-                  {message.file ? renderMedia(message) : message.text}
-                </div>
+                <>
+                  <div
+                    key={index}
+                    className={`chat-message ${getAlignmentClass(message)}`}
+                    style={{
+                      backgroundColor: message.text ? "" : "transparent",
+                    }}
+                  >
+                    {message.file ? renderMedia(message) : message.text}
+                  </div>
+                </>
               ))}
             </div>
           </div>
           <div>
-            <input
-              type="text"
-              id="messageInput"
+            <textarea
+              draggable="false"
+              style={{ resize: "none" }}
               placeholder="Type your message"
               ref={messageInputRef}
               onKeyPress={handleKeyPress}
@@ -130,7 +132,12 @@ function Message() {
               <label htmlFor="fileInput">
                 <img src={clip} alt="" />
               </label>
-              <img src={plane} alt="" onClick={sendMessage} />
+              <img
+                src={plane}
+                alt=""
+                onClick={sendMessage}
+                className="chatPlane"
+              />
               <input
                 type="file"
                 id="fileInput"
