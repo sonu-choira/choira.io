@@ -10,7 +10,9 @@ function Payment() {
     return (
       <div className="choira_test_pay_status">
         <div>
-          <div>{isPaid ? <FaCheck /> : ""}</div>
+          <div>
+            <FaCheck />
+          </div>
         </div>
         <div>
           <b>{status} :</b>

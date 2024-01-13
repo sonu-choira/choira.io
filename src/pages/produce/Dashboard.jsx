@@ -11,12 +11,14 @@ import progress from "../../assets/img/dashboard_img/progress.svg";
 import payment from "../../assets/img/dashboard_img/payment.svg";
 import message from "../../assets/img/dashboard_img/message.svg";
 import { useNavigate } from "react-router-dom";
+import MobileDashboard from "./MobileDashboard";
 
 function Dashboard() {
   const navigate = useNavigate();
   const gotoNewproject = () => {
     navigate("/newproject");
   };
+
   const statusColorMap = {
     new: "#27AE60",
     "in progress": "#2D9CDB",
@@ -30,6 +32,7 @@ function Dashboard() {
     pay: "#FFC701",
     "pay now": "#FFC701",
   };
+
   const ProjectCard = ({
     status,
     name,
@@ -73,6 +76,7 @@ function Dashboard() {
     },
     // Add more projects as needed
   ]);
+
   useEffect(() => {
     setProjects((p) => {
       return p.map((pi) => {
@@ -87,14 +91,7 @@ function Dashboard() {
     console.log(projects);
   }, [projects]);
 
-  //progress tab
-  const ProgressCard = ({
-    status,
-    name,
-
-    totalTime,
-    createdDate,
-  }) => (
+  const ProgressCard = ({ status, name, totalTime, createdDate }) => (
     <div className="dasboard_progress_tab_card">
       <div
         className="project_status"
@@ -105,32 +102,29 @@ function Dashboard() {
         {status}
       </div>
       <div className="project_name">{name}</div>
-
       <div>
         <div className="musician_type">{totalTime}</div>
         <div className="project_created_date">{createdDate}</div>
       </div>
     </div>
   );
+
   const [progress, setprogress] = useState([
     {
       status: "New",
       name: "Choira_Test",
-
       totalTime: "02 Days to go",
       createdDate: "09/27/2023",
     },
     {
       status: "In progress",
       name: "Hope_Test",
-
       totalTime: "02 Days to go",
       createdDate: "01/04/2023",
     },
     // Add more projects as needed
   ]);
 
-  // payment tab section
   const PaymentCard = ({
     status,
     name,
@@ -140,7 +134,7 @@ function Dashboard() {
     paymentStatus,
     createdDate,
   }) => (
-    <div className="dasboard_payment_tab_card ">
+    <div className="dasboard_payment_tab_card">
       <div
         className="project_status"
         style={{
@@ -161,7 +155,7 @@ function Dashboard() {
       </div>
       <div
         className="project_type"
-        style={{ display: status.toLowerCase() == "paid" ? "none" : "" }}
+        style={{ display: status.toLowerCase() === "paid" ? "none" : "" }}
       >
         PayNow
       </div>
@@ -194,36 +188,35 @@ function Dashboard() {
     // Add more projects as needed
   ]);
 
-  // message tab
-
-  const Messagecard = ({
-    name,
-
-    message,
-  }) => (
+  const Messagecard = ({ name, message }) => (
     <div className="dasboard_message_tab_card">
       <div className="project_name">{name}</div>
-
       <div className="musician_type">You : {message}</div>
       <div className="project_created_date">Replay</div>
     </div>
   );
-  const [message, setMessage] = useState([
+
+  const [messages, setMessages] = useState([
     {
       status: "New",
       name: "Choira_Test",
-
       message: "Hey Jackson, Thanks for t...",
     },
     {
       status: "In progress",
       name: "Hope_Test",
-
       message: "Let’s make a hit togethe...",
     },
     // Add more projects as needed
   ]);
-  return (
+
+  return window.innerWidth <= 768 ? (
+    <>
+      <div className="mobDashboard">
+        <MobileDashboard />
+      </div>
+    </>
+  ) : (
     <>
       <div className="wrapper">
         <div className="sidebar">
@@ -307,8 +300,8 @@ function Dashboard() {
                 </div>
                 <div className="project-main-content">
                   <div className="dasboard_project_tab">
-                    {progress.map((progress, index) => (
-                      <ProgressCard key={index} {...progress} />
+                    {progress.map((progressItem, index) => (
+                      <ProgressCard key={index} {...progressItem} />
                     ))}
                   </div>
                 </div>
@@ -320,8 +313,8 @@ function Dashboard() {
                 </div>
                 <div className="project-main-content">
                   <div className="dasboard_project_tab">
-                    {payments.map((project, index) => (
-                      <PaymentCard key={index} {...project} />
+                    {payments.map((paymentItem, index) => (
+                      <PaymentCard key={index} {...paymentItem} />
                     ))}
                   </div>
                 </div>
@@ -333,8 +326,8 @@ function Dashboard() {
                 </div>
                 <div className="project-main-content">
                   <div className="dasboard_project_tab">
-                    {message.map((message, index) => (
-                      <Messagecard key={index} {...message} />
+                    {messages.map((messageItem, index) => (
+                      <Messagecard key={index} {...messageItem} />
                     ))}
                   </div>
                 </div>

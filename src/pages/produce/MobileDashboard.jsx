@@ -7,33 +7,31 @@ import create from "../../assets/img/dashboard_img/create.svg";
 import produce from "../../assets/img/dashboard_img/produce_selected.svg";
 import community from "../../assets/img/dashboard_img/community.svg";
 import tanmay from "../../assets/img/dashboard_img/tanmay.png";
-import folder from "../../assets/img/dashboard_img/folder.svg";
-import progress from "../../assets/img/dashboard_img/progress.svg";
-import payment from "../../assets/img/dashboard_img/payment.svg";
-import message from "../../assets/img/dashboard_img/message.svg";
+// import { IoIosArrowBack } from "react-icons/io";
+
 import { IoIosArrowBack } from "react-icons/io";
 import { FiEdit } from "react-icons/fi";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-import ProjecDetails from "../../components/user-project-detail/ProjecDetails";
 // import ProjecDetails from "../../components/user-project-detail/ProjecDetails";hh11
 
 import { FaPen } from "react-icons/fa6";
-import Progress from "../../components/user-project-detail/Progress";
-import Payment from "../../components/user-project-detail/Payment";
-import Message from "../../components/user-project-detail/Message";
+
 import { RxCross2 } from "react-icons/rx";
 import { FaFolder } from "react-icons/fa";
 import { TbProgressCheck } from "react-icons/tb";
 import { MdPayments } from "react-icons/md";
 import { LuMessagesSquare } from "react-icons/lu";
+import MobileProjectDetail from "../../components/user-project-detail/MobileProjectDetail";
+import MobileProgress from "../../components/user-project-detail/MobileProgress";
+import MobilePayment from "../../components/user-project-detail/MobilePayment";
 
-function ChoiraTest() {
+function MobileDashboard() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { state } = location;
-  const { userProjectData } = state || {};
-  const { ProjectDeliveryDate } = userProjectData || {};
+  // const location = useLocation();
+  // const { state } = location;
+  // const { userProjectData } = state || {};
+  // const { ProjectDeliveryDate } = userProjectData || {};
 
   const gotoNewproject = () => {
     navigate("/newproject");
@@ -245,9 +243,7 @@ function ChoiraTest() {
           <div className="produce-section">
             <div className="produce-section-main2">
               <div>
-                <div>
-                  <img src={folder} alt="" /> <h1>Choira-test</h1>
-                </div>
+                <IoIosArrowBack />
                 <div className="mobview">
                   <FaBars
                     onClick={() => {
@@ -302,7 +298,7 @@ function ChoiraTest() {
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <div
                     onClick={() => setTab(4)}
                     style={{
@@ -315,9 +311,9 @@ function ChoiraTest() {
                     <LuMessagesSquare />
                     <h6>Message</h6>
                   </div>
-                </div>
+                </div> */}
               </div>
-              <div className="choira-test-btn">
+              {/* <div className="choira-test-btn">
                 <div>
                   <button>
                     <IoIosArrowBack />
@@ -337,19 +333,16 @@ function ChoiraTest() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
-
           <div className="choira-test-project-section">
             {tab == 1 ? (
-              <ProjecDetails userProjectData={userProjectData} />
+              <MobileProjectDetail />
             ) : tab == 2 ? (
-              <Progress />
-            ) : tab == 3 ? (
-              <Payment />
+              <MobileProgress />
             ) : (
-              <Message />
+              <MobilePayment />
             )}
           </div>
         </div>
@@ -358,4 +351,4 @@ function ChoiraTest() {
   );
 }
 
-export default ChoiraTest;
+export default MobileDashboard;

@@ -239,7 +239,7 @@ body {
 }
 
 .choira-test-project-section-main {
-  /* border: 2px solid green; */
+  border: 2px solid green;
   width: 90%;
   height: 98%;
   border-radius: 20px;
@@ -1014,6 +1014,9 @@ select {
   /* border: 2px solid red; */
   display: flex;
 }
+.ctp_main h3 {
+  color: black;
+}
 .price_section > div > div:first-child {
   width: 70%;
   height: 100%;
@@ -1149,6 +1152,12 @@ select {
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.25);
   margin-bottom: 1%;
   border-radius: 10px;
+}
+.choira_test_pay_status p {
+  color: black;
+}
+.payment_mode p {
+  color: black;
 }
 .choira_test_pay_status > div:first-child {
   width: 5%;
@@ -1557,6 +1566,9 @@ button {
   .ctp_main {
     width: 95%;
   }
+  .ctp_main h3 {
+    color: white;
+  }
   .ctp_main > div:nth-child(2) {
     overflow-y: scroll;
   }
@@ -1569,6 +1581,7 @@ button {
     border-radius: 5px;
     position: relative;
   }
+
   .choira_test_pay_status > div:first-child {
     width: 8%;
   }
@@ -1596,6 +1609,12 @@ button {
   .choira_test_pay_status > div:nth-child(4) {
     width: 20%;
     margin-left: 5%;
+  }
+  .choira_test_pay_status p {
+    color: white;
+  }
+  .choira_test_pay_status > div:nth-child(4) {
+    font-size: 2vmax;
   }
   .payment_mode > div {
     width: 90%;
@@ -1647,5 +1666,88 @@ button {
     z-index: 300;
     width: 90%;
     font-size: 1.8vmax;
+  }
+  .mobDashboard .produce-section-main2 > div:first-child {
+    font-size: 3vmax;
+    /* border: 2px solid red; */
+    height: 100%;
+    border: none;
+  }
+  .mobDashboard .produce-section-tabs {
+    width: 100% !important;
+    /* border: 2px solid green; */
+    height: 100%;
+  }
+  .mobDashboard .produce-section-tabs > div {
+    border: none;
+    width: 100%;
+  }
+  .mobDashboard .produce-section-tabs > div > div {
+    /* border: 2px solid red; */
+    font-size: 3vmax;
+    width: 90%;
+  }
+  .mobDashboard .produce-section {
+    height: 12%;
+    border: none;
+  }
+  .mobileDashboard_project_section {
+    /* border: 2px solid red; */
+    width: 85%;
+    height: 98%;
+
+    /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    font-size: 1.8vmax;
+    gap: 3%;
+    overflow: auto;
+  }
+  .mobileDashboard_project_section > div {
+    width: 98%;
+    min-height: 20%;
+    border: 10px solid transparent;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    flex-direction: column;
+    gap: 6%;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.25);
+  }
+  .mobileDashboard_project_section > div > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 30%;
+    /* border: 2px solid blue; */
+    margin-top: 4%;
+  }
+  .mobileDashboard_project_section > div > div:first-child > div:first-child {
+    /* border: 2px solid pink; */
+    width: 60%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 5%;
+    font-size: 2.5vmax;
+    font-weight: 600;
+  }
+  .mobileDashboard_project_section
+    > div
+    > div:first-child
+    > div:first-child
+    img {
+    height: 100%;
+  }
+  .mobileDashboard_project_section > div > div:nth-child(2) {
+    width: 80%;
+    height: 60%;
+    /* border: 2px solid red; */
+    overflow: auto;
   }
 }
