@@ -748,6 +748,8 @@ body {
 }
 .progress_main_div_timer {
   width: 25%;
+  /* padding-left: 1%;
+  padding-right: 1%; */
   height: 100%;
   border: 2px solid gray;
   display: flex;
@@ -1749,5 +1751,19 @@ button {
     height: 60%;
     /* border: 2px solid red; */
     overflow: auto;
+  }
+  .progress-div {
+    overflow-y: scroll;
+  }
+  .progress_main_div_content > div > div > div:nth-child(2) {
+    color: rgba(224, 224, 224, 0.252);
+    border-left: 5px solid rgba(224, 224, 224, 0.252);
+  }
+  .progress_main_div_content > div > div > div:first-child {
+    color: rgba(224, 224, 224, 0.252);
+  }
+  .progress_main_div_content > div > div > div > div:first-child { 
+    color: rgba(224, 224, 224, 0.252);
+
   }
 }

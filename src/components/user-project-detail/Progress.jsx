@@ -70,10 +70,29 @@ function Progress() {
   const { ProjectDeliveryDate } = userProjectData || {};
   // project status
   const [created, setCreated] = useState(true);
-  const [production, setProdection] = useState(false);
+  const [production, setProdection] = useState(true);
   const [review, setReview] = useState(false);
   const [complete, setComplete] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("Initial");
+  useEffect(() => {
+    if (complete && review && production && created == true) {
+      setCurrentStatus("completed");
+    } else if (review && production && created == true) {
+      setCurrentStatus("review");
+    } else if (production && created == true) {
+      setCurrentStatus("under production");
+    } else if (created == true) {
+      setCurrentStatus("created");
+    } else {
+      setCurrentStatus("Initial");
+    }
+  }, []);
+
+  const getColorStyle = (isActive) => {
+    return isActive
+      ? { color: window.innerWidth >= 768 ? "black" : "white" }
+      : {};
+  };
 
   return (
     <>
@@ -114,12 +133,16 @@ function Progress() {
                       <RiRecordCircleFill style={{ color: "#ffc701" }} />
                     )}
                   </div>
-                  <div style={{ color: created ? "black" : "" }}>Created</div>
+                  <div style={getColorStyle(created)}>Created</div>
                 </div>
                 <div
                   style={{
                     borderLeft: created ? "5px solid #ffc701" : "",
-                    color: created ? "black" : "",
+                    color: created
+                      ? window.innerWidth >= 768
+                        ? "black"
+                        : "white"
+                      : "",
                   }}
                 >
                   This is the initial stage where you create a new project and
@@ -142,14 +165,16 @@ function Progress() {
                       <RiRecordCircleFill />
                     )}
                   </div>
-                  <div style={{ color: production ? "black" : "" }}>
-                    Under Production
-                  </div>
+                  <div style={getColorStyle(production)}>Under Production</div>
                 </div>
                 <div
                   style={{
                     borderLeft: production ? "5px solid #ffc701" : "",
-                    color: production ? "black" : "",
+                    color: production
+                      ? window.innerWidth >= 768
+                        ? "black"
+                        : "white"
+                      : "",
                   }}
                 >
                   Once you have created the project, our team of music
@@ -163,30 +188,64 @@ function Progress() {
               <div>
                 <div>
                   <div>
-                    <FaCheckCircle />
+                    {created && production && review ? (
+                      <FaCheckCircle style={{ color: "#ffc701" }} />
+                    ) : production ? (
+                      <RiRecordCircleFill style={{ color: "#ffc701" }} />
+                    ) : (
+                      <RiRecordCircleFill />
+                    )}
                   </div>
-                  <div>Ready for Review</div>
+                  <div style={getColorStyle(review)}>Ready for Review</div>
                 </div>
-                <div style={{ borderColor: "#E0E0E0" }}>
+                <div
+                  style={{
+                    borderLeft: review ? "5px solid #ffc701" : "",
+                    color: review
+                      ? window.innerWidth >= 768
+                        ? "black"
+                        : "white"
+                      : "",
+                  }}
+                >
                   After the production is completed, your project will move to
                   the review phase. Here, you can listen to the final version of
                   your music and provide feedback or suggestions for any changes
                   you want to make. <br />
-                  <button>
-                    Request Revision <img src={tickbtn} alt="" />
-                  </button>
+                  {review ? (
+                    <button>
+                      Request Revision <img src={tickbtn} alt="" />
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </div>
             <div>
               <div>
                 <div>
-                  <div style={{ color: "#E0E0E0" }}>
-                    <RiRecordCircleFill />
+                  <div>
+                    {created && production && review && complete ? (
+                      <FaCheckCircle style={{ color: "#ffc701" }} />
+                    ) : review ? (
+                      <RiRecordCircleFill style={{ color: "#ffc701" }} />
+                    ) : (
+                      <RiRecordCircleFill />
+                    )}
                   </div>
-                  <div style={{ color: "#E0E0E0" }}>Completed</div>
+                  <div style={getColorStyle(complete)}>Completed</div>
                 </div>
-                <div style={{ color: "#E0E0E0", border: "none" }}>
+                <div
+                  style={{
+                    borderLeft: complete ? "5px solid #ffc701" : "",
+                    color: complete
+                      ? window.innerWidth >= 768
+                        ? "black"
+                        : "white"
+                      : "",
+                  }}
+                >
                   Once you have reviewed and approved the final version of your
                   music, the project will be marked as completed. You can then
                   download the final version and use it for your intended

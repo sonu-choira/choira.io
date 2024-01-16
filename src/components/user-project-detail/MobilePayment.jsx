@@ -7,6 +7,7 @@ const projectsData = [
     title: "Pran",
     date: "15/04/2023",
     categories: ["Original Song", "Music Production"],
+    // paymentStatus : "Next payment"
   },
   {
     title: "Choira-Test",
@@ -31,7 +32,11 @@ function MobilePayment() {
                 <img src={musicfile} alt="" />
                 <div>{project.title}</div>
               </div>
-              <div>{project.date}</div>
+
+              <div>
+                <small>Next Payment :</small> <br />
+                {project.date}
+              </div>
             </div>
             <div>
               {project.categories.map((category, catIndex) => (
