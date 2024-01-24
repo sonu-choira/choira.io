@@ -37,13 +37,12 @@
     "wavesurfer.js": "^7.5.2",
     "web-vitals": "^1.0.1"
   },
-"scripts": {
-  "start": "react-scripts start",
-  "build": "react-scripts build",
-  "test": "react-scripts test",
-  "eject": "react-scripts eject",
-  "preinstall": "npm install --legacy-peer-deps"
-},
+  "scripts": {
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
