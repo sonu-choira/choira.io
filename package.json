@@ -37,6 +37,9 @@
     "wavesurfer.js": "^7.5.2",
     "web-vitals": "^1.0.1"
   },
+  "engines": {
+  "node": "20.5.0"
+},
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
