@@ -239,7 +239,7 @@ body {
 }
 
 .choira-test-project-section-main {
-  border: 2px solid green;
+  /* border: 2px solid green; */
   width: 90%;
   height: 98%;
   border-radius: 20px;
@@ -1762,8 +1762,10 @@ button {
   .progress_main_div_content > div > div > div:first-child {
     color: rgba(224, 224, 224, 0.252);
   }
-  .progress_main_div_content > div > div > div > div:first-child { 
+  .progress_main_div_content > div > div > div > div:first-child {
     color: rgba(224, 224, 224, 0.252);
-
+  }
+  .payment_mode p {
+    color: white;
   }
 }

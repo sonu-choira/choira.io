@@ -16,6 +16,7 @@ import { FiEdit } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import ProjecDetails from "../../components/user-project-detail/ProjecDetails";
+import { createProduceItem } from "../../services/produceSection";
 // import ProjecDetails from "../../components/user-project-detail/ProjecDetails";hh11
 
 import { FaPen } from "react-icons/fa6";
@@ -29,16 +30,41 @@ import { MdPayments } from "react-icons/md";
 import { LuMessagesSquare } from "react-icons/lu";
 
 function ChoiraTest() {
+  const [userProjectData, setUserProjectData] = useState({});
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  const { userProjectData } = state || {};
-  const { ProjectDeliveryDate } = userProjectData || {};
+
+  useEffect(() => {
+    const createProjectData = async () => {
+      try {
+        // Make a POST request on page load to create userProjectData
+        const createdProjectData = await createProduceItem(userProjectData);
+        // Handle the created project data as needed
+        console.log("Project data created on page load:", createdProjectData);
+      } catch (error) {
+        // Handle error, e.g., show an error message to the user
+        console.error("Error creating project data:", error);
+      }
+    };
+
+    // Ensure that userProjectData is available and not an empty object
+    if (
+      state &&
+      state.userProjectData &&
+      Object.keys(state.userProjectData).length > 0
+    ) {
+      setUserProjectData(state.userProjectData);
+      createProjectData();
+    } else {
+      // Handle the case when userProjectData is not available or is an empty object
+      console.error("Invalid or missing userProjectData");
+    }
+  }, [state]);
 
   const gotoNewproject = () => {
     navigate("/newproject");
   };
-
   // change profile img
   const [editProfile, setEditProfile] = useState(false);
   const eiditProfileFn = () => {

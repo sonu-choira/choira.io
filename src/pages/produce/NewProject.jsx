@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../produce/newproject.css";
 import logo from "../../assets/img/logo-choira.svg";
 
@@ -39,6 +39,17 @@ function NewProject() {
       BookSessionMonth: "",
     },
   });
+  useEffect(() => {
+    const storedData = localStorage.getItem("userProjectData");
+
+    if (storedData) {
+      setUserProjectData(JSON.parse(storedData));
+      // setUserProjectData(storedData);
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("userProjectData", JSON.stringify(userProjectData));
+  }, [userProjectData]);
 
   const handleNext = () => {
     // Increment the current step when the user clicks "Continue"

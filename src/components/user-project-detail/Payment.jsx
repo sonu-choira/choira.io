@@ -57,6 +57,7 @@ function Payment() {
       isPaid: false,
     },
   ];
+  let totalAmount = { totalPrice: 26000, paidAmount: 10000 };
 
   return (
     <>
@@ -67,16 +68,16 @@ function Payment() {
               <div>
                 <div>
                   <div>Total Price</div>
-                  <div>₹25,00</div>
+                  <div>{totalAmount.totalPrice}</div>
                 </div>
                 <div>
                   <div>
                     <div>. Paid</div>
-                    <div>₹15,00</div>
+                    <div>{totalAmount.paidAmount}</div>
                   </div>
                   <div>
                     <div>. Pending</div>
-                    <div>₹10,00</div>
+                    <div>{totalAmount.totalPrice - totalAmount.paidAmount}</div>
                   </div>
                 </div>
               </div>
@@ -87,11 +88,13 @@ function Payment() {
                   <img src={pay1} alt="" />
                 </div>
                 <div>
-                  <p>**** **** **** 4563</p>
-                  <h3>Choira bank</h3>
+                  <label htmlFor="mode1">
+                    <p>**** **** **** 4563</p>
+                    <h3>Choira bank</h3>
+                  </label>
                 </div>
                 <div>
-                  <input type="radio" name="a" />
+                  <input id="mode1" type="radio" name="a" />
                 </div>
               </div>
 
@@ -100,11 +103,13 @@ function Payment() {
                   <img src={pay2} alt="" />
                 </div>
                 <div>
-                  <p>xyz@choira.io</p>
-                  <h3>Paypal</h3>
+                  <label htmlFor="mode2">
+                    <p>xyz@choira.io</p>
+                    <h3>Paypal</h3>
+                  </label>
                 </div>
                 <div>
-                  <input type="radio" name="a" />
+                  <input id="mode2" type="radio" name="a" />
                 </div>
               </div>
             </div>
