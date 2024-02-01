@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import upload from "../../assets/img/chooseType-img/upload.svg";
 import music from "../../assets/img/chooseType-img/Music.svg";
 import cross from "../../assets/img/chooseType-img/cross.svg";
 
-export default function ShareLink({ onNext, setUserProjectData }) {
-  const [projectDetails, setProjectDetails] = useState("");
+export default function ShareLink({
+  onNext,
+  setUserProjectData,
+  onBack,
+  links,
+  setLinks,
+  uploadedFiles,
+  setUploadedFiles,
+  projectDetails,
+  setProjectDetails,
+}) {
+  // const [projectDetails, setProjectDetails] = useState("");
 
   const handleContinue = () => {
     if (projectDetails != "") {
@@ -14,6 +24,8 @@ export default function ShareLink({ onNext, setUserProjectData }) {
           link.length > 15 ? `${link.substring(0, 15)}...` : link
         )
         .join(", ");
+
+      console.log(linkNames);
       const fileNames = uploadedFiles
         .map((file) => displayFileName(file.name))
         .join(", ");
@@ -21,7 +33,7 @@ export default function ShareLink({ onNext, setUserProjectData }) {
       setUserProjectData((prevData) => ({
         ...prevData,
         LinksForSimilarTrack: [...prevData.LinksForSimilarTrack, links],
-        DemoFiles: [...prevData.DemoFiles, fileNames],
+        DemoFiles: [fileNames],
         DetailsOfProject: projectDetails,
       }));
 
@@ -33,7 +45,7 @@ export default function ShareLink({ onNext, setUserProjectData }) {
       alert("Please Tell us more about the project");
     }
   };
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  // const [uploadedFiles, setUploadedFiles] = useState([]);
   const [is6FileUploaded, setIs6FileUploaded] = useState(false);
 
   useEffect(() => {
@@ -46,7 +58,7 @@ export default function ShareLink({ onNext, setUserProjectData }) {
   }, [uploadedFiles]);
 
   const [getLink, setGetLink] = useState("");
-  const [links, setLinks] = useState([]);
+  // const [links, setLinks] = useState([]);
 
   const addLink = () => {
     // Simplified URL validation
@@ -114,7 +126,9 @@ export default function ShareLink({ onNext, setUserProjectData }) {
 
   // Calculate the number of divs needed based on the number of links
   const linkDivs = Math.ceil(links.length / 3);
-
+  const handelBack = () => {
+    onBack();
+  };
   return (
     <>
       <div className="project-div2">
@@ -244,6 +258,7 @@ export default function ShareLink({ onNext, setUserProjectData }) {
               placeholder="Enter text here..."
               draggable="false"
               style={{ resize: "none" }}
+              value={projectDetails}
               onChange={(e) => {
                 setProjectDetails(e.target.value);
               }}
@@ -252,6 +267,9 @@ export default function ShareLink({ onNext, setUserProjectData }) {
         </div>
 
         <div className="project-div2-btn">
+          <button onClick={handelBack}>
+            <FaAngleLeft /> Back
+          </button>
           <button onClick={handleContinue}>
             Continue <FaAngleRight />
           </button>

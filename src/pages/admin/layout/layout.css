@@ -1,0 +1,8 @@
+.reuseablebtn {
+  width: 20%;
+  height: 5%;
+  border-radius: 5px;
+  background-color: #ffc701;
+  color: black;
+  font-size: 1vmax;
+}

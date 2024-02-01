@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 // import "./ProjectDelivery.css"; // Import your CSS file
 
-const ProjectDelivery = ({ onNext, setUserProjectData }) => {
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedDatesAndPrices, setSelectedDatesAndPrices] = useState([]);
+const ProjectDelivery = ({
+  onNext,
+  setUserProjectData,
+  onBack,
+  selectedDate,
+  setSelectedDate,
+  selectedDatesAndPrices,
+  setSelectedDatesAndPrices,
+}) => {
+  // const [selectedDate, setSelectedDate] = useState("");
+  // const [selectedDatesAndPrices, setSelectedDatesAndPrices] = useState([]);
 
   const [selectedPrice, setSelectedPrice] = useState(0);
 
@@ -48,7 +56,9 @@ const ProjectDelivery = ({ onNext, setUserProjectData }) => {
       alert("Please select Delivery Date");
     }
   };
-
+  const handelBack = () => {
+    onBack();
+  };
   return (
     <>
       <div className="project-div2">
@@ -87,6 +97,9 @@ const ProjectDelivery = ({ onNext, setUserProjectData }) => {
         </div>
 
         <div className="project-div2-btn">
+          <button onClick={handelBack}>
+            <FaAngleLeft /> Back
+          </button>
           <button onClick={handleContinue}>
             Continue <FaAngleRight />
           </button>

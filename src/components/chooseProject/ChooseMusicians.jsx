@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import cm1 from "../../assets/img/chooseType-img/cm1.jpeg";
 import cm2 from "../../assets/img/chooseType-img/cm2.jpeg";
 import cm3 from "../../assets/img/chooseType-img/cm3.jpeg";
@@ -48,11 +48,15 @@ const cardData = [
 ];
 // ... (previous imports and code)
 
-export default function ChooseMusicians({ onNext, setUserProjectData }) {
-  const [selectedFullProductionTeam, setSelectedFullProductionTeam] =
-    useState(false);
-  const [selectedMusicians, setSelectedMusicians] = useState([]);
-
+export default function ChooseMusicians({
+  onNext,
+  setUserProjectData,
+  onBack,
+  selectedFullProductionTeam,
+  setSelectedFullProductionTeam,
+  selectedMusicians,
+  setSelectedMusicians,
+}) {
   const handleMusicianClick = (musician) => {
     if (musician.title === "FULL PRODUCTION TEAM") {
       // If FULL PRODUCTION TEAM is selected, select both "FULL PRODUCTION TEAM" and the musician
@@ -89,15 +93,22 @@ export default function ChooseMusicians({ onNext, setUserProjectData }) {
         ? ["FULL PRODUCTION TEAM"]
         : selectedMusicians.map((musician) => musician.title);
 
+      console.log();
+
       // alert(`Selected Musicians: ${selectedMusicianTitles.join(", ")}`);
 
       // You can update your user data or perform other actions as needed
+      // setUserProjectData((prevData) => ({
+      //   ...prevData,
+      //   MusicianForProject: [
+      //     ...prevData.MusicianForProject,
+      //     selectedMusicianTitles,
+      //   ],
+      // }));
+
       setUserProjectData((prevData) => ({
         ...prevData,
-        MusicianForProject: [
-          ...prevData.MusicianForProject,
-          selectedMusicianTitles,
-        ],
+        MusicianForProject: selectedMusicianTitles,
       }));
 
       onNext();
@@ -105,7 +116,9 @@ export default function ChooseMusicians({ onNext, setUserProjectData }) {
       alert("Please choose at least one musician before continuing.");
     }
   };
-
+  const handelBack = () => {
+    onBack();
+  };
   return (
     <>
       <div className="project-div2">
@@ -156,6 +169,9 @@ export default function ChooseMusicians({ onNext, setUserProjectData }) {
         </div>
 
         <div className="project-div2-btn">
+          <button onClick={handelBack}>
+            <FaAngleLeft /> Back
+          </button>
           <button onClick={handleContinue}>
             Continue <FaAngleRight />
           </button>

@@ -102,7 +102,7 @@ function ChoiraTest() {
     Mob: "1231231230",
     emal: "sample@gmail.com",
   });
-  const [tab, setTab] = useState(2);
+  const [tab, setTab] = useState(1);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   return (
     <>

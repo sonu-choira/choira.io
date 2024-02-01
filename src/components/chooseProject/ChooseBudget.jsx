@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 const formatValue = (value) => {
   if (value >= 100000) {
@@ -14,8 +14,18 @@ const formatValue = (value) => {
   }
 };
 
-export default function ChooseBudget({ onNext, setUserProjectData }) {
-  const [checkIfBudgetIsSelected, setCheckIfBudgetIsSelected] = useState(false);
+export default function ChooseBudget({
+  onNext,
+  setUserProjectData,
+  onBack,
+  minRange,
+  maxRange,
+  setMinRange,
+  setMaxRange,
+  checkIfBudgetIsSelected,
+  setCheckIfBudgetIsSelected,
+}) {
+  // const [checkIfBudgetIsSelected, setCheckIfBudgetIsSelected] = useState(false);
   const handleContinue = () => {
     if (checkIfBudgetIsSelected == true) {
       let budget = `₹${formatValue(minRange)} - ₹${formatValue(maxRange)}`;
@@ -36,8 +46,8 @@ export default function ChooseBudget({ onNext, setUserProjectData }) {
     // Call the callback to trigger navigation to the next component
   };
 
-  const [minRange, setMinRange] = useState(1000);
-  const [maxRange, setMaxRange] = useState(500000);
+  // const [minRange, setMinRange] = useState(1000);
+  // const [maxRange, setMaxRange] = useState(500000);
 
   const minRangeValueGap = 0;
 
@@ -61,7 +71,9 @@ export default function ChooseBudget({ onNext, setUserProjectData }) {
     setMinRange(newMinRange);
     setMaxRange(newMaxRange);
   };
-
+  const handelBack = () => {
+    onBack();
+  };
   return (
     <>
       <div className="project-div2">
@@ -121,6 +133,9 @@ export default function ChooseBudget({ onNext, setUserProjectData }) {
         </div>
 
         <div className="project-div2-btn">
+          <button onClick={handelBack}>
+            <FaAngleLeft /> Back
+          </button>
           <button onClick={handleContinue}>
             Continue <FaAngleRight />
           </button>

@@ -53,6 +53,7 @@ const ConnectInFewSecond = ({
 
     // setDataUpdatedNavigateNow(true);.
     onUserProjectDataUpdate();
+    // localStorage.clear();
   };
   // useEffect(() => {
   //   // Check if userProjectData has been updated by child components

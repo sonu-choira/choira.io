@@ -3,11 +3,13 @@ import dancer from "../../assets/img/dashboard_img/dance.gif";
 import { FaAngleRight } from "react-icons/fa6";
 import { FaAngleLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import Button from "../../pages/admin/layout/Button";
 
 export default function CreateNewProject({ onNext }) {
   const navigate = useNavigate();
   const gotoDashboard = () => {
     navigate("/dashboard");
+    localStorage.clear();
   };
 
   const handleContinue = () => {

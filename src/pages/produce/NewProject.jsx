@@ -18,6 +18,23 @@ import ConnectInFewSecond from "../../components/chooseProject/ConnectInFewSecon
 import { useState } from "react";
 
 function NewProject() {
+  // all cards states are managed here
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCardGenre, setSelectedCardGenre] = useState(null);
+  const [selectedFullProductionTeam, setSelectedFullProductionTeam] =
+    useState(false);
+  const [selectedMusicians, setSelectedMusicians] = useState([]);
+  const [minRange, setMinRange] = useState(1000);
+  const [maxRange, setMaxRange] = useState(500000);
+  const [checkIfBudgetIsSelected, setCheckIfBudgetIsSelected] = useState(false);
+  const [links, setLinks] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [projectDetails, setProjectDetails] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDatesAndPrices, setSelectedDatesAndPrices] = useState([]);
+
+  // all cards states are ends here
+
   const navigate = useNavigate();
   const [connectedPersonName, setConnectedPersonName] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
@@ -41,20 +58,27 @@ function NewProject() {
   });
   useEffect(() => {
     const storedData = localStorage.getItem("userProjectData");
+    const storedStep = localStorage.getItem("currentStep");
 
     if (storedData) {
       setUserProjectData(JSON.parse(storedData));
-      // setUserProjectData(storedData);
+    }
+
+    if (storedStep) {
+      setCurrentStep(parseInt(storedStep, 10));
     }
   }, []);
+
   useEffect(() => {
     localStorage.setItem("userProjectData", JSON.stringify(userProjectData));
-  }, [userProjectData]);
+    localStorage.setItem("currentStep", currentStep.toString());
+  }, [userProjectData, currentStep]);
 
   const handleNext = () => {
-    // Increment the current step when the user clicks "Continue"
     setCurrentStep(currentStep + 1);
-    // alert(JSON.stringify(userProjectData, null, 2));
+  };
+  const handelBack = () => {
+    setCurrentStep(currentStep - 1);
   };
   // const [userProjectData, setUserProjectData] = useState({});
   const handleUserProjectDataUpdate = () => {
@@ -86,48 +110,80 @@ function NewProject() {
             {currentStep === 1 && (
               <ChooseType
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
+                selectedCard={selectedCard}
+                setSelectedCard={setSelectedCard}
               />
             )}
             {currentStep === 2 && (
               <ChooseGenre
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
+                setSelectedCardGenre={setSelectedCardGenre}
+                selectedCardGenre={selectedCardGenre}
               />
             )}
             {currentStep === 3 && (
               <ChooseMusicians
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
+                selectedFullProductionTeam={selectedFullProductionTeam}
+                setSelectedFullProductionTeam={setSelectedFullProductionTeam}
+                selectedMusicians={selectedMusicians}
+                setSelectedMusicians={setSelectedMusicians}
               />
             )}
             {currentStep === 4 && (
               <ChooseBudget
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
+                minRange={minRange}
+                maxRange={maxRange}
+                setMinRange={setMinRange}
+                setMaxRange={setMaxRange}
+                checkIfBudgetIsSelected={checkIfBudgetIsSelected}
+                setCheckIfBudgetIsSelected={setCheckIfBudgetIsSelected}
               />
             )}
             {currentStep === 5 && (
               <ShareLink
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
+                links={links}
+                setLinks={setLinks}
+                uploadedFiles={uploadedFiles}
+                setUploadedFiles={setUploadedFiles}
+                projectDetails={projectDetails}
+                setProjectDetails={setProjectDetails}
               />
             )}
             {currentStep === 6 && (
               <ProjectDelivery
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                selectedDatesAndPrices={selectedDatesAndPrices}
+                setSelectedDatesAndPrices={setSelectedDatesAndPrices}
               />
             )}
             {currentStep === 7 && (
               <GoodName
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
               />
             )}
             {currentStep === 8 && (
               <AlmostDone
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
                 setCurrentStep={setCurrentStep}
               />
@@ -135,6 +191,7 @@ function NewProject() {
             {currentStep === 9 && (
               <BookSession
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
                 setCurrentStep={setCurrentStep}
               />
@@ -142,6 +199,7 @@ function NewProject() {
             {currentStep === 10 && (
               <ConnectInFewSecond
                 onNext={handleNext}
+                onBack={handelBack}
                 setUserProjectData={setUserProjectData}
                 userProjectData={userProjectData}
                 onUserProjectDataUpdate={handleUserProjectDataUpdate}

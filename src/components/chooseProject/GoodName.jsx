@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import song from "../../assets/img/chooseType-img/song.gif";
-const GoodName = ({ onNext, setUserProjectData }) => {
+const GoodName = ({ onNext, setUserProjectData, onBack }) => {
   const [goodName, setGoodName] = useState("");
   const handleContinue = () => {
     if (goodName != "") {
@@ -15,7 +15,9 @@ const GoodName = ({ onNext, setUserProjectData }) => {
       alert("Please give a Name to Your Project");
     }
   };
-
+  const handelBack = () => {
+    onBack();
+  };
   return (
     <>
       <div className="project-div2">
@@ -31,6 +33,7 @@ const GoodName = ({ onNext, setUserProjectData }) => {
               type="text"
               placeholder="Enter Project 
             name"
+              value={goodName}
               onChange={(e) => {
                 setGoodName(e.target.value);
               }}
@@ -39,6 +42,9 @@ const GoodName = ({ onNext, setUserProjectData }) => {
         </div>
 
         <div className="project-div2-btn">
+          <button onClick={handelBack}>
+            <FaAngleLeft /> Back
+          </button>
           <button onClick={handleContinue}>
             Continue <FaAngleRight />
           </button>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+
 import ct1 from "../../assets/img/chooseType-img/ct1.png";
 import ct2 from "../../assets/img/chooseType-img/ct2.jpeg";
 import ct3 from "../../assets/img/chooseType-img/ct3.png";
@@ -53,8 +54,13 @@ const cardData = [
   },
 ];
 
-export default function ChooseType({ onNext, setUserProjectData }) {
-  const [selectedCard, setSelectedCard] = useState(null);
+export default function ChooseType({
+  onNext,
+  setUserProjectData,
+  onBack,
+  selectedCard,
+  setSelectedCard,
+}) {
   const handleCardClick = (card) => {
     setSelectedCard(card);
   };
@@ -72,6 +78,10 @@ export default function ChooseType({ onNext, setUserProjectData }) {
       alert("Please choose type of music before continuing.");
     }
   };
+  const handelBack = () => {
+    onBack();
+  };
+
   return (
     <>
       <div className="project-div2">
@@ -116,6 +126,9 @@ export default function ChooseType({ onNext, setUserProjectData }) {
         </div>
 
         <div className="project-div2-btn">
+          <button onClick={handelBack}>
+            <FaAngleLeft /> Back
+          </button>
           <button onClick={handleContinue}>
             Continue <FaAngleRight />
           </button>

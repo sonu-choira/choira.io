@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaAngleRight } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import cg1 from "../../assets/img/chooseType-img/cg1.jpeg";
 import cg2 from "../../assets/img/chooseType-img/cg1.jpeg";
 import cg3 from "../../assets/img/chooseType-img/cg3.jpeg";
@@ -47,25 +47,32 @@ const cardData = [
   },
 ];
 
-export default function ChooseGenre({ onNext, setUserProjectData }) {
-  const [selectedCard, setSelectedCard] = useState(null);
-
+export default function ChooseGenre({
+  onNext,
+  setUserProjectData,
+  onBack,
+  selectedCardGenre,
+  setSelectedCardGenre,
+}) {
   const handleCardClick = (card) => {
-    setSelectedCard(card);
+    setSelectedCardGenre(card);
   };
   const handleContinue = () => {
-    if (selectedCard) {
+    if (selectedCardGenre) {
       // Show alert with the selected card's name
-      // alert(`Selected Card: ${selectedCard.title}`);
+      // alert(`Selected Card: ${selectedCardGenre.title}`);
       setUserProjectData((prevData) => ({
         ...prevData,
-        GenreOfMusic: selectedCard.title,
+        GenreOfMusic: selectedCardGenre.title,
       }));
 
       onNext();
     } else {
       alert("Please choose type of music before continuing.");
     }
+  };
+  const handelBack = () => {
+    onBack();
   };
   return (
     <>
@@ -91,7 +98,8 @@ export default function ChooseGenre({ onNext, setUserProjectData }) {
                     key={cardIndex}
                     style={{
                       border:
-                        selectedCard && selectedCard.title === card.title
+                        selectedCardGenre &&
+                        selectedCardGenre.title === card.title
                           ? "2px solid #FFC701"
                           : "none",
                     }}
@@ -111,6 +119,9 @@ export default function ChooseGenre({ onNext, setUserProjectData }) {
         </div>
 
         <div className="project-div2-btn">
+          <button onClick={handelBack}>
+            <FaAngleLeft /> Back
+          </button>
           <button onClick={handleContinue}>
             Continue <FaAngleRight />
           </button>
