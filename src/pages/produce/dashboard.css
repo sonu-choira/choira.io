@@ -827,7 +827,7 @@ body {
 }
 .test-overlay-after {
   opacity: 1;
-  z-index: 0;
+  z-index: 100;
 }
 .choira_edit_profile {
   left: 50%;
@@ -845,6 +845,7 @@ body {
   color: white;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 }
 .choira_edit_profile > div {
   width: 90%;
