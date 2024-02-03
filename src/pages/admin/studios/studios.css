@@ -16,7 +16,7 @@
 }
 .studioHeader {
   width: 100%;
-  height: 8%;
+  height: 10%;
   /* border: 2px solid green; */
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: flex;
@@ -166,12 +166,12 @@
       cursor: default;
     }
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: #ffc701;
       cursor: pointer;
     }
 
     &.selected {
-      background-color: rgba(0, 0, 0, 0.08);
+      background-color: #ffc701;
     }
 
     .arrow {
@@ -213,21 +213,136 @@
 }
 .allStudioDetailsPage {
   width: 100%;
-  height: 90%;
-  border: 2px solid red;
+  height: 88%;
+  /* border: 2px solid red; */
   margin-top: -2%;
   background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-direction: column;
 }
 .allStudiobtndiv {
-  width: 100%;
+  width: 95%;
   height: 10%;
-  border: 2px solid green;
+  /* border: 2px solid green; */
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .allStudiobtndiv > div:nth-child(2) {
-  width: 30%;
+  width: 28%;
   height: 100%;
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+}
+.allStudiobtndiv > div:nth-child(1) {
+  font-size: 1.5vmax;
+  font-weight: 600;
+}
+.studioImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.studioImage > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  border-radius: 10px;
+}
+.studioTabelDiv {
+  width: 95%;
+  height: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* border: 2px solid yellow; */
+  background-color: white;
+  border-radius: 10px;
+}
+.studioTabelDiv small {
+  color: rgba(173, 177, 181, 1);
+}
+.studioTabelDiv > div {
+  width: 95%;
+  height: 85%;
+  /* border: 2px solid blue; */
+
+  overflow-y: scroll;
+}
+.studioTabelDiv > div table {
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
+}
+.studiotabelHead {
+  width: 100%;
+  height: 50px;
+  background-color: rgba(243, 246, 249, 1);
+  text-align: center;
+}
+.studiotabelHead > tr {
+  width: 80%;
+  /* border: 2px solid green; */
+}
+.studiotabelHead > tr > th:nth-child(1) {
+  width: 20%;
+}
+.studiotabelHead > tr > th:nth-child(2) {
+  width: 10%;
+}
+.studiotabelHead > tr > th:nth-child(3) {
+  width: 15%;
+}
+.studiotabelHead > tr > th:nth-child(4) {
+  width: 10%;
+}
+
+td {
+  text-align: center;
+}
+.tableActionbtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
+}
+.tableActionbtn > div:nth-child(2) {
+  width: 15%;
+  /* border: 2px solid green; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.3vmax;
+  height: 40%;
+}
+.tabelpaginationDiv {
+  width: 95%;
+  /* border: 2px solid red; */
+  height: 6%;
+  display: flex;
+  align-items: end;
+  margin-top: 1%;
+}
+.studioFooter {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* border: 2px solid green; */
+  background-color: white;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+  margin-top: 1%;
 }

@@ -5,8 +5,8 @@ function Button({ name, icon, onClick, style }) {
   return (
     <>
       <button className="reuseablebtn" onClick={onClick} style={style}>
-        {icon}
-        {name}
+        <div>{icon}</div>
+        <div>{name}</div>
       </button>
     </>
   );
