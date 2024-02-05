@@ -36,6 +36,10 @@ function ChoiraTest() {
   const { state } = location;
 
   useEffect(() => {
+    console.log(userProjectData);
+  }, [userProjectData]);
+
+  useEffect(() => {
     const createProjectData = async () => {
       try {
         // Make a POST request on page load to create userProjectData
@@ -55,12 +59,13 @@ function ChoiraTest() {
       Object.keys(state.userProjectData).length > 0
     ) {
       setUserProjectData(state.userProjectData);
+      console.log(state.userProjectData);
       createProjectData();
     } else {
       // Handle the case when userProjectData is not available or is an empty object
       console.error("Invalid or missing userProjectData");
     }
-  }, [state]);
+  }, [state.userProjectData]);
 
   const gotoNewproject = () => {
     navigate("/newproject");

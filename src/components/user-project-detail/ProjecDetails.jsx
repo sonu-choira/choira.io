@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactPlayer from "react-player";
 import musicFolder from "../../assets/img/music-folder.svg";
 import zipFile from "../../assets/img/zip_file.svg";
@@ -17,9 +17,13 @@ function ProjecDetails({ userProjectData }) {
     ProjectDeliveryDate,
     ExtraAmountToPay,
     NameOFProject,
-    TimeSlots,
     ConnectedPerson,
+    TimeSlots,
   } = userProjectData || {};
+
+  useEffect(() => {
+    console.log(userProjectData);
+  }, []);
 
   const { SelectedSlots, SelectedDate, BookSessionMonth } = TimeSlots || {};
 
@@ -29,8 +33,15 @@ function ProjecDetails({ userProjectData }) {
     return link.includes("youtube.com") || link.includes("youtu.be");
   };
 
-  console.log("MusicianForProject:", MusicianForProject[0].join(","));
-  console.log("MusicianForProject:", MusicianForProject[0].join(","));
+  console.log(
+    "MusicianForProject:",
+    MusicianForProject &&
+      Array.isArray(MusicianForProject) &&
+      MusicianForProject.length > 0
+      ? MusicianForProject.join(",")
+      : "Not available"
+  );
+
   return (
     <>
       <div className="choira-test-project-section-main">
@@ -50,7 +61,14 @@ function ProjecDetails({ userProjectData }) {
           </div>
           <div>
             <span>Need help with:</span>
-            <h4> {MusicianForProject[0].join(", ")}</h4>
+            <h4>
+              {" "}
+              {MusicianForProject &&
+              Array.isArray(MusicianForProject) &&
+              MusicianForProject.length > 0
+                ? MusicianForProject.join(",")
+                : "Not available"}
+            </h4>
           </div>
           <div>
             <span>Price Range:</span>
@@ -63,52 +81,60 @@ function ProjecDetails({ userProjectData }) {
           <div className="choira-test-demoFile">
             <span>Demo File:</span>
             <div className="choira-test-demoFile-main">
-              {DemoFiles.length === 0 ? (
-                <div>Empty</div>
-              ) : (
-                DemoFiles[0].split(",").map((file, index) => (
-                  <div key={index}>
-                    {file.trim().toLowerCase().endsWith(".mp3") && (
-                      <img src={musicFolder} alt="" />
-                    )}
-                    {file.trim().toLowerCase().endsWith(".rar") && (
-                      <img src={rarFile} alt="" />
-                    )}
-                    {file.trim().toLowerCase().endsWith(".zip") && (
-                      <img src={zipFile} alt="" />
-                    )}
-                    {!file.trim().toLowerCase().endsWith(".mp3") &&
-                      !file.trim().toLowerCase().endsWith(".rar") &&
-                      !file.trim().toLowerCase().endsWith(".zip") && (
-                        <img src={files} alt="" />
+              {DemoFiles ? (
+                DemoFiles.length === 0 ? (
+                  <div>Empty</div>
+                ) : (
+                  DemoFiles[0].split(",").map((file, index) => (
+                    <div key={index}>
+                      {file.trim().toLowerCase().endsWith(".mp3") && (
+                        <img src={musicFolder} alt="" />
                       )}
-                    {file.trim() ? <h4>{file.trim()}</h4> : <div>Empty</div>}
-                  </div>
-                ))
+                      {file.trim().toLowerCase().endsWith(".rar") && (
+                        <img src={rarFile} alt="" />
+                      )}
+                      {file.trim().toLowerCase().endsWith(".zip") && (
+                        <img src={zipFile} alt="" />
+                      )}
+                      {!file.trim().toLowerCase().endsWith(".mp3") &&
+                        !file.trim().toLowerCase().endsWith(".rar") &&
+                        !file.trim().toLowerCase().endsWith(".zip") && (
+                          <img src={files} alt="" />
+                        )}
+                      {file.trim() ? <h4>{file.trim()}</h4> : <div>Empty</div>}
+                    </div>
+                  ))
+                )
+              ) : (
+                <div>Empty</div>
               )}
             </div>
           </div>
           <div>
             <span>Reference Links:</span>
-            {LinksForSimilarTrack[0].length === 1 &&
-            isYouTubeLink(LinksForSimilarTrack[0][0]) ? (
-              <div className="choira-test-player">
-                <ReactPlayer
-                  controls
-                  url={LinksForSimilarTrack[0][0]}
-                  width="100%"
-                  height="100%"
-                />
-              </div>
+            {LinksForSimilarTrack && LinksForSimilarTrack[0] ? (
+              LinksForSimilarTrack[0].length === 1 &&
+              isYouTubeLink(LinksForSimilarTrack[0][0]) ? (
+                <div className="choira-test-player">
+                  <ReactPlayer
+                    controls
+                    url={LinksForSimilarTrack[0][0]}
+                    width="100%"
+                    height="100%"
+                  />
+                </div>
+              ) : (
+                <h4>
+                  {LinksForSimilarTrack[0].map((item, index) => (
+                    <h4 key={index}>
+                      {item}
+                      {index < LinksForSimilarTrack[0].length - 1 && <br />}
+                    </h4>
+                  ))}
+                </h4>
+              )
             ) : (
-              <h4>
-                {LinksForSimilarTrack[0].map((item, index) => (
-                  <h4 key={index}>
-                    {item}
-                    {index < LinksForSimilarTrack[0].length - 1 && <br />}
-                  </h4>
-                ))}
-              </h4>
+              <div>No reference links provided</div>
             )}
           </div>
         </div>

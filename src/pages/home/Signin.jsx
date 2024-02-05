@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 
 import singer from "../../assets/img/singer2.png";
-import "../home/signin.css";
+import signStyle from "../home/signinBackup.module.css";
 import logo from "../../assets/img/logo-choira.svg";
 import google from "../../assets/img/google.png";
 import facebook from "../../assets/img/facebook.png";
@@ -430,7 +430,7 @@ function Signin() {
 
   return (
     <>
-      <div className="navbar">
+      <div className={signStyle.SignInnavbar}>
         <img
           src={logo}
           alt="Choira Logo"
@@ -439,17 +439,17 @@ function Signin() {
         />
       </div>
 
-      <div className="wrapper">
+      <div className={signStyle.wrapper}>
         <form>
-          <div className="main">
-            <div className="singer">
+          <div className={signStyle.main}>
+            <div className={signStyle.singer}>
               <img src={singer} alt="Singer" />
             </div>
 
-            <div className="signup">
-              <div className="signup-main">
-                <div className="signup-main-2">
-                  <div className="signup-header">
+            <div className={signStyle.signup}>
+              <div className={signStyle.signupmain}>
+                <div className={signStyle.signupmain2}>
+                  <div className={signStyle.signupHeader}>
                     <div>
                       <h3>
                         Welcome to <span>Choira</span>
@@ -467,10 +467,10 @@ function Signin() {
                       </div>
                     </div>
                   </div>
-                  <div className="signup-header2">
+                  <div className={signStyle.signupHeader2}>
                     <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
                   </div>
-                  <div className="enter-mob">
+                  <div className={signStyle.enterMob}>
                     {sign == 1 ? (
                       <SigninNum
                         mobileNumber={mobileNumber}
@@ -489,14 +489,14 @@ function Signin() {
                       <SignUpDetails />
                     )}
 
-                    <div className="footer">
+                    <div className={signStyle.footer}>
                       <div
                         className={`${
                           sign == 1
-                            ? "hr-line"
+                            ? signStyle.hrLine
                             : sign == 2
-                            ? "visiblity"
-                            : "visiblity"
+                            ? signStyle.visiblity
+                            : signStyle.visiblity
                         }`}
                       >
                         <div></div>
@@ -507,10 +507,10 @@ function Signin() {
                       <div
                         className={`${
                           sign == 1
-                            ? "signin-option"
+                            ? signStyle.signinOption
                             : sign == 2
-                            ? "visiblity"
-                            : "visiblity"
+                            ? signStyle.visiblity
+                            : signStyle.visiblity
                         }`}
                       >
                         <div
@@ -535,10 +535,10 @@ function Signin() {
                       <div
                         className={`${
                           sign == 1
-                            ? "continue"
+                            ? signStyle.continue
                             : sign == 2
-                            ? "verify-continue2 continue "
-                            : " continue "
+                            ? `${signStyle.verifyContinue2} ${signStyle.continue}`
+                            : signStyle.continue
                         }`}
                       >
                         <div>

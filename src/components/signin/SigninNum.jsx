@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import signStyle from "../../pages/home/signinBackup.module.css";
 
 const SigninNum = ({
   mobileNumber,
@@ -12,11 +13,11 @@ const SigninNum = ({
 
   return (
     <>
-      <div className="enter-mob-inner-div">
+      <div className={signStyle.enterMobInnerDiv}>
         <div>
           <label htmlFor="mob">Enter your mobile number</label>
         </div>
-        <div className="enter-mob-input">
+        <div className={signStyle.enterMobInput}>
           <div>
             <select
               name="mobpin"
@@ -29,7 +30,7 @@ const SigninNum = ({
               {/* Add more country options as needed */}
             </select>
           </div>
-          <div className="mobpin2">
+          <div className={signStyle.mobpin2}>
             <div className="contry-code">+{countryCode}|</div>
             <input
               type="number"
@@ -40,7 +41,7 @@ const SigninNum = ({
             />
           </div>
         </div>
-        <div className="verify">
+        <div className={signStyle.verify}>
           <h6>
             To verify your mobile no, We will send you a confirmation code
           </h6>

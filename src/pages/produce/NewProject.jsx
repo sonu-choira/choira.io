@@ -36,7 +36,7 @@ function NewProject() {
   // all cards states are ends here
 
   const navigate = useNavigate();
-  const [connectedPersonName, setConnectedPersonName] = useState("");
+
   const [currentStep, setCurrentStep] = useState(0);
   const [userProjectData, setUserProjectData] = useState({
     TypeOfMusic: "",
@@ -49,13 +49,22 @@ function NewProject() {
     ProjectDeliveryDate: "",
     ExtraAmountToPay: "",
     NameOFProject: "",
-    ConnectedPerson: connectedPersonName,
+    ConnectedPerson: "",
     TimeSlots: {
       SelectedSlots: "",
       SelectedDate: "",
       BookSessionMonth: "",
     },
   });
+
+  useEffect(() => {
+    console.log("UPDATED2.......");
+    if (userProjectData.ConnectedPerson) {
+      handleUserProjectDataUpdate();
+    }
+    // localStorage.setItem("userProjectData", JSON.stringify(userProjectData));
+  }, [userProjectData]);
+
   useEffect(() => {
     const storedData = localStorage.getItem("userProjectData");
     const storedStep = localStorage.getItem("currentStep");
@@ -76,6 +85,7 @@ function NewProject() {
 
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
+    // alert(JSON.stringify(userProjectData));
   };
   const handelBack = () => {
     setCurrentStep(currentStep - 1);
@@ -84,6 +94,7 @@ function NewProject() {
   const handleUserProjectDataUpdate = () => {
     // This function will be called by the child component
     // when userProjectData is updated
+    console.log("userProjectData");
     navigate("/choiratest", { state: { userProjectData } });
   };
   const gotoHome = () => {
@@ -203,7 +214,6 @@ function NewProject() {
                 setUserProjectData={setUserProjectData}
                 userProjectData={userProjectData}
                 onUserProjectDataUpdate={handleUserProjectDataUpdate}
-                setConnectedPersonName={setConnectedPersonName}
               />
             )}
           </div>

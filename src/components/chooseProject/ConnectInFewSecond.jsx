@@ -11,7 +11,6 @@ const ConnectInFewSecond = ({
   setUserProjectData,
   userProjectData,
   onUserProjectDataUpdate,
-  setConnectedPersonName,
 }) => {
   const images = [img1, img2, img3, img4];
   const usernames = ["soni", "kajal", "ravi", "sonu"];
@@ -48,11 +47,16 @@ const ConnectInFewSecond = ({
   // const [dataUpdatedNavigateNow, setDataUpdatedNavigateNow] = useState(false);
   const navigate = useNavigate();
 
-  const joinNow = () => {
-    setConnectedPersonName(currentUsername);
+  const joinNow = async () => {
+    console.log("currentUsername");
+    // await setConnectedPersonName(currentUsername);
+    const jkt = await setUserProjectData((prevdata) => {
+      return { ...prevdata, ConnectedPerson: currentUsername };
+    });
+    console.log("currentUsername", jkt);
 
     // setDataUpdatedNavigateNow(true);.
-    onUserProjectDataUpdate();
+    // onUserProjectDataUpdate();
     localStorage.clear();
   };
   // useEffect(() => {

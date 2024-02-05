@@ -83,7 +83,7 @@ h6 {
   justify-content: center;
   align-items: center;
 }
-.signup-main {
+.signupmain {
   width: 60%;
   height: 90%;
   /* border: 2px solid red; */
@@ -91,14 +91,14 @@ h6 {
   overflow: hidden;
   background-color: #262727;
 }
-.signup-main-2 {
+.signupmain2 {
   /* border: 2px solid red; */
   margin-left: 10%;
   margin-right: 10%;
   height: 98%;
 }
 
-.signup-header {
+.signupHeader {
   display: flex;
   justify-content: space-between;
 }
@@ -109,37 +109,37 @@ h6 {
   display: flex;
   justify-content: space-between;
 }
-.signup-header > div {
+.signupHeader > div {
   /* border: 2px solid green; */
   height: 10%;
   text-align: start;
 }
-.signup-header2 > h1 {
+.signupHeader2 > h1 {
   margin-top: -25%;
   font-size: 2.8vmax;
   font-weight: 600;
 }
-.signup-header2 {
+.signupHeader2 {
   border: 2px solid #262727;
   width: 45%;
   height: 6%;
 }
-.signup-header span {
+.signupHeader span {
   font-weight: 600;
 }
-.signup-header h3 {
+.signupHeader h3 {
   font-weight: 400;
   cursor: pointer;
 }
-.signup-header h5 {
+.signupHeader h5 {
   color: gray;
 }
-.enter-mob {
+.enterMob {
   /* border: 2px solid green; */
   width: 100%;
   height: 22%;
 }
-.enter-mob-input {
+.enterMobInput {
   /*  */
   /* border: 2px solid orange; */
   display: flex;
@@ -163,7 +163,7 @@ h6 {
   padding-left: 2%;
   font-weight: 600;
 }
-.enter-mob-inner-div {
+.enterMobInnerDiv {
   height: 100%;
   width: 100%;
   /* border: 2px solid red; */
@@ -185,28 +185,28 @@ h6 {
   padding-left: 5px;
   font-size: 0.9vmax;
 }
-.enter-mob-input > div:first-child {
+.enterMobInput > div:first-child {
   /* border: 2px solid red; */
   height: 75%;
   width: 20%;
 }
 
-.enter-mob-inner-div > div:first-child {
+.enterMobInnerDiv > div:first-child {
   /* border: 2px solid red; */
   padding-bottom: 5px;
 }
-.enter-mob-inner-div div:nth-child(1) label {
+.enterMobInnerDiv div:nth-child(1) label {
   color: gray;
 }
-/* .enter-mob div:nth-child(2) {
+/* .enterMob div:nth-child(2) {
   text-align: start;
 } */
 
-.enter-mob-input > div:first-child {
+.enterMobInput > div:first-child {
   height: 50%;
   /* border: 2px solid red; */
 }
-.enter-mob-input select {
+.enterMobInput select {
   /* border: 2px solid red; */
   border-radius: 10px;
   width: 85%;
@@ -216,12 +216,12 @@ h6 {
   outline: none;
   text-transform: uppercase;
 }
-.enter-mob-input > div:nth-child(2) {
+.enterMobInput > div:nth-child(2) {
   /* border: 2px solid green; */
   height: 50%;
   width: 59%;
 }
-.enter-mob-input input {
+.enterMobInput input {
   /* border: 2px solid red; */
   border-radius: 10px;
   width: 115%;
@@ -241,17 +241,17 @@ h6 {
   align-items: center;
   margin-top: -12%;
 }
-.hr-line {
+.hrLine {
   display: flex;
   align-items: center;
   padding-top: 20%;
 }
-.hr-line small {
+.hrLine small {
   padding-left: 2%;
   padding-right: 2%;
   color: gray;
 }
-.hr-line div {
+.hrLine div {
   border: 1px solid white;
   width: 50%;
   height: 0%;
@@ -261,10 +261,10 @@ h6 {
   width: 100%;
   height: 45vh;
 }
-.signin-option > div {
+.signinOption > div {
   cursor: pointer;
 }
-.signin-option {
+.signinOption {
   /* border: 2px solid blue; */
   height: 20%;
   display: flex;
@@ -275,16 +275,16 @@ h6 {
   cursor: pointer;
 }
 
-.signin-option small {
+.signinOption small {
   color: black;
   padding-bottom: 3px;
 }
 
-.signin-option > div:first-child {
+.signinOption > div:first-child {
   width: 68%;
   background-color: #fff9e3;
 }
-.signin-option div {
+.signinOption div {
   /* border: 2px solid pink; */
   width: 12%;
   height: 60%;
@@ -295,7 +295,7 @@ h6 {
   gap: 10%;
   background-color: #ffffff;
 }
-.signin-option img {
+.signinOption img {
   height: 20px;
   width: 20px;
 }
@@ -393,7 +393,7 @@ h6 {
   visibility: hidden;
 }
 
-.verify-continue2 {
+.verifyContinue2 {
   margin-top: 55%;
 }
 .enter-mob-inner-div3 {
