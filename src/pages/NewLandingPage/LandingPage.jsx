@@ -36,12 +36,20 @@ import p4 from "../../assets/img/landingPageImg/p4.png";
 import p5 from "../../assets/img/landingPageImg/p5.png";
 import mobfooter1 from "../../assets/img/landingPageImg/mopfooter1.png";
 import mobfooter2 from "../../assets/img/landingPageImg/mopfooter2.png";
+import "../../pages/home/home.scss";
+import googleLogo from "../../assets/logoImg/google.png";
+import facebookLogo from "../../assets/logoImg/facebook.png";
+import spottyLogo from "../../assets/logoImg/spotify.png";
+import mailLogo from "../../assets/logoImg/mainWhite.png";
 
 import { ImCross } from "react-icons/im";
 import { FaChevronRight } from "react-icons/fa";
 
 import { Link, useNavigate } from "react-router-dom";
-
+import Logo from "../../assets/choria.svg";
+import RegisterBox from "../../pocPages/register";
+import GoogleExtraBox from "../../pocPages/extraGoogle";
+import LoginBox from "../../pocPages/login";
 function LandingPage() {
   const navigate = useNavigate();
   const goTosigninPage = () => {
@@ -242,361 +250,465 @@ function LandingPage() {
   const visibleTestimonial = visibleImages[1];
 
   const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+  const [isScreenOpen, setIsScreenOpen] = useState(0);
+  const closeModel = () => {
+    //   setIsLoginOpen(false);
+    //   loginCheckVerify = true;
+    //   checkLogin();
+    // };
+    // let loginCheckVerify = true;
+    // const checkLogin = () => {
+    //   if (loginCheckVerify) {
+    //     let loginState = localStorage.getItem("isLogin");
+    //     if (loginState === "true") {
+    //       isLogin = true;
+    //     } else {
+    //       isLogin = false;
+    //     }
+    //     loginCheckVerify = false;
+    //   }
+    //   dataForRegistration.phone = new Date().getTime();
+  };
+
+  // checkLogin();
   return (
     <>
-      <div id="landing-page1" className="landing-page1">
-        <div className="navbar">
-          <div>
-            <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
-          </div>
-          <div className={combinedClasses}>
-            <h3>Home</h3>
-            <h3>Studio</h3>
-            <h3>Jamming</h3>
-            <h3 onClick={gotoDashboard}>AI Music Gen</h3>
-            <h3 onClick={goTosigninPage}>Signin</h3>
-            <h3 onClick={goTosigninPage}>Signin</h3>
-            <h3 onClick={goTosigninPage}>Signin</h3>
-
-            <img
-              className="o4"
-              style={{ cursor: "pointer" }}
-              src={o4}
-              alt=""
-              onClick={smallNav}
-            />
-          </div>
-          <div
-            className="testlogo"
-            style={{ display: navLogo ? "block" : "none" }}
-          >
-            <img
-              className="o5"
-              style={{ cursor: "pointer" }}
-              src={o4}
-              alt=""
-              onClick={smallNav}
-            />
-          </div>
-        </div>
-
-        {/* mobile navbar start here------------------- */}
-        <div className="mobile-navbar">
-          <div>
-            <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
-          </div>
-          <div>
-            <FaBars
-              onClick={() => {
-                setSidebarVisible((prevState) => !prevState); // Toggle the state
-              }}
-            />
-          </div>
-        </div>
-
-        {/* mobile navbar end here------------------- */}
-
-        {/* sidebar-----------=-- */}
-        <div className={`lpSidebar ${sidebarVisible ? "lpSidebar-after" : ""}`}>
-          {/* <div className="lpSidebar lpSidebar-after"> */}
-          <div>
-            <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
-            <ImCross
-              onClick={() => {
-                setSidebarVisible((prevState) => !prevState); // Toggle the state
-              }}
-            />
-          </div>
-          <div>
-            <div>Home</div>
-            <div>Studio</div>
-            <div>Jamming</div>
-            <div onClick={gotoDashboard}>AI Music Gen</div>
-            <div>Signin</div>
-          </div>
-        </div>
-        {/* sidebar end -------------------------- */}
-
-        <div className="page1-main">
-          <div>
-            <div className="page1-main-content">
-              <div>
-                <h1>
-                  <span>Music</span> Ecosystem <br />
-                  for the <span>Digital</span> Age
-                </h1>
-              </div>
-              <div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur. <br /> Metus diam eget
-                  mollis eget in dignissim nibh. <br /> In nibh lectus enim eu
-                  adipiscing eget pulvinar.
-                </p>
-              </div>
-              <div>
-                <button>Get Started</button>
-                <p style={{ cursor: "pointer" }}>
-                  Watch video <FaChevronRight />
-                </p>
+      {isLoginOpen ? (
+        <div id="myModal" className="modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <span
+                className="close"
+                // onClick={() => {
+                //   setIsLoginOpen(false);
+                // }}
+              >
+                &times;
+              </span>
+              <h2>Get Started with</h2>
+              <div className="logoModel">
+                <img src={Logo} alt="choria" />
               </div>
             </div>
-            <div></div>
+            <div className="modal-body" style={{ padding: "2px 16px" }}>
+              {isScreenOpen === 0 ? (
+                <div className="screenOne">
+                  <div className="ssoClass">
+                    <div
+                      className="googleLogin screenLogin"
+                      // onClick={() =>
+                      //   handleFirebaseClick(googleProvider, "GOOGLE")
+                      // }
+                    >
+                      <div className="logo">
+                        <img src={googleLogo} alt="google Logo" />
+                      </div>
+                      <div className="brandName">Log in with Google</div>
+                    </div>
+
+                    <div
+                      className="facebookLogin screenLogin"
+                      // onClick={() => spotifyLogin()}
+                    >
+                      <div className="logo">
+                        <img src={spottyLogo} alt="google Logo" />
+                      </div>
+                      <div className="brandName">Log in with Spotify</div>
+                    </div>
+                    <div
+                      className="spottyLogin screenLogin"
+                      // onClick={() =>
+                      //   handleFirebaseClick(facebookProvider, "FACEBOOK")
+                      // }
+                    >
+                      <div className="logo">
+                        <img src={facebookLogo} alt="google Logo" />
+                      </div>
+                      <div className="brandName">Log in with Facebook</div>
+                    </div>
+                    <div
+                      className="mailLogin screenLogin"
+                      // onClick={() => setIsScreenOpen(3)}
+                    >
+                      <div className="logo">
+                        <img src={mailLogo} alt="google Logo" />
+                      </div>
+                      <div className="brandName">Log in with email instead</div>
+                    </div>
+                    <div className="loginNow">
+                      {/* <div className="loginText" onClick={() => setIsScreenOpen(3)}>
+                          Already have an account? Click here
+                        </div> */}
+                      <div
+                        className="loginText"
+                        // onClick={() => {
+                        //   setIsSignUpOpen(true);
+                        //   setIsLoginOpen(false);
+                        // }}
+                      >
+                        Don't have an account? Click here
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : isScreenOpen === 1 ? (
+                <div className="screenTwo">
+                  <RegisterBox closeModel={closeModel} />
+                  <div
+                    className="cancelNow"
+                    //  onClick={() => setIsScreenOpen(0)}
+                  >
+                    <div className="button">Cancel</div>
+                  </div>
+                </div>
+              ) : isScreenOpen === 2 ? (
+                <div className="screenTwo">
+                  <GoogleExtraBox closeModel={"registerUser"} />
+                  <div
+                    className="cancelNow"
+                    //  onClick={() => setIsScreenOpen(0)}
+                  >
+                    <div className="button">Cancel</div>
+                  </div>
+                </div>
+              ) : isScreenOpen === 3 ? (
+                <div className="screenTwo">
+                  <LoginBox closeModel={closeModel} />
+                  <div
+                    className="cancelNow"
+                    //  onClick={() => setIsScreenOpen(0)}
+                  >
+                    <div className="button">Cancel</div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+            <div className="modal-footer">
+              <p
+                style={{ cursor: "pointer", textAlign: "center" }}
+                // onClick={() => {
+                //   navigate("/termsandCondition");
+                // }}
+              >
+                Terms And Conditions
+              </p>
+            </div>
+          </div>
+          <div
+            className="backGroundClick"
+            onClick={() => {
+              setIsLoginOpen(false);
+            }}
+          ></div>
+        </div>
+      ) : null}
+
+      <div className="landingpageWrapper">
+        <div id="landing-page1" className="landing-page1">
+          <div className="navbar">
+            <div>
+              <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
+            </div>
+            <div className={combinedClasses}>
+              <h3>Home</h3>
+              <h3>Studio</h3>
+              <h3>Jamming</h3>
+              <h3 onClick={gotoDashboard}>AI Music Gen</h3>
+              <h3
+                onClick={() => {
+                  setIsLoginOpen(true);
+                }}
+              >
+                Signin
+              </h3>
+
+              <img
+                className="o4"
+                style={{ cursor: "pointer" }}
+                src={o4}
+                alt=""
+                onClick={smallNav}
+              />
+            </div>
+            <div
+              className="testlogo"
+              style={{ display: navLogo ? "block" : "none" }}
+            >
+              <img
+                className="o5"
+                style={{ cursor: "pointer" }}
+                src={o4}
+                alt=""
+                onClick={smallNav}
+              />
+            </div>
+          </div>
+
+          {/* mobile navbar start here------------------- */}
+          <div className="mobile-navbar">
+            <div>
+              <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
+            </div>
+            <div>
+              <FaBars
+                onClick={() => {
+                  setSidebarVisible((prevState) => !prevState); // Toggle the state
+                }}
+              />
+            </div>
+          </div>
+
+          {/* mobile navbar end here------------------- */}
+
+          {/* sidebar-----------=-- */}
+          <div
+            className={`lpSidebar ${sidebarVisible ? "lpSidebar-after" : ""}`}
+          >
+            {/* <div className="lpSidebar lpSidebar-after"> */}
+            <div>
+              <img src={logo} alt="Choira Logo" style={{ cursor: "pointer" }} />
+              <ImCross
+                onClick={() => {
+                  setSidebarVisible((prevState) => !prevState); // Toggle the state
+                }}
+              />
+            </div>
+            <div>
+              <div>Home</div>
+              <div>Studio</div>
+              <div>Jamming</div>
+              <div onClick={gotoDashboard}>AI Music Gen</div>
+              <div>Signin</div>
+            </div>
+          </div>
+          {/* sidebar end -------------------------- */}
+
+          <div className="page1-main">
+            <div>
+              <div className="page1-main-content">
+                <div>
+                  <h1>
+                    <span>Music</span> Ecosystem <br />
+                    for the <span>Digital</span> Age
+                  </h1>
+                </div>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur. <br /> Metus diam
+                    eget mollis eget in dignissim nibh. <br /> In nibh lectus
+                    enim eu adipiscing eget pulvinar.
+                  </p>
+                </div>
+                <div>
+                  <button>Get Started</button>
+                  <p style={{ cursor: "pointer" }}>
+                    Watch video <FaChevronRight />
+                  </p>
+                </div>
+              </div>
+              <div></div>
+            </div>
+          </div>
+          <div className="page1-footer">
+            <div></div> {/* shadow effect div */}
+            <div>
+              <div>
+                <img src={stripe} alt="" />
+              </div>
+              <div>
+                <img src={phonepay} alt="" />
+              </div>
+              <div>
+                <img src={nbc} alt="" />
+              </div>
+              <div>
+                <img src={cbs} alt="" />
+              </div>
+              <div>
+                <img src={nasa} alt="" />
+              </div>
+              <div>
+                <img src={primeVideo} alt="" />
+              </div>
+            </div>
           </div>
         </div>
-        <div className="page1-footer">
+        <div className="mob-page1-footer">
           <div></div> {/* shadow effect div */}
           <div>
             <div>
-              <img src={stripe} alt="" />
+              <div>
+                <img src={stripe} alt="" />
+              </div>
+              <div>
+                <img src={phonepay} alt="" />
+              </div>
             </div>
-            <div>
-              <img src={phonepay} alt="" />
-            </div>
-            <div>
-              <img src={nbc} alt="" />
-            </div>
-            <div>
-              <img src={cbs} alt="" />
-            </div>
-            <div>
-              <img src={nasa} alt="" />
-            </div>
-            <div>
-              <img src={primeVideo} alt="" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mob-page1-footer">
-        <div></div> {/* shadow effect div */}
-        <div>
-          <div>
-            <div>
-              <img src={stripe} alt="" />
-            </div>
-            <div>
-              <img src={phonepay} alt="" />
-            </div>
-          </div>
 
-          <div>
             <div>
-              <img src={nbc} alt="" />
+              <div>
+                <img src={nbc} alt="" />
+              </div>
+              <div>
+                <img src={cbs} alt="" />
+              </div>
             </div>
             <div>
-              <img src={cbs} alt="" />
-            </div>
-          </div>
-          <div>
-            <div>
-              <img src={nasa} alt="" />
-            </div>
-            <div>
-              <img src={primeVideo} alt="" />
+              <div>
+                <img src={nasa} alt="" />
+              </div>
+              <div>
+                <img src={primeVideo} alt="" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {window.innerWidth > 600 ? (
-        <>
-          <div className="landing-page-2">
-            {slidesData.map((slide, index) => (
-              <div
-                key={index}
-                className={`landing-page-2-main slide ${
-                  index === counter ? "active" : ""
-                }`}
-              >
-                <div className={index % 2 === 1 ? "rowReverse" : ""}>
-                  <div>
-                    <div className="landing-page-2-content">
-                      <div>
-                        <span>{slide.title}</span>
+        {window.innerWidth > 600 ? (
+          <>
+            <div className="landing-page-2">
+              {slidesData.map((slide, index) => (
+                <div
+                  key={index}
+                  className={`landing-page-2-main slide ${
+                    index === counter ? "active" : ""
+                  }`}
+                >
+                  <div className={index % 2 === 1 ? "rowReverse" : ""}>
+                    <div>
+                      <div className="landing-page-2-content">
+                        <div>
+                          <span>{slide.title}</span>
+                        </div>
+                        <div>
+                          <p>{slide.subtitle}</p>
+                        </div>
+                        <div>
+                          <p>{slide.content}</p>
+                        </div>
+                        {counter === 0 ? (
+                          <div>
+                            <button>create</button>
+                          </div>
+                        ) : counter === 1 ? (
+                          <div>
+                            <button>Book Now</button>
+                          </div>
+                        ) : counter === 2 ? (
+                          <div>
+                            <button>Start Jam</button>
+                          </div>
+                        ) : (
+                          <div>
+                            <button>Generate</button>
+                          </div>
+                        )}
                       </div>
-                      <div>
-                        <p>{slide.subtitle}</p>
-                      </div>
-                      <div>
-                        <p>{slide.content}</p>
-                      </div>
-                      {counter === 0 ? (
-                        <div>
-                          <button>create</button>
-                        </div>
-                      ) : counter === 1 ? (
-                        <div>
-                          <button>Book Now</button>
-                        </div>
-                      ) : counter === 2 ? (
-                        <div>
-                          <button>Start Jam</button>
-                        </div>
-                      ) : (
-                        <div>
-                          <button>Generate</button>
-                        </div>
-                      )}
                     </div>
-                  </div>
-                  <div className="landing-page-2-img">
-                    <img src={slide.image} alt="" />
+                    <div className="landing-page-2-img">
+                      <img src={slide.image} alt="" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          <div className="landing-page2-bullets">
-            {slidesData.map((_, i) => (
-              <div
-                style={{
-                  backgroundColor: i === counter ? "#FFC701" : "",
-                }}
-                className="slider-btn"
-                key={i}
-                onClick={() => changeSlide(i)}
-              ></div>
-            ))}
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="landing-page-2 ">
-            {slidesData.map((slide, index) => (
-              <div
-                key={index}
-                className={`landing-page-2-main-mob slide ${
-                  index === counter ? "active" : ""
-                }`}
-              >
-                <div className="landing-page-2-content-mob">
-                  <div>
-                    <span>{slide.title}</span>
-                  </div>
-                  <div>
-                    <p>{slide.subtitle}</p>
-                  </div>
-                  <div>
-                    <img src={slide.image} alt="" />
-                  </div>
-                  <div>
-                    <p>{slide.content}</p>
-                  </div>
-                  {counter === 0 ? (
+              ))}
+            </div>
+            <div className="landing-page2-bullets">
+              {slidesData.map((_, i) => (
+                <div
+                  style={{
+                    backgroundColor: i === counter ? "#FFC701" : "",
+                  }}
+                  className="slider-btn"
+                  key={i}
+                  onClick={() => changeSlide(i)}
+                ></div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="landing-page-2 ">
+              {slidesData.map((slide, index) => (
+                <div
+                  key={index}
+                  className={`landing-page-2-main-mob slide ${
+                    index === counter ? "active" : ""
+                  }`}
+                >
+                  <div className="landing-page-2-content-mob">
                     <div>
-                      <button>create</button>
+                      <span>{slide.title}</span>
                     </div>
-                  ) : counter === 1 ? (
                     <div>
-                      <button>Book Now</button>
+                      <p>{slide.subtitle}</p>
                     </div>
-                  ) : counter === 2 ? (
                     <div>
-                      <button>Start Jam</button>
+                      <img src={slide.image} alt="" />
                     </div>
-                  ) : (
                     <div>
-                      <button>Generate</button>
+                      <p>{slide.content}</p>
                     </div>
-                  )}
+                    {counter === 0 ? (
+                      <div>
+                        <button>create</button>
+                      </div>
+                    ) : counter === 1 ? (
+                      <div>
+                        <button>Book Now</button>
+                      </div>
+                    ) : counter === 2 ? (
+                      <div>
+                        <button>Start Jam</button>
+                      </div>
+                    ) : (
+                      <div>
+                        <button>Generate</button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          <div className="landing-page2-bullets">
-            {slidesData.map((_, i) => (
-              <div
-                style={{
-                  backgroundColor: i === counter ? "#FFC701" : "",
-                }}
-                className="slider-btn"
-                key={i}
-                onClick={() => changeSlide(i)}
-              ></div>
-            ))}
-          </div>
-        </>
-      )}
+              ))}
+            </div>
+            <div className="landing-page2-bullets">
+              {slidesData.map((_, i) => (
+                <div
+                  style={{
+                    backgroundColor: i === counter ? "#FFC701" : "",
+                  }}
+                  className="slider-btn"
+                  key={i}
+                  onClick={() => changeSlide(i)}
+                ></div>
+              ))}
+            </div>
+          </>
+        )}
 
-      <div className="landing-page-3">
-        <div className="landing-page-3-main">
-          <div>
-            <h2>The Future of Music</h2>
-          </div>
+        <div className="landing-page-3">
+          <div className="landing-page-3-main">
+            <div>
+              <h2>The Future of Music</h2>
+            </div>
 
-          <div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
-              mi tempor ut. Posuere nunc adipiscing fermentum br in. Sem
-              ullamcorper venenatis ut metus.
-            </p>
-          </div>
-          <div>
-            <img src={display} alt="" />
-          </div>
-          <div>
-            <button>open</button>
+            <div>
+              <p>
+                Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
+                mi tempor ut. Posuere nunc adipiscing fermentum br in. Sem
+                ullamcorper venenatis ut metus.
+              </p>
+            </div>
+            <div>
+              <img src={display} alt="" />
+            </div>
+            <div>
+              <button>open</button>
+            </div>
           </div>
         </div>
-      </div>
-      {/* mobile version  */}
-      <div className="mob-landing-page-4-main">
-        <div>
-          <div>
-            <div>
-              <img src={talented} alt="" />
-            </div>
-            <div>
-              <h3>Top talents</h3>
-              <br />
-            </div>
-          </div>
-          <div>
-            Work with award winning talents across the globe, we deliver an
-            unparalleled combination of timeless expertise, proven results,
-            long-term stability and trust.
-          </div>
-        </div>
-        <div>
-          <div>
-            <div>
-              <img src={trusted} alt="" />
-            </div>
-            <div>
-              <h3>Trusted Studio Profiles</h3>
-              <br />
-            </div>
-          </div>
-          <div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
-              mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
-              ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
-            </p>
-          </div>
-        </div>
-        <div>
-          <div>
-            <div>
-              <img src={best} alt="" />
-            </div>
-            <div>
-              <h3>Create the best</h3>
-              <br />
-            </div>
-          </div>
-          <div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
-              mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
-              ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* pc-version  */}
-      <div id="landing-page-4" className="landing-page-4">
-        <div className="landing-page-4-main">
+        {/* mobile version  */}
+        <div className="mob-landing-page-4-main">
           <div>
             <div>
               <div>
@@ -604,6 +716,7 @@ function LandingPage() {
               </div>
               <div>
                 <h3>Top talents</h3>
+                <br />
               </div>
             </div>
             <div>
@@ -619,6 +732,7 @@ function LandingPage() {
               </div>
               <div>
                 <h3>Trusted Studio Profiles</h3>
+                <br />
               </div>
             </div>
             <div>
@@ -636,6 +750,7 @@ function LandingPage() {
               </div>
               <div>
                 <h3>Create the best</h3>
+                <br />
               </div>
             </div>
             <div>
@@ -647,135 +762,295 @@ function LandingPage() {
             </div>
           </div>
         </div>
-        <div id="lp4-testinomal" className="lp4-testinomal">
-          <div className="lp4-testinomal-main">
-            <div>Testimonial</div>
-            <div>What our users say about us?</div>
-            <div className="person-title">{visibleTestimonial.title}</div>
+
+        {/* pc-version  */}
+        <div id="landing-page-4" className="landing-page-4">
+          <div className="landing-page-4-main">
             <div>
-              <p className="person-decription">
-                {visibleTestimonial.description}
-              </p>
-            </div>
-            <div>
-              <b className="person-name">{visibleTestimonial.name}</b>
-              <small className="person-designationAndCity">
-                {visibleTestimonial.designationAndCity}
-              </small>
-            </div>
-            <div>
-              {visibleImages.map((testimonial, index) => (
-                <div key={index} className={index === 1 ? "visible" : "hidden"}>
-                  <img
-                    src={testimonial.image}
-                    alt={`person-${index + 1}`}
-                    className="testimonial-image"
-                  />
+              <div>
+                <div>
+                  <img src={talented} alt="" />
                 </div>
-              ))}
+                <div>
+                  <h3>Top talents</h3>
+                </div>
+              </div>
+              <div>
+                Work with award winning talents across the globe, we deliver an
+                unparalleled combination of timeless expertise, proven results,
+                long-term stability and trust.
+              </div>
             </div>
             <div>
-              <button>View More</button>
+              <div>
+                <div>
+                  <img src={trusted} alt="" />
+                </div>
+                <div>
+                  <h3>Trusted Studio Profiles</h3>
+                </div>
+              </div>
+              <div>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur. Interdum augue nam
+                  vitae mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
+                  ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+                </p>
+              </div>
+            </div>
+            <div>
+              <div>
+                <div>
+                  <img src={best} alt="" />
+                </div>
+                <div>
+                  <h3>Create the best</h3>
+                </div>
+              </div>
+              <div>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur. Interdum augue nam
+                  vitae mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
+                  ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div id="lp4-testinomal" className="lp4-testinomal">
+            <div className="lp4-testinomal-main">
+              <div>Testimonial</div>
+              <div>What our users say about us?</div>
+              <div className="person-title">{visibleTestimonial.title}</div>
+              <div>
+                <p className="person-decription">
+                  {visibleTestimonial.description}
+                </p>
+              </div>
+              <div>
+                <b className="person-name">{visibleTestimonial.name}</b>
+                <small className="person-designationAndCity">
+                  {visibleTestimonial.designationAndCity}
+                </small>
+              </div>
+              <div>
+                {visibleImages.map((testimonial, index) => (
+                  <div
+                    key={index}
+                    className={index === 1 ? "visible" : "hidden"}
+                  >
+                    <img
+                      src={testimonial.image}
+                      alt={`person-${index + 1}`}
+                      className="testimonial-image"
+                    />
+                  </div>
+                ))}
+              </div>
+              <div>
+                <button>View More</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="landing-page-5">
-        <div className="lp5-aiMusic">
-          <div>Get started</div>
-          <div>Start generating royalty free music with Music-AI</div>
-          <div>
-            No credit card to start. Enjoy up to 50 high quality music per month
-            for free.
-          </div>
-          <div>
-            <button>Start generating for free</button>
+        <div className="landing-page-5">
+          <div className="lp5-aiMusic">
+            <div>Get started</div>
+            <div>Start generating royalty free music with Music-AI</div>
             <div>
-              Contact sales <FaChevronRight />
+              No credit card to start. Enjoy up to 50 high quality music per
+              month for free.
+            </div>
+            <div>
+              <button>Start generating for free</button>
+              <div>
+                Contact sales <FaChevronRight />
+              </div>
+            </div>
+          </div>
+          <div className="lp5-backed">
+            <div>
+              <div>
+                &nbsp; Backed By
+                <img src={line} alt="" />
+              </div>
+            </div>
+            <div>
+              <div>
+                <img src={marl} alt="" />
+              </div>
+              <div>
+                <img src={tech} alt="" />
+              </div>
+              <div>
+                <img src={sine} alt="" />
+              </div>
             </div>
           </div>
         </div>
-        <div className="lp5-backed">
-          <div>
+        <div className="landing-page-6">
+          <div className="lp6-main">
             <div>
-              &nbsp; Backed By
-              <img src={line} alt="" />
+              <div>
+                <div>
+                  <img src={logo} alt="" />
+                </div>
+                <div>
+                  Choira is an online ecosystem to <br /> empower you with
+                  online tools to jam, <br /> produce and explore music.
+                </div>
+                <div>
+                  <a
+                    href="https://www.instagram.com/choiramusic/"
+                    target="_blank"
+                  >
+                    <img src={insta} alt="" />
+                  </a>
+                  <a
+                    href="https://www.facebook.com/Choira-107074321806949"
+                    target="_blank"
+                  >
+                    <img src={facebook} alt="" />
+                  </a>
+                  <a href="https://twitter.com/choiramusic" target="_blank">
+                    <img src={tweeter} alt="" />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/company/choira"
+                    target="_blank"
+                  >
+                    <img src={linkedin} alt="" />
+                  </a>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <h4>Products</h4>
+                </div>
+                <div>Create</div>
+                <div>Studio</div>
+                <div>Jam</div>
+                <div>Music-AI</div>
+              </div>
+              <div>
+                <div>
+                  <h4>Company</h4>
+                </div>
+                <div>
+                  {" "}
+                  <a href="#/about">About us</a>
+                </div>
+                <div>Blog</div>
+                <div>
+                  <a href="https://studio.choira.io/#choira_team">Our team</a>
+                </div>
+                <div>
+                  <a href="#lp4-testinomal">Customer stories</a>
+                </div>
+                <div>Contact us</div>
+              </div>
+              <div>
+                <div>
+                  <h4>Support</h4>
+                </div>
+                <div>Help & Support</div>
+                <div>
+                  <a href="#/TermsandCondition">Terms & Conditions</a>
+                </div>
+                <div>
+                  <a href="#/Privacypolicy">Privacy Policy</a>
+                </div>
+                <div>
+                  <a href="#/refundPolicy">Refund Policy</a>
+                </div>
+                <div>
+                  <a href="#/Disclaimer">Disclaimer</a>
+                </div>
+              </div>
+              <div>
+                <div>
+                  Stay connected to us
+                  <input type="text" placeholder="Your email address" />
+                </div>
+              </div>
+            </div>
+            <div style={{ borderTop: "1px solid gray" }}>
+              © {currentYear} Choira.io All rights reserved
             </div>
           </div>
-          <div>
-            <div>
-              <img src={marl} alt="" />
-            </div>
-            <div>
-              <img src={tech} alt="" />
-            </div>
-            <div>
-              <img src={sine} alt="" />
-            </div>
-          </div>
+
+          {/* footer for mobile  */}
         </div>
-      </div>
-      <div className="landing-page-6">
-        <div className="lp6-main">
+        <div className="mob-lp6-main">
           <div>
             <div>
               <div>
-                <img src={logo} alt="" />
+                <div>
+                  <img src={logo} alt="" />
+                </div>
+                <div>
+                  Choira is an online ecosystem to empower you <br /> with
+                  online tools to jam, produce and explore <br /> music.
+                </div>
+                <div className="mob-lp6-social">
+                  <a
+                    href="https://www.instagram.com/choiramusic/"
+                    target="_blank"
+                  >
+                    <img src={insta} alt="" />
+                  </a>
+                  <a
+                    href="https://www.facebook.com/Choira-107074321806949"
+                    target="_blank"
+                  >
+                    <img src={facebook} alt="" />
+                  </a>
+                  <a href="https://twitter.com/choiramusic" target="_blank">
+                    <img src={tweeter} alt="" />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/company/choira"
+                    target="_blank"
+                  >
+                    <img src={linkedin} alt="" />
+                  </a>
+                </div>
               </div>
+
               <div>
-                Choira is an online ecosystem to <br /> empower you with online
-                tools to jam, <br /> produce and explore music.
-              </div>
-              <div>
-                <a
-                  href="https://www.instagram.com/choiramusic/"
-                  target="_blank"
-                >
-                  <img src={insta} alt="" />
-                </a>
-                <a
-                  href="https://www.facebook.com/Choira-107074321806949"
-                  target="_blank"
-                >
-                  <img src={facebook} alt="" />
-                </a>
-                <a href="https://twitter.com/choiramusic" target="_blank">
-                  <img src={tweeter} alt="" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/company/choira"
-                  target="_blank"
-                >
-                  <img src={linkedin} alt="" />
-                </a>
+                <div>
+                  Stay connected to us
+                  <input type="text" placeholder="Your email address" />
+                </div>
               </div>
             </div>
             <div>
               <div>
-                <h4>Products</h4>
+                <div>
+                  <h4>Products</h4>
+                </div>
+                <div>Create</div>
+                <div>Studio</div>
+                <div>Jam</div>
+                <div>Music-AI</div>
               </div>
-              <div>Create</div>
-              <div>Studio</div>
-              <div>Jam</div>
-              <div>Music-AI</div>
+              <div>
+                <div>
+                  <h4>Company</h4>
+                </div>
+                <div>
+                  <a href="#/about">About us</a>
+                </div>
+                <div>Blog</div>
+                <div>
+                  <a href="https://studio.choira.io/#choira_team">Our team</a>
+                </div>
+                <div>
+                  <a href="#lp4-testinomal">Customer stories</a>
+                </div>
+                <div>Contact us</div>
+              </div>
             </div>
-            <div>
-              <div>
-                <h4>Company</h4>
-              </div>
-              <div>
-                {" "}
-                <a href="#/about">About us</a>
-              </div>
-              <div>Blog</div>
-              <div>
-                <a href="https://studio.choira.io/#choira_team">Our team</a>
-              </div>
-              <div>
-                <a href="#lp4-testinomal">Customer stories</a>
-              </div>
-              <div>Contact us</div>
-            </div>
+
             <div>
               <div>
                 <h4>Support</h4>
@@ -794,112 +1069,10 @@ function LandingPage() {
                 <a href="#/Disclaimer">Disclaimer</a>
               </div>
             </div>
-            <div>
-              <div>
-                Stay connected to us
-                <input type="text" placeholder="Your email address" />
-              </div>
-            </div>
           </div>
           <div style={{ borderTop: "1px solid gray" }}>
             © {currentYear} Choira.io All rights reserved
           </div>
-        </div>
-
-        {/* footer for mobile  */}
-      </div>
-      <div className="mob-lp6-main">
-        <div>
-          <div>
-            <div>
-              <div>
-                <img src={logo} alt="" />
-              </div>
-              <div>
-                Choira is an online ecosystem to empower you <br /> with online
-                tools to jam, produce and explore <br /> music.
-              </div>
-              <div className="mob-lp6-social">
-                <a
-                  href="https://www.instagram.com/choiramusic/"
-                  target="_blank"
-                >
-                  <img src={insta} alt="" />
-                </a>
-                <a
-                  href="https://www.facebook.com/Choira-107074321806949"
-                  target="_blank"
-                >
-                  <img src={facebook} alt="" />
-                </a>
-                <a href="https://twitter.com/choiramusic" target="_blank">
-                  <img src={tweeter} alt="" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/company/choira"
-                  target="_blank"
-                >
-                  <img src={linkedin} alt="" />
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <div>
-                Stay connected to us
-                <input type="text" placeholder="Your email address" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <div>
-              <div>
-                <h4>Products</h4>
-              </div>
-              <div>Create</div>
-              <div>Studio</div>
-              <div>Jam</div>
-              <div>Music-AI</div>
-            </div>
-            <div>
-              <div>
-                <h4>Company</h4>
-              </div>
-              <div>
-                <a href="#/about">About us</a>
-              </div>
-              <div>Blog</div>
-              <div>
-                <a href="https://studio.choira.io/#choira_team">Our team</a>
-              </div>
-              <div>
-                <a href="#lp4-testinomal">Customer stories</a>
-              </div>
-              <div>Contact us</div>
-            </div>
-          </div>
-
-          <div>
-            <div>
-              <h4>Support</h4>
-            </div>
-            <div>Help & Support</div>
-            <div>
-              <a href="#/TermsandCondition">Terms & Conditions</a>
-            </div>
-            <div>
-              <a href="#/Privacypolicy">Privacy Policy</a>
-            </div>
-            <div>
-              <a href="#/refundPolicy">Refund Policy</a>
-            </div>
-            <div>
-              <a href="#/Disclaimer">Disclaimer</a>
-            </div>
-          </div>
-        </div>
-        <div style={{ borderTop: "1px solid gray" }}>
-          © {currentYear} Choira.io All rights reserved
         </div>
       </div>
     </>

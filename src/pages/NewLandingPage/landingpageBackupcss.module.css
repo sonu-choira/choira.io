@@ -1,24 +1,15 @@
 * {
-  /* margin: 0;
-  padding: 0; */
-  /* box-sizing: border-box; */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   color: #fff;
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 button {
   cursor: pointer;
 }
-.landingpageWrapper * {
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-.landingpageWrapper {
-  overflow-x: hidden;
-}
-.landing-page1 {
+.landingPage1 {
   height: 100vh;
   width: 100vw;
   background-image: url("../../assets/img/hero\ bg.png");
@@ -27,7 +18,6 @@ button {
   background-position: center;
   background-size: cover;
   position: relative;
-  overflow-x: hidden;
 }
 
 .navbar {
@@ -146,7 +136,6 @@ span {
 .page1-main-content > div:first-child {
   width: 100%;
   height: 50%;
-  margin: 0;
   /* border: 2px solid green; */
 }
 .page1-main-content > div:nth-child(2) {
@@ -323,8 +312,6 @@ span {
 }
 
 .landing-page-3 {
-  margin: 0;
-  padding: 0;
   height: 75vh;
   width: 100vw;
   background-color: #1e1e1e;
@@ -344,8 +331,6 @@ span {
   gap: 2%;
 }
 .landing-page-3-main > div:first-child h2 {
-  margin: 0;
-  padding: 0;
   font-size: 2.5vmax;
 }
 .landing-page-3-main > div:nth-child(4) {
@@ -747,7 +732,7 @@ span {
 .lpSidebar {
   display: none;
 }
-.mobile-navbar {
+.mobileNavbar {
   display: none;
 }
 .mob-page1-footer {
@@ -763,7 +748,7 @@ span {
   display: none;
 }
 
-@media only screen and (min-width: 1024px) and (max-width: 1903px) {
+@media only screen and (min-width: 1024px) and (max-width: 1550px) {
   .landing-page-3 {
     height: 100vh;
     /* border: 2px solid red; */
@@ -784,7 +769,7 @@ span {
   .navbar {
     display: none;
   }
-  .mobile-navbar {
+  .mobileNavbar {
     display: block;
     height: 10%;
     width: 100%;
@@ -795,10 +780,10 @@ span {
     padding-right: 12%;
     margin-top: 20px;
   }
-  .mobile-navbar > div:first-child > img {
+  .mobileNavbar > div:first-child > img {
     width: 60%;
   }
-  .mobile-navbar > div:nth-child(2) {
+  .mobileNavbar > div:nth-child(2) {
     font-size: 2.5vmax;
   }
   .lpSidebar {
@@ -815,7 +800,7 @@ span {
     flex-direction: column;
     transition: 1s ease;
   }
-  .lpSidebar-after {
+  .lpSidebarAfter {
     right: 0%;
     transition: 1s ease;
   }
@@ -929,7 +914,7 @@ span {
     border-radius: 30px;
   }
 
-  .landing-page1 {
+  .landingPage1 {
     background-image: url(../../assets/img/mobilebackground.png);
     background-position: center top;
     background-size: cover;
