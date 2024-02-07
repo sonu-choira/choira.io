@@ -252,6 +252,7 @@ function LandingPage() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
   const [isScreenOpen, setIsScreenOpen] = useState(0);
   const closeModel = () => {
@@ -279,18 +280,20 @@ function LandingPage() {
       {isLoginOpen ? (
         <div id="myModal" className="modal">
           <div className="modal-content">
-            <div className="modal-header">
+            <div className="modal-header ">
               <span
                 className="close"
-                // onClick={() => {
-                //   setIsLoginOpen(false);
-                // }}
+                onClick={() => {
+                  setIsLoginOpen(false);
+                }}
               >
                 &times;
               </span>
-              <h2>Get Started with</h2>
-              <div className="logoModel">
-                <img src={Logo} alt="choria" />
+              <div className="dflex">
+                <h2>Get Started with</h2>
+                <div className="logoModel">
+                  <img src={Logo} alt="choria" />
+                </div>
               </div>
             </div>
             <div className="modal-body" style={{ padding: "2px 16px" }}>
@@ -343,11 +346,12 @@ function LandingPage() {
                           Already have an account? Click here
                         </div> */}
                       <div
+                        style={{ color: "black" }}
                         className="loginText"
-                        // onClick={() => {
-                        //   setIsSignUpOpen(true);
-                        //   setIsLoginOpen(false);
-                        // }}
+                        onClick={() => {
+                          setIsSignUpOpen(true);
+                          setIsLoginOpen(false);
+                        }}
                       >
                         Don't have an account? Click here
                       </div>
@@ -388,10 +392,14 @@ function LandingPage() {
             </div>
             <div className="modal-footer">
               <p
-                style={{ cursor: "pointer", textAlign: "center" }}
-                // onClick={() => {
-                //   navigate("/termsandCondition");
-                // }}
+                style={{
+                  cursor: "pointer",
+                  textAlign: "center",
+                  color: "black",
+                }}
+                onClick={() => {
+                  navigate("/termsandCondition");
+                }}
               >
                 Terms And Conditions
               </p>
@@ -401,6 +409,137 @@ function LandingPage() {
             className="backGroundClick"
             onClick={() => {
               setIsLoginOpen(false);
+            }}
+          ></div>
+        </div>
+      ) : null}
+
+      {isSignUpOpen ? (
+        <div id="myModal" className="modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <span
+                className="close"
+                onClick={() => {
+                  setIsSignUpOpen(false);
+                }}
+              >
+                &times;
+              </span>
+              <div className="dflex">
+                <h2>Get Started with</h2>
+                <div className="logoModel">
+                  <img src={Logo} alt="choria" />
+                </div>
+              </div>
+            </div>
+            <div className="modal-body" style={{ padding: "2px 16px" }}>
+              {isScreenOpen === 0 ? (
+                <div className="screenOne">
+                  <div className="ssoClass">
+                    <div
+                      className="googleLogin screenLogin"
+                      // onClick={() =>
+                      //   handleFirebaseClick(googleProvider, "GOOGLE")
+                      // }
+                    >
+                      <div className="logo">
+                        <img src={googleLogo} alt="google Logo" />
+                      </div>
+                      <div className="brandName">Sign Up with Google</div>
+                    </div>
+                    <div
+                      className="facebookLogin screenLogin"
+                      // onClick={() => spotifyLogin()}
+                    >
+                      <div className="logo">
+                        <img src={spottyLogo} alt="google Logo" />
+                      </div>
+                      <div className="brandName">Sign Up with Spotify</div>
+                    </div>
+                    <div
+                      className="spottyLogin screenLogin"
+                      // onClick={() =>
+                      //   handleFirebaseClick(facebookProvider, "FACEBOOK")
+                      // }
+                    >
+                      <div className="logo">
+                        <img src={facebookLogo} alt="google Logo" />
+                      </div>
+                      <div className="brandName">Sign Up with Facebook</div>
+                    </div>
+                    <div
+                      className="mailLogin screenLogin"
+                      // onClick={() => setIsScreenOpen(1)}
+                    >
+                      <div className="logo">
+                        <img src={mailLogo} alt="google Logo" />
+                      </div>
+                      <div className="brandName">
+                        Sign Up with email instead
+                      </div>
+                    </div>
+                    <div className="loginNow">
+                      {/* <div className="loginText" onClick={() => setIsScreenOpen(3)}>
+                          Already have an account? Click here
+                        </div> */}
+                      <div
+                        className="loginText"
+                        style={{ color: "black" }}
+                        onClick={() => {
+                          setIsSignUpOpen(false);
+                          setIsLoginOpen(true);
+                        }}
+                      >
+                        Already have an account? Click here
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : isScreenOpen === 1 ? (
+                <div className="screenTwo">
+                  <RegisterBox closeModel={closeModel} />
+                  <div className="cancelNow" onClick={() => setIsScreenOpen(0)}>
+                    <div className="button">Cancel</div>
+                  </div>
+                </div>
+              ) : isScreenOpen === 2 ? (
+                <div className="screenTwo">
+                  <GoogleExtraBox
+                  //  closeModel={registerUser}
+                  />
+                  <div className="cancelNow" onClick={() => setIsScreenOpen(0)}>
+                    <div className="button">Cancel</div>
+                  </div>
+                </div>
+              ) : isScreenOpen === 3 ? (
+                <div className="screenTwo">
+                  <LoginBox closeModel={closeModel} />
+                  <div className="cancelNow" onClick={() => setIsScreenOpen(0)}>
+                    <div className="button">Cancel</div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+            <div className="modal-footer">
+              <p
+                style={{
+                  cursor: "pointer",
+                  textAlign: "center",
+                  color: "black",
+                }}
+                onClick={() => {
+                  navigate("/termsandCondition");
+                }}
+              >
+                Terms And Conditions
+              </p>
+            </div>
+          </div>
+          <div
+            className="backGroundClick"
+            onClick={() => {
+              setIsSignUpOpen(false);
             }}
           ></div>
         </div>

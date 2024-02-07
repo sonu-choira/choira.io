@@ -26,6 +26,8 @@
   text-decoration: none;
 }
 
+
+
 @media screen and (max-width: 450px) {
   .sidenav {
   	padding-top: 15px;
@@ -699,6 +701,7 @@ footer {
             padding: 12px 0;
             border-radius: 20px;
             margin-top: 20px;
+            padding-left: 5%;
 
             .logo {
               height: 20px;
@@ -773,7 +776,8 @@ footer {
     .modal-footer {
       padding: 2px 16px;
       background-color: #F5F5F5;
-      color: rgb(0, 0, 0);
+      color: rgb(0, 0, 0) !important;
+      // background-color: #202020;
 
       p {
         margin: 9% auto;

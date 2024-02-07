@@ -15,6 +15,13 @@ button {
   padding: 0;
   box-sizing: border-box;
 }
+.dflex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .landingpageWrapper {
   overflow-x: hidden;
 }
