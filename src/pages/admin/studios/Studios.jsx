@@ -48,8 +48,8 @@ function Studios() {
           {/* <OnboardStudio/> */}
           <div className="allStudioDetailsPage">
             {/* <AllStudioDetail /> */}
-            {/* <AddNewStudio /> */}
-            <AddNewRoom />
+            <AddNewStudio />
+            {/* <AddNewRoom /> */}
 
             <StudioFooter />
           </div>

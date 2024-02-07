@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MdAddAPhoto } from "react-icons/md";
+import { MdAddAPhoto, MdCancel } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import upload from "../../assets/img/upload.png";
 import {
@@ -42,6 +42,29 @@ function AddNewStudio() {
 
     // Update hasContent state based on whether there is content in the textarea
     setHasContent(inputCode.trim() !== "");
+  };
+
+  const [teams, setTeams] = useState([]);
+
+  const handleAddTeamDetail = () => {
+    const newTeam = {
+      photo: null,
+      name: "",
+      profile: "",
+    };
+    setTeams([...teams, newTeam]);
+  };
+
+  const handlePhotoChange = (event, index) => {
+    const newTeams = [...teams];
+    newTeams[index].photo = event.target.files[0];
+    setTeams(newTeams);
+  };
+
+  const handleInputChange = (event, index, field) => {
+    const newTeams = [...teams];
+    newTeams[index][field] = event.target.value;
+    setTeams(newTeams);
   };
   return (
     <>
@@ -234,28 +257,65 @@ function AddNewStudio() {
               </div>
               <div>
                 <div className="addTeamDetailDiv">
-                  <label htmlFor="pincode">Rooms</label>
-                  <span className="addTeamDetailbtn">
+                  <label htmlFor="Teams">Teams</label>
+                  <span
+                    className="addTeamDetailbtn"
+                    onClick={handleAddTeamDetail}
+                  >
                     <IoMdAddCircle />
                   </span>
 
-                  <div>
-                    <div className="addTeamDetailMainDiv">
-                      <div>
-                        <label htmlFor="uploadteamPhoto">
-                          <MdAddAPhoto />
-                        </label>
-                        <input
-                          type="file"
-                          id="uploadteamPhoto"
-                          style={{ display: "none" }}
-                        />
+                  <div className="addTeamDetailDynamicDiv">
+                    {teams.map((team, index) => (
+                      <div key={index} className="addTeamDetailMainDiv">
+                        <div>
+                          <label htmlFor={`uploadteamPhoto-${index}`}>
+                            <MdAddAPhoto />
+                          </label>
+                          <input
+                            type="file"
+                            id={`uploadteamPhoto-${index}`}
+                            style={{ display: "none" }}
+                            onChange={(event) =>
+                              handlePhotoChange(event, index)
+                            }
+                          />
+                          {team.photo && (
+                            <div>
+                              <img
+                                src={URL.createObjectURL(team.photo)}
+                                alt={`Team ${index} Photo`}
+                                style={{
+                                  maxWidth: "100px",
+                                  maxHeight: "100px",
+                                }}
+                              />
+                              <span className="cancelUpload">
+                                <MdCancel />
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <input
+                            type="text"
+                            placeholder="Name"
+                            value={team.name}
+                            onChange={(event) =>
+                              handleInputChange(event, index, "name")
+                            }
+                          />
+                          <input
+                            type="text"
+                            placeholder="Profile"
+                            value={team.profile}
+                            onChange={(event) =>
+                              handleInputChange(event, index, "profile")
+                            }
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <input type="text" placeholder="Name" />
-                        <input type="text" placeholder="profile" />
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
