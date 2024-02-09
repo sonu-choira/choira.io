@@ -465,6 +465,9 @@ td {
 .addNewStudioimgBox label {
   font-size: 1vmax;
   font-weight: 600;
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
 }
 .addNewStudioimgBox > div {
   margin-top: 2%;
@@ -489,9 +492,43 @@ td {
 .addNewStudioimgBox > div > label span {
   color: #ffc701;
 }
-.addNewStudioimgBox > div > label img {
+.addNewStudioimgBox > div > label > div:first-child > img {
   width: 40px;
   height: 30px;
+}
+.showMultipleStudioImage {
+  width: 100%;
+  height: 100%;
+  padding-top: 1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 2px solid red;
+}
+.showMultipleStudioImage > div:nth-child(1) {
+  width: 95%;
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2%;
+  border: 2px solid green;
+}
+.showMultipleStudioImage > div:nth-child(2) {
+  align-self: flex-start;
+  padding-left: 2%;
+}
+
+.showMultipleStudioImage > div:nth-child(1) > div {
+  /* Add any styling for each grid item */
+  border: 1px solid #ccc;
+  width: 18%;
+  height: 80%;
+  object-fit: cover;
+  position: relative;
+  border-radius: 10px;
+  text-align: center;
 }
 .showlocationDiv {
   width: 100%;
@@ -500,8 +537,11 @@ td {
 }
 .addNewStudioPage > div:nth-child(2) {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
+  /* border: 2px solid red; */
+  min-height: 100%;
+  height: fit-content;
 }
 .addNewStudioPage > div:nth-child(2) > div {
   width: 95%;
@@ -510,7 +550,7 @@ td {
 }
 .addNewStudioinputBox2 {
   width: 100%;
-  height: 20%;
+  min-height: 15vh;
   /* border: 2px solid green; */
   display: flex;
   flex-direction: column;
@@ -518,8 +558,10 @@ td {
 }
 .addNewStudioinputBox2 textarea {
   border-radius: 10px;
-  height: 60%;
-  width: 100%;
+  min-height: 12vh;
+  max-width: 100%;
+  min-width: 50%;
+  max-height: 50vh;
   outline: none;
   border: 2px solid #dddddd;
   padding-left: 1%;
@@ -569,32 +611,32 @@ td {
 }
 .addTeamDetailDiv {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   /* border: 2px solid green; */
   display: flex;
   flex-direction: column;
   gap: 5%;
-  position: relative;
 }
 .addTeamDetailDynamicDiv {
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   display: flex;
   align-items: center;
-  /* justify-content: center; */
+
   flex-direction: column;
   gap: 5%;
   border-radius: 10px;
 
   width: 100%;
-  height: 90%;
+  min-height: 90%;
+
   /* height: fit-content; */
   outline: none;
-  border: 2px solid #dddddd;
 
   color: black;
   /* overflow: scroll; */
 
   padding-top: 5%;
+  /* border: 2px solid pink; */
 }
 .addTeamDetailDiv > label {
   font-size: 1vmax;
@@ -603,17 +645,21 @@ td {
 
 .addTeamDetailMainDiv {
   width: 95%;
-  height: fit-content;
-  border: 2px solid red;
+  min-height: 10vh;
+
+  border: 2px solid #dddddd;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
+  position: relative;
+  padding-left: 2%;
+  margin-bottom: 5%;
   /* flex-direction: column; */
 }
 .addTeamDetailMainDiv > div:nth-child(1) {
   width: 20%;
-  height: 80%;
+  height: 7vh;
   border: 2px dashed black;
   display: flex;
   align-items: center;
@@ -646,16 +692,25 @@ td {
   font-weight: 600;
 }
 .addTeamDetailMainDiv > div:nth-child(2) input {
-  width: 100%;
+  width: 95%;
   border: none;
   outline: none;
 }
 .addTeamDetailbtn {
-  position: absolute;
-  bottom: 5%;
-  right: 2%;
-  font-size: 2vmax;
-  color: #ffc701;
+  /* position: absolute; */
+  align-self: start;
+  bottom: 0%;
+
+  left: 2%;
+  font-size: 1.2vmax;
+  color: black;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 2%;
+  padding-bottom: 2%;
+  cursor: pointer;
 }
 
 .addNewRoomPage {
@@ -699,4 +754,26 @@ td {
 .defaultLabel {
   font-size: 1vmax;
   font-weight: 600;
+}
+.cancelTeamDetailUpload {
+  position: absolute;
+  /* float: left; */
+  top: -10%;
+  right: -2%;
+  font-size: 1.1vmax;
+
+  color: #ffc701;
+  cursor: pointer;
+  /* mix-blend-mode: color-burn black; */
+}
+.cancelImageUpload {
+  position: absolute;
+  /* float: left; */
+  top: -12%;
+  right: 0%;
+  font-size: 1vmax;
+
+  color: #ffc701;
+  cursor: pointer;
+  /* mix-blend-mode: color-burn black; */
 }

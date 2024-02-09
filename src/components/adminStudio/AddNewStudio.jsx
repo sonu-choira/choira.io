@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import { MdAddAPhoto, MdCancel } from "react-icons/md";
-import { IoMdAddCircle } from "react-icons/io";
-import upload from "../../assets/img/upload.png";
-import {
-  FaCheckDouble,
-  FaFilter,
-  FaRegBell,
-  FaRegClock,
-  FaShare,
-} from "react-icons/fa6";
+import { MdAddAPhoto, MdCancel, MdOutlineAddBox } from "react-icons/md";
+
+import upload from "../../assets/upload.svg";
+import cross from "../../assets/cross.svg";
 
 function AddNewStudio() {
   const amenitiesList = [
@@ -43,16 +37,12 @@ function AddNewStudio() {
     // Update hasContent state based on whether there is content in the textarea
     setHasContent(inputCode.trim() !== "");
   };
-
-  const [teams, setTeams] = useState([]);
+  const [teams, setTeams] = useState([{ photo: null, name: "", profile: "" }]);
 
   const handleAddTeamDetail = () => {
-    const newTeam = {
-      photo: null,
-      name: "",
-      profile: "",
-    };
+    const newTeam = { photo: null, name: "", profile: "" };
     setTeams([...teams, newTeam]);
+    console.log(teams);
   };
 
   const handlePhotoChange = (event, index) => {
@@ -65,6 +55,41 @@ function AddNewStudio() {
     const newTeams = [...teams];
     newTeams[index][field] = event.target.value;
     setTeams(newTeams);
+  };
+
+  const handleCancelImage = (index) => {
+    const newTeams = [...teams];
+    newTeams[index].photo = null;
+    setTeams(newTeams);
+  };
+
+  const handleCancelTeam = (index) => {
+    if (teams.length > 1) {
+      const newTeams = [...teams];
+      newTeams.splice(index, 1);
+      setTeams(newTeams);
+    }
+  };
+
+  const hideAddPhotoIcon = (team) => {
+    return team.photo ? { display: "none" } : {};
+  };
+
+  const [images, setImages] = useState([]);
+
+  const handleImageChange = (event) => {
+    const selectedImages = Array.from(event.target.files);
+    const newImages = [
+      ...images,
+      ...selectedImages.slice(0, 5 - images.length),
+    ];
+    setImages(newImages);
+  };
+
+  const handleRemoveImage = (index) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
   };
   return (
     <>
@@ -133,13 +158,62 @@ function AddNewStudio() {
               <br />
 
               <div>
-                <label className="abs" htmlFor="selectimg">
-                  <img src={upload} alt="" />
-                  <div>
-                    Drag and Drop or <span>Browse</span> <br /> to upload
-                  </div>
+                <label className="abs" htmlFor="">
+                  {images.length === 0 ? (
+                    <div>
+                      <label htmlFor="selectimg">
+                        <img src={upload} alt="" />
+                        <div>
+                          Drag and Drop or <span>Browse</span> <br /> to upload
+                        </div>
+                      </label>
+                    </div>
+                  ) : (
+                    <div className="showMultipleStudioImage">
+                      <div>
+                        {images.map((image, index) => (
+                          <div key={index}>
+                            <img
+                              src={URL.createObjectURL(image)}
+                              alt={`Uploaded Image ${index + 1}`}
+                              style={{ width: "100%", height: "100%" }}
+                            />
+                            <span
+                              className="cancelImageUpload"
+                              style={{ right: "-10%" }}
+                              onClick={() => handleRemoveImage(index)}
+                            >
+                              <img src={cross} alt="" />
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      {images.length <= 4 ? (
+                        <div>
+                          <label
+                            htmlFor="selectimg"
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              paddingTop: "15%",
+                            }}
+                          >
+                            <img src={upload} alt="" /> Upload
+                          </label>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  )}
                 </label>
-                <input type="file" id="selectimg" />
+                <input
+                  type="file"
+                  multiple
+                  accept=".jpeg,.png,.svg,.webp,.jpg,.jfif"
+                  id="selectimg"
+                  onChange={handleImageChange}
+                />
               </div>
             </div>
             <div className="addNewStudioinputBox" style={{ paddingTop: "2%" }}>
@@ -193,7 +267,7 @@ function AddNewStudio() {
               className="showlocationDiv"
               style={{
                 width: "100%",
-                height: "100%",
+                height: "40%",
 
                 overflow: "hidden",
                 border: "1px solid #ddd",
@@ -258,19 +332,16 @@ function AddNewStudio() {
               <div>
                 <div className="addTeamDetailDiv">
                   <label htmlFor="Teams">Teams</label>
-                  <span
-                    className="addTeamDetailbtn"
-                    onClick={handleAddTeamDetail}
-                  >
-                    <IoMdAddCircle />
-                  </span>
 
                   <div className="addTeamDetailDynamicDiv">
                     {teams.map((team, index) => (
                       <div key={index} className="addTeamDetailMainDiv">
                         <div>
-                          <label htmlFor={`uploadteamPhoto-${index}`}>
-                            <MdAddAPhoto />
+                          <label
+                            style={{ cursor: "pointer" }}
+                            htmlFor={`uploadteamPhoto-${index}`}
+                          >
+                            <MdAddAPhoto style={hideAddPhotoIcon(team)} />
                           </label>
                           <input
                             type="file"
@@ -290,8 +361,11 @@ function AddNewStudio() {
                                   maxHeight: "100px",
                                 }}
                               />
-                              <span className="cancelUpload">
-                                <MdCancel />
+                              <span
+                                className="cancelImageUpload"
+                                onClick={() => handleCancelImage(index)}
+                              >
+                                <img src={cross} alt="" />
                               </span>
                             </div>
                           )}
@@ -314,8 +388,23 @@ function AddNewStudio() {
                             }
                           />
                         </div>
+                        {teams.length > 1 && (
+                          <span
+                            style={{ cursor: "pointer" }}
+                            className="cancelTeamDetailUpload"
+                            onClick={() => handleCancelTeam(index)}
+                          >
+                            <img src={cross} alt="" />
+                          </span>
+                        )}
                       </div>
                     ))}
+                    <span
+                      className="addTeamDetailbtn"
+                      onClick={handleAddTeamDetail}
+                    >
+                      <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
+                    </span>
                   </div>
                 </div>
               </div>
