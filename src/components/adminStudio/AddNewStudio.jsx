@@ -3,6 +3,7 @@ import { MdAddAPhoto, MdCancel, MdOutlineAddBox } from "react-icons/md";
 
 import upload from "../../assets/upload.svg";
 import cross from "../../assets/cross.svg";
+import StudioFooter from "./StudioFooter";
 
 function AddNewStudio() {
   const amenitiesList = [
@@ -76,6 +77,7 @@ function AddNewStudio() {
   };
 
   const [images, setImages] = useState([]);
+  const [isOver, setIsOver] = useState(false);
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
@@ -89,6 +91,35 @@ function AddNewStudio() {
   const handleRemoveImage = (index) => {
     const newImages = [...images];
     newImages.splice(index, 1);
+    setImages(newImages);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setIsOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsOver(false);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setIsOver(false);
+
+    const draggedIndex = event.dataTransfer.getData("text/plain");
+    const droppedIndex = images.length;
+
+    // Prevent dropping the item back into its original position
+    if (draggedIndex === droppedIndex.toString()) {
+      return;
+    }
+
+    const draggedImage = images[draggedIndex];
+    const newImages = [...images];
+    newImages.splice(draggedIndex, 1);
+    newImages.splice(droppedIndex, 0, draggedImage);
+
     setImages(newImages);
   };
   return (
@@ -156,7 +187,6 @@ function AddNewStudio() {
             <div className="addNewStudioimgBox">
               <label htmlFor="selectimg">Image</label>
               <br />
-
               <div>
                 <label className="abs" htmlFor="">
                   {images.length === 0 ? (
@@ -169,10 +199,23 @@ function AddNewStudio() {
                       </label>
                     </div>
                   ) : (
-                    <div className="showMultipleStudioImage">
+                    <div
+                      className={`showMultipleStudioImage ${
+                        isOver ? "drag-over" : ""
+                      }`}
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                    >
                       <div>
                         {images.map((image, index) => (
-                          <div key={index}>
+                          <div
+                            key={index}
+                            draggable
+                            onDragStart={(e) => {
+                              e.dataTransfer.setData("text/plain", index);
+                            }}
+                          >
                             <img
                               src={URL.createObjectURL(image)}
                               alt={`Uploaded Image ${index + 1}`}
@@ -188,7 +231,7 @@ function AddNewStudio() {
                           </div>
                         ))}
                       </div>
-                      {images.length <= 4 ? (
+                      {images.length <= 4 && (
                         <div>
                           <label
                             htmlFor="selectimg"
@@ -201,8 +244,6 @@ function AddNewStudio() {
                             <img src={upload} alt="" /> Upload
                           </label>
                         </div>
-                      ) : (
-                        ""
                       )}
                     </div>
                   )}
@@ -412,6 +453,7 @@ function AddNewStudio() {
           </div>
         </div>
       </div>
+      <StudioFooter />
     </>
   );
 }

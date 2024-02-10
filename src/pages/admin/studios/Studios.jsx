@@ -20,6 +20,7 @@ import StudioFooter from "../../../components/adminStudio/StudioFooter";
 import upload from "../../../assets/img/upload.png";
 import AddNewStudio from "../../../components/adminStudio/AddNewStudio";
 import AddNewRoom from "../../../components/adminStudio/AddNewRoom";
+import StudioBookingDetail from "../../../components/adminStudio/booking/StudioBookingDetail";
 
 function Studios() {
   return (
@@ -45,13 +46,12 @@ function Studios() {
             </div>
           </div>
           {/* //sdhbsda */}
-          {/* <OnboardStudio/> */}
+          {/* <OnboardStudio /> */}
           <div className="allStudioDetailsPage">
             {/* <AllStudioDetail /> */}
-            <AddNewStudio />
+            {/* <AddNewStudio /> */}
             {/* <AddNewRoom /> */}
-
-            <StudioFooter />
+            <StudioBookingDetail />
           </div>
         </div>
       </div>

@@ -259,15 +259,72 @@ input[type="number"] {
 .allStudiobtndiv > div:nth-child(2) {
   width: 28%;
   height: 100%;
-  /* border: 2px solid blue; */
+  border: 2px solid blue;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5%;
 }
 .allStudiobtndiv > div:nth-child(1) {
-  font-size: 1.5vmax;
+  font-size: 1.3vmax;
   font-weight: 600;
+}
+
+.bookingStudiobtn {
+  width: 95%;
+  height: 10%;
+  /* border: 2px solid green; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bookingStudiobtn > div:nth-child(2) {
+  width: 48%;
+  height: 100%;
+  border: 2px solid blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+}
+.bookingStudiobtn > div:nth-child(1) {
+  font-size: 1vmax;
+  font-weight: 600;
+  border: 2px solid transparent;
+  width: 35%;
+  height: 80%;
+}
+.bookingStudiobtn > div:nth-child(1) > div {
+  width: 90.5%;
+  height: 100%;
+  /* border: 2px solid pink; */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  border-radius: 15px;
+  background-color: white;
+}
+.bookingStudiobtn > div:nth-child(1) > div > div:hover {
+  background-color: #ffc701;
+  cursor: pointer;
+  color: black;
+}
+.bookingStudiobtn > div:nth-child(1) > div > div {
+  height: 100%;
+  width: fit-content;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  padding: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bookingStudiobtn > div:nth-child(1) > div > div:nth-child(4) {
+  border: 2px solid transparent;
+  padding-right: 6%;
+  padding-left: 5%;
 }
 .studioImage {
   width: 50px;
@@ -319,16 +376,16 @@ input[type="number"] {
   /* border: 2px solid green; */
 }
 .studiotabelHead > tr > th:nth-child(1) {
-  width: 20%;
+  width: 25%;
 }
 .studiotabelHead > tr > th:nth-child(2) {
-  width: 10%;
-}
-.studiotabelHead > tr > th:nth-child(3) {
   width: 15%;
 }
+.studiotabelHead > tr > th:nth-child(3) {
+  width: 25%;
+}
 .studiotabelHead > tr > th:nth-child(4) {
-  width: 10%;
+  width: 15%;
 }
 
 td {
@@ -343,12 +400,12 @@ td {
   /* border: 2px solid red; */
 }
 .tableActionbtn > div:nth-child(2) {
-  width: 15%;
-  /* border: 2px solid green; */
+  width: 35%;
+  border: 2px solid green;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 1.3vmax;
+  font-size: 1vmax;
   height: 40%;
 }
 .tabelpaginationDiv {
@@ -358,6 +415,24 @@ td {
   display: flex;
   align-items: end;
   margin-top: 1%;
+}
+.tableActionbtn > div:nth-child(1) {
+  width: 40%;
+  /* border: 2px solid pink; */
+}
+.tableActionbtn select {
+  /* background-color: red; */
+  color: black;
+  border: none;
+  outline: none;
+  width: 80%;
+  width: 100%;
+  height: 100%;
+  padding: 5%;
+}
+.tableActionbtn option {
+  background-color: white;
+  color: black;
 }
 .studioFooter {
   width: 100%;

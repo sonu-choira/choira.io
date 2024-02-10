@@ -2,7 +2,7 @@
   /* margin: 0;
   padding: 0; */
   /* box-sizing: border-box; */
-  color: #fff;
+
   /* overflow-x: hidden; */
   scroll-behavior: smooth;
 }
@@ -14,6 +14,7 @@ button {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: #fff;
 }
 .dflex {
   display: flex;
@@ -332,7 +333,7 @@ span {
 .landing-page-3 {
   margin: 0;
   padding: 0;
-  height: 75vh;
+  height: 80vh;
   width: 100vw;
   background-color: #1e1e1e;
   display: flex;

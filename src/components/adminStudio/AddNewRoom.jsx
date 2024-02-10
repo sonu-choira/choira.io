@@ -9,6 +9,7 @@ import {
   FaRegClock,
   FaShare,
 } from "react-icons/fa6";
+import StudioFooter from "./StudioFooter";
 
 function AddNewRoom() {
   const days = [
@@ -202,6 +203,7 @@ function AddNewRoom() {
           </div>
         </div>
       </div>
+      <StudioFooter />
     </>
   );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { FaCheckDouble, FaRegClock } from "react-icons/fa6";
 import { LuFilePlus } from "react-icons/lu";
 import { MdCalendarMonth } from "react-icons/md";
+import { GrTableAdd } from "react-icons/gr";
 
 function OnboardStudio() {
   return (
@@ -30,7 +31,7 @@ function OnboardStudio() {
           </div>
           <div>
             <div>
-              <MdCalendarMonth />
+              <GrTableAdd />
             </div>
             <div>Slot Booking</div>
           </div>

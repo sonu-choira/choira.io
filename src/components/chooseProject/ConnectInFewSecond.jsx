@@ -54,10 +54,9 @@ const ConnectInFewSecond = ({
       return { ...prevdata, ConnectedPerson: currentUsername };
     });
     console.log("currentUsername", jkt);
-
+    localStorage.clear();
     // setDataUpdatedNavigateNow(true);.
     // onUserProjectDataUpdate();
-    localStorage.clear();
   };
   // useEffect(() => {
   //   // Check if userProjectData has been updated by child components
