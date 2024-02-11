@@ -13,7 +13,7 @@ import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
 let PageSize = 10;
 
-function StudioBookingDetail() {
+function Artist() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
 
@@ -74,12 +74,13 @@ function StudioBookingDetail() {
           <table>
             <thead className="studiotabelHead">
               <tr>
-                <th style={{ width: "15%" }}>Booking ID</th>
+                <th style={{ width: "10%" }}>Booking ID</th>
                 <th>User Name</th>
-                <th style={{ width: "15%" }}>Studio Name</th>
-                <th>No. of Hour</th>
-                <th>Date</th>
-                <th>Time Slot</th>
+
+                <th style={{ width: "12%" }}> Mobile No.</th>
+                <th>Artist Name</th>
+                <th>Services</th>
+                <th>Amount</th>
                 <th>Project Status</th>
               </tr>
             </thead>
@@ -89,14 +90,13 @@ function StudioBookingDetail() {
                   <tr>
                     <td style={{ textAlign: "center" }}>#{products.id}</td>
                     <td>{products.title}</td>
-                    <td>
-                      {products.category}
-                      <br />
-                      <small>Maharastra</small>
-                    </td>
+
                     <td>{products.stock}</td>
-                    <td>{products.discountPercentage}</td>
-                    <td>{products.rating}</td>
+                    <td>{products.brand}</td>
+                    <td>{products.category}</td>
+                    <td style={{ textAlign: "start" }}>
+                      Starting price from ₹{products.price} <br />
+                    </td>
                     <td className="tableActionbtn">
                       <div>
                         <select
@@ -143,4 +143,4 @@ function StudioBookingDetail() {
   );
 }
 
-export default StudioBookingDetail;
+export default Artist;

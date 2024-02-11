@@ -13,7 +13,7 @@ import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
 let PageSize = 10;
 
-function StudioBookingDetail() {
+function MusicProduction() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
 
@@ -76,10 +76,10 @@ function StudioBookingDetail() {
               <tr>
                 <th style={{ width: "15%" }}>Booking ID</th>
                 <th>User Name</th>
-                <th style={{ width: "15%" }}>Studio Name</th>
-                <th>No. of Hour</th>
-                <th>Date</th>
-                <th>Time Slot</th>
+
+                <th> Mobile No.</th>
+                <th>Production Name</th>
+                <th>Amount</th>
                 <th>Project Status</th>
               </tr>
             </thead>
@@ -89,12 +89,8 @@ function StudioBookingDetail() {
                   <tr>
                     <td style={{ textAlign: "center" }}>#{products.id}</td>
                     <td>{products.title}</td>
-                    <td>
-                      {products.category}
-                      <br />
-                      <small>Maharastra</small>
-                    </td>
-                    <td>{products.stock}</td>
+
+                    <td>{products.category}</td>
                     <td>{products.discountPercentage}</td>
                     <td>{products.rating}</td>
                     <td className="tableActionbtn">
@@ -143,4 +139,4 @@ function StudioBookingDetail() {
   );
 }
 
-export default StudioBookingDetail;
+export default MusicProduction;

@@ -35,6 +35,7 @@ const NewProject = lazy(() => import("./pages/produce/NewProject.jsx"));
 const ChoiraTest = lazy(() => import("./pages/produce/ChoiraTest.jsx"));
 const LandingPage = lazy(() => import("./pages/NewLandingPage/LandingPage.jsx"));
 const Studios = lazy(() => import("./pages/admin/studios/Studios.jsx"));
+const BookingPages = lazy(() => import("./pages/admin/studios/BookingPages.jsx"));
 
 
 
@@ -53,6 +54,7 @@ const Routing = () => {
           <Route exact path='/newproject' element={<NewProject/>} />
           <Route exact path='/choiratest' element={<ChoiraTest/>} />
           <Route exact path='/studios' element={<Studios/>} />
+          <Route exact path='/booking' element={<BookingPages/>} />
           <Route exact path='/userHome' element={<UserHome/>}/> 
           <Route exact path='/adminHome' element={<AdminHome/>}/> 
           <Route exact path='/armHome' element={<ArmHome/>}/> 

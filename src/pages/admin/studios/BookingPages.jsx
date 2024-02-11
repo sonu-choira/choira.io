@@ -24,8 +24,10 @@ import StudioBookingDetail from "../../../components/adminStudio/booking/StudioB
 import MusicProduction from "../../../components/adminStudio/booking/MusicProduction";
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
+import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
 
-function Studios() {
+function BookingPages() {
+  const [bookingPageCount, setBookingPageCount] = useState(1);
   return (
     <>
       <div className="wrapper">
@@ -48,12 +50,20 @@ function Studios() {
               <MdOutlineSettings />
             </div>
           </div>
-          {/* //sdhbsda */}
-          {/* <OnboardStudio /> */}
           <div className="allStudioDetailsPage">
-            {/* <AllStudioDetail /> */}
-            <AddNewStudio />
-            {/* <AddNewRoom /> */}
+            <BookingActionBar
+              bookingPageCount={bookingPageCount}
+              setBookingPageCount={setBookingPageCount}
+            />
+            {bookingPageCount == 1 ? (
+              <StudioBookingDetail />
+            ) : bookingPageCount == 2 ? (
+              <MusicProduction />
+            ) : bookingPageCount == 3 ? (
+              <MixMaster />
+            ) : (
+              <Artist />
+            )}
           </div>
         </div>
       </div>
@@ -61,4 +71,4 @@ function Studios() {
   );
 }
 
-export default Studios;
+export default BookingPages;
