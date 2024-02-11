@@ -37,10 +37,12 @@ input[type="number"] {
   justify-content: start;
   flex-direction: column;
   gap: 5%;
+  /* overflow: hidden; */
 }
 .studioHeader {
   width: 100%;
-  height: 10%;
+  min-height: 8%;
+  max-height: 8%;
   /* border: 2px solid green; */
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: flex;
@@ -101,19 +103,20 @@ input[type="number"] {
   right: 0;
   color: orange;
 }
-.onboardStudio > div {
-  display: flex;
-  align-items: center;
-}
 .onboardStudio {
   width: 80%;
   height: 40%;
-  /* border: 2px solid red; */
+  border: 2px solid red;
   display: flex;
   align-items: start;
   justify-content: start;
   flex-direction: column;
 }
+.onboardStudio > div {
+  display: flex;
+  align-items: center;
+}
+
 .onboardStudio > div:nth-child(1) {
   width: 40%;
   height: 15%;
@@ -852,4 +855,7 @@ td {
   color: #ffc701;
   cursor: pointer;
   /* mix-blend-mode: color-burn black; */
+}
+.addNewStudioPage .addNewStudioinputBox {
+  height: 20%;
 }

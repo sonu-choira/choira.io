@@ -5,7 +5,7 @@ import upload from "../../assets/upload.svg";
 import cross from "../../assets/cross.svg";
 import StudioFooter from "./StudioFooter";
 
-function AddNewStudio() {
+function AddNewStudio({ setSelectTab }) {
   const amenitiesList = [
     { id: "wifi", label: "Wifi" },
     { id: "ac", label: "AC" },
@@ -303,7 +303,11 @@ function AddNewStudio() {
                 onChange={handleIframeCodeChange}
               />
             </div>
-            <div style={{ fontSize: "1vmax", fontWeight: "600" }}>Location</div>
+            <div
+              style={{ fontSize: "1vmax", fontWeight: "600", paddingTop: "2%" }}
+            >
+              Location
+            </div>
             <div
               className="showlocationDiv"
               style={{
@@ -453,7 +457,7 @@ function AddNewStudio() {
           </div>
         </div>
       </div>
-      <StudioFooter />
+      <StudioFooter setSelectTab={setSelectTab} />
     </>
   );
 }

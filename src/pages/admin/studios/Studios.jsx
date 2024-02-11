@@ -24,8 +24,10 @@ import StudioBookingDetail from "../../../components/adminStudio/booking/StudioB
 import MusicProduction from "../../../components/adminStudio/booking/MusicProduction";
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
+import SlotBooking from "../../../components/adminStudio/SlotBooking";
 
 function Studios() {
+  const [selectTab, setSelectTab] = useState(0);
   return (
     <>
       <div className="wrapper">
@@ -49,10 +51,23 @@ function Studios() {
             </div>
           </div>
           {/* //sdhbsda */}
-          {/* <OnboardStudio /> */}
+
+          {selectTab == 0 && (
+            <OnboardStudio selectTab={selectTab} setSelectTab={setSelectTab} />
+          )}
           <div className="allStudioDetailsPage">
+            {selectTab == 1 ? (
+              <AllStudioDetail setSelectTab={setSelectTab} />
+            ) : selectTab == 2 ? (
+              <AddNewStudio setSelectTab={setSelectTab} />
+            ) : selectTab == 3 ? (
+              <SlotBooking setSelectTab={setSelectTab} />
+            ) : (
+              ""
+            )}
             {/* <AllStudioDetail /> */}
-            <AddNewStudio />
+            {/* <AddNewStudio /> */}
+            {/* <SlotBooking /> */}
             {/* <AddNewRoom /> */}
           </div>
         </div>

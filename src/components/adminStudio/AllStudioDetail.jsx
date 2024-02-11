@@ -10,7 +10,7 @@ import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 import StudioFooter from "./StudioFooter";
 let PageSize = 10;
 
-function AllStudioDetail() {
+function AllStudioDetail({ setSelectTab }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   // useEffect(async () => {
@@ -134,7 +134,7 @@ function AllStudioDetail() {
           onPageChange={(page) => setCurrentPage(page)}
         />
       </div>
-      <StudioFooter />
+      <StudioFooter setSelectTab={setSelectTab} />
     </>
   );
 }
