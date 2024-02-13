@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useState } from "react";
 
 import singer from "../../assets/img/singer2.png";
-import "../home/signin.css";
+import signupStyle from "../home/signinBackup.module.css";
+// import "../home/signin.css";
 import logo from "../../assets/img/logo-choira.svg";
 import google from "../../assets/img/google.png";
 import facebook from "../../assets/img/facebook.png";
@@ -443,7 +444,7 @@ function Signup() {
 
   return (
     <>
-      <div className="navbar">
+      <div className={signupStyle.SignInnavbar}>
         <img
           src={logo}
           alt="Choira Logo"
@@ -452,7 +453,7 @@ function Signup() {
         />
       </div>
 
-      <div className="wrapper">
+      <div className={signupStyle.wrapper}>
         <form
           action=""
           onSubmit={(e) => {
@@ -462,14 +463,14 @@ function Signup() {
             // }
           }}
         >
-          <div className="main">
-            <div className="singer">
+          <div className={signupStyle.main}>
+            <div className={signupStyle.singer}>
               <img src={singer} alt="Singer" />
             </div>
-            <div className="signup">
-              <div className="signup-main">
-                <div className="signup-main-2">
-                  <div className="signup-header">
+            <div className={signupStyle.signup}>
+              <div className={signupStyle.signupmain}>
+                <div className={signupStyle.signupmain2}>
+                  <div className={signupStyle.signupHeader}>
                     <div>
                       <h3>
                         Welcome to <span>Choira</span>
@@ -487,10 +488,10 @@ function Signup() {
                       </div>
                     </div>
                   </div>
-                  <div className="signup-header2">
+                  <div className={signupStyle.signupHeader2}>
                     <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
                   </div>
-                  <div className="enter-mob">
+                  <div className={signupStyle.enterMob}>
                     {sign == 1 ? (
                       <SigninNum
                         mobileNumber={mobileNumber}
@@ -511,14 +512,14 @@ function Signup() {
                       <SignUpDetails />
                     )}
 
-                    <div className="footer">
+                    <div className={signupStyle.footer}>
                       <div
                         className={`${
                           sign == 1
-                            ? "hr-line"
+                            ? `${signupStyle.hrLine}`
                             : sign == 2
-                            ? "visiblity"
-                            : "visiblity"
+                            ? `${signupStyle.visiblity}`
+                            : `${signupStyle.visiblity}`
                         }`}
                       >
                         <div></div>
@@ -529,10 +530,10 @@ function Signup() {
                       <div
                         className={`${
                           sign == 1
-                            ? "signin-option"
+                            ? `${signupStyle.signinOption}`
                             : sign == 2
-                            ? "visiblity"
-                            : "visiblity"
+                            ? `${signupStyle.visiblity}`
+                            : `${signupStyle.visiblity}`
                         }`}
                       >
                         <div
@@ -557,10 +558,10 @@ function Signup() {
                       <div
                         className={`${
                           sign == 1
-                            ? "continue"
+                            ? `${signupStyle.continue}`
                             : sign == 2
-                            ? "verify-continue2 continue "
-                            : " continue "
+                            ? `${signupStyle.verifyContinue2} ${signupStyle.continue}`
+                            : `${signupStyle.continue}`
                         }`}
                       >
                         <div>

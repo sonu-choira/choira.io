@@ -106,7 +106,7 @@ input[type="number"] {
 .onboardStudio {
   width: 80%;
   height: 40%;
-  border: 2px solid red;
+  /* border: 2px solid red; */
   display: flex;
   align-items: start;
   justify-content: start;
@@ -238,6 +238,35 @@ input[type="number"] {
       }
     }
   }
+}
+
+.mainPaginationDiv {
+  /* border: 2px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 40%;
+}
+.paginationgoto {
+  width: 40%;
+  /* border: 2px solid pink; */
+}
+.paginationgoto > input {
+  width: 40%;
+  border: none;
+  outline: none;
+  margin-right: 5%;
+  border-radius: 5px;
+  /* background-color: #f0f0f0; */
+}
+.paginationgoto > button {
+  width: 30%;
+  border-radius: 5px;
+  font-size: 0.8vmax;
+  background-color: white;
+}
+.paginationgoto > button:hover {
+  background-color: #ffc701;
 }
 .allStudioDetailsPage {
   width: 100%;
