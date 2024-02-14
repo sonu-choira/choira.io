@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { MdAddAPhoto } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import upload from "../../assets/img/upload.png";
+import style from "../../pages/admin/studios/studio.module.css";
+
 import {
   FaCheckDouble,
   FaFilter,
@@ -64,16 +66,16 @@ function SlotBooking({ setSelectTab }) {
   };
   return (
     <>
-      <div className="addNewStudioTitle">Slot Booking</div>
-      <div className="addNewStudioPage">
+      <div className={style.addNewStudioTitle}>Slot Booking</div>
+      <div className={style.addNewStudioPage}>
         <div style={{ height: "80%" }}>
           <div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="UserName">User Name</label>
               <input type="text" id="UserName" placeholder="Enter User Name" />
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="Mobilenumber">Mobile number</label>
               <input
                 type="text"
@@ -82,12 +84,12 @@ function SlotBooking({ setSelectTab }) {
               />
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="Email">Email</label>
               <input type="email" id="Email" placeholder="Enter Email id" />
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label>Booking Hours</label>
 
               <select>
@@ -102,7 +104,7 @@ function SlotBooking({ setSelectTab }) {
           </div>
           {/* secod side  */}
           <div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label>Studio</label>
 
               <select>
@@ -114,7 +116,7 @@ function SlotBooking({ setSelectTab }) {
                 <option>5</option>
               </select>
             </div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label>Room</label>
 
               <select>
@@ -127,12 +129,12 @@ function SlotBooking({ setSelectTab }) {
               </select>
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="Date">Date</label>
               <input type="date" id="RoomArea" placeholder="Enter Date" />
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="TimeSlot">Time Slot</label>
               <input type="time" id="TimeSlot" placeholder="Enter Time Slot" />
             </div>

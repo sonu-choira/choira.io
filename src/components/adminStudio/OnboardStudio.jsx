@@ -4,6 +4,7 @@ import { LuFilePlus } from "react-icons/lu";
 import { MdCalendarMonth } from "react-icons/md";
 import { GrTableAdd } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
+import style from "../../pages/admin/studios/studio.module.css";
 
 function OnboardStudio({ setSelectTab, selectTab }) {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function OnboardStudio({ setSelectTab, selectTab }) {
   // };
   return (
     <>
-      <div className="onboardStudio">
+      <div className={style.onboardStudio}>
         <div>👋 Hey Stacy!</div>
         <div>Let’s Onboard Studios</div>
         <div>

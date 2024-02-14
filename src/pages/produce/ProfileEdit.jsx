@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import tanmay from "../../assets/img/dashboard_img/tanmay.png";
 import { FaPen } from "react-icons/fa6";
+import "../../pages/produce/dashboard.css";
+// import style from "../../pages/produce/dashboard.module.css";
 
 function ProfileEdit({ setEditProfile, editProfile }) {
   const [selectedImage, setSelectedImage] = useState(null);

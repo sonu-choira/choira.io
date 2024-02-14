@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import style from "../../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
@@ -69,10 +70,10 @@ function MusicProduction() {
 
   return (
     <>
-      <div className="studioTabelDiv">
+      <div className={style.studioTabelDiv}>
         <div>
           <table>
-            <thead className="studiotabelHead">
+            <thead className={style.studiotabelHead}>
               <tr>
                 <th style={{ width: "15%" }}>Booking ID</th>
                 <th>User Name</th>
@@ -93,7 +94,7 @@ function MusicProduction() {
                     <td>{products.category}</td>
                     <td>{products.discountPercentage}</td>
                     <td>{products.rating}</td>
-                    <td className="tableActionbtn">
+                    <td className={style.tableActionbtn}>
                       <div>
                         <select
                           value={selectedStatus[products.id] || ""}
@@ -126,7 +127,7 @@ function MusicProduction() {
           </table>
         </div>
       </div>
-      <div className="tabelpaginationDiv">
+      <div className={style.tabelpaginationDiv}>
         <Pagination
           className="pagination-bar"
           currentPage={currentPage}

@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import "../studios/studios.css";
+import { Alert } from "antd";
+// import "../studios/studios.css";
+import style from "../studios/studio.module.css";
 import WebDashboard from "../../produce/WebDashboard";
 import { IoSearch } from "react-icons/io5";
 import { MdAddAPhoto } from "react-icons/md";
@@ -25,15 +27,33 @@ import MusicProduction from "../../../components/adminStudio/booking/MusicProduc
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
+import { useNavigate } from "react-router-dom";
 
 function BookingPages() {
   const [bookingPageCount, setBookingPageCount] = useState(1);
+  const navigate = useNavigate();
+  const gotoSignin = () => {
+    navigate("/signin");
+  };
+  const storedIsSignin = localStorage.getItem("isSignin");
+  const storedAlert = localStorage.getItem("alertShown");
+  useEffect(() => {
+    if (storedIsSignin) {
+      if (storedAlert) {
+      } else {
+        alert("Welcome Admin 😊");
+        localStorage.setItem("alertShown", "true");
+      }
+    } else {
+      gotoSignin();
+    }
+  }, []);
   return (
     <>
-      <div className="wrapper">
+      <div className={style.wrapper}>
         <WebDashboard />
-        <div className="studioMainScreen">
-          <div className="studioHeader">
+        <div className={style.studioMainScreen}>
+          <div className={style.studioHeader}>
             <div>
               <input type="text" placeholder="search" />
             </div>
@@ -41,7 +61,7 @@ function BookingPages() {
               <IoSearch />
             </div>
             <div>
-              <div className="notifyIcon">
+              <div className={style.notifyIcon}>
                 <GoDotFill />
               </div>
               <FaRegBell />
@@ -50,7 +70,7 @@ function BookingPages() {
               <MdOutlineSettings />
             </div>
           </div>
-          <div className="allStudioDetailsPage">
+          <div className={style.allStudioDetailsPage}>
             <BookingActionBar
               bookingPageCount={bookingPageCount}
               setBookingPageCount={setBookingPageCount}

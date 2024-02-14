@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { MdAddAPhoto, MdCancel, MdOutlineAddBox } from "react-icons/md";
+import style from "../../pages/admin/studios/studio.module.css";
 
 import upload from "../../assets/upload.svg";
 import cross from "../../assets/cross.svg";
@@ -124,11 +125,11 @@ function AddNewStudio({ setSelectTab }) {
   };
   return (
     <>
-      <div className="addNewStudioTitle">Add new studio</div>
-      <div className="addNewStudioPage">
+      <div className={style.addNewStudioTitle}>Add new studio</div>
+      <div className={style.addNewStudioPage}>
         <div>
           <div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="studioName">Studio Name</label>
               <input
                 type="text"
@@ -137,11 +138,11 @@ function AddNewStudio({ setSelectTab }) {
               />
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="area">Total Area</label>
               <input type="text" id="area" placeholder="Enter Approx. Area" />
             </div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="rooms">Rooms</label>
 
               <select id="rooms">
@@ -153,12 +154,12 @@ function AddNewStudio({ setSelectTab }) {
                 <option>5</option>
               </select>
             </div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="pincode">Studio Pincode</label>
               <input type="text" id="pincode" placeholder="Enter Pincode" />
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="addcity">Studio city</label>
               <input list="city" id="addcity" placeholder="Select city Name" />
               <datalist id="city">
@@ -167,7 +168,7 @@ function AddNewStudio({ setSelectTab }) {
                 <option value="Bombay">Bombay</option>
               </datalist>
             </div>
-            <div className="amenitesCheckbox">
+            <div className={style.amenitesCheckbox}>
               {amenitiesList.map((amenity) => (
                 <div key={amenity.id}>
                   <input
@@ -184,11 +185,11 @@ function AddNewStudio({ setSelectTab }) {
             </div>
           </div>
           <div>
-            <div className="addNewStudioimgBox">
+            <div className={style.addNewStudioimgBox}>
               <label htmlFor="selectimg">Image</label>
               <br />
               <div>
-                <label className="abs" htmlFor="">
+                <label className={style.abs} htmlFor="">
                   {images.length === 0 ? (
                     <div>
                       <label htmlFor="selectimg">
@@ -200,7 +201,7 @@ function AddNewStudio({ setSelectTab }) {
                     </div>
                   ) : (
                     <div
-                      className={`showMultipleStudioImage ${
+                      className={`${style.showMultipleStudioImage} ${
                         isOver ? "drag-over" : ""
                       }`}
                       onDrop={handleDrop}
@@ -222,7 +223,7 @@ function AddNewStudio({ setSelectTab }) {
                               style={{ width: "100%", height: "100%" }}
                             />
                             <span
-                              className="cancelImageUpload"
+                              className={style.cancelImageUpload}
                               style={{ right: "-10%" }}
                               onClick={() => handleRemoveImage(index)}
                             >
@@ -257,7 +258,10 @@ function AddNewStudio({ setSelectTab }) {
                 />
               </div>
             </div>
-            <div className="addNewStudioinputBox" style={{ paddingTop: "2%" }}>
+            <div
+              className={style.addNewStudioinputBox}
+              style={{ paddingTop: "2%" }}
+            >
               <label htmlFor="guest">Max Guests</label>
 
               <select id="guest">
@@ -270,7 +274,7 @@ function AddNewStudio({ setSelectTab }) {
               </select>
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="addstate">Select State</label>
               <input
                 list="state"
@@ -284,7 +288,7 @@ function AddNewStudio({ setSelectTab }) {
               </datalist>
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label
                 htmlFor="iframeCode"
                 style={{
@@ -309,7 +313,7 @@ function AddNewStudio({ setSelectTab }) {
               Location
             </div>
             <div
-              className="showlocationDiv"
+              className={style.showlocationDiv}
               style={{
                 width: "100%",
                 height: "40%",
@@ -343,7 +347,7 @@ function AddNewStudio({ setSelectTab }) {
         </div>
         <div>
           <div>
-            <div className="addNewStudioinputBox2">
+            <div className={style.addNewStudioinputBox2}>
               <label htmlFor="aboutStudio">About Studio</label>
               <textarea
                 type="text"
@@ -351,7 +355,7 @@ function AddNewStudio({ setSelectTab }) {
                 placeholder="Enter Studio Details"
               />
             </div>
-            <div className="addNewStudioinputBox2">
+            <div className={style.addNewStudioinputBox2}>
               <label htmlFor="studioService">Studio Services</label>
               <textarea
                 type="text"
@@ -359,7 +363,7 @@ function AddNewStudio({ setSelectTab }) {
                 placeholder="Enter Studio Services"
               />
             </div>
-            <div className="addNewStudioinputBox2">
+            <div className={style.addNewStudioinputBox2}>
               <label htmlFor="area">Total Area</label>
               <textarea
                 type="text"
@@ -367,20 +371,20 @@ function AddNewStudio({ setSelectTab }) {
                 placeholder="Enter Approx. Area"
               />
             </div>
-            <div className="roomAndClassSection">
+            <div className={style.roomAndClassSection}>
               <div>
-                <div className="addNewStudioinputBox3">
+                <div className={style.addNewStudioinputBox3}>
                   <label htmlFor="pincode">Rooms</label>
                   <input type="text" id="pincode" placeholder="Enter Pincode" />
                 </div>
               </div>
               <div>
-                <div className="addTeamDetailDiv">
+                <div className={style.addTeamDetailDiv}>
                   <label htmlFor="Teams">Teams</label>
 
-                  <div className="addTeamDetailDynamicDiv">
+                  <div className={style.addTeamDetailDynamicDiv}>
                     {teams.map((team, index) => (
-                      <div key={index} className="addTeamDetailMainDiv">
+                      <div key={index} className={style.addTeamDetailMainDiv}>
                         <div>
                           <label
                             style={{ cursor: "pointer" }}
@@ -407,7 +411,7 @@ function AddNewStudio({ setSelectTab }) {
                                 }}
                               />
                               <span
-                                className="cancelImageUpload"
+                                className={style.cancelImageUpload}
                                 onClick={() => handleCancelImage(index)}
                               >
                                 <img src={cross} alt="" />
@@ -436,7 +440,7 @@ function AddNewStudio({ setSelectTab }) {
                         {teams.length > 1 && (
                           <span
                             style={{ cursor: "pointer" }}
-                            className="cancelTeamDetailUpload"
+                            className={style.cancelTeamDetailUpload}
                             onClick={() => handleCancelTeam(index)}
                           >
                             <img src={cross} alt="" />
@@ -445,7 +449,7 @@ function AddNewStudio({ setSelectTab }) {
                       </div>
                     ))}
                     <span
-                      className="addTeamDetailbtn"
+                      className={style.addTeamDetailbtn}
                       onClick={handleAddTeamDetail}
                     >
                       <MdOutlineAddBox /> &nbsp;<div>Add Person</div>

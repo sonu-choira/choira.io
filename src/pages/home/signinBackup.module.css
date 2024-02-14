@@ -1,7 +1,6 @@
-* {
+/* * {
   color: white;
-  /* overflow-x: visible; */
-}
+} */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -43,6 +42,7 @@ h6 {
   background-color: black;
   /* overflow: hidden; */
   overflow: hidden;
+  color: white;
 }
 .main {
   width: 100vw;
@@ -183,7 +183,7 @@ h6 {
   justify-content: center;
   align-items: center;
   padding-left: 5px;
-  font-size: 0.9vmax;
+  font-size: 0.7vmax;
 }
 .enterMobInput > div:first-child {
   /* border: 2px solid red; */
@@ -330,7 +330,7 @@ h6 {
   align-items: center;
   justify-content: center;
 }
-.enter-mob-inner-div2 {
+.enterMobinnerdiv2 {
   height: 100%;
   width: 100%;
   display: flex;
@@ -346,7 +346,7 @@ h6 {
   align-items: center;
   /* text-align: start; */
 }
-.enter-mob-inner-div2 div:nth-child(2) {
+.enterMobinnerdiv2 div:nth-child(2) {
   /* border: 2px solid blue; */
   width: 100%;
   height: 10%;
@@ -354,7 +354,7 @@ h6 {
   justify-content: start;
   align-items: center;
 }
-.verify2-input {
+.verify2Input {
   display: flex;
   gap: 5%;
 
@@ -362,7 +362,7 @@ h6 {
   height: 35%;
   /* border: 2px solid red; */
 }
-.verify2-input input {
+.verify2Input input {
   width: 15%;
   outline: none;
   border-radius: 5px;
@@ -570,11 +570,16 @@ h6 {
   border-radius: 10px;
   font-weight: 600;
 }
-/* @media only screen and (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   .singer {
     display: none;
   }
   .signup {
     width: 100%;
+    /* border: 2px solid red; */
   }
-} */
+  .signupmain {
+    width: 80%;
+    height: 70%;
+  }
+}

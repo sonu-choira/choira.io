@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { MdAddAPhoto } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import upload from "../../assets/img/upload.png";
+import style from "../../pages/admin/studios/studio.module.css";
+
 import {
   FaCheckDouble,
   FaFilter,
@@ -64,16 +66,16 @@ function AddNewRoom() {
   };
   return (
     <>
-      <div className="addNewStudioTitle">Add new room</div>
-      <div className="addNewRoomPage">
+      <div className={style.addNewStudioTitle}>Add new room</div>
+      <div className={style.addNewRoomPage}>
         <div>
           <div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="RoomName">Room Name</label>
               <input type="text" id="RoomName" placeholder="Enter Room Name" />
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="RoomArea">Room Area</label>
               <input
                 type="text"
@@ -81,7 +83,7 @@ function AddNewRoom() {
                 placeholder="Enter Approx. Area"
               />
             </div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="price">Price Per Hour</label>
               <input
                 type="number"
@@ -89,13 +91,13 @@ function AddNewRoom() {
                 placeholder="Enter Price Per Hour"
               />
             </div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label htmlFor="Discount">Discount</label>
               <input type="number" id="Discount" placeholder="Enter Discount" />
             </div>
 
-            <div className="defaultLabel">Booking Days</div>
-            <div className="amenitesCheckbox">
+            <div className={style.defaultLabel}>Booking Days</div>
+            <div className={style.amenitesCheckbox}>
               {days.map((days) => (
                 <div key={days.id}>
                   <input
@@ -111,7 +113,7 @@ function AddNewRoom() {
               ))}
             </div>
 
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label>General Start Time</label>
 
               <select>
@@ -123,7 +125,7 @@ function AddNewRoom() {
                 <option>5</option>
               </select>
             </div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label>Booking Start Time</label>
 
               <select>
@@ -137,12 +139,12 @@ function AddNewRoom() {
             </div>
           </div>
           <div>
-            <div className="addNewStudioimgBox">
+            <div className={style.addNewStudioimgBox}>
               <label htmlFor="selectimg">Image</label>
               <br />
 
               <div>
-                <label className="abs" htmlFor="selectimg">
+                <label className={style.abs} htmlFor="selectimg">
                   <img src={upload} alt="" />
                   <div>
                     Drag and Drop or <span>Browse</span> <br /> to upload
@@ -152,8 +154,8 @@ function AddNewRoom() {
               </div>
             </div>
 
-            <div className="defaultLabel">Amenities</div>
-            <div className="amenitesCheckbox">
+            <div className={style.defaultLabel}>Amenities</div>
+            <div className={style.amenitesCheckbox}>
               {amenitiesList.map((amenity) => (
                 <div key={amenity.id}>
                   <input
@@ -168,7 +170,7 @@ function AddNewRoom() {
                 </div>
               ))}
             </div>
-            <div className="addNewStudioinputBox2">
+            <div className={style.addNewStudioinputBox2}>
               <label htmlFor="RoomDetails">Room Details</label>
               <textarea
                 type="text"
@@ -176,7 +178,7 @@ function AddNewRoom() {
                 placeholder="Enter Room Details"
               />
             </div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label>General End Time</label>
 
               <select>
@@ -188,7 +190,7 @@ function AddNewRoom() {
                 <option>5</option>
               </select>
             </div>
-            <div className="addNewStudioinputBox">
+            <div className={style.addNewStudioinputBox}>
               <label>Booking End Time</label>
 
               <select>

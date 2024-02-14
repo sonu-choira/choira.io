@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import style from "../../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
@@ -69,10 +70,10 @@ function MixMaster() {
 
   return (
     <>
-      <div className="studioTabelDiv">
+      <div className={style.studioTabelDiv}>
         <div>
           <table>
-            <thead className="studiotabelHead">
+            <thead className={style.studiotabelHead}>
               <tr>
                 <th style={{ width: "15%" }}>Booking ID</th>
                 <th>User Name</th>
@@ -95,7 +96,7 @@ function MixMaster() {
                     <td style={{ textAlign: "start" }}>
                       Starting price from ₹{products.price} <br />
                     </td>
-                    <td className="tableActionbtn">
+                    <td className={style.tableActionbtn}>
                       <div>
                         <select
                           value={selectedStatus[products.id] || ""}
@@ -128,7 +129,7 @@ function MixMaster() {
           </table>
         </div>
       </div>
-      <div className="tabelpaginationDiv">
+      <div className={style.tabelpaginationDiv}>
         <Pagination
           className="pagination-bar"
           currentPage={currentPage}

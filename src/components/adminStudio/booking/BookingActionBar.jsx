@@ -2,11 +2,12 @@ import React from "react";
 import Button from "../../../pages/admin/layout/Button";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 import { LuFilePlus } from "react-icons/lu";
+import style from "../../../pages/admin/studios/studio.module.css";
 
 function BookingActionBar({ setBookingPageCount, bookingPageCount }) {
   return (
     <>
-      <div className="bookingStudiobtn" style={{ marginBottom: "2%" }}>
+      <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
         <div>
           <div>
             <div

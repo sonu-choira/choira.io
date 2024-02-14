@@ -1,11 +1,12 @@
 import React from "react";
 import Button from "../../pages/admin/layout/Button";
 import { IoIosArrowBack } from "react-icons/io";
+import style from "../../pages/admin/studios/studio.module.css";
 
 function StudioFooter({ setSelectTab }) {
   return (
     <>
-      <div className="studioFooter">
+      <div className={style.studioFooter}>
         <Button
           name={"Back"}
           icon={<IoIosArrowBack />}

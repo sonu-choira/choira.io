@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-import "../studios/studios.css";
+// import "../studios/studios.css";
+import style from "../studios/studio.module.css";
 import WebDashboard from "../../produce/WebDashboard";
 import { IoSearch } from "react-icons/io5";
 import { MdAddAPhoto } from "react-icons/md";
@@ -30,10 +31,10 @@ function Studios() {
   const [selectTab, setSelectTab] = useState(0);
   return (
     <>
-      <div className="wrapper">
+      <div className={style.wrapper}>
         <WebDashboard />
-        <div className="studioMainScreen">
-          <div className="studioHeader">
+        <div className={style.studioMainScreen}>
+          <div className={style.studioHeader}>
             <div>
               <input type="text" placeholder="search" />
             </div>
@@ -41,7 +42,7 @@ function Studios() {
               <IoSearch />
             </div>
             <div>
-              <div className="notifyIcon">
+              <div className={style.notifyIcon}>
                 <GoDotFill />
               </div>
               <FaRegBell />
@@ -55,7 +56,7 @@ function Studios() {
           {selectTab == 0 && (
             <OnboardStudio selectTab={selectTab} setSelectTab={setSelectTab} />
           )}
-          <div className="allStudioDetailsPage">
+          <div className={style.allStudioDetailsPage}>
             {selectTab == 1 ? (
               <AllStudioDetail setSelectTab={setSelectTab} />
             ) : selectTab == 2 ? (

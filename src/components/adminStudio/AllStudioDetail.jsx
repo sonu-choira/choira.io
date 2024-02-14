@@ -8,6 +8,8 @@ import Pagination from "../../pages/admin/studios/Pagination";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 import StudioFooter from "./StudioFooter";
+import style from "../../pages/admin/studios/studio.module.css";
+
 let PageSize = 10;
 
 function AllStudioDetail({ setSelectTab }) {
@@ -51,7 +53,7 @@ function AllStudioDetail({ setSelectTab }) {
 
   return (
     <>
-      <div className="allStudiobtndiv">
+      <div className={style.allStudiobtndiv}>
         <div>All Studios</div>
         <div>
           <Button
@@ -71,10 +73,10 @@ function AllStudioDetail({ setSelectTab }) {
           />
         </div>
       </div>
-      <div className="studioTabelDiv">
+      <div className={style.studioTabelDiv}>
         <div>
           <table>
-            <thead className="studiotabelHead">
+            <thead className={style.studiotabelHead}>
               <tr>
                 <th>Studio</th>
                 <th>Price</th>
@@ -88,7 +90,7 @@ function AllStudioDetail({ setSelectTab }) {
                 return (
                   <tr>
                     <td style={{ display: "flex", alignItems: "center" }}>
-                      <div className="studioImage">
+                      <div className={style.studioImage}>
                         <img src={products.thumbnail} alt="" />
                       </div>
                       &nbsp;&nbsp;{products.title}
@@ -104,7 +106,7 @@ function AllStudioDetail({ setSelectTab }) {
                       <small>Maharastra</small>
                     </td>
                     <td>{products.stock}</td>
-                    <td className="tableActionbtn">
+                    <td className={style.tableActionbtn}>
                       <div>
                         <Switch />
                       </div>
@@ -125,7 +127,7 @@ function AllStudioDetail({ setSelectTab }) {
           </table>
         </div>
       </div>
-      <div className="tabelpaginationDiv">
+      <div className={style.tabelpaginationDiv}>
         <Pagination
           className="pagination-bar"
           currentPage={currentPage}

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import style from "../../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
@@ -11,26 +12,72 @@ import Button from "../../../pages/admin/layout/Button";
 import Switch from "../../../pages/admin/layout/Switch";
 import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
+import axios from "axios";
 let PageSize = 10;
 
 function StudioBookingDetail() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
 
-  const fetchProducts = async () => {
-    try {
-      const res = await fetch("https://dummyjson.com/products?limit=100");
-      const data = await res.json();
-      if (data && data.products) {
-        setProducts(data.products);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  // const fetchProducts = async () => {
+  //   try {
+  //     const res = await fetch("https://dummyjson.com/products?limit=100");
+  //     const data = await res.json();
+  //     if (data && data.products) {
+  //       setProducts(data.products);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // const fetchProducts = async () => {
+  //   try {
+  //     const myHeaders = new Headers();
+  //     myHeaders.append("Authorization", "Bearer debugTest");
+  //     myHeaders.append("Content-Type", "application/json");
+  //     const res = await fetch(
+  //       "https://test.api.choira.io/api/settings/category",
+  //       {
+  //         method: "GET",
+  //         headers: myHeaders,
+  //         body: JSON.stringify({
+  //           active: 1,
+  //         }),
+  //       }
+  //     );
+  //     const data = await res.json();
+  //     console.log(data);
+  //     if (data && data.products) {
+  //       setProducts(data.products);
+  //       console.log("the data is " + products);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+  useEffect(() => {
+    axios
+      .get(
+        "https://test.api.choira.io/api/settings/category?" +
+          new URLSearchParams({
+            active: 1,
+          }),
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer debugTest",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+      });
+  }, []);
 
   useEffect(() => {
-    fetchProducts();
+    // fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -69,10 +116,10 @@ function StudioBookingDetail() {
 
   return (
     <>
-      <div className="studioTabelDiv">
+      <div className={style.studioTabelDiv}>
         <div>
           <table>
-            <thead className="studiotabelHead">
+            <thead className={style.studiotabelHead}>
               <tr>
                 <th style={{ width: "15%" }}>Booking ID</th>
                 <th>User Name</th>
@@ -97,7 +144,7 @@ function StudioBookingDetail() {
                     <td>{products.stock}</td>
                     <td>{products.discountPercentage}</td>
                     <td>{products.rating}</td>
-                    <td className="tableActionbtn">
+                    <td className={style.tableActionbtn}>
                       <div>
                         <select
                           value={selectedStatus[products.id] || ""}
@@ -130,7 +177,7 @@ function StudioBookingDetail() {
           </table>
         </div>
       </div>
-      <div className="tabelpaginationDiv">
+      <div className={style.tabelpaginationDiv}>
         <Pagination
           className="pagination-bar"
           currentPage={currentPage}

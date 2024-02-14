@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../produce/dashboard.css";
+import style from "../produce/dashboard.module.css";
 import logo from "../../assets/img/logo-choira.svg";
 import create from "../../assets/img/dashboard_img/create.svg";
 import produce from "../../assets/img/dashboard_img/produce_selected.svg";
@@ -15,19 +15,19 @@ function WebDashboard() {
   return (
     <>
       <ProfileEdit editProfile={editProfile} setEditProfile={setEditProfile} />
-      <div className="sidebar">
-        <div className="sidebar-main">
-          <div className="section1">
+      <div className={style.sidebar}>
+        <div className={style.sidebarMain}>
+          <div className={style.section1}>
             <div>
               <img src={logo} alt="" />
             </div>
-            <div className="create-btn">
+            <div className={style.createBtn}>
               <button>
                 <img src={create} alt="" />
                 Create
               </button>
             </div>
-            <div className="community">
+            <div className={style.community}>
               <div>
                 <img src={community} alt="" />
                 Community
@@ -40,11 +40,11 @@ function WebDashboard() {
           </div>
 
           <div
-            className="section2"
+            className={style.section2}
             style={{ cursor: "pointer" }}
             onClick={editProfiletab}
           >
-            <div className="section2-main">
+            <div className={style.section2Main}>
               <div>
                 <img src={tanmay} alt="" />
               </div>

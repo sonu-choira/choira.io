@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import style from "../../pages/home/signinBackup.module.css";
+import { useNavigate } from "react-router-dom";
 
 const OptVerify = ({
   mobileNumber,
@@ -18,6 +20,11 @@ const OptVerify = ({
   const [generatedOTP, setGeneratedOTP] = useState("");
   const [enteredOTP, setEnteredOTP] = useState("");
   const inputRefs = useRef([]);
+  const navigate = useNavigate();
+  const gotoBooking = () => {
+    navigate("/booking");
+  };
+  const [isSignin, setIsSignin] = useState(false);
 
   useEffect(() => {
     // Generate a random OTP when the component mounts
@@ -78,7 +85,9 @@ const OptVerify = ({
       if (enteredOTP === generatedOTP) {
         console.log("OTP is correct. Redirect or perform another action.");
         alert("OTP is correct.");
+        gotoBooking();
         setCheckOtp(false);
+        localStorage.setItem("isSignin", "true");
       } else {
         console.log("Incorrect OTP. Please try again.");
         alert("Incorrect OTP. Please try again.");
@@ -124,8 +133,8 @@ const OptVerify = ({
 
   return (
     <>
-      <div className="enter-mob-inner-div2">
-        <div className="verify2">
+      <div className={style.enterMobinnerdiv2}>
+        <div className={style.verify2}>
           <h4>Verify your mobile number</h4>
         </div>
         <div>
@@ -136,7 +145,7 @@ const OptVerify = ({
             </b>
           </h6>
         </div>
-        <div className="verify2-input">
+        <div className={style.verify2Input}>
           {[...Array(4)].map((_, index) => (
             <input
               required
@@ -156,7 +165,7 @@ const OptVerify = ({
             />
           ))}
         </div>
-        <div className="timer">
+        <div className={style.timer}>
           {seconds > 0 ? (
             <h6>
               Expect code in <b> {seconds} seconds</b>
