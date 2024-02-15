@@ -59,10 +59,8 @@ function StudioBookingDetail() {
   useEffect(() => {
     axios
       .get(
-        "https://test.api.choira.io/api/settings/category?" +
-          new URLSearchParams({
-            active: 1,
-          }),
+        "https://test.api.choira.io/api/studios-all?limit=61",
+
         {
           headers: {
             Accept: "application/json",
@@ -73,6 +71,10 @@ function StudioBookingDetail() {
       )
       .then((response) => {
         console.log(response);
+        const data = response;
+        if (data && data.data.studios.results) {
+          setProducts(data.data.studios.results);
+        }
       });
   }, []);
 
@@ -134,14 +136,14 @@ function StudioBookingDetail() {
               {currentTableData.map((products) => {
                 return (
                   <tr>
-                    <td style={{ textAlign: "center" }}>#{products.id}</td>
+                    <td style={{ textAlign: "center" }}>#{products._id}</td>
                     <td>{products.title}</td>
                     <td>
                       {products.category}
                       <br />
                       <small>Maharastra</small>
                     </td>
-                    <td>{products.stock}</td>
+                    <td>{products.fullName}</td>
                     <td>{products.discountPercentage}</td>
                     <td>{products.rating}</td>
                     <td className={style.tableActionbtn}>
