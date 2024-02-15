@@ -36,6 +36,10 @@ function WebDashboard() {
                 <img src={produce} alt="" />
                 Produce
               </div>
+              <div>
+                <img src={produce} alt="" />
+                App & More
+              </div>
             </div>
           </div>
 

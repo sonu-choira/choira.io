@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 
-import "../home/signin.css";
+// import "../home/signin.css";
+import style from "../home/signinBackup.module.css";
 import logo from "../../assets/img/logo-choira.svg";
 import bin from "../../assets/img/bin.gif";
 import google from "../../assets/img/google.png";
@@ -82,18 +83,20 @@ function DeleteAccount() {
   return (
     <>
       <div
-        className={` delete-overlay-after ${
-          deletepopup ? "delete-overlay" : ""
+        className={` ${style.deleteOverlayAfter} ${
+          deletepopup ? `${style.deleteOverlay}` : ""
         }`}
       ></div>
       <div
-        className={` delete-Popup ${deletepopup ? "delete-Popup-after" : ""}`}
+        className={` ${style.deletePopup} ${
+          deletepopup ? `${style.deletePopupAfter}` : ""
+        }`}
       >
-        <div className="cancelPopup">
+        <div className={style.cancelPopup}>
           <IoClose style={{ cursor: "pointer" }} onClick={popuptabCancel} />
         </div>
-        <div className="popupTitle">Account Deleted</div>
-        <div className="popupDecription">
+        <div className={style.popupTitle}>Account Deleted</div>
+        <div className={style.popupDecription}>
           <p>
             We have recieved your request to delete your account. <br />
             <br />
@@ -101,16 +104,16 @@ function DeleteAccount() {
             will be remove permanently.
           </p>
         </div>
-        <div className="popupImg">
+        <div className={style.popupImg}>
           <img src={plane} alt="" />
         </div>
-        <div className="popupbtn">
+        <div className={style.popupbtn}>
           <button style={{ cursor: "pointer" }} onClick={popuptabCancel}>
             Ok
           </button>
         </div>
       </div>
-      <div className="navbar">
+      <div className={style.SignInnavbar}>
         <img
           src={logo}
           alt="Choira Logo"
@@ -119,17 +122,17 @@ function DeleteAccount() {
         />
       </div>
 
-      <div className="wrapper">
+      <div className={style.wrapper}>
         <form onSubmit={handelSubmit}>
-          <div className="main">
-            <div className="deleteAccount">
+          <div className={style.main}>
+            <div className={style.deleteAccount}>
               <img src={deleteAccountimg} alt="deleteAccount" />
             </div>
 
-            <div className="signup">
-              <div className="signup-main">
-                <div className="signup-main-2">
-                  <div className="delete-header">
+            <div className={style.signup}>
+              <div className={style.signupmain}>
+                <div className={style.signupmain2}>
+                  <div className={style.deleteHeader}>
                     <div>
                       <h1>Delete Account</h1>
                     </div>
@@ -140,7 +143,7 @@ function DeleteAccount() {
                       account ?
                     </h4>
                   </div>
-                  <div className="enter-mob">
+                  <div className={style.enterMob}>
                     {deleteAccount == 1 ? (
                       <SigninNum
                         mobileNumber={mobileNumber}
@@ -164,14 +167,14 @@ function DeleteAccount() {
                       />
                     )}
 
-                    <div className="footer">
+                    <div className={style.footer}>
                       <div
-                        className={`${
-                          deleteAccount == 1
-                            ? "hr-line visiblity2"
-                            : deleteAccount == 2
-                            ? "visiblity"
-                            : "hr-line visiblity2"
+                        className={`${style.hrLine} ${
+                          deleteAccount === 1
+                            ? style.visiblity2
+                            : deleteAccount === 2
+                            ? style.visiblity
+                            : `${style.hrLine} ${style.visiblity2}`
                         }`}
                       >
                         <div></div>
@@ -180,12 +183,12 @@ function DeleteAccount() {
                       </div>
 
                       <div
-                        className={`${
-                          deleteAccount == 1
-                            ? "signin-option visiblity2"
-                            : deleteAccount == 2
-                            ? "visiblity"
-                            : "signin-option visiblity2"
+                        className={`${style.signinOption} ${
+                          deleteAccount === 1
+                            ? style.visiblity2
+                            : deleteAccount === 2
+                            ? style.visiblity2
+                            : `${style.signinOption} ${style.visiblity2}`
                         }`}
                       >
                         <div>
@@ -201,11 +204,11 @@ function DeleteAccount() {
                       </div>
                       <div
                         className={`${
-                          deleteAccount == 1
-                            ? "continue"
-                            : deleteAccount == 2
-                            ? "verify-continue2 continue "
-                            : " continue "
+                          deleteAccount === 1
+                            ? style.continue
+                            : deleteAccount === 2
+                            ? `${style.verifyContinue2} ${style.continue}`
+                            : style.continue
                         }`}
                       >
                         <div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import style from "../../pages/home/signinBackup.module.css";
 
 const DeleteAccountEmailVerify = ({
   setDeleteAccountEmail,
@@ -6,11 +7,11 @@ const DeleteAccountEmailVerify = ({
 }) => {
   return (
     <>
-      <div className="enter-mob-inner-div">
+      <div className={style.enterMobInnerDiv}>
         <div>
           <label htmlFor="email">Enter your Email Id to confirm </label>
         </div>
-        <div className="enter-email-input">
+        <div className={style.enteremailinput}>
           <input
             type="email"
             id="email"

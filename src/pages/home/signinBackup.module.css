@@ -102,10 +102,10 @@ h6 {
   display: flex;
   justify-content: space-between;
 }
-.delete-header h1 {
+.deleteHeader h1 {
   color: #ffc701;
 }
-.delete-header {
+.deleteHeader {
   display: flex;
   justify-content: space-between;
 }
@@ -149,12 +149,12 @@ h6 {
   width: 100%;
   height: 76%;
 }
-.enter-email-input {
+.enteremailinput {
   width: 100%;
   height: 40%;
   /* border: 2px solid green; */
 }
-.enter-email-input > input {
+.enteremailinput > input {
   width: 100%;
   height: 100%;
   border-radius: 5px;
@@ -475,7 +475,7 @@ h6 {
 .date-input input {
   text-transform: uppercase;
 }
-.delete-overlay {
+.deleteOverlay {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -483,11 +483,11 @@ h6 {
   top: -100%;
   transition: 1s ease;
 }
-.delete-overlay-after {
+.deleteOverlayAfter {
   top: 0%;
   transition: 1s ease;
 }
-.delete-Popup {
+.deletePopup {
   left: 50%;
   top: -100%;
   position: fixed;
@@ -501,7 +501,7 @@ h6 {
   background-color: #262727;
   transition: 1s ease;
 }
-.delete-Popup-after {
+.deletePopupAfter {
   top: 50%;
 
   transition: 1s ease;
@@ -536,6 +536,7 @@ h6 {
   height: 20%;
   /* border: 2px solid blue; */
   text-align: center;
+  color: white;
 }
 .popupImg {
   width: 100%;

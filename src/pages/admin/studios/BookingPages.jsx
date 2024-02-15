@@ -77,7 +77,8 @@ function BookingPages() {
             />
             {bookingPageCount == 1 ? (
               <StudioBookingDetail />
-            ) : bookingPageCount == 2 ? (
+            ) : // <AllStudioDetail />
+            bookingPageCount == 2 ? (
               <MusicProduction />
             ) : bookingPageCount == 3 ? (
               <MixMaster />

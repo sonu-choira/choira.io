@@ -53,7 +53,7 @@ function AllStudioDetail({ setSelectTab }) {
 
   return (
     <>
-      <div className={style.allStudiobtndiv}>
+      {/* <div className={style.allStudiobtndiv}>
         <div>All Studios</div>
         <div>
           <Button
@@ -72,7 +72,87 @@ function AllStudioDetail({ setSelectTab }) {
             style={{ height: "50%", width: "28%", gap: "5%" }}
           />
         </div>
-      </div>
+        </div> */}
+      {/* <div className={style.allStudiobtndiv}>
+        <div
+          className={style.bookingStudiobtn}
+          style={{ width: "100%", height: "100%" }}
+        >
+          <div>
+            <div>
+              <div
+                style={{
+                  borderLeft: "none",
+                  backgroundColor: bookingPageCount == 1 ? "#ffc701" : "",
+                }}
+                onClick={() => {
+                  setBookingPageCount(1);
+                }}
+              >
+                Studio
+              </div>
+              <div
+                style={{
+                  backgroundColor: bookingPageCount == 2 ? "#ffc701" : "",
+                }}
+                onClick={() => {
+                  setBookingPageCount(2);
+                }}
+              >
+                Music Production
+              </div>
+              <div
+                style={{
+                  backgroundColor: bookingPageCount == 3 ? "#ffc701" : "",
+                }}
+                onClick={() => {
+                  setBookingPageCount(3);
+                }}
+              >
+                Artist
+              </div>
+              <div
+                style={{
+                  borderRight: "none",
+                  backgroundColor: bookingPageCount == 4 ? "#ffc701" : "",
+                }}
+                onClick={() => {
+                  setBookingPageCount(4);
+                }}
+              >
+                Mix-Master
+              </div>
+            </div>
+          </div>
+          <div style={{ justifyContent: bookingPageCount == 1 ? "" : "end" }}>
+            <Button
+              name={"Card view"}
+              icon={<FaTableCellsLarge />}
+              style={{ height: "50%", width: "20%", gap: "5%" }}
+            />
+            <Button
+              name={"Filter"}
+              icon={<FaFilter />}
+              style={{ height: "50%", width: "15%", gap: "5%" }}
+            />
+            <Button
+              name={"Share"}
+              icon={<FaShare />}
+              style={{ height: "50%", width: "15%", gap: "5%" }}
+            />
+            {bookingPageCount == 1 ? (
+              <Button
+                name={"Slot Booking"}
+                icon={<LuFilePlus />}
+                style={{ height: "50%", width: "28%", gap: "5%" }}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+      </div> */}
+
       <div className={style.studioTabelDiv}>
         <div>
           <table>
