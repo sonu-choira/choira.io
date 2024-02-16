@@ -12,6 +12,7 @@ import Button from "../../../pages/admin/layout/Button";
 import Switch from "../../../pages/admin/layout/Switch";
 import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
+import imageNotFound from "../../../assets/imagesNotFound.png";
 import axios from "axios";
 let PageSize = 10;
 
@@ -115,7 +116,13 @@ function StudioBookingDetail() {
         return "";
     }
   };
-
+  const [activityStatus, setActivityStatus] = useState({});
+  const handleSwitchChange = (studioId) => {
+    setActivityStatus((prevStatus) => ({
+      ...prevStatus,
+      [studioId]: !prevStatus[studioId], // Toggle the switch state
+    }));
+  };
   return (
     <>
       <div className={style.studioTabelDiv}>
@@ -123,50 +130,60 @@ function StudioBookingDetail() {
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th style={{ width: "15%" }}>Booking ID</th>
-                <th>User Name</th>
-                <th style={{ width: "15%" }}>Studio Name</th>
-                <th>No. of Hour</th>
-                <th>Date</th>
-                <th>Time Slot</th>
-                <th>Project Status</th>
+                <th>Studio</th>
+                <th>Price</th>
+                <th>Location</th>
+                <th>No. of Rooms</th>
+                <th>Activity Status</th>
               </tr>
             </thead>
             <tbody>
               {currentTableData.map((products) => {
                 return (
-                  <tr>
-                    <td style={{ textAlign: "center" }}>#{products._id}</td>
-                    <td>{products.title}</td>
-                    <td>
-                      {products.category}
-                      <br />
-                      <small>Maharastra</small>
+                  <tr key={products._id}>
+                    <td style={{ display: "flex", alignItems: "center" }}>
+                      <div className={style.studioImage}>
+                        {products.studioPhotos ? (
+                          <img
+                            src={products.studioPhotos}
+                            alt=""
+                            onError={(e) => {
+                              e.target.src = imageNotFound;
+                            }}
+                          />
+                        ) : (
+                          <img src={imageNotFound} alt="" />
+                        )}
+                      </div>
+                      &nbsp;&nbsp;{products.fullName}
                     </td>
-                    <td>{products.fullName}</td>
-                    <td>{products.discountPercentage}</td>
-                    <td>{products.rating}</td>
+                    <td>
+                      ₹{products.pricePerHour}
+                      <br />
+                      <small>per hour</small>
+                    </td>
+                    <td>
+                      {products.address}
+                      <br />
+                      <small> {products.state}</small>
+                    </td>
+                    <td>{products.totalRooms}</td>
                     <td className={style.tableActionbtn}>
                       <div>
-                        <select
-                          value={selectedStatus[products.id] || ""}
-                          onChange={(e) => handleChange(products.id, e)}
-                          style={{
-                            backgroundColor: getStatusColor(
-                              selectedStatus[products.id]
-                            ),
-                          }}
-                        >
-                          <option value="">Select Status</option>
-                          <option value="Active">Active</option>
-                          <option value="Pending">Pending</option>
-                          <option value="Complete">Complete</option>
-                          <option value="Cancelled">Cancelled</option>
-                        </select>
+                        <label className="switch">
+                          <input
+                            type="checkbox"
+                            checked={activityStatus[products._id] || false}
+                            onChange={() => handleSwitchChange(products._id)}
+                          />
+                          <span className="slider"></span>
+                        </label>
                       </div>
-                      <div style={{ width: "25%" }}>
+                      <div>
                         <GrShare style={{ cursor: "pointer" }} />
-
+                        <MdEdit
+                          style={{ color: "#ffc701", cursor: "pointer" }}
+                        />
                         <RiDeleteBin5Fill
                           style={{ color: "red", cursor: "pointer" }}
                         />

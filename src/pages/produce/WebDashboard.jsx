@@ -6,11 +6,16 @@ import produce from "../../assets/img/dashboard_img/produce_selected.svg";
 import community from "../../assets/img/dashboard_img/community.svg";
 import tanmay from "../../assets/img/dashboard_img/tanmay.png";
 import ProfileEdit from "./ProfileEdit";
+import { useNavigate } from "react-router-dom";
 
 function WebDashboard() {
   const [editProfile, setEditProfile] = useState(false);
   const editProfiletab = () => {
     setEditProfile(true);
+  };
+  const navigate = useNavigate();
+  const gotoAllStudioDetailPage = () => {
+    navigate("/allStudioPageDetailsPage");
   };
   return (
     <>
@@ -36,7 +41,7 @@ function WebDashboard() {
                 <img src={produce} alt="" />
                 Produce
               </div>
-              <div>
+              <div onClick={gotoAllStudioDetailPage}>
                 <img src={produce} alt="" />
                 App & More
               </div>

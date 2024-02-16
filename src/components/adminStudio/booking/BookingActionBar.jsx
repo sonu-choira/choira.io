@@ -13,30 +13,30 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount }) {
             <div
               style={{
                 borderLeft: "none",
-                backgroundColor: bookingPageCount == 1 ? "#ffc701" : "",
+                backgroundColor: bookingPageCount == "c1" ? "#ffc701" : "",
               }}
               onClick={() => {
-                setBookingPageCount(1);
+                setBookingPageCount("c1");
               }}
             >
               Studio
             </div>
             <div
               style={{
-                backgroundColor: bookingPageCount == 2 ? "#ffc701" : "",
+                backgroundColor: bookingPageCount == "c2" ? "#ffc701" : "",
               }}
               onClick={() => {
-                setBookingPageCount(2);
+                setBookingPageCount("c2");
               }}
             >
               Music Production
             </div>
             <div
               style={{
-                backgroundColor: bookingPageCount == 3 ? "#ffc701" : "",
+                backgroundColor: bookingPageCount == "c3" ? "#ffc701" : "",
               }}
               onClick={() => {
-                setBookingPageCount(3);
+                setBookingPageCount("c3");
               }}
             >
               Artist
@@ -44,17 +44,17 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount }) {
             <div
               style={{
                 borderRight: "none",
-                backgroundColor: bookingPageCount == 4 ? "#ffc701" : "",
+                backgroundColor: bookingPageCount == "c4" ? "#ffc701" : "",
               }}
               onClick={() => {
-                setBookingPageCount(4);
+                setBookingPageCount("c4");
               }}
             >
               Mix-Master
             </div>
           </div>
         </div>
-        <div style={{ justifyContent: bookingPageCount == 1 ? "" : "end" }}>
+        <div style={{ justifyContent: bookingPageCount == "c1" ? "" : "end" }}>
           <Button
             name={"Card view"}
             icon={<FaTableCellsLarge />}
@@ -70,7 +70,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount }) {
             icon={<FaShare />}
             style={{ height: "50%", width: "15%", gap: "5%" }}
           />
-          {bookingPageCount == 1 ? (
+          {bookingPageCount == "c1" ? (
             <Button
               name={"Slot Booking"}
               icon={<LuFilePlus />}

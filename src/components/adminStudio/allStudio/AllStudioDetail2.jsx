@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import style from "../../pages/admin/studios/studio.module.css";
+import style from "../../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
@@ -9,54 +9,17 @@ import { IoIosArrowBack } from "react-icons/io";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 
 // import Button from "../../../pages/admin/layout/Button";
-import Switch from "../../pages/admin/layout/Switch";
-import Pagination from "../../pages/admin/studios/Pagination";
+import Switch from "../../../pages/admin/layout/Switch";
+import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
-import imageNotFound from "../../assets/imagesNotFound.png";
+import imageNotFound from "../../../assets/imagesNotFound.png";
 import axios from "axios";
 let PageSize = 10;
 
-function AllStudioDetail() {
+function AllStudioDetail2() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
 
-  // const fetchProducts = async () => {
-  //   try {
-  //     const res = await fetch("https://dummyjson.com/products?limit=100");
-  //     const data = await res.json();
-  //     if (data && data.products) {
-  //       setProducts(data.products);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // const fetchProducts = async () => {
-  //   try {
-  //     const myHeaders = new Headers();
-  //     myHeaders.append("Authorization", "Bearer debugTest");
-  //     myHeaders.append("Content-Type", "application/json");
-  //     const res = await fetch(
-  //       "https://test.api.choira.io/api/settings/category",
-  //       {
-  //         method: "GET",
-  //         headers: myHeaders,
-  //         body: JSON.stringify({
-  //           active: 1,
-  //         }),
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     console.log(data);
-  //     if (data && data.products) {
-  //       setProducts(data.products);
-  //       console.log("the data is " + products);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
   useEffect(() => {
     axios
       .get(
@@ -79,13 +42,13 @@ function AllStudioDetail() {
       });
   }, []);
 
-  useEffect(() => {
-    // fetchProducts();
-  }, []);
+  // useEffect(() => {
+  //   // fetchProducts();
+  // }, []);
 
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
+  // useEffect(() => {
+  //   console.log(products);
+  // }, [products]);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -130,7 +93,7 @@ function AllStudioDetail() {
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th>Studio</th>
+                <th>Studioaa</th>
                 <th>Price</th>
                 <th>Location</th>
                 <th>No. of Rooms</th>
@@ -209,4 +172,4 @@ function AllStudioDetail() {
   );
 }
 
-export default AllStudioDetail;
+export default AllStudioDetail2;

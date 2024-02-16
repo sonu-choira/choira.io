@@ -12,6 +12,7 @@ import {
 //   } from "react-router-dom";
 
   import { ChoiraLoader } from "./components/loader/ChoiraLoader";
+import AllStudioPageDetailsPage from "./pages/admin/studios/AllStudioPageDetailsPage.jsx";
 
 // import Signup from "./pages/home/Signup.jsx";
 
@@ -36,6 +37,7 @@ const ChoiraTest = lazy(() => import("./pages/produce/ChoiraTest.jsx"));
 const LandingPage = lazy(() => import("./pages/NewLandingPage/LandingPage.jsx"));
 const Studios = lazy(() => import("./pages/admin/studios/Studios.jsx"));
 const BookingPages = lazy(() => import("./pages/admin/studios/BookingPages.jsx"));
+const AllStudioDetailsPage = lazy(() => import("./pages/admin/studios/AllStudioPageDetailsPage.jsx"));
 
 
 
@@ -54,6 +56,7 @@ const Routing = () => {
           <Route exact path='/newproject' element={<NewProject/>} />
           <Route exact path='/choiratest' element={<ChoiraTest/>} />
           <Route exact path='/studios' element={<Studios/>} />
+          <Route exact path='/allStudioPageDetailsPage' element={<AllStudioPageDetailsPage/>} />
           <Route exact path='/booking' element={<BookingPages/>} />
           <Route exact path='/userHome' element={<UserHome/>}/> 
           <Route exact path='/adminHome' element={<AdminHome/>}/> 

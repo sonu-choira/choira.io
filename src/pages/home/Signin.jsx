@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 
 import singer from "../../assets/img/singer2.png";
 import signStyle from "../home/signinBackup.module.css";
@@ -393,9 +393,43 @@ function Signin() {
     });
   };
 
-  const signin = true;
-
+  // api integration ----------------------------------------
   const [mobileNumber, setMobileNumber] = useState("");
+
+  const [data, setData] = useState([]);
+  const checkLoginData = () => {
+    axios
+      .post(
+        "https://test.api.choira.io/api/users/login-otp",
+        {
+          phoneNumber: `91${mobileNumber}`,
+          userType: "NUMBER",
+          role: "admin",
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            // Authorization: "Bearer debugTest",
+            // "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        const responseData = response.data; // Assuming the data is in the 'data' field
+        setData(responseData);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+  useEffect(() => {
+    console.log("api hit");
+    console.log(mobileNumber);
+    console.log(data);
+  }, [data]);
+  const signin = true;
 
   // State to manage the sign-in steps
   const [sign, setSign] = useState(1);
@@ -403,19 +437,24 @@ function Signin() {
   // Function to handle mobile number input
   const handleMobileNumberChange = (e) => {
     setMobileNumber(e.target.value);
+    // console.log(mobileNumber);
   };
 
-  const handleContinueButtonClick = () => {
+  const handleContinueButtonClick = (e) => {
     // Check if the mobile number is not empty and has exactly 10 digits
+    e.preventDefault();
+
     const trimmedMobileNumber = mobileNumber.trim();
     if (trimmedMobileNumber !== "" && trimmedMobileNumber.length === 10) {
-      setSign(2);
+      // setSign(2);
       // Perform any other actions as needed
+      checkLoginData();
     } else {
       // Display an error message or take appropriate action
       alert("Please enter a valid 10-digit mobile number.");
     }
   };
+
   const [countryCode, setCountryCode] = useState("91");
   const handleCountryCodeChange = (code) => {
     setCountryCode(code);
