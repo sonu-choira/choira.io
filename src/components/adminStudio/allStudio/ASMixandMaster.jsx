@@ -15,36 +15,35 @@ import { LuFilePlus } from "react-icons/lu";
 import axios from "axios";
 let PageSize = 10;
 
-function ASMixandMaster() {
+function ASMixandMaster({ setProducts, products }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("https://test.api.choira.io/api/services", {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer debugTest",
-          "Content-Type": "application/json",
-        },
-        params: {
-          limit: 61,
-          serviceType: "c2",
-          active: 1,
-        },
-        // body: {},
-      })
-      .then((response) => {
-        console.log(response);
-        const data = response;
-        if (data && data.data.services.results) {
-          setProducts(data.data.services.results);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("https://test.api.choira.io/api/services", {
+  //       headers: {
+  //         Accept: "application/json",
+  //         Authorization: "Bearer debugTest",
+  //         "Content-Type": "application/json",
+  //       },
+  //       params: {
+  //         limit: 61,
+  //         serviceType: "c3",
+  //         active: 1,
+  //       },
+  //       // body: {},
+  //     })
+  //     .then((response) => {
+  //       console.log(response);
+  //       const data = response;
+  //       if (data && data.data.services.results) {
+  //         setProducts(data.data.services.results);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []);
 
   // useEffect(() => {
   //   console.log(products);

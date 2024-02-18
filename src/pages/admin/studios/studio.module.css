@@ -448,6 +448,9 @@ td {
   display: flex;
   align-items: end;
   margin-top: 1%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
 .tableActionbtn > div:nth-child(1) {
   width: 60%;

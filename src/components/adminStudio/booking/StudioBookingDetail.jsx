@@ -60,7 +60,7 @@ function StudioBookingDetail() {
   useEffect(() => {
     axios
       .get(
-        "https://test.api.choira.io/api/studios-all?limit=61",
+        "https://test.api.choira.io/api/services/bookings",
 
         {
           headers: {
@@ -73,8 +73,8 @@ function StudioBookingDetail() {
       .then((response) => {
         console.log(response);
         const data = response;
-        if (data && data.data.studios.results) {
-          setProducts(data.data.studios.results);
+        if (data && data.data.services.results) {
+          setProducts(data.data.services.results);
         }
       });
   }, []);
@@ -158,7 +158,7 @@ function StudioBookingDetail() {
                       &nbsp;&nbsp;{products.fullName}
                     </td>
                     <td>
-                      ₹{products.pricePerHour}
+                      ₹{products.totalPrice}
                       <br />
                       <small>per hour</small>
                     </td>

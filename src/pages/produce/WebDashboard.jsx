@@ -17,6 +17,9 @@ function WebDashboard() {
   const gotoAllStudioDetailPage = () => {
     navigate("/allStudioPageDetailsPage");
   };
+  const gotoBookings = () => {
+    navigate("/booking");
+  };
   return (
     <>
       <ProfileEdit editProfile={editProfile} setEditProfile={setEditProfile} />
@@ -44,6 +47,10 @@ function WebDashboard() {
               <div onClick={gotoAllStudioDetailPage}>
                 <img src={produce} alt="" />
                 App & More
+              </div>
+              <div onClick={gotoBookings}>
+                <img src={produce} alt="" />
+                Bookings
               </div>
             </div>
           </div>

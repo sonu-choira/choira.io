@@ -30,24 +30,24 @@ import BookingActionBar from "../../../components/adminStudio/booking/BookingAct
 import { useNavigate } from "react-router-dom";
 
 function BookingPages() {
-  const [bookingPageCount, setBookingPageCount] = useState(1);
+  const [bookingPageCount, setBookingPageCount] = useState("c1");
   const navigate = useNavigate();
   const gotoSignin = () => {
     navigate("/signin");
   };
-  const storedIsSignin = localStorage.getItem("isSignin");
-  const storedAlert = localStorage.getItem("alertShown");
-  useEffect(() => {
-    if (storedIsSignin) {
-      if (storedAlert) {
-      } else {
-        alert("Welcome Admin 😊");
-        localStorage.setItem("alertShown", "true");
-      }
-    } else {
-      gotoSignin();
-    }
-  }, []);
+  // const storedIsSignin = localStorage.getItem("isSignin");
+  // const storedAlert = localStorage.getItem("alertShown");
+  // useEffect(() => {
+  //   if (storedIsSignin) {
+  //     if (storedAlert) {
+  //     } else {
+  //       alert("Welcome Admin 😊");
+  //       localStorage.setItem("alertShown", "true");
+  //     }
+  //   } else {
+  //     gotoSignin();
+  //   }
+  // }, []);
   return (
     <>
       <div className={style.wrapper}>
@@ -75,12 +75,12 @@ function BookingPages() {
               bookingPageCount={bookingPageCount}
               setBookingPageCount={setBookingPageCount}
             />
-            {bookingPageCount == 1 ? (
+            {bookingPageCount == "c1" ? (
               <StudioBookingDetail />
             ) : // <AllStudioDetail />
-            bookingPageCount == 2 ? (
+            bookingPageCount == "c2" ? (
               <MusicProduction />
-            ) : bookingPageCount == 3 ? (
+            ) : bookingPageCount == "c3" ? (
               <MixMaster />
             ) : (
               <Artist />

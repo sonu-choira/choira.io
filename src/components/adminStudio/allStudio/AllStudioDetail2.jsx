@@ -16,31 +16,32 @@ import imageNotFound from "../../../assets/imagesNotFound.png";
 import axios from "axios";
 let PageSize = 10;
 
-function AllStudioDetail2() {
+function AllStudioDetail2({ products, setProducts }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get(
-        "https://test.api.choira.io/api/studios-all?limit=61",
+  // useEffect(() => {
+  //   console.log(`got your token id ------------------- ${token}`);
+  //   axios
+  //     .get(
+  //       "https://test.api.choira.io/api/studios-all?limit=61",
 
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: "Bearer debugTest",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        const data = response;
-        if (data && data.data.studios.results) {
-          setProducts(data.data.studios.results);
-        }
-      });
-  }, []);
+  //       {
+  //         headers: {
+  //           Accept: "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log(response);
+  //       const data = response;
+  //       if (data && data.data.studios.results) {
+  //         setProducts(data.data.studios.results);
+  //       }
+  //     });
+  // }, [token]);
 
   // useEffect(() => {
   //   // fetchProducts();

@@ -24,6 +24,7 @@ import Swal from "sweetalert2";
 import { loginUrl, getTokenByUrl } from "../../spotify";
 
 import { httpUrl, nodeUrl } from "../../restservice";
+// import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
 
@@ -396,7 +397,7 @@ function Signin() {
   // api integration ----------------------------------------
   const [mobileNumber, setMobileNumber] = useState("");
 
-  const [data, setData] = useState([]);
+  const [token, setToken] = useState([]);
   const checkLoginData = () => {
     axios
       .post(
@@ -418,7 +419,11 @@ function Signin() {
       .then((response) => {
         console.log(response);
         const responseData = response.data; // Assuming the data is in the 'data' field
-        setData(responseData);
+        if (responseData.token) {
+          setToken(responseData.token);
+        } else {
+          console.log("Not get Token");
+        }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -426,9 +431,14 @@ function Signin() {
   };
   useEffect(() => {
     console.log("api hit");
-    console.log(mobileNumber);
-    console.log(data);
-  }, [data]);
+
+    setMobileNumber("");
+    console.log(token);
+    // Cookies.set("userToken", token, { path: "/" });
+    // const checkCookie = Cookies.get("userToken");
+    localStorage.setItem("token", token);
+    // console.log(`your locatdata data is ${locatdata}`);
+  }, [token]);
   const signin = true;
 
   // State to manage the sign-in steps
