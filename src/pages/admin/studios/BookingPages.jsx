@@ -30,7 +30,7 @@ import BookingActionBar from "../../../components/adminStudio/booking/BookingAct
 import { useNavigate } from "react-router-dom";
 
 function BookingPages() {
-  const [bookingPageCount, setBookingPageCount] = useState("c1");
+  const [bookingPageCount, setBookingPageCount] = useState("c2");
   const navigate = useNavigate();
   const gotoSignin = () => {
     navigate("/signin");

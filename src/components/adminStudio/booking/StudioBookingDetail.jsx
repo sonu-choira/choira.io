@@ -14,6 +14,7 @@ import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
 import imageNotFound from "../../../assets/imagesNotFound.png";
 import axios from "axios";
+import appAndmoreApi from "../../../services/appAndmoreApi";
 let PageSize = 10;
 
 function StudioBookingDetail() {
@@ -58,6 +59,7 @@ function StudioBookingDetail() {
   //   }
   // };
   useEffect(() => {
+    appAndmoreApi.appAndmoreApi();
     axios
       .get(
         "https://test.api.choira.io/api/services/bookings",

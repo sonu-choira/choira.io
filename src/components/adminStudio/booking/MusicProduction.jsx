@@ -12,26 +12,37 @@ import Button from "../../../pages/admin/layout/Button";
 import Switch from "../../../pages/admin/layout/Switch";
 import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
+import axios from "axios";
 let PageSize = 10;
 
 function MusicProduction() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
 
-  const fetchProducts = async () => {
-    try {
-      const res = await fetch("https://dummyjson.com/products?limit=100");
-      const data = await res.json();
-      if (data && data.products) {
-        setProducts(data.products);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  useEffect(() => {
+    axios
+      .get(
+        "https://test.api.choira.io/api/services/bookings?serviceType=c2",
+
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer debugTest",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        const data = response;
+        if (data && data.data.services.results) {
+          setProducts(data.data.services.results);
+        }
+      });
+  }, []);
 
   useEffect(() => {
-    fetchProducts();
+    // fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -88,12 +99,12 @@ function MusicProduction() {
               {currentTableData.map((products) => {
                 return (
                   <tr>
-                    <td style={{ textAlign: "center" }}>#{products.id}</td>
-                    <td>{products.title}</td>
+                    <td style={{ textAlign: "center" }}>#{products._id}</td>
+                    <td>{products.productId}</td>
 
                     <td>{products.category}</td>
                     <td>{products.discountPercentage}</td>
-                    <td>{products.rating}</td>
+                    <td>₹{products.totalPrice}</td>
                     <td className={style.tableActionbtn}>
                       <div>
                         <select
