@@ -15,7 +15,7 @@ import { httpUrl } from '../../../restservice'
 import axios from 'axios';
 import "./manageProject.scss"
 
-import { ChoiraLoader } from "../../../components/loader/ChoiraLoader";
+import ChoiraLoader from "../../../components/loader/ChoiraLoader";
 // import TrackShow from "./trackShow";
 export default function ManageProject(props) {
 
