@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 // import "../studios/studios.css";
 import style from "../studios/studio.module.css";
-import WebDashboard from "../../produce/WebDashboard";
 import { IoSearch } from "react-icons/io5";
 import { MdAddAPhoto } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
@@ -32,6 +31,7 @@ import { useNavigate } from "react-router-dom";
 import ASMusicProduction from "../../../components/adminStudio/allStudio/ASMusicProduction";
 import ASMixandMaster from "../../../components/adminStudio/allStudio/ASMixandMaster";
 import AllStudioDetail2 from "../../../components/adminStudio/allStudio/AllStudioDetail2";
+import WebDashboard2 from "../../produce/WebDashBoard2";
 // import Cookies from "js-cookie";
 
 function AllStudioPageDetailsPage() {
@@ -106,49 +106,26 @@ function AllStudioPageDetailsPage() {
         });
     }
   }, [bookingPageCount]);
+  const pagetype = "apps";
 
   return (
     <>
-      <div className={style.wrapper}>
-        <WebDashboard />
-        <div className={style.studioMainScreen}>
-          <div className={style.studioHeader}>
-            <div>
-              <input type="text" placeholder="search" />
-            </div>
-            <div>
-              <IoSearch />
-            </div>
-            <div>
-              <div className={style.notifyIcon}>
-                <GoDotFill />
-              </div>
-              <FaRegBell />
-            </div>
-            <div>
-              <MdOutlineSettings />
-            </div>
-          </div>
-          <div className={style.allStudioDetailsPage}>
-            <BookingActionBar
-              bookingPageCount={bookingPageCount}
-              setBookingPageCount={setBookingPageCount}
-            />
-            {bookingPageCount == "c1" ? (
-              <AllStudioDetail2 products={products} setProducts={setProducts} />
-            ) : // <AllStudioDetail />
-            bookingPageCount == "c2" ? (
-              <ASMusicProduction
-                products={products}
-                setProducts={setProducts}
-              />
-            ) : bookingPageCount == "c3" ? (
-              <Artist />
-            ) : (
-              <ASMixandMaster products={products} setProducts={setProducts} />
-            )}
-          </div>
-        </div>
+      <div className={style.allStudioDetailsPage}>
+        <BookingActionBar
+          page
+          bookingPageCount={bookingPageCount}
+          setBookingPageCount={setBookingPageCount}
+        />
+        {bookingPageCount == "c1" ? (
+          <AllStudioDetail2 products={products} setProducts={setProducts} />
+        ) : // <AllStudioDetail />
+        bookingPageCount == "c2" ? (
+          <ASMusicProduction products={products} setProducts={setProducts} />
+        ) : bookingPageCount == "c3" ? (
+          <Artist />
+        ) : (
+          <ASMixandMaster products={products} setProducts={setProducts} />
+        )}
       </div>
     </>
   );

@@ -3,6 +3,8 @@ import Button from "../../../pages/admin/layout/Button";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 import { LuFilePlus } from "react-icons/lu";
 import style from "../../../pages/admin/studios/studio.module.css";
+import { FaDownload } from "react-icons/fa";
+import { MdNoteAdd } from "react-icons/md";
 
 function BookingActionBar({ setBookingPageCount, bookingPageCount }) {
   return (
@@ -74,11 +76,21 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount }) {
             <Button
               name={"Slot Booking"}
               icon={<LuFilePlus />}
-              style={{ height: "50%", width: "28%", gap: "5%" }}
+              style={{ height: "50%", width: "20%", gap: "5%" }}
             />
           ) : (
             ""
           )}
+          <Button
+            name={"Download"}
+            icon={<FaDownload />}
+            style={{ height: "50%", width: "15%", gap: "5%" }}
+          />
+          <Button
+            name={"Add New"}
+            icon={<MdNoteAdd />}
+            style={{ height: "50%", width: "15%", gap: "5%" }}
+          />
         </div>
       </div>
     </>

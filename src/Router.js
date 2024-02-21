@@ -38,6 +38,7 @@ const LandingPage = lazy(() => import("./pages/NewLandingPage/LandingPage.jsx"))
 const Studios = lazy(() => import("./pages/admin/studios/Studios.jsx"));
 const BookingPages = lazy(() => import("./pages/admin/studios/BookingPages.jsx"));
 const AllStudioDetailsPage = lazy(() => import("./pages/admin/studios/AllStudioPageDetailsPage.jsx"));
+const AdminDashboardLayout = lazy(() => import("./pages/admin/layout/AdminDashboardLayout.jsx"));
 
 
 
@@ -57,6 +58,7 @@ const Routing = () => {
           <Route exact path='/choiratest' element={<ChoiraTest/>} />
           <Route exact path='/studios' element={<Studios/>} />
           <Route exact path='/allStudioPageDetailsPage' element={<AllStudioPageDetailsPage/>} />
+          <Route exact path='/adminDashboard' element={<AdminDashboardLayout/>} />
           <Route exact path='/booking' element={<BookingPages/>} />
           <Route exact path='/userHome' element={<UserHome/>}/> 
           <Route exact path='/adminHome' element={<AdminHome/>}/> 

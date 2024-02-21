@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 // import "../studios/studios.css";
 import style from "../studios/studio.module.css";
-import WebDashboard from "../../produce/WebDashboard";
 import { IoSearch } from "react-icons/io5";
 import { MdAddAPhoto } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
@@ -26,13 +25,14 @@ import MusicProduction from "../../../components/adminStudio/booking/MusicProduc
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
 import SlotBooking from "../../../components/adminStudio/SlotBooking";
+import WebDashboard2 from "../../produce/WebDashBoard2";
 
 function Studios() {
-  const [selectTab, setSelectTab] = useState(0);
+  const [selectTab, setSelectTab] = useState(1);
   return (
     <>
       <div className={style.wrapper}>
-        <WebDashboard />
+        <WebDashboard2 />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
             <div>
@@ -53,9 +53,9 @@ function Studios() {
           </div>
           {/* //sdhbsda */}
 
-          {selectTab == 0 && (
+          {/* {selectTab == 0 && (
             <OnboardStudio selectTab={selectTab} setSelectTab={setSelectTab} />
-          )}
+          )} */}
           <div className={style.allStudioDetailsPage}>
             {selectTab == 1 ? (
               <AllStudioDetail setSelectTab={setSelectTab} />
@@ -66,10 +66,6 @@ function Studios() {
             ) : (
               ""
             )}
-            {/* <AllStudioDetail /> */}
-            {/* <AddNewStudio /> */}
-            {/* <SlotBooking /> */}
-            {/* <AddNewRoom /> */}
           </div>
         </div>
       </div>

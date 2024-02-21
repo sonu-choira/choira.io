@@ -313,13 +313,13 @@ input[type="number"] {
 }
 
 .bookingStudiobtn > div:nth-child(2) {
-  width: 48%;
+  width: 65%;
   height: 100%;
   /* border: 2px solid blue; */
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5%;
+  gap: 2%;
 }
 .bookingStudiobtn > div:nth-child(1) {
   font-size: 1vmax;

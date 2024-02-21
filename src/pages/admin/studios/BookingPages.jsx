@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Alert } from "antd";
 // import "../studios/studios.css";
 import style from "../studios/studio.module.css";
-import WebDashboard from "../../produce/WebDashboard";
 import { IoSearch } from "react-icons/io5";
 import { MdAddAPhoto } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
@@ -28,6 +27,7 @@ import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
 import { useNavigate } from "react-router-dom";
+import WebDashboard2 from "../../produce/WebDashBoard2";
 
 function BookingPages() {
   const [bookingPageCount, setBookingPageCount] = useState("c2");
@@ -50,43 +50,21 @@ function BookingPages() {
   // }, []);
   return (
     <>
-      <div className={style.wrapper}>
-        <WebDashboard />
-        <div className={style.studioMainScreen}>
-          <div className={style.studioHeader}>
-            <div>
-              <input type="text" placeholder="search" />
-            </div>
-            <div>
-              <IoSearch />
-            </div>
-            <div>
-              <div className={style.notifyIcon}>
-                <GoDotFill />
-              </div>
-              <FaRegBell />
-            </div>
-            <div>
-              <MdOutlineSettings />
-            </div>
-          </div>
-          <div className={style.allStudioDetailsPage}>
-            <BookingActionBar
-              bookingPageCount={bookingPageCount}
-              setBookingPageCount={setBookingPageCount}
-            />
-            {bookingPageCount == "c1" ? (
-              <StudioBookingDetail />
-            ) : // <AllStudioDetail />
-            bookingPageCount == "c2" ? (
-              <MusicProduction />
-            ) : bookingPageCount == "c3" ? (
-              <MixMaster />
-            ) : (
-              <Artist />
-            )}
-          </div>
-        </div>
+      <div className={style.allStudioDetailsPage}>
+        <BookingActionBar
+          bookingPageCount={bookingPageCount}
+          setBookingPageCount={setBookingPageCount}
+        />
+        {bookingPageCount == "c1" ? (
+          <StudioBookingDetail />
+        ) : // <AllStudioDetail />
+        bookingPageCount == "c2" ? (
+          <MusicProduction />
+        ) : bookingPageCount == "c3" ? (
+          <MixMaster />
+        ) : (
+          <Artist />
+        )}
       </div>
     </>
   );
