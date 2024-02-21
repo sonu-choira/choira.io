@@ -15,6 +15,7 @@ import SlotBooking from "../../../components/adminStudio/SlotBooking";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 import AllStudioPageDetailsPage from "../studios/AllStudioPageDetailsPage";
 import BookingPages from "../studios/BookingPages";
+import AddNewProduction from "../../../components/adminStudio/allStudio/AddNewProduction";
 
 function AdminDashboardLayout() {
   const [tabCount, setTabCount] = useState(3);
@@ -40,6 +41,8 @@ function AdminDashboardLayout() {
               <MdOutlineSettings />
             </div>
           </div>
+          {tabCount === 1 && <AddNewStudio />}
+          {tabCount === 2 && <AddNewProduction />}
 
           {tabCount === 3 ? (
             <AllStudioPageDetailsPage />

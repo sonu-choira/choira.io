@@ -20,6 +20,10 @@ body {
   padding: 10%;
   background-color: rgba(255, 199, 1, 0.2);
 }
+.padding {
+  padding: 10%;
+  cursor: pointer;
+}
 .sidebar {
   width: 12%;
   /* border: 2px solid yellow; */

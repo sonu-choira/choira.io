@@ -6,7 +6,7 @@ import style from "../../../pages/admin/studios/studio.module.css";
 import { FaDownload } from "react-icons/fa";
 import { MdNoteAdd } from "react-icons/md";
 
-function BookingActionBar({ setBookingPageCount, bookingPageCount }) {
+function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
@@ -72,7 +72,12 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount }) {
             icon={<FaShare />}
             style={{ height: "50%", width: "15%", gap: "5%" }}
           />
-          {bookingPageCount == "c1" ? (
+          <Button
+            name={"Download"}
+            icon={<FaDownload />}
+            style={{ height: "50%", width: "15%", gap: "5%" }}
+          />
+          {(bookingPageCount == "c1") & (pagetype != "apps") ? (
             <Button
               name={"Slot Booking"}
               icon={<LuFilePlus />}
@@ -81,16 +86,26 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount }) {
           ) : (
             ""
           )}
-          <Button
-            name={"Download"}
-            icon={<FaDownload />}
-            style={{ height: "50%", width: "15%", gap: "5%" }}
-          />
-          <Button
-            name={"Add New"}
-            icon={<MdNoteAdd />}
-            style={{ height: "50%", width: "15%", gap: "5%" }}
-          />
+
+          {pagetype != "apps" ? (
+            ""
+          ) : (
+            <Button
+              name={"Add New"}
+              icon={<MdNoteAdd />}
+              style={{ height: "50%", width: "15%", gap: "5%" }}
+            />
+          )}
+
+          {/* {pagetype !== "apps"
+            ? ""
+            : (bookingPageCount === "c2" || bookingPageCount === "c4") && (
+                <Button
+                  name={"Add New"}
+                  icon={<MdNoteAdd />}
+                  style={{ height: "50%", width: "15%", gap: "5%" }}
+                />
+              )} */}
         </div>
       </div>
     </>

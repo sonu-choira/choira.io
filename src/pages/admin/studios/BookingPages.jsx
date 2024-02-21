@@ -30,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 
 function BookingPages() {
-  const [bookingPageCount, setBookingPageCount] = useState("c2");
+  const [bookingPageCount, setBookingPageCount] = useState("c1");
   const navigate = useNavigate();
   const gotoSignin = () => {
     navigate("/signin");

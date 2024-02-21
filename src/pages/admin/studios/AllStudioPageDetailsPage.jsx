@@ -112,7 +112,7 @@ function AllStudioPageDetailsPage() {
     <>
       <div className={style.allStudioDetailsPage}>
         <BookingActionBar
-          page
+          pagetype={pagetype}
           bookingPageCount={bookingPageCount}
           setBookingPageCount={setBookingPageCount}
         />

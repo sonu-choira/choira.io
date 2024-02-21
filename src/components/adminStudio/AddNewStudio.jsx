@@ -125,7 +125,9 @@ function AddNewStudio({ setSelectTab }) {
   };
   return (
     <>
-      <div className={style.addNewStudioTitle}>Add new studio</div>
+      <div className={style.addNewStudioTitle} style={{ marginTop: "-2%" }}>
+        Add new studio
+      </div>
       <div className={style.addNewStudioPage}>
         <div>
           <div>

@@ -38,14 +38,14 @@ function WebDashboard2({ tabCount, setTabCount }) {
             </div>
             <div className={style.community}>
               <div
-                className={tabCount === 1 ? style.tabActive : null}
+                className={tabCount === 1 ? style.tabActive : style.padding}
                 onClick={gotoStudios}
               >
                 <img src={community} alt="" />
                 Studios
               </div>
               <div
-                className={tabCount === 2 ? style.tabActive : null}
+                className={tabCount === 2 ? style.tabActive : style.padding}
                 onClick={() => {
                   setTabCount(2);
                 }}
@@ -54,14 +54,14 @@ function WebDashboard2({ tabCount, setTabCount }) {
                 Produce
               </div>
               <div
-                className={tabCount === 3 ? style.tabActive : null}
+                className={tabCount === 3 ? style.tabActive : style.padding}
                 onClick={gotoAllStudioDetailPage}
               >
                 <img src={produce} alt="" />
                 App & More
               </div>
               <div
-                className={tabCount === 4 ? style.tabActive : null}
+                className={tabCount === 4 ? style.tabActive : style.padding}
                 onClick={gotoBookings}
               >
                 <img src={produce} alt="" />
