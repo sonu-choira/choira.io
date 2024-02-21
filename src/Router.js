@@ -1,17 +1,24 @@
 import { lazy, Suspense } from "react";
 // import { BrowserRouter as Router, Route } from 'react-router-dom';
 import {
+  useLocation,
   BrowserRouter as Router,
+  useRoutes,
+  Navigate,
     Routes,
     Route,
   } from "react-router-dom";
-// import {
-//   HashRouter as Router,
-//     Routes,
-//     Route,
-//   } from "react-router-dom";
 
-  import { ChoiraLoader } from "./components/loader/ChoiraLoader";
+// Guards
+import AuthGuard from './guards/AuthGuard';
+
+// layouts
+import DashboardLayout from './pages/layout/index'
+
+// configs
+import { PATH_AFTER_LOGIN } from './config/config';
+
+import ChoiraLoader from "./components/loader/ChoiraLoader";
 import AllStudioPageDetailsPage from "./pages/admin/studios/AllStudioPageDetailsPage.jsx";
 
 // import Signup from "./pages/home/Signup.jsx";
@@ -41,11 +48,9 @@ const AllStudioDetailsPage = lazy(() => import("./pages/admin/studios/AllStudioP
 const AdminDashboardLayout = lazy(() => import("./pages/admin/layout/AdminDashboardLayout.jsx"));
 
 
-
-
 const Routing = () => {
   return (
-    <Router>
+    // <Router>
       <Suspense fallback={<ChoiraLoader/>}>
         <Routes>
         <Route exact path='/' element={<Home/>} />
@@ -71,10 +76,10 @@ const Routing = () => {
           <Route exact path='/refundPolicy' element={<RefundPolicy/>}/> 
           <Route exact path='/home' element={<Home/>}/>
           <Route exact path='/landingpage' element={<LandingPage/>}/>
-          {/* <Route exact path='/signup' element={<Signup/>}/> */}
+          <Route exact path='/signup' element={<Signup/>}/>
         </Routes>
       </Suspense>
-    </Router>
+    // </Router>
   );
 };
 export default Routing;

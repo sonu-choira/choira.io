@@ -144,7 +144,7 @@ function Signin() {
   };
   const navigates = navigate;
   const gotoSignup = () => {
-    navigates("/signup");
+    navigates("/auth/signup");
   };
   const sendmail = (e) => {
     e.preventDefault();

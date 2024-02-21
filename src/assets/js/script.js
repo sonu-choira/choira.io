@@ -32,8 +32,10 @@ function createSelect() {
   }
 
   function wrapElement(el, wrapper, i, placeholder) {
-    el.parentNode.insertBefore(wrapper, el);
-    wrapper.appendChild(el);
+    if (el){
+    el?.parentNode.insertBefore(wrapper, el);
+    wrapper?.appendChild(el);
+    }
 
     document.addEventListener('click', function (e) {
       let clickInside = wrapper.contains(e.target);
