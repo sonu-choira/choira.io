@@ -6,7 +6,7 @@ const instance = axios.create({
   baseURL: `${SERVER_API}/api`, // HOST_API,
   headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "http://localhost:3001, http://localhost:3003",
+    "Access-Control-Allow-Origin": "http://localhost:3000",
 
   },
 });
@@ -16,7 +16,7 @@ instance.interceptors.request.use(
     const token = TokenService.getLocalAccessToken();
     if (token) {
       config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
-    //   config.headers["x-access-token"] = token; // for Node.js Express back-end
+      // config.headers["x-access-token"] = token; // for Node.js Express back-end
     }
     // console.log("config", config);
     return config;
