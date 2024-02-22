@@ -27,7 +27,7 @@ export default function ChooseBudget({
 }) {
   // const [checkIfBudgetIsSelected, setCheckIfBudgetIsSelected] = useState(false);
   const handleContinue = () => {
-    if (checkIfBudgetIsSelected == true) {
+    if (checkIfBudgetIsSelected === true) {
       let budget = `₹${formatValue(minRange)} - ₹${formatValue(maxRange)}`;
       setUserProjectData((prevData) => ({
         ...prevData,

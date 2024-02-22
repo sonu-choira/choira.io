@@ -520,14 +520,14 @@ function Signin() {
                     <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
                   </div>
                   <div className={signStyle.enterMob}>
-                    {sign == 1 ? (
+                    {sign === 1 ? (
                       <SigninNum
                         mobileNumber={mobileNumber}
                         handleMobileNumberChange={handleMobileNumberChange}
                         countryCode={countryCode} // Pass the country code to SigninNum
                         onCountryCodeChange={handleCountryCodeChange} // Pass the handler function
                       />
-                    ) : sign == 2 ? (
+                    ) : sign === 2 ? (
                       <OptVerify
                         mobileNumber={mobileNumber}
                         countryCode={countryCode}
@@ -541,9 +541,9 @@ function Signin() {
                     <div className={signStyle.footer}>
                       <div
                         className={`${
-                          sign == 1
+                          sign === 1
                             ? signStyle.hrLine
-                            : sign == 2
+                            : sign === 2
                             ? signStyle.visiblity
                             : signStyle.visiblity
                         }`}
@@ -555,9 +555,9 @@ function Signin() {
 
                       <div
                         className={`${
-                          sign == 1
+                          sign === 1
                             ? signStyle.signinOption
-                            : sign == 2
+                            : sign === 2
                             ? signStyle.visiblity
                             : signStyle.visiblity
                         }`}
@@ -583,9 +583,9 @@ function Signin() {
                       </div>
                       <div
                         className={`${
-                          sign == 1
+                          sign === 1
                             ? signStyle.continue
-                            : sign == 2
+                            : sign === 2
                             ? `${signStyle.verifyContinue2} ${signStyle.continue}`
                             : signStyle.continue
                         }`}

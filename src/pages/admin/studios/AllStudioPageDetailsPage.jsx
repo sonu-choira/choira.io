@@ -28,9 +28,9 @@ import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
 import { useNavigate } from "react-router-dom";
-import ASMusicProduction from "../../../components/adminStudio/allStudio/ASMusicProduction";
-import ASMixandMaster from "../../../components/adminStudio/allStudio/ASMixandMaster";
-import AllStudioDetail2 from "../../../components/adminStudio/allStudio/AllStudioDetail2";
+import ASMusicProduction from "../../../components/adminStudio/appsAndMore/ASMusicProduction";
+import ASMixandMaster from "../../../components/adminStudio/appsAndMore/ASMixandMaster";
+import AllStudioDetail2 from "../../../components/adminStudio/appsAndMore/AllStudioDetail2";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 // import Cookies from "js-cookie";
 
@@ -116,12 +116,12 @@ function AllStudioPageDetailsPage() {
           bookingPageCount={bookingPageCount}
           setBookingPageCount={setBookingPageCount}
         />
-        {bookingPageCount == "c1" ? (
+        {bookingPageCount === "c1" ? (
           <AllStudioDetail2 products={products} setProducts={setProducts} />
         ) : // <AllStudioDetail />
-        bookingPageCount == "c2" ? (
+        bookingPageCount === "c2" ? (
           <ASMusicProduction products={products} setProducts={setProducts} />
-        ) : bookingPageCount == "c3" ? (
+        ) : bookingPageCount === "c3" ? (
           <Artist />
         ) : (
           <ASMixandMaster products={products} setProducts={setProducts} />

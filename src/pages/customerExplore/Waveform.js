@@ -120,7 +120,7 @@ export default function Waveform({ url, url1, tracks, id, setSelectedPlayButton,
                 }
 
                 <div onClick={handlePlayPause} className="play">
-                    {selectedPlayButton == tracks.name && playing ?
+                    {selectedPlayButton===tracks.name && playing ?
                         <img src={iconPauseBox} alt="icon" width="20px" className='upImage' />
                         :
                         <img src={iconBox} alt="icon" className='upImage' />

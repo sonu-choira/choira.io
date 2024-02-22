@@ -373,11 +373,11 @@ function ChoiraTest() {
           </div>
 
           <div className="choira-test-project-section">
-            {tab == 1 ? (
+            {tab === 1 ? (
               <ProjecDetails userProjectData={userProjectData} />
-            ) : tab == 2 ? (
+            ) : tab === 2 ? (
               <Progress />
-            ) : tab == 3 ? (
+            ) : tab === 3 ? (
               <Payment />
             ) : (
               <Message />

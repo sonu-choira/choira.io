@@ -6,6 +6,7 @@ import upload from "../../../assets/upload.svg";
 import cross from "../../../assets/cross.svg";
 import StudioFooter from "../StudioFooter";
 import { Select } from "antd";
+import { VscDiffAdded } from "react-icons/vsc";
 
 function AddNewProduction({ setSelectTab }) {
   const amenitiesList = [
@@ -54,7 +55,7 @@ function AddNewProduction({ setSelectTab }) {
     setTeams(newTeams);
   };
 
-  const handleDiscographyInputChange = (event, index, field) => {
+  const handleInputChange = (event, index, field) => {
     const newTeams = [...teams];
     newTeams[index][field] = event.target.value;
     setTeams(newTeams);
@@ -134,18 +135,18 @@ function AddNewProduction({ setSelectTab }) {
     height: "90%",
   };
 
-  const [discography, setDiscography] = useState([""]); // Initial state with an empty input
+  const [discography, setDiscography] = useState([""]);
 
-  const handleInputChange = (index, value) => {
+  const handleDiscographyInputChange = (index, value) => {
     const updatedDiscography = [...discography];
     updatedDiscography[index] = value;
     setDiscography(updatedDiscography);
   };
 
   const handleAddDiscography = () => {
-    if (discography.length < 3) {
-      setDiscography([...discography, ""]);
-    }
+    // if (discography.length < 3) {
+    setDiscography([...discography, ""]);
+    // }
   };
 
   const handleRemoveDiscography = (index) => {
@@ -210,59 +211,41 @@ function AddNewProduction({ setSelectTab }) {
                 placeholder="Enter About Services"
               />
             </div>
-            <div className={style.addNewStudioinputBox2}>
-              <label htmlFor="About">About</label>
 
-              <textarea
-                type="text"
-                id="About"
-                placeholder="Enter About Services"
-              />
-            </div>
-            <div className={style.addNewStudioinputBox2}>
-              <label htmlFor="About">About</label>
-
-              <textarea
-                type="text"
-                id="About"
-                placeholder="Enter About Services"
-              />
-            </div>
-            <div className={style.addNewStudioinputBox2}>
-              <label htmlFor="About">About</label>
-
-              <textarea
-                type="text"
-                id="About"
-                placeholder="Enter About Services"
-              />
-            </div>
-            <div className={style.addNewStudioinputBox2}>
-              <label htmlFor="About">About</label>
-
-              <textarea
-                type="text"
-                id="About"
-                placeholder="Enter About Services"
-              />
-            </div>
-            <div className={style.addNewStudioinputBox2}>
-              <label htmlFor="About">About</label>
-
-              <textarea
-                type="text"
-                id="About"
-                placeholder="Enter About Services"
-              />
-            </div>
-            <div className={style.addNewStudioinputBox2}>
-              <label htmlFor="About">About</label>
-
-              <textarea
-                type="text"
-                id="About"
-                placeholder="Enter About Services"
-              />
+            <div>
+              <label htmlFor={`Discography`}>Discography</label>
+              {discography.map((value, index) => (
+                <div className={style.Discography} key={index}>
+                  <div>
+                    <input
+                      type="text"
+                      id={`Discography-${index}`}
+                      value={value}
+                      onChange={(e) =>
+                        handleDiscographyInputChange(index, e.target.value)
+                      }
+                      placeholder="Enter work links"
+                    />
+                    {index > 0 && (
+                      <div
+                        className={style.cancelUpload}
+                        onClick={() => handleRemoveDiscography(index)}
+                      >
+                        <img src={cross} alt="Remove" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {discography.length < 3 && (
+                <div
+                  style={{ cursor: "pointer" }}
+                  className={style.addDiscography}
+                  onClick={handleAddDiscography}
+                >
+                  <VscDiffAdded /> Add Discography
+                </div>
+              )}
             </div>
           </div>
           <div>
@@ -367,38 +350,119 @@ function AddNewProduction({ setSelectTab }) {
               />
             </div>
 
-            <label htmlFor={`Discography`}>Discography</label>
-            {discography.map((value, index) => (
-              <div className={style.Discography} key={index}>
-                <div>
-                  <input
-                    type="text"
-                    id={`Discography-${index}`}
-                    value={value}
-                    onChange={(e) =>
-                      handleDiscographyInputChange(index, e.target.value)
-                    }
-                  />
-                  {index > 0 && (
-                    <div
-                      className={style.cancelUpload}
-                      onClick={() => handleRemoveDiscography(index)}
-                    >
-                      <img src={cross} alt="" />
+            <div>
+              <label htmlFor={`Discography`}>Discography</label>
+              {discography.map((value, index) => (
+                <div className={style.Discography} key={index}>
+                  <div>
+                    <input
+                      type="text"
+                      id={`Discography-${index}`}
+                      value={value}
+                      onChange={(e) =>
+                        handleDiscographyInputChange(index, e.target.value)
+                      }
+                      placeholder="Enter work links"
+                    />
+                    {index > 0 && (
+                      <div
+                        className={style.cancelUpload}
+                        onClick={() => handleRemoveDiscography(index)}
+                      >
+                        <img src={cross} alt="Remove" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {discography.length < 3 && (
+                <div
+                  style={{ cursor: "pointer" }}
+                  className={style.addDiscography}
+                  onClick={handleAddDiscography}
+                >
+                  <VscDiffAdded /> Add Discography
+                </div>
+              )}
+            </div>
+
+            <div>
+              <div className={style.addTeamDetailDiv}>
+                <label htmlFor="Teams">Teams</label>
+
+                <div className={style.addTeamDetailDynamicDiv}>
+                  {teams.map((team, index) => (
+                    <div key={index} className={style.addTeamDetailMainDiv}>
+                      <div>
+                        <label
+                          style={{ cursor: "pointer" }}
+                          htmlFor={`uploadteamPhoto-${index}`}
+                        >
+                          <MdAddAPhoto style={hideAddPhotoIcon(team)} />
+                        </label>
+                        <input
+                          type="file"
+                          id={`uploadteamPhoto-${index}`}
+                          style={{ display: "none" }}
+                          onChange={(event) => handlePhotoChange(event, index)}
+                        />
+                        {team.photo && (
+                          <div>
+                            <img
+                              src={URL.createObjectURL(team.photo)}
+                              alt={`Team ${index} Photo`}
+                              style={{
+                                maxWidth: "100px",
+                                maxHeight: "100px",
+                              }}
+                            />
+                            <span
+                              className={style.cancelImageUpload}
+                              onClick={() => handleCancelImage(index)}
+                            >
+                              <img src={cross} alt="" />
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="Name"
+                          value={team.name}
+                          onChange={(event) =>
+                            handleInputChange(event, index, "name")
+                          }
+                        />
+                        <input
+                          type="text"
+                          placeholder="Profile"
+                          value={team.profile}
+                          onChange={(event) =>
+                            handleInputChange(event, index, "profile")
+                          }
+                        />
+                      </div>
+                      {teams.length > 1 && (
+                        <span
+                          style={{ cursor: "pointer" }}
+                          className={style.cancelTeamDetailUpload}
+                          onClick={() => handleCancelTeam(index)}
+                        >
+                          <img src={cross} alt="" />
+                        </span>
+                      )}
                     </div>
-                  )}
+                  ))}
+                  <span
+                    className={style.addTeamDetailbtn}
+                    onClick={handleAddTeamDetail}
+                  >
+                    <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
+                  </span>
                 </div>
               </div>
-            ))}
-            {discography.length < 3 && (
-              <div
-                style={{ cursor: "pointer" }}
-                className={style.addDiscography}
-                onClick={handleAddDiscography}
-              >
-                Add Discography
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

@@ -75,13 +75,13 @@ function Progress() {
   const [complete, setComplete] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("Initial");
   useEffect(() => {
-    if (complete && review && production && created == true) {
+    if (complete && review && production && created === true) {
       setCurrentStatus("completed");
-    } else if (review && production && created == true) {
+    } else if (review && production && created === true) {
       setCurrentStatus("review");
-    } else if (production && created == true) {
+    } else if (production && created === true) {
       setCurrentStatus("under production");
-    } else if (created == true) {
+    } else if (created === true) {
       setCurrentStatus("created");
     } else {
       setCurrentStatus("Initial");

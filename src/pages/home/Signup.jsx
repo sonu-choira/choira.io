@@ -437,7 +437,7 @@ function Signup() {
   let [redicrectToDetail, setRedicrectToDetail] = useState(false);
   const check_otp_btn = () => {
     setSignup_checkOtp(false);
-    if (redicrectToDetail == true) {
+    if (redicrectToDetail === true) {
       setSign(3);
     }
   };
@@ -492,14 +492,14 @@ function Signup() {
                     <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
                   </div>
                   <div className={signupStyle.enterMob}>
-                    {sign == 1 ? (
+                    {sign === 1 ? (
                       <SigninNum
                         mobileNumber={mobileNumber}
                         handleMobileNumberChange={handleMobileNumberChange}
                         countryCode={countryCode}
                         onCountryCodeChange={handleCountryCodeChange}
                       />
-                    ) : sign == 2 ? (
+                    ) : sign === 2 ? (
                       <OptVerify
                         mobileNumber={mobileNumber}
                         countryCode={countryCode}
@@ -515,9 +515,9 @@ function Signup() {
                     <div className={signupStyle.footer}>
                       <div
                         className={`${
-                          sign == 1
+                          sign === 1
                             ? `${signupStyle.hrLine}`
-                            : sign == 2
+                            : sign === 2
                             ? `${signupStyle.visiblity}`
                             : `${signupStyle.visiblity}`
                         }`}
@@ -529,9 +529,9 @@ function Signup() {
 
                       <div
                         className={`${
-                          sign == 1
+                          sign === 1
                             ? `${signupStyle.signinOption}`
-                            : sign == 2
+                            : sign === 2
                             ? `${signupStyle.visiblity}`
                             : `${signupStyle.visiblity}`
                         }`}
@@ -557,9 +557,9 @@ function Signup() {
                       </div>
                       <div
                         className={`${
-                          sign == 1
+                          sign === 1
                             ? `${signupStyle.continue}`
-                            : sign == 2
+                            : sign === 2
                             ? `${signupStyle.verifyContinue2} ${signupStyle.continue}`
                             : `${signupStyle.continue}`
                         }`}

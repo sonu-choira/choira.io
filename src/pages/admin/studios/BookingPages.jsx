@@ -55,12 +55,12 @@ function BookingPages() {
           bookingPageCount={bookingPageCount}
           setBookingPageCount={setBookingPageCount}
         />
-        {bookingPageCount == "c1" ? (
+        {bookingPageCount === "c1" ? (
           <StudioBookingDetail />
         ) : // <AllStudioDetail />
-        bookingPageCount == "c2" ? (
+        bookingPageCount === "c2" ? (
           <MusicProduction />
-        ) : bookingPageCount == "c3" ? (
+        ) : bookingPageCount === "c3" ? (
           <MixMaster />
         ) : (
           <Artist />

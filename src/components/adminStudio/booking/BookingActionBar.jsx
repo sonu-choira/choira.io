@@ -15,7 +15,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
             <div
               style={{
                 borderLeft: "none",
-                backgroundColor: bookingPageCount == "c1" ? "#ffc701" : "",
+                backgroundColor: bookingPageCount === "c1" ? "#ffc701" : "",
               }}
               onClick={() => {
                 setBookingPageCount("c1");
@@ -25,7 +25,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
             </div>
             <div
               style={{
-                backgroundColor: bookingPageCount == "c2" ? "#ffc701" : "",
+                backgroundColor: bookingPageCount === "c2" ? "#ffc701" : "",
               }}
               onClick={() => {
                 setBookingPageCount("c2");
@@ -35,7 +35,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
             </div>
             <div
               style={{
-                backgroundColor: bookingPageCount == "c3" ? "#ffc701" : "",
+                backgroundColor: bookingPageCount === "c3" ? "#ffc701" : "",
               }}
               onClick={() => {
                 setBookingPageCount("c3");
@@ -46,7 +46,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
             <div
               style={{
                 borderRight: "none",
-                backgroundColor: bookingPageCount == "c4" ? "#ffc701" : "",
+                backgroundColor: bookingPageCount === "c4" ? "#ffc701" : "",
               }}
               onClick={() => {
                 setBookingPageCount("c4");
@@ -56,7 +56,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
             </div>
           </div>
         </div>
-        <div style={{ justifyContent: bookingPageCount == "c1" ? "" : "end" }}>
+        <div style={{ justifyContent: bookingPageCount === "c1" ? "" : "end" }}>
           <Button
             name={"Card view"}
             icon={<FaTableCellsLarge />}
@@ -77,7 +77,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
             icon={<FaDownload />}
             style={{ height: "50%", width: "15%", gap: "5%" }}
           />
-          {(bookingPageCount == "c1") & (pagetype != "apps") ? (
+          {(bookingPageCount === "c1") & (pagetype != "apps") ? (
             <Button
               name={"Slot Booking"}
               icon={<LuFilePlus />}

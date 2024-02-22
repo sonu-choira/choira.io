@@ -144,14 +144,14 @@ function DeleteAccount() {
                     </h4>
                   </div>
                   <div className={style.enterMob}>
-                    {deleteAccount == 1 ? (
+                    {deleteAccount === 1 ? (
                       <SigninNum
                         mobileNumber={mobileNumber}
                         handleMobileNumberChange={handleMobileNumberChange}
                         countryCode={countryCode} // Pass the country code to SigninNum
                         onCountryCodeChange={handleCountryCodeChange} // Pass the handler function
                       />
-                    ) : deleteAccount == 2 ? (
+                    ) : deleteAccount === 2 ? (
                       <OptVerify
                         mobileNumber={mobileNumber}
                         countryCode={countryCode}

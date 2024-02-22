@@ -7,7 +7,7 @@ function SignUpDetails(props) {
   // let takeData = props.sendData;
   const [wrongDetails, setWrongDetails] = useState(true);
   useEffect(() => {
-    if (props.sendData == true) {
+    if (props.sendData === true) {
       if (email === "sonu@gmail.com") {
         alert("This email is already present");
         props.setSendData(false);

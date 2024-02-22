@@ -337,9 +337,9 @@ function MobileDashboard() {
             </div>
           </div>
           <div className="choira-test-project-section">
-            {tab == 1 ? (
+            {tab === 1 ? (
               <MobileProjectDetail />
-            ) : tab == 2 ? (
+            ) : tab === 2 ? (
               <MobileProgress />
             ) : (
               <MobilePayment />

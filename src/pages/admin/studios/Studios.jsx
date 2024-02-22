@@ -53,15 +53,15 @@ function Studios() {
           </div>
           {/* //sdhbsda */}
 
-          {/* {selectTab == 0 && (
+          {/* {selectTab===0 && (
             <OnboardStudio selectTab={selectTab} setSelectTab={setSelectTab} />
           )} */}
           <div className={style.allStudioDetailsPage}>
-            {selectTab == 1 ? (
+            {selectTab === 1 ? (
               <AllStudioDetail setSelectTab={setSelectTab} />
-            ) : selectTab == 2 ? (
+            ) : selectTab === 2 ? (
               <AddNewStudio setSelectTab={setSelectTab} />
-            ) : selectTab == 3 ? (
+            ) : selectTab === 3 ? (
               <SlotBooking setSelectTab={setSelectTab} />
             ) : (
               ""
