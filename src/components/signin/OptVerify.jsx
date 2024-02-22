@@ -15,6 +15,7 @@ const OptVerify = ({
   deletecheckOtp,
   setDeleteCheckOtp,
   setDeleteAccount,
+  apiOtp,
 }) => {
   const [seconds, setSeconds] = useState(30);
   const [generatedOTP, setGeneratedOTP] = useState("");
@@ -22,7 +23,7 @@ const OptVerify = ({
   const inputRefs = useRef([]);
   const navigate = useNavigate();
   const gotoBooking = () => {
-    navigate("/booking");
+    navigate("/adminDashboard");
   };
   const [isSignin, setIsSignin] = useState(false);
 
@@ -50,7 +51,7 @@ const OptVerify = ({
     const otp = Math.floor(Math.random() * 10000)
       .toString()
       .padStart(4, "0");
-    console.log(otp);
+    console.log(` ingnore this otp ${otp}`);
     alert("your otp is " + otp);
     setGeneratedOTP(otp);
   };
@@ -82,7 +83,8 @@ const OptVerify = ({
   // this is for signin page
   useEffect(() => {
     if (checkOtp === false) {
-      if (enteredOTP === generatedOTP) {
+      // if (enteredOTP === generatedOTP) {
+      if (enteredOTP === apiOtp) {
         console.log("OTP is correct. Redirect or perform another action.");
         alert("OTP is correct.");
         gotoBooking();

@@ -207,7 +207,7 @@ h6 {
   /* border: 2px solid red; */
 }
 .enterMobInput select {
-  /* border: 2px solid red; */
+  border: 2px solid red;
   border-radius: 10px;
   width: 85%;
   height: 95%;

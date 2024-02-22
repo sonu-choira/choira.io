@@ -1,5 +1,7 @@
 import api from "./api";
 import axios from '../utils/axios';
+import TokenService from "../services/token.service"
+import { SERVER_API } from "../config/config";
 
 // utils
 import { isValidToken, setSession } from '../utils/jwt';
@@ -16,22 +18,18 @@ class AuthService {
         if (response.data) {
             return response.data;
         }
-    }
+    };
 
     login = async (phoneNumber='', userType='NUMBER', role="user") => {
-        const response = await axios.post('/auth/signin', {
+
+        const response = await axios.post('/users/login-otp', {
             phoneNumber,
             userType,
             role
         });
-        const { token, user } = response.data;
-        const auth = response.data.status
-        const userData = { auth, user, token }
-    
-        setSession(token);
-        console.log("res ===>", userData)
-        TokenService.setUser(userData)
-        // window.localStorage.setItem('accessToken', accessToken);
+
+        const userData = response.data;
+
         return userData;
       };
 

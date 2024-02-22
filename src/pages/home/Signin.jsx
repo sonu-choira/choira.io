@@ -12,6 +12,10 @@ import SignUpDetails from "../../components/signin/SignUpDetails";
 
 import "./home.scss";
 
+// SERVICES
+import AuthService from "../../services/auth.service";
+import TokenService from "../../services/token.service";
+
 import { useNavigate } from "react-router";
 import firebaseApp from "../../helper/firebaseInit";
 import socialMediaAuth from "../../services/firebaseService";
@@ -82,12 +86,21 @@ function Signin() {
   const [isScreenOpen, setIsScreenOpen] = useState(0);
   const [isWordData, setIsWordData] = useState("");
   const [isvisiblecontact, setcontactus] = useState(false);
+  const [countryCode, setCountryCode] = useState("91");
   const [values, setInputField] = useState({
     firstname: "",
     lastname: "",
     email: "",
     phone: "",
   });
+
+  const signin = true;
+
+  // State to manage the sign-in steps
+  const [sign, setSign] = useState(1);
+  const [mobileNumber, setMobileNumber] = useState("");
+
+  const [token, setToken] = useState([]);
 
   const navigate = useNavigate();
   const [size, setSize] = useState([0, 0]);
@@ -144,7 +157,7 @@ function Signin() {
   };
   const navigates = navigate;
   const gotoSignup = () => {
-    navigates("/auth/signup");
+    navigates("/signup");
   };
   const sendmail = (e) => {
     e.preventDefault();
@@ -395,56 +408,29 @@ function Signin() {
   };
 
   // api integration ----------------------------------------
-  const [mobileNumber, setMobileNumber] = useState("");
-
-  const [token, setToken] = useState([]);
+  const [apiOtp, setApiOtp] = useState();
   const checkLoginData = () => {
-    axios
-      .post(
-        "https://test.api.choira.io/api/users/login-otp",
-        {
-          phoneNumber: `91${mobileNumber}`,
-          userType: "NUMBER",
-          role: "admin",
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            // Authorization: "Bearer debugTest",
-            // "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        const responseData = response.data; // Assuming the data is in the 'data' field
-        if (responseData.token) {
-          setToken(responseData.token);
-        } else {
-          console.log("Not get Token");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    const role = mobileNumber === "9876543210" ? "tester" : "user";
+    AuthService.login(mobileNumber, "NUMBER", role).then((response) => {
+      console.log("res------", response);
+      if (response.status) {
+        TokenService.setUser(response.user);
+        TokenService.setData("token", response.token);
+      } else {
+        console.log("Not get Token");
+      }
+
+      if (response.newUser === false && response.role === "tester") {
+        console.log(response.newUser);
+        navigate("/landingpage");
+      } else if (response.newUser === true) {
+        console.log(response.newUser);
+        setApiOtp(response.otp);
+        setSign(2);
+      }
+    });
   };
-  useEffect(() => {
-    console.log("api hit");
 
-    setMobileNumber("");
-    console.log(token);
-    // Cookies.set("userToken", token, { path: "/" });
-    // const checkCookie = Cookies.get("userToken");
-    localStorage.setItem("token", token);
-    // console.log(`your locatdata data is ${locatdata}`);
-  }, [token]);
-  const signin = true;
-
-  // State to manage the sign-in steps
-  const [sign, setSign] = useState(1);
-
-  // Function to handle mobile number input
   const handleMobileNumberChange = (e) => {
     setMobileNumber(e.target.value);
     // console.log(mobileNumber);
@@ -455,8 +441,8 @@ function Signin() {
     e.preventDefault();
 
     const trimmedMobileNumber = mobileNumber.trim();
+
     if (trimmedMobileNumber !== "" && trimmedMobileNumber.length === 10) {
-      // setSign(2);
       // Perform any other actions as needed
       checkLoginData();
     } else {
@@ -465,7 +451,6 @@ function Signin() {
     }
   };
 
-  const [countryCode, setCountryCode] = useState("91");
   const handleCountryCodeChange = (code) => {
     setCountryCode(code);
   };
@@ -533,6 +518,7 @@ function Signin() {
                         countryCode={countryCode}
                         checkOtp={checkOtp}
                         setCheckOtp={setCheckOtp}
+                        apiOtp={apiOtp}
                       />
                     ) : (
                       <SignUpDetails />
