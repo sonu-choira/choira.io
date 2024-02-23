@@ -5,7 +5,11 @@ import { SERVER_API } from '../config/config';
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  baseURL: SERVER_API, // HOST_API,
+  baseURL: `${SERVER_API}/api`, // HOST_API,
+  headers: {
+    "Content-Type": "application/json",
+    // "Access-Control-Allow-Origin" : "*"
+  },
 });
 
 axiosInstance.interceptors.response.use(

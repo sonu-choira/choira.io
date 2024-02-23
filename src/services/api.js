@@ -3,16 +3,17 @@ import TokenService from "./token.service";
 import { SERVER_API } from '../config/config';
 
 const instance = axios.create({
+
   baseURL: `${SERVER_API}/api`, // HOST_API,
   headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "http://localhost:3000",
-
+    // "Access-Control-Allow-Origin" : "*"
   },
 });
 // console.log("INSTAN", instance)
 instance.interceptors.request.use(
   (config) => {
+    // console.log("SERVER_API-----", SERVER_API);
     const token = TokenService.getLocalAccessToken();
     if (token) {
       config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
@@ -37,11 +38,11 @@ instance.interceptors.response.use(
         originalConfig._retry = true;
         try {
             console.log("err-----", err);
-        //   const rs = await instance.post("/auth/refreshtoken", {
-        //     refreshToken: TokenService.getLocalRefreshToken(),
-        //   });
-        //   const { accessToken } = rs.data;
-        //   TokenService.updateLocalAccessToken(accessToken);
+          // const rs = await instance.post("/auth/refreshtoken", {
+          //   refreshToken: TokenService.getLocalRefreshToken(),
+          // });
+          // const { accessToken } = rs.data;
+          // TokenService.updateLocalAccessToken(accessToken);
           return instance(originalConfig);
         } catch (_error) {
           return Promise.reject(_error);

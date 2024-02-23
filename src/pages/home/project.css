@@ -11,6 +11,11 @@ body {
   /* border: 2px solid red; */
   /* position: relative; */
   z-index: -1;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 h3 {
   color: whitesmoke;
@@ -175,9 +180,13 @@ h3 {
   height: 90vh;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
 }
 .back {
   padding-left: 3%;
+  cursor: pointer;
+  padding-bottom: 2%;
+  padding-top: 2%;
 }
 .content-main {
   display: flex;
@@ -254,4 +263,7 @@ h3 {
   align-items: flex-end;
   /* border: 2px solid red; */
   justify-content: end;
+}
+.content > div:first-child > h3 {
+  padding-bottom: 2%;
 }

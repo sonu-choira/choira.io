@@ -18,38 +18,6 @@ let PageSize = 10;
 
 function AllStudioDetail2({ products, setProducts }) {
   const [currentPage, setCurrentPage] = useState(1);
-  // const [products, setProducts] = useState([]);
-
-  // useEffect(() => {
-  //   console.log(`got your token id ------------------- ${token}`);
-  //   axios
-  //     .get(
-  //       "https://test.api.choira.io/api/studios-all?limit=61",
-
-  //       {
-  //         headers: {
-  //           Accept: "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       console.log(response);
-  //       const data = response;
-  //       if (data && data.data.studios.results) {
-  //         setProducts(data.data.studios.results);
-  //       }
-  //     });
-  // }, [token]);
-
-  // useEffect(() => {
-  //   // fetchProducts();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(products);
-  // }, [products]);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;

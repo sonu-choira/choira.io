@@ -20,69 +20,6 @@ function AllStudioDetail() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
 
-  // const fetchProducts = async () => {
-  //   try {
-  //     const res = await fetch("https://dummyjson.com/products?limit=100");
-  //     const data = await res.json();
-  //     if (data && data.products) {
-  //       setProducts(data.products);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // const fetchProducts = async () => {
-  //   try {
-  //     const myHeaders = new Headers();
-  //     myHeaders.append("Authorization", "Bearer debugTest");
-  //     myHeaders.append("Content-Type", "application/json");
-  //     const res = await fetch(
-  //       "https://test.api.choira.io/api/settings/category",
-  //       {
-  //         method: "GET",
-  //         headers: myHeaders,
-  //         body: JSON.stringify({
-  //           active: 1,
-  //         }),
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     console.log(data);
-  //     if (data && data.products) {
-  //       setProducts(data.products);
-  //       console.log("the data is " + products);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-  useEffect(() => {
-    axios
-      .get(
-        "https://test.api.choira.io/api/studios-all?limit=61",
-
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: "Bearer debugTest",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        const data = response;
-        if (data && data.data.studios.results) {
-          setProducts(data.data.studios.results);
-        }
-      });
-  }, []);
-
-  useEffect(() => {
-    // fetchProducts();
-  }, []);
-
   useEffect(() => {
     console.log(products);
   }, [products]);

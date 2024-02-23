@@ -1,27 +1,34 @@
 import axios from "axios";
+import api from "./api"
 
 class Appapi{
   
-  appAndmoreApi() {
-    axios.get(
-        "https://test.api.choira.io/api/services/bookings",
+ getStudios = async (limit,active) => {
+  
+  const apiUrl = process.env.REACT_APP_HOST_API; 
+  const response = await api.get(`/studios-all`, {
+    params: {
+      limit: limit,
+      active: active
+    }
+  });
+  console.log("res ===>", response.data)
+  return response.data;
+ };
 
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: "Bearer debugTest",
-            "Content-Type": "application/json",
-          },
+ getServices = async (limit, Type, active) => {
+    const response = await api.get(`/services`,{ 
+        params: {
+            limit: limit,
+            serviceType: Type,
+            active: active
         }
-      )
-      .then((response) => {
-        console.log(response);
-        const data = response;
-        if (data && data.data.services.results) {
-          return data.data.services.results;
-        }
-      });
-  }
+    });
+    const {status} = response.data
+    console.log("res ===>", response.data)
+    return response.data;
+   };
+ 
 
 }
 

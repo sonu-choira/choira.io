@@ -28,6 +28,7 @@ import Swal from "sweetalert2";
 import { loginUrl, getTokenByUrl } from "../../spotify";
 
 import { httpUrl, nodeUrl } from "../../restservice";
+import { Alert } from "antd";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -422,7 +423,7 @@ function Signin() {
 
       if (response.newUser === false && response.role === "tester") {
         console.log(response.newUser);
-        navigate("/landingpage");
+        navigate("/adminDashboard");
       } else if (response.newUser === true) {
         console.log(response.newUser);
         setApiOtp(response.otp);
@@ -472,6 +473,13 @@ function Signin() {
           onClick={gotoHome}
         />
       </div>
+      <Alert
+        message="Success Tips"
+        description="Detailed description and advice about successful copywriting."
+        type="success"
+        showIcon
+        closable
+      />
 
       <div className={signStyle.wrapper}>
         <form>
@@ -528,10 +536,10 @@ function Signin() {
                       <div
                         className={`${
                           sign === 1
-                            ? signStyle.hrLine
+                            ? `${signStyle.hrLine}`
                             : sign === 2
-                            ? signStyle.visiblity
-                            : signStyle.visiblity
+                            ? `${signStyle.visiblity}`
+                            : `${signStyle.visiblity}`
                         }`}
                       >
                         <div></div>

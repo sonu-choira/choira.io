@@ -5,7 +5,7 @@ require('dotenv').config()
 // API
 // ----------------------------------------------------------------------
 
-export const SERVER_API =  process.env.REACT_APP_HOST_API || "https://test.api.choira.io/api" ;
+export const SERVER_API =  process.env.REACT_APP_HOST_API || "https://test.api.choira.io" ;
 
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL

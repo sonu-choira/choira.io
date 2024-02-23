@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 // import { Alert } from "antd";
 import axios from "axios";
+// import Cookies from "js-cookie";
+
 // import "../studios/studios.css";
-import style from "../studios/studio.module.css";
 import { IoSearch } from "react-icons/io5";
 import { MdAddAPhoto } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
+import style from "../studios/studio.module.css";
 
 import { FaRegBell } from "react-icons/fa6";
 import { MdCalendarMonth, MdOutlineSettings } from "react-icons/md";
@@ -18,6 +20,7 @@ import { FaTableCellsLarge } from "react-icons/fa6";
 import Switch from "../layout/Switch";
 import OnboardStudio from "../../../components/adminStudio/OnboardStudio";
 
+// components
 import StudioFooter from "../../../components/adminStudio/StudioFooter";
 import upload from "../../../assets/img/upload.png";
 import AddNewStudio from "../../../components/adminStudio/AddNewStudio";
@@ -32,26 +35,18 @@ import ASMusicProduction from "../../../components/adminStudio/appsAndMore/ASMus
 import ASMixandMaster from "../../../components/adminStudio/appsAndMore/ASMixandMaster";
 import AllStudioDetail2 from "../../../components/adminStudio/appsAndMore/AllStudioDetail2";
 import WebDashboard2 from "../../produce/WebDashBoard2";
-// import Cookies from "js-cookie";
+
+// services
+import Appapi from "../../../services/appAndmoreApi";
 
 function AllStudioPageDetailsPage() {
   const [bookingPageCount, setBookingPageCount] = useState("c1");
   const [products, setProducts] = useState([]);
-  // const [token, setToken] = useState();
-  // const [token, setToken] = useState();
-
-  // useEffect(() => {
-  //   const checkCookie = Cookies.get("userToken");
-  //   setToken(checkCookie);
-
-  //   console.log(token);
-  // }, []);
 
   const navigate = useNavigate();
   const gotoSignin = () => {
     navigate("/signin");
   };
-  const token = localStorage.getItem("token");
 
   useEffect(() => {
     console.log("bookingPageCount-----", bookingPageCount);
@@ -60,49 +55,27 @@ function AllStudioPageDetailsPage() {
       // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c2";
 
-      axios
-        .get("https://test.api.choira.io/api/services", {
-          headers: {
-            Accept: "application/json",
-            Authorization: "Bearer debugTest",
-            "Content-Type": "application/json",
-          },
-          params: {
-            limit: 10,
-            active: 1,
-            serviceType: idToUse, // Use the corrected id variable
-          },
-        })
+      Appapi.getServices("100", idToUse, 1)
         .then((response) => {
-          console.log(response);
-          const data = response;
-          if (data && data.data.services.results) {
-            setProducts(data.data.services.results);
+          console.log("====================> response C2", response);
+          if (response.status) {
+            setProducts(response.services.results);
           }
         })
         .catch((error) => {
-          console.error("Error fetching data:", error);
+          console.error("Error fetching studios:", error);
         });
     } else if (bookingPageCount === "c1") {
-      console.log(`got your token id ------------------- ${token}`);
-      axios
-        .get(
-          "https://test.api.choira.io/api/studios-all?limit=61",
-
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer debugTest`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
+      const limit = 64;
+      const active = 1;
+      // const type = bookingPageCount;
+      Appapi.getStudios(limit, active)
         .then((response) => {
-          console.log(response);
-          const data = response;
-          if (data && data.data.studios.results) {
-            setProducts(data.data.studios.results);
-          }
+          console.log("====================> response C1", response);
+          if (response.status) setProducts(response.studios.results);
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
         });
     }
   }, [bookingPageCount]);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import style from "../../pages/home/signinBackup.module.css";
 import { useNavigate } from "react-router-dom";
+import { Alert } from "antd";
 
 const OptVerify = ({
   mobileNumber,
@@ -86,7 +87,12 @@ const OptVerify = ({
       // if (enteredOTP === generatedOTP) {
       if (enteredOTP === apiOtp) {
         console.log("OTP is correct. Redirect or perform another action.");
-        alert("OTP is correct.");
+        <Alert
+          message="OTP is correct."
+          type="success"
+          style={{ zIndex: 100 }}
+        />;
+        // alert("OTP is correct.");
         gotoBooking();
         setCheckOtp(false);
         localStorage.setItem("isSignin", "true");
@@ -178,6 +184,13 @@ const OptVerify = ({
             </h6>
           )}
         </div>
+        <Alert message="Success Tip" type="success" showIcon closable />
+        <Alert
+          message="Incorrect OTP. Please try again. "
+          type="error"
+          showIcon
+          closable
+        />
       </div>
     </>
   );

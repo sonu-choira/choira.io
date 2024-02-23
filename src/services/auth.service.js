@@ -20,7 +20,7 @@ class AuthService {
         }
     };
 
-    login = async (phoneNumber='', userType='NUMBER', role="user") => {
+    login = async (phoneNumber='9876543210', userType='NUMBER', role="user") => {
 
         const response = await axios.post('/users/login-otp', {
             phoneNumber,
