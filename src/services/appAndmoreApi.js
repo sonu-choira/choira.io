@@ -5,7 +5,7 @@ class Appapi{
   
  getStudios = async (limit,active) => {
   
-  const apiUrl = process.env.REACT_APP_HOST_API; 
+
   const response = await api.get(`/studios-all`, {
     params: {
       limit: limit,

@@ -70,12 +70,12 @@ function WebDashboard2({ tabCount, setTabCount }) {
             </div>
           </div>
 
-          <div
-            className={style.section2}
-            style={{ cursor: "pointer" }}
-            onClick={editProfiletab}
-          >
-            <div className={style.section2Main}>
+          <div className={style.section2}>
+            <div
+              className={style.section2Main}
+              style={{ cursor: "pointer" }}
+              onClick={editProfiletab}
+            >
               <div>
                 <img src={tanmay} alt="" />
               </div>
