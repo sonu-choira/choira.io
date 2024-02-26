@@ -7,14 +7,16 @@ class TokenService {
     }
   
     getLocalAccessToken = () => {
-      const token = JSON.parse(localStorage.getItem("token"));
-      return token;
+      const token = localStorage.getItem("token")
+      // console.log("token-----", token);
+      let parsedToken;
+      if (token && token !== undefined) {parsedToken = JSON.parse(token) 
+      }
+      return parsedToken;
     }
   
     updateLocalAccessToken = (token) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      user.accessToken = token;
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", JSON.stringify(token));
     }
   
     getUser = () => {

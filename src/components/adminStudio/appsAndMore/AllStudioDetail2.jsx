@@ -14,9 +14,20 @@ import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
 import imageNotFound from "../../../assets/imagesNotFound.png";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 let PageSize = 10;
 
 function AllStudioDetail2({ products, setProducts }) {
+  const navigate = useNavigate();
+  const gotoEdit = (id) => {
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
+
+    navigate(`/studio/edit?id=${id}`, {
+      state: { productData: selectedProduct },
+    });
+  };
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
@@ -49,7 +60,8 @@ function AllStudioDetail2({ products, setProducts }) {
     }
   };
   const [activityStatus, setActivityStatus] = useState({});
-  const handleSwitchChange = (studioId) => {
+  const handleSwitchChange = (studioId, status) => {
+    console.log(status);
     setActivityStatus((prevStatus) => ({
       ...prevStatus,
       [studioId]: !prevStatus[studioId], // Toggle the switch state
@@ -105,8 +117,17 @@ function AllStudioDetail2({ products, setProducts }) {
                         <label className="switch">
                           <input
                             type="checkbox"
-                            checked={activityStatus[products._id] || false}
-                            onChange={() => handleSwitchChange(products._id)}
+                            checked={
+                              products.isActive === 1
+                              // ? activityStatus[products._id]
+                              // : false
+                            }
+                            onChange={() =>
+                              handleSwitchChange(
+                                products._id,
+                                products.isActive
+                              )
+                            }
                           />
                           <span className="slider"></span>
                         </label>
@@ -115,6 +136,9 @@ function AllStudioDetail2({ products, setProducts }) {
                         <GrShare style={{ cursor: "pointer" }} />
                         <MdEdit
                           style={{ color: "#ffc701", cursor: "pointer" }}
+                          onClick={() => {
+                            gotoEdit(products._id);
+                          }}
                         />
                         <RiDeleteBin5Fill
                           style={{ color: "red", cursor: "pointer" }}
