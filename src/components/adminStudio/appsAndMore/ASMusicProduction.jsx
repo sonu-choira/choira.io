@@ -15,11 +15,23 @@ import Pagination from "../../../pages/admin/studios/Pagination";
 import imageNotFound from "../../../assets/imagesNotFound.png";
 
 import { LuFilePlus } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 
 let PageSize = 10;
 
 function ASMusicProduction({ products, setProducts }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
+
+  const gotoEdit = (id) => {
+    const isEditMode = true;
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
+
+    navigate(`/service/musicProduction/edit?id=${id}`, {
+      state: { productData: selectedProduct, isEditMode: isEditMode },
+    });
+  };
 
   const [activityStatus, setActivityStatus] = useState({});
   const handleSwitchChange = (studioId) => {
@@ -116,6 +128,9 @@ function ASMusicProduction({ products, setProducts }) {
                         <GrShare style={{ cursor: "pointer" }} />
                         <MdEdit
                           style={{ color: "#ffc701", cursor: "pointer" }}
+                          onClick={() => {
+                            gotoEdit(products._id);
+                          }}
                         />
                         <RiDeleteBin5Fill
                           style={{ color: "red", cursor: "pointer" }}

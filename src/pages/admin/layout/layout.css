@@ -8,6 +8,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  outline: none;
+  border: none;
 }
 
 /* The switch - the box around the slider */

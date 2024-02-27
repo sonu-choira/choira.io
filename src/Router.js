@@ -21,6 +21,7 @@ import { PATH_AFTER_LOGIN } from './config/config';
 import ChoiraLoader from "./components/loader/ChoiraLoader";
 import AllStudioPageDetailsPage from "./pages/admin/studios/AllStudioPageDetailsPage.jsx";
 import AddNewStudio from "../src/components/adminStudio/AddNewStudio.jsx";
+import AddNewProduction from "../src/components/adminStudio/appsAndMore/AddNewProduction.jsx";
 
 // import Signup from "./pages/home/Signup.jsx";
 
@@ -50,6 +51,7 @@ const BookingPages = lazy(() => import("./pages/admin/studios/BookingPages.jsx")
 const AllStudioDetailsPage = lazy(() => import("./pages/admin/studios/AllStudioPageDetailsPage.jsx"));
 const AdminDashboardLayout = lazy(() => import("./pages/admin/layout/AdminDashboardLayout.jsx"));
 const Editstudio = lazy(()=> import("../src/components/adminStudio/AddNewStudio.jsx"))
+const EditProduction = lazy(()=> import("../src/components/adminStudio/appsAndMore/AddNewProduction.jsx"))
           {/* admin page  ends ========================> */}
 
 
@@ -87,6 +89,7 @@ const Routing = () => {
           <Route exact path='/adminDashboard' element={<AdminDashboardLayout/>} />
           <Route exact path='/booking' element={<BookingPages/>} />
           <Route exact path='/studio/edit' element={<AddNewStudio/>} />
+          <Route exact path='/service/musicProduction/edit' element={<AddNewProduction/>} />
           {/* admin page route ends ========================> */}
 
         </Routes>
