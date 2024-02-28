@@ -20,7 +20,7 @@ import { useLocation } from "react-router-dom";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
-  console.log("the data id  ================== >", data.state.productData);
+
   // let isEditMode = false;
   // if (data.state.isEditMode) {
   //   isEditMode = true;
@@ -28,7 +28,12 @@ function AddNewProduction({ setSelectTab }) {
   //   isEditMode = false;
   // }
 
-  const [isEditMode, setIsEditMode] = useState(data.state.isEditMode || false);
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  useEffect(() => {
+    setIsEditMode(data.state?.isEditMode);
+    console.log("the data id  ================== >", data.state?.productData);
+  }, []);
 
   // const [isEditMode, setIsEditMode] = useState(false);
   // if (data.state.isEditMode) {
@@ -38,10 +43,12 @@ function AddNewProduction({ setSelectTab }) {
   // }
   const [productionData, setProductionData] = useState({});
   useEffect(() => {
-    if (data.state.productData) {
+    if (data.state?.productData) {
       setProductionData(data.state.productData);
+    } else {
+      setProductionData({});
     }
-  }, [data.state.productData]);
+  }, [data.state?.productData]);
 
   const [selectedAmenities, setSelectedAmenities] = useState([]);
 

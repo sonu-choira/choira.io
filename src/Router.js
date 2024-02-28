@@ -52,6 +52,7 @@ const AllStudioDetailsPage = lazy(() => import("./pages/admin/studios/AllStudioP
 const AdminDashboardLayout = lazy(() => import("./pages/admin/layout/AdminDashboardLayout.jsx"));
 const Editstudio = lazy(()=> import("../src/components/adminStudio/AddNewStudio.jsx"))
 const EditProduction = lazy(()=> import("../src/components/adminStudio/appsAndMore/AddNewProduction.jsx"))
+const AddProduction = lazy(()=> import("../src/components/adminStudio/appsAndMore/AddNewProduction.jsx"))
           {/* admin page  ends ========================> */}
 
 
@@ -90,6 +91,7 @@ const Routing = () => {
           <Route exact path='/booking' element={<BookingPages/>} />
           <Route exact path='/studio/edit' element={<AddNewStudio/>} />
           <Route exact path='/service/musicProduction/edit' element={<AddNewProduction/>} />
+          <Route exact path='/service/musicProduction/add' element={<AddNewProduction/>} />
           {/* admin page route ends ========================> */}
 
         </Routes>

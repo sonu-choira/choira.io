@@ -50,6 +50,7 @@ function AllStudioPageDetailsPage() {
 
   useEffect(() => {
     console.log("bookingPageCount-----", bookingPageCount);
+    setProducts([]);
 
     if (bookingPageCount === "c2" || bookingPageCount === "c4") {
       // Corrected the id assignments

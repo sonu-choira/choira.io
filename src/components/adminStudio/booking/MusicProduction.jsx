@@ -15,39 +15,39 @@ import { LuFilePlus } from "react-icons/lu";
 import axios from "axios";
 let PageSize = 10;
 
-function MusicProduction() {
+function MusicProduction({ products, setProducts }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get(
-        "https://test.api.choira.io/api/services/bookings?serviceType=c2",
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       "https://test.api.choira.io/api/services/bookings?serviceType=c2",
 
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: "Bearer debugTest",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        const data = response;
-        if (data && data.data.services.results) {
-          setProducts(data.data.services.results);
-        }
-      });
-  }, []);
+  //       {
+  //         headers: {
+  //           Accept: "application/json",
+  //           Authorization: "Bearer debugTest",
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log(response);
+  //       const data = response;
+  //       if (data && data.data.services.results) {
+  //         setProducts(data.data.services.results);
+  //       }
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    // fetchProducts();
-  }, []);
+  // useEffect(() => {
+  //   // fetchProducts();
+  // }, []);
 
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
+  // useEffect(() => {
+  //   console.log(products);
+  // }, [products]);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;

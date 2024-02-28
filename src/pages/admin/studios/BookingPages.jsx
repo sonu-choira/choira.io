@@ -28,9 +28,11 @@ import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
 import { useNavigate } from "react-router-dom";
 import WebDashboard2 from "../../produce/WebDashBoard2";
+import bookingPageApi from "../../../services/bookingPageApi";
 
 function BookingPages() {
   const [bookingPageCount, setBookingPageCount] = useState("c1");
+  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   const gotoSignin = () => {
     navigate("/signin");
@@ -48,6 +50,41 @@ function BookingPages() {
   //     gotoSignin();
   //   }
   // }, []);
+
+  useEffect(() => {
+    console.log("bookingPageCount-----", bookingPageCount);
+    setProducts([]);
+
+    if (bookingPageCount === "c2" || bookingPageCount === "c4") {
+      // Corrected the id assignments
+      const idToUse = bookingPageCount === "c2" ? "c2" : "c2";
+
+      bookingPageApi
+        .musicProduction("100", idToUse, 1)
+        .then((response) => {
+          console.log("====================> response C2", response);
+          if (response.status) {
+            setProducts(response.services.results);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
+    } else if (bookingPageCount === "c1") {
+      const limit = 64;
+      const active = 1;
+      // const type = bookingPageCount;
+      bookingPageApi
+        .getBookings(limit, active)
+        .then((response) => {
+          console.log("====================> response C1", response);
+          if (response.status) setProducts(response.studios.results);
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
+    }
+  }, [bookingPageCount]);
   return (
     <>
       <div className={style.allStudioDetailsPage}>
@@ -56,14 +93,14 @@ function BookingPages() {
           setBookingPageCount={setBookingPageCount}
         />
         {bookingPageCount === "c1" ? (
-          <StudioBookingDetail />
+          <StudioBookingDetail products={products} setProducts={setProducts} />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
-          <MusicProduction />
+          <MusicProduction products={products} setProducts={setProducts} />
         ) : bookingPageCount === "c3" ? (
-          <MixMaster />
-        ) : (
           <Artist />
+        ) : (
+          <MixMaster products={products} setProducts={setProducts} />
         )}
       </div>
     </>

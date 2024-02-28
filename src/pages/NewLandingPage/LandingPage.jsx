@@ -636,9 +636,10 @@ function LandingPage() {
                 </div>
                 <div>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur. <br /> Metus diam
-                    eget mollis eget in dignissim nibh. <br /> In nibh lectus
-                    enim eu adipiscing eget pulvinar.
+                    From instant studio bookings to industry-level music <br />
+                    creation, Choira empowers musicians to seamlessly <br />
+                    navigate the creative process and elevate their musical
+                    journey.
                   </p>
                 </div>
                 <div>
@@ -652,8 +653,8 @@ function LandingPage() {
             </div>
           </div>
           <div className="page1-footer">
-            <div></div> {/* shadow effect div */}
-            <div>
+            {/* <div></div> shadow effect div */}
+            {/* <div>
               <div>
                 <img src={stripe} alt="" />
               </div>
@@ -672,39 +673,10 @@ function LandingPage() {
               <div>
                 <img src={primeVideo} alt="" />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
-        <div className="mob-page1-footer">
-          <div></div> {/* shadow effect div */}
-          <div>
-            <div>
-              <div>
-                <img src={stripe} alt="" />
-              </div>
-              <div>
-                <img src={phonepay} alt="" />
-              </div>
-            </div>
-
-            <div>
-              <div>
-                <img src={nbc} alt="" />
-              </div>
-              <div>
-                <img src={cbs} alt="" />
-              </div>
-            </div>
-            <div>
-              <div>
-                <img src={nasa} alt="" />
-              </div>
-              <div>
-                <img src={primeVideo} alt="" />
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* <div className="mob-page1-footer"></div> */}
         {window.innerWidth > 600 ? (
           <>
             <div className="landing-page-2">

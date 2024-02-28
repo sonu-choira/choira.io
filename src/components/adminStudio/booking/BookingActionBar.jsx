@@ -5,8 +5,13 @@ import { LuFilePlus } from "react-icons/lu";
 import style from "../../../pages/admin/studios/studio.module.css";
 import { FaDownload } from "react-icons/fa";
 import { MdNoteAdd } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
+  const navigate = useNavigate();
+  const gotoAddNew = () => {
+    navigate("/service/musicProduction/add");
+  };
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
@@ -33,7 +38,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
             >
               Music Production
             </div>
-            <div
+            {/* <div
               style={{
                 backgroundColor: bookingPageCount === "c3" ? "#ffc701" : "",
               }}
@@ -42,14 +47,14 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               }}
             >
               Artist
-            </div>
+            </div> */}
             <div
               style={{
                 borderRight: "none",
-                backgroundColor: bookingPageCount === "c4" ? "#ffc701" : "",
+                backgroundColor: bookingPageCount === "c3" ? "#ffc701" : "",
               }}
               onClick={() => {
-                setBookingPageCount("c4");
+                setBookingPageCount("c3");
               }}
             >
               Mix-Master
@@ -60,22 +65,42 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
           <Button
             name={"Card view"}
             icon={<FaTableCellsLarge />}
-            style={{ height: "50%", width: "20%", gap: "5%" }}
+            style={{
+              height: "50%",
+              width: "20%",
+              gap: "5%",
+              backgroundColor: "#ADB5BD",
+            }}
           />
           <Button
             name={"Filter"}
             icon={<FaFilter />}
-            style={{ height: "50%", width: "15%", gap: "5%" }}
+            style={{
+              height: "50%",
+              width: "15%",
+              gap: "5%",
+              backgroundColor: "#ADB5BD",
+            }}
           />
           <Button
             name={"Share"}
             icon={<FaShare />}
-            style={{ height: "50%", width: "15%", gap: "5%" }}
+            style={{
+              height: "50%",
+              width: "15%",
+              gap: "5%",
+              backgroundColor: "#ADB5BD",
+            }}
           />
           <Button
             name={"Download"}
             icon={<FaDownload />}
-            style={{ height: "50%", width: "15%", gap: "5%" }}
+            style={{
+              height: "50%",
+              width: "15%",
+              gap: "5%",
+              backgroundColor: "#ADB5BD",
+            }}
           />
           {(bookingPageCount === "c1") & (pagetype != "apps") ? (
             <Button
@@ -92,6 +117,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
           ) : (
             <Button
               name={"Add New"}
+              onClick={gotoAddNew}
               icon={<MdNoteAdd />}
               style={{ height: "50%", width: "15%", gap: "5%" }}
             />
@@ -99,7 +125,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
 
           {/* {pagetype !== "apps"
             ? ""
-            : (bookingPageCount === "c2" || bookingPageCount === "c4") && (
+            : (bookingPageCount === "c2" || bookingPageCount === "c3") && (
                 <Button
                   name={"Add New"}
                   icon={<MdNoteAdd />}

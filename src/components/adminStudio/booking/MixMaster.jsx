@@ -14,29 +14,29 @@ import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
 let PageSize = 10;
 
-function MixMaster() {
+function MixMaster({ products, setProducts }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
 
-  const fetchProducts = async () => {
-    try {
-      const res = await fetch("https://dummyjson.com/products?limit=100");
-      const data = await res.json();
-      if (data && data.products) {
-        setProducts(data.products);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  // const fetchProducts = async () => {
+  //   try {
+  //     const res = await fetch("https://dummyjson.com/products?limit=100");
+  //     const data = await res.json();
+  //     if (data && data.products) {
+  //       setProducts(data.products);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  // useEffect(() => {
+  //   fetchProducts();
+  // }, []);
 
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
+  // useEffect(() => {
+  //   console.log(products);
+  // }, [products]);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
