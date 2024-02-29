@@ -62,32 +62,32 @@ function LandingPage() {
   const slidesData = [
     {
       title: "Choira create",
-      subtitle: "Sound like a pro. Create Commercial quality tracks.",
+      subtitle: `Turn creativity into   commercial tracks.`,
       content:
-        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
+        "Unlock your artistic potential and redefine your musical journey. Craft each composition with precision, transforming them into finely tuned commercial masterpieces. Our platform equips you with the tools to shape, refine, and produce standout tracks that make a lasting impact in the professional music landscape.",
       image: produce,
     },
     {
-      title: "Choira create",
-      subtitle: "Record your next Hit. Book Studio instantly.",
+      title: "Choira STUDIO",
+      subtitle: "From idea to track in a click book studios instantly.",
       content:
-        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu",
+        "Our platform is designed to simplify the studio booking process, offering a user-friendly experience that puts the power of professional recording at your fingertips. You gain access to a curated selection of top-notch studios, ensuring that your musical journey is equipped with the resources needed to bring your artistic vision to life. ",
       image: studio,
     },
     {
-      title: "Choira create",
-      subtitle: "Real-time Jam. Remote jam like you’re in the same room.",
+      title: "Choira JAM",
+      subtitle: "Anytime, Anywhere Jam",
       content:
-        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
+        "Remote jamming, providing a virtual space that makes musicians feel like they're in the same room. Experience seamless real-time collaboration from any location, preserving the essence of live jamming in a shared musical journey",
       image: jamming,
     },
-    {
-      title: "Choira create",
-      subtitle: "Turn your words into amazing music with AI music Gen.",
-      content:
-        "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
-      image: ai,
-    },
+    // {
+    //   title: "Choira create",
+    //   subtitle: "Turn your words into amazing music with AI music Gen.",
+    //   content:
+    //     "Lorem ipsum dolor sit amet consectetur. Sed id id eget volutpat. Mauris amet leo vulputate massa ultrices velit. Vel sed quam mattis integer consequat. Consectetur odio risus venenatis urna non nulla sed. Ultrices tincidunt magna ut lacus enim ac consequat. Vivamus vel massa elit gravida hendrerit mi posuere velit. Suspendisse risu.",
+    //   image: ai,
+    // },
   ];
 
   useEffect(() => {
@@ -109,14 +109,14 @@ function LandingPage() {
       if (deltaX < -20) {
         // Swipe left
         setCounter((prevCounter) => {
-          const newCounter = prevCounter >= 3 ? 0 : prevCounter + 1;
+          const newCounter = prevCounter >= 2 ? 0 : prevCounter + 1;
           updateSlides(newCounter);
           return newCounter;
         });
       } else if (deltaX > 20) {
         // Swipe right
         setCounter((prevCounter) => {
-          const newCounter = prevCounter === 0 ? 3 : prevCounter - 1;
+          const newCounter = prevCounter === 0 ? 2 : prevCounter - 1;
           updateSlides(newCounter);
           return newCounter;
         });
@@ -140,7 +140,7 @@ function LandingPage() {
       handleTouchEnd({ changedTouches: [{ clientX: 1 }] });
       // Simulate a right swipe
       setCounter((prevCounter) => {
-        const newCounter = prevCounter >= 3 ? 0 : prevCounter + 1;
+        const newCounter = prevCounter >= 2 ? 0 : prevCounter + 1;
 
         slides.forEach((slide) => {
           slide.style.transform = `translateX(-${newCounter * 100}%)`;
@@ -652,29 +652,7 @@ function LandingPage() {
               <div></div>
             </div>
           </div>
-          <div className="page1-footer">
-            {/* <div></div> shadow effect div */}
-            {/* <div>
-              <div>
-                <img src={stripe} alt="" />
-              </div>
-              <div>
-                <img src={phonepay} alt="" />
-              </div>
-              <div>
-                <img src={nbc} alt="" />
-              </div>
-              <div>
-                <img src={cbs} alt="" />
-              </div>
-              <div>
-                <img src={nasa} alt="" />
-              </div>
-              <div>
-                <img src={primeVideo} alt="" />
-              </div>
-            </div> */}
-          </div>
+          <div className="page1-footer"></div>
         </div>
         {/* <div className="mob-page1-footer"></div> */}
         {window.innerWidth > 600 ? (
@@ -761,23 +739,26 @@ function LandingPage() {
                     <div>
                       <p>{slide.content}</p>
                     </div>
-                    {counter === 0 ? (
-                      <div>
-                        <button>create</button>
-                      </div>
-                    ) : counter === 1 ? (
-                      <div>
-                        <button>Book Now</button>
-                      </div>
-                    ) : counter === 2 ? (
-                      <div>
-                        <button>Start Jam</button>
-                      </div>
-                    ) : (
-                      <div>
-                        <button>Generate</button>
-                      </div>
-                    )}
+                    {
+                      counter === 0 ? (
+                        <div>
+                          <button>create</button>
+                        </div>
+                      ) : counter === 1 ? (
+                        <div>
+                          <button>Book Now</button>
+                        </div>
+                      ) : (
+                        <div>
+                          <button>Start Jam</button>
+                        </div>
+                      )
+                      // : (
+                      //   <div>
+                      //     <button>Generate</button>
+                      //   </div>
+                      // )
+                    }
                   </div>
                 </div>
               ))}
@@ -800,14 +781,16 @@ function LandingPage() {
         <div className="landing-page-3">
           <div className="landing-page-3-main">
             <div>
-              <h2>The Future of Music</h2>
+              <h2>
+                Disrupting tunes, reshaping the <br /> music industry by melody
+              </h2>
             </div>
 
             <div>
               <p>
-                Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
-                mi tempor ut. Posuere nunc adipiscing fermentum br in. Sem
-                ullamcorper venenatis ut metus.
+                A fusion of innovation, global collaboration, and seamless tech,
+                empowering artists <br />
+                to create, connect, and shape the next era of sound.
               </p>
             </div>
             <div>
@@ -831,26 +814,10 @@ function LandingPage() {
               </div>
             </div>
             <div>
-              Work with award winning talents across the globe, we deliver an
-              unparalleled combination of timeless expertise, proven results,
-              long-term stability and trust.
-            </div>
-          </div>
-          <div>
-            <div>
-              <div>
-                <img src={trusted} alt="" />
-              </div>
-              <div>
-                <h3>Trusted Studio Profiles</h3>
-                <br />
-              </div>
-            </div>
-            <div>
               <p>
-                Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
-                mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
-                ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+                Our team of accomplished musicians, visionary technologists and
+                creative minds collaborate to bring you groundbreaking solutions
+                in the world of music
               </p>
             </div>
           </div>
@@ -866,9 +833,27 @@ function LandingPage() {
             </div>
             <div>
               <p>
-                Lorem ipsum dolor sit amet consectetur. Interdum augue nam vitae
-                mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
-                ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+                Choira's your ally beyond a platform. Top-notch tech,
+                personalized solutions, a supportive community—dedicated to
+                enhancing your musical journey. Join us, create your best music.
+              </p>
+            </div>
+          </div>
+          <div>
+            <div>
+              <div>
+                <img src={trusted} alt="" />
+              </div>
+              <div>
+                <h3>Trusted Studio Profiles</h3>
+                <br />
+              </div>
+            </div>
+            <div>
+              <p>
+                Explore Choira's trusted studios—top-notch spaces with
+                cutting-edge equipment, acoustically optimized environments, &
+                dedicated professionals enhancing your music production.
               </p>
             </div>
           </div>
@@ -887,25 +872,10 @@ function LandingPage() {
                 </div>
               </div>
               <div>
-                Work with award winning talents across the globe, we deliver an
-                unparalleled combination of timeless expertise, proven results,
-                long-term stability and trust.
-              </div>
-            </div>
-            <div>
-              <div>
-                <div>
-                  <img src={trusted} alt="" />
-                </div>
-                <div>
-                  <h3>Trusted Studio Profiles</h3>
-                </div>
-              </div>
-              <div>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur. Interdum augue nam
-                  vitae mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
-                  ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+                  Our team of accomplished musicians, visionary technologists
+                  and creative minds collaborate to bring you groundbreaking
+                  solutions in the world of music
                 </p>
               </div>
             </div>
@@ -915,14 +885,32 @@ function LandingPage() {
                   <img src={best} alt="" />
                 </div>
                 <div>
+                  <h3>Trusted Studio Profiles</h3>
+                </div>
+              </div>
+              <div>
+                <p>
+                  Choira's your ally beyond a platform. Top-notch tech,
+                  personalized solutions, a supportive community—dedicated to
+                  enhancing your musical journey. Join us, create your best
+                  music.
+                </p>
+              </div>
+            </div>
+            <div>
+              <div>
+                <div>
+                  <img src={trusted} alt="" />
+                </div>
+                <div>
                   <h3>Create the best</h3>
                 </div>
               </div>
               <div>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur. Interdum augue nam
-                  vitae mi tempor ut. Posuere nunc adipiscing fermentum in. Sem
-                  ullamcorper venenatis ut metus. Leo tempor pellentesque eu.
+                  Explore Choira's trusted studios—top-notch spaces with
+                  cutting-edge equipment, acoustically optimized environments, &
+                  dedicated professionals enhancing your music production.
                 </p>
               </div>
             </div>
