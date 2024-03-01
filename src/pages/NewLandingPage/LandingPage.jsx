@@ -29,11 +29,10 @@ import insta from "../../assets/img/landingPageImg/insta.png";
 import facebook from "../../assets/img/landingPageImg/facebook.svg";
 import tweeter from "../../assets/img/landingPageImg/tweter.svg";
 import linkedin from "../../assets/img/landingPageImg/linkedin.svg";
-import p1 from "../../assets/img/landingPageImg/p1.png";
-import p2 from "../../assets/img/landingPageImg/p2.png";
-import p3 from "../../assets/img/landingPageImg/p3.png";
-import p4 from "../../assets/img/landingPageImg/p4.png";
-import p5 from "../../assets/img/landingPageImg/p5.png";
+import bombay from "../../assets/img/landingPageImg/bombay.svg";
+import nayan from "../../assets/img/landingPageImg/nayan.svg";
+import kundan from "../../assets/img/landingPageImg/kundan.svg";
+
 import mobfooter1 from "../../assets/img/landingPageImg/mopfooter1.png";
 import mobfooter2 from "../../assets/img/landingPageImg/mopfooter2.png";
 import "../../pages/home/home.scss";
@@ -188,45 +187,45 @@ function LandingPage() {
   };
   const testimonials = [
     {
-      name: "Floyd Miles",
-      designationAndCity: "Singer, Sydney",
-      title: "The best Solution to book a studio!",
+      name: "Bombay Music Co.",
+      designationAndCity: "Record Label, Mumbai",
+      // title: "The best Solution to book a studio!",
       description:
-        "“Arcu at dictum sapien, mollis. Vulputate sit id accumsan, ultricies. In ultrices malesuada elit mauris etiam odio. Duis tristique lacus, et blandit viverra nisl velit. Sed mattis rhoncus, diam suspendisse sit nunc, gravida eu. Lectus eget eget ac dolor neque lorem sapien, suspendisse aliquam.”",
-      image: p1,
+        "“Choira’s strong backend music production team delivered exciting projects to us with our roster of artists situated all around India via seamless remote collaborations.”",
+      image: bombay,
     },
     {
-      name: "John Doe",
-      designationAndCity: "Designer, New York",
-      title: "Fantastic Experience with Choira!",
+      name: "Kundan Sad",
+      designationAndCity: "Film Director, Mumbai",
+      // title: "Fantastic Experience with Choira!",
       description:
-        "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit turpis at varius tincidunt. Integer gravida, ligula sit amet efficitur sodales, libero nisi ultricies odio, et malesuada mauris turpis id mi.”",
-      image: p2,
+        "“It was great partnering with Choira to produce a song for my feature film in just 5 days!”",
+      image: kundan,
     },
     {
-      name: "Alice Johnson",
-      designationAndCity: "Developer, San Francisco",
-      title: "Easy-to-use and Effective Platform!",
+      name: "Nayan Pachori",
+      designationAndCity: "Film Director, Mumbai",
+      // title: "Easy-to-use and Effective Platform!",
       description:
-        "“Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse ac venenatis turpis. In dictum vestibulum nisl eget volutpat.”",
-      image: p3,
+        "“Choira’s remote music production methodology helped me finish the music for my web series in the middle of the pandemic with diversified artists all over the world completely online!”",
+      image: nayan,
     },
-    {
-      name: "Bob Smith",
-      designationAndCity: "Manager, London",
-      title: "Incredible Features and User-Friendly!",
-      description:
-        "“Vestibulum consequat ipsum nec tortor vulputate, nec fringilla turpis hendrerit. Sed in lacus non tortor blandit feugiat ac et elit.”",
-      image: p4,
-    },
-    {
-      name: "Eva Davis",
-      designationAndCity: "Engineer, Berlin",
-      title: "Highly Recommend Choira!",
-      description:
-        "“Ut tristique, libero id congue fermentum, odio tortor ultricies felis, ut interdum arcu odio vel odio.”",
-      image: p5,
-    },
+    // {
+    //   name: "Bob Smith",
+    //   designationAndCity: "Manager, London",
+    //   // title: "Incredible Features and User-Friendly!",
+    //   description:
+    //     "“Vestibulum consequat ipsum nec tortor vulputate, nec fringilla turpis hendrerit. Sed in lacus non tortor blandit feugiat ac et elit.”",
+    //   image: p4,
+    // },
+    // {
+    //   name: "Eva Davis",
+    //   designationAndCity: "Engineer, Berlin",
+    //   // title: "Highly Recommend Choira!",
+    //   description:
+    //     "“Ut tristique, libero id congue fermentum, odio tortor ultricies felis, ut interdum arcu odio vel odio.”",
+    //   image: p5,
+    // },
   ];
 
   const [startIndex, setStartIndex] = useState(0);
@@ -240,11 +239,11 @@ function LandingPage() {
   }, [testimonials.length]);
 
   const visibleImages = [
-    testimonials[(startIndex + 4) % 5],
-    testimonials[startIndex % 5],
-    testimonials[(startIndex + 1) % 5],
-    testimonials[(startIndex + 2) % 5],
-    testimonials[(startIndex + 3) % 5],
+    testimonials[(startIndex + 2) % 3],
+    testimonials[startIndex % 3],
+    testimonials[(startIndex + 1) % 3],
+    // testimonials[(startIndex + 2) % 4],
+    // testimonials[(startIndex + 3) % 5],
   ];
 
   const visibleTestimonial = visibleImages[1];
@@ -919,7 +918,7 @@ function LandingPage() {
             <div className="lp4-testinomal-main">
               <div>Testimonial</div>
               <div>What our users say about us?</div>
-              <div className="person-title">{visibleTestimonial.title}</div>
+              {/* <div className="person-title">{visibleTestimonial.title}</div> */}
               <div>
                 <p className="person-decription">
                   {visibleTestimonial.description}
@@ -952,17 +951,26 @@ function LandingPage() {
           </div>
         </div>
         <div className="landing-page-5">
-          <div className="lp5-aiMusic">
-            <div>Get started</div>
-            <div>Start generating royalty free music with Music-AI</div>
+          <div className="companyPhoto">
+            {/* <div className="show effect div"></div> */}
             <div>
-              No credit card to start. Enjoy up to 50 high quality music per
-              month for free.
-            </div>
-            <div>
-              <button>Start generating for free</button>
               <div>
-                Contact sales <FaChevronRight />
+                <img src={stripe} alt="" />
+              </div>
+              <div>
+                <img src={phonepay} alt="" />
+              </div>
+              <div>
+                <img src={nbc} alt="" />
+              </div>
+              <div>
+                <img src={cbs} alt="" />
+              </div>
+              <div>
+                <img src={nasa} alt="" />
+              </div>
+              <div>
+                <img src={primeVideo} alt="" />
               </div>
             </div>
           </div>
@@ -1115,7 +1123,7 @@ function LandingPage() {
                 </div>
               </div>
 
-              <div>
+              <div className="stayConnected">
                 <div>
                   Stay connected to us
                   <input type="text" placeholder="Your email address" />

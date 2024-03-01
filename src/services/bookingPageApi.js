@@ -17,7 +17,7 @@ import api from "./api"
    };
 
    musicProduction = async (limit, Type, active) => {
-    const response = await api.get(`/services`,{ 
+    const response = await api.get(`/bookings/services`,{ 
         params: {
             limit: limit,
             serviceType: Type,
