@@ -17,37 +17,6 @@ let PageSize = 10;
 
 function MusicProduction({ products, setProducts }) {
   const [currentPage, setCurrentPage] = useState(1);
-  // const [products, setProducts] = useState([]);
-
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       "https://test.api.choira.io/api/services/bookings?serviceType=c2",
-
-  //       {
-  //         headers: {
-  //           Accept: "application/json",
-  //           Authorization: "Bearer debugTest",
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       console.log(response);
-  //       const data = response;
-  //       if (data && data.data.services.results) {
-  //         setProducts(data.data.services.results);
-  //       }
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   // fetchProducts();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(products);
-  // }, [products]);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -100,10 +69,10 @@ function MusicProduction({ products, setProducts }) {
                 return (
                   <tr>
                     <td style={{ textAlign: "center" }}>#{products._id}</td>
-                    <td>{products.productId}</td>
+                    <td>{products.userFullName}</td>
 
-                    <td>{products.category}</td>
-                    <td>{products.discountPercentage}</td>
+                    <td>{products.userPhone}</td>
+                    <td>{products.serviceFullName}</td>
                     <td>₹{products.totalPrice}</td>
                     <td className={style.tableActionbtn}>
                       <div>

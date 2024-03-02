@@ -52,7 +52,7 @@ function AllStudioPageDetailsPage() {
     console.log("bookingPageCount-----", bookingPageCount);
     setProducts([]);
 
-    if (bookingPageCount === "c2" || bookingPageCount === "c4") {
+    if (bookingPageCount === "c2" || bookingPageCount === "c3") {
       // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c2";
 
@@ -96,9 +96,9 @@ function AllStudioPageDetailsPage() {
         bookingPageCount === "c2" ? (
           <ASMusicProduction products={products} setProducts={setProducts} />
         ) : bookingPageCount === "c3" ? (
-          <Artist />
-        ) : (
           <ASMixandMaster products={products} setProducts={setProducts} />
+        ) : (
+          <Artist />
         )}
       </div>
     </>

@@ -173,7 +173,7 @@ span {
     height: 100%;
     font-size: 1.2vmax;
 
-    line-height: 36.3px;
+    line-height: 30px;
   }
 }
 .page1-main-content > div:nth-child(3) {
@@ -804,7 +804,7 @@ span {
   align-items: center;
 }
 .lp6-main > div > div:nth-child(1) > div:nth-child(2) {
-  font-size: 1.4vmin;
+  font-size: 0.9vmax;
   line-height: 18px;
 }
 .lp6-main > div > div:nth-child(5) > div {
@@ -950,7 +950,7 @@ span {
       #1a1814;
 
     position: absolute;
-    transition: 1s ease;
+    transition: transform 1s ease;
   }
   .landing-page-2 {
     height: 92svh;

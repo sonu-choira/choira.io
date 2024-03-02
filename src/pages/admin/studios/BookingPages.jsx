@@ -55,7 +55,7 @@ function BookingPages() {
     console.log("bookingPageCount-----", bookingPageCount);
     setProducts([]);
 
-    if (bookingPageCount === "c2" || bookingPageCount === "c4") {
+    if (bookingPageCount === "c2" || bookingPageCount === "c3") {
       // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c2";
 
@@ -63,8 +63,8 @@ function BookingPages() {
         .musicProduction("100", idToUse, 1)
         .then((response) => {
           console.log("====================> response C2", response);
-          if (response.status) {
-            setProducts(response.services.results);
+          if (response.data) {
+            setProducts(response.data);
           }
         })
         .catch((error) => {
@@ -78,7 +78,7 @@ function BookingPages() {
         .getBookings(limit, active)
         .then((response) => {
           console.log("====================> response C1", response);
-          if (response.status) setProducts(response.studios.results);
+          if (response.data) setProducts(response.data);
         })
         .catch((error) => {
           console.error("Error fetching studios:", error);
@@ -98,9 +98,9 @@ function BookingPages() {
         bookingPageCount === "c2" ? (
           <MusicProduction products={products} setProducts={setProducts} />
         ) : bookingPageCount === "c3" ? (
-          <Artist />
-        ) : (
           <MixMaster products={products} setProducts={setProducts} />
+        ) : (
+          <Artist />
         )}
       </div>
     </>

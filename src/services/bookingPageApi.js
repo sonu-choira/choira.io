@@ -5,7 +5,7 @@ import api from "./api"
   getBookings = async (limit ,active) => {
   
 
-    const response = await api.get(`/bookings`, {
+    const response = await api.get(`/bookings/services`, {
       params: {
         limit: limit,
         active: active
@@ -20,7 +20,7 @@ import api from "./api"
     const response = await api.get(`/bookings/services`,{ 
         params: {
             limit: limit,
-            serviceType: Type,
+            bookingType: Type,
             active: active
         }
     });

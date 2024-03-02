@@ -16,27 +16,6 @@ let PageSize = 10;
 
 function MixMaster({ products, setProducts }) {
   const [currentPage, setCurrentPage] = useState(1);
-  // const [products, setProducts] = useState([]);
-
-  // const fetchProducts = async () => {
-  //   try {
-  //     const res = await fetch("https://dummyjson.com/products?limit=100");
-  //     const data = await res.json();
-  //     if (data && data.products) {
-  //       setProducts(data.products);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(products);
-  // }, [products]);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -89,21 +68,21 @@ function MixMaster({ products, setProducts }) {
                 return (
                   <tr>
                     <td style={{ textAlign: "center" }}>#{products.id}</td>
-                    <td>{products.title}</td>
+                    <td>{products.userFullName}</td>
 
-                    <td>{products.stock}</td>
-                    <td>{products.discountPercentage}</td>
+                    <td>{products.userPhone}</td>
+                    <td>{products.serviceFullName}</td>
                     <td style={{ textAlign: "start" }}>
-                      Starting price from ₹{products.price} <br />
+                      Starting price from ₹{products.totalPrice} <br />
                     </td>
                     <td className={style.tableActionbtn}>
                       <div>
                         <select
-                          value={selectedStatus[products.id] || ""}
-                          onChange={(e) => handleChange(products.id, e)}
+                          value={selectedStatus[products._id] || ""}
+                          onChange={(e) => handleChange(products._id, e)}
                           style={{
                             backgroundColor: getStatusColor(
-                              selectedStatus[products.id]
+                              selectedStatus[products._id]
                             ),
                           }}
                         >

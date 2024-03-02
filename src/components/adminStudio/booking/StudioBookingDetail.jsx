@@ -12,57 +12,17 @@ import Button from "../../../pages/admin/layout/Button";
 import Switch from "../../../pages/admin/layout/Switch";
 import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
-import imageNotFound from "../../../assets/imagesNotFound.png";
 import axios from "axios";
-import appAndmoreApi from "../../../services/appAndmoreApi";
 let PageSize = 10;
 
 function StudioBookingDetail({ products, setProducts }) {
   const [currentPage, setCurrentPage] = useState(1);
   // const [products, setProducts] = useState([]);
 
-  // const fetchProducts = async () => {
-  //   try {
-  //     const res = await fetch("https://dummyjson.com/products?limit=100");
-  //     const data = await res.json();
-  //     if (data && data.products) {
-  //       setProducts(data.products);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // const fetchProducts = async () => {
-  //   try {
-  //     const myHeaders = new Headers();
-  //     myHeaders.append("Authorization", "Bearer debugTest");
-  //     myHeaders.append("Content-Type", "application/json");
-  //     const res = await fetch(
-  //       "https://test.api.choira.io/api/settings/category",
-  //       {
-  //         method: "GET",
-  //         headers: myHeaders,
-  //         body: JSON.stringify({
-  //           active: 1,
-  //         }),
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     console.log(data);
-  //     if (data && data.products) {
-  //       setProducts(data.products);
-  //       console.log("the data is " + products);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
   // useEffect(() => {
-  //   appAndmoreApi.appAndmoreApi();
   //   axios
   //     .get(
-  //       "https://test.api.choira.io/api/services/bookings",
+  //       "https://test.api.choira.io/api/services/bookings?serviceType=c2",
 
   //       {
   //         headers: {
@@ -118,13 +78,7 @@ function StudioBookingDetail({ products, setProducts }) {
         return "";
     }
   };
-  const [activityStatus, setActivityStatus] = useState({});
-  const handleSwitchChange = (studioId) => {
-    setActivityStatus((prevStatus) => ({
-      ...prevStatus,
-      [studioId]: !prevStatus[studioId], // Toggle the switch state
-    }));
-  };
+
   return (
     <>
       <div className={style.studioTabelDiv}>
@@ -132,60 +86,48 @@ function StudioBookingDetail({ products, setProducts }) {
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th>Studio</th>
-                <th>Price</th>
-                <th>Location</th>
-                <th>No. of Rooms</th>
-                <th>Activity Status</th>
+                <th style={{ width: "15%" }}>Booking ID</th>
+                <th>User Name</th>
+
+                <th>studio Name</th>
+                <th>No. of hours</th>
+                <th>Date</th>
+                <th>Time Slot Status</th>
+                <th style={{ width: "20%" }}>Project Status</th>
               </tr>
             </thead>
             <tbody>
               {currentTableData.map((products) => {
                 return (
-                  <tr key={products._id}>
-                    <td style={{ display: "flex", alignItems: "center" }}>
-                      <div className={style.studioImage}>
-                        {products.studioPhotos ? (
-                          <img
-                            src={products.studioPhotos}
-                            alt=""
-                            onError={(e) => {
-                              e.target.src = imageNotFound;
-                            }}
-                          />
-                        ) : (
-                          <img src={imageNotFound} alt="" />
-                        )}
-                      </div>
-                      &nbsp;&nbsp;{products.fullName}
-                    </td>
-                    <td>
-                      ₹{products.totalPrice}
-                      <br />
-                      <small>per hour</small>
-                    </td>
-                    <td>
-                      {products.address}
-                      <br />
-                      <small> {products.state}</small>
-                    </td>
-                    <td>{products.totalRooms}</td>
+                  <tr>
+                    <td style={{ textAlign: "center" }}>#{products._id}</td>
+                    <td>{products.userFullName}</td>
+
+                    <td>{products.serviceFullName}</td>
+                    <td>{products.planId}</td>
+                    <td>₹{products.bookingDate}</td>
+                    <td>₹{products.totalPrice}</td>
                     <td className={style.tableActionbtn}>
                       <div>
-                        <label className="switch">
-                          <input
-                            type="checkbox"
-                            checked={activityStatus[products._id] || false}
-                            onChange={() => handleSwitchChange(products._id)}
-                          />
-                          <span className="slider"></span>
-                        </label>
+                        <select
+                          value={selectedStatus[products._id] || ""}
+                          onChange={(e) => handleChange(products._id, e)}
+                          style={{
+                            backgroundColor: getStatusColor(
+                              selectedStatus[products._id]
+                            ),
+                          }}
+                        >
+                          <option value="">Select Status</option>
+                          <option value="Active">Active</option>
+                          <option value="Pending">Pending</option>
+                          <option value="Complete">Complete</option>
+                          <option value="Cancelled">Cancelled</option>
+                        </select>
                       </div>
-                      <div>
+                      <div style={{ width: "25%" }}>
                         <GrShare style={{ cursor: "pointer" }} />
-                        <MdEdit
-                          style={{ color: "#ffc701", cursor: "pointer" }}
-                        />
+
                         <RiDeleteBin5Fill
                           style={{ color: "red", cursor: "pointer" }}
                         />
