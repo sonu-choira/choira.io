@@ -29,6 +29,16 @@ import api from "./api"
     return response.data;
    };
 
+   updateStatus = async (id, selectedstatus) => {
+    const response = await api.post(`/bookings/update`,{
+      bookingId: id,
+      status: selectedstatus
+    });
+    const {status} = response.data
+    console.log("res ===>", response.data)
+    return response.data;
+   };
+
  }
 
 

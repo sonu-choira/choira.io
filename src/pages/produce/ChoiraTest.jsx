@@ -68,6 +68,9 @@ function ChoiraTest() {
   }, [state.userProjectData]);
 
   const gotoNewproject = () => {
+    localStorage.removeItem("userProjectData");
+    localStorage.removeItem("currentStep");
+
     navigate("/newproject");
   };
   // change profile img

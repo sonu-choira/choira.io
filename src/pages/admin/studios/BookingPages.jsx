@@ -57,12 +57,15 @@ function BookingPages() {
 
     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
       // Corrected the id assignments
-      const idToUse = bookingPageCount === "c2" ? "c2" : "c2";
+      const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
       bookingPageApi
         .musicProduction("100", idToUse, 1)
         .then((response) => {
-          console.log("====================> response C2", response);
+          console.log(
+            `====================> response ${bookingPageCount} `,
+            response
+          );
           if (response.data) {
             setProducts(response.data);
           }
