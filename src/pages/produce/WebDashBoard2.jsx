@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import style from "../produce/dashboard.module.css";
 import logo from "../../assets/img/logo-choira.svg";
 import create from "../../assets/img/dashboard_img/create.svg";
@@ -8,24 +8,33 @@ import tanmay from "../../assets/img/dashboard_img/tanmay.png";
 import ProfileEdit from "./ProfileEdit";
 import { useNavigate } from "react-router-dom";
 
-function WebDashboard2({ tabCount, setTabCount }) {
+function WebDashboard2({ navCount, setNavCount }) {
+  // const NavtabCount = localStorage.getItem("NavtabCount");
   const [editProfile, setEditProfile] = useState(false);
+  const navigate = useNavigate();
+
   const editProfiletab = () => {
     setEditProfile(true);
   };
-  const navigate = useNavigate();
+
   const gotoAllStudioDetailPage = () => {
+    setNavCount(3);
     // navigate("/allStudioPageDetailsPage");
-    setTabCount(3);
   };
   const gotoBookings = () => {
     // navigate("/booking");
-    setTabCount(4);
+    // setTabCount(4);
   };
   const gotoStudios = () => {
+    setNavCount(1);
     // navigate("/studios");
-    setTabCount(1);
   };
+
+  console.log("pagecount is", navCount);
+
+  useEffect(() => {
+    console.log("Effec navCount::", navCount);
+  }, [navCount]);
 
   return (
     <>
@@ -38,30 +47,30 @@ function WebDashboard2({ tabCount, setTabCount }) {
             </div>
             <div className={style.community}>
               <div
-                className={tabCount === 1 ? style.tabActive : style.padding}
+                className={navCount === 1 ? style.tabActive : style.padding}
                 onClick={gotoStudios}
               >
                 <img src={community} alt="" />
                 Studios
               </div>
               <div
-                className={tabCount === 2 ? style.tabActive : style.padding}
+                className={navCount === 2 ? style.tabActive : style.padding}
                 onClick={() => {
-                  setTabCount(2);
+                  localStorage.setItem("NavtabCount", 2);
                 }}
               >
                 <img src={produce} alt="" />
                 Produce
               </div>
               <div
-                className={tabCount === 3 ? style.tabActive : style.padding}
+                className={navCount === 3 ? style.tabActive : style.padding}
                 onClick={gotoAllStudioDetailPage}
               >
                 <img src={produce} alt="" />
                 App & More
               </div>
               <div
-                className={tabCount === 4 ? style.tabActive : style.padding}
+                className={navCount === 4 ? style.tabActive : style.padding}
                 onClick={gotoBookings}
               >
                 <img src={produce} alt="" />

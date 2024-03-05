@@ -1,6 +1,16 @@
 
 class TokenService {
 
+    getSettings = () => {
+      const settings = JSON.parse(localStorage.getItem("settings"));
+      return settings;
+    }
+
+    setSettings = () => {
+      const settings = JSON.parse(localStorage.setItem("settings"));
+      return settings;
+    }
+
     getLocalRefreshToken = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       return user?.refreshToken;

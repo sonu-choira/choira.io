@@ -17,7 +17,12 @@ import { useNavigate } from "react-router-dom";
 import bookingPageApi from "../../../services/bookingPageApi";
 let PageSize = 10;
 
-function StudioBookingDetail({ products, setProducts }) {
+function StudioBookingDetail({
+  products,
+  setProducts,
+  handleChange,
+  getStatusColor,
+}) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const gotoShowDetails = (id) => {
@@ -41,63 +46,6 @@ function StudioBookingDetail({ products, setProducts }) {
     setProducts(products);
   }, [products]);
 
-  const handleChange = async (productId, event) => {
-    /// api
-    try {
-      const updateddata = products.map((prd) => {
-        if (prd._id === productId) {
-          prd.status = parseInt(event.target.value);
-        }
-        return prd;
-      });
-      const response = await bookingPageApi.updateStatus(
-        productId,
-        event.target.value
-      );
-
-      if (response.status) {
-        // Assuming response.data is an array of updated products
-        // setProducts(response.data);
-
-        setProducts(updateddata);
-      }
-    } catch (error) {
-      console.error("Error updating status:", error);
-    }
-
-    // console.log(updateddata);
-  };
-  // useEffect(() => {
-  //   console.log(products);
-  // }, [products]);
-
-  const getStatusColor = (status) => {
-    status = parseInt(status);
-    switch (status) {
-      case 2:
-        return "#FFDDDD";
-      // case "Pending":
-      //   return "#CAE2FF";
-      case 1:
-        return "#DDFFF3";
-      case 0:
-        return "#FFF3CA";
-      default:
-        return "";
-    }
-  };
-  // const [updateColor, setUpdateColor] = useState(products?.status);
-  // useEffect(() => {
-  //   console.log(products?.status);
-  //   getStatusColor(updateColor);
-  // }, [updateColor]);
-
-  // const getColor2 = () => {
-  //   // Use the current state value directly, no need to call setUpdateColor
-  //   const color = getStatusColor(updateColor);
-  //   console.log(`the color is ${color}`);
-  // };
-  // getColor2();
   return (
     <>
       <div className={style.studioTabelDiv}>

@@ -2,25 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Alert } from "antd";
 // import "../studios/studios.css";
 import style from "../studios/studio.module.css";
-import { IoSearch } from "react-icons/io5";
-import { MdAddAPhoto } from "react-icons/md";
-import { IoMdAddCircle } from "react-icons/io";
 
-import { FaRegBell } from "react-icons/fa6";
-import { MdCalendarMonth, MdOutlineSettings } from "react-icons/md";
-import { GoDotFill } from "react-icons/go";
-import { LuFilePlus } from "react-icons/lu";
-import Pagination from "./Pagination";
-// import data from "../studios/mock-data.json";
-import Button from "../layout/Button";
-import { FaTableCellsLarge } from "react-icons/fa6";
-import Switch from "../layout/Switch";
-import OnboardStudio from "../../../components/adminStudio/OnboardStudio";
-import AllStudioDetail from "../../../components/adminStudio/AllStudioDetail";
-import StudioFooter from "../../../components/adminStudio/StudioFooter";
-import upload from "../../../assets/img/upload.png";
-import AddNewStudio from "../../../components/adminStudio/AddNewStudio";
-import AddNewRoom from "../../../components/adminStudio/AddNewRoom";
 import StudioBookingDetail from "../../../components/adminStudio/booking/StudioBookingDetail";
 import MusicProduction from "../../../components/adminStudio/booking/MusicProduction";
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
@@ -51,6 +33,52 @@ function BookingPages() {
   //   }
   // }, []);
 
+  // {-------  this code is for update color of selected  action ---------}
+
+  const handleChange = async (productId, event) => {
+    /// api
+    try {
+      const updateddata = products.map((prd) => {
+        if (prd._id === productId) {
+          prd.status = parseInt(event.target.value);
+        }
+        return prd;
+      });
+      const response = await bookingPageApi.updateStatus(
+        productId,
+        event.target.value
+      );
+
+      if (response.status) {
+        // Assuming response.data is an array of updated products
+        // setProducts(response.data);
+
+        setProducts(updateddata);
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+
+    // console.log(updateddata);
+  };
+
+  const getStatusColor = (status) => {
+    status = parseInt(status);
+    switch (status) {
+      case 2:
+        return "#FFDDDD";
+      // case "Pending":
+      //   return "#CAE2FF";
+      case 1:
+        return "#DDFFF3";
+      case 0:
+        return "#FFF3CA";
+      default:
+        return "";
+    }
+  };
+
+  // {-------  this code is end of  update color of selected  action ---------}
   useEffect(() => {
     console.log("bookingPageCount-----", bookingPageCount);
     setProducts([]);
@@ -96,12 +124,27 @@ function BookingPages() {
           setBookingPageCount={setBookingPageCount}
         />
         {bookingPageCount === "c1" ? (
-          <StudioBookingDetail products={products} setProducts={setProducts} />
+          <StudioBookingDetail
+            products={products}
+            setProducts={setProducts}
+            handleChange={handleChange}
+            getStatusColor={getStatusColor}
+          />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
-          <MusicProduction products={products} setProducts={setProducts} />
+          <MusicProduction
+            products={products}
+            setProducts={setProducts}
+            handleChange={handleChange}
+            getStatusColor={getStatusColor}
+          />
         ) : bookingPageCount === "c3" ? (
-          <MixMaster products={products} setProducts={setProducts} />
+          <MixMaster
+            products={products}
+            setProducts={setProducts}
+            handleChange={handleChange}
+            getStatusColor={getStatusColor}
+          />
         ) : (
           <Artist />
         )}

@@ -14,7 +14,7 @@ import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
 let PageSize = 10;
 
-function MixMaster({ products, setProducts }) {
+function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
@@ -24,28 +24,6 @@ function MixMaster({ products, setProducts }) {
   }, [currentPage, products]);
 
   const [selectedStatus, setSelectedStatus] = useState({});
-
-  const handleChange = (productId, event) => {
-    setSelectedStatus((prevStatus) => ({
-      ...prevStatus,
-      [productId]: event.target.value,
-    }));
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Cancelled":
-        return "#FFDDDD";
-      case "Pending":
-        return "#CAE2FF";
-      case "Complete":
-        return "#DDFFF3";
-      case "Active":
-        return "#FFF3CA";
-      default:
-        return "";
-    }
-  };
 
   return (
     <>
@@ -78,23 +56,30 @@ function MixMaster({ products, setProducts }) {
                     <td className={style.tableActionbtn}>
                       <div>
                         <select
-                          value={selectedStatus[products._id] || ""}
+                          value={
+                            selectedStatus[products._id] || products.status
+                          }
                           onChange={(e) => handleChange(products._id, e)}
                           style={{
-                            backgroundColor: getStatusColor(
-                              selectedStatus[products._id]
-                            ),
+                            backgroundColor: getStatusColor(products.status),
                           }}
                         >
-                          <option value="">Select Status</option>
-                          <option value="Active">Active</option>
-                          <option value="Pending">Pending</option>
-                          <option value="Complete">Complete</option>
-                          <option value="Cancelled">Cancelled</option>
+                          <option value="" disabled>
+                            Select Status
+                          </option>
+                          <option value={0}>Active</option>
+                          {/* <option value="Pending">Pending</option> */}
+                          <option value={1}>Complete</option>
+                          <option value={2}>Cancelled</option>
                         </select>
                       </div>
                       <div style={{ width: "25%" }}>
-                        <GrShare style={{ cursor: "pointer" }} />
+                        <GrShare
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            // gotoShowDetails(products._id);
+                          }}
+                        />
 
                         <RiDeleteBin5Fill
                           style={{ color: "red", cursor: "pointer" }}
