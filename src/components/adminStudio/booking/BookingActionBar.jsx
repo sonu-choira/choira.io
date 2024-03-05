@@ -10,7 +10,9 @@ import { useNavigate } from "react-router-dom";
 function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
   const navigate = useNavigate();
   const gotoAddNew = () => {
-    navigate("/service/musicProduction/add");
+    navigate("/service/musicProduction/add", {
+      state: { navCount: 3 },
+    });
   };
   return (
     <>
@@ -114,13 +116,15 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
 
           {pagetype != "apps" ? (
             ""
-          ) : (
+          ) : bookingPageCount === "c2" || bookingPageCount === "c3" ? (
             <Button
               name={"Add New"}
               onClick={gotoAddNew}
               icon={<MdNoteAdd />}
               style={{ height: "50%", width: "15%", gap: "5%" }}
             />
+          ) : (
+            ""
           )}
 
           {/* {pagetype !== "apps"

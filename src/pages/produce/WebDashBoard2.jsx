@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import style from "../produce/dashboard.module.css";
 import logo from "../../assets/img/logo-choira.svg";
 import create from "../../assets/img/dashboard_img/create.svg";
@@ -8,33 +8,40 @@ import tanmay from "../../assets/img/dashboard_img/tanmay.png";
 import ProfileEdit from "./ProfileEdit";
 import { useNavigate } from "react-router-dom";
 
-function WebDashboard2({ navCount, setNavCount }) {
-  // const NavtabCount = localStorage.getItem("NavtabCount");
-  const [editProfile, setEditProfile] = useState(false);
-  const navigate = useNavigate();
+function WebDashboard2({ tabCount, setTabCount, navCount }) {
+  if (navCount) {
+    setTabCount(navCount);
+    // alert(navCount);
+  }
 
+  const [editProfile, setEditProfile] = useState(false);
   const editProfiletab = () => {
     setEditProfile(true);
   };
-
+  const navigate = useNavigate();
   const gotoAllStudioDetailPage = () => {
-    setNavCount(3);
     // navigate("/allStudioPageDetailsPage");
+    if (navCount) {
+      navigate("/adminDashboard");
+    } else {
+      setTabCount(3);
+    }
   };
   const gotoBookings = () => {
-    // navigate("/booking");
-    // setTabCount(4);
+    if (navCount) {
+      navigate("/adminDashboard");
+    } else {
+      setTabCount(4);
+    }
   };
   const gotoStudios = () => {
-    setNavCount(1);
     // navigate("/studios");
+    if (navCount) {
+      navigate("/adminDashboard");
+    } else {
+      setTabCount(1);
+    }
   };
-
-  console.log("pagecount is", navCount);
-
-  useEffect(() => {
-    console.log("Effec navCount::", navCount);
-  }, [navCount]);
 
   return (
     <>
@@ -47,30 +54,34 @@ function WebDashboard2({ navCount, setNavCount }) {
             </div>
             <div className={style.community}>
               <div
-                className={navCount === 1 ? style.tabActive : style.padding}
+                className={tabCount === 1 ? style.tabActive : style.padding}
                 onClick={gotoStudios}
               >
                 <img src={community} alt="" />
                 Studios
               </div>
               <div
-                className={navCount === 2 ? style.tabActive : style.padding}
+                className={tabCount === 2 ? style.tabActive : style.padding}
                 onClick={() => {
-                  localStorage.setItem("NavtabCount", 2);
+                  if (navCount) {
+                    navigate("/adminDashboard");
+                  } else {
+                    setTabCount(2);
+                  }
                 }}
               >
                 <img src={produce} alt="" />
                 Produce
               </div>
               <div
-                className={navCount === 3 ? style.tabActive : style.padding}
+                className={tabCount === 3 ? style.tabActive : style.padding}
                 onClick={gotoAllStudioDetailPage}
               >
                 <img src={produce} alt="" />
                 App & More
               </div>
               <div
-                className={navCount === 4 ? style.tabActive : style.padding}
+                className={tabCount === 4 ? style.tabActive : style.padding}
                 onClick={gotoBookings}
               >
                 <img src={produce} alt="" />

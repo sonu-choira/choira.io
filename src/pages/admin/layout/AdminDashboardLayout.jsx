@@ -17,25 +17,13 @@ import AllStudioPageDetailsPage from "../studios/AllStudioPageDetailsPage";
 import BookingPages from "../studios/BookingPages";
 import AddNewProduction from "../../../components/adminStudio/appsAndMore/AddNewProduction";
 import AddNewServices from "../../../components/adminStudio/appsAndMore/AddNewServices";
-import TokenService from "../../../services/token.service";
 
 function AdminDashboardLayout() {
   const [tabCount, setTabCount] = useState(3);
-  const [navCount, setNavCount] = useState(3); //localStorage.getItem("NavtabCount")
-
-  useEffect(() => {
-    console.log("pjgfdjgjfdgd", navCount);
-  }, [navCount]);
-
   return (
     <>
       <div className={style.wrapper}>
-        <WebDashboard2
-          tabCount={tabCount}
-          setTabCount={setTabCount}
-          navCount={navCount}
-          setNavCount={setNavCount}
-        />
+        <WebDashboard2 tabCount={tabCount} setTabCount={setTabCount} />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
             <div>
@@ -54,12 +42,12 @@ function AdminDashboardLayout() {
               <MdOutlineSettings />
             </div>
           </div>
-          {navCount === 1 && <SlotBooking />}
-          {navCount === 2 && <AddNewServices />}
+          {tabCount === 1 && <SlotBooking />}
+          {tabCount === 2 && <AddNewServices />}
 
-          {navCount === 3 ? (
+          {tabCount === 3 ? (
             <AllStudioPageDetailsPage />
-          ) : navCount === 4 ? (
+          ) : tabCount === 4 ? (
             <BookingPages />
           ) : (
             ""

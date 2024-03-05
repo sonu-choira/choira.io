@@ -2,8 +2,13 @@ import React from "react";
 import Button from "../../pages/admin/layout/Button";
 import { IoIosArrowBack } from "react-icons/io";
 import style from "../../pages/admin/studios/studio.module.css";
+import { useNavigate } from "react-router-dom";
 
 function StudioFooter({ setSelectTab }) {
+  const navigate = useNavigate();
+  const gotoadminpage = () => {
+    navigate("/adminDashboard");
+  };
   return (
     <>
       <div className={style.studioFooter}>
@@ -11,9 +16,7 @@ function StudioFooter({ setSelectTab }) {
           name={"Back"}
           icon={<IoIosArrowBack />}
           style={{ height: "55%" }}
-          onClick={() => {
-            setSelectTab(0);
-          }}
+          onClick={gotoadminpage}
         />
         <Button name={"Save"} style={{ height: "55%" }} />
       </div>

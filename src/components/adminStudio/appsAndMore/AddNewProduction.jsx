@@ -20,7 +20,7 @@ import { useLocation } from "react-router-dom";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
-
+  const navCount = data?.state?.navCount;
   // let isEditMode = false;
   // if (data.state.isEditMode) {
   //   isEditMode = true;
@@ -185,10 +185,15 @@ function AddNewProduction({ setSelectTab }) {
     updatedDiscography.splice(index, 1);
     setDiscography(updatedDiscography);
   };
+  const [tabCount, setTabCount] = useState();
   return (
     <>
       <div className={style.wrapper}>
-        <WebDashboard2 />
+        <WebDashboard2
+          navCount={navCount}
+          tabCount={tabCount}
+          setTabCount={setTabCount}
+        />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
             <div>
