@@ -581,6 +581,16 @@ td {
   margin-top: 0%;
   height: 80%;
 }
+.editPencilinput {
+  position: relative;
+  padding-bottom: 2%;
+}
+.editpencil {
+  position: absolute;
+  bottom: 25%;
+  right: 2%;
+  cursor: pointer;
+}
 .amenitesCheckbox {
   border: 2px solid #dddddd;
   width: 100%;
@@ -928,6 +938,7 @@ td {
 .addNewStudioPage .addNewStudioinputBox {
   height: 20%;
 }
+
 @media only screen and (min-width: 1024px) and (max-width: 1903px) {
   .addNewStudioPage .addNewStudioinputBox {
     height: 10%;

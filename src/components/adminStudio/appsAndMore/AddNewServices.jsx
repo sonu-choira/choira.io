@@ -16,7 +16,7 @@ import {
 import StudioFooter from "../StudioFooter";
 import cross from "../../../assets/cross.svg";
 let index = 0;
-function AddNewServices({ setSelectTab }) {
+function AddNewServices({ setShowServices }) {
   const [items, setItems] = useState([
     "Wifi",
     "AC",
@@ -278,7 +278,11 @@ function AddNewServices({ setSelectTab }) {
           </div>
         </div>
       </div>
-      <StudioFooter setSelectTab={setSelectTab} />
+      <StudioFooter
+        backOnclick={() => {
+          setShowServices(false);
+        }}
+      />
     </>
   );
 }

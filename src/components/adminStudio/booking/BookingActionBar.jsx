@@ -8,10 +8,11 @@ import { MdNoteAdd } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
+  console.log(bookingPageCount);
   const navigate = useNavigate();
-  const gotoAddNew = () => {
+  const gotoAddNew = (bookingPageCount) => {
     navigate("/service/musicProduction/add", {
-      state: { navCount: 3 },
+      state: { navCount: 3, bookingPageCount: bookingPageCount },
     });
   };
   return (
@@ -119,7 +120,9 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
           ) : bookingPageCount === "c2" || bookingPageCount === "c3" ? (
             <Button
               name={"Add New"}
-              onClick={gotoAddNew}
+              onClick={() => {
+                gotoAddNew(bookingPageCount);
+              }}
               icon={<MdNoteAdd />}
               style={{ height: "50%", width: "15%", gap: "5%" }}
             />

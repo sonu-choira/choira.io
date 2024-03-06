@@ -73,7 +73,7 @@ function AllStudioPageDetailsPage() {
       Appapi.getStudios(limit, active)
         .then((response) => {
           console.log("====================> response C1", response);
-          if (response.status) setProducts(response.studios.results);
+          if (response.nearYou) setProducts(response.nearYou);
         })
         .catch((error) => {
           console.error("Error fetching studios:", error);

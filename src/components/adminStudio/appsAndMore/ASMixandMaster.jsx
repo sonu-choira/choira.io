@@ -30,7 +30,11 @@ function ASMixandMaster({ products, setProducts }) {
     console.log("navigated=======>", selectedProduct);
 
     navigate(`/service/musicProduction/edit?id=${id}`, {
-      state: { productData: selectedProduct, isEditMode: isEditMode },
+      state: {
+        productData: selectedProduct,
+        isEditMode: isEditMode,
+        bookingPageCount: "c3",
+      },
     });
   };
   const [activityStatus, setActivityStatus] = useState({});
