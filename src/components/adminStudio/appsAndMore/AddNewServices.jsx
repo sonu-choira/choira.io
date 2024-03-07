@@ -16,7 +16,13 @@ import {
 import StudioFooter from "../StudioFooter";
 import cross from "../../../assets/cross.svg";
 let index = 0;
-function AddNewServices({ setShowServices }) {
+
+function AddNewServices({
+  setShowServices,
+  addNewServicesformData,
+  setAddNewServicesformData,
+}) {
+  console.log(addNewServicesformData);
   const [items, setItems] = useState([
     "Wifi",
     "AC",
@@ -26,11 +32,14 @@ function AddNewServices({ setShowServices }) {
     "Banjo",
     "Car Parking",
   ]);
+
   const [name, setName] = useState("");
   const inputRef = useRef(null);
+
   const onNameChange = (event) => {
     setName(event.target.value);
   };
+
   const addItem = (e) => {
     e.preventDefault();
     setItems([...items, name || `New item ${index++}`]);
@@ -40,84 +49,28 @@ function AddNewServices({ setShowServices }) {
     }, 0);
   };
 
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [selectedDate, setSelectedDate] = useState([]);
-
-  const handleCheckboxChange = (id) => {
-    const updatedAmenities = selectedAmenities.includes(id)
-      ? selectedAmenities.filter((amenity) => amenity !== id)
-      : [...selectedAmenities, id];
-
-    setSelectedAmenities(updatedAmenities);
-    console.log(selectedAmenities);
-  };
-  const handledaysCheckboxChange = (id) => {
-    const updaeddays = selectedDate.includes(id)
-      ? selectedDate.filter((day) => day !== id)
-      : [...selectedDate, id];
-
-    setSelectedDate(updaeddays);
-    console.log(selectedDate);
-  };
-  const [iframeCode, setIframeCode] = useState("");
-  const [hasContent, setHasContent] = useState(false);
-
-  const handleIframeCodeChange = (e) => {
-    const inputCode = e.target.value;
-
-    // Update the state with the user-entered iframe code
-    setIframeCode(inputCode);
-
-    // Update hasContent state based on whether there is content in the textarea
-    setHasContent(inputCode.trim() !== "");
-  };
-
-  const [images, setImages] = useState([]);
-  const [isOver, setIsOver] = useState(false);
-
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
     const newImages = [
-      ...images,
-      ...selectedImages.slice(0, 5 - images.length),
+      ...addNewServicesformData.images,
+      ...selectedImages.slice(0, 5 - addNewServicesformData.images.length),
     ];
-    setImages(newImages);
+    setAddNewServicesformData({ ...addNewServicesformData, images: newImages });
   };
 
   const handleRemoveImage = (index) => {
-    const newImages = [...images];
+    const newImages = [...addNewServicesformData.images];
     newImages.splice(index, 1);
-    setImages(newImages);
+    setAddNewServicesformData({ ...addNewServicesformData, images: newImages });
   };
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    setIsOver(true);
+  const handleAmenitiesChange = (selectedAmenities) => {
+    setAddNewServicesformData({
+      ...addNewServicesformData,
+      amenities: selectedAmenities,
+    });
   };
 
-  const handleDragLeave = () => {
-    setIsOver(false);
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    setIsOver(false);
-
-    const draggedIndex = event.dataTransfer.getData("text/plain");
-    const droppedIndex = images.length;
-
-    // Prevent dropping the item back into its original position
-    if (draggedIndex === droppedIndex.toString()) {
-      return;
-    }
-
-    const draggedImage = images[draggedIndex];
-    const newImages = [...images];
-    newImages.splice(draggedIndex, 1);
-    newImages.splice(droppedIndex, 0, draggedImage);
-
-    setImages(newImages);
-  };
   return (
     <>
       <div className={style.addNewStudioTitle}>Add New Services</div>
@@ -125,37 +78,61 @@ function AddNewServices({ setShowServices }) {
         <div style={{ height: "90%" }}>
           <div>
             <div className={style.addNewStudioinputBox}>
-              <label htmlFor="UserName">User Name</label>
-              <input type="text" id="UserName" placeholder="Enter User Name" />
+              <label htmlFor="serviceName">Service Name</label>
+              <input
+                type="text"
+                id="serviceName"
+                placeholder="Enter Service Name"
+                value={addNewServicesformData.serviceName}
+                onChange={(e) =>
+                  setAddNewServicesformData({
+                    ...addNewServicesformData,
+                    serviceName: e.target.value,
+                  })
+                }
+              />
             </div>
 
             <div className={style.addNewStudioinputBox}>
-              <label htmlFor="Mobilenumber">Mobile number</label>
+              <label htmlFor="startingPrice">Price Starting From</label>
               <input
                 type="text"
-                id="Mobilenumber"
-                placeholder="Enter Mobile number"
+                id="startingPrice"
+                placeholder="Enter price"
+                value={addNewServicesformData.startingPrice}
+                onChange={(e) =>
+                  setAddNewServicesformData({
+                    ...addNewServicesformData,
+                    startingPrice: e.target.value,
+                  })
+                }
               />
             </div>
 
             <div className={style.addNewStudioinputBox2}>
-              <label htmlFor="About">About</label>
-
+              <label htmlFor="serviceDetails">Service Details</label>
               <textarea
                 type="text"
-                id="About"
-                placeholder="Enter About Services"
+                id="serviceDetails"
+                placeholder="Enter Service Details"
+                value={addNewServicesformData.serviceDetails}
+                onChange={(e) =>
+                  setAddNewServicesformData({
+                    ...addNewServicesformData,
+                    serviceDetails: e.target.value,
+                  })
+                }
               />
             </div>
           </div>
-          {/* secod side  */}
+
           <div>
             <div className={style.addNewStudioimgBox}>
               <label htmlFor="selectimg">Image</label>
               <br />
               <div>
                 <label className={style.abs} htmlFor="">
-                  {images.length === 0 ? (
+                  {addNewServicesformData.images?.length === 0 ? (
                     <div>
                       <label htmlFor="selectimg">
                         <img src={upload} alt="" />
@@ -165,16 +142,9 @@ function AddNewServices({ setShowServices }) {
                       </label>
                     </div>
                   ) : (
-                    <div
-                      className={`${style.showMultipleStudioImage} ${
-                        isOver ? "drag-over" : ""
-                      }`}
-                      onDrop={handleDrop}
-                      onDragOver={handleDragOver}
-                      onDragLeave={handleDragLeave}
-                    >
+                    <div className={style.showMultipleStudioImage}>
                       <div>
-                        {images.map((image, index) => (
+                        {addNewServicesformData.images.map((image, index) => (
                           <div
                             key={index}
                             draggable
@@ -189,7 +159,6 @@ function AddNewServices({ setShowServices }) {
                             />
                             <span
                               className={style.cancelImageUpload}
-                              style={{ right: "-10%" }}
                               onClick={() => handleRemoveImage(index)}
                             >
                               <img src={cross} alt="" />
@@ -197,7 +166,7 @@ function AddNewServices({ setShowServices }) {
                           </div>
                         ))}
                       </div>
-                      {images.length <= 4 && (
+                      {addNewServicesformData.images.length <= 4 && (
                         <div>
                           <label
                             htmlFor="selectimg"
@@ -273,6 +242,8 @@ function AddNewServices({ setShowServices }) {
                   label: item,
                   value: item,
                 }))}
+                value={addNewServicesformData.amenities}
+                onChange={handleAmenitiesChange}
               />
             </div>
           </div>

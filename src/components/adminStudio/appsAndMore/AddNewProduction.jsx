@@ -24,13 +24,17 @@ function AddNewProduction({ setSelectTab }) {
   // const [productionData, setProductionData] = useState(initialState)
   const data = useLocation();
   const navCount = data?.state?.navCount;
-  // let isEditMode = false;
-  // if (data.state.isEditMode) {
-  //   isEditMode = true;
-  // } else {
-  //   isEditMode = false;
-  // }
 
+  const [addNewServicesformData, setAddNewServicesformData] = useState([
+    {
+      serviceName: "",
+      startingPrice: "",
+      serviceDetails: "",
+      images: [],
+      amenities: [],
+    },
+    // ... add more initial objects as needed based on the selectedOption
+  ]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [services, setServices] = useState([]);
@@ -211,10 +215,49 @@ function AddNewProduction({ setSelectTab }) {
     setServiceDetails(updatedServiceDetails);
   };
 
+  const handleEditService = () => {
+    setShowServices(true);
+  };
   const renderServiceDivs = () => {
     const divs = [];
-    for (let i = 0; i < parseInt(selectedOption); i++) {
-      divs.push(
+
+    for (let i = 0; i < parseInt(selectedOption, 10); i++) {
+      const currentServiceData = addNewServicesformData[i] || {};
+
+      const serviceDiv = currentServiceData.serviceName ? (
+        // Display service with data
+        <div key={i} className={style.addTeamDetailDynamicDiv}>
+          <div className={style.addTeamDetailMainDiv}>
+            <div>
+              <label
+                style={{ cursor: "pointer" }}
+                htmlFor={`uploadServicePhoto`}
+              >
+                <MdOutlineAddBox />
+              </label>
+              <input
+                type="file"
+                id={`uploadServicePhoto`}
+                style={{ display: "none" }}
+                src={URL.createObjectURL(currentServiceData.images[0])}
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                value={currentServiceData.serviceName}
+                placeholder="Name"
+              />
+              <input
+                type="text"
+                placeholder="Profile"
+                value={`starting price from ₹ ${currentServiceData.startingPrice}`}
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        // Display editable service div
         <div
           key={i}
           className={`${style.addNewStudioinputBox} ${style.editPencilinput}`}
@@ -230,15 +273,14 @@ function AddNewProduction({ setSelectTab }) {
             onChange={(e) => handleServiceChange(e, i)}
           />
           <div className={style.editpencil}>
-            <FaPencilAlt
-              onClick={() => {
-                setShowServices(true);
-              }}
-            />
+            <FaPencilAlt onClick={handleEditService} />
           </div>
         </div>
       );
+
+      divs.push(serviceDiv);
     }
+
     return divs;
   };
   return (
@@ -271,6 +313,8 @@ function AddNewProduction({ setSelectTab }) {
             <AddNewServices
               setServices={setServices}
               setShowServices={setShowServices}
+              setAddNewServicesformData={setAddNewServicesformData}
+              addNewServicesformData={addNewServicesformData}
             />
           ) : (
             <>
@@ -331,7 +375,11 @@ function AddNewProduction({ setSelectTab }) {
                           id="Amenities"
                           mode="multiple"
                           placeholder="Select one or more Amenities"
-                          value={selectedItems}
+                          value={
+                            productionData?.amenities?.map(
+                              (item) => item.name
+                            ) || []
+                          }
                           onChange={setSelectedItems}
                           style={customStyles}
                           options={productionData?.amenities?.map((item) => ({
@@ -790,6 +838,28 @@ function AddNewProduction({ setSelectTab }) {
                             </span>
                           </div>
                         )}
+                      </div>
+
+                      <div className={style.addTeamDetailDynamicDiv}>
+                        <div className={style.addTeamDetailMainDiv}>
+                          <div>
+                            <label
+                              style={{ cursor: "pointer" }}
+                              htmlFor={`uploadServicePhoto`}
+                            >
+                              <MdOutlineAddBox />
+                            </label>
+                            <input
+                              type="file"
+                              id={`uploadServicePhoto`}
+                              style={{ display: "none" }}
+                            />
+                          </div>
+                          <div>
+                            <input type="text" placeholder="Name" />
+                            <input type="text" placeholder="Profile" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

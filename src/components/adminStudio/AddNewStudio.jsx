@@ -15,11 +15,15 @@ import { IoSearch } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { FaRegBell } from "react-icons/fa6";
 import { useLocation } from "react-router-dom";
+import { Select } from "antd";
 
 function AddNewStudio({ setSelectTab }) {
+  const customStyles = {
+    height: "90%",
+  };
   const data = useLocation();
   console.log("the data id  ================== >", data.state.productData);
-
+  const [selectedItems, setSelectedItems] = useState([]);
   const [studioDetails, setStudioDetails] = useState({
     fullName: "",
     area: "",
@@ -281,21 +285,24 @@ function AddNewStudio({ setSelectTab }) {
                     <option value="Bombay">Bombay</option>
                   </datalist>
                 </div>
-                <div className={style.amenitesCheckbox}>
-                  {amenitiesList.map((amenity) => (
-                    <div key={amenity.id}>
-                      <input
-                        type="checkbox"
-                        id={amenity.id}
-                        checked={selectedAmenities.includes(amenity.id)}
-                        onChange={() => handleCheckboxChange(amenity.id)}
-                        name="amenity"
-                        value={studioDetails.amenities}
-                      />
-                      &nbsp;
-                      <label htmlFor={amenity.id}>{amenity.label}</label>
-                    </div>
-                  ))}
+                <div className={style.addNewStudioinputBox}>
+                  <label htmlFor="Amenities">Amenities </label>
+
+                  <Select
+                    id="Amenities"
+                    mode="multiple"
+                    className=""
+                    placeholder="Select one or more Amenities"
+                    value={
+                      studioDetails?.amenities?.map((item) => item.name) || []
+                    }
+                    onChange={setSelectedItems}
+                    style={customStyles}
+                    options={studioDetails?.amenities?.map((item) => ({
+                      value: item.name,
+                      label: item.name,
+                    }))}
+                  />
                 </div>
               </div>
               <div>
