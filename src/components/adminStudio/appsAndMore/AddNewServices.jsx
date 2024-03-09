@@ -15,14 +15,13 @@ import {
 } from "react-icons/fa6";
 import StudioFooter from "../StudioFooter";
 import cross from "../../../assets/cross.svg";
-let index = 0;
 
 function AddNewServices({
   setShowServices,
   addNewServicesformData,
   setAddNewServicesformData,
+  indexofServices,
 }) {
-  console.log(addNewServicesformData);
   const [items, setItems] = useState([
     "Wifi",
     "AC",
@@ -33,17 +32,23 @@ function AddNewServices({
     "Car Parking",
   ]);
 
-  const [name, setName] = useState("");
   const inputRef = useRef(null);
 
+  const currentServiceData = addNewServicesformData[indexofServices] || {};
+
   const onNameChange = (event) => {
-    setName(event.target.value);
+    setAddNewServicesformData({
+      ...addNewServicesformData,
+      [indexofServices]: {
+        ...currentServiceData,
+        serviceName: event.target.value,
+      },
+    });
   };
 
   const addItem = (e) => {
     e.preventDefault();
-    setItems([...items, name || `New item ${index++}`]);
-    setName("");
+    setItems([...items, currentServiceData.serviceName]);
     setTimeout(() => {
       inputRef.current?.focus();
     }, 0);
@@ -52,22 +57,39 @@ function AddNewServices({
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
     const newImages = [
-      ...addNewServicesformData.images,
-      ...selectedImages.slice(0, 5 - addNewServicesformData.images.length),
+      ...currentServiceData.images,
+      ...selectedImages.slice(0, 5 - currentServiceData.images.length),
     ];
-    setAddNewServicesformData({ ...addNewServicesformData, images: newImages });
+
+    setAddNewServicesformData({
+      ...addNewServicesformData,
+      [indexofServices]: {
+        ...currentServiceData,
+        images: newImages,
+      },
+    });
   };
 
   const handleRemoveImage = (index) => {
-    const newImages = [...addNewServicesformData.images];
+    const newImages = [...currentServiceData.images];
     newImages.splice(index, 1);
-    setAddNewServicesformData({ ...addNewServicesformData, images: newImages });
+
+    setAddNewServicesformData({
+      ...addNewServicesformData,
+      [indexofServices]: {
+        ...currentServiceData,
+        images: newImages,
+      },
+    });
   };
 
   const handleAmenitiesChange = (selectedAmenities) => {
     setAddNewServicesformData({
       ...addNewServicesformData,
-      amenities: selectedAmenities,
+      [indexofServices]: {
+        ...currentServiceData,
+        amenities: selectedAmenities,
+      },
     });
   };
 
@@ -83,13 +105,8 @@ function AddNewServices({
                 type="text"
                 id="serviceName"
                 placeholder="Enter Service Name"
-                value={addNewServicesformData.serviceName}
-                onChange={(e) =>
-                  setAddNewServicesformData({
-                    ...addNewServicesformData,
-                    serviceName: e.target.value,
-                  })
-                }
+                value={currentServiceData.serviceName}
+                onChange={onNameChange}
               />
             </div>
 
@@ -99,11 +116,14 @@ function AddNewServices({
                 type="text"
                 id="startingPrice"
                 placeholder="Enter price"
-                value={addNewServicesformData.startingPrice}
+                value={currentServiceData.startingPrice}
                 onChange={(e) =>
                   setAddNewServicesformData({
                     ...addNewServicesformData,
-                    startingPrice: e.target.value,
+                    [indexofServices]: {
+                      ...currentServiceData,
+                      startingPrice: e.target.value,
+                    },
                   })
                 }
               />
@@ -115,11 +135,14 @@ function AddNewServices({
                 type="text"
                 id="serviceDetails"
                 placeholder="Enter Service Details"
-                value={addNewServicesformData.serviceDetails}
+                value={currentServiceData.serviceDetails}
                 onChange={(e) =>
                   setAddNewServicesformData({
                     ...addNewServicesformData,
-                    serviceDetails: e.target.value,
+                    [indexofServices]: {
+                      ...currentServiceData,
+                      serviceDetails: e.target.value,
+                    },
                   })
                 }
               />
@@ -132,7 +155,7 @@ function AddNewServices({
               <br />
               <div>
                 <label className={style.abs} htmlFor="">
-                  {addNewServicesformData.images?.length === 0 ? (
+                  {currentServiceData.images?.length === 0 ? (
                     <div>
                       <label htmlFor="selectimg">
                         <img src={upload} alt="" />
@@ -144,7 +167,7 @@ function AddNewServices({
                   ) : (
                     <div className={style.showMultipleStudioImage}>
                       <div>
-                        {addNewServicesformData.images.map((image, index) => (
+                        {currentServiceData.images.map((image, index) => (
                           <div
                             key={index}
                             draggable
@@ -166,7 +189,7 @@ function AddNewServices({
                           </div>
                         ))}
                       </div>
-                      {addNewServicesformData.images.length <= 4 && (
+                      {currentServiceData.images.length <= 4 && (
                         <div>
                           <label
                             htmlFor="selectimg"
@@ -220,7 +243,7 @@ function AddNewServices({
                       <Input
                         placeholder="Please enter item"
                         ref={inputRef}
-                        value={name}
+                        value={currentServiceData.serviceName}
                         onChange={onNameChange}
                         onKeyDown={(e) => e.stopPropagation()}
                         style={{
@@ -242,7 +265,7 @@ function AddNewServices({
                   label: item,
                   value: item,
                 }))}
-                value={addNewServicesformData.amenities}
+                value={currentServiceData.amenities}
                 onChange={handleAmenitiesChange}
               />
             </div>

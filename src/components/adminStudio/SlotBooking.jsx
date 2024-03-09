@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MdAddAPhoto } from "react-icons/md";
+import { MdAddAPhoto, MdOutlineSettings } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import upload from "../../assets/img/upload.png";
 import style from "../../pages/admin/studios/studio.module.css";
@@ -12,8 +12,15 @@ import {
   FaShare,
 } from "react-icons/fa6";
 import StudioFooter from "./StudioFooter";
+import WebDashboard2 from "../../pages/produce/WebDashBoard2";
+import { IoSearch } from "react-icons/io5";
+import { GoDotFill } from "react-icons/go";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function SlotBooking({ setSelectTab }) {
+  const data = useLocation();
+  const [tabCount, setTabCount] = useState();
+  const navCount = data?.state?.navCount;
   const days = [
     { id: "Monday", label: "Monday" },
     { id: "Tuesday", label: "Tuesday" },
@@ -64,84 +71,122 @@ function SlotBooking({ setSelectTab }) {
     // Update hasContent state based on whether there is content in the textarea
     setHasContent(inputCode.trim() !== "");
   };
+  const navigate = useNavigate();
+  const backOnclick = () => {
+    navigate("/adminDashboard");
+  };
   return (
     <>
-      <div className={style.addNewStudioTitle}>Slot Booking</div>
-      <div className={style.addNewStudioPage}>
-        <div style={{ height: "80%" }}>
-          <div>
-            <div className={style.addNewStudioinputBox}>
-              <label htmlFor="UserName">User Name</label>
-              <input type="text" id="UserName" placeholder="Enter User Name" />
+      <div className={style.wrapper}>
+        <WebDashboard2
+          navCount={navCount}
+          tabCount={tabCount}
+          setTabCount={setTabCount}
+        />
+        <div className={style.studioMainScreen}>
+          <div className={style.studioHeader}>
+            <div>
+              <input type="text" placeholder="search" />
             </div>
-
-            <div className={style.addNewStudioinputBox}>
-              <label htmlFor="Mobilenumber">Mobile number</label>
-              <input
-                type="text"
-                id="Mobilenumber"
-                placeholder="Enter Mobile number"
-              />
+            <div>
+              <IoSearch />
             </div>
-
-            <div className={style.addNewStudioinputBox}>
-              <label htmlFor="Email">Email</label>
-              <input type="email" id="Email" placeholder="Enter Email id" />
+            <div>
+              <div className={style.notifyIcon}>
+                <GoDotFill />
+              </div>
+              <FaRegBell />
             </div>
-
-            <div className={style.addNewStudioinputBox}>
-              <label>Booking Hours</label>
-
-              <select>
-                <option>Choose Booking Hours</option>
-                <option>1 Hour</option>
-                <option>2 Hour</option>
-                <option>3 Hour</option>
-                <option>4 Hour</option>
-                <option>5 Hour</option>
-              </select>
+            <div>
+              <MdOutlineSettings />
             </div>
           </div>
-          {/* secod side  */}
-          <div>
-            <div className={style.addNewStudioinputBox}>
-              <label>Studio</label>
+          <div className={style.addNewStudioTitle}>Slot Booking</div>
+          <div className={style.addNewStudioPage}>
+            <div style={{ height: "80%" }}>
+              <div>
+                <div className={style.addNewStudioinputBox}>
+                  <label htmlFor="UserName">User Name</label>
+                  <input
+                    type="text"
+                    id="UserName"
+                    placeholder="Enter User Name"
+                  />
+                </div>
 
-              <select>
-                <option>Select Studio</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </div>
-            <div className={style.addNewStudioinputBox}>
-              <label>Room</label>
+                <div className={style.addNewStudioinputBox}>
+                  <label htmlFor="Mobilenumber">Mobile number</label>
+                  <input
+                    type="text"
+                    id="Mobilenumber"
+                    placeholder="Enter Mobile number"
+                  />
+                </div>
 
-              <select>
-                <option>Select Room</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </div>
+                <div className={style.addNewStudioinputBox}>
+                  <label htmlFor="Email">Email</label>
+                  <input type="email" id="Email" placeholder="Enter Email id" />
+                </div>
 
-            <div className={style.addNewStudioinputBox}>
-              <label htmlFor="Date">Date</label>
-              <input type="date" id="RoomArea" placeholder="Enter Date" />
-            </div>
+                <div className={style.addNewStudioinputBox}>
+                  <label>Booking Hours</label>
 
-            <div className={style.addNewStudioinputBox}>
-              <label htmlFor="TimeSlot">Time Slot</label>
-              <input type="time" id="TimeSlot" placeholder="Enter Time Slot" />
+                  <select>
+                    <option>Choose Booking Hours</option>
+                    <option>1 Hour</option>
+                    <option>2 Hour</option>
+                    <option>3 Hour</option>
+                    <option>4 Hour</option>
+                    <option>5 Hour</option>
+                  </select>
+                </div>
+              </div>
+              {/* secod side  */}
+              <div>
+                <div className={style.addNewStudioinputBox}>
+                  <label>Studio</label>
+
+                  <select>
+                    <option>Select Studio</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                </div>
+                <div className={style.addNewStudioinputBox}>
+                  <label>Room</label>
+
+                  <select>
+                    <option>Select Room</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                </div>
+
+                <div className={style.addNewStudioinputBox}>
+                  <label htmlFor="Date">Date</label>
+                  <input type="date" id="RoomArea" placeholder="Enter Date" />
+                </div>
+
+                <div className={style.addNewStudioinputBox}>
+                  <label htmlFor="TimeSlot">Time Slot</label>
+                  <input
+                    type="time"
+                    id="TimeSlot"
+                    placeholder="Enter Time Slot"
+                  />
+                </div>
+              </div>
             </div>
           </div>
+          <StudioFooter setSelectTab={setSelectTab} backOnclick={backOnclick} />
         </div>
       </div>
-      <StudioFooter setSelectTab={setSelectTab} />
     </>
   );
 }

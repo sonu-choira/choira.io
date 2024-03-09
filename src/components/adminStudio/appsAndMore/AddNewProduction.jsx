@@ -22,19 +22,38 @@ import AddNewServices from "./AddNewServices";
 
 function AddNewProduction({ setSelectTab }) {
   // const [productionData, setProductionData] = useState(initialState)
+  const [selectedOption, setSelectedOption] = useState("0");
+
   const data = useLocation();
   const navCount = data?.state?.navCount;
 
-  const [addNewServicesformData, setAddNewServicesformData] = useState([
-    {
-      serviceName: "",
-      startingPrice: "",
-      serviceDetails: "",
-      images: [],
-      amenities: [],
-    },
-    // ... add more initial objects as needed based on the selectedOption
-  ]);
+  const [addNewServicesformData, setAddNewServicesformData] = useState([]);
+
+  const initializeServicesArray = () => {
+    const initialArray = [];
+    const selectedOptionCount = parseInt(selectedOption, 10);
+
+    for (let i = 0; i < selectedOptionCount; i++) {
+      initialArray.push({
+        serviceName: "",
+        startingPrice: "",
+        serviceDetails: "",
+        images: [],
+        amenities: [],
+      });
+    }
+
+    setAddNewServicesformData(initialArray);
+  };
+
+  useEffect(() => {
+    // Initialize the array when the selectedOption changes
+    initializeServicesArray();
+  }, [selectedOption]);
+
+  useEffect(() => {
+    console.log("hii", addNewServicesformData);
+  }, [addNewServicesformData]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [services, setServices] = useState([]);
@@ -65,26 +84,6 @@ function AddNewProduction({ setSelectTab }) {
 
   const [selectedAmenities, setSelectedAmenities] = useState([]);
 
-  // const handleCheckboxChange = (id) => {
-  //   const updatedAmenities = selectedAmenities.includes(id)
-  //     ? selectedAmenities.filter((amenity) => amenity !== id)
-  //     : [...selectedAmenities, id];
-
-  //   setSelectedAmenities(updatedAmenities);
-  //   console.log(selectedAmenities);
-  // };
-  // const [iframeCode, setIframeCode] = useState("");
-  // const [hasContent, setHasContent] = useState(false);
-
-  // const handleIframeCodeChange = (e) => {
-  //   const inputCode = e.target.value;
-
-  //   // Update the state with the user-entered iframe code
-  //   setIframeCode(inputCode);
-
-  //   // Update hasContent state based on whether there is content in the textarea
-  //   setHasContent(inputCode.trim() !== "");
-  // };
   const [teams, setTeams] = useState([{ photo: null, name: "", profile: "" }]);
 
   const handleAddTeamDetail = () => {
@@ -201,7 +200,6 @@ function AddNewProduction({ setSelectTab }) {
   const [tabCount, setTabCount] = useState();
 
   // this code is for render multiple div based on select
-  const [selectedOption, setSelectedOption] = useState("0");
   const [serviceDetails, setServiceDetails] = useState([]);
 
   const handleChange = (event) => {
@@ -214,9 +212,10 @@ function AddNewProduction({ setSelectTab }) {
     updatedServiceDetails[index] = event.target.value;
     setServiceDetails(updatedServiceDetails);
   };
-
-  const handleEditService = () => {
+  const [indexofServices, setIndexofServices] = useState();
+  const handleEditService = (i) => {
     setShowServices(true);
+    setIndexofServices(i);
   };
   const renderServiceDivs = () => {
     const divs = [];
@@ -225,6 +224,7 @@ function AddNewProduction({ setSelectTab }) {
       const currentServiceData = addNewServicesformData[i] || {};
 
       const serviceDiv = currentServiceData.serviceName ? (
+        // currentServiceData.images.length > 0 ? (
         // Display service with data
         <div key={i} className={style.addTeamDetailDynamicDiv}>
           <div className={style.addTeamDetailMainDiv}>
@@ -233,17 +233,26 @@ function AddNewProduction({ setSelectTab }) {
                 style={{ cursor: "pointer" }}
                 htmlFor={`uploadServicePhoto`}
               >
-                <MdOutlineAddBox />
+                {/* <MdOutlineAddBox /> */}
               </label>
-              <input
-                type="file"
-                id={`uploadServicePhoto`}
-                style={{ display: "none" }}
-                src={URL.createObjectURL(currentServiceData.images[0])}
+
+              <img
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+                src={
+                  currentServiceData.images.length > 0
+                    ? URL.createObjectURL(currentServiceData.images[0])
+                    : ""
+                }
+                alt=""
               />
             </div>
             <div>
               <input
+                readOnly
                 type="text"
                 value={currentServiceData.serviceName}
                 placeholder="Name"
@@ -252,6 +261,13 @@ function AddNewProduction({ setSelectTab }) {
                 type="text"
                 placeholder="Profile"
                 value={`starting price from ₹ ${currentServiceData.startingPrice}`}
+              />
+            </div>
+            <div className={style.editpencil}>
+              <FaPencilAlt
+                onClick={() => {
+                  handleEditService(i);
+                }}
               />
             </div>
           </div>
@@ -273,7 +289,11 @@ function AddNewProduction({ setSelectTab }) {
             onChange={(e) => handleServiceChange(e, i)}
           />
           <div className={style.editpencil}>
-            <FaPencilAlt onClick={handleEditService} />
+            <FaPencilAlt
+              onClick={() => {
+                handleEditService(i);
+              }}
+            />
           </div>
         </div>
       );
@@ -283,6 +303,7 @@ function AddNewProduction({ setSelectTab }) {
 
     return divs;
   };
+
   return (
     <>
       <div className={style.wrapper}>
@@ -315,6 +336,8 @@ function AddNewProduction({ setSelectTab }) {
               setShowServices={setShowServices}
               setAddNewServicesformData={setAddNewServicesformData}
               addNewServicesformData={addNewServicesformData}
+              setIndexofServices={setIndexofServices}
+              indexofServices={indexofServices}
             />
           ) : (
             <>
@@ -414,58 +437,6 @@ function AddNewProduction({ setSelectTab }) {
                       />
                     </div>
 
-                    {/* <div>
-                      <label htmlFor={`Discography`}>Discography</label>
-                      {discography.map((value, index) => (
-                        <div className={style.Discography} key={index}>
-                          <div>
-                            <input
-                              type="text"
-                              id={`Discography-${index}`}
-                              value={value}
-                              onChange={(e) =>
-                                handleDiscographyInputChange(index, e.target.value)
-                              }
-                              placeholder="Enter work links"
-                            />
-                            {index > 0 && (
-                              <div
-                                className={style.cancelUpload}
-                                onClick={() => handleRemoveDiscography(index)}
-                              >
-                                <img src={cross} alt="Remove" />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                      {discography.length < 3 && (
-                        <div
-                          style={{ cursor: "pointer" }}
-                          className={style.addDiscography}
-                          onClick={handleAddDiscography}
-                        >
-                          <VscDiffAdded /> Add Discography
-                        </div>
-                      )}
-                    </div> */}
-
-                    {/* <div
-                      className={`${style.addNewStudioinputBox} ${style.editPencilinput}`}
-                    >
-                      <label htmlFor="ProductionName">Services</label>
-                      <input
-                        className={style.editPencilinput}
-                        type="text"
-                        id="ProductionName"
-                        name="ProductionName"
-                        value={productionData.fullName}
-                        placeholder="Enter Services Details"
-                      />
-                      <div className={style.editpencil}>
-                        <FaPencilAlt />
-                      </div>
-                    </div> */}
                     {selectedOption !== "0" && renderServiceDivs()}
                   </div>
 
@@ -838,28 +809,6 @@ function AddNewProduction({ setSelectTab }) {
                             </span>
                           </div>
                         )}
-                      </div>
-
-                      <div className={style.addTeamDetailDynamicDiv}>
-                        <div className={style.addTeamDetailMainDiv}>
-                          <div>
-                            <label
-                              style={{ cursor: "pointer" }}
-                              htmlFor={`uploadServicePhoto`}
-                            >
-                              <MdOutlineAddBox />
-                            </label>
-                            <input
-                              type="file"
-                              id={`uploadServicePhoto`}
-                              style={{ display: "none" }}
-                            />
-                          </div>
-                          <div>
-                            <input type="text" placeholder="Name" />
-                            <input type="text" placeholder="Profile" />
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>

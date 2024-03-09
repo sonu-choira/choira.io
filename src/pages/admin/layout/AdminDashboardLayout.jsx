@@ -42,8 +42,8 @@ function AdminDashboardLayout() {
               <MdOutlineSettings />
             </div>
           </div>
-          {tabCount === 1 && <SlotBooking />}
-          {tabCount === 2 && <AddNewServices />}
+          {tabCount === 1 && ""}
+          {tabCount === 2 && ""}
 
           {tabCount === 3 ? (
             <AllStudioPageDetailsPage />

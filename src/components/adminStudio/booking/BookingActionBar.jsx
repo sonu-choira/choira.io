@@ -15,6 +15,11 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
       state: { navCount: 3, bookingPageCount: bookingPageCount },
     });
   };
+  const gotoSlotBooking = () => {
+    navigate("/service/AddSlotBooking", {
+      state: { navCount: 4 },
+    });
+  };
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
@@ -110,6 +115,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               name={"Slot Booking"}
               icon={<LuFilePlus />}
               style={{ height: "50%", width: "20%", gap: "5%" }}
+              onClick={gotoSlotBooking}
             />
           ) : (
             ""

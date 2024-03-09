@@ -100,7 +100,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 <img src={tanmay} alt="" />
               </div>
               <div>
-                <h5>Tanmay</h5>
+                <h5>Tanmay</h5> <br />
                 <h6>Music Producer</h6>
               </div>
             </div>
