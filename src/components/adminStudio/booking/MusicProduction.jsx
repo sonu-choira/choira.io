@@ -48,9 +48,9 @@ function MusicProduction({
               </tr>
             </thead>
             <tbody>
-              {currentTableData.map((products) => {
+              {currentTableData.map((products, i) => {
                 return (
-                  <tr>
+                  <tr key={i}>
                     <td style={{ textAlign: "center" }}>#{products._id}</td>
                     <td>{products.userFullName}</td>
 

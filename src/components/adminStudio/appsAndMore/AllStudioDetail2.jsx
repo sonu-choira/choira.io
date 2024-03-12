@@ -15,10 +15,18 @@ import { LuFilePlus } from "react-icons/lu";
 import imageNotFound from "../../../assets/imagesNotFound.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 
 let PageSize = 10;
 
-function AllStudioDetail2({ products, setProducts }) {
+function AllStudioDetail2({
+  products,
+  setProducts,
+  pageDetails,
+  setPageCount,
+  pageCount,
+  totalPage,
+}) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
     const selectedProduct = products.find((product) => product._id === id);
@@ -82,7 +90,7 @@ function AllStudioDetail2({ products, setProducts }) {
               </tr>
             </thead>
             <tbody>
-              {currentTableData.map((products) => {
+              {products.map((products) => {
                 return (
                   <tr key={products._id}>
                     <td style={{ display: "flex", alignItems: "center" }}>
@@ -153,12 +161,10 @@ function AllStudioDetail2({ products, setProducts }) {
         </div>
       </div>
       <div className={style.tabelpaginationDiv}>
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={products.length}
-          pageSize={PageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+        <PaginationNav
+          pageCount={pageCount}
+          totalPage={totalPage}
+          setPageCount={setPageCount}
         />
       </div>
     </>

@@ -14,12 +14,16 @@ import WebDashboard2 from "../../pages/produce/WebDashBoard2";
 import { IoSearch } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { FaRegBell } from "react-icons/fa6";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Select } from "antd";
 
 function AddNewStudio({ setSelectTab }) {
   const customStyles = {
     height: "90%",
+  };
+  const navigate = useNavigate();
+  const gotoadminpage = () => {
+    navigate("/adminDashboard");
   };
   const data = useLocation();
   console.log("the data id  ================== >", data.state.productData);
@@ -650,7 +654,10 @@ function AddNewStudio({ setSelectTab }) {
               </div>
             </div>
           </div>
-          <StudioFooter setSelectTab={setSelectTab} />
+          <StudioFooter
+            setSelectTab={setSelectTab}
+            backOnclick={gotoadminpage}
+          />
         </div>
       </div>
     </>

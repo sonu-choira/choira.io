@@ -42,6 +42,8 @@ import Appapi from "../../../services/appAndmoreApi";
 function AllStudioPageDetailsPage() {
   const [bookingPageCount, setBookingPageCount] = useState("c1");
   const [products, setProducts] = useState([]);
+  const [totalPage, setTotalPage] = useState();
+  const [pageCount, setPageCount] = useState(1);
 
   const navigate = useNavigate();
   const gotoSignin = () => {
@@ -54,13 +56,15 @@ function AllStudioPageDetailsPage() {
 
     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
       // Corrected the id assignments
-      const idToUse = bookingPageCount === "c2" ? "c2" : "c2";
+      const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
-      Appapi.getServices("100", idToUse, 1)
+      Appapi.getServices("10", idToUse, 1, pageCount)
         .then((response) => {
           console.log("====================> response C2", response);
           if (response.status) {
             setProducts(response.services.results);
+            // console.log("lkasdnflkjsdnf", response.status);
+            setTotalPage(response.services.totalPages);
           }
         })
         .catch((error) => {
@@ -70,16 +74,21 @@ function AllStudioPageDetailsPage() {
       const limit = 64;
       const active = 1;
       // const type = bookingPageCount;
-      Appapi.getStudios(limit, active)
+      Appapi.getStudios(limit, active, pageCount)
         .then((response) => {
           console.log("====================> response C1", response);
-          if (response.nearYou) setProducts(response.nearYou);
+          if (response.studios.results) {
+            setProducts(response.studios.results);
+            setTotalPage(response.studios.paginate.totalPages);
+
+            // setPageCount(response.paginate.page);
+          }
         })
         .catch((error) => {
           console.error("Error fetching studios:", error);
         });
     }
-  }, [bookingPageCount]);
+  }, [bookingPageCount, pageCount]);
   const pagetype = "apps";
 
   return (
@@ -91,12 +100,30 @@ function AllStudioPageDetailsPage() {
           setBookingPageCount={setBookingPageCount}
         />
         {bookingPageCount === "c1" ? (
-          <AllStudioDetail2 products={products} setProducts={setProducts} />
+          <AllStudioDetail2
+            products={products}
+            setProducts={setProducts}
+            totalPage={totalPage}
+            setPageCount={setPageCount}
+            pageCount={pageCount}
+          />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
-          <ASMusicProduction products={products} setProducts={setProducts} />
+          <ASMusicProduction
+            products={products}
+            setProducts={setProducts}
+            totalPage={totalPage}
+            setPageCount={setPageCount}
+            pageCount={pageCount}
+          />
         ) : bookingPageCount === "c3" ? (
-          <ASMixandMaster products={products} setProducts={setProducts} />
+          <ASMixandMaster
+            products={products}
+            setProducts={setProducts}
+            totalPage={totalPage}
+            setPageCount={setPageCount}
+            pageCount={pageCount}
+          />
         ) : (
           <Artist />
         )}

@@ -16,10 +16,18 @@ import imageNotFound from "../../../assets/imagesNotFound.png";
 
 import { LuFilePlus } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
+import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 
 let PageSize = 10;
 
-function ASMixandMaster({ products, setProducts }) {
+function ASMixandMaster({
+  products,
+  setProducts,
+  pageDetails,
+  setPageCount,
+  pageCount,
+  totalPage,
+}) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const navigate = useNavigate();
@@ -90,7 +98,7 @@ function ASMixandMaster({ products, setProducts }) {
               </tr>
             </thead>
             <tbody>
-              {currentTableData.map((products) => {
+              {products.map((products) => {
                 return (
                   <tr key={products._id}>
                     <td style={{ display: "flex", alignItems: "center" }}>
@@ -122,8 +130,17 @@ function ASMixandMaster({ products, setProducts }) {
                         <label className="switch">
                           <input
                             type="checkbox"
-                            checked={activityStatus[products._id] || false}
-                            onChange={() => handleSwitchChange(products._id)}
+                            checked={
+                              products.isActive === 1
+                              // ? activityStatus[products._id]
+                              // : false
+                            }
+                            onChange={() =>
+                              handleSwitchChange(
+                                products._id,
+                                products.isActive
+                              )
+                            }
                           />
                           <span className="slider"></span>
                         </label>
@@ -149,12 +166,10 @@ function ASMixandMaster({ products, setProducts }) {
         </div>
       </div>
       <div className={style.tabelpaginationDiv}>
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={products.length}
-          pageSize={PageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+        <PaginationNav
+          pageCount={pageCount}
+          totalPage={totalPage}
+          setPageCount={setPageCount}
         />
       </div>
     </>

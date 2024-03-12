@@ -3,25 +3,27 @@ import api from "./api"
 
 class Appapi{
   
- getStudios = async (limit,active) => {
+ getStudios = async (limit,active ,pageCount) => {
   
 
   const response = await api.get(`/studios-all`, {
     params: {
-      limit: limit,
-      active: active
+      limit: 10,
+      page :pageCount,
+      // active: active
     }
   });
   console.log("res ===>", response.data)
   return response.data;
  };
 
- getServices = async (limit, Type, active) => {
+ getServices = async (limit, Type, active ,pageCount) => {
     const response = await api.get(`/services`,{ 
         params: {
             limit: limit,
             serviceType: Type,
-            active: active
+            active: active,
+            page:pageCount,
         }
     });
     const {status} = response.data

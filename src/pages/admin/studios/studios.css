@@ -173,6 +173,7 @@ input[type="number"] {
 .pagination-container {
   display: flex;
   list-style-type: none;
+  /* border: 2px solid red; */
 
   .pagination-item {
     padding: 0 12px;

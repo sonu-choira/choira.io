@@ -15,25 +15,11 @@ import bookingPageApi from "../../../services/bookingPageApi";
 function BookingPages() {
   const [bookingPageCount, setBookingPageCount] = useState("c1");
   const [products, setProducts] = useState([]);
+
   const navigate = useNavigate();
   const gotoSignin = () => {
     navigate("/signin");
   };
-  // const storedIsSignin = localStorage.getItem("isSignin");
-  // const storedAlert = localStorage.getItem("alertShown");
-  // useEffect(() => {
-  //   if (storedIsSignin) {
-  //     if (storedAlert) {
-  //     } else {
-  //       alert("Welcome Admin 😊");
-  //       localStorage.setItem("alertShown", "true");
-  //     }
-  //   } else {
-  //     gotoSignin();
-  //   }
-  // }, []);
-
-  // {-------  this code is for update color of selected  action ---------}
 
   const handleChange = async (productId, event) => {
     /// api
@@ -109,7 +95,10 @@ function BookingPages() {
         .getBookings(limit, active)
         .then((response) => {
           console.log("====================> response C1", response);
-          if (response.data) setProducts(response.data);
+          if (response.data) {
+            setProducts(response.data);
+            console.log("pagekaDetail", response);
+          }
         })
         .catch((error) => {
           console.error("Error fetching studios:", error);
