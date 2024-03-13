@@ -11,9 +11,13 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
   console.log(bookingPageCount);
   const navigate = useNavigate();
   const gotoAddNew = (bookingPageCount) => {
-    navigate("/service/musicProduction/add", {
-      state: { navCount: 3, bookingPageCount: bookingPageCount },
-    });
+    if (bookingPageCount === "c1") {
+      navigate("/studio/add");
+    } else {
+      navigate("/service/musicProduction/add", {
+        state: { navCount: 3, bookingPageCount: bookingPageCount },
+      });
+    }
   };
   const gotoSlotBooking = () => {
     navigate("/service/AddSlotBooking", {
@@ -123,7 +127,9 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
 
           {pagetype != "apps" ? (
             ""
-          ) : bookingPageCount === "c2" || bookingPageCount === "c3" ? (
+          ) : bookingPageCount === "c2" ||
+            bookingPageCount === "c3" ||
+            bookingPageCount === "c1" ? (
             <Button
               name={"Add New"}
               onClick={() => {

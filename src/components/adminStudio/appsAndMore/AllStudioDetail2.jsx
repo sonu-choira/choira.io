@@ -29,14 +29,33 @@ function AllStudioDetail2({
 }) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
+    const isEditMode = true;
     const selectedProduct = products.find((product) => product._id === id);
     console.log("navigated=======>", selectedProduct);
 
     navigate(`/studio/edit?id=${id}`, {
-      state: { productData: selectedProduct },
+      state: {
+        productData: selectedProduct,
+        navCount: 3,
+        isEditMode: isEditMode,
+      },
     });
   };
   const [currentPage, setCurrentPage] = useState(1);
+  const gotoShowStudioDetaisl = (id) => {
+    const isEditMode = true;
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
+
+    navigate(`/studio/edit?id=${id}`, {
+      state: {
+        productData: selectedProduct,
+        navCount: 3,
+        isEditMode: isEditMode,
+        showMode: true,
+      },
+    });
+  };
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -141,7 +160,10 @@ function AllStudioDetail2({
                         </label>
                       </div>
                       <div>
-                        <GrShare style={{ cursor: "pointer" }} />
+                        <GrShare
+                          style={{ cursor: "pointer" }}
+                          onClick={() => gotoShowStudioDetaisl(products._id)}
+                        />
                         <MdEdit
                           style={{ color: "#ffc701", cursor: "pointer" }}
                           onClick={() => {

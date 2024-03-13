@@ -16,8 +16,16 @@ import { GoDotFill } from "react-icons/go";
 import { FaRegBell } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Select } from "antd";
+import { FaPencilAlt } from "react-icons/fa";
 
 function AddNewStudio({ setSelectTab }) {
+  const [images, setImages] = useState([]);
+  const [isOver, setIsOver] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  useEffect(() => {
+    setIsEditMode(data.state?.isEditMode);
+  }, []);
   const customStyles = {
     height: "90%",
   };
@@ -25,8 +33,14 @@ function AddNewStudio({ setSelectTab }) {
   const gotoadminpage = () => {
     navigate("/adminDashboard");
   };
+
   const data = useLocation();
-  console.log("the data id  ================== >", data.state.productData);
+  console.log("the data id  ================== >", data?.state?.productData);
+  // alert(data.state.navCount);
+  const [showMode, setshowMode] = useState(data?.state?.showMode || false);
+
+  const navCount = data?.state?.navCount;
+  const [tabCount, setTabCount] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
   const [studioDetails, setStudioDetails] = useState({
     fullName: "",
@@ -48,8 +62,15 @@ function AddNewStudio({ setSelectTab }) {
   });
 
   useEffect(() => {
-    setStudioDetails(data.state.productData);
-  }, [data.state.productData]);
+    if (data?.state?.productData) setStudioDetails(data?.state?.productData);
+  }, [data?.state?.productData]);
+
+  useEffect(() => {
+    if (studioDetails?.studioPhotos.length)
+      setImages(studioDetails.studioPhotos);
+    // studioDetails?.studioPhotos.length ??
+    //   setImages(studioDetails?.studioPhotos);
+  }, [studioDetails?.studioPhotos?.length]);
 
   const amenitiesList = [
     { id: "wifi", label: "Wifi" },
@@ -121,9 +142,6 @@ function AddNewStudio({ setSelectTab }) {
     return team.photo ? { display: "none" } : {};
   };
 
-  const [images, setImages] = useState([]);
-  const [isOver, setIsOver] = useState(false);
-
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
     const newImages = [
@@ -167,10 +185,103 @@ function AddNewStudio({ setSelectTab }) {
 
     setImages(newImages);
   };
+
+  // --------------------------rooms ---------------------
+  const [selectedOption, setSelectedOption] = useState("0");
+  if (data?.state?.productData?.totalRooms.length) {
+    // setSelectedOption(studioDetails?.totalRooms);
+    console.log(data?.state?.productData?.totalRooms);
+    setSelectedOption(data?.state?.productData?.totalRooms);
+  }
+  const [serviceDetails, setServiceDetails] = useState([]);
+  const [addNewServicesformData, setAddNewServicesformData] = useState([]);
+  const [showServices, setShowServices] = useState(false);
+
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+    setServiceDetails([]);
+  };
+
+  const handleServiceChange = (event, index) => {
+    const updatedServiceDetails = [...serviceDetails];
+    updatedServiceDetails[index] = event.target.value;
+    setServiceDetails(updatedServiceDetails);
+  };
+  const [indexofServices, setIndexofServices] = useState();
+  const handleEditService = (i) => {
+    setShowServices(true);
+    setIndexofServices(i);
+  };
+
+  const renderServiceDivs = () => {
+    const divs = [];
+
+    for (let i = 0; i < parseInt(selectedOption, 10); i++) {
+      const currentServiceData = addNewServicesformData[i] || {};
+
+      const serviceDiv = (
+        <div key={i} className={style.addTeamDetailDynamicDiv}>
+          <div className={style.addTeamDetailMainDiv}>
+            <div>
+              <label
+                style={{ cursor: "pointer" }}
+                htmlFor={`uploadServicePhoto`}
+              >
+                {/* <MdOutlineAddBox /> */}
+              </label>
+
+              <img
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+                // src={
+                //   currentServiceData.images.length > 0
+                //     ? URL.createObjectURL(currentServiceData.images[0])
+                //     : ""
+                // }
+                alt=""
+              />
+            </div>
+            <div>
+              <input
+                readOnly
+                type="text"
+                value={studioDetails?.roomsDetails?.roomName}
+                placeholder="Name"
+              />
+              <input
+                type="text"
+                placeholder="Profile"
+                value={`starting price from ₹ ${currentServiceData.startingPrice}`}
+              />
+            </div>
+            <div className={style.editpencil}>
+              <FaPencilAlt
+                onClick={() => {
+                  handleEditService(i);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      );
+
+      divs.push(serviceDiv);
+    }
+
+    return divs;
+  };
+
   return (
     <>
       <div className={style.wrapper}>
-        <WebDashboard2 />
+        <WebDashboard2
+          navCount={navCount}
+          tabCount={tabCount}
+          setTabCount={setTabCount}
+        />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
             <div>
@@ -191,10 +302,18 @@ function AddNewStudio({ setSelectTab }) {
           </div>
 
           <div className={style.addNewStudioTitle} style={{ marginTop: "-2%" }}>
-            Add new studio
+            {isEditMode && showMode
+              ? "Studio details"
+              : isEditMode
+              ? "Edit Studio"
+              : "Add new studio"}
           </div>
           <div className={style.addNewStudioPage}>
-            <div>
+            {/* {showMode ? ()} */}
+
+            <div style={{ position: showMode ? "relative" : "" }}>
+              {showMode ? <p className={style.showmode}></p> : ""}
+
               <div>
                 <div className={style.addNewStudioinputBox}>
                   <label htmlFor="studioName">Studio Name</label>
@@ -203,7 +322,7 @@ function AddNewStudio({ setSelectTab }) {
                     id="studioName"
                     placeholder="Enter Studio Area"
                     name="studioName"
-                    value={studioDetails.fullName}
+                    value={studioDetails?.fullName}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
@@ -220,7 +339,7 @@ function AddNewStudio({ setSelectTab }) {
                     id="area"
                     placeholder="Enter Approx. Area"
                     name="area"
-                    value={studioDetails.area}
+                    value={studioDetails?.area}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
@@ -230,25 +349,24 @@ function AddNewStudio({ setSelectTab }) {
                   />
                 </div>
                 <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="rooms">Rooms</label>
-
+                  <label htmlFor="Rooms">Rooms</label>
                   <select
-                    id="rooms"
-                    name="rooms"
-                    value={studioDetails.totalRooms}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        totalRooms: e.target.value,
-                      })
-                    }
+                    id="Rooms"
+                    name="totalRooms"
+                    onChange={handleChange}
+                    value={selectedOption}
                   >
-                    <option>Select No. of Rooms</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                    <option value="0">Select No. of Services</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
                   </select>
                 </div>
                 <div className={style.addNewStudioinputBox}>
@@ -258,7 +376,7 @@ function AddNewStudio({ setSelectTab }) {
                     id="pincode"
                     name="pincode"
                     placeholder="Enter Pincode"
-                    value={studioDetails.pincode}
+                    value={studioDetails?.pincode}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
@@ -275,7 +393,7 @@ function AddNewStudio({ setSelectTab }) {
                     id="addcity"
                     placeholder="Select city Name"
                     name="addcity"
-                    value={studioDetails.city}
+                    value={studioDetails?.city}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
@@ -315,7 +433,7 @@ function AddNewStudio({ setSelectTab }) {
                   <br />
                   <div>
                     <label className={style.abs} htmlFor="">
-                      {images.length === 0 ? (
+                      {images?.length === 0 ? (
                         <div>
                           <label htmlFor="selectimg">
                             <img src={upload} alt="" />
@@ -334,31 +452,64 @@ function AddNewStudio({ setSelectTab }) {
                           onDragOver={handleDragOver}
                           onDragLeave={handleDragLeave}
                         >
-                          <div>
-                            {images.map((image, index) => (
-                              <div
-                                key={index}
-                                draggable
-                                onDragStart={(e) => {
-                                  e.dataTransfer.setData("text/plain", index);
-                                }}
-                              >
-                                <img
-                                  src={URL.createObjectURL(image)}
-                                  alt={`Uploaded Image ${index + 1}`}
-                                  style={{ width: "100%", height: "100%" }}
-                                />
-                                <span
-                                  className={style.cancelImageUpload}
-                                  style={{ right: "-10%" }}
-                                  onClick={() => handleRemoveImage(index)}
+                          {isEditMode ? (
+                            <div>
+                              {images.map((imageUrl, index) => (
+                                <div
+                                  key={index}
+                                  draggable
+                                  onDragStart={(e) => {
+                                    e.dataTransfer.setData("text/plain", index);
+                                  }}
                                 >
-                                  <img src={cross} alt="" />
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                          {images.length <= 4 && (
+                                  <img
+                                    src={imageUrl}
+                                    alt={`Uploaded Image ${index + 1}`}
+                                    style={{
+                                      width: "100%",
+                                      height: "100%",
+                                    }}
+                                  />
+                                  <span
+                                    className={style.cancelImageUpload}
+                                    style={{ right: "-10%" }}
+                                    onClick={() => handleRemoveImage(index)}
+                                  >
+                                    <img src={cross} alt="" />
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div>
+                              {images?.map((image, index) => (
+                                <div
+                                  key={index}
+                                  draggable
+                                  onDragStart={(e) => {
+                                    e.dataTransfer.setData("text/plain", index);
+                                  }}
+                                >
+                                  <img
+                                    src={URL.createObjectURL(image)}
+                                    alt={`Uploaded Image ${index + 1}`}
+                                    style={{
+                                      width: "100%",
+                                      height: "100%",
+                                    }}
+                                  />
+                                  <span
+                                    className={style.cancelImageUpload}
+                                    style={{ right: "-10%" }}
+                                    onClick={() => handleRemoveImage(index)}
+                                  >
+                                    <img src={cross} alt="" />
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {images?.length <= 4 && (
                             <div>
                               <label
                                 htmlFor="selectimg"
@@ -380,11 +531,11 @@ function AddNewStudio({ setSelectTab }) {
                       multiple
                       accept=".jpeg,.png,.svg,.webp,.jpg,.jfif"
                       id="selectimg"
-                      name="studioPhotos"
                       onChange={handleImageChange}
                     />
                   </div>
                 </div>
+
                 <div
                   className={style.addNewStudioinputBox}
                   style={{ paddingTop: "2%" }}
@@ -393,7 +544,7 @@ function AddNewStudio({ setSelectTab }) {
 
                   <select
                     id="guest"
-                    value={studioDetails.maxGuests}
+                    value={studioDetails?.maxGuests}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
@@ -417,7 +568,7 @@ function AddNewStudio({ setSelectTab }) {
                     id="addstate"
                     placeholder="Select state Name"
                     name="state"
-                    value={studioDetails.state}
+                    value={studioDetails?.state}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
@@ -493,7 +644,10 @@ function AddNewStudio({ setSelectTab }) {
                 </div>
               </div>
             </div>
-            <div>
+
+            <div style={{ position: showMode ? "relative" : "" }}>
+              {showMode ? <p className={style.showmode}></p> : ""}
+
               <div>
                 <div className={style.addNewStudioinputBox2}>
                   <label htmlFor="aboutStudio">About Studio</label>
@@ -501,12 +655,12 @@ function AddNewStudio({ setSelectTab }) {
                     type="text"
                     id="aboutStudio"
                     placeholder="Enter Studio Details"
-                    value={studioDetails.aboutUs.aboutUs}
+                    value={studioDetails?.aboutUs.aboutUs}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
                         aboutUs: {
-                          ...studioDetails.aboutUs,
+                          ...studioDetails?.aboutUs,
                           aboutUs: e.target.value,
                         },
                       })
@@ -519,12 +673,12 @@ function AddNewStudio({ setSelectTab }) {
                     type="text"
                     id="studioService"
                     placeholder="Enter Studio Services"
-                    value={studioDetails.aboutUs.services}
+                    value={studioDetails?.aboutUs.services}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
                         aboutUs: {
-                          ...studioDetails.aboutUs,
+                          ...studioDetails?.aboutUs,
                           services: e.target.value,
                         },
                       })
@@ -537,12 +691,12 @@ function AddNewStudio({ setSelectTab }) {
                     type="text"
                     id="area"
                     placeholder="Enter Approx. Area"
-                    value={studioDetails.aboutUs.infrastructure}
+                    value={studioDetails?.aboutUs.infrastructure}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
                         aboutUs: {
-                          ...studioDetails.aboutUs,
+                          ...studioDetails?.aboutUs,
                           infrastructure: e.target.value,
                         },
                       })
@@ -550,109 +704,177 @@ function AddNewStudio({ setSelectTab }) {
                   />
                 </div>
                 <div className={style.roomAndClassSection}>
-                  <div>
-                    <div className={style.addNewStudioinputBox3}>
-                      <label htmlFor="pincode">Rooms</label>
-                      <input
-                        type="text"
-                        id="pincode"
-                        placeholder="Enter Pincode"
-                        value={studioDetails.roomsDetails}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            roomsDetails: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
+                  <div>{selectedOption !== "0" && renderServiceDivs()}</div>
                   <div>
                     <div className={style.addTeamDetailDiv}>
                       <label htmlFor="Teams">Teams</label>
-
-                      <div className={style.addTeamDetailDynamicDiv}>
-                        {teams.map((team, index) => (
-                          <div
-                            key={index}
-                            className={style.addTeamDetailMainDiv}
-                          >
-                            <div>
-                              <label
-                                style={{ cursor: "pointer" }}
-                                htmlFor={`uploadteamPhoto-${index}`}
+                      {isEditMode ? (
+                        <>
+                          <div className={style.addTeamDetailDynamicDiv}>
+                            {studioDetails?.teamDetails.map((team, index) => (
+                              <div
+                                key={index}
+                                className={style.addTeamDetailMainDiv}
                               >
-                                <MdAddAPhoto style={hideAddPhotoIcon(team)} />
-                              </label>
-                              <input
-                                type="file"
-                                // value={studioDetails.teamDetails}
-                                id={`uploadteamPhoto-${index}`}
-                                style={{ display: "none" }}
-                                onChange={(event) =>
-                                  handlePhotoChange(event, index)
-                                }
-                              />
-                              {team.photo && (
                                 <div>
-                                  <img
-                                    src={URL.createObjectURL(team.photo)}
-                                    alt={`Team ${index} Photo`}
-                                    style={{
-                                      maxWidth: "100px",
-                                      maxHeight: "100px",
-                                    }}
+                                  <label
+                                    style={{ cursor: "pointer" }}
+                                    htmlFor={`uploadteamPhoto-${index}`}
+                                  >
+                                    {/* <MdAddAPhoto
+                                      style={hideAddPhotoIcon(team)}
+                                    /> */}
+                                  </label>
+                                  <input
+                                    type="file"
+                                    // value={studioDetails?.teamDetails}
+                                    id={`uploadteamPhoto-${index}`}
+                                    style={{ display: "none" }}
+                                    onChange={(event) =>
+                                      handlePhotoChange(event, index)
+                                    }
                                   />
+                                  {team.imgUrl && (
+                                    <div>
+                                      <img
+                                        src={team.imgUrl}
+                                        alt={`Team ${index} Photo`}
+                                        style={{
+                                          maxWidth: "100px",
+                                          maxHeight: "100px",
+                                        }}
+                                      />
+                                      <span
+                                        className={style.cancelImageUpload}
+                                        onClick={() => handleCancelImage(index)}
+                                      >
+                                        <img src={cross} alt="" />
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                                <div>
+                                  <input
+                                    type="text"
+                                    placeholder="Name"
+                                    value={team.name}
+                                    onChange={(event) =>
+                                      handleInputChange(event, index, "name")
+                                    }
+                                  />
+                                  <input
+                                    type="text"
+                                    placeholder="Profile"
+                                    value={team.designation}
+                                    onChange={(event) =>
+                                      handleInputChange(event, index, "profile")
+                                    }
+                                  />
+                                </div>
+                                {team.length > 1 && (
                                   <span
-                                    className={style.cancelImageUpload}
-                                    onClick={() => handleCancelImage(index)}
+                                    style={{ cursor: "pointer" }}
+                                    className={style.cancelTeamDetailUpload}
+                                    onClick={() => handleCancelTeam(index)}
                                   >
                                     <img src={cross} alt="" />
                                   </span>
-                                </div>
+                                )}
+                              </div>
+                            ))}
+                            <span
+                              className={style.addTeamDetailbtn}
+                              onClick={handleAddTeamDetail}
+                            >
+                              <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
+                            </span>
+                          </div>
+                        </>
+                      ) : (
+                        <div className={style.addTeamDetailDynamicDiv}>
+                          {teams.map((team, index) => (
+                            <div
+                              key={index}
+                              className={style.addTeamDetailMainDiv}
+                            >
+                              <div>
+                                <label
+                                  style={{ cursor: "pointer" }}
+                                  htmlFor={`uploadteamPhoto-${index}`}
+                                >
+                                  <MdAddAPhoto style={hideAddPhotoIcon(team)} />
+                                </label>
+                                <input
+                                  type="file"
+                                  // value={studioDetails?.teamDetails}
+                                  id={`uploadteamPhoto-${index}`}
+                                  style={{ display: "none" }}
+                                  onChange={(event) =>
+                                    handlePhotoChange(event, index)
+                                  }
+                                />
+                                {team.photo && (
+                                  <div>
+                                    <img
+                                      src={URL.createObjectURL(team.photo)}
+                                      alt={`Team ${index} Photo`}
+                                      style={{
+                                        maxWidth: "100px",
+                                        maxHeight: "100px",
+                                      }}
+                                    />
+                                    <span
+                                      className={style.cancelImageUpload}
+                                      onClick={() => handleCancelImage(index)}
+                                    >
+                                      <img src={cross} alt="" />
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                              <div>
+                                <input
+                                  type="text"
+                                  placeholder="Name"
+                                  value={team.name}
+                                  onChange={(event) =>
+                                    handleInputChange(event, index, "name")
+                                  }
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="Profile"
+                                  // value={team.profile}
+                                  onChange={(event) =>
+                                    handleInputChange(event, index, "profile")
+                                  }
+                                />
+                              </div>
+                              {teams.length > 1 && (
+                                <span
+                                  style={{ cursor: "pointer" }}
+                                  className={style.cancelTeamDetailUpload}
+                                  onClick={() => handleCancelTeam(index)}
+                                >
+                                  <img src={cross} alt="" />
+                                </span>
                               )}
                             </div>
-                            <div>
-                              <input
-                                type="text"
-                                placeholder="Name"
-                                value={team.name}
-                                onChange={(event) =>
-                                  handleInputChange(event, index, "name")
-                                }
-                              />
-                              <input
-                                type="text"
-                                placeholder="Profile"
-                                // value={team.profile}
-                                onChange={(event) =>
-                                  handleInputChange(event, index, "profile")
-                                }
-                              />
-                            </div>
-                            {teams.length > 1 && (
-                              <span
-                                style={{ cursor: "pointer" }}
-                                className={style.cancelTeamDetailUpload}
-                                onClick={() => handleCancelTeam(index)}
-                              >
-                                <img src={cross} alt="" />
-                              </span>
-                            )}
-                          </div>
-                        ))}
-                        <span
-                          className={style.addTeamDetailbtn}
-                          onClick={handleAddTeamDetail}
-                        >
-                          <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
-                        </span>
-                      </div>
+                          ))}
+                          <span
+                            className={style.addTeamDetailbtn}
+                            onClick={handleAddTeamDetail}
+                          >
+                            <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            {/* <p className={style.showmode}></p> */}
           </div>
           <StudioFooter
             setSelectTab={setSelectTab}

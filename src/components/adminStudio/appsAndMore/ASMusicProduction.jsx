@@ -41,6 +41,7 @@ function ASMusicProduction({
         productData: selectedProduct,
         isEditMode: isEditMode,
         bookingPageCount: "c2",
+        navCount: 3,
       },
     });
   };
