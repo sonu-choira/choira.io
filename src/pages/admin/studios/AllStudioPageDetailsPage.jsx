@@ -60,7 +60,10 @@ function AllStudioPageDetailsPage() {
 
       Appapi.getServices("10", idToUse, 1, pageCount)
         .then((response) => {
-          console.log("====================> response C2", response);
+          console.log(
+            `====================> response ${bookingPageCount}`,
+            response
+          );
           if (response.status) {
             setProducts(response.services.results);
             // console.log("lkasdnflkjsdnf", response.status);
@@ -76,7 +79,10 @@ function AllStudioPageDetailsPage() {
       // const type = bookingPageCount;
       Appapi.getStudios(limit, active, pageCount)
         .then((response) => {
-          console.log("====================> response C1", response);
+          console.log(
+            `====================> response ${bookingPageCount}`,
+            response
+          );
           if (response.studios.results) {
             setProducts(response.studios.results);
             setTotalPage(response.studios.paginate.totalPages);
