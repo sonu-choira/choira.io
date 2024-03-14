@@ -17,6 +17,7 @@ import { FaRegBell } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Select } from "antd";
 import { FaPencilAlt } from "react-icons/fa";
+import DragAndDropImageDiv from "../../pages/admin/layout/DragAndDropImageDiv";
 
 function AddNewStudio({ setSelectTab }) {
   const [images, setImages] = useState([]);
@@ -42,6 +43,10 @@ function AddNewStudio({ setSelectTab }) {
   const navCount = data?.state?.navCount;
   const [tabCount, setTabCount] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
+  const [teamDetails, setTeamsDetails] = useState([
+    { photo: null, name: "", profile: "", designation: "" },
+  ]);
+
   const [studioDetails, setStudioDetails] = useState({
     fullName: "",
     area: "",
@@ -54,7 +59,7 @@ function AddNewStudio({ setSelectTab }) {
       services: "",
       infrastructure: "",
     },
-    teamDetails: [{ photo: null, name: "", profile: "" }],
+    teamDetails: [{ photo: null, name: "", profile: "", designation: "" }],
     studioPhotos: [],
     maxGuests: "",
     state: "",
@@ -68,9 +73,11 @@ function AddNewStudio({ setSelectTab }) {
   useEffect(() => {
     if (studioDetails?.studioPhotos.length)
       setImages(studioDetails.studioPhotos);
-    // studioDetails?.studioPhotos.length ??
-    //   setImages(studioDetails?.studioPhotos);
   }, [studioDetails?.studioPhotos?.length]);
+  useEffect(() => {
+    if (studioDetails?.teamDetails.length)
+      setTeamsDetails(studioDetails.teamDetails);
+  }, [studioDetails?.teamDetails?.length]);
 
   const amenitiesList = [
     { id: "wifi", label: "Wifi" },
@@ -104,86 +111,46 @@ function AddNewStudio({ setSelectTab }) {
     // Update hasContent state based on whether there is content in the textarea
     setHasContent(inputCode.trim() !== "");
   };
-  const [teams, setTeams] = useState([{ photo: null, name: "", profile: "" }]);
 
   const handleAddTeamDetail = () => {
-    const newTeam = { photo: null, name: "", profile: "" };
-    setTeams([...teams, newTeam]);
-    console.log(teams);
+    const newTeam = { photo: null, name: "", designation: "" };
+    setTeamsDetails([...teamDetails, newTeam]);
+    console.log(teamDetails);
   };
 
   const handlePhotoChange = (event, index) => {
-    const newTeams = [...teams];
+    console.log("event.target.files[0]");
+    console.log(event.target.files[0]);
+    const newTeams = [...teamDetails];
     newTeams[index].photo = event.target.files[0];
-    setTeams(newTeams);
+    setTeamsDetails(newTeams);
   };
 
   const handleInputChange = (event, index, field) => {
-    const newTeams = [...teams];
+    const newTeams = [...teamDetails];
+    console.log(field);
     newTeams[index][field] = event.target.value;
-    setTeams(newTeams);
+    console.log(newTeams);
+    setTeamsDetails(newTeams);
   };
 
   const handleCancelImage = (index) => {
-    const newTeams = [...teams];
+    const newTeams = [...teamDetails];
     newTeams[index].photo = null;
-    setTeams(newTeams);
+    setTeamsDetails(newTeams);
   };
 
   const handleCancelTeam = (index) => {
-    if (teams.length > 1) {
-      const newTeams = [...teams];
+    console.log("iimmggggg");
+    if (teamDetails.length > 1) {
+      const newTeams = [...teamDetails];
       newTeams.splice(index, 1);
-      setTeams(newTeams);
+      setTeamsDetails(newTeams);
     }
   };
 
   const hideAddPhotoIcon = (team) => {
     return team.photo ? { display: "none" } : {};
-  };
-
-  const handleImageChange = (event) => {
-    const selectedImages = Array.from(event.target.files);
-    const newImages = [
-      ...images,
-      ...selectedImages.slice(0, 5 - images.length),
-    ];
-    setImages(newImages);
-  };
-
-  const handleRemoveImage = (index) => {
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    setImages(newImages);
-  };
-
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    setIsOver(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsOver(false);
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    setIsOver(false);
-
-    const draggedIndex = event.dataTransfer.getData("text/plain");
-    const droppedIndex = images.length;
-
-    // Prevent dropping the item back into its original position
-    if (draggedIndex === droppedIndex.toString()) {
-      return;
-    }
-
-    const draggedImage = images[draggedIndex];
-    const newImages = [...images];
-    newImages.splice(draggedIndex, 1);
-    newImages.splice(droppedIndex, 0, draggedImage);
-
-    setImages(newImages);
   };
 
   // --------------------------rooms ---------------------
@@ -428,113 +395,11 @@ function AddNewStudio({ setSelectTab }) {
                 </div>
               </div>
               <div>
-                <div className={style.addNewStudioimgBox}>
-                  <label htmlFor="selectimg">Image</label>
-                  <br />
-                  <div>
-                    <label className={style.abs} htmlFor="">
-                      {images?.length === 0 ? (
-                        <div>
-                          <label htmlFor="selectimg">
-                            <img src={upload} alt="" />
-                            <div>
-                              Drag and Drop or <span>Browse</span> <br /> to
-                              upload
-                            </div>
-                          </label>
-                        </div>
-                      ) : (
-                        <div
-                          className={`${style.showMultipleStudioImage} ${
-                            isOver ? "drag-over" : ""
-                          }`}
-                          onDrop={handleDrop}
-                          onDragOver={handleDragOver}
-                          onDragLeave={handleDragLeave}
-                        >
-                          {isEditMode ? (
-                            <div>
-                              {images.map((imageUrl, index) => (
-                                <div
-                                  key={index}
-                                  draggable
-                                  onDragStart={(e) => {
-                                    e.dataTransfer.setData("text/plain", index);
-                                  }}
-                                >
-                                  <img
-                                    src={imageUrl}
-                                    alt={`Uploaded Image ${index + 1}`}
-                                    style={{
-                                      width: "100%",
-                                      height: "100%",
-                                    }}
-                                  />
-                                  <span
-                                    className={style.cancelImageUpload}
-                                    style={{ right: "-10%" }}
-                                    onClick={() => handleRemoveImage(index)}
-                                  >
-                                    <img src={cross} alt="" />
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <div>
-                              {images?.map((image, index) => (
-                                <div
-                                  key={index}
-                                  draggable
-                                  onDragStart={(e) => {
-                                    e.dataTransfer.setData("text/plain", index);
-                                  }}
-                                >
-                                  <img
-                                    src={URL.createObjectURL(image)}
-                                    alt={`Uploaded Image ${index + 1}`}
-                                    style={{
-                                      width: "100%",
-                                      height: "100%",
-                                    }}
-                                  />
-                                  <span
-                                    className={style.cancelImageUpload}
-                                    style={{ right: "-10%" }}
-                                    onClick={() => handleRemoveImage(index)}
-                                  >
-                                    <img src={cross} alt="" />
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                          {images?.length <= 4 && (
-                            <div>
-                              <label
-                                htmlFor="selectimg"
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  paddingTop: "15%",
-                                }}
-                              >
-                                <img src={upload} alt="" /> Upload
-                              </label>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </label>
-                    <input
-                      type="file"
-                      multiple
-                      accept=".jpeg,.png,.svg,.webp,.jpg,.jfif"
-                      id="selectimg"
-                      onChange={handleImageChange}
-                    />
-                  </div>
-                </div>
+                <DragAndDropImageDiv
+                  images={images}
+                  setImages={setImages}
+                  isEditMode={isEditMode}
+                />
 
                 <div
                   className={style.addNewStudioinputBox}
@@ -767,7 +632,11 @@ function AddNewStudio({ setSelectTab }) {
                                     placeholder="Profile"
                                     value={team.designation}
                                     onChange={(event) =>
-                                      handleInputChange(event, index, "profile")
+                                      handleInputChange(
+                                        event,
+                                        index,
+                                        "designation"
+                                      )
                                     }
                                   />
                                 </div>
@@ -792,7 +661,7 @@ function AddNewStudio({ setSelectTab }) {
                         </>
                       ) : (
                         <div className={style.addTeamDetailDynamicDiv}>
-                          {teams.map((team, index) => (
+                          {teamDetails.map((team, index) => (
                             <div
                               key={index}
                               className={style.addTeamDetailMainDiv}
@@ -850,7 +719,7 @@ function AddNewStudio({ setSelectTab }) {
                                   }
                                 />
                               </div>
-                              {teams.length > 1 && (
+                              {teamDetails.length > 1 && (
                                 <span
                                   style={{ cursor: "pointer" }}
                                   className={style.cancelTeamDetailUpload}
