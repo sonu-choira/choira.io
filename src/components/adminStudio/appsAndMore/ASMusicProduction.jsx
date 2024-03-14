@@ -46,6 +46,22 @@ function ASMusicProduction({
     });
   };
 
+  const gotoShowMusicProduction = (id) => {
+    const isEditMode = true;
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
+
+    navigate(`/service/musicProduction/edit?id=${id}`, {
+      state: {
+        productData: selectedProduct,
+        navCount: 3,
+        isEditMode: isEditMode,
+        bookingPageCount: "c2",
+        showMode: true,
+      },
+    });
+  };
+
   const [activityStatus, setActivityStatus] = useState({});
   const handleSwitchChange = (studioId) => {
     setActivityStatus((prevStatus) => ({
@@ -147,7 +163,12 @@ function ASMusicProduction({
                         </label>
                       </div>
                       <div>
-                        <GrShare style={{ cursor: "pointer" }} />
+                        <GrShare
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            gotoShowMusicProduction(products._id);
+                          }}
+                        />
                         <MdEdit
                           style={{ color: "#ffc701", cursor: "pointer" }}
                           onClick={() => {

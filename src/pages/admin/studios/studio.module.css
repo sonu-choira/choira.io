@@ -556,7 +556,7 @@ td {
   position: absolute;
   top: 0;
   z-index: 1000;
-  background-color: rgba(128, 128, 128, 0.096);
+  /* background-color: rgba(128, 128, 128, 0.055); */
   user-select: none;
 }
 .addNewStudioPage > div {

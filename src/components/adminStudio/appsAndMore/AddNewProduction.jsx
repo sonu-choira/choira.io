@@ -21,11 +21,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AddNewServices from "./AddNewServices";
 
 function AddNewProduction({ setSelectTab }) {
-  // const [productionData, setProductionData] = useState(initialState)
-  const [selectedOption, setSelectedOption] = useState("0");
-
   const data = useLocation();
   const navCount = data?.state?.navCount;
+  const [showMode, setshowMode] = useState(data?.state?.showMode || false);
+  // const [productionData, setProductionData] = useState(initialState)
+  const [selectedOption, setSelectedOption] = useState("0");
 
   const [addNewServicesformData, setAddNewServicesformData] = useState([]);
 
@@ -345,19 +345,26 @@ function AddNewProduction({ setSelectTab }) {
                 className={style.addNewStudioTitle}
                 style={{ marginTop: "-2%" }}
               >
-                {isEditMode
-                  ? bookingPageCount === "c2"
-                    ? "Edit production Details"
-                    : "Edit Mix&Master Details"
-                  : bookingPageCount === "c2"
-                  ? "Add new production"
-                  : "Add new Mix&Master"}
+                {isEditMode && showMode && bookingPageCount === "c2"
+                  ? "Production Details"
+                  : isEditMode && showMode && bookingPageCount === "c3"
+                  ? "Mix & Master Details"
+                  : isEditMode && bookingPageCount === "c2"
+                  ? "Edit Production Details"
+                  : isEditMode && bookingPageCount === "c3"
+                  ? "Edit Mix & Master Details"
+                  : !isEditMode && bookingPageCount === "c2"
+                  ? "Add New Production"
+                  : !isEditMode && bookingPageCount === "c3"
+                  ? "Add New Mix & Master"
+                  : ""}
               </div>
               <div
                 className={style.addNewStudioPage}
                 // style={{ maxHeight: "fit-content" }}
               >
-                <div>
+                <div style={{ position: showMode ? "relative" : "" }}>
+                  {showMode ? <p className={style.showmode}></p> : ""}
                   <div>
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="ProductionName">Production Name </label>
