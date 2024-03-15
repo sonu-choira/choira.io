@@ -20,6 +20,7 @@ import { FaRegBell } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
 import AddNewServices from "./AddNewServices";
 import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
+import AddMultipleTeam from "../../../pages/admin/layout/AddMultipleTeam";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
@@ -40,7 +41,7 @@ function AddNewProduction({ setSelectTab }) {
     servicePhotos: [],
     addOns: [],
     discography: [],
-    teams: [{ photo: null, name: "", profile: "" }],
+    // teams: [{ photo: null, name: "", profile: "" }],
   });
   const handleStudioDetailsChange = (event, field) => {
     setStudioDetails((prevState) => ({
@@ -113,43 +114,9 @@ function AddNewProduction({ setSelectTab }) {
 
   const [selectedAmenities, setSelectedAmenities] = useState([]);
 
-  const [teams, setTeams] = useState([{ photo: null, name: "", profile: "" }]);
-
-  const handleAddTeamDetail = () => {
-    const newTeam = { photo: null, name: "", profile: "" };
-    setTeams([...teams, newTeam]);
-    console.log(teams);
-  };
-
-  const handlePhotoChange = (event, index) => {
-    const newTeams = [...teams];
-    newTeams[index].photo = event.target.files[0];
-    setTeams(newTeams);
-  };
-
-  const handleInputChange = (event, index, field) => {
-    const newTeams = [...teams];
-    newTeams[index][field] = event.target.value;
-    setTeams(newTeams);
-  };
-
-  const handleCancelImage = (index) => {
-    const newTeams = [...teams];
-    newTeams[index].photo = null;
-    setTeams(newTeams);
-  };
-
-  const handleCancelTeam = (index) => {
-    if (teams.length > 1) {
-      const newTeams = [...teams];
-      newTeams.splice(index, 1);
-      setTeams(newTeams);
-    }
-  };
-
-  const hideAddPhotoIcon = (team) => {
-    return team.photo ? { display: "none" } : {};
-  };
+  const [teamDetails, setTeamsDetails] = useState([
+    { photo: null, name: "", profile: "", designation: "" },
+  ]);
 
   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
   const [selectedItems, setSelectedItems] = useState([]);
@@ -508,168 +475,12 @@ function AddNewProduction({ setSelectTab }) {
                     </div>
 
                     <div>
-                      <div className={style.addTeamDetailDiv}>
-                        <label htmlFor="Teams">Teams</label>
-                        {isEditMode ? (
-                          <div className={style.addTeamDetailDynamicDiv}>
-                            {teams?.map((team, index) => (
-                              <div
-                                key={index}
-                                className={style.addTeamDetailMainDiv}
-                              >
-                                <div>
-                                  <label
-                                    style={{ cursor: "pointer" }}
-                                    htmlFor={`uploadteamPhoto-${index}`}
-                                  >
-                                    <MdAddAPhoto
-                                      style={hideAddPhotoIcon(team)}
-                                    />
-                                  </label>
-                                  <input
-                                    type="file"
-                                    id={`uploadteamPhoto-${index}`}
-                                    style={{ display: "none" }}
-                                    onChange={(event) =>
-                                      handlePhotoChange(event, index)
-                                    }
-                                  />
-                                  {team.imgUrl && (
-                                    <div>
-                                      <img
-                                        src={team.imgUrl}
-                                        alt={`Team ${index} Photo`}
-                                        style={{
-                                          maxWidth: "100px",
-                                          maxHeight: "100px",
-                                        }}
-                                      />
-                                      <span
-                                        className={style.cancelImageUpload}
-                                        onClick={() => handleCancelImage(index)}
-                                      >
-                                        <img src={cross} alt="" />
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                                <div>
-                                  <input
-                                    type="text"
-                                    placeholder="Name"
-                                    value={team.name}
-                                    onChange={(event) =>
-                                      handleInputChange(event, index, "name")
-                                    }
-                                  />
-                                  <input
-                                    type="text"
-                                    placeholder="Profile"
-                                    value={team.designation}
-                                    onChange={(event) =>
-                                      handleInputChange(event, index, "profile")
-                                    }
-                                  />
-                                </div>
-                                {teams.length > 1 && (
-                                  <span
-                                    style={{ cursor: "pointer" }}
-                                    className={style.cancelTeamDetailUpload}
-                                    onClick={() => handleCancelTeam(index)}
-                                  >
-                                    <img src={cross} alt="" />
-                                  </span>
-                                )}
-                              </div>
-                            ))}
-                            <span
-                              className={style.addTeamDetailbtn}
-                              onClick={handleAddTeamDetail}
-                            >
-                              <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
-                            </span>
-                          </div>
-                        ) : (
-                          <div className={style.addTeamDetailDynamicDiv}>
-                            {teams.map((team, index) => (
-                              <div
-                                key={index}
-                                className={style.addTeamDetailMainDiv}
-                              >
-                                <div>
-                                  <label
-                                    style={{ cursor: "pointer" }}
-                                    htmlFor={`uploadteamPhoto-${index}`}
-                                  >
-                                    <MdAddAPhoto
-                                      style={hideAddPhotoIcon(team)}
-                                    />
-                                  </label>
-                                  <input
-                                    type="file"
-                                    id={`uploadteamPhoto-${index}`}
-                                    style={{ display: "none" }}
-                                    onChange={(event) =>
-                                      handlePhotoChange(event, index)
-                                    }
-                                  />
-                                  {team.photo && (
-                                    <div>
-                                      <img
-                                        src={URL.createObjectURL(team.photo)}
-                                        alt={`Team ${index} Photo`}
-                                        style={{
-                                          maxWidth: "100px",
-                                          maxHeight: "100px",
-                                        }}
-                                      />
-                                      <span
-                                        className={style.cancelImageUpload}
-                                        onClick={() => handleCancelImage(index)}
-                                      >
-                                        <img src={cross} alt="" />
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                                <div>
-                                  <input
-                                    type="text"
-                                    placeholder="Name"
-                                    value={team.name}
-                                    onChange={(event) =>
-                                      handleInputChange(event, index, "name")
-                                    }
-                                  />
-                                  <input
-                                    type="text"
-                                    placeholder="Profile"
-                                    value={team.profile}
-                                    onChange={(event) =>
-                                      handleInputChange(event, index, "profile")
-                                    }
-                                  />
-                                </div>
-                                {teams.length > 1 && (
-                                  <span
-                                    style={{ cursor: "pointer" }}
-                                    className={style.cancelTeamDetailUpload}
-                                    onClick={() => handleCancelTeam(index)}
-                                  >
-                                    <img src={cross} alt="" />
-                                  </span>
-                                )}
-                              </div>
-                            ))}
-                            <span
-                              className={style.addTeamDetailbtn}
-                              onClick={handleAddTeamDetail}
-                            >
-                              <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
-                            </span>
-                          </div>
-                        )}
-                      </div>
+                      {/* <AddMultipleTeam
+                        teamDetails={teamDetails}
+                        setTeamsDetails={setTeamsDetails}
+                        data={data}
+                        isEditMode={isEditMode}
+                      /> */}
                     </div>
                   </div>
                 </div>

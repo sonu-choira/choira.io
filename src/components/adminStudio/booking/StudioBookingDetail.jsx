@@ -59,7 +59,7 @@ function StudioBookingDetail({
                 <th>studio Name</th>
                 <th>No. of hours</th>
                 <th>Date</th>
-                <th>Time Slot Status</th>
+                <th>Time Slot </th>
                 <th style={{ width: "20%" }}>Project Status</th>
               </tr>
             </thead>
@@ -68,9 +68,9 @@ function StudioBookingDetail({
                 return (
                   <tr key={products._id}>
                     <td style={{ textAlign: "center" }}>#{products._id}</td>
-                    <td>{products.userFullName}</td>
+                    <td>{products.userName}</td>
 
-                    <td>{products.serviceFullName}</td>
+                    <td>{products.studioName}</td>
                     <td>{products.planId}</td>
                     <td>{products.bookingDate}</td>
                     <td>₹{products.totalPrice}</td>

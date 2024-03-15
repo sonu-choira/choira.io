@@ -18,6 +18,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Select } from "antd";
 import { FaPencilAlt } from "react-icons/fa";
 import DragAndDropImageDiv from "../../pages/admin/layout/DragAndDropImageDiv";
+import AddMultipleTeam from "../../pages/admin/layout/AddMultipleTeam";
 
 function AddNewStudio({ setSelectTab }) {
   const [images, setImages] = useState([]);
@@ -59,7 +60,7 @@ function AddNewStudio({ setSelectTab }) {
       services: "",
       infrastructure: "",
     },
-    teamDetails: [{ photo: null, name: "", profile: "", designation: "" }],
+    // teamDetails: [{ photo: null, name: "", profile: "", designation: "" }],
     studioPhotos: [],
     maxGuests: "",
     state: "",
@@ -74,10 +75,6 @@ function AddNewStudio({ setSelectTab }) {
     if (studioDetails?.studioPhotos.length)
       setImages(studioDetails.studioPhotos);
   }, [studioDetails?.studioPhotos?.length]);
-  useEffect(() => {
-    if (studioDetails?.teamDetails.length)
-      setTeamsDetails(studioDetails.teamDetails);
-  }, [studioDetails?.teamDetails?.length]);
 
   const amenitiesList = [
     { id: "wifi", label: "Wifi" },
@@ -110,47 +107,6 @@ function AddNewStudio({ setSelectTab }) {
 
     // Update hasContent state based on whether there is content in the textarea
     setHasContent(inputCode.trim() !== "");
-  };
-
-  const handleAddTeamDetail = () => {
-    const newTeam = { photo: null, name: "", designation: "" };
-    setTeamsDetails([...teamDetails, newTeam]);
-    console.log(teamDetails);
-  };
-
-  const handlePhotoChange = (event, index) => {
-    console.log("event.target.files[0]");
-    console.log(event.target.files[0]);
-    const newTeams = [...teamDetails];
-    newTeams[index].photo = event.target.files[0];
-    setTeamsDetails(newTeams);
-  };
-
-  const handleInputChange = (event, index, field) => {
-    const newTeams = [...teamDetails];
-    console.log(field);
-    newTeams[index][field] = event.target.value;
-    console.log(newTeams);
-    setTeamsDetails(newTeams);
-  };
-
-  const handleCancelImage = (index) => {
-    const newTeams = [...teamDetails];
-    newTeams[index].photo = null;
-    setTeamsDetails(newTeams);
-  };
-
-  const handleCancelTeam = (index) => {
-    console.log("iimmggggg");
-    if (teamDetails.length > 1) {
-      const newTeams = [...teamDetails];
-      newTeams.splice(index, 1);
-      setTeamsDetails(newTeams);
-    }
-  };
-
-  const hideAddPhotoIcon = (team) => {
-    return team.photo ? { display: "none" } : {};
   };
 
   // --------------------------rooms ---------------------
@@ -571,174 +527,12 @@ function AddNewStudio({ setSelectTab }) {
                 <div className={style.roomAndClassSection}>
                   <div>{selectedOption !== "0" && renderServiceDivs()}</div>
                   <div>
-                    <div className={style.addTeamDetailDiv}>
-                      <label htmlFor="Teams">Teams</label>
-                      {isEditMode ? (
-                        <>
-                          <div className={style.addTeamDetailDynamicDiv}>
-                            {studioDetails?.teamDetails.map((team, index) => (
-                              <div
-                                key={index}
-                                className={style.addTeamDetailMainDiv}
-                              >
-                                <div>
-                                  <label
-                                    style={{ cursor: "pointer" }}
-                                    htmlFor={`uploadteamPhoto-${index}`}
-                                  >
-                                    {/* <MdAddAPhoto
-                                      style={hideAddPhotoIcon(team)}
-                                    /> */}
-                                  </label>
-                                  <input
-                                    type="file"
-                                    // value={studioDetails?.teamDetails}
-                                    id={`uploadteamPhoto-${index}`}
-                                    style={{ display: "none" }}
-                                    onChange={(event) =>
-                                      handlePhotoChange(event, index)
-                                    }
-                                  />
-                                  {team.imgUrl && (
-                                    <div>
-                                      <img
-                                        src={team.imgUrl}
-                                        alt={`Team ${index} Photo`}
-                                        style={{
-                                          maxWidth: "100px",
-                                          maxHeight: "100px",
-                                        }}
-                                      />
-                                      <span
-                                        className={style.cancelImageUpload}
-                                        onClick={() => handleCancelImage(index)}
-                                      >
-                                        <img src={cross} alt="" />
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                                <div>
-                                  <input
-                                    type="text"
-                                    placeholder="Name"
-                                    value={team.name}
-                                    onChange={(event) =>
-                                      handleInputChange(event, index, "name")
-                                    }
-                                  />
-                                  <input
-                                    type="text"
-                                    placeholder="Profile"
-                                    value={team.designation}
-                                    onChange={(event) =>
-                                      handleInputChange(
-                                        event,
-                                        index,
-                                        "designation"
-                                      )
-                                    }
-                                  />
-                                </div>
-                                {team.length > 1 && (
-                                  <span
-                                    style={{ cursor: "pointer" }}
-                                    className={style.cancelTeamDetailUpload}
-                                    onClick={() => handleCancelTeam(index)}
-                                  >
-                                    <img src={cross} alt="" />
-                                  </span>
-                                )}
-                              </div>
-                            ))}
-                            <span
-                              className={style.addTeamDetailbtn}
-                              onClick={handleAddTeamDetail}
-                            >
-                              <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
-                            </span>
-                          </div>
-                        </>
-                      ) : (
-                        <div className={style.addTeamDetailDynamicDiv}>
-                          {teamDetails.map((team, index) => (
-                            <div
-                              key={index}
-                              className={style.addTeamDetailMainDiv}
-                            >
-                              <div>
-                                <label
-                                  style={{ cursor: "pointer" }}
-                                  htmlFor={`uploadteamPhoto-${index}`}
-                                >
-                                  <MdAddAPhoto style={hideAddPhotoIcon(team)} />
-                                </label>
-                                <input
-                                  type="file"
-                                  // value={studioDetails?.teamDetails}
-                                  id={`uploadteamPhoto-${index}`}
-                                  style={{ display: "none" }}
-                                  onChange={(event) =>
-                                    handlePhotoChange(event, index)
-                                  }
-                                />
-                                {team.photo && (
-                                  <div>
-                                    <img
-                                      src={URL.createObjectURL(team.photo)}
-                                      alt={`Team ${index} Photo`}
-                                      style={{
-                                        maxWidth: "100px",
-                                        maxHeight: "100px",
-                                      }}
-                                    />
-                                    <span
-                                      className={style.cancelImageUpload}
-                                      onClick={() => handleCancelImage(index)}
-                                    >
-                                      <img src={cross} alt="" />
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                              <div>
-                                <input
-                                  type="text"
-                                  placeholder="Name"
-                                  value={team.name}
-                                  onChange={(event) =>
-                                    handleInputChange(event, index, "name")
-                                  }
-                                />
-                                <input
-                                  type="text"
-                                  placeholder="Profile"
-                                  // value={team.profile}
-                                  onChange={(event) =>
-                                    handleInputChange(event, index, "profile")
-                                  }
-                                />
-                              </div>
-                              {teamDetails.length > 1 && (
-                                <span
-                                  style={{ cursor: "pointer" }}
-                                  className={style.cancelTeamDetailUpload}
-                                  onClick={() => handleCancelTeam(index)}
-                                >
-                                  <img src={cross} alt="" />
-                                </span>
-                              )}
-                            </div>
-                          ))}
-                          <span
-                            className={style.addTeamDetailbtn}
-                            onClick={handleAddTeamDetail}
-                          >
-                            <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                    <AddMultipleTeam
+                      teamDetails={teamDetails}
+                      setTeamsDetails={setTeamsDetails}
+                      data={data}
+                      isEditMode={isEditMode}
+                    />
                   </div>
                 </div>
               </div>

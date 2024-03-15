@@ -88,11 +88,13 @@ function BookingPages() {
           console.error("Error fetching studios:", error);
         });
     } else if (bookingPageCount === "c1") {
-      const limit = 64;
+      const limit = 10;
       const active = 1;
+      const bookingType = 1;
+      const category = bookingPageCount;
       // const type = bookingPageCount;
       bookingPageApi
-        .getBookings(limit, active)
+        .getBookings(limit, active, bookingType, category)
         .then((response) => {
           console.log("====================> response C1", response);
           if (response.data) {

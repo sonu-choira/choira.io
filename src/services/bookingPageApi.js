@@ -2,13 +2,15 @@
 import api from "./api"
 
  class bookingApi {
-  getBookings = async (limit ,active) => {
+  getBookings = async (limit, active,bookingType,category) => {
   
 
-    const response = await api.get(`/bookings/services`, {
+    const response = await api.get(`/bookings`, {
       params: {
         limit: limit,
-        active: active
+        active: active,
+        bookingType: bookingType,
+        category: category,
       }
     });
     const {status} = response.data

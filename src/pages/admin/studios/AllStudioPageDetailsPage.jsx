@@ -66,7 +66,7 @@ function AllStudioPageDetailsPage() {
           );
           if (response.status) {
             setProducts(response.services.results);
-            // console.log("lkasdnflkjsdnf", response.status);
+            console.log("lkasdnflkjsdnf", response.status);
             setTotalPage(response.services.totalPages);
           }
         })
@@ -83,8 +83,9 @@ function AllStudioPageDetailsPage() {
             `====================> response ${bookingPageCount}`,
             response
           );
-          if (response.studios.results) {
-            setProducts(response.studios.results);
+          console.log("response.data.studios", response.studios);
+          if (response.studios) {
+            setProducts(response.studios);
             setTotalPage(response.studios.paginate.totalPages);
 
             // setPageCount(response.paginate.page);

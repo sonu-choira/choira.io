@@ -17,6 +17,7 @@ import imageNotFound from "../../../assets/imagesNotFound.png";
 import { LuFilePlus } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 
 let PageSize = 10;
 
@@ -114,74 +115,74 @@ function ASMixandMaster({
               </tr>
             </thead>
             <tbody>
-              {products.map((products) => {
-                return (
-                  <tr key={products._id}>
-                    <td style={{ display: "flex", alignItems: "center" }}>
-                      <div className={style.studioImage}>
-                        {products.studioPhotos ? (
-                          <img
-                            src={products.studioPhotos}
-                            alt=""
-                            onError={(e) => {
-                              e.target.src = imageNotFound;
+              {products.length === 0 ? (
+                <ChoiraLoder2 />
+              ) : (
+                products.map((product) => {
+                  return (
+                    <tr key={product._id}>
+                      <td style={{ display: "flex", alignItems: "center" }}>
+                        <div className={style.studioImage}>
+                          {product.studioPhotos ? (
+                            <img
+                              src={product.studioPhotos}
+                              alt=""
+                              onError={(e) => {
+                                e.target.src = imageNotFound;
+                              }}
+                            />
+                          ) : (
+                            <img src={imageNotFound} alt="" />
+                          )}
+                        </div>
+                        &nbsp;&nbsp;{product.fullName}
+                      </td>
+                      <td>Starting from ₹{product.price}</td>
+                      <td>
+                        {product.address}
+                        <br />
+                        <small> {product.state}</small>
+                      </td>
+                      <td>{product.creationTimeStamp}</td>
+
+                      <td className={style.tableActionbtn}>
+                        <div>
+                          <label className="switch">
+                            <input
+                              type="checkbox"
+                              checked={product.isActive === 1}
+                              onChange={() =>
+                                handleSwitchChange(
+                                  product._id,
+                                  product.isActive
+                                )
+                              }
+                            />
+                            <span className="slider"></span>
+                          </label>
+                        </div>
+                        <div>
+                          <GrShare
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              gotoShowMixAndMaster(product._id);
                             }}
                           />
-                        ) : (
-                          <img src={imageNotFound} alt="" />
-                        )}
-                      </div>
-                      &nbsp;&nbsp;{products.fullName}
-                    </td>
-                    <td>Starting from ₹{products.price}</td>
-                    <td>
-                      {products.address}
-                      <br />
-                      <small> {products.state}</small>
-                    </td>
-                    <td>{products.creationTimeStamp}</td>
-
-                    <td className={style.tableActionbtn}>
-                      <div>
-                        <label className="switch">
-                          <input
-                            type="checkbox"
-                            checked={
-                              products.isActive === 1
-                              // ? activityStatus[products._id]
-                              // : false
-                            }
-                            onChange={() =>
-                              handleSwitchChange(
-                                products._id,
-                                products.isActive
-                              )
-                            }
+                          <MdEdit
+                            style={{ color: "#ffc701", cursor: "pointer" }}
+                            onClick={() => {
+                              gotoEdit(product._id);
+                            }}
                           />
-                          <span className="slider"></span>
-                        </label>
-                      </div>
-                      <div>
-                        <GrShare
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            gotoShowMixAndMaster(products._id);
-                          }}
-                        />
-                        <MdEdit
-                          style={{ color: "#ffc701", cursor: "pointer" }}
-                          onClick={() => {
-                            gotoEdit(products._id);
-                          }}
-                        />
-                        <RiDeleteBin5Fill
-                          style={{ color: "red", cursor: "pointer" }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                          <RiDeleteBin5Fill
+                            style={{ color: "red", cursor: "pointer" }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

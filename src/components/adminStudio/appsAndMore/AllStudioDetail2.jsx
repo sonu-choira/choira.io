@@ -16,6 +16,8 @@ import imageNotFound from "../../../assets/imagesNotFound.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+import ChoiraLoader from "../../loader/ChoiraLoader";
+import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 
 let PageSize = 10;
 
@@ -57,11 +59,11 @@ function AllStudioDetail2({
     });
   };
 
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return products.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, products]);
+  // const currentTableData = useMemo(() => {
+  //   const firstPageIndex = (currentPage - 1) * PageSize;
+  //   const lastPageIndex = firstPageIndex + PageSize;
+  //   return products.slice(firstPageIndex, lastPageIndex);
+  // }, [currentPage, products]);
 
   const [selectedStatus, setSelectedStatus] = useState({});
 
@@ -109,75 +111,79 @@ function AllStudioDetail2({
               </tr>
             </thead>
             <tbody>
-              {products.map((products) => {
-                return (
-                  <tr key={products._id}>
-                    <td style={{ display: "flex", alignItems: "center" }}>
-                      <div className={style.studioImage}>
-                        {products.studioPhotos ? (
-                          <img
-                            src={products.studioPhotos}
-                            alt=""
-                            onError={(e) => {
-                              e.target.src = imageNotFound;
+              {products.length === 0 ? (
+                <ChoiraLoder2 />
+              ) : (
+                products.map((products) => {
+                  return (
+                    <tr key={products._id}>
+                      <td style={{ display: "flex", alignItems: "center" }}>
+                        <div className={style.studioImage}>
+                          {products.studioPhotos ? (
+                            <img
+                              src={products.studioPhotos}
+                              alt=""
+                              onError={(e) => {
+                                e.target.src = imageNotFound;
+                              }}
+                            />
+                          ) : (
+                            <img src={imageNotFound} alt="" />
+                          )}
+                        </div>
+                        &nbsp;&nbsp;{products.fullName}
+                      </td>
+                      <td>
+                        ₹{products.pricePerHour}
+                        <br />
+                        <small>per hour</small>
+                      </td>
+                      <td>
+                        {products.address}
+                        <br />
+                        <small> {products.state}</small>
+                      </td>
+                      <td>{products.totalRooms}</td>
+                      <td className={style.tableActionbtn}>
+                        <div>
+                          <label className="switch">
+                            <input
+                              type="checkbox"
+                              checked={
+                                products.isActive === 1
+                                // ? activityStatus[products._id]
+                                // : false
+                              }
+                              onChange={() =>
+                                handleSwitchChange(
+                                  products._id,
+                                  products.isActive
+                                )
+                              }
+                            />
+                            <span className="slider"></span>
+                          </label>
+                        </div>
+                        <div>
+                          <GrShare
+                            style={{ cursor: "pointer" }}
+                            onClick={() => gotoShowStudioDetaisl(products._id)}
+                          />
+                          <MdEdit
+                            style={{ color: "#ffc701", cursor: "pointer" }}
+                            onClick={() => {
+                              gotoEdit(products._id);
                             }}
                           />
-                        ) : (
-                          <img src={imageNotFound} alt="" />
-                        )}
-                      </div>
-                      &nbsp;&nbsp;{products.fullName}
-                    </td>
-                    <td>
-                      ₹{products.pricePerHour}
-                      <br />
-                      <small>per hour</small>
-                    </td>
-                    <td>
-                      {products.address}
-                      <br />
-                      <small> {products.state}</small>
-                    </td>
-                    <td>{products.totalRooms}</td>
-                    <td className={style.tableActionbtn}>
-                      <div>
-                        <label className="switch">
-                          <input
-                            type="checkbox"
-                            checked={
-                              products.isActive === 1
-                              // ? activityStatus[products._id]
-                              // : false
-                            }
-                            onChange={() =>
-                              handleSwitchChange(
-                                products._id,
-                                products.isActive
-                              )
-                            }
+                          <RiDeleteBin5Fill
+                            style={{ color: "red", cursor: "pointer" }}
                           />
-                          <span className="slider"></span>
-                        </label>
-                      </div>
-                      <div>
-                        <GrShare
-                          style={{ cursor: "pointer" }}
-                          onClick={() => gotoShowStudioDetaisl(products._id)}
-                        />
-                        <MdEdit
-                          style={{ color: "#ffc701", cursor: "pointer" }}
-                          onClick={() => {
-                            gotoEdit(products._id);
-                          }}
-                        />
-                        <RiDeleteBin5Fill
-                          style={{ color: "red", cursor: "pointer" }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
