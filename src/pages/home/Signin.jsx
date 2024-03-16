@@ -426,6 +426,7 @@ function Signin() {
         navigate("/adminDashboard");
       } else if (response.newUser === true) {
         console.log(response.newUser);
+        localStorage.removeItem("token");
         setApiOtp(response.otp);
         setSign(2);
       }
@@ -473,13 +474,13 @@ function Signin() {
           onClick={gotoHome}
         />
       </div>
-      <Alert
+      {/* <Alert
         message="Success Tips"
         description="Detailed description and advice about successful copywriting."
         type="success"
         showIcon
         closable
-      />
+      /> */}
 
       <div className={signStyle.wrapper}>
         <form>

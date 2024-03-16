@@ -17,9 +17,24 @@ import AllStudioPageDetailsPage from "../studios/AllStudioPageDetailsPage";
 import BookingPages from "../studios/BookingPages";
 import AddNewProduction from "../../../components/adminStudio/appsAndMore/AddNewProduction";
 import AddNewServices from "../../../components/adminStudio/appsAndMore/AddNewServices";
+import { useNavigate } from "react-router-dom";
 
 function AdminDashboardLayout() {
-  const [tabCount, setTabCount] = useState(3);
+  const navigate = useNavigate();
+  const [tabCount, setTabCount] = useState(4);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("Token from localStorage:", token);
+    if (token === null || token === undefined) {
+      const isSignin = localStorage.getItem("isSignin");
+      if (isSignin) {
+        navigate("/landingpage");
+      } else {
+        navigate("/signin");
+      }
+    }
+  }, []);
+
   return (
     <>
       <div className={style.wrapper}>

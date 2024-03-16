@@ -72,7 +72,7 @@ function AddNewStudio({ setSelectTab }) {
   }, [data?.state?.productData]);
 
   useEffect(() => {
-    if (studioDetails?.studioPhotos.length)
+    if (studioDetails?.studioPhotos?.length)
       setImages(studioDetails.studioPhotos);
   }, [studioDetails?.studioPhotos?.length]);
 
@@ -109,9 +109,9 @@ function AddNewStudio({ setSelectTab }) {
     setHasContent(inputCode.trim() !== "");
   };
 
-  // --------------------------rooms ---------------------
+  // --------------------------roomsaaaa ---------------------
   const [selectedOption, setSelectedOption] = useState("0");
-  if (data?.state?.productData?.totalRooms.length) {
+  if (data?.state?.productData?.totalRooms?.length) {
     // setSelectedOption(studioDetails?.totalRooms);
     console.log(data?.state?.productData?.totalRooms);
     setSelectedOption(data?.state?.productData?.totalRooms);
@@ -234,7 +234,12 @@ function AddNewStudio({ setSelectTab }) {
           <div className={style.addNewStudioPage}>
             {/* {showMode ? ()} */}
 
-            <div style={{ position: showMode ? "relative" : "" }}>
+            <div
+              style={{
+                position: showMode ? "relative" : "",
+                overflow: "hidden",
+              }}
+            >
               {showMode ? <p className={style.showmode}></p> : ""}
 
               <div>
@@ -476,7 +481,7 @@ function AddNewStudio({ setSelectTab }) {
                     type="text"
                     id="aboutStudio"
                     placeholder="Enter Studio Details"
-                    value={studioDetails?.aboutUs.aboutUs}
+                    value={studioDetails?.aboutUs?.aboutUs}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
@@ -494,7 +499,7 @@ function AddNewStudio({ setSelectTab }) {
                     type="text"
                     id="studioService"
                     placeholder="Enter Studio Services"
-                    value={studioDetails?.aboutUs.services}
+                    value={studioDetails?.aboutUs?.services}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,
@@ -512,7 +517,7 @@ function AddNewStudio({ setSelectTab }) {
                     type="text"
                     id="area"
                     placeholder="Enter Approx. Area"
-                    value={studioDetails?.aboutUs.infrastructure}
+                    value={studioDetails?.aboutUs?.infrastructure}
                     onChange={(e) =>
                       setStudioDetails({
                         ...studioDetails,

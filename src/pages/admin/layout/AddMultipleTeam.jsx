@@ -5,7 +5,7 @@ import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
 
 function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
   useEffect(() => {
-    if (data?.state?.productData?.teamDetails.length)
+    if (data?.state?.productData?.teamDetails?.length)
       setTeamsDetails(data?.state?.productData.teamDetails);
     console.log("datails isssssss", teamDetails);
   }, [data?.state?.productData?.teamDetails?.length]);

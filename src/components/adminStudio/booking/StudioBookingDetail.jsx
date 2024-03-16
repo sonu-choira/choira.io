@@ -25,15 +25,29 @@ function StudioBookingDetail({
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+  // const gotoShowDetails = (id) => {
+  //   const selectedProduct = products.find((product) => product._id === id);
+  //   console.log("navigated=======>", selectedProduct);
+
+  //   navigate(`/service/showBookingDetails?id=${id}`, {
+  //     state: { productData: selectedProduct },
+  //   });
+  // };
+
   const gotoShowDetails = (id) => {
+    const isEditMode = true;
     const selectedProduct = products.find((product) => product._id === id);
     console.log("navigated=======>", selectedProduct);
 
-    navigate(`/service/showBookingDetails?id=${id}`, {
-      state: { productData: selectedProduct },
+    navigate(`/studio/edit?id=${id}`, {
+      state: {
+        productData: selectedProduct,
+        navCount: 4,
+        isEditMode: isEditMode,
+        showMode: true,
+      },
     });
   };
-
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
@@ -64,9 +78,9 @@ function StudioBookingDetail({
               </tr>
             </thead>
             <tbody>
-              {currentTableData.map((products) => {
+              {currentTableData.map((products, i) => {
                 return (
-                  <tr key={products._id}>
+                  <tr key={i}>
                     <td style={{ textAlign: "center" }}>#{products._id}</td>
                     <td>{products.userName}</td>
 

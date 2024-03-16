@@ -125,6 +125,7 @@ function AddNewProduction({ setSelectTab }) {
 
   const customStyles = {
     height: "90%",
+    overFlow: "scroll",
   };
 
   const [discography, setDiscography] = useState([""]);

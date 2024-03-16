@@ -53,7 +53,8 @@ const OptVerify = ({
       .toString()
       .padStart(4, "0");
     console.log(` ingnore this otp ${otp}`);
-    alert("your otp is " + otp);
+    // alert("your otp is " + otp);
+    alert("your otp is " + apiOtp);
     setGeneratedOTP(otp);
   };
 
@@ -99,6 +100,12 @@ const OptVerify = ({
       } else {
         console.log("Incorrect OTP. Please try again.");
         alert("Incorrect OTP. Please try again.");
+        <Alert
+          message="Incorrect OTP. Please try again. "
+          type="error"
+          showIcon
+          closable
+        />;
         setCheckOtp(true);
       }
     }
@@ -184,13 +191,7 @@ const OptVerify = ({
             </h6>
           )}
         </div>
-        <Alert message="Success Tip" type="success" showIcon closable />
-        <Alert
-          message="Incorrect OTP. Please try again. "
-          type="error"
-          showIcon
-          closable
-        />
+        {/* <Alert message="Success Tip" type="success" showIcon closable /> */}
       </div>
     </>
   );
