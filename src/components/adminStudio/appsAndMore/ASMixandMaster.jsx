@@ -123,9 +123,9 @@ function ASMixandMaster({
                     <tr key={product._id}>
                       <td style={{ display: "flex", alignItems: "center" }}>
                         <div className={style.studioImage}>
-                          {product.studioPhotos ? (
+                          {product.servicePhotos ? (
                             <img
-                              src={product.studioPhotos}
+                              src={product.servicePhotos[0]}
                               alt=""
                               onError={(e) => {
                                 e.target.src = imageNotFound;
