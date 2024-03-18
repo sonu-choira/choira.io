@@ -21,35 +21,25 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AddNewServices from "./AddNewServices";
 import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
 import AddMultipleTeam from "../../../pages/admin/layout/AddMultipleTeam";
+import AddmultipleServises from "../../../pages/admin/layout/AddmultipleServises";
+import AddNewServices2 from "./AddNewServices2";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
   const navCount = data?.state?.navCount;
   const [showMode, setshowMode] = useState(data?.state?.showMode || false);
   // const [productionData, setProductionData] = useState(initialState)
+
+  const [teamDetails, setTeamsDetails] = useState([
+    { photo: null, name: "", profile: "", designation: "" },
+  ]);
+
+  const [service, setService] = useState([
+    { photo: [], name: "", about: "", amenites: [], price: "" },
+  ]);
   const [selectedOption, setSelectedOption] = useState("0");
   const [images, setImages] = useState([]);
-
   const [addNewServicesformData, setAddNewServicesformData] = useState([]);
-  useEffect(() => {}, [data]);
-
-  const [studioDetails, setStudioDetails] = useState({
-    productionName: "",
-    services: "",
-    amenities: [],
-    about: "",
-    servicePhotos: [],
-    addOns: [],
-    discography: [],
-    // teams: [{ photo: null, name: "", profile: "" }],
-  });
-  const handleStudioDetailsChange = (event, field) => {
-    setStudioDetails((prevState) => ({
-      ...prevState,
-      [field]: event.target.value,
-    }));
-  };
-
   const initializeServicesArray = () => {
     const initialArray = [];
 
@@ -66,6 +56,50 @@ function AddNewProduction({ setSelectTab }) {
     }
 
     setAddNewServicesformData(initialArray);
+  };
+
+  useEffect(() => {
+    if (data?.state?.productData?.packages?.length) {
+      console.log("API data received:", data.state.productData?.packages);
+      setSelectedOption(data?.state?.productData?.packages?.length);
+
+      const transformedPackages = data?.state?.productData?.packages.map(
+        (packageItem) => ({
+          serviceName: packageItem.name,
+          startingPrice: packageItem.price,
+          serviceDetails: packageItem.about,
+          images: packageItem.photo_url,
+          amenities: packageItem.amenites,
+        })
+      );
+
+      console.log("Transformed packages:", transformedPackages);
+
+      setAddNewServicesformData(transformedPackages);
+    }
+  }, [data?.state?.productData?.packages]);
+
+  useEffect(() => {
+    console.log("addNewServicesformData", addNewServicesformData);
+    console.log("origiunal data", data?.state?.productData?.packages);
+  }, [addNewServicesformData]);
+
+  const [studioDetails, setStudioDetails] = useState({
+    productionName: "",
+    services: "",
+    amenities: [],
+    about: "",
+    servicePhotos: [],
+    addOns: [],
+    discography: [],
+    // teams: [{ photo: null, name: "", profile: "" }],
+  });
+
+  const handleStudioDetailsChange = (event, field) => {
+    setStudioDetails((prevState) => ({
+      ...prevState,
+      [field]: event.target.value,
+    }));
   };
 
   useEffect(() => {
@@ -111,12 +145,6 @@ function AddNewProduction({ setSelectTab }) {
       setProductionData({});
     }
   }, [data.state?.productData]);
-
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
-
-  const [teamDetails, setTeamsDetails] = useState([
-    { photo: null, name: "", profile: "", designation: "" },
-  ]);
 
   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
   const [selectedItems, setSelectedItems] = useState([]);
@@ -281,13 +309,15 @@ function AddNewProduction({ setSelectTab }) {
             </div>
           </div>
           {showServices ? (
-            <AddNewServices
+            <AddNewServices2
               setServices={setServices}
               setShowServices={setShowServices}
               setAddNewServicesformData={setAddNewServicesformData}
               addNewServicesformData={addNewServicesformData}
               setIndexofServices={setIndexofServices}
               indexofServices={indexofServices}
+              setService={setService}
+              service={service}
             />
           ) : (
             <>
@@ -322,7 +352,7 @@ function AddNewProduction({ setSelectTab }) {
                         type="text"
                         id="ProductionName"
                         name="ProductionName"
-                        value={studioDetails.productionName}
+                        value={studioDetails.fullName}
                         placeholder="Enter Production Name"
                         onChange={(event) =>
                           handleStudioDetailsChange(event, "productionName")
@@ -476,12 +506,18 @@ function AddNewProduction({ setSelectTab }) {
                     </div>
 
                     <div>
-                      {/* <AddMultipleTeam
+                      <AddmultipleServises
                         teamDetails={teamDetails}
                         setTeamsDetails={setTeamsDetails}
                         data={data}
                         isEditMode={isEditMode}
-                      /> */}
+                        setIndexofServices={setIndexofServices}
+                        indexofServices={indexofServices}
+                        showServices={showServices}
+                        setShowServices={setShowServices}
+                        service={service}
+                        setService={setService}
+                      />
                     </div>
                   </div>
                 </div>

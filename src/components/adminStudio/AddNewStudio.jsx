@@ -48,6 +48,10 @@ function AddNewStudio({ setSelectTab }) {
     { photo: null, name: "", profile: "", designation: "" },
   ]);
 
+  useEffect(() => {
+    console.log("teamDetails", teamDetails);
+  }, [teamDetails]);
+
   const [studioDetails, setStudioDetails] = useState({
     fullName: "",
     area: "",
