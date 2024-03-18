@@ -34,10 +34,10 @@ function AddNewProduction({ setSelectTab }) {
   useEffect(() => {}, [data]);
 
   const [studioDetails, setStudioDetails] = useState({
-    productionName: "",
+    fullName: "",
     services: "",
     amenities: [],
-    about: "",
+    aboutUs: "",
     servicePhotos: [],
     addOns: [],
     discography: [],
@@ -322,10 +322,10 @@ function AddNewProduction({ setSelectTab }) {
                         type="text"
                         id="ProductionName"
                         name="ProductionName"
-                        value={studioDetails.productionName}
+                        value={studioDetails.fullName}
                         placeholder="Enter Production Name"
                         onChange={(event) =>
-                          handleStudioDetailsChange(event, "productionName")
+                          handleStudioDetailsChange(event, "fullName")
                         }
                       />
                     </div>
@@ -393,7 +393,7 @@ function AddNewProduction({ setSelectTab }) {
                         type="text"
                         id="About"
                         placeholder="Enter About Services"
-                        value={productionData?.aboutUs?.aboutUs}
+                        value={productionData?.aboutUs}
                       />
                     </div>
 

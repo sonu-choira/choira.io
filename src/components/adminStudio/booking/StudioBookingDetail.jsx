@@ -67,55 +67,60 @@ function StudioBookingDetail({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th style={{ width: "15%" }}>Booking ID</th>
                 <th>User Name</th>
+                <th>Mobile No.</th>
 
                 <th>studio Name</th>
                 <th>No. of hours</th>
                 <th>Date</th>
-                <th>Time Slot </th>
-                <th style={{ width: "20%" }}>Project Status</th>
+                <th style={{ width: "10%" }}>Total Price </th>
+                <th style={{ width: "10%" }}>Project Status</th>
               </tr>
             </thead>
             <tbody>
               {currentTableData.map((products, i) => {
                 return (
                   <tr key={i}>
-                    <td style={{ textAlign: "center" }}>#{products._id}</td>
                     <td>{products.userName}</td>
+                    <td style={{ textAlign: "center" }}>
+                      {products.userPhone}
+                    </td>
 
                     <td>{products.studioName}</td>
                     <td>{products.planId}</td>
                     <td>{products.bookingDate}</td>
                     <td>₹{products.totalPrice}</td>
                     <td className={style.tableActionbtn}>
-                      <div>
+                      {/* <div>
                         <select
                           value={
-                            selectedStatus[products._id] || products.status
+                            selectedStatus[products._id] ||
+                            products.bookingStatus
                           }
                           onChange={(e) => handleChange(products._id, e)}
                           style={{
-                            backgroundColor: getStatusColor(products.status),
+                            backgroundColor: getStatusColor(
+                              products.bookingStatus
+                            ),
                           }}
                         >
                           <option value="" disabled>
                             Select Status
                           </option>
                           <option value={0}>Active</option>
-                          {/* <option value="Pending">Pending</option> */}
+                          
                           <option value={1}>Complete</option>
                           <option value={2}>Cancelled</option>
                         </select>
-                      </div>
-                      <div style={{ width: "25%" }}>
+                      </div> */}
+                      <div>
                         <GrShare
                           style={{ cursor: "pointer" }}
                           onClick={() => {
-                            gotoShowDetails(products._id);
+                            // gotoShowDetails(products._id);
                           }}
-                        />
-
+                        />{" "}
+                        &nbsp;
                         <RiDeleteBin5Fill
                           style={{ color: "red", cursor: "pointer" }}
                         />

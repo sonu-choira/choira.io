@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
-  const [tabCount, setTabCount] = useState(4);
+  const [tabCount, setTabCount] = useState(3);
   useEffect(() => {
     const token = localStorage.getItem("token");
     console.log("Token from localStorage:", token);

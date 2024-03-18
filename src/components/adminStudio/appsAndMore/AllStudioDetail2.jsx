@@ -172,7 +172,7 @@ function AllStudioDetail2({
                           <MdEdit
                             style={{ color: "#ffc701", cursor: "pointer" }}
                             onClick={() => {
-                              gotoEdit(products._id);
+                              // gotoEdit(products._id);
                             }}
                           />
                           <RiDeleteBin5Fill
