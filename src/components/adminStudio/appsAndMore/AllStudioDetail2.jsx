@@ -103,7 +103,7 @@ function AllStudioDetail2({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th>Studioaa</th>
+                <th>Studio</th>
                 <th>Price</th>
                 <th>Location</th>
                 <th>No. of Rooms</th>
