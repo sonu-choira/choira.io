@@ -57,11 +57,14 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
                       <div>
                         <select
                           value={
-                            selectedStatus[products._id] || products.status
+                            selectedStatus[products._id] ||
+                            products.bookingStatus
                           }
                           onChange={(e) => handleChange(products._id, e)}
                           style={{
-                            backgroundColor: getStatusColor(products.status),
+                            backgroundColor: getStatusColor(
+                              products.bookingStatus
+                            ),
                           }}
                         >
                           <option value="" disabled>

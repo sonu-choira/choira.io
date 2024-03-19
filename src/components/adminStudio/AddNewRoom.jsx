@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa6";
 import StudioFooter from "./StudioFooter";
 
-function AddNewRoom() {
+function AddNewRoom({ setshowRoomsDetails }) {
   const days = [
     { id: "Monday", label: "Monday" },
     { id: "Tuesday", label: "Tuesday" },
@@ -205,7 +205,11 @@ function AddNewRoom() {
           </div>
         </div>
       </div>
-      <StudioFooter />
+      <StudioFooter
+        backOnclick={() => {
+          setshowRoomsDetails(false);
+        }}
+      />
     </>
   );
 }

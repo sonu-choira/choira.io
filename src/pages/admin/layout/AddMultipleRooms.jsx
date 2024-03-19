@@ -4,75 +4,82 @@ import style from "../studios/studio.module.css";
 import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 
-function AddmultipleServises({
-  service,
-  setService,
+function AddMultipleRooms({
+  rooms,
+  setrooms,
   data,
   isEditMode,
-  setShowServices,
-  setIndexofServices,
+  setshowRoomsDetails,
+  setIndexofrooms,
 }) {
-  useEffect(() => {
-    console.log("ho raha hai change ", service);
-  }, [service]);
-  useEffect(() => {
-    if (data?.state?.productData?.service?.length) {
-      console.log(typeof data.state.productData.service);
-      setService(data.state.productData.service);
-    }
-    //  else if (initialService && initialService.length) {
-    //   setService(initialService);
-    // }
-  }, [data?.state?.productData?.service?.length]);
+  // useEffect(() => {
+  //   console.log("ho raha hai change ", rooms);
+  // }, [rooms]);
+  // useEffect(() => {
+  //   if (data?.state?.productData?.rooms?.length) {
+  //     console.log(typeof data.state.productData.rooms);
+  //     setrooms(data.state.productData.rooms);
+  //   }
+  //   //  else if (initialService && initialService.length) {
+  //   //   setrooms(initialService);
+  //   // }
+  // }, [data?.state?.productData?.rooms?.length]);
 
   useEffect(() => {
-    console.log("-------------------------------------", service);
-  }, [service]);
+    console.log("-------------------------------------", rooms);
+  }, [rooms]);
 
   useEffect(() => {
-    console.log(">>>>>>>>>>>>>>>", service);
+    console.log(">>>>>>>>>>>>>>>", rooms);
   }, []);
 
   const handleAddTeamDetail = () => {
     const newTeam = {
+      roomName: "",
+      roomArea: "",
+      pricePerHour: "",
+      discount: "",
+      bookingDays: [],
+      generalStartTime: "",
+      generalEndTime: "",
+      bookingStartTime: [],
+      bookingEndTime: [],
       photo: [],
-      name: "",
-      about: "",
       amenities: [],
-      price: "",
+      roomDetails: "",
     };
-    setService([...service, newTeam]);
+    setrooms([...rooms, newTeam]);
   };
 
   const handlePhotoChange = (event, index) => {
-    const newTeams = [...service];
+    const newTeams = [...rooms];
     newTeams[index].photo = event.target.files[0];
-    setService(newTeams);
+    setrooms(newTeams);
   };
 
   const handleInputChange = (event, index, field) => {
-    const newTeams = [...service];
+    const newTeams = [...rooms];
     newTeams[index][field] = event.target.value;
-    setService(newTeams);
+    setrooms(newTeams);
   };
 
   const handleCancelImage = (index) => {
-    const newTeams = [...service];
+    const newTeams = [...rooms];
     newTeams[index].photo = null;
-    setService(newTeams);
+    setrooms(newTeams);
   };
 
   const handleCancelTeam = (index) => {
-    if (service.length > 1) {
-      const newTeams = [...service];
+    if (rooms.length > 1) {
+      const newTeams = [...rooms];
       newTeams.splice(index, 1);
-      setService(newTeams);
+      setrooms(newTeams);
     }
   };
 
   const handleEditService = (index) => {
-    setShowServices(true);
-    setIndexofServices(index);
+    setshowRoomsDetails(true);
+    setIndexofrooms(index);
   };
 
   const hideAddPhotoIcon = (team) => {
@@ -85,10 +92,10 @@ function AddmultipleServises({
 
   return (
     <div className={style.addTeamDetailDiv}>
-      <label htmlFor="Services">Services</label>
+      <label htmlFor="Rooms">Rooms</label>
       {isEditMode ? (
-        <div className={style.addTeamDetailDynamicDiv} id="Services">
-          {service?.map((team, index) => (
+        <div className={style.addTeamDetailDynamicDiv} id="Rooms">
+          {rooms?.map((team, index) => (
             <div key={index} className={style.addTeamDetailMainDiv}>
               <div>
                 <label htmlFor={`uploadteamPhoto-${index}`}>
@@ -112,9 +119,11 @@ function AddmultipleServises({
               <div>
                 <input
                   type="text"
-                  placeholder="Enter Services Name"
-                  value={team.name}
-                  onChange={(event) => handleInputChange(event, index, "name")}
+                  placeholder="Enter Rooms Name"
+                  value={team.roomName}
+                  onChange={(event) =>
+                    handleInputChange(event, index, "roomName")
+                  }
                 />
 
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -125,15 +134,15 @@ function AddmultipleServises({
                       fontSize: "1vmax",
                     }}
                   >
-                    Starting Price ₹
+                    pricePerHour ₹
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
                     type="text"
                     placeholder=""
-                    value={team.price}
+                    value={team.pricePerHour}
                     onChange={(event) =>
-                      handleInputChange(event, index, "price")
+                      handleInputChange(event, index, "pricePerHour")
                     }
                   />
                 </div>
@@ -141,7 +150,7 @@ function AddmultipleServises({
                   <FaPencilAlt onClick={() => handleEditService(index)} />
                 </div>
               </div>
-              {service.length > 1 && (
+              {rooms.length > 1 && (
                 <span
                   style={{ cursor: "pointer" }}
                   className={style.cancelTeamDetailUpload}
@@ -156,12 +165,12 @@ function AddmultipleServises({
             className={style.addTeamDetailbtn}
             onClick={handleAddTeamDetail}
           >
-            <MdOutlineAddBox /> &nbsp;<div>Add new Services</div>
+            <MdOutlineAddBox /> &nbsp;<div>Add new Rooms</div>
           </span>
         </div>
       ) : (
         <div className={style.addTeamDetailDynamicDiv}>
-          {service.map((team, index) => (
+          {rooms.map((team, index) => (
             <div key={index} className={style.addTeamDetailMainDiv}>
               <div>
                 <label
@@ -202,9 +211,11 @@ function AddmultipleServises({
               <div>
                 <input
                   type="text"
-                  placeholder="Name"
-                  value={team.name}
-                  onChange={(event) => handleInputChange(event, index, "name")}
+                  placeholder="roomName"
+                  value={team.roomName}
+                  onChange={(event) =>
+                    handleInputChange(event, index, "roomName")
+                  }
                 />
                 <input
                   type="text"
@@ -219,7 +230,7 @@ function AddmultipleServises({
                 </div>
               </div>
 
-              {service.length > 1 && (
+              {rooms.length > 1 && (
                 <span
                   style={{ cursor: "pointer" }}
                   className={style.cancelTeamDetailUpload}
@@ -242,4 +253,4 @@ function AddmultipleServises({
   );
 }
 
-export default AddmultipleServises;
+export default AddMultipleRooms;

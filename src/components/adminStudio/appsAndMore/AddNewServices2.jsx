@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Divider, Input, Select, Space, Button } from "antd";
 import { MdAddAPhoto } from "react-icons/md";
@@ -18,9 +18,9 @@ import cross from "../../../assets/cross.svg";
 
 function AddNewServices2({
   setShowServices,
-  indexofServices,
   service,
   setService,
+  indexofServices,
 }) {
   const [items, setItems] = useState([
     "Wifi",
@@ -33,31 +33,67 @@ function AddNewServices2({
   ]);
 
   const inputRef = useRef(null);
+
   const currentServiceData = service[indexofServices] || {};
+  useEffect(() => {
+    console.log("currentServiceData-------->", currentServiceData);
+  }, [currentServiceData]);
+
+  // const onNameChange = (event) => {
+  //   setService([
+  //     ...service,
+  //     [indexofServices]: {
+  //       ...currentServiceData,
+  //       name: event.target.value,
+  //     },
+  //   ]);
+  //   setService((preservices)=>{
+
+  //     preservices.map((item,idx)=>{
+
+  //     })
+
+  //   })
+
+  //   // setService([
+  //   //   ...service,
+  //   //   {
+  //   //     name: event.target.value,
+  //   //   },
+  //   // ]);
+  // };
 
   const onNameChange = (event) => {
-    const { value } = event.target;
     setService((prevService) => {
-      const updatedService = [...prevService];
-      updatedService[indexofServices].name = value;
-      return updatedService;
+      const updatedService = [...prevService]; // Copy the existing service array
+      updatedService[indexofServices] = {
+        ...updatedService[indexofServices], // Copy the existing object
+        name: event.target.value, // Update the 'name' property
+      };
+      return updatedService; // Return the updated array
     });
   };
 
-  const addItem = () => {
+  const addItem = (e) => {
+    e.preventDefault();
     setItems([...items, currentServiceData.name]);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
   };
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
+    const newImages = [
+      ...currentServiceData.photo,
+      ...selectedImages.slice(0, 5 - currentServiceData.photo.length),
+    ];
+
     setService((prevService) => {
-      const updatedService = Array.isArray(prevService) ? [...prevService] : [];
+      const updatedService = [...prevService];
       updatedService[indexofServices] = {
-        ...updatedService[indexofServices],
-        photo: [
-          ...(updatedService[indexofServices]?.photo || []),
-          ...selectedImages.slice(0, 5), // Limit to 5 images
-        ],
+        ...currentServiceData,
+        photo: newImages,
       };
       return updatedService;
     });
@@ -69,7 +105,32 @@ function AddNewServices2({
 
     setService((prevService) => {
       const updatedService = [...prevService];
-      updatedService[indexofServices].photo = newImages;
+      updatedService[indexofServices] = {
+        ...currentServiceData,
+        photo: newImages,
+      };
+      return updatedService;
+    });
+  };
+
+  const handlePriceChange = (event) => {
+    setService((prevService) => {
+      const updatedService = [...prevService];
+      updatedService[indexofServices] = {
+        ...updatedService[indexofServices],
+        price: event.target.value,
+      };
+      return updatedService;
+    });
+  };
+
+  const handleAboutChange = (event) => {
+    setService((prevService) => {
+      const updatedService = [...prevService];
+      updatedService[indexofServices] = {
+        ...updatedService[indexofServices],
+        about: event.target.value,
+      };
       return updatedService;
     });
   };
@@ -79,7 +140,7 @@ function AddNewServices2({
       const updatedService = [...prevService];
       updatedService[indexofServices] = {
         ...updatedService[indexofServices],
-        amenites: selectedAmenities,
+        amenities: selectedAmenities,
       };
       return updatedService;
     });
@@ -92,10 +153,10 @@ function AddNewServices2({
         <div style={{ height: "90%" }}>
           <div>
             <div className={style.addNewStudioinputBox}>
-              <label htmlFor="name">Service Name</label>
+              <label htmlFor="serviceName">Service Name</label>
               <input
                 type="text"
-                id="name"
+                id="serviceName"
                 placeholder="Enter Service Name"
                 value={currentServiceData.name}
                 onChange={onNameChange}
@@ -103,40 +164,24 @@ function AddNewServices2({
             </div>
 
             <div className={style.addNewStudioinputBox}>
-              <label htmlFor="price">Price Starting From</label>
+              <label htmlFor="startingPrice">Price Starting From</label>
               <input
                 type="text"
-                id="price"
+                id="startingPrice"
                 placeholder="Enter price"
                 value={currentServiceData.price}
-                onChange={(e) =>
-                  setService({
-                    ...service,
-                    [indexofServices]: {
-                      ...currentServiceData,
-                      price: e.target.value,
-                    },
-                  })
-                }
+                onChange={handlePriceChange}
               />
             </div>
 
             <div className={style.addNewStudioinputBox2}>
-              <label htmlFor="about">Service Details</label>
+              <label htmlFor="serviceDetails">Service Details</label>
               <textarea
                 type="text"
-                id="about"
+                id="serviceDetails"
                 placeholder="Enter Service Details"
                 value={currentServiceData.about}
-                onChange={(e) =>
-                  setService({
-                    ...service,
-                    [indexofServices]: {
-                      ...currentServiceData,
-                      about: e.target.value,
-                    },
-                  })
-                }
+                onChange={handleAboutChange}
               />
             </div>
           </div>
@@ -257,7 +302,7 @@ function AddNewServices2({
                   label: item,
                   value: item,
                 }))}
-                value={currentServiceData.amenites}
+                value={currentServiceData.amenities}
                 onChange={handleAmenitiesChange}
               />
             </div>

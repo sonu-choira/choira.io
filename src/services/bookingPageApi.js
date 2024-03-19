@@ -34,7 +34,8 @@ import api from "./api"
    updateStatus = async (id, selectedstatus) => {
     const response = await api.post(`/bookings/update`,{
       bookingId: id,
-      status: selectedstatus
+      
+      bookingStatus: parseInt(selectedstatus),
     });
     const {status} = response.data
     console.log("res ===>", response.data)

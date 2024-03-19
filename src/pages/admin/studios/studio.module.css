@@ -881,6 +881,7 @@ td {
   position: relative;
   padding-left: 2%;
   margin-bottom: 5%;
+  /* border: 2px solid red; */
   /* flex-direction: column; */
 }
 .addTeamDetailMainDiv > div:nth-child(1) {
@@ -922,14 +923,15 @@ td {
   width: 95%;
   border: none;
   outline: none;
+  /* border: 2px solid red; */
 }
 .addTeamDetailbtn {
   /* position: absolute; */
   align-self: start;
   bottom: 0%;
-
+  font-size: 1vmax;
   left: 2%;
-  font-size: 1.2vmax;
+
   color: black;
   z-index: 10;
   display: flex;

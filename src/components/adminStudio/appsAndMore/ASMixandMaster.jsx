@@ -114,15 +114,21 @@ function ASMixandMaster({
                 <th>Activity Status</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className={style.tbody}>
               {products.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
                 products.map((product) => {
                   return (
                     <tr key={product._id}>
-                      <td style={{ display: "flex", alignItems: "center" }}>
-                        <div className={style.studioImage}>
+                      <td
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "100%",
+                        }}
+                      >
+                        <div className={style.studioImage} style={{}}>
                           {product.studioPhotos ? (
                             <img
                               src={product.studioPhotos}

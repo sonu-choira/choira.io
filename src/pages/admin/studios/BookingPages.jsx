@@ -26,7 +26,8 @@ function BookingPages() {
     try {
       const updateddata = products.map((prd) => {
         if (prd._id === productId) {
-          prd.status = parseInt(event.target.value);
+          prd.bookingStatus = parseInt(event.target.value);
+          console.log(" prd.status", prd.bookingStatus);
         }
         return prd;
       });

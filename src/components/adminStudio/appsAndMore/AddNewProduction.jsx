@@ -35,7 +35,7 @@ function AddNewProduction({ setSelectTab }) {
   ]);
 
   const [service, setService] = useState([
-    { photo: [], name: "", about: "", amenites: [], price: "" },
+    { photo: [], name: "", about: "", amenities: [], price: "" },
   ]);
   const [selectedOption, setSelectedOption] = useState("0");
   const [images, setImages] = useState([]);
@@ -57,6 +57,10 @@ function AddNewProduction({ setSelectTab }) {
 
     setAddNewServicesformData(initialArray);
   };
+
+  useEffect(() => {
+    console.log("addNewServicesformData-------", addNewServicesformData);
+  }, [setAddNewServicesformData]);
 
   useEffect(() => {
     if (data?.state?.productData?.packages?.length) {
@@ -116,7 +120,7 @@ function AddNewProduction({ setSelectTab }) {
   }, [selectedOption]);
 
   useEffect(() => {
-    console.log("hii", addNewServicesformData);
+    console.log("addNewServicesformData", addNewServicesformData);
   }, [addNewServicesformData]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showServices, setShowServices] = useState(false);
@@ -310,10 +314,7 @@ function AddNewProduction({ setSelectTab }) {
           </div>
           {showServices ? (
             <AddNewServices2
-              setServices={setServices}
               setShowServices={setShowServices}
-              setAddNewServicesformData={setAddNewServicesformData}
-              addNewServicesformData={addNewServicesformData}
               setIndexofServices={setIndexofServices}
               indexofServices={indexofServices}
               setService={setService}

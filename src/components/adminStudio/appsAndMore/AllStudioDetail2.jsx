@@ -117,7 +117,13 @@ function AllStudioDetail2({
                 products.map((products) => {
                   return (
                     <tr key={products._id}>
-                      <td style={{ display: "flex", alignItems: "center" }}>
+                      <td
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "100%",
+                        }}
+                      >
                         <div className={style.studioImage}>
                           {products.studioPhotos ? (
                             <img
