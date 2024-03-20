@@ -55,15 +55,15 @@ function AddNewStudio({ setSelectTab }) {
   const [rooms, setrooms] = useState([
     {
       roomName: "",
-      roomArea: "",
+      area: "",
       pricePerHour: "",
-      discount: "",
+      discountPercentage: "",
       bookingDays: [],
       generalStartTime: "",
       generalEndTime: "",
       bookingStartTime: [],
       bookingEndTime: [],
-      photo: [],
+      roomPhotos: [],
       amenities: [],
       roomDetails: "",
     },
@@ -94,9 +94,14 @@ function AddNewStudio({ setSelectTab }) {
   });
 
   useEffect(() => {
-    if (data?.state?.productData) setStudioDetails(data?.state?.productData);
+    if (data?.state?.productData) {
+      setStudioDetails(data?.state?.productData);
+      setrooms(data?.state?.productData.roomsDetails);
+    }
   }, [data?.state?.productData]);
-
+  useEffect(() => {
+    console.log("room updated ", rooms);
+  }, [rooms]);
   useEffect(() => {
     if (studioDetails?.studioPhotos?.length)
       setImages(studioDetails.studioPhotos);
@@ -156,11 +161,11 @@ function AddNewStudio({ setSelectTab }) {
     updatedServiceDetails[index] = event.target.value;
     setServiceDetails(updatedServiceDetails);
   };
-  const [indexofServices, setIndexofServices] = useState();
-  const handleEditService = (i) => {
-    setShowServices(true);
-    setIndexofServices(i);
-  };
+  // const [indexofrooms, setIndexofRooms] = useState();
+  // const handleEditService = (i) => {
+  //   setShowServices(true);
+  //   setIndexofrooms(i);
+  // };
 
   const renderServiceDivs = () => {
     const divs = [];
@@ -209,7 +214,7 @@ function AddNewStudio({ setSelectTab }) {
             <div className={style.editpencil}>
               <FaPencilAlt
                 onClick={() => {
-                  handleEditService(i);
+                  // handleEditService(i);
                 }}
               />
             </div>
@@ -251,7 +256,14 @@ function AddNewStudio({ setSelectTab }) {
           </div>
 
           {showRoomsDetails ? (
-            <AddNewRoom setshowRoomsDetails={setshowRoomsDetails} />
+            <AddNewRoom
+              setshowRoomsDetails={setshowRoomsDetails}
+              isEditMode={isEditMode}
+              rooms={rooms}
+              setrooms={setrooms}
+              setIndexofrooms={setIndexofrooms}
+              indexofrooms={indexofrooms}
+            />
           ) : (
             <>
               <div

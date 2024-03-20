@@ -44,7 +44,7 @@ function AddMultipleRooms({
       generalEndTime: "",
       bookingStartTime: [],
       bookingEndTime: [],
-      photo: [],
+      roomPhotos: [],
       amenities: [],
       roomDetails: "",
     };
@@ -53,7 +53,7 @@ function AddMultipleRooms({
 
   const handlePhotoChange = (event, index) => {
     const newTeams = [...rooms];
-    newTeams[index].photo = event.target.files[0];
+    newTeams[index].roomPhotos = event.target.files[0];
     setrooms(newTeams);
   };
 
@@ -65,7 +65,7 @@ function AddMultipleRooms({
 
   const handleCancelImage = (index) => {
     const newTeams = [...rooms];
-    newTeams[index].photo = null;
+    newTeams[index].roomPhotos = null;
     setrooms(newTeams);
   };
 
@@ -77,14 +77,14 @@ function AddMultipleRooms({
     }
   };
 
-  const handleEditService = (index) => {
+  const handelEditRooms = (index) => {
     setshowRoomsDetails(true);
     setIndexofrooms(index);
   };
 
   const hideAddPhotoIcon = (team) => {
     console.log("team--------", team);
-    var send = team.photo.length ? { display: "none" } : {};
+    var send = team?.roomPhotos?.length ? { display: "none" } : {};
     console.log("send", send);
 
     return send;
@@ -98,18 +98,14 @@ function AddMultipleRooms({
           {rooms?.map((team, index) => (
             <div key={index} className={style.addTeamDetailMainDiv}>
               <div>
-                <label htmlFor={`uploadteamPhoto-${index}`}>
+                <label>
                   <MdAddAPhoto style={hideAddPhotoIcon(team)} />
                 </label>
 
-                {team.photo.length ? (
+                {team.roomPhotos.length ? (
                   <div>
                     <img
-                      src={
-                        team.photo.length
-                          ? URL.createObjectURL(team.photo[0])
-                          : ""
-                      }
+                      src={team.roomPhotos.length ? team.roomPhotos.length : ""}
                     />
                   </div>
                 ) : (
@@ -147,7 +143,7 @@ function AddMultipleRooms({
                   />
                 </div>
                 <div className={style.editpencil}>
-                  <FaPencilAlt onClick={() => handleEditService(index)} />
+                  <FaPencilAlt onClick={() => handelEditRooms(index)} />
                 </div>
               </div>
               {rooms.length > 1 && (
@@ -173,39 +169,22 @@ function AddMultipleRooms({
           {rooms.map((team, index) => (
             <div key={index} className={style.addTeamDetailMainDiv}>
               <div>
-                <label
-                  style={{ cursor: "pointer" }}
-                  htmlFor={`uploadteamPhoto-${index}`}
-                >
+                <label>
                   <MdAddAPhoto style={hideAddPhotoIcon(team)} />
                 </label>
-                {/* <input
-                  type="file"
-                  id={`uploadteamPhoto-${index}`}
-                  style={{ display: "none" }}
-                  onChange={(event) => handlePhotoChange(event, index)}
-                /> */}
-                {team.photo && (
+
+                {team.roomPhotos.length ? (
                   <div>
                     <img
                       src={
-                        team.photo.length > 0
-                          ? URL.createObjectURL(team.photo[0])
+                        team.roomPhotos.length
+                          ? URL.createObjectURL(team.roomPhotos[0])
                           : ""
                       }
-                      // alt={`Team ${index} Photo`}
-                      style={{
-                        maxWidth: "100px",
-                        maxHeight: "100px",
-                      }}
                     />
-                    {/* <span
-                      className={style.cancelImageUpload}
-                      onClick={() => handleCancelImage(index)}
-                    >
-                      <img src={cross} alt="" />
-                    </span> */}
                   </div>
+                ) : (
+                  ""
                 )}
               </div>
               <div>
@@ -226,7 +205,7 @@ function AddMultipleRooms({
                   }
                 />
                 <div className={style.editpencil}>
-                  <FaPencilAlt onClick={() => handleEditService(index)} />
+                  <FaPencilAlt onClick={() => handelEditRooms(index)} />
                 </div>
               </div>
 
@@ -245,7 +224,7 @@ function AddMultipleRooms({
             className={style.addTeamDetailbtn}
             onClick={handleAddTeamDetail}
           >
-            <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
+            <MdOutlineAddBox /> &nbsp;<div>Add Rooms</div>
           </span>
         </div>
       )}

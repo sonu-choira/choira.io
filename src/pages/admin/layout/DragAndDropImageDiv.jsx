@@ -4,6 +4,10 @@ import cross from "../../../assets/cross.svg";
 import style from "../studios/studio.module.css";
 
 function DragAndDropImageDiv({ images, setImages, isEditMode }) {
+  // to use this drag and drop component please pass a prop of use state
+  // const [images, setImages] = useState([]);
+  // and isEditMode
+
   const [isOver, setIsOver] = useState(false);
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
