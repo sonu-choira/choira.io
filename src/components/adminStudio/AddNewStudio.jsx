@@ -51,6 +51,7 @@ function AddNewStudio({ setSelectTab }) {
   const [teamDetails, setTeamsDetails] = useState([
     { photo: null, name: "", profile: "", designation: "" },
   ]);
+  const [selectedStudioAmenities, setSelectedStudioAmenities] = useState([]);
 
   const [rooms, setrooms] = useState([
     {
@@ -93,6 +94,54 @@ function AddNewStudio({ setSelectTab }) {
     mapLink: "",
   });
 
+  const [saveAddData, setsaveAddData] = useState({
+    aboutUs: {},
+    address: "",
+    amenities: selectedStudioAmenities,
+    area: "",
+    availabilities: [],
+    city: "",
+    clientPhotos: [],
+    creationTimeStamp: "",
+    featuredReviews: "",
+    fullName: "",
+    isActive: "",
+    latitude: "",
+    location: { coordinates: [], type: "" },
+    longitude: "",
+    mapLink: "",
+    maxGuests: "",
+    overallAvgRating: "",
+    pincode: "",
+    pricePerHour: "",
+    reviews: {},
+    roomsDetails: rooms,
+    state: "",
+    studioPhotos: images,
+    teamDetails: teamDetails,
+    totalRooms: "",
+    _id: "",
+  });
+
+  const saveAllData = () => {
+    setsaveAddData({
+      ...saveAddData,
+      aboutUs: { ...studioDetails.aboutUs },
+      address: `${studioDetails.area}, ${studioDetails.city}, ${studioDetails.state} - ${studioDetails.pincode}`,
+      amenities: [...studioDetails.amenities],
+      area: studioDetails.area,
+      city: studioDetails.city,
+      fullName: studioDetails.fullName,
+      isActive: true, // You can set this value based on your logic
+      mapLink: studioDetails.mapLink,
+      maxGuests: studioDetails.maxGuests,
+      pincode: studioDetails.pincode,
+      state: studioDetails.state,
+      studioPhotos: [...studioDetails.studioPhotos],
+      totalRooms: studioDetails.totalRooms,
+    });
+  };
+
   useEffect(() => {
     if (data?.state?.productData) {
       setStudioDetails(data?.state?.productData);
@@ -107,126 +156,24 @@ function AddNewStudio({ setSelectTab }) {
       setImages(studioDetails.studioPhotos);
   }, [studioDetails?.studioPhotos?.length]);
 
-  const amenitiesList = [
-    { id: "wifi", label: "Wifi" },
-    { id: "ac", label: "AC" },
-    { id: "dj", label: "DJ" },
-    { id: "piano", label: "Piano" },
-    { id: "drum", label: "Drum" },
-    { id: "carparking", label: "Car Parking" },
-    { id: "banjo", label: "Banjo" },
+  const studioamenitiesList = [
+    "Wifi",
+    "AC",
+    "DJ",
+    "Piano",
+    "Drum",
+    "Car Parking",
+    "Banjo",
   ];
+  const filteredAmenities = studioamenitiesList.filter(
+    (o) => !selectedStudioAmenities.includes(o)
+  );
 
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
-
-  const handleCheckboxChange = (id) => {
-    const updatedAmenities = selectedAmenities.includes(id)
-      ? selectedAmenities.filter((amenity) => amenity !== id)
-      : [...selectedAmenities, id];
-
-    setSelectedAmenities(updatedAmenities);
-    console.log(selectedAmenities);
-  };
-  const [iframeCode, setIframeCode] = useState("");
-  const [hasContent, setHasContent] = useState(false);
-
-  const handleIframeCodeChange = (e) => {
-    const inputCode = e.target.value;
-
-    // Update the state with the user-entered iframe code
-    setIframeCode(inputCode);
-
-    // Update hasContent state based on whether there is content in the textarea
-    setHasContent(inputCode.trim() !== "");
-  };
-
-  // --------------------------roomsaaaa ---------------------
-  const [selectedOption, setSelectedOption] = useState("0");
-  if (data?.state?.productData?.totalRooms?.length) {
-    // setSelectedOption(studioDetails?.totalRooms);
-    console.log(data?.state?.productData?.totalRooms);
-    setSelectedOption(data?.state?.productData?.totalRooms);
-  }
-  const [serviceDetails, setServiceDetails] = useState([]);
-  const [addNewServicesformData, setAddNewServicesformData] = useState([]);
-  const [showServices, setShowServices] = useState(false);
-
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
-    setServiceDetails([]);
-  };
-
-  const handleServiceChange = (event, index) => {
-    const updatedServiceDetails = [...serviceDetails];
-    updatedServiceDetails[index] = event.target.value;
-    setServiceDetails(updatedServiceDetails);
-  };
-  // const [indexofrooms, setIndexofRooms] = useState();
-  // const handleEditService = (i) => {
-  //   setShowServices(true);
-  //   setIndexofrooms(i);
-  // };
-
-  const renderServiceDivs = () => {
-    const divs = [];
-
-    for (let i = 0; i < parseInt(selectedOption, 10); i++) {
-      const currentServiceData = addNewServicesformData[i] || {};
-
-      const serviceDiv = (
-        <div key={i} className={style.addTeamDetailDynamicDiv}>
-          <div className={style.addTeamDetailMainDiv}>
-            <div>
-              <label
-                style={{ cursor: "pointer" }}
-                htmlFor={`uploadServicePhoto`}
-              >
-                {/* <MdOutlineAddBox /> */}
-              </label>
-
-              <img
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-                // src={
-                //   currentServiceData.images.length > 0
-                //     ? URL.createObjectURL(currentServiceData.images[0])
-                //     : ""
-                // }
-                alt=""
-              />
-            </div>
-            <div>
-              <input
-                readOnly
-                type="text"
-                value={studioDetails?.roomsDetails?.roomName}
-                placeholder="Name"
-              />
-              <input
-                type="text"
-                placeholder="Profile"
-                value={`starting price from ₹ ${currentServiceData.startingPrice}`}
-              />
-            </div>
-            <div className={style.editpencil}>
-              <FaPencilAlt
-                onClick={() => {
-                  // handleEditService(i);
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      );
-
-      divs.push(serviceDiv);
-    }
-
-    return divs;
-  };
+  useEffect(() => {
+    setSelectedStudioAmenities(
+      studioDetails?.amenities?.map((item) => item.name) || []
+    );
+  }, [studioDetails?.amenities]);
 
   return (
     <>
@@ -388,15 +335,12 @@ function AddNewStudio({ setSelectTab }) {
                         mode="multiple"
                         className=""
                         placeholder="Select one or more Amenities"
-                        value={
-                          studioDetails?.amenities?.map((item) => item.name) ||
-                          []
-                        }
-                        onChange={setSelectedItems}
-                        style={customStyles}
-                        options={studioDetails?.amenities?.map((item) => ({
-                          value: item.name,
-                          label: item.name,
+                        value={selectedStudioAmenities}
+                        onChange={setSelectedStudioAmenities}
+                        // style={customStyles}
+                        options={filteredAmenities?.map((item) => ({
+                          value: item,
+                          label: item,
                         }))}
                       />
                     </div>

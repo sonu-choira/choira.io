@@ -83,9 +83,9 @@ function AddMultipleRooms({
   };
 
   const hideAddPhotoIcon = (team) => {
-    console.log("team--------", team);
+    // console.log("team--------", team);
     var send = team?.roomPhotos?.length ? { display: "none" } : {};
-    console.log("send", send);
+    // console.log("send", send);
 
     return send;
   };

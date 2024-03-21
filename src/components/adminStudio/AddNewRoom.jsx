@@ -29,19 +29,46 @@ function AddNewRoom({
   setIndexofrooms,
 }) {
   const currentRoomsData = rooms[indexofrooms] || "";
+  const customStyles = {
+    height: "90%",
+    overFlow: "scroll",
+  };
+  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [selectedDate, setSelectedDate] = useState([]);
+  const [time, setTime] = useState([]);
+  const [bookingtime, setBookingtime] = useState([]);
 
   let genreralStartTime;
   let genreralEndTime;
+  let bookingStartTime;
+  let bookingEndTime;
+  // useEffect(() => {
+  //   if (currentRoomsData?.generalTime?.startTime?.length == 5) {
+  //     genreralStartTime = String(
+  //       `${currentRoomsData?.generalTime?.startTime}:00`
+  //     );
+  //     genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}:00`);
+
+  //     bookingStartTime = String(`${currentRoomsData?.generalStartTime}:00`);
+  //     bookingEndTime = String(`${currentRoomsData?.generalEndTime}:00`);
+  //   } else {
+  //     genreralStartTime = String(`${currentRoomsData?.generalTime?.startTime}`);
+  //     genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}`);
+
+  //     bookingStartTime = String(`${currentRoomsData?.generalStartTime}`);
+  //     bookingEndTime = String(`${currentRoomsData?.generalEndTime}`);
+  //   }
+
+  //   console.log("genreralStartTime", genreralStartTime);
+  //   console.log("genreralStartTime", typeof genreralStartTime);
+
+  //   console.log("genreralEndTime", genreralEndTime);
+  // }, [currentRoomsData]);
+
   useEffect(() => {
-    genreralStartTime = String(
-      `${currentRoomsData?.generalTime?.startTime}:00`
-    );
-    console.log("genreralStartTime", genreralStartTime);
-    console.log("genreralStartTime", typeof genreralStartTime);
-    genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}:00`);
-    console.log("genreralEndTime", genreralEndTime);
-  }, [currentRoomsData]);
-  console.log("indexofrooms", indexofrooms);
+    console.log("rooms ka details change huaa haiiiiiiiiiiiiiiii");
+  }, [rooms]);
+
   useEffect(() => {
     console.log("currentRoomsData------>/", currentRoomsData);
     console.log(
@@ -55,8 +82,62 @@ function AddNewRoom({
     currentRoomsData ? currentRoomsData.roomPhotos : []
   );
 
-  const [time, setTime] = useState();
-  const [bookingtime, setBookingtime] = useState();
+  useEffect(() => {
+    setrooms((prerooms) => {
+      prerooms.map((rm, idex) => {
+        if (idex === indexofrooms) {
+          rm.roomPhotos = images;
+        }
+      });
+      return prerooms;
+    });
+  }, [images]);
+
+  useEffect(() => {
+    setrooms((prerooms) => {
+      prerooms.map((rm, idex) => {
+        if (idex === indexofrooms) {
+          rm.amenities = selectedAmenities;
+        }
+      });
+      return prerooms;
+    });
+  }, [selectedAmenities.length]);
+
+  useEffect(() => {
+    setrooms((prerooms) => {
+      prerooms.map((rm, idex) => {
+        if (idex === indexofrooms) {
+          rm.bookingDays = selectedDate;
+        }
+      });
+      return prerooms;
+    });
+  }, [selectedDate.length]);
+
+  useEffect(() => {
+    setrooms((prerooms) => {
+      prerooms.map((rm, idex) => {
+        if (idex === indexofrooms) {
+          rm.bookingStartTime = time[0];
+          rm.bookingEndTime = time[1];
+        }
+      });
+      return prerooms;
+    });
+  }, [bookingtime.length]);
+
+  useEffect(() => {
+    setrooms((prerooms) => {
+      prerooms.map((rm, idex) => {
+        if (idex === indexofrooms) {
+          rm.generalStartTime = time[0];
+          rm.generalEndTime = time[1];
+        }
+      });
+      return prerooms;
+    });
+  }, [time.length]);
 
   const handelGeneralTime = (time, timeString) => {
     console.log(time, timeString);
@@ -79,32 +160,73 @@ function AddNewRoom({
   dayjs.extend(customParseFormat);
 
   const days = [
-    { id: "Monday", label: "Monday" },
-    { id: "Tuesday", label: "Tuesday" },
-    { id: "wednesday", label: "wednesday" },
-    { id: "thursday", label: "thursday" },
-    { id: "friday", label: "friday" },
-    { id: "Saturday", label: "Saturday" },
-    { id: "sunday", label: "sunday" },
+    // { id: "1", name: "Monday" },
+    // { id: "2", name: "Tuesday" },
+    // { id: "3", name: "wednesday" },
+    // { id: "4", name: "thursday" },
+    // { id: "5", name: "friday" },
+    // { id: "6", name: "Saturday" },
+    // { id: "7", name: "sunday" },
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
   ];
 
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [selectedDate, setSelectedDate] = useState([]);
+  const amenitiesList = [
+    "Wifi",
+    "AC",
+    "DJ",
+    "Piano",
+    "Drum",
+    "Car Parking",
+    "Banjo",
+  ];
 
-  const handleCheckboxChange = (id) => {
-    const updatedAmenities = selectedAmenities.includes(id)
-      ? selectedAmenities.filter((amenity) => amenity !== id)
-      : [...selectedAmenities, id];
+  if (isEditMode) {
+  }
+  useEffect(() => {
+    if (isEditMode) {
+      setSelectedDate(
+        currentRoomsData?.bookingDays?.map((item) => item?.name) || []
+      );
+    }
+  }, [currentRoomsData?.bookingDays.length]);
 
-    setSelectedAmenities(updatedAmenities);
-    console.log(selectedAmenities);
-  };
+  const filteredDates = days.filter((o) => !selectedDate.includes(o));
+
+  const filteredAmenities = amenitiesList.filter(
+    (o) => !selectedAmenities.includes(o)
+  );
+
+  useEffect(() => {
+    setSelectedAmenities(
+      currentRoomsData?.amenities?.map((item) => item) || []
+    );
+  }, [currentRoomsData?.amenities]);
+
+  // const handleCheckboxChange = (id) => {
+  //   const updatedAmenities = selectedAmenities.includes(id)
+  //     ? selectedAmenities.filter((amenity) => amenity !== id)
+  //     : [...selectedAmenities, id];
+
+  //   setSelectedAmenities(updatedAmenities);
+  //   console.log(selectedAmenities);
+  // };
+
+  useEffect(() => {
+    console.log("selectedDate updated:", selectedDate);
+  }, [selectedDate]);
+
   const handledaysCheckboxChange = (id) => {
-    const updaeddays = selectedDate.includes(id)
+    const updatedDays = selectedDate.includes(id)
       ? selectedDate.filter((day) => day !== id)
       : [...selectedDate, id];
 
-    setSelectedDate(updaeddays);
+    setSelectedDate(updatedDays);
     console.log(selectedDate);
   };
   const [iframeCode, setIframeCode] = useState("");
@@ -120,28 +242,25 @@ function AddNewRoom({
     setHasContent(inputCode.trim() !== "");
   };
 
-  const [amenitiesList, setAmenitiesList] = useState([
-    "Wifi",
-    "AC",
-    "DJ",
-    "Piano",
-    "Drum",
-    "Car Parking",
-    "Banjo",
-  ]);
   const [name, setName] = useState("");
   const onNameChange = (event) => {
     setName(event.target.value);
   };
-  const addItem = (e) => {
-    e.preventDefault();
-    setAmenitiesList([...amenitiesList, name]);
-    setName("");
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  };
 
+  // const [temproomdetails, settemproomdetails] = useState( {
+  //   roomName: "",
+  //   area: "",
+  //   pricePerHour: "",
+  //   discountPercentage: "",
+  //   bookingDays: [],
+  //   generalStartTime: "",
+  //   generalEndTime: "",
+  //   bookingStartTime: [],
+  //   bookingEndTime: [],
+  //   roomPhotos: [],
+  //   amenities: [],
+  //   roomDetails: "",
+  // },)
   useEffect(() => {
     console.log("room k details mila", rooms);
   }, [rooms]);
@@ -255,21 +374,34 @@ function AddNewRoom({
             </div>
 
             <div className={style.defaultLabel}>Booking Days</div>
-            <div className={style.amenitesCheckbox}>
-              {days.map((days) => (
-                <div key={days.id}>
+            {/* <div className={style.amenitesCheckbox}>
+              {days.map((day) => (
+                <div key={day.id}>
                   <input
                     type="checkbox"
-                    id={days.id}
-                    value={days.id}
-                    checked={selectedDate.includes(days.id)}
-                    onChange={() => handledaysCheckboxChange(days.id)}
+                    id={day.id}
+                    value={day.id}
+                    checked={selectedDate.includes(day.id)}
+                    onChange={() => handledaysCheckboxChange(day.id)}
                   />
                   &nbsp;
-                  <label htmlFor={days.id}>{days.label}</label>
+                  <label htmlFor={day.id}>{day.name}</label>
                 </div>
               ))}
-            </div>
+            </div> */}
+
+            <Select
+              id="Dates"
+              mode="multiple"
+              placeholder="Select Bookig Dates"
+              value={selectedDate}
+              onChange={setSelectedDate}
+              // style={customStyles}
+              options={filteredDates?.map((item) => ({
+                value: item,
+                label: item,
+              }))}
+            />
 
             <div className={style.addNewStudioinputBox}>
               <label>General Start & End Time</label>
@@ -279,14 +411,14 @@ function AddNewRoom({
                 //   dayjs("1:30:00", "HH:mm:ss"),
                 //   dayjs("2:30:56", "HH:mm:ss"),
                 // ]}
-                defaultValue={
-                  isEditMode
-                    ? [
-                        dayjs(`${genreralStartTime}`, "HH:mm:ss"),
-                        dayjs(`${genreralEndTime}`, "HH:mm:ss"),
-                      ]
-                    : []
-                }
+                // defaultValue={
+                //   isEditMode
+                //     ? [
+                //         dayjs(`${genreralStartTime}`, "HH:mm:ss"),
+                //         dayjs(`${genreralEndTime}`, "HH:mm:ss"),
+                //       ]
+                //     : []
+                // }
                 style={{ height: "100%", outline: "none" }}
               />
             </div>
@@ -326,52 +458,19 @@ function AddNewRoom({
               ))}
               
             </div> */}
-
             <Select
+              id="Amenites"
               mode="multiple"
-              style={{
-                width: "100%",
-                minHeight: "7%",
-
-                outline: "none",
-                border: "none",
-              }}
-              placeholder="Select one or more Amenities"
-              value={currentRoomsData?.amenities?.map((item) => item) || []}
-              dropdownRender={(menu) => (
-                <>
-                  {menu}
-                  <Divider
-                    style={{
-                      margin: "8px 0",
-                    }}
-                  />
-                  <Space
-                    style={{
-                      padding: "0 8px 4px",
-                    }}
-                  >
-                    <Input
-                      placeholder="Please enter item"
-                      ref={inputRef}
-                      onChange={onNameChange}
-                      onKeyDown={(e) => e.stopPropagation()}
-                    />
-                    <Button
-                      type="text"
-                      icon={<PlusOutlined />}
-                      onClick={addItem}
-                    >
-                      Add item
-                    </Button>
-                  </Space>
-                </>
-              )}
-              options={amenitiesList.map((item) => ({
-                label: item,
+              placeholder="Select Amenites"
+              value={selectedAmenities}
+              onChange={setSelectedAmenities}
+              // style={customStyles}
+              options={filteredAmenities?.map((item) => ({
                 value: item,
+                label: item,
               }))}
             />
+
             <div className={style.addNewStudioinputBox2}>
               <label htmlFor="RoomDetails">Room Details</label>
               <textarea
@@ -399,10 +498,14 @@ function AddNewRoom({
 
               <TimePicker.RangePicker
                 onChange={handelbookingTime}
-                defaultValue={[
-                  dayjs("3:30:00", "HH:mm:ss"),
-                  dayjs("4:30:00", "HH:mm:ss"),
-                ]}
+                // defaultValue={
+                //   isEditMode
+                //     ? [
+                //         dayjs(`${bookingStartTime}`, "HH:mm:ss"),
+                //         dayjs(`${bookingEndTime}`, "HH:mm:ss"),
+                //       ]
+                //     : []
+                // }
                 style={{ height: "100%", outline: "none" }}
               />
             </div>
