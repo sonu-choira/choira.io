@@ -29,34 +29,20 @@ function AddNewProduction({ setSelectTab }) {
   const navCount = data?.state?.navCount;
   const [showMode, setshowMode] = useState(data?.state?.showMode || false);
   // const [productionData, setProductionData] = useState(initialState)
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [addon, setAddon] = useState();
 
   const [teamDetails, setTeamsDetails] = useState([
     { photo: null, name: "", profile: "", designation: "" },
   ]);
 
   const [service, setService] = useState([
-    { photo: [], name: "", about: "", amenities: [], price: "" },
+    { photo_url: [], name: "", about: "", amenites: [], price: "" },
   ]);
-  const [selectedOption, setSelectedOption] = useState("0");
+  const [discography, setDiscography] = useState([""]);
+
   const [images, setImages] = useState([]);
   const [addNewServicesformData, setAddNewServicesformData] = useState([]);
-  const initializeServicesArray = () => {
-    const initialArray = [];
-
-    const selectedOptionCount = parseInt(selectedOption, 10);
-
-    for (let i = 0; i < selectedOptionCount; i++) {
-      initialArray.push({
-        serviceName: "",
-        startingPrice: "",
-        serviceDetails: "",
-        images: [],
-        amenities: [],
-      });
-    }
-
-    setAddNewServicesformData(initialArray);
-  };
 
   useEffect(() => {
     console.log("addNewServicesformData-------", addNewServicesformData);
@@ -64,60 +50,117 @@ function AddNewProduction({ setSelectTab }) {
 
   useEffect(() => {
     if (data?.state?.productData?.packages?.length) {
-      console.log("API data received:", data.state.productData?.packages);
-      setSelectedOption(data?.state?.productData?.packages?.length);
-
-      const transformedPackages = data?.state?.productData?.packages.map(
-        (packageItem) => ({
-          serviceName: packageItem.name,
-          startingPrice: packageItem.price,
-          serviceDetails: packageItem.about,
-          images: packageItem.photo_url,
-          amenities: packageItem.amenites,
-        })
+      // setStudioDetails(data?.state?.productData);
+      console.log(
+        "data?.state?.productData.packages",
+        data?.state?.productData.packages
       );
-
-      console.log("Transformed packages:", transformedPackages);
-
-      setAddNewServicesformData(transformedPackages);
+      setService(data?.state?.productData.packages);
     }
   }, [data?.state?.productData?.packages]);
+
+  // useEffect(() => {
+  //   console.log("servicese chnage huaa hai ", service);
+  // }, [service]);
 
   useEffect(() => {
     console.log("addNewServicesformData", addNewServicesformData);
     console.log("origiunal data", data?.state?.productData?.packages);
   }, [addNewServicesformData]);
 
-  const [studioDetails, setStudioDetails] = useState({
-    productionName: "",
-    services: "",
+  // const [serviceData, setStudioDetails] = useState({
+  //   productionName: "",
+  //   services: "",
+  //   amenities: [],
+  //   about: "",
+  //   servicePhotos: [],
+  //   addOns: [],
+  //   discography: [],
+  //   // teams: [{ photo: null, name: "", profile: "" }],
+  // });
+
+  const [serviceData, setServiceData] = useState({
+    aboutUs: "",
     amenities: [],
-    about: "",
+    clientPhotos: [],
+    creationTimeStamp: "",
+    discographyDetails: [],
+    featuredReviews: [],
+    fullName: "",
+    isActive: "",
+    packages: [],
+    price: "",
+    reviews: [],
     servicePhotos: [],
+    service_id: "",
+    type: "",
+    workDetails: [],
     addOns: [],
-    discography: [],
-    // teams: [{ photo: null, name: "", profile: "" }],
+    _id: "",
   });
 
+  useEffect(() => {
+    console.log(
+      "service ka data chnage ho raha haiiiiiiiii======>",
+      serviceData
+    );
+  }, [images]);
+
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.servicePhotos = images;
+      return prevdata;
+    });
+  }, [images]);
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.amenities = selectedItems;
+      return prevdata;
+    });
+  }, [selectedItems]);
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.packages = service;
+      return prevdata;
+    });
+  }, [service]);
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.addOns = addon;
+      return prevdata;
+    });
+  }, [addon]);
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.discographyDetails = discography;
+      return prevdata;
+    });
+  }, [discography]);
+
+  useEffect(() => {
+    console.log("service data chnage huaa hai ", serviceData);
+  }, [serviceData]);
+
   const handleStudioDetailsChange = (event, field) => {
-    setStudioDetails((prevState) => ({
+    setServiceData((prevState) => ({
       ...prevState,
       [field]: event.target.value,
     }));
   };
 
   useEffect(() => {
-    if (data?.state?.productData) setStudioDetails(data?.state?.productData);
+    if (data?.state?.productData) setServiceData(data?.state?.productData);
   }, [data?.state?.productData]);
-  useEffect(() => {
-    if (studioDetails?.servicePhotos.length)
-      setImages(studioDetails.servicePhotos);
-  }, [studioDetails?.servicePhotos?.length]);
 
   useEffect(() => {
-    // Initialize the array when the selectedOption changes
-    initializeServicesArray();
-  }, [selectedOption]);
+    if (serviceData?.servicePhotos?.length)
+      setImages(serviceData.servicePhotos);
+  }, [serviceData?.servicePhotos?.length]);
+
+  // useEffect(() => {
+  //   // Initialize the array when the selectedOption changes
+  //   initializeServicesArray();
+  // }, [selectedOption]);
 
   useEffect(() => {
     console.log("addNewServicesformData", addNewServicesformData);
@@ -151,7 +194,18 @@ function AddNewProduction({ setSelectTab }) {
   }, [data.state?.productData]);
 
   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
-  const [selectedItems, setSelectedItems] = useState([]);
+
+  const addonlist = [
+    "Wifi",
+    "AC",
+    "DJ",
+    "Piano",
+    "Drum",
+    "Banjo",
+    "Car Parking",
+  ];
+
+  const filterAddon = addonlist.filter((o) => !addon?.includes(o));
 
   const filteredOptions = OPTIONS.filter((o) => !selectedItems.includes(o));
 
@@ -159,8 +213,6 @@ function AddNewProduction({ setSelectTab }) {
     height: "90%",
     overFlow: "scroll",
   };
-
-  const [discography, setDiscography] = useState([""]);
 
   const handleDiscographyInputChange = (index, value) => {
     const updatedDiscography = [...discography];
@@ -184,10 +236,10 @@ function AddNewProduction({ setSelectTab }) {
   // this code is for render multiple div based on select
   const [serviceDetails, setServiceDetails] = useState([]);
 
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
-    setServiceDetails([]);
-  };
+  // const handleChange = (event) => {
+  //   setSelectedOption(event.target.value);
+  //   setServiceDetails([]);
+  // };
 
   const handleServiceChange = (event, index) => {
     const updatedServiceDetails = [...serviceDetails];
@@ -198,92 +250,6 @@ function AddNewProduction({ setSelectTab }) {
   const handleEditService = (i) => {
     setShowServices(true);
     setIndexofServices(i);
-  };
-  const renderServiceDivs = () => {
-    const divs = [];
-
-    for (let i = 0; i < parseInt(selectedOption, 10); i++) {
-      const currentServiceData = addNewServicesformData[i] || {};
-
-      const serviceDiv = currentServiceData.serviceName ? (
-        // currentServiceData.images.length > 0 ? (
-        // Display service with data
-        <div key={i} className={style.addTeamDetailDynamicDiv}>
-          <div className={style.addTeamDetailMainDiv}>
-            <div>
-              <label
-                style={{ cursor: "pointer" }}
-                htmlFor={`uploadServicePhoto`}
-              >
-                {/* <MdOutlineAddBox /> */}
-              </label>
-
-              <img
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-                src={
-                  currentServiceData.images.length > 0
-                    ? URL.createObjectURL(currentServiceData.images[0])
-                    : ""
-                }
-                alt=""
-              />
-            </div>
-            <div>
-              <input
-                readOnly
-                type="text"
-                value={currentServiceData.serviceName}
-                placeholder="Name"
-              />
-              <input
-                type="text"
-                placeholder="Profile"
-                value={`starting price from ₹ ${currentServiceData.startingPrice}`}
-              />
-            </div>
-            <div className={style.editpencil}>
-              <FaPencilAlt
-                onClick={() => {
-                  handleEditService(i);
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      ) : (
-        // Display editable service div
-        <div
-          key={i}
-          className={`${style.addNewStudioinputBox} ${style.editPencilinput}`}
-        >
-          <label htmlFor={`ProductionName${i + 1}`}>Service {i + 1}</label>
-          <input
-            className={style.editPencilinput}
-            type="text"
-            id={`ProductionName${i + 1}`}
-            name={`ProductionName${i + 1}`}
-            value={serviceDetails[i] || ""}
-            placeholder={`Enter Service ${i + 1} Details`}
-            onChange={(e) => handleServiceChange(e, i)}
-          />
-          <div className={style.editpencil}>
-            <FaPencilAlt
-              onClick={() => {
-                handleEditService(i);
-              }}
-            />
-          </div>
-        </div>
-      );
-
-      divs.push(serviceDiv);
-    }
-
-    return divs;
   };
 
   return (
@@ -319,6 +285,7 @@ function AddNewProduction({ setSelectTab }) {
               indexofServices={indexofServices}
               setService={setService}
               service={service}
+              isEditMode={isEditMode}
             />
           ) : (
             <>
@@ -353,35 +320,14 @@ function AddNewProduction({ setSelectTab }) {
                         type="text"
                         id="ProductionName"
                         name="ProductionName"
-                        value={studioDetails.fullName}
+                        value={serviceData.fullName}
                         placeholder="Enter Production Name"
                         onChange={(event) =>
-                          handleStudioDetailsChange(event, "productionName")
+                          handleStudioDetailsChange(event, "fullName")
                         }
                       />
                     </div>
 
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="Services">Services</label>
-                      <select
-                        id="Services"
-                        name="Services"
-                        onChange={handleChange}
-                        value={selectedOption}
-                      >
-                        <option value="0">Select No. of Services</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                      </select>
-                    </div>
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="Amenities">Amenities </label>
                       {isEditMode ? (
@@ -425,10 +371,25 @@ function AddNewProduction({ setSelectTab }) {
                         id="About"
                         placeholder="Enter About Services"
                         value={productionData?.aboutUs?.aboutUs}
+                        onChange={(event) =>
+                          handleStudioDetailsChange(event, "aboutUs")
+                        }
                       />
                     </div>
-
-                    {selectedOption !== "0" && renderServiceDivs()}
+                    <div>
+                      <AddmultipleServises
+                        teamDetails={teamDetails}
+                        setTeamsDetails={setTeamsDetails}
+                        data={data}
+                        isEditMode={isEditMode}
+                        setIndexofServices={setIndexofServices}
+                        indexofServices={indexofServices}
+                        showServices={showServices}
+                        setShowServices={setShowServices}
+                        service={service}
+                        setService={setService}
+                      />
+                    </div>
                   </div>
 
                   {/* -------------------second side start here -------------- */}
@@ -448,10 +409,10 @@ function AddNewProduction({ setSelectTab }) {
                         id="Amenities"
                         mode="multiple"
                         placeholder="Select one or more Add-ons"
-                        value={selectedItems}
-                        onChange={setSelectedItems}
+                        value={addon}
+                        onChange={setAddon}
                         style={customStyles}
-                        options={filteredOptions.map((item) => ({
+                        options={filterAddon.map((item) => ({
                           value: item,
                           label: item,
                         }))}
@@ -504,21 +465,6 @@ function AddNewProduction({ setSelectTab }) {
                           <VscDiffAdded /> Add Discography
                         </div>
                       )}
-                    </div>
-
-                    <div>
-                      <AddmultipleServises
-                        teamDetails={teamDetails}
-                        setTeamsDetails={setTeamsDetails}
-                        data={data}
-                        isEditMode={isEditMode}
-                        setIndexofServices={setIndexofServices}
-                        indexofServices={indexofServices}
-                        showServices={showServices}
-                        setShowServices={setShowServices}
-                        service={service}
-                        setService={setService}
-                      />
                     </div>
                   </div>
                 </div>

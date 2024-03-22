@@ -123,24 +123,38 @@ function AddNewStudio({ setSelectTab }) {
     _id: "",
   });
 
-  const saveAllData = () => {
-    setsaveAddData({
-      ...saveAddData,
-      aboutUs: { ...studioDetails.aboutUs },
-      address: `${studioDetails.area}, ${studioDetails.city}, ${studioDetails.state} - ${studioDetails.pincode}`,
-      amenities: [...studioDetails.amenities],
-      area: studioDetails.area,
-      city: studioDetails.city,
-      fullName: studioDetails.fullName,
-      isActive: true, // You can set this value based on your logic
-      mapLink: studioDetails.mapLink,
-      maxGuests: studioDetails.maxGuests,
-      pincode: studioDetails.pincode,
-      state: studioDetails.state,
-      studioPhotos: [...studioDetails.studioPhotos],
-      totalRooms: studioDetails.totalRooms,
+  useEffect(() => {
+    console.log("studioDetails change huaa hai ", studioDetails);
+    setsaveAddData((prev) => {
+      return { ...prev, ...studioDetails };
     });
-  };
+  }, [studioDetails]);
+
+  useEffect(() => {
+    console.log("saveAddData change huaa hai ", saveAddData);
+    // setsaveAddData((prev)=>{
+    //   return {...prev,studioDetails}
+    // })
+  }, [saveAddData]);
+
+  // const saveAllData = () => {
+  //   setsaveAddData({
+  //     ...saveAddData,
+  //     aboutUs: { ...studioDetails.aboutUs },
+  //     address: `${studioDetails.area}, ${studioDetails.city}, ${studioDetails.state} - ${studioDetails.pincode}`,
+  //     amenities: [...studioDetails.amenities],
+  //     area: studioDetails.area,
+  //     city: studioDetails.city,
+  //     fullName: studioDetails.fullName,
+  //     isActive: true, // You can set this value based on your logic
+  //     mapLink: studioDetails.mapLink,
+  //     maxGuests: studioDetails.maxGuests,
+  //     pincode: studioDetails.pincode,
+  //     state: studioDetails.state,
+  //     studioPhotos: [...studioDetails.studioPhotos],
+  //     totalRooms: studioDetails.totalRooms,
+  //   });
+  // };
 
   useEffect(() => {
     if (data?.state?.productData) {

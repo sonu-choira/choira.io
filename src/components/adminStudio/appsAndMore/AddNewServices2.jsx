@@ -15,12 +15,14 @@ import {
 } from "react-icons/fa6";
 import StudioFooter from "../StudioFooter";
 import cross from "../../../assets/cross.svg";
+import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
 
 function AddNewServices2({
   setShowServices,
   service,
   setService,
   indexofServices,
+  isEditMode,
 }) {
   const [items, setItems] = useState([
     "Wifi",
@@ -39,30 +41,21 @@ function AddNewServices2({
     console.log("currentServiceData-------->", currentServiceData);
   }, [currentServiceData]);
 
-  // const onNameChange = (event) => {
-  //   setService([
-  //     ...service,
-  //     [indexofServices]: {
-  //       ...currentServiceData,
-  //       name: event.target.value,
-  //     },
-  //   ]);
-  //   setService((preservices)=>{
+  const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  //     preservices.map((item,idx)=>{
+  useEffect(() => {
+    if (isEditMode) {
+      setSelectedItems(
+        currentServiceData?.amenites?.map((item) => item.name) || []
+      );
+    }
+  }, [currentServiceData?.amenites]);
 
-  //     })
-
-  //   })
-
-  //   // setService([
-  //   //   ...service,
-  //   //   {
-  //   //     name: event.target.value,
-  //   //   },
-  //   // ]);
-  // };
-
+  const filteredOptions = OPTIONS.filter((o) => !selectedItems.includes(o));
+  const [images, setImages] = useState(
+    currentServiceData ? currentServiceData.photo_url : []
+  );
   const onNameChange = (event) => {
     setService((prevService) => {
       const updatedService = [...prevService]; // Copy the existing service array
@@ -76,38 +69,64 @@ function AddNewServices2({
 
   const addItem = (e) => {
     e.preventDefault();
-    setItems([...items, currentServiceData.name]);
+    setItems([...items]);
     setTimeout(() => {
       inputRef.current?.focus();
     }, 0);
   };
 
+  // useEffect(() => {
+  //   if()
+
+  // }, [images])
+
+  useEffect(() => {
+    setService((prerooms) => {
+      prerooms.map((rm, idex) => {
+        if (idex === indexofServices) {
+          rm.photo_url = images;
+        }
+      });
+      return prerooms;
+    });
+  }, [images]);
+  useEffect(() => {
+    setService((prerooms) => {
+      prerooms.map((rm, idex) => {
+        if (idex === indexofServices) {
+          rm.amenites = selectedItems;
+        }
+      });
+      return prerooms;
+    });
+  }, [selectedItems.length]);
+
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
     const newImages = [
-      ...currentServiceData.photo,
-      ...selectedImages.slice(0, 5 - currentServiceData.photo.length),
+      ...currentServiceData.photo_url,
+      ...selectedImages.slice(0, 5 - currentServiceData.photo_url.length),
     ];
 
     setService((prevService) => {
       const updatedService = [...prevService];
       updatedService[indexofServices] = {
         ...currentServiceData,
-        photo: newImages,
+        photo_url: newImages,
       };
       return updatedService;
     });
   };
 
   const handleRemoveImage = (index) => {
-    const newImages = [...currentServiceData.photo];
+    const newImages = [...currentServiceData.photo_url];
     newImages.splice(index, 1);
 
     setService((prevService) => {
       const updatedService = [...prevService];
       updatedService[indexofServices] = {
         ...currentServiceData,
-        photo: newImages,
+        photo_url: newImages,
       };
       return updatedService;
     });
@@ -187,123 +206,24 @@ function AddNewServices2({
           </div>
 
           <div>
-            <div className={style.addNewStudioimgBox}>
-              <label htmlFor="selectimg">Image</label>
-              <br />
-              <div>
-                <label className={style.abs} htmlFor="">
-                  {currentServiceData.photo?.length === 0 ? (
-                    <div>
-                      <label htmlFor="selectimg">
-                        <img src={upload} alt="" />
-                        <div>
-                          Drag and Drop or <span>Browse</span> <br /> to upload
-                        </div>
-                      </label>
-                    </div>
-                  ) : (
-                    <div className={style.showMultipleStudioImage}>
-                      <div>
-                        {currentServiceData.photo.map((image, index) => (
-                          <div
-                            key={index}
-                            draggable
-                            onDragStart={(e) => {
-                              e.dataTransfer.setData("text/plain", index);
-                            }}
-                          >
-                            <img
-                              src={URL.createObjectURL(image)}
-                              alt={`Uploaded Image ${index + 1}`}
-                              style={{ width: "100%", height: "100%" }}
-                            />
-                            <span
-                              className={style.cancelImageUpload}
-                              onClick={() => handleRemoveImage(index)}
-                            >
-                              <img src={cross} alt="" />
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      {currentServiceData.photo.length <= 4 && (
-                        <div>
-                          <label
-                            htmlFor="selectimg"
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              paddingTop: "15%",
-                            }}
-                          >
-                            <img src={upload} alt="" /> Upload
-                          </label>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </label>
-                <input
-                  type="file"
-                  multiple
-                  accept=".jpeg,.png,.svg,.webp,.jpg,.jfif"
-                  id="selectimg"
-                  onChange={handleImageChange}
-                />
-              </div>
-            </div>
+            <DragAndDropImageDiv
+              images={images}
+              setImages={setImages}
+              isEditMode={isEditMode}
+            />
             <div className={style.addNewStudioinputBox}>
               <label htmlFor="Amenities">Amenities</label>
+
               <Select
                 id="Amenities"
                 mode="multiple"
-                style={{
-                  width: "100%",
-                  height: "80%",
-                  outline: "none",
-                  border: "none",
-                }}
-                placeholder="Select or type Amenities"
-                dropdownRender={(menu) => (
-                  <>
-                    {menu}
-                    <Divider
-                      style={{
-                        margin: "8px 0",
-                      }}
-                    />
-                    <Space
-                      style={{
-                        padding: "0 8px 4px",
-                      }}
-                    >
-                      <Input
-                        placeholder="Please enter item"
-                        ref={inputRef}
-                        value={currentServiceData.name}
-                        onChange={onNameChange}
-                        onKeyDown={(e) => e.stopPropagation()}
-                        style={{
-                          outline: "none",
-                          border: "none",
-                        }}
-                      />
-                      <Button
-                        type="text"
-                        icon={<PlusOutlined />}
-                        onClick={addItem}
-                      >
-                        Add item
-                      </Button>
-                    </Space>
-                  </>
-                )}
-                options={items.map((item) => ({
-                  label: item,
+                placeholder="Select one or more Amenities"
+                value={selectedItems}
+                onChange={setSelectedItems}
+                // style={customStyles}
+                options={filteredOptions.map((item) => ({
                   value: item,
                 }))}
-                value={currentServiceData.amenities}
-                onChange={handleAmenitiesChange}
               />
             </div>
           </div>

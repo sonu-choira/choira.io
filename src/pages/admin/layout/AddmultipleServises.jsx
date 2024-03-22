@@ -35,7 +35,7 @@ function AddmultipleServises({
 
   const handleAddTeamDetail = () => {
     const newTeam = {
-      photo: [],
+      photo_url: [],
       name: "",
       about: "",
       amenities: [],
@@ -46,7 +46,7 @@ function AddmultipleServises({
 
   const handlePhotoChange = (event, index) => {
     const newTeams = [...service];
-    newTeams[index].photo = event.target.files[0];
+    newTeams[index].photo_url = event.target.files[0];
     setService(newTeams);
   };
 
@@ -58,7 +58,7 @@ function AddmultipleServises({
 
   const handleCancelImage = (index) => {
     const newTeams = [...service];
-    newTeams[index].photo = null;
+    newTeams[index].photo_url = null;
     setService(newTeams);
   };
 
@@ -76,9 +76,9 @@ function AddmultipleServises({
   };
 
   const hideAddPhotoIcon = (team) => {
-    console.log("team--------", team);
-    var send = team.photo.length ? { display: "none" } : {};
-    console.log("send", send);
+    // console.log("team--------", team);
+    var send = team.photo_url.length ? { display: "none" } : {};
+    // console.log("send", send);
 
     return send;
   };
@@ -95,14 +95,14 @@ function AddmultipleServises({
                   <MdAddAPhoto style={hideAddPhotoIcon(team)} />
                 </label>
 
-                {team.photo.length ? (
+                {team.photo_url.length ? (
                   <div>
                     <img
-                      src={
-                        team.photo.length
-                          ? URL.createObjectURL(team.photo[0])
-                          : ""
-                      }
+                    // src={
+                    //   team.photo_url.length
+                    //     ? URL.createObjectURL(team.photo_url[0])
+                    //     : ""
+                    // }
                     />
                   </div>
                 ) : (
@@ -176,15 +176,15 @@ function AddmultipleServises({
                   style={{ display: "none" }}
                   onChange={(event) => handlePhotoChange(event, index)}
                 /> */}
-                {team.photo && (
+                {team.photo_url && (
                   <div>
                     <img
-                      src={
-                        team.photo.length > 0
-                          ? URL.createObjectURL(team.photo[0])
-                          : ""
-                      }
-                      // alt={`Team ${index} Photo`}
+                      // src={
+                      //   team.photo_url.length > 0
+                      //     ? URL.createObjectURL(team.photo_url[0])
+                      //     : ""
+                      // }
+                      // alt={`Team ${index} photo_url`}
                       style={{
                         maxWidth: "100px",
                         maxHeight: "100px",
