@@ -1371,7 +1371,7 @@ body {
   background-color: #eee;
 }
 
-input {
+.chat-input input {
   flex: 1;
   padding: 8px;
 }

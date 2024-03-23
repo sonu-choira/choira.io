@@ -4,6 +4,7 @@ import style from "../../../pages/admin/studios/studio.module.css";
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
+import Button from "../../../pages/admin/layout/Button";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
@@ -18,6 +19,10 @@ import { useNavigate } from "react-router-dom";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 import ChoiraLoader from "../../loader/ChoiraLoader";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import { IoCalendarOutline } from "react-icons/io5";
+import { BiSearchAlt } from "react-icons/bi";
+import { RiExpandUpDownLine } from "react-icons/ri";
+import { CiFilter } from "react-icons/ci";
 
 let PageSize = 10;
 
@@ -96,18 +101,146 @@ function AllStudioDetail2({
       [studioId]: !prevStatus[studioId], // Toggle the switch state
     }));
   };
+  const [showpricefilter, setshowpricefilter] = useState(false);
+  const handelpriceFilter = () => {
+    setshowpricefilter((prevState) => !prevState);
+  };
+  const [showloactionfilter, setshowloactionfilter] = useState(false);
+  const handellocationFilter = () => {
+    setshowloactionfilter((prevState) => !prevState);
+  };
   return (
     <>
       <div className={style.studioTabelDiv}>
+        <div className={style.searchDiv}>
+          <div>
+            <p>Search by Date </p>
+            <label htmlFor="selectDate">
+              <IoCalendarOutline />
+            </label>
+            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
+          </div>
+          <div>
+            <BiSearchAlt /> <br />
+            <input type="text" placeholder="Search" />
+          </div>
+        </div>
         <div>
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th>Studioaa</th>
-                <th>Price</th>
-                <th>Location</th>
-                <th>No. of Rooms</th>
-                <th>Activity Status</th>
+                <th>
+                  <div className={style.headingContainer}>
+                    Studioa
+                    <div className={style.filterBox}>
+                      <RiExpandUpDownLine />
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div className={style.headingContainer}>
+                    Price
+                    <div
+                      className={style.filterBox}
+                      onClick={handelpriceFilter}
+                    >
+                      <CiFilter />
+                      {showpricefilter ? (
+                        <div className={style.filteractionBox}>
+                          <div>Price Range</div>
+                          <div>
+                            <p>start Price</p>
+                            <input type="text" placeholder="₹|" />
+                          </div>
+                          <div>
+                            <p>End Price</p>
+                            <input type="text" placeholder="₹|" />
+                          </div>
+                          <div>
+                            <p>reset </p>
+                            <Button name={"ok"} />
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                </th>
+
+                <th>
+                  <div className={style.headingContainer}>
+                    Location
+                    <div
+                      className={style.filterBox}
+                      onClick={handellocationFilter}
+                    >
+                      <CiFilter />
+                      {showloactionfilter ? (
+                        <div className={style.filteractionBox2}>
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="Search for Region"
+                            />
+                          </div>
+                          <div>
+                            <div>
+                              <input
+                                type="checkbox"
+                                name="mumbai"
+                                id="mumbai"
+                              />
+                              <label htmlFor="mumbai">Mumbai</label>
+                            </div>
+                          </div>
+                          <div>
+                            <div>
+                              <input
+                                type="checkbox"
+                                name="mumbai"
+                                id="mumbai"
+                              />
+                              <label htmlFor="mumbai">Mumbai</label>
+                            </div>
+                          </div>
+                          <div>
+                            <div>
+                              <input
+                                type="checkbox"
+                                name="mumbai"
+                                id="mumbai"
+                              />
+                              <label htmlFor="mumbai">Mumbai</label>
+                            </div>
+                          </div>
+                          <div style={{ justifyContent: "space-around" }}>
+                            <p>reset </p>
+                            <Button name={"ok"} />
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div className={style.headingContainer}>
+                    No. of Rooms
+                    <div className={style.filterBox}>
+                      <CiFilter />
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div className={style.headingContainer}>
+                    Activity Status
+                    <div className={style.filterBox}>
+                      <CiFilter />
+                    </div>
+                  </div>
+                </th>
               </tr>
             </thead>
             <tbody>

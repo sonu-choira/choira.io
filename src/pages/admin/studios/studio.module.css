@@ -434,14 +434,49 @@ input[type="number"] {
 .studioTabelDiv small {
   color: rgba(173, 177, 181, 1);
 }
-.studioTabelDiv > div {
+
+.searchDiv {
+  /* border: 2px solid red; */
+  width: 100%;
+  height: 8vh;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-evenly; */
+  padding-left: 5%;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 80%;
+  }
+  > div:first-child {
+    width: 20%;
+    border: 2px solid #f3f6f9;
+    border-radius: 10px;
+  }
+  > div:last-child {
+    width: 72%;
+    border: 2px solid #f3f6f9;
+    border-radius: 10px;
+    margin-left: 5%;
+
+    padding-left: 2%;
+    input {
+      /* width: 50% !important; */
+      /* border: 2px solid red; */
+      border: none;
+      outline: none;
+    }
+  }
+}
+.studioTabelDiv > div:nth-child(2) {
   width: 95%;
   height: 85%;
   /* border: 2px solid blue; */
 
   overflow-y: scroll;
 }
-.studioTabelDiv > div table {
+.studioTabelDiv > div:nth-child(2) table {
   width: 100%;
   height: 100%;
   /* border: 2px solid red; */
@@ -456,8 +491,109 @@ input[type="number"] {
   width: 80%;
   /* border: 2px solid green; */
 }
+.headingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.filterBox {
+  width: 2vw;
+  height: 4vh;
+  /* border: 2px solid red; */
+  display: inline-block;
+  margin-left: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  &:hover {
+    background-color: #ffc70133;
+  }
+}
+.filteractionBox {
+  position: absolute;
+  font-size: 1vmax;
+  font-weight: 400;
+  width: 15vw;
+  min-height: 25vh;
+  max-height: fit-content;
+  /* border: 2px solid red; */
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  top: 85%;
+  left: 43%;
+  background-color: white;
+  transition: 1s ease-in-out;
+  border-radius: 10px;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 2%;
+    padding-top: 2%;
+    > p {
+      color: gray;
+    }
+    > input {
+      max-width: 40%;
+      padding: 2%;
+      border-radius: 5px;
+      outline: none;
+      border: none;
+      border: 2px solid rgba(0, 0, 0, 0.25);
+      /* border-color: rgba(0, 0, 0, 0.25); */
+    }
+  }
+}
+
+.filteractionBox2 {
+  position: absolute;
+  font-size: 1vmax;
+  font-weight: 400;
+  width: 10vw;
+  min-height: 25vh;
+  max-height: fit-content;
+  /* border: 2px solid red; */
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  top: 85%;
+  left: 43%;
+  background-color: white;
+  transition: 1s ease-in-out;
+  border-radius: 10px;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 5%;
+
+    padding-bottom: 2%;
+    /* border: 2px solid red; */
+    padding-top: 4%;
+    > p {
+      color: gray;
+    }
+    > input[type="text"] {
+      max-width: 80%;
+      padding: 3%;
+      border-radius: 5px;
+      outline: none;
+      border: none;
+      border: 2px solid rgba(0, 0, 0, 0.25);
+      /* border-color: rgba(0, 0, 0, 0.25); */
+    }
+    > input[type="checkbox"] {
+      margin: 0;
+    }
+  }
+}
+
 .studiotabelHead > tr > th:nth-child(1) {
   width: 25%;
+  /* display: flex;
+  align-items: center; */
+  /* justify-content: space-around; */
 }
 .studiotabelHead > tr > th:nth-child(2) {
   width: 15%;
@@ -470,7 +606,8 @@ input[type="number"] {
 }
 
 td {
-  text-align: center;
+  text-align: start;
+  padding-left: 2%;
 }
 .tableActionbtn {
   display: flex;
