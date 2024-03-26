@@ -299,6 +299,8 @@ input[type="number"] {
   /* border: 2px solid pink; */
 }
 .paginationgoto > input {
+  padding-left: 3%;
+  height: 3.5vh;
   width: 40%;
   border: none;
   outline: none;
@@ -457,17 +459,31 @@ input[type="number"] {
   > div:last-child {
     width: 72%;
     border: 2px solid #f3f6f9;
+    /* border: 2px solid red; */
     border-radius: 10px;
     margin-left: 5%;
 
     padding-left: 2%;
     input {
-      /* width: 50% !important; */
+      width: 95%;
+      height: 100%;
       /* border: 2px solid red; */
       border: none;
       outline: none;
     }
   }
+}
+.antCustomcss {
+  height: 100%;
+  width: 100%;
+  border: 1px solid #f3f6f9 !important;
+  border-radius: 8px;
+  box-shadow: none !important;
+}
+
+.antCustomcss:hover,
+.antCustomcss:focus {
+  border-color: #f3f6f9 !important;
 }
 .studioTabelDiv > div:nth-child(2) {
   width: 95%;
@@ -761,7 +777,7 @@ td {
 .addNewStudioinputBox input,
 .addNewStudioinputBox select {
   border-radius: 10px;
-
+  height: 100%;
   width: 100%;
   outline: none;
   border: 2px solid #dddddd;

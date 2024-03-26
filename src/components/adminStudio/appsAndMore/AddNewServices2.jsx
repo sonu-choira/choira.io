@@ -223,6 +223,7 @@ function AddNewServices2({
                 // style={customStyles}
                 options={filteredOptions.map((item) => ({
                   value: item,
+                  label: item,
                 }))}
               />
             </div>

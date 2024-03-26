@@ -99,6 +99,35 @@ function AddNewProduction({ setSelectTab }) {
     _id: "",
   });
 
+  const [sendataToApi, setsendataToApi] = useState({
+    serviceName: "",
+    startingPrice: "",
+    offerings: [],
+    TotalServices: "",
+    servicePlans: [],
+    servicePhotos: [],
+    description: [],
+    portfolio: [],
+    userReviews: {},
+  });
+
+  useEffect(() => {
+    console.log("sendataToApi ===>", sendataToApi);
+  }, [sendataToApi]);
+
+  useEffect(() => {
+    setsendataToApi((prev) => ({
+      ...prev,
+      serviceName: serviceData.fullName,
+      startingPrice: serviceData.price,
+      offerings: serviceData.amenities,
+      TotalServices: serviceData.packages.length,
+      servicePlans: serviceData.packages,
+      servicePhotos: serviceData.servicePhotos,
+      description: serviceData.aboutUs,
+    }));
+  }, [serviceData]);
+
   useEffect(() => {
     console.log(
       "service ka data chnage ho raha haiiiiiiiii======>",
@@ -307,7 +336,7 @@ function AddNewProduction({ setSelectTab }) {
                   ? "Add New Mix & Master"
                   : ""}
               </div>
-              <div
+              <form
                 className={style.addNewStudioPage}
                 // style={{ maxHeight: "fit-content" }}
               >
@@ -406,6 +435,7 @@ function AddNewProduction({ setSelectTab }) {
                     >
                       <label htmlFor="Amenities">Add-ons </label>
                       <Select
+                        disabled
                         id="Amenities"
                         mode="multiple"
                         placeholder="Select one or more Add-ons"
@@ -434,6 +464,8 @@ function AddNewProduction({ setSelectTab }) {
                         <div className={style.Discography} key={index}>
                           <div>
                             <input
+                              style={{ cursor: "not-allowed" }}
+                              disabled
                               type="text"
                               id={`Discography-${index}`}
                               value={value}
@@ -458,9 +490,12 @@ function AddNewProduction({ setSelectTab }) {
                       ))}
                       {discography.length < 3 && (
                         <div
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "not-allowed" }}
+                          // style={{ cursor: "pointer" }}
                           className={style.addDiscography}
-                          onClick={handleAddDiscography}
+                          // onClick={
+                          //   handleAddDiscography
+                          // }
                         >
                           <VscDiffAdded /> Add Discography
                         </div>
@@ -468,7 +503,7 @@ function AddNewProduction({ setSelectTab }) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </form>
               <StudioFooter backOnclick={gotoadminpage} />
             </>
           )}

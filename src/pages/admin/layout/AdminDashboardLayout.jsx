@@ -25,7 +25,7 @@ function AdminDashboardLayout() {
   const [tabCount, setTabCount] = useState(3);
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("Token from localStorage:", token);
+    // console.log("Token from localStorage:", token);
     if (token === null || token === undefined) {
       const isSignin = localStorage.getItem("isSignin");
       if (isSignin) {
@@ -59,7 +59,7 @@ function AdminDashboardLayout() {
             </div>
           </div>
           {tabCount === 1 && ""}
-          {tabCount === 2 && <AddNewRoom />}
+          {tabCount === 2 && ""}
 
           {tabCount === 3 ? (
             <AllStudioPageDetailsPage />

@@ -97,7 +97,7 @@ function AddNewStudio({ setSelectTab }) {
   const [saveAddData, setsaveAddData] = useState({
     aboutUs: {},
     address: "",
-    amenities: selectedStudioAmenities,
+    amenities: [],
     area: "",
     availabilities: [],
     city: "",
@@ -115,10 +115,10 @@ function AddNewStudio({ setSelectTab }) {
     pincode: "",
     pricePerHour: "",
     reviews: {},
-    roomsDetails: rooms,
+    roomsDetails: [],
     state: "",
-    studioPhotos: images,
-    teamDetails: teamDetails,
+    studioPhotos: [],
+    teamDetails: [],
     totalRooms: "",
     _id: "",
   });
@@ -131,30 +131,37 @@ function AddNewStudio({ setSelectTab }) {
   }, [studioDetails]);
 
   useEffect(() => {
+    setsaveAddData((prevdata) => {
+      prevdata.studioPhotos = images;
+      return prevdata;
+    });
+  }, [images]);
+
+  useEffect(() => {
+    setsaveAddData((prevdata) => {
+      prevdata.teamDetails = teamDetails;
+      return prevdata;
+    });
+  }, [teamDetails]);
+  useEffect(() => {
+    setsaveAddData((prevdata) => {
+      prevdata.roomsDetails = rooms;
+      return prevdata;
+    });
+  }, [rooms]);
+  useEffect(() => {
+    setsaveAddData((prevdata) => {
+      prevdata.amenities = selectedStudioAmenities;
+      return prevdata;
+    });
+  }, [selectedStudioAmenities]);
+
+  useEffect(() => {
     console.log("saveAddData change huaa hai ", saveAddData);
     // setsaveAddData((prev)=>{
     //   return {...prev,studioDetails}
     // })
   }, [saveAddData]);
-
-  // const saveAllData = () => {
-  //   setsaveAddData({
-  //     ...saveAddData,
-  //     aboutUs: { ...studioDetails.aboutUs },
-  //     address: `${studioDetails.area}, ${studioDetails.city}, ${studioDetails.state} - ${studioDetails.pincode}`,
-  //     amenities: [...studioDetails.amenities],
-  //     area: studioDetails.area,
-  //     city: studioDetails.city,
-  //     fullName: studioDetails.fullName,
-  //     isActive: true, // You can set this value based on your logic
-  //     mapLink: studioDetails.mapLink,
-  //     maxGuests: studioDetails.maxGuests,
-  //     pincode: studioDetails.pincode,
-  //     state: studioDetails.state,
-  //     studioPhotos: [...studioDetails.studioPhotos],
-  //     totalRooms: studioDetails.totalRooms,
-  //   });
-  // };
 
   useEffect(() => {
     if (data?.state?.productData) {
@@ -237,7 +244,7 @@ function AddNewStudio({ setSelectTab }) {
                   ? "Edit Studio"
                   : "Add new studio"}
               </div>
-              <div className={style.addNewStudioPage}>
+              <form className={style.addNewStudioPage}>
                 {/* {showMode ? ()} */}
 
                 <div
@@ -515,7 +522,7 @@ function AddNewStudio({ setSelectTab }) {
                   </div>
                 </div>
                 {/* <p className={style.showmode}></p> */}
-              </div>
+              </form>
               <StudioFooter
                 setSelectTab={setSelectTab}
                 backOnclick={gotoadminpage}

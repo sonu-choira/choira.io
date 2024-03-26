@@ -23,6 +23,10 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import { RiExpandUpDownLine } from "react-icons/ri";
 import { CiFilter } from "react-icons/ci";
+import { DatePicker, Space } from "antd";
+const onChange = (date, dateString) => {
+  console.log(date, dateString);
+};
 
 let PageSize = 10;
 
@@ -114,11 +118,7 @@ function AllStudioDetail2({
       <div className={style.studioTabelDiv}>
         <div className={style.searchDiv}>
           <div>
-            <p>Search by Date </p>
-            <label htmlFor="selectDate">
-              <IoCalendarOutline />
-            </label>
-            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
+            <DatePicker onChange={onChange} className={style.antCustomcss} />
           </div>
           <div>
             <BiSearchAlt /> <br />
@@ -140,11 +140,8 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Price
-                    <div
-                      className={style.filterBox}
-                      onClick={handelpriceFilter}
-                    >
-                      <CiFilter />
+                    <div className={style.filterBox}>
+                      <CiFilter onClick={handelpriceFilter} />
                       {showpricefilter ? (
                         <div className={style.filteractionBox}>
                           <div>Price Range</div>
@@ -171,11 +168,8 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Location
-                    <div
-                      className={style.filterBox}
-                      onClick={handellocationFilter}
-                    >
-                      <CiFilter />
+                    <div className={style.filterBox}>
+                      <CiFilter onClick={handellocationFilter} />
                       {showloactionfilter ? (
                         <div className={style.filteractionBox2}>
                           <div>
