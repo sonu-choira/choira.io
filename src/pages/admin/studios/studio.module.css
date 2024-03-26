@@ -299,6 +299,8 @@ input[type="number"] {
   /* border: 2px solid pink; */
 }
 .paginationgoto > input {
+    padding-left: 3%;
+  height: 3.5vh;
   width: 40%;
   border: none;
   outline: none;
