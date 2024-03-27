@@ -3,8 +3,17 @@ import style from "../studios/studio.module.css";
 import { IoIosArrowForward } from "react-icons/io";
 import { GrFormPrevious } from "react-icons/gr";
 
-function PaginationNav({ totalPage, pageCount, setPageCount }) {
+function PaginationNav({
+  bookingPageCount,
+  totalPage,
+  pageCount,
+  setPageCount,
+}) {
   const [middlePages, setMiddlePages] = useState([]);
+
+  useEffect(() => {
+    setPageCount(1);
+  }, [bookingPageCount]);
 
   useEffect(() => {
     const generatePages = () => {

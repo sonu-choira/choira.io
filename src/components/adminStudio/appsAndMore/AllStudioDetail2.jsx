@@ -37,6 +37,7 @@ function AllStudioDetail2({
   setPageCount,
   pageCount,
   totalPage,
+  bookingPageCount,
 }) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
@@ -326,6 +327,7 @@ function AllStudioDetail2({
           pageCount={pageCount}
           totalPage={totalPage}
           setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>

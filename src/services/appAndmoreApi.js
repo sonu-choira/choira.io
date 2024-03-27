@@ -30,6 +30,16 @@ class Appapi{
     console.log("res ===>", response.data)
     return response.data;
    };
+
+ createService = async (serviceData) => {
+    const response = await api.post(`services/create`,{ 
+      serviceData
+    });
+    const {status} = response.data
+    console.log("postdata ===>", response.data)
+    return response.data;
+
+   };
  
 
 }

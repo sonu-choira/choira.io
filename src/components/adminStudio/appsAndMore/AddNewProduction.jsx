@@ -23,6 +23,7 @@ import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv
 import AddMultipleTeam from "../../../pages/admin/layout/AddMultipleTeam";
 import AddmultipleServises from "../../../pages/admin/layout/AddmultipleServises";
 import AddNewServices2 from "./AddNewServices2";
+import appAndmoreApi from "../../../services/appAndmoreApi";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
@@ -111,9 +112,33 @@ function AddNewProduction({ setSelectTab }) {
     userReviews: {},
   });
 
-  useEffect(() => {
-    console.log("sendataToApi ===>", sendataToApi);
-  }, [sendataToApi]);
+  const handelSavebtn = () => {
+    setsendataToApi((prev) => ({
+      ...prev,
+      serviceName: serviceData.fullName,
+      startingPrice: serviceData.price,
+      offerings: serviceData.amenities,
+      TotalServices: serviceData.packages.length,
+      servicePlans: serviceData.packages,
+      servicePhotos: serviceData.servicePhotos,
+      description: serviceData.aboutUs,
+    }));
+    alert("your service has been created ");
+    appAndmoreApi
+      .createService(sendataToApi)
+      .then((response) => {
+        console.log(
+          `====================> data create huaa hai  ${bookingPageCount} `,
+          response
+        );
+      })
+      .catch((error) => {
+        console.error("Error fetching studios:", error);
+      });
+  };
+  // useEffect(() => {
+  //   console.log("sendataToApi ===>", sendataToApi);
+  // }, [sendataToApi]);
 
   useEffect(() => {
     setsendataToApi((prev) => ({
@@ -504,7 +529,10 @@ function AddNewProduction({ setSelectTab }) {
                   </div>
                 </div>
               </form>
-              <StudioFooter backOnclick={gotoadminpage} />
+              <StudioFooter
+                backOnclick={gotoadminpage}
+                saveOnclick={handelSavebtn}
+              />
             </>
           )}
         </div>

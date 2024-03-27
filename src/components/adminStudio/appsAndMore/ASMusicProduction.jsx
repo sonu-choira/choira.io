@@ -30,6 +30,7 @@ function ASMusicProduction({
   setPageCount,
   pageCount,
   totalPage,
+  bookingPageCount,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -218,6 +219,7 @@ function ASMusicProduction({
           pageCount={pageCount}
           totalPage={totalPage}
           setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   MdAddAPhoto,
   MdCancel,
@@ -23,8 +23,10 @@ import AddNewServices2 from "./appsAndMore/AddNewServices2";
 import AddmultipleServises from "../../pages/admin/layout/AddmultipleServises";
 import AddMultipleRooms from "../../pages/admin/layout/AddMultipleRooms";
 import AddNewRoom from "./AddNewRoom";
+import Button from "../../pages/admin/layout/Button";
 
 function AddNewStudio({ setSelectTab }) {
+  const submitButtonRef = useRef(null);
   const [images, setImages] = useState([]);
   const [isOver, setIsOver] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -196,6 +198,17 @@ function AddNewStudio({ setSelectTab }) {
     );
   }, [studioDetails?.amenities]);
 
+  const handleSubmitButtonClick = () => {
+    // Programmatically trigger click event on the hidden submit button
+    if (submitButtonRef.current) {
+      submitButtonRef.current.click();
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    // Your submission logic goes here
+  };
   return (
     <>
       <div className={style.wrapper}>
@@ -207,7 +220,7 @@ function AddNewStudio({ setSelectTab }) {
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
             <div>
-              <input type="text" placeholder="search" />
+              <input required type="text" placeholder="search" />
             </div>
             <div>
               <IoSearch />
@@ -246,7 +259,6 @@ function AddNewStudio({ setSelectTab }) {
               </div>
               <form className={style.addNewStudioPage}>
                 {/* {showMode ? ()} */}
-
                 <div
                   style={{
                     position: showMode ? "relative" : "",
@@ -259,6 +271,7 @@ function AddNewStudio({ setSelectTab }) {
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="studioName">Studio Name</label>
                       <input
+                        required
                         type="text"
                         id="studioName"
                         placeholder="Enter Studio Area"
@@ -276,6 +289,7 @@ function AddNewStudio({ setSelectTab }) {
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="area">Total Area</label>
                       <input
+                        required
                         type="text"
                         id="area"
                         placeholder="Enter Approx. Area"
@@ -313,6 +327,7 @@ function AddNewStudio({ setSelectTab }) {
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="pincode">Studio Pincode</label>
                       <input
+                        required
                         type="text"
                         id="pincode"
                         name="pincode"
@@ -330,6 +345,7 @@ function AddNewStudio({ setSelectTab }) {
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="addcity">Studio city</label>
                       <input
+                        required
                         list="city"
                         id="addcity"
                         placeholder="Select city Name"
@@ -352,6 +368,7 @@ function AddNewStudio({ setSelectTab }) {
                       <label htmlFor="Amenities">Amenities </label>
 
                       <Select
+                        required
                         id="Amenities"
                         mode="multiple"
                         className=""
@@ -380,6 +397,7 @@ function AddNewStudio({ setSelectTab }) {
                       <label htmlFor="guest">Max Guests</label>
 
                       <select
+                        required
                         id="guest"
                         value={studioDetails?.maxGuests}
                         onChange={(e) =>
@@ -401,6 +419,7 @@ function AddNewStudio({ setSelectTab }) {
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="addstate">Select State</label>
                       <input
+                        required
                         list="state"
                         id="addstate"
                         placeholder="Select state Name"
@@ -423,6 +442,7 @@ function AddNewStudio({ setSelectTab }) {
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="studioName">Studio MapLink</label>
                       <input
+                        required
                         type="text"
                         id="studioName"
                         placeholder="Enter Studio MapLink"
@@ -438,7 +458,6 @@ function AddNewStudio({ setSelectTab }) {
                     </div>
                   </div>
                 </div>
-
                 <div style={{ position: showMode ? "relative" : "" }}>
                   {showMode ? <p className={style.showmode}></p> : ""}
 
@@ -521,11 +540,16 @@ function AddNewStudio({ setSelectTab }) {
                     </div>
                   </div>
                 </div>
+                <button style={{ display: "none" }} ref={submitButtonRef}>
+                  submit
+                </button>
                 {/* <p className={style.showmode}></p> */}
               </form>
               <StudioFooter
                 setSelectTab={setSelectTab}
                 backOnclick={gotoadminpage}
+                saveType={"submit"}
+                saveOnclick={handleSubmitButtonClick}
               />
             </>
           )}

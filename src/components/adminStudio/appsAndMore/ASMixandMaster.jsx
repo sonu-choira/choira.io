@@ -30,6 +30,7 @@ function ASMixandMaster({
   setPageCount,
   pageCount,
   totalPage,
+  bookingPageCount,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -213,6 +214,7 @@ function ASMixandMaster({
           pageCount={pageCount}
           totalPage={totalPage}
           setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>
