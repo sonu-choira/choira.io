@@ -1,185 +1,200 @@
 // import React, { useEffect, useRef, useState } from "react";
-// import {
-//   MdAddAPhoto,
-//   MdCancel,
-//   MdOutlineAddBox,
-//   MdOutlineSettings,
-// } from "react-icons/md";
+// import { MdAddAPhoto } from "react-icons/md";
+// import { IoMdAddCircle } from "react-icons/io";
+// import upload from "../../assets/img/upload.png";
 // import style from "../../pages/admin/studios/studio.module.css";
 
-// import upload from "../../assets/upload.svg";
-// import cross from "../../assets/cross.svg";
+// import {
+//   FaCheckDouble,
+//   FaFilter,
+//   FaRegBell,
+//   FaRegClock,
+//   FaShare,
+// } from "react-icons/fa6";
+
 // import StudioFooter from "./StudioFooter";
-// import WebDashboard2 from "../../pages/produce/WebDashBoard2";
-// import { IoSearch } from "react-icons/io5";
-// import { GoDotFill } from "react-icons/go";
-// import { FaRegBell } from "react-icons/fa6";
-// import { useLocation, useNavigate } from "react-router-dom";
-// import { Select } from "antd";
-// import { FaPencilAlt } from "react-icons/fa";
+// import { Button, Divider, Input, Select, Space } from "antd";
+// import { PlusOutlined } from "@ant-design/icons";
 // import DragAndDropImageDiv from "../../pages/admin/layout/DragAndDropImageDiv";
-// import AddMultipleTeam from "../../pages/admin/layout/AddMultipleTeam";
-// import AddNewServices2 from "./appsAndMore/AddNewServices2";
-// import AddmultipleServises from "../../pages/admin/layout/AddmultipleServises";
-// import AddMultipleRooms from "../../pages/admin/layout/AddMultipleRooms";
-// import AddNewRoom from "./AddNewRoom";
-// import Button from "../../pages/admin/layout/Button";
+// import { TimePicker } from "antd";
+// import dayjs from "dayjs";
+// import customParseFormat from "dayjs/plugin/customParseFormat";
 
-// function AddNewStudio({ setSelectTab }) {
-//   const submitButtonRef = useRef(null);
-//   const [images, setImages] = useState([]);
-//   const [isOver, setIsOver] = useState(false);
-//   const [isEditMode, setIsEditMode] = useState(false);
-
-//   useEffect(() => {
-//     setIsEditMode(data.state?.isEditMode);
-//   }, []);
+// function AddNewRoom({
+//   setshowRoomsDetails,
+//   isEditMode,
+//   setrooms,
+//   rooms,
+//   indexofrooms,
+//   setIndexofrooms,
+// }) {
+//   const currentRoomsData = rooms[indexofrooms] || "";
 //   const customStyles = {
 //     height: "90%",
+//     overFlow: "scroll",
 //   };
-//   const navigate = useNavigate();
-//   const gotoadminpage = () => {
-//     navigate("/adminDashboard");
+//   const [selectedAmenities, setSelectedAmenities] = useState([]);
+//   const [selectedDate, setSelectedDate] = useState([]);
+//   const [time, setTime] = useState([]);
+//   const [bookingtime, setBookingtime] = useState([]);
+
+//   const handleChange = (value) => {
+//     console.log(`selected ${value}`);
 //   };
+//   const options = [
+//     { id: "1", value: "Monday", label: "Monday" },
+//     { id: "2", value: "Tuesday", label: "Tuesday" },
+//     { id: "3", value: "Wednesday", label: "Wednesday" },
+//     { id: "4", value: "Thursday", label: "Thursday" },
+//     { id: "5", value: "Friday", label: "Friday" },
+//     { id: "6", value: "Saturday", label: "Saturday" },
+//     { id: "7", value: "Sunday", label: "Sunday" },
+//   ];
+//   const [selectedOptions, setSelectedOptions] = useState(["Monday"]); // Initial selected option(s)
 
-//   const data = useLocation();
-//   console.log("the data id  ================== >", data?.state?.productData);
-//   // alert(data.state.navCount);
-//   const [showMode, setshowMode] = useState(data?.state?.showMode || false);
+//   const handleChangeday = (selectedValues) => {
+//     setSelectedOptions(selectedValues);
+//     console.log("change hua hai handleChangeday---->", selectedOptions);
+//   };
+//   let genreralStartTime;
+//   let genreralEndTime;
+//   let bookingStartTime;
+//   let bookingEndTime;
+//   // useEffect(() => {
+//   //   if (currentRoomsData?.generalTime?.startTime?.length == 5) {
+//   //     genreralStartTime = String(
+//   //       `${currentRoomsData?.generalTime?.startTime}:00`
+//   //     );
+//   //     genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}:00`);
 
-//   const navCount = data?.state?.navCount;
-//   const [tabCount, setTabCount] = useState();
-//   const [selectedItems, setSelectedItems] = useState([]);
-//   const [teamDetails, setTeamsDetails] = useState([
-//     { photo: null, name: "", profile: "", designation: "" },
-//   ]);
-//   const [selectedStudioAmenities, setSelectedStudioAmenities] = useState([]);
+//   //     bookingStartTime = String(`${currentRoomsData?.generalStartTime}:00`);
+//   //     bookingEndTime = String(`${currentRoomsData?.generalEndTime}:00`);
+//   //   } else {
+//   //     genreralStartTime = String(`${currentRoomsData?.generalTime?.startTime}`);
+//   //     genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}`);
 
-//   const [rooms, setrooms] = useState([
-//     {
-//       roomName: "",
-//       area: "",
-//       pricePerHour: "",
-//       discountPercentage: "",
-//       bookingDays: [],
-//       generalStartTime: "",
-//       generalEndTime: "",
-//       bookingStartTime: [],
-//       bookingEndTime: [],
-//       roomPhotos: [],
-//       amenities: [],
-//       roomDetails: "",
-//     },
-//   ]);
-//   const [showRoomsDetails, setshowRoomsDetails] = useState(false);
-//   const [indexofrooms, setIndexofrooms] = useState();
-//   useEffect(() => {
-//     console.log("teamDetails", teamDetails);
-//   }, [teamDetails]);
+//   //     bookingStartTime = String(`${currentRoomsData?.generalStartTime}`);
+//   //     bookingEndTime = String(`${currentRoomsData?.generalEndTime}`);
+//   //   }
 
-//   const [studioDetails, setStudioDetails] = useState({
-//     fullName: "",
-//     area: "",
-//     totalRooms: "",
-//     pincode: "",
-//     city: "",
-//     amenities: [],
-//     aboutUs: {
-//       aboutUs: "",
-//       services: "",
-//       infrastructure: "",
-//     },
-//     // teamDetails: [{ photo: null, name: "", profile: "", designation: "" }],
-//     studioPhotos: [],
-//     maxGuests: "",
-//     state: "",
-//     mapLink: "",
-//   });
+//   //   console.log("genreralStartTime", genreralStartTime);
+//   //   console.log("genreralStartTime", typeof genreralStartTime);
 
-//   const [saveAddData, setsaveAddData] = useState({
-//     aboutUs: {},
-//     address: "",
-//     amenities: [],
-//     area: "",
-//     availabilities: [],
-//     city: "",
-//     clientPhotos: [],
-//     creationTimeStamp: "",
-//     featuredReviews: "",
-//     fullName: "",
-//     isActive: "",
-//     latitude: "",
-//     location: { coordinates: [], type: "" },
-//     longitude: "",
-//     mapLink: "",
-//     maxGuests: "",
-//     overallAvgRating: "",
-//     pincode: "",
-//     pricePerHour: "",
-//     reviews: {},
-//     roomsDetails: [],
-//     state: "",
-//     studioPhotos: [],
-//     teamDetails: [],
-//     totalRooms: "",
-//     _id: "",
-//   });
+//   //   console.log("genreralEndTime", genreralEndTime);
+//   // }, [currentRoomsData]);
 
 //   useEffect(() => {
-//     console.log("studioDetails change huaa hai ", studioDetails);
-//     setsaveAddData((prev) => {
-//       return { ...prev, ...studioDetails };
-//     });
-//   }, [studioDetails]);
+//     console.log("rooms ka details change huaa haiiiiiiiiiiiiiiii");
+//   }, [rooms]);
 
 //   useEffect(() => {
-//     setsaveAddData((prevdata) => {
-//       prevdata.studioPhotos = images;
-//       return prevdata;
+//     console.log("currentRoomsData------>/", currentRoomsData);
+//     console.log(
+//       "currentRoomsData?.generalTime?.startTime",
+//       `${currentRoomsData?.generalTime?.startTime}:00`
+//     );
+//   }, []);
+
+//   const inputRef = useRef(null);
+//   const [images, setImages] = useState(
+//     currentRoomsData ? currentRoomsData.roomPhotos : []
+//   );
+
+//   useEffect(() => {
+//     setrooms((prerooms) => {
+//       prerooms.map((rm, idex) => {
+//         if (idex === indexofrooms) {
+//           rm.roomPhotos = images;
+//         }
+//       });
+//       return prerooms;
 //     });
 //   }, [images]);
 
 //   useEffect(() => {
-//     setsaveAddData((prevdata) => {
-//       prevdata.teamDetails = teamDetails;
-//       return prevdata;
+//     setrooms((prerooms) => {
+//       prerooms.map((rm, idex) => {
+//         if (idex === indexofrooms) {
+//           rm.amenities = selectedAmenities;
+//         }
+//       });
+//       return prerooms;
 //     });
-//   }, [teamDetails]);
-//   useEffect(() => {
-//     setsaveAddData((prevdata) => {
-//       prevdata.roomsDetails = rooms;
-//       return prevdata;
-//     });
-//   }, [rooms]);
-//   useEffect(() => {
-//     setsaveAddData((prevdata) => {
-//       prevdata.amenities = selectedStudioAmenities;
-//       return prevdata;
-//     });
-//   }, [selectedStudioAmenities]);
+//   }, [selectedAmenities.length]);
 
 //   useEffect(() => {
-//     console.log("saveAddData change huaa hai ", saveAddData);
-//     // setsaveAddData((prev)=>{
-//     //   return {...prev,studioDetails}
-//     // })
-//   }, [saveAddData]);
+//     setrooms((prerooms) => {
+//       prerooms.map((rm, idex) => {
+//         if (idex === indexofrooms) {
+//           rm.bookingDays = selectedDate;
+//         }
+//       });
+//       return prerooms;
+//     });
+//   }, [selectedDate.length]);
 
 //   useEffect(() => {
-//     if (data?.state?.productData) {
-//       setStudioDetails(data?.state?.productData);
-//       setrooms(data?.state?.productData.roomsDetails);
-//     }
-//   }, [data?.state?.productData]);
-//   useEffect(() => {
-//     console.log("room updated ", rooms);
-//   }, [rooms]);
-//   useEffect(() => {
-//     if (studioDetails?.studioPhotos?.length)
-//       setImages(studioDetails.studioPhotos);
-//   }, [studioDetails?.studioPhotos?.length]);
+//     setrooms((prerooms) => {
+//       prerooms.map((rm, idex) => {
+//         if (idex === indexofrooms) {
+//           rm.bookingStartTime = time[0];
+//           rm.bookingEndTime = time[1];
+//         }
+//       });
+//       return prerooms;
+//     });
+//   }, [bookingtime.length]);
 
-//   const studioamenitiesList = [
+//   useEffect(() => {
+//     setrooms((prerooms) => {
+//       prerooms.map((rm, idex) => {
+//         if (idex === indexofrooms) {
+//           rm.generalStartTime = time[0];
+//           rm.generalEndTime = time[1];
+//         }
+//       });
+//       return prerooms;
+//     });
+//   }, [time.length]);
+
+//   const handelGeneralTime = (time, timeString) => {
+//     console.log(time, timeString);
+//     console.log("time is ", time);
+//     console.log("timeString is ", timeString);
+//     setTime(timeString);
+//   };
+//   const handelbookingTime = (time, timeString) => {
+//     console.log(time, timeString);
+//     console.log("bookingt time is ", time);
+//     console.log(" boolking timeString is ", timeString);
+//     setBookingtime(timeString);
+//   };
+
+//   const abdefaultValue = ["18:30:56", "23:30:56"];
+
+//   useEffect(() => {
+//     console.log("timeRange", time);
+//   }, [time]);
+//   dayjs.extend(customParseFormat);
+
+//   const days = [
+//     // { id: "1", name: "Monday" },
+//     // { id: "2", name: "Tuesday" },
+//     // { id: "3", name: "wednesday" },
+//     // { id: "4", name: "thursday" },
+//     // { id: "5", name: "friday" },
+//     // { id: "6", name: "Saturday" },
+//     // { id: "7", name: "sunday" },
+//     "Monday",
+//     "Tuesday",
+//     "Wednesday",
+//     "Thursday",
+//     "Friday",
+//     "Saturday",
+//     "Sunday",
+//   ];
+
+//   const amenitiesList = [
 //     "Wifi",
 //     "AC",
 //     "DJ",
@@ -188,375 +203,357 @@
 //     "Car Parking",
 //     "Banjo",
 //   ];
-//   const filteredAmenities = studioamenitiesList.filter(
-//     (o) => !selectedStudioAmenities.includes(o)
+
+//   if (isEditMode) {
+//   }
+//   useEffect(() => {
+//     if (isEditMode) {
+//       setSelectedDate(
+//         currentRoomsData?.bookingDays?.map((item) => item?.name) || []
+//       );
+//       console.log(
+//         "currentRoomsData?.bookingDays?.map=====>>>",
+//         currentRoomsData?.bookingDays?.map((item) => item?.name)
+//       );
+//     }
+//   }, [currentRoomsData?.bookingDays.length]);
+
+//   const filteredDates = days.filter((o) => !selectedDate.includes(o));
+
+//   const filteredAmenities = amenitiesList.filter(
+//     (o) => !selectedAmenities.includes(o)
 //   );
 
 //   useEffect(() => {
-//     setSelectedStudioAmenities(
-//       studioDetails?.amenities?.map((item) => item.name) || []
+//     setSelectedAmenities(
+//       currentRoomsData?.amenities?.map((item) => item) || []
 //     );
-//   }, [studioDetails?.amenities]);
+//   }, [currentRoomsData?.amenities]);
 
-//   const handleSubmitButtonClick = () => {
-//     // Programmatically trigger click event on the hidden submit button
-//     if (submitButtonRef.current) {
-//       submitButtonRef.current.click();
-//     }
+//   // const handleCheckboxChange = (id) => {
+//   //   const updatedAmenities = selectedAmenities.includes(id)
+//   //     ? selectedAmenities.filter((amenity) => amenity !== id)
+//   //     : [...selectedAmenities, id];
+
+//   //   setSelectedAmenities(updatedAmenities);
+//   //   console.log(selectedAmenities);
+//   // };
+
+//   useEffect(() => {
+//     console.log("selectedDate updated:", selectedDate);
+//   }, [selectedDate]);
+
+//   const handledaysCheckboxChange = (id) => {
+//     const updatedDays = selectedDate.includes(id)
+//       ? selectedDate.filter((day) => day !== id)
+//       : [...selectedDate, id];
+
+//     setSelectedDate(updatedDays);
+//     console.log(selectedDate);
+//   };
+//   const [iframeCode, setIframeCode] = useState("");
+//   const [hasContent, setHasContent] = useState(false);
+
+//   const handleIframeCodeChange = (e) => {
+//     const inputCode = e.target.value;
+
+//     // Update the state with the user-entered iframe code
+//     setIframeCode(inputCode);
+
+//     // Update hasContent state based on whether there is content in the textarea
+//     setHasContent(inputCode.trim() !== "");
 //   };
 
-//   const handleSubmit = (event) => {
-//     event.preventDefault(); // Prevent default form submission behavior
-//     // Your submission logic goes here
+//   const [name, setName] = useState("");
+//   const onNameChange = (event) => {
+//     setName(event.target.value);
 //   };
+
+//   // const [temproomdetails, settemproomdetails] = useState( {
+//   //   roomName: "",
+//   //   area: "",
+//   //   pricePerHour: "",
+//   //   discountPercentage: "",
+//   //   bookingDays: [],
+//   //   generalStartTime: "",
+//   //   generalEndTime: "",
+//   //   bookingStartTime: [],
+//   //   bookingEndTime: [],
+//   //   roomPhotos: [],
+//   //   amenities: [],
+//   //   roomDetails: "",
+//   // },)
+//   useEffect(() => {
+//     console.log("room k details mila", rooms);
+//   }, [rooms]);
+
+//   const handleRoomNameChange = (event) => {
+//     const { value } = event.target;
+//     setrooms((prevRooms) => {
+//       const updatedRooms = [...prevRooms];
+//       updatedRooms[indexofrooms] = {
+//         ...currentRoomsData,
+//         roomName: value,
+//       };
+//       return updatedRooms;
+//     });
+//   };
+
+//   const handleRoomAreaChange = (event) => {
+//     const { value } = event.target;
+//     setrooms((prevRooms) => {
+//       const updatedRooms = [...prevRooms];
+//       updatedRooms[indexofrooms] = {
+//         ...currentRoomsData,
+//         area: value,
+//       };
+//       return updatedRooms;
+//     });
+//   };
+
+//   const handlePricePerHourChange = (event) => {
+//     const { value } = event.target;
+//     setrooms((prevRooms) => {
+//       const updatedRooms = [...prevRooms];
+//       updatedRooms[indexofrooms] = {
+//         ...currentRoomsData,
+//         pricePerHour: value,
+//       };
+//       return updatedRooms;
+//     });
+//   };
+
+//   const handleDiscountChange = (event) => {
+//     const { value } = event.target;
+//     setrooms((prevRooms) => {
+//       const updatedRooms = [...prevRooms];
+//       updatedRooms[indexofrooms] = {
+//         ...currentRoomsData,
+//         discountPercentage: value,
+//       };
+//       return updatedRooms;
+//     });
+//   };
+
+//   const handleRoomDetailsChange = (event) => {
+//     const { value } = event.target;
+//     setrooms((prevRooms) => {
+//       const updatedRooms = [...prevRooms];
+//       updatedRooms[indexofrooms] = {
+//         ...currentRoomsData,
+//         roomDetails: value,
+//       };
+//       return updatedRooms;
+//     });
+//   };
+
 //   return (
 //     <>
-//       <div className={style.wrapper}>
-//         <WebDashboard2
-//           navCount={navCount}
-//           tabCount={tabCount}
-//           setTabCount={setTabCount}
-//         />
-//         <div className={style.studioMainScreen}>
-//           <div className={style.studioHeader}>
-//             <div>
-//               <input required type="text" placeholder="search" />
-//             </div>
-//             <div>
-//               <IoSearch />
-//             </div>
-//             <div>
-//               <div className={style.notifyIcon}>
-//                 <GoDotFill />
-//               </div>
-//               <FaRegBell />
-//             </div>
-//             <div>
-//               <MdOutlineSettings />
-//             </div>
-//           </div>
-
-//           {showRoomsDetails ? (
-//             <AddNewRoom
-//               setshowRoomsDetails={setshowRoomsDetails}
-//               isEditMode={isEditMode}
-//               rooms={rooms}
-//               setrooms={setrooms}
-//               setIndexofrooms={setIndexofrooms}
-//               indexofrooms={indexofrooms}
-//             />
-//           ) : (
-//             <>
-//               <div
-//                 className={style.addNewStudioTitle}
-//                 style={{ marginTop: "-2%" }}
-//               >
-//                 {isEditMode && showMode
-//                   ? "Studio details"
-//                   : isEditMode
-//                   ? "Edit Studio"
-//                   : "Add new studio"}
-//               </div>
-//               <form className={style.addNewStudioPage}>
-//                 {/* {showMode ? ()} */}
-//                 <div
-//                   style={{
-//                     position: showMode ? "relative" : "",
-//                     overflow: "hidden",
-//                   }}
-//                 >
-//                   {showMode ? <p className={style.showmode}></p> : ""}
-
-//                   <div>
-//                     <div className={style.addNewStudioinputBox}>
-//                       <label htmlFor="studioName">Studio Name</label>
-//                       <input
-//                         required
-//                         type="text"
-//                         id="studioName"
-//                         placeholder="Enter Studio Area"
-//                         name="studioName"
-//                         value={studioDetails?.fullName}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             fullName: e.target.value,
-//                           })
-//                         }
-//                       />
-//                     </div>
-
-//                     <div className={style.addNewStudioinputBox}>
-//                       <label htmlFor="area">Total Area</label>
-//                       <input
-//                         required
-//                         type="text"
-//                         id="area"
-//                         placeholder="Enter Approx. Area"
-//                         name="area"
-//                         value={studioDetails?.area}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             area: e.target.value,
-//                           })
-//                         }
-//                       />
-//                     </div>
-//                     {/* <div className={style.addNewStudioinputBox}>
-//                   <label htmlFor="Rooms">Rooms</label>
-//                   <select
-//                     id="Rooms"
-//                     name="totalRooms"
-//                     onChange={handleChange}
-//                     value={selectedOption}
-//                   >
-//                     <option value="0">Select No. of Services</option>
-//                     <option value="1">1</option>
-//                     <option value="2">2</option>
-//                     <option value="3">3</option>
-//                     <option value="4">4</option>
-//                     <option value="5">5</option>
-//                     <option value="6">6</option>
-//                     <option value="7">7</option>
-//                     <option value="8">8</option>
-//                     <option value="9">9</option>
-//                     <option value="10">10</option>
-//                   </select>
-//                 </div> */}
-//                     <div className={style.addNewStudioinputBox}>
-//                       <label htmlFor="pincode">Studio Pincode</label>
-//                       <input
-//                         required
-//                         type="text"
-//                         id="pincode"
-//                         name="pincode"
-//                         placeholder="Enter Pincode"
-//                         value={studioDetails?.pincode}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             pincode: e.target.value,
-//                           })
-//                         }
-//                       />
-//                     </div>
-
-//                     <div className={style.addNewStudioinputBox}>
-//                       <label htmlFor="addcity">Studio city</label>
-//                       <input
-//                         required
-//                         list="city"
-//                         id="addcity"
-//                         placeholder="Select city Name"
-//                         name="addcity"
-//                         value={studioDetails?.city}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             city: e.target.value,
-//                           })
-//                         }
-//                       />
-//                       <datalist id="city">
-//                         <option value="Mumbai">Mumbai</option>
-//                         <option value="Delhi">Delhi</option>
-//                         <option value="Bombay">Bombay</option>
-//                       </datalist>
-//                     </div>
-//                     <div className={style.addNewStudioinputBox}>
-//                       <label htmlFor="Amenities">Amenities </label>
-
-//                       <Select
-//                         required
-//                         id="Amenities"
-//                         mode="multiple"
-//                         className=""
-//                         placeholder="Select one or more Amenities"
-//                         value={selectedStudioAmenities}
-//                         onChange={setSelectedStudioAmenities}
-//                         // style={customStyles}
-//                         options={filteredAmenities?.map((item) => ({
-//                           value: item,
-//                           label: item,
-//                         }))}
-//                       />
-//                     </div>
-//                   </div>
-//                   <div>
-//                     <DragAndDropImageDiv
-//                       images={images}
-//                       setImages={setImages}
-//                       isEditMode={isEditMode}
-//                     />
-
-//                     <div
-//                       className={style.addNewStudioinputBox}
-//                       style={{ paddingTop: "2%" }}
-//                     >
-//                       <label htmlFor="guest">Max Guests</label>
-
-//                       <select
-//                         required
-//                         id="guest"
-//                         value={studioDetails?.maxGuests}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             maxGuests: e.target.value,
-//                           })
-//                         }
-//                       >
-//                         <option>Select Maximum Guest allowed</option>
-//                         <option>1</option>
-//                         <option>2</option>
-//                         <option>3</option>
-//                         <option>4</option>
-//                         <option>5</option>
-//                       </select>
-//                     </div>
-
-//                     <div className={style.addNewStudioinputBox}>
-//                       <label htmlFor="addstate">Select State</label>
-//                       <input
-//                         required
-//                         list="state"
-//                         id="addstate"
-//                         placeholder="Select state Name"
-//                         name="state"
-//                         value={studioDetails?.state}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             state: e.target.value,
-//                           })
-//                         }
-//                       />
-//                       <datalist id="state">
-//                         <option value="Mumbai">Mumbai</option>
-//                         <option value="Delhi">Delhi</option>
-//                         <option value="Bombay">Bombay</option>
-//                       </datalist>
-//                     </div>
-
-//                     <div className={style.addNewStudioinputBox}>
-//                       <label htmlFor="studioName">Studio MapLink</label>
-//                       <input
-//                         required
-//                         type="text"
-//                         id="studioName"
-//                         placeholder="Enter Studio MapLink"
-//                         name="studioName"
-//                         value={studioDetails?.mapLink}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             mapLink: e.target.value,
-//                           })
-//                         }
-//                       />
-//                     </div>
-//                   </div>
-//                 </div>
-//                 <div style={{ position: showMode ? "relative" : "" }}>
-//                   {showMode ? <p className={style.showmode}></p> : ""}
-
-//                   <div>
-//                     <div className={style.addNewStudioinputBox2}>
-//                       <label htmlFor="aboutStudio">About Studio</label>
-//                       <textarea
-//                         type="text"
-//                         id="aboutStudio"
-//                         placeholder="Enter Studio Details"
-//                         value={studioDetails?.aboutUs?.aboutUs}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             aboutUs: {
-//                               ...studioDetails?.aboutUs,
-//                               aboutUs: e.target.value,
-//                             },
-//                           })
-//                         }
-//                       />
-//                     </div>
-//                     <div className={style.addNewStudioinputBox2}>
-//                       <label htmlFor="studioService">Studio Services</label>
-//                       <textarea
-//                         type="text"
-//                         id="studioService"
-//                         placeholder="Enter Studio Services"
-//                         value={studioDetails?.aboutUs?.services}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             aboutUs: {
-//                               ...studioDetails?.aboutUs,
-//                               services: e.target.value,
-//                             },
-//                           })
-//                         }
-//                       />
-//                     </div>
-//                     <div className={style.addNewStudioinputBox2}>
-//                       <label htmlFor="area">Total Area</label>
-//                       <textarea
-//                         type="text"
-//                         id="area"
-//                         placeholder="Enter Approx. Area"
-//                         value={studioDetails?.aboutUs?.infrastructure}
-//                         onChange={(e) =>
-//                           setStudioDetails({
-//                             ...studioDetails,
-//                             aboutUs: {
-//                               ...studioDetails?.aboutUs,
-//                               infrastructure: e.target.value,
-//                             },
-//                           })
-//                         }
-//                       />
-//                     </div>
-
-//                     <div className={style.roomAndClassSection}>
-//                       <div>
-//                         <AddMultipleRooms
-//                           rooms={rooms}
-//                           setrooms={setrooms}
-//                           setshowRoomsDetails={setshowRoomsDetails}
-//                           showRoomsDetails={showRoomsDetails}
-//                           indexofrooms={indexofrooms}
-//                           isEditMode={isEditMode}
-//                           setIndexofrooms={setIndexofrooms}
-//                         />
-//                       </div>
-//                       <div>
-//                         <AddMultipleTeam
-//                           teamDetails={teamDetails}
-//                           setTeamsDetails={setTeamsDetails}
-//                           data={data}
-//                           isEditMode={isEditMode}
-//                         />
-//                       </div>
-//                     </div>
-//                   </div>
-//                 </div>
-//                 <button style={{ display: "none" }} ref={submitButtonRef}>
-//                   submit
-//                 </button>
-//                 {/* <p className={style.showmode}></p> */}
-//               </form>
-//               <StudioFooter
-//                 setSelectTab={setSelectTab}
-//                 backOnclick={gotoadminpage}
-//                 saveType={"submit"}
-//                 saveOnclick={handleSubmitButtonClick}
+//       <div className={style.addNewStudioTitle}>Add new room</div>
+//       <div className={style.addNewRoomPage}>
+//         <div>
+//           <div>
+//             <div className={style.addNewStudioinputBox}>
+//               <label htmlFor="RoomName">Room Name</label>
+//               <input
+//                 type="text"
+//                 id="RoomName"
+//                 placeholder="Enter Room Name"
+//                 value={currentRoomsData?.roomName}
+//                 onChange={handleRoomNameChange}
 //               />
-//             </>
-//           )}
+//             </div>
+
+//             <div className={style.addNewStudioinputBox}>
+//               <label htmlFor="RoomArea">Room Area</label>
+//               <input
+//                 type="text"
+//                 id="RoomArea"
+//                 placeholder="Enter Approx. Area"
+//                 value={currentRoomsData?.area}
+//                 onChange={handleRoomAreaChange}
+//               />
+//             </div>
+//             <div className={style.addNewStudioinputBox}>
+//               <label htmlFor="price">Price Per Hour</label>
+//               <input
+//                 type="number"
+//                 id="price"
+//                 placeholder="Enter Price Per Hour"
+//                 value={currentRoomsData?.pricePerHour}
+//                 onChange={handlePricePerHourChange}
+//               />
+//             </div>
+//             <div className={style.addNewStudioinputBox}>
+//               <label htmlFor="Discount">Discount</label>
+//               <input
+//                 type="number"
+//                 id="Discount"
+//                 placeholder="Enter Discount"
+//                 value={currentRoomsData?.discountPercentage}
+//                 onChange={handleDiscountChange}
+//               />
+//             </div>
+
+//             <div className={style.defaultLabel}>Booking Days</div>
+//             {/* <div className={style.amenitesCheckbox}>
+//               {days.map((day) => (
+//                 <div key={day.id}>
+//                   <input
+//                     type="checkbox"
+//                     id={day.id}
+//                     value={day.id}
+//                     checked={selectedDate.includes(day.id)}
+//                     onChange={() => handledaysCheckboxChange(day.id)}
+//                   />
+//                   &nbsp;
+//                   <label htmlFor={day.id}>{day.name}</label>
+//                 </div>
+//               ))}
+//             </div> */}
+
+//             <Select
+//               id="Dates"
+//               mode="multiple"
+//               placeholder="Select Bookig Dates"
+//               value={selectedDate}
+//               onChange={setSelectedDate}
+//               // style={customStyles}
+//               options={filteredDates?.map((item) => ({
+//                 value: item,
+//                 label: item,
+//               }))}
+//             />
+
+//             <div className={style.addNewStudioinputBox}>
+//               <label>General Start & End Time</label>
+//               <TimePicker.RangePicker
+//                 onChange={handelGeneralTime}
+//                 // defaultValue={[
+//                 //   dayjs("1:30:00", "HH:mm:ss"),
+//                 //   dayjs("2:30:56", "HH:mm:ss"),
+//                 // ]}
+//                 // defaultValue={
+//                 //   isEditMode
+//                 //     ? [
+//                 //         dayjs(`${genreralStartTime}`, "HH:mm:ss"),
+//                 //         dayjs(`${genreralEndTime}`, "HH:mm:ss"),
+//                 //       ]
+//                 //     : []
+//                 // }
+//                 style={{ height: "100%", outline: "none" }}
+//               />
+//             </div>
+//             {/* <div className={style.addNewStudioinputBox}>
+//               <label>Booking Start Time</label>
+//               <select>
+//                 <option>Select Booking Start Time</option>
+//                 <option>1</option>
+//                 <option>2</option>
+//                 <option>3</option>
+//                 <option>4</option>
+//                 <option>5</option>
+//               </select>
+//             </div> */}
+//           </div>
+//           <div>
+//             <DragAndDropImageDiv
+//               images={images}
+//               setImages={setImages}
+//               isEditMode={isEditMode}
+//             />
+
+//             <div className={style.defaultLabel}>Amenities</div>
+//             {/* <div className={style.amenitesCheckbox}>
+//               {amenitiesList.map((amenity) => (
+//                 <div key={amenity.id}>
+//                   <input
+//                     type="checkbox"
+//                     id={amenity.id}
+//                     value={amenity.id}
+//                     checked={selectedAmenities.includes(amenity.id)}
+//                     onChange={() => handleCheckboxChange(amenity.id)}
+//                   />
+//                   &nbsp;
+//                   <label htmlFor={amenity.id}>{amenity.label}</label>
+//                 </div>
+//               ))}
+
+//             </div> */}
+//             <Select
+//               id="Amenites"
+//               mode="multiple"
+//               placeholder="Select Amenites"
+//               value={selectedAmenities}
+//               onChange={setSelectedAmenities}
+//               // style={customStyles}
+//               options={filteredAmenities?.map((item) => ({
+//                 value: item,
+//                 label: item,
+//               }))}
+//             />
+
+//             <div className={style.addNewStudioinputBox2}>
+//               <label htmlFor="RoomDetails">Room Details</label>
+//               <textarea
+//                 type="text"
+//                 id="RoomDetails"
+//                 placeholder="Enter Room Details"
+//                 value={currentRoomsData?.details?.map((item) => item) || []}
+//                 onChange={handleRoomDetailsChange}
+//               />
+//             </div>
+//             {/* <div className={style.addNewStudioinputBox}>
+//               <label>General End Time</label>
+
+//               <select>
+//                 <option>Select General End Time</option>
+//                 <option>1</option>
+//                 <option>2</option>
+//                 <option>3</option>
+//                 <option>4</option>
+//                 <option>5</option>
+//               </select>
+//             </div> */}
+//             <div className={style.addNewStudioinputBox}>
+//               <label>Booking start & End Time</label>
+
+//               <TimePicker.RangePicker
+//                 onChange={handelbookingTime}
+//                 // defaultValue={
+//                 //   isEditMode
+//                 //     ? [
+//                 //         dayjs(`${bookingStartTime}`, "HH:mm:ss"),
+//                 //         dayjs(`${bookingEndTime}`, "HH:mm:ss"),
+//                 //       ]
+//                 //     : []
+//                 // }
+//                 style={{ height: "100%", outline: "none" }}
+//               />
+//             </div>
+
+//             <Select
+//               mode="multiple"
+//               style={{
+//                 width: "100%",
+//               }}
+//               placeholder="select one country"
+//               // defaultValue={[""]}
+//               onChange={handleChangeday}
+//               optionLabelProp="label"
+//               options={options}
+//               optionRender={(option) => <Space>{option.data.value}</Space>}
+//             />
+//           </div>
 //         </div>
 //       </div>
+//       <StudioFooter
+//         backOnclick={() => {
+//           setshowRoomsDetails(false);
+//         }}
+//       />
 //     </>
 //   );
 // }
 
-// export default AddNewStudio;
+// export default AddNewRoom;

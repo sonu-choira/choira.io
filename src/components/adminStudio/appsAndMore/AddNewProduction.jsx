@@ -29,6 +29,10 @@ function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
   const navCount = data?.state?.navCount;
   const [showMode, setshowMode] = useState(data?.state?.showMode || false);
+  let bookingPageCount;
+  if (data?.state?.bookingPageCount) {
+    bookingPageCount = data?.state?.bookingPageCount;
+  }
   // const [productionData, setProductionData] = useState(initialState)
   const [selectedItems, setSelectedItems] = useState([]);
   const [addon, setAddon] = useState();
@@ -88,16 +92,15 @@ function AddNewProduction({ setSelectTab }) {
     discographyDetails: [],
     featuredReviews: [],
     fullName: "",
-    isActive: "",
+    isActive: 0,
     packages: [],
     price: "",
     reviews: [],
     servicePhotos: [],
     service_id: "",
-    type: "",
+    type: bookingPageCount,
     workDetails: [],
     addOns: [],
-    _id: "",
   });
 
   const [sendataToApi, setsendataToApi] = useState({
@@ -110,6 +113,8 @@ function AddNewProduction({ setSelectTab }) {
     description: [],
     portfolio: [],
     userReviews: {},
+    type: bookingPageCount,
+    isActive: 0,
   });
 
   const handelSavebtn = () => {
@@ -232,11 +237,6 @@ function AddNewProduction({ setSelectTab }) {
     setIsEditMode(data.state?.isEditMode);
     console.log("the data id  ================== >", data.state?.productData);
   }, []);
-
-  let bookingPageCount;
-  if (data?.state?.bookingPageCount) {
-    bookingPageCount = data?.state?.bookingPageCount;
-  }
 
   const [productionData, setProductionData] = useState({});
   useEffect(() => {

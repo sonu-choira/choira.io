@@ -24,6 +24,7 @@ import AddmultipleServises from "../../pages/admin/layout/AddmultipleServises";
 import AddMultipleRooms from "../../pages/admin/layout/AddMultipleRooms";
 import AddNewRoom from "./AddNewRoom";
 import Button from "../../pages/admin/layout/Button";
+import appAndmoreApi from "../../services/appAndmoreApi";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -78,25 +79,6 @@ function AddNewStudio({ setSelectTab }) {
   }, [teamDetails]);
 
   const [studioDetails, setStudioDetails] = useState({
-    fullName: "",
-    area: "",
-    totalRooms: "",
-    pincode: "",
-    city: "",
-    amenities: [],
-    aboutUs: {
-      aboutUs: "",
-      services: "",
-      infrastructure: "",
-    },
-    // teamDetails: [{ photo: null, name: "", profile: "", designation: "" }],
-    studioPhotos: [],
-    maxGuests: "",
-    state: "",
-    mapLink: "",
-  });
-
-  const [saveAddData, setsaveAddData] = useState({
     aboutUs: {},
     address: "",
     amenities: [],
@@ -125,45 +107,82 @@ function AddNewStudio({ setSelectTab }) {
     _id: "",
   });
 
+  // const [saveAddData, setsaveAddData] = useState({
+  //   aboutUs: {},
+  //   address: "",
+  //   amenities: [],
+  //   area: "",
+  //   availabilities: [],
+  //   city: "",
+  //   clientPhotos: [],
+  //   creationTimeStamp: "",
+  //   featuredReviews: "",
+  //   fullName: "",
+  //   isActive: "",
+  //   latitude: "",
+  //   location: { coordinates: [], type: "" },
+  //   longitude: "",
+  //   mapLink: "",
+  //   maxGuests: "",
+  //   overallAvgRating: "",
+  //   pincode: "",
+  //   pricePerHour: "",
+  //   reviews: {},
+  //   roomsDetails: [],
+  //   state: "",
+  //   studioPhotos: [],
+  //   teamDetails: [],
+  //   totalRooms: "",
+  //   _id: "",
+  // });
+
   useEffect(() => {
     console.log("studioDetails change huaa hai ", studioDetails);
-    setsaveAddData((prev) => {
-      return { ...prev, ...studioDetails };
-    });
   }, [studioDetails]);
 
   useEffect(() => {
-    setsaveAddData((prevdata) => {
+    setStudioDetails((prevdata) => {
       prevdata.studioPhotos = images;
       return prevdata;
     });
-  }, [images]);
+  }, [images.length]);
 
   useEffect(() => {
-    setsaveAddData((prevdata) => {
+    setStudioDetails((prevdata) => {
       prevdata.teamDetails = teamDetails;
       return prevdata;
     });
-  }, [teamDetails]);
+  }, [teamDetails.length]);
+
   useEffect(() => {
-    setsaveAddData((prevdata) => {
+    setStudioDetails((prevdata) => {
       prevdata.roomsDetails = rooms;
       return prevdata;
     });
   }, [rooms]);
+
+  // useEffect(() => {
+  //   setStudioDetails((prevdata) => {
+  //     return {
+  //       ...prevdata,
+  //       roomsDetails: rooms,
+  //     };
+  //   });
+  // }, [rooms.length]);
+
   useEffect(() => {
-    setsaveAddData((prevdata) => {
+    setStudioDetails((prevdata) => {
       prevdata.amenities = selectedStudioAmenities;
       return prevdata;
     });
-  }, [selectedStudioAmenities]);
+  }, [selectedStudioAmenities.length]);
 
-  useEffect(() => {
-    console.log("saveAddData change huaa hai ", saveAddData);
-    // setsaveAddData((prev)=>{
-    //   return {...prev,studioDetails}
-    // })
-  }, [saveAddData]);
+  // useEffect(() => {
+  //   console.log("saveAddData change huaa hai ", saveAddData);
+  //   // setsaveAddData((prev)=>{
+  //   //   return {...prev,studioDetails}
+  //   // })
+  // }, [saveAddData]);
 
   useEffect(() => {
     if (data?.state?.productData) {
@@ -194,21 +213,68 @@ function AddNewStudio({ setSelectTab }) {
 
   useEffect(() => {
     setSelectedStudioAmenities(
-      studioDetails?.amenities?.map((item) => item.name) || []
+      studioDetails?.amenities?.map((item) => item?.name) || []
     );
   }, [studioDetails?.amenities]);
 
   const handleSubmitButtonClick = () => {
     // Programmatically trigger click event on the hidden submit button
-    if (submitButtonRef.current) {
-      submitButtonRef.current.click();
-    }
-  };
+    // if (submitButtonRef.current) {
+    //   submitButtonRef.current.click();
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    // Your submission logic goes here
+    // }
+    alert("your Studio has been created");
+    appAndmoreApi
+      .createStudio(studioDetails)
+      .then((response) => {
+        console.log(`====================> data create huaa hai   `, response);
+      })
+      .catch((error) => {
+        console.error("Error fetching studios:", error);
+      });
   };
+  // const [sendStudioDetailtApi, setSendStudioDetailtApi] = useState({
+  //   fullName: "",
+  //   setStudioDetails: "",
+  //   mapLink: "",
+  //   city: "",
+  //   state: "",
+  //   area: "",
+  //   pincode: "",
+  //   pricePerHour: "",
+  //   availabilities: [],
+  //   amenities: [],
+  //   totalRooms: "",
+  //   roomsDetails: [],
+  //   maxGuests: "",
+  //   studioPhotos: [],
+  //   aboutUs: "",
+  //   teamDetails: [],
+  //   clientPhotos: [],
+  //   reviews: {},
+  //   featuredReviews: [],
+  // });
+
+  // useEffect(() => {
+  //   setSendStudioDetailtApi((prev) => {
+  //     return { ...prev, ...studioDetails };
+  //   });
+  // }, [studioDetails]);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "sendStudioDetailtApi change huaa haiiiiiiiii-=======>->>>",
+  //     sendStudioDetailtApi
+  //   );
+  // }, [sendStudioDetailtApi]);
+  // const handleSubmit = (event) => {
+  //   event.preventDefault(); // Prevent default form submission behavior
+  //   // Your submission logic goes here
+  // };
+  // setSendStudioDetailtApi({
+
+  // });
+
   return (
     <>
       <div className={style.wrapper}>
@@ -303,27 +369,7 @@ function AddNewStudio({ setSelectTab }) {
                         }
                       />
                     </div>
-                    {/* <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Rooms">Rooms</label>
-                  <select
-                    id="Rooms"
-                    name="totalRooms"
-                    onChange={handleChange}
-                    value={selectedOption}
-                  >
-                    <option value="0">Select No. of Services</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                  </select>
-                </div> */}
+
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="pincode">Studio Pincode</label>
                       <input
@@ -438,6 +484,23 @@ function AddNewStudio({ setSelectTab }) {
                         <option value="Bombay">Bombay</option>
                       </datalist>
                     </div>
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="address">Studio Address</label>
+                      <input
+                        required
+                        type="text"
+                        id="address"
+                        placeholder="Enter Studio Area"
+                        name="studioName"
+                        value={studioDetails?.address}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            address: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
 
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="studioName">Studio MapLink</label>
@@ -499,10 +562,10 @@ function AddNewStudio({ setSelectTab }) {
                       />
                     </div>
                     <div className={style.addNewStudioinputBox2}>
-                      <label htmlFor="area">Total Area</label>
+                      <label htmlFor="infrastructure">Infrastructure</label>
                       <textarea
                         type="text"
-                        id="area"
+                        id="infrastructure"
                         placeholder="Enter Approx. Area"
                         value={studioDetails?.aboutUs?.infrastructure}
                         onChange={(e) =>

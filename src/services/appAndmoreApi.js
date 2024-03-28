@@ -32,9 +32,9 @@ class Appapi{
    };
 
  createService = async (serviceData) => {
-    const response = await api.post(`services/create`,{ 
+    const response = await api.post(`services/create`, 
       serviceData
-    });
+    );
     const {status} = response.data
     console.log("postdata ===>", response.data)
     return response.data;
@@ -42,7 +42,20 @@ class Appapi{
    };
  
 
+   createStudio = async (studioData) => {
+      const response = await api.post(`studios/create`,
+        studioData
+      );
+      const {status} = response.data
+      console.log("postdata ===>", response.data)
+      return response.data;
+   
+     };
 }
+
+
+
+
 
 
 export default new Appapi();
