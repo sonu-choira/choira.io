@@ -47,6 +47,8 @@ function AddNewProduction({ setSelectTab }) {
   const [discography, setDiscography] = useState([""]);
 
   const [images, setImages] = useState([]);
+  const [getimgUrl, setGetimgUrl] = useState([]);
+
   const [addNewServicesformData, setAddNewServicesformData] = useState([]);
 
   useEffect(() => {
@@ -167,10 +169,10 @@ function AddNewProduction({ setSelectTab }) {
 
   useEffect(() => {
     setServiceData((prevdata) => {
-      prevdata.servicePhotos = images;
+      prevdata.servicePhotos = getimgUrl;
       return prevdata;
     });
-  }, [images]);
+  }, [getimgUrl]);
   useEffect(() => {
     setServiceData((prevdata) => {
       prevdata.amenities = selectedItems;
@@ -452,6 +454,7 @@ function AddNewProduction({ setSelectTab }) {
                       images={images}
                       setImages={setImages}
                       isEditMode={isEditMode}
+                      getimgUrl={getimgUrl}
                     />
 
                     <div

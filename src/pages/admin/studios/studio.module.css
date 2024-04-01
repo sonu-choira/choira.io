@@ -828,8 +828,8 @@ td {
 .addNewStudioimgBox {
   /* border: 2px solid red; */
   width: 100%;
-  min-height: 25%;
-  max-height: 25%;
+  min-height: 25vh;
+  max-height: 25vh;
 }
 .addNewStudioimgBox label {
   font-size: 1vmax;
@@ -838,13 +838,21 @@ td {
   height: 100%;
   /* border: 2px solid red; */
 }
+.loderdiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .addNewStudioimgBox > div {
   margin-top: 2%;
   width: 100%;
   border: 2px dashed #dddddd;
-  height: 85%;
+  height: 65%;
   border-radius: 10px;
 }
+
 .addNewStudioimgBox > div > label {
   width: 100%;
   height: 100%;
@@ -901,6 +909,14 @@ td {
   position: relative;
   border-radius: 10px;
   text-align: center;
+}
+.imageuploadspan {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100% !important;
+  /* border: 2px solid green; */
+  height: 20%;
 }
 .showlocationDiv {
   width: 100%;

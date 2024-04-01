@@ -77,7 +77,7 @@ function AddmultipleServises({
 
   const hideAddPhotoIcon = (team) => {
     // console.log("team--------", team);
-    var send = team.photo_url.length ? { display: "none" } : {};
+    var send = team?.photo_url?.length ? { display: "none" } : {};
     // console.log("send", send);
 
     return send;
@@ -95,7 +95,7 @@ function AddmultipleServises({
                   <MdAddAPhoto style={hideAddPhotoIcon(team)} />
                 </label>
 
-                {team.photo_url.length ? (
+                {team?.photo_url?.length ? (
                   <div>
                     <img
                     // src={

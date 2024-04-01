@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import cross from "../../../assets/cross.svg";
 import style from "../studios/studio.module.css";
 import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
+import imageUploadapi from "../../../services/imageUploadapi";
+import Swal from "sweetalert2";
 
 function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
   useEffect(() => {
@@ -22,6 +24,19 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
     const newTeams = [...teamDetails];
     newTeams[index].photo = event.target.files[0];
     setTeamsDetails(newTeams);
+    let imagefile = event.target.files[0];
+    imageUploadapi.singleImgUpload(imagefile).then((response) => {
+      console.log("Image links created:", response.imageUrl);
+      if (response.imageUrl) {
+        Swal.fire({
+          title: "Images uploaded!",
+          text: "Images uploaded!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1800,
+        });
+      }
+    });
   };
 
   const handleInputChange = (event, index, field) => {

@@ -29,6 +29,7 @@ import appAndmoreApi from "../../services/appAndmoreApi";
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
   const [images, setImages] = useState([]);
+  const [getimgUrl, setGetimgUrl] = useState([]);
   const [isOver, setIsOver] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -142,10 +143,10 @@ function AddNewStudio({ setSelectTab }) {
 
   useEffect(() => {
     setStudioDetails((prevdata) => {
-      prevdata.studioPhotos = images;
+      prevdata.studioPhotos = getimgUrl;
       return prevdata;
     });
-  }, [images.length]);
+  }, [getimgUrl.length]);
 
   useEffect(() => {
     setStudioDetails((prevdata) => {
@@ -196,6 +197,7 @@ function AddNewStudio({ setSelectTab }) {
   useEffect(() => {
     if (studioDetails?.studioPhotos?.length)
       setImages(studioDetails.studioPhotos);
+    setGetimgUrl(studioDetails.studioPhotos);
   }, [studioDetails?.studioPhotos?.length]);
 
   const studioamenitiesList = [
@@ -428,9 +430,28 @@ function AddNewStudio({ setSelectTab }) {
                         }))}
                       />
                     </div>
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="studioName">Studio MapLink</label>
+                      <input
+                        required
+                        type="text"
+                        id="studioName"
+                        placeholder="Enter Studio MapLink"
+                        name="studioName"
+                        value={studioDetails?.mapLink}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            mapLink: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <div>
                     <DragAndDropImageDiv
+                      setGetimgUrl={setGetimgUrl}
+                      getimgUrl={getimgUrl}
                       images={images}
                       setImages={setImages}
                       isEditMode={isEditMode}
@@ -497,24 +518,6 @@ function AddNewStudio({ setSelectTab }) {
                           setStudioDetails({
                             ...studioDetails,
                             address: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="studioName">Studio MapLink</label>
-                      <input
-                        required
-                        type="text"
-                        id="studioName"
-                        placeholder="Enter Studio MapLink"
-                        name="studioName"
-                        value={studioDetails?.mapLink}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            mapLink: e.target.value,
                           })
                         }
                       />

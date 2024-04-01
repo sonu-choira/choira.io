@@ -40,7 +40,7 @@
     "sass": "^1.43.5",
     "slick-carousel": "^1.8.1",
     "spotify-web-api-js": "^1.5.2",
-    "sweetalert2": "^11.3.0",
+    "sweetalert2": "^11.10.7",
     "sweetalert2-react-content": "^4.2.0",
     "swiper": "^11.0.5",
     "wavesurfer.js": "^7.5.2",
@@ -69,5 +69,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/form-data": "^2.5.0"
   }
 }
