@@ -108,12 +108,17 @@ function AddNewRoom({
     setrooms((prerooms) => {
       prerooms.map((rm, idex) => {
         if (idex === indexofrooms) {
+          console.log("selectedDate", selectedDate);
           rm.bookingDays = selectedDate;
         }
       });
       return prerooms;
     });
   }, [selectedDate.length]);
+
+  useEffect(() => {
+    console.log("====>>>>>>>", rooms);
+  }, [rooms]);
 
   useEffect(() => {
     setrooms((prerooms) => {
@@ -186,15 +191,31 @@ function AddNewRoom({
     "Banjo",
   ];
 
-  if (isEditMode) {
-  }
+  // useEffect(() => {
+  //   if (isEditMode) {
+  //     setSelectedDate(
+  //       currentRoomsData?.bookingDays?.map((item) => item?.name) || []
+  //     );
+  //     console.log(
+  //       "currentRoomsData?.bookingDays?.map((item) => item?.name)",
+  //       currentRoomsData?.bookingDays?.map((item) => item?.name)
+  //     );
+  //   }
+  // }, [currentRoomsData?.bookingDays?.length]);
+
   useEffect(() => {
     if (isEditMode) {
-      setSelectedDate(
-        currentRoomsData?.bookingDays?.map((item) => item?.name) || []
-      );
+      const bookingDays = currentRoomsData?.bookingDays;
+      console.log("currentRoomsData:", currentRoomsData);
+      if (bookingDays && bookingDays.length > 0) {
+        const selectedDateNames = bookingDays.map((item) => item?.name || item);
+        console.log("selectedDateNames:", selectedDateNames);
+        setSelectedDate(selectedDateNames);
+      } else {
+        setSelectedDate([]);
+      }
     }
-  }, [currentRoomsData?.bookingDays.length]);
+  }, [isEditMode]);
 
   const filteredDates = days.filter((o) => !selectedDate.includes(o));
 
@@ -221,14 +242,14 @@ function AddNewRoom({
     console.log("selectedDate updated:", selectedDate);
   }, [selectedDate]);
 
-  const handledaysCheckboxChange = (id) => {
-    const updatedDays = selectedDate.includes(id)
-      ? selectedDate.filter((day) => day !== id)
-      : [...selectedDate, id];
+  // const handledaysCheckboxChange = (id) => {
+  //   const updatedDays = selectedDate.includes(id)
+  //     ? selectedDate.filter((day) => day !== id)
+  //     : [...selectedDate, id];
 
-    setSelectedDate(updatedDays);
-    console.log(selectedDate);
-  };
+  //   setSelectedDate(updatedDays);
+  //   console.log(selectedDate);
+  // };
   const [iframeCode, setIframeCode] = useState("");
   const [hasContent, setHasContent] = useState(false);
 

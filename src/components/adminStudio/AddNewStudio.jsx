@@ -160,7 +160,7 @@ function AddNewStudio({ setSelectTab }) {
       prevdata.roomsDetails = rooms;
       return prevdata;
     });
-  }, [rooms]);
+  }, [rooms.length]);
 
   // useEffect(() => {
   //   setStudioDetails((prevdata) => {

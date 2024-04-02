@@ -44,13 +44,29 @@ function AddNewServices2({
   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
   const [selectedItems, setSelectedItems] = useState([]);
 
+  // useEffect(() => {
+  //   if (isEditMode) {
+  //     setSelectedItems(
+  //       currentServiceData?.amenites?.map((item) => item?.name) || []
+  //     );
+  //   }
+  // }, [isEditMode]);
+
   useEffect(() => {
     if (isEditMode) {
-      setSelectedItems(
-        currentServiceData?.amenites?.map((item) => item.name) || []
-      );
+      const tempaminities = currentServiceData?.amenites;
+      console.log("tempaminities:", tempaminities);
+      if (tempaminities && tempaminities.length > 0) {
+        const slectedtempaminities = tempaminities.map(
+          (item) => item?.name || item
+        );
+        console.log("selectedDateNames:", slectedtempaminities);
+        setSelectedItems(slectedtempaminities);
+      } else {
+        setSelectedItems([]);
+      }
     }
-  }, [currentServiceData?.amenites]);
+  }, [isEditMode]);
 
   const filteredOptions = OPTIONS.filter((o) => !selectedItems.includes(o));
   const [images, setImages] = useState(
@@ -65,14 +81,6 @@ function AddNewServices2({
       };
       return updatedService; // Return the updated array
     });
-  };
-
-  const addItem = (e) => {
-    e.preventDefault();
-    setItems([...items]);
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
   };
 
   // useEffect(() => {
