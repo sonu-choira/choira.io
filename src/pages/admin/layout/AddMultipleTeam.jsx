@@ -94,8 +94,18 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                     {team.photo ? (
                       <div>
                         <img
-                          src={URL.createObjectURL(team.photo)}
-                          alt={`Team ${index} Photo`}
+                          // src={URL.createObjectURL(team.photo)}
+                          src={team.photo}
+                          // src={
+                          //   team.photo
+                          //     ? team.photo.startsWith("http")
+                          //       ? team.photo // If `team.photo[0]` is a string URL
+                          //       : team.photo instanceof Blob
+                          //       ? URL.createObjectURL(team.photo) // If `team.roomPhotos[0]` is a Blob, create a URL for it
+                          //       : undefined // Default to undefined if `team.roomPhotos[0]` is not a string URL or a Blob
+                          //     : undefined // Default to undefined if `team.roomPhotos` is an empty array
+                          // }
+                          // alt={`Team ${index} Photo`}
                           style={{
                             maxWidth: "100px",
                             maxHeight: "100px",
@@ -214,10 +224,10 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                   />
                   <input
                     type="text"
-                    placeholder="Profile"
+                    placeholder="designation"
                     // value={team.profile}
                     onChange={(event) =>
-                      handleInputChange(event, index, "profile")
+                      handleInputChange(event, index, "designation")
                     }
                   />
                 </div>

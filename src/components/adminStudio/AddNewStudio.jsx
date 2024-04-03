@@ -53,7 +53,7 @@ function AddNewStudio({ setSelectTab }) {
   const [tabCount, setTabCount] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
   const [teamDetails, setTeamsDetails] = useState([
-    { photo: null, name: "", profile: "", designation: "" },
+    { photo: null, name: "", designation: "" },
   ]);
   const [selectedStudioAmenities, setSelectedStudioAmenities] = useState([]);
 

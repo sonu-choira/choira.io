@@ -185,10 +185,20 @@ function AddMultipleRooms({
                 {team.roomPhotos.length ? (
                   <div>
                     <img
+                      // src={
+                      //   team.roomPhotos.length
+                      //     ? URL.createObjectURL(team.roomPhotos[0])
+                      //     : ""
+                      // }
+
                       src={
                         team.roomPhotos.length
-                          ? URL.createObjectURL(team.roomPhotos[0])
-                          : ""
+                          ? team.roomPhotos[0].startsWith("http")
+                            ? team.roomPhotos[0] // If `team.roomPhotos[0]` is a string URL
+                            : team.roomPhotos[0] instanceof Blob
+                            ? URL.createObjectURL(team.roomPhotos[0]) // If `team.roomPhotos[0]` is a Blob, create a URL for it
+                            : undefined // Default to undefined if `team.roomPhotos[0]` is not a string URL or a Blob
+                          : undefined // Default to undefined if `team.roomPhotos` is an empty array
                       }
                     />
                   </div>

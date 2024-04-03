@@ -37,33 +37,34 @@ function AddNewRoom({
   const [selectedDate, setSelectedDate] = useState([]);
   const [time, setTime] = useState([]);
   const [bookingtime, setBookingtime] = useState([]);
+  const [getimgUrl, setGetimgUrl] = useState([]);
 
   let genreralStartTime;
   let genreralEndTime;
   let bookingStartTime;
   let bookingEndTime;
-  // useEffect(() => {
-  //   if (currentRoomsData?.generalTime?.startTime?.length == 5) {
-  //     genreralStartTime = String(
-  //       `${currentRoomsData?.generalTime?.startTime}:00`
-  //     );
-  //     genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}:00`);
+  useEffect(() => {
+    if (currentRoomsData?.generalTime?.startTime?.length == 5) {
+      genreralStartTime = String(
+        `${currentRoomsData?.generalTime?.startTime}:00`
+      );
+      genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}:00`);
 
-  //     bookingStartTime = String(`${currentRoomsData?.generalStartTime}:00`);
-  //     bookingEndTime = String(`${currentRoomsData?.generalEndTime}:00`);
-  //   } else {
-  //     genreralStartTime = String(`${currentRoomsData?.generalTime?.startTime}`);
-  //     genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}`);
+      bookingStartTime = String(`${currentRoomsData?.generalStartTime}:00`);
+      bookingEndTime = String(`${currentRoomsData?.generalEndTime}:00`);
+    } else {
+      genreralStartTime = String(`${currentRoomsData?.generalTime?.startTime}`);
+      genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}`);
 
-  //     bookingStartTime = String(`${currentRoomsData?.generalStartTime}`);
-  //     bookingEndTime = String(`${currentRoomsData?.generalEndTime}`);
-  //   }
+      bookingStartTime = String(`${currentRoomsData?.generalStartTime}`);
+      bookingEndTime = String(`${currentRoomsData?.generalEndTime}`);
+    }
 
-  //   console.log("genreralStartTime", genreralStartTime);
-  //   console.log("genreralStartTime", typeof genreralStartTime);
+    console.log("genreralStartTime", genreralStartTime);
+    console.log("genreralStartTime", typeof genreralStartTime);
 
-  //   console.log("genreralEndTime", genreralEndTime);
-  // }, [currentRoomsData]);
+    console.log("genreralEndTime", genreralEndTime);
+  }, [currentRoomsData]);
 
   useEffect(() => {
     console.log("rooms ka details change huaa haiiiiiiiiiiiiiiii");
@@ -86,12 +87,12 @@ function AddNewRoom({
     setrooms((prerooms) => {
       prerooms.map((rm, idex) => {
         if (idex === indexofrooms) {
-          rm.roomPhotos = images;
+          rm.roomPhotos = getimgUrl;
         }
       });
       return prerooms;
     });
-  }, [images]);
+  }, [getimgUrl]);
 
   useEffect(() => {
     setrooms((prerooms) => {
@@ -460,6 +461,8 @@ function AddNewRoom({
               images={images}
               setImages={setImages}
               isEditMode={isEditMode}
+              setGetimgUrl={setGetimgUrl}
+              getimgUrl={getimgUrl}
             />
 
             <div className={style.defaultLabel}>Amenities</div>
@@ -519,14 +522,18 @@ function AddNewRoom({
 
               <TimePicker.RangePicker
                 onChange={handelbookingTime}
-                // defaultValue={
-                //   isEditMode
-                //     ? [
-                //         dayjs(`${bookingStartTime}`, "HH:mm:ss"),
-                //         dayjs(`${bookingEndTime}`, "HH:mm:ss"),
-                //       ]
-                //     : []
-                // }
+                defaultValue={
+                  isEditMode
+                    ? [
+                        dayjs(bookingStartTime, "HH:mm:ss"),
+                        dayjs(bookingEndTime, "HH:mm:ss"),
+                      ]
+                    : // ? [
+                      //     dayjs(`${bookingStartTime}`, "HH:mm:ss"),
+                      //     dayjs(`${bookingEndTime}`, "HH:mm:ss"),
+                      //   ]
+                      []
+                }
                 style={{ height: "100%", outline: "none" }}
               />
             </div>
