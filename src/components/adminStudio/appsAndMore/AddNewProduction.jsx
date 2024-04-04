@@ -24,11 +24,14 @@ import AddMultipleTeam from "../../../pages/admin/layout/AddMultipleTeam";
 import AddmultipleServises from "../../../pages/admin/layout/AddmultipleServises";
 import AddNewServices2 from "./AddNewServices2";
 import appAndmoreApi from "../../../services/appAndmoreApi";
+import Swal from "sweetalert2";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
   const navCount = data?.state?.navCount;
   const [showMode, setshowMode] = useState(data?.state?.showMode || false);
+  // console.log("data.state", data.state.productData._id);
+  let serviceId = data?.state?.productData?._id;
   let bookingPageCount;
   if (data?.state?.bookingPageCount) {
     bookingPageCount = data?.state?.bookingPageCount;
@@ -65,7 +68,6 @@ function AddNewProduction({ setSelectTab }) {
       setService(data?.state?.productData.packages);
     }
   }, [data?.state?.productData?.packages]);
-
   // useEffect(() => {
   //   console.log("servicese chnage huaa hai ", service);
   // }, [service]);
@@ -130,18 +132,91 @@ function AddNewProduction({ setSelectTab }) {
       servicePhotos: serviceData.servicePhotos,
       description: serviceData.aboutUs,
     }));
-    alert("your service has been created ");
-    appAndmoreApi
-      .createService(sendataToApi)
-      .then((response) => {
-        console.log(
-          `====================> data create huaa hai  ${bookingPageCount} `,
-          response
-        );
-      })
-      .catch((error) => {
-        console.error("Error fetching studios:", error);
+    if (isEditMode) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Edit service!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          appAndmoreApi
+            .updateService(serviceId, sendataToApi)
+            .then((response) => {
+              if (response) {
+                Swal.fire({
+                  title: "Service Created!",
+                  text: "Your Data  has been saved.",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              }
+              console.log(
+                `====================> data create huaa hai  ${bookingPageCount} `,
+                response
+              );
+            })
+            .catch((error) => {
+              if (error) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              }
+              console.error("Error fetching studios:", error);
+            });
+        }
       });
+    } else {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Create service!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          appAndmoreApi
+            .createService(sendataToApi)
+            .then((response) => {
+              if (response) {
+                Swal.fire({
+                  title: "Service Created!",
+                  text: "Your Data  has been saved.",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              }
+              console.log(
+                `====================> data create huaa hai  ${bookingPageCount} `,
+                response
+              );
+            })
+            .catch((error) => {
+              if (error) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              }
+              console.error("Error fetching studios:", error);
+            });
+        }
+      });
+    }
   };
   // useEffect(() => {
   //   console.log("sendataToApi ===>", sendataToApi);

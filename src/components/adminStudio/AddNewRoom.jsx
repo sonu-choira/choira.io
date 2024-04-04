@@ -195,7 +195,7 @@ function AddNewRoom({
   // useEffect(() => {
   //   if (isEditMode) {
   //     setSelectedDate(
-  //       currentRoomsData?.bookingDays?.map((item) => item?.name) || []
+  //       currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
   //     );
   //     console.log(
   //       "currentRoomsData?.bookingDays?.map((item) => item?.name)",
@@ -204,19 +204,19 @@ function AddNewRoom({
   //   }
   // }, [currentRoomsData?.bookingDays?.length]);
 
-  useEffect(() => {
-    if (isEditMode) {
-      const bookingDays = currentRoomsData?.bookingDays;
-      console.log("currentRoomsData:", currentRoomsData);
-      if (bookingDays && bookingDays.length > 0) {
-        const selectedDateNames = bookingDays.map((item) => item?.name || item);
-        console.log("selectedDateNames:", selectedDateNames);
-        setSelectedDate(selectedDateNames);
-      } else {
-        setSelectedDate([]);
-      }
-    }
-  }, [isEditMode]);
+  // useEffect(() => {
+  //   if (isEditMode) {
+  //     const bookingDays = currentRoomsData?.bookingDays;
+  //     console.log("currentRoomsData:", currentRoomsData);
+  //     if (bookingDays && bookingDays.length > 0) {
+  //       const selectedDateNames = bookingDays.map((item) => item?.name || item);
+  //       console.log("selectedDateNames:", selectedDateNames);
+  //       setSelectedDate(selectedDateNames);
+  //     } else {
+  //       setSelectedDate([]);
+  //     }
+  //   }
+  // }, [isEditMode]);
 
   const filteredDates = days.filter((o) => !selectedDate.includes(o));
 
@@ -229,6 +229,12 @@ function AddNewRoom({
       currentRoomsData?.amenities?.map((item) => item) || []
     );
   }, [currentRoomsData?.amenities]);
+
+  useEffect(() => {
+    setSelectedDate(
+      currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
+    );
+  }, [currentRoomsData?.bookingDays]);
 
   // const handleCheckboxChange = (id) => {
   //   const updatedAmenities = selectedAmenities.includes(id)
@@ -251,23 +257,6 @@ function AddNewRoom({
   //   setSelectedDate(updatedDays);
   //   console.log(selectedDate);
   // };
-  const [iframeCode, setIframeCode] = useState("");
-  const [hasContent, setHasContent] = useState(false);
-
-  const handleIframeCodeChange = (e) => {
-    const inputCode = e.target.value;
-
-    // Update the state with the user-entered iframe code
-    setIframeCode(inputCode);
-
-    // Update hasContent state based on whether there is content in the textarea
-    setHasContent(inputCode.trim() !== "");
-  };
-
-  const [name, setName] = useState("");
-  const onNameChange = (event) => {
-    setName(event.target.value);
-  };
 
   // const [temproomdetails, settemproomdetails] = useState( {
   //   roomName: "",

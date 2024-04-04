@@ -25,6 +25,7 @@ import AddMultipleRooms from "../../pages/admin/layout/AddMultipleRooms";
 import AddNewRoom from "./AddNewRoom";
 import Button from "../../pages/admin/layout/Button";
 import appAndmoreApi from "../../services/appAndmoreApi";
+import Swal from "sweetalert2";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -155,25 +156,28 @@ function AddNewStudio({ setSelectTab }) {
     });
   }, [teamDetails.length]);
 
-  useEffect(() => {
-    setStudioDetails((prevdata) => {
-      prevdata.roomsDetails = rooms;
-      return prevdata;
-    });
-  }, [rooms.length]);
-
   // useEffect(() => {
   //   setStudioDetails((prevdata) => {
-  //     return {
-  //       ...prevdata,
-  //       roomsDetails: rooms,
-  //     };
+  //     prevdata.roomsDetails = rooms;
+  //     return prevdata;
   //   });
-  // }, [rooms.length]);
+  // }, [rooms?.length]);
 
   useEffect(() => {
     setStudioDetails((prevdata) => {
-      prevdata.amenities = selectedStudioAmenities;
+      return {
+        ...prevdata,
+        roomsDetails: rooms,
+      };
+    });
+  }, [rooms]);
+
+  useEffect(() => {
+    setStudioDetails((prevdata) => {
+      prevdata.amenities = selectedStudioAmenities.map((name, index) => ({
+        id: index,
+        name,
+      }));
       return prevdata;
     });
   }, [selectedStudioAmenities.length]);
@@ -215,7 +219,7 @@ function AddNewStudio({ setSelectTab }) {
 
   useEffect(() => {
     setSelectedStudioAmenities(
-      studioDetails?.amenities?.map((item) => item?.name) || []
+      studioDetails?.amenities?.map((item) => item?.name || item) || []
     );
   }, [studioDetails?.amenities]);
 
@@ -225,15 +229,47 @@ function AddNewStudio({ setSelectTab }) {
     //   submitButtonRef.current.click();
 
     // }
-    alert("your Studio has been created");
-    appAndmoreApi
-      .createStudio(studioDetails)
-      .then((response) => {
-        console.log(`====================> data create huaa hai   `, response);
-      })
-      .catch((error) => {
-        console.error("Error fetching studios:", error);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Create it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        appAndmoreApi
+          .createStudio(studioDetails)
+          .then((response) => {
+            console.log(
+              `====================> data create huaa hai   `,
+              response
+            );
+            if (response) {
+              Swal.fire({
+                title: "Studio Created!",
+                text: "Your Data  has been saved.",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1800,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching studios:", error);
+            if (error) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                showConfirmButton: false,
+                timer: 1800,
+              });
+            }
+          });
+      }
+    });
   };
   // const [sendStudioDetailtApi, setSendStudioDetailtApi] = useState({
   //   fullName: "",

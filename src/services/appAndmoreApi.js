@@ -51,6 +51,17 @@ class Appapi{
       return response.data;
    
      };
+
+   updateService = async (serviceId, serviceData) => {
+      const response = await api.put(`services/update/${serviceId}`,
+      serviceData
+      );
+      const {status} = response.data
+      console.log("postdata ===>", response.data)
+      return response.data;
+   
+     };
+
 }
 
 
