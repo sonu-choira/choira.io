@@ -24,6 +24,8 @@ import { BiSearchAlt } from "react-icons/bi";
 import { RiExpandUpDownLine } from "react-icons/ri";
 import { CiFilter } from "react-icons/ci";
 import { DatePicker, Space } from "antd";
+import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter";
+import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
 const onChange = (date, dateString) => {
   console.log(date, dateString);
 };
@@ -108,12 +110,60 @@ function AllStudioDetail2({
   };
   const [showpricefilter, setshowpricefilter] = useState(false);
   const handelpriceFilter = () => {
-    setshowpricefilter((prevState) => !prevState);
+    setshowpricefilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowloactionfilter(false);
+        setShowRoomFilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
   };
+
   const [showloactionfilter, setshowloactionfilter] = useState(false);
   const handellocationFilter = () => {
-    setshowloactionfilter((prevState) => !prevState);
+    setshowloactionfilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setShowRoomFilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
   };
+
+  const [showRoomFilter, setShowRoomFilter] = useState(false);
+  const handelRoomFilter = () => {
+    setShowRoomFilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setshowloactionfilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
+
+  const [showstatusFilter, setShowstatusFilter] = useState(false);
+  const handelStatusFilter = () => {
+    setShowstatusFilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setshowloactionfilter(false);
+        setShowRoomFilter(false);
+      }
+      return !prevState;
+    });
+  };
+
+  const city = ["Mumbai", "Delhi", "Bangalore", "Chennai"];
+  const room = ["1", "2", "3", "4", "5"];
+  const status = ["active", "inactive"];
+
   return (
     <>
       <div className={style.studioTabelDiv}>
@@ -142,26 +192,10 @@ function AllStudioDetail2({
                   <div className={style.headingContainer}>
                     Price
                     <div className={style.filterBox}>
-                      <CiFilter onClick={handelpriceFilter} />
-                      {showpricefilter ? (
-                        <div className={style.filteractionBox}>
-                          <div>Price Range</div>
-                          <div>
-                            <p>start Price</p>
-                            <input type="text" placeholder="₹|" />
-                          </div>
-                          <div>
-                            <p>End Price</p>
-                            <input type="text" placeholder="₹|" />
-                          </div>
-                          <div>
-                            <p>reset </p>
-                            <Button name={"ok"} />
-                          </div>
-                        </div>
-                      ) : (
-                        ""
-                      )}
+                      <span onClick={handelpriceFilter}>
+                        <CiFilter />
+                      </span>
+                      {showpricefilter ? <PriceFilter /> : ""}
                     </div>
                   </div>
                 </th>
@@ -170,53 +204,10 @@ function AllStudioDetail2({
                   <div className={style.headingContainer}>
                     Location
                     <div className={style.filterBox}>
-                      <CiFilter onClick={handellocationFilter} />
-                      {showloactionfilter ? (
-                        <div className={style.filteractionBox2}>
-                          <div>
-                            <input
-                              type="text"
-                              placeholder="Search for Region"
-                            />
-                          </div>
-                          <div>
-                            <div>
-                              <input
-                                type="checkbox"
-                                name="mumbai"
-                                id="mumbai"
-                              />
-                              <label htmlFor="mumbai">Mumbai</label>
-                            </div>
-                          </div>
-                          <div>
-                            <div>
-                              <input
-                                type="checkbox"
-                                name="mumbai"
-                                id="mumbai"
-                              />
-                              <label htmlFor="mumbai">Mumbai</label>
-                            </div>
-                          </div>
-                          <div>
-                            <div>
-                              <input
-                                type="checkbox"
-                                name="mumbai"
-                                id="mumbai"
-                              />
-                              <label htmlFor="mumbai">Mumbai</label>
-                            </div>
-                          </div>
-                          <div style={{ justifyContent: "space-around" }}>
-                            <p>reset </p>
-                            <Button name={"ok"} />
-                          </div>
-                        </div>
-                      ) : (
-                        ""
-                      )}
+                      <span onClick={handellocationFilter}>
+                        <CiFilter />
+                      </span>
+                      {showloactionfilter ? <CheckboxFilter data={city} /> : ""}
                     </div>
                   </div>
                 </th>
@@ -224,7 +215,10 @@ function AllStudioDetail2({
                   <div className={style.headingContainer}>
                     No. of Rooms
                     <div className={style.filterBox}>
-                      <CiFilter />
+                      <span onClick={handelRoomFilter}>
+                        <CiFilter />
+                      </span>
+                      {showRoomFilter ? <CheckboxFilter data={room} /> : ""}
                     </div>
                   </div>
                 </th>
@@ -232,7 +226,17 @@ function AllStudioDetail2({
                   <div className={style.headingContainer}>
                     Activity Status
                     <div className={style.filterBox}>
-                      <CiFilter />
+                      <span onClick={handelStatusFilter}>
+                        <CiFilter />
+                      </span>
+                      {showstatusFilter ? (
+                        <CheckboxFilter
+                          data={status}
+                          cusstyle={{ left: "-355%" }}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </th>

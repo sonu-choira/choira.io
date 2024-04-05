@@ -501,7 +501,7 @@ function AddNewProduction({ setSelectTab }) {
                         type="text"
                         id="About"
                         placeholder="Enter About Services"
-                        value={productionData?.aboutUs?.aboutUs}
+                        value={productionData?.aboutUs}
                         onChange={(event) =>
                           handleStudioDetailsChange(event, "aboutUs")
                         }
