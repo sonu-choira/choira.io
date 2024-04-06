@@ -148,7 +148,7 @@ function AddNewProduction({ setSelectTab }) {
             .then((response) => {
               if (response) {
                 Swal.fire({
-                  title: "Service Created!",
+                  title: "Service Updated!",
                   text: "Your Data  has been saved.",
                   icon: "success",
                   showConfirmButton: false,
@@ -228,7 +228,7 @@ function AddNewProduction({ setSelectTab }) {
       serviceName: serviceData.fullName,
       startingPrice: serviceData.price,
       offerings: serviceData.amenities,
-      TotalServices: serviceData.packages.length,
+      TotalServices: serviceData?.packages?.length,
       servicePlans: serviceData.packages,
       servicePhotos: serviceData.servicePhotos,
       description: serviceData.aboutUs,
@@ -282,6 +282,7 @@ function AddNewProduction({ setSelectTab }) {
       ...prevState,
       [field]: event.target.value,
     }));
+    console.log(field);
   };
 
   useEffect(() => {
@@ -468,7 +469,7 @@ function AddNewProduction({ setSelectTab }) {
                           placeholder="Select one or more Amenities"
                           value={
                             productionData?.amenities?.map(
-                              (item) => item.name
+                              (item) => item?.name || item
                             ) || []
                           }
                           onChange={setSelectedItems}
@@ -502,6 +503,7 @@ function AddNewProduction({ setSelectTab }) {
                         id="About"
                         placeholder="Enter About Services"
                         value={productionData?.aboutUs}
+                        name="aboutUs"
                         onChange={(event) =>
                           handleStudioDetailsChange(event, "aboutUs")
                         }

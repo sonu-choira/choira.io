@@ -30,7 +30,7 @@ function DragAndDropImageDiv({
   const uploadimagetoDataBase = (e) => {
     e.preventDefault();
     console.log("Data being sent:", images);
-    if (images.length <= 0) {
+    if (images?.length <= 0) {
       Swal.fire({
         icon: "error",
         title: "Oops...",

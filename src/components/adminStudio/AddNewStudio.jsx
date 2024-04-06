@@ -70,6 +70,7 @@ function AddNewStudio({ setSelectTab }) {
       bookingStartTime: [],
       bookingEndTime: [],
       roomPhotos: [],
+      roomPhotosUrl: [],
       amenities: [],
       roomDetails: "",
     },
@@ -224,11 +225,6 @@ function AddNewStudio({ setSelectTab }) {
   }, [studioDetails?.amenities]);
 
   const handleSubmitButtonClick = () => {
-    // Programmatically trigger click event on the hidden submit button
-    // if (submitButtonRef.current) {
-    //   submitButtonRef.current.click();
-
-    // }
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -239,17 +235,35 @@ function AddNewStudio({ setSelectTab }) {
       confirmButtonText: "Yes, Create it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        const updatedRoomsDetails = studioDetails.roomsDetails.map((room) => ({
+          ...room,
+          roomPhotos: room.roomPhotosUrl,
+        }));
+
+        const updatedRoomsDetailsWithoutUrl = updatedRoomsDetails.map(
+          (room) => {
+            const { roomPhotosUrl, ...updatedRoom } = room;
+            return updatedRoom;
+          }
+        );
+
+        const updatedStudioDetails = {
+          ...studioDetails,
+          roomsDetails: updatedRoomsDetailsWithoutUrl,
+        };
+        console.log("updatedStudioDetails", updatedStudioDetails);
+
         appAndmoreApi
-          .createStudio(studioDetails)
+          .createStudio(updatedStudioDetails)
           .then((response) => {
             console.log(
-              `====================> data create huaa hai   `,
+              "====================> data create huaa hai   ",
               response
             );
             if (response) {
               Swal.fire({
                 title: "Studio Created!",
-                text: "Your Data  has been saved.",
+                text: "Your Data has been saved.",
                 icon: "success",
                 showConfirmButton: false,
                 timer: 1800,
@@ -271,6 +285,7 @@ function AddNewStudio({ setSelectTab }) {
       }
     });
   };
+
   // const [sendStudioDetailtApi, setSendStudioDetailtApi] = useState({
   //   fullName: "",
   //   setStudioDetails: "",

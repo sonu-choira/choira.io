@@ -27,6 +27,11 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
     let imagefile = event.target.files[0];
     imageUploadapi.singleImgUpload(imagefile).then((response) => {
       console.log("Image links created:", response.imageUrl);
+      const newTeams = [...teamDetails];
+
+      newTeams[index].photo = response?.imageUrl;
+      setTeamsDetails(newTeams);
+
       if (response.imageUrl) {
         Swal.fire({
           title: "Images uploaded!",
@@ -196,14 +201,27 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                   />
                   {team.photo && (
                     <div>
-                      <img
-                        src={URL.createObjectURL(team.photo)}
-                        alt={`Team ${index} Photo`}
-                        style={{
-                          maxWidth: "100px",
-                          maxHeight: "100px",
-                        }}
-                      />
+                      {typeof team.photo === "string" &&
+                      team.photo.startsWith("http") ? (
+                        <img
+                          src={team.photo}
+                          alt={`Team ${index} Photo`}
+                          style={{
+                            maxWidth: "100px",
+                            maxHeight: "100px",
+                          }}
+                        />
+                      ) : team.photo instanceof Blob ||
+                        team.photo instanceof File ? (
+                        <img
+                          src={URL.createObjectURL(team.photo)}
+                          alt={`Team ${index} Photo`}
+                          style={{
+                            maxWidth: "100px",
+                            maxHeight: "100px",
+                          }}
+                        />
+                      ) : null}
                       <span
                         className={style.cancelImageUpload}
                         onClick={() => handleCancelImage(index, "photo")}

@@ -87,7 +87,18 @@ function AddNewRoom({
     setrooms((prerooms) => {
       prerooms.map((rm, idex) => {
         if (idex === indexofrooms) {
-          rm.roomPhotos = getimgUrl;
+          rm.roomPhotos = images;
+        }
+      });
+      return prerooms;
+    });
+  }, [images]);
+
+  useEffect(() => {
+    setrooms((prerooms) => {
+      prerooms.map((rm, idex) => {
+        if (idex === indexofrooms) {
+          rm.roomPhotosUrl = getimgUrl;
         }
       });
       return prerooms;

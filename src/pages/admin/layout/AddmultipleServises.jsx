@@ -206,14 +206,26 @@ function AddmultipleServises({
                   value={team.name}
                   onChange={(event) => handleInputChange(event, index, "name")}
                 />
-                <input
-                  type="text"
-                  placeholder="Profile"
-                  value={team.profile}
-                  onChange={(event) =>
-                    handleInputChange(event, index, "profile")
-                  }
-                />
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <small
+                    style={{
+                      position: "absolute",
+                      left: "40%",
+                      fontSize: "1vmax",
+                    }}
+                  >
+                    Starting Price ₹
+                  </small>
+                  <input
+                    style={{ paddingLeft: "55%" }}
+                    type="text"
+                    placeholder=""
+                    value={team.price}
+                    onChange={(event) =>
+                      handleInputChange(event, index, "price")
+                    }
+                  />
+                </div>
                 <div className={style.editpencil}>
                   <FaPencilAlt onClick={() => handleEditService(index)} />
                 </div>

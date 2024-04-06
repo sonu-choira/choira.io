@@ -102,7 +102,7 @@ function AddMultipleRooms({
                   <MdAddAPhoto style={hideAddPhotoIcon(team)} />
                 </label>
 
-                {team.roomPhotos.length ? (
+                {team?.roomPhotos?.length ? (
                   <div>
                     <img
                       src={
@@ -185,15 +185,10 @@ function AddMultipleRooms({
                 {team.roomPhotos.length ? (
                   <div>
                     <img
-                      // src={
-                      //   team.roomPhotos.length
-                      //     ? URL.createObjectURL(team.roomPhotos[0])
-                      //     : ""
-                      // }
-
                       src={
                         team.roomPhotos.length
-                          ? team.roomPhotos[0].startsWith("http")
+                          ? typeof team.roomPhotos[0] === "string" &&
+                            team.roomPhotos[0].startsWith("http")
                             ? team.roomPhotos[0] // If `team.roomPhotos[0]` is a string URL
                             : team.roomPhotos[0] instanceof Blob
                             ? URL.createObjectURL(team.roomPhotos[0]) // If `team.roomPhotos[0]` is a Blob, create a URL for it
@@ -215,14 +210,26 @@ function AddMultipleRooms({
                     handleInputChange(event, index, "roomName")
                   }
                 />
-                <input
-                  type="text"
-                  placeholder="Profile"
-                  value={team.profile}
-                  onChange={(event) =>
-                    handleInputChange(event, index, "profile")
-                  }
-                />
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <small
+                    style={{
+                      position: "absolute",
+                      left: "40%",
+                      fontSize: "1vmax",
+                    }}
+                  >
+                    pricePerHour ₹
+                  </small>
+                  <input
+                    style={{ paddingLeft: "55%" }}
+                    type="text"
+                    placeholder=""
+                    value={team.pricePerHour}
+                    onChange={(event) =>
+                      handleInputChange(event, index, "pricePerHour")
+                    }
+                  />
+                </div>
                 <div className={style.editpencil}>
                   <FaPencilAlt onClick={() => handelEditRooms(index)} />
                 </div>
