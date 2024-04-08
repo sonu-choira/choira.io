@@ -61,6 +61,16 @@ class Appapi{
       return response.data;
    
      };
+     
+   updateStudio = async (studioId, studioData) => {
+      const response = await api.patch(`studios/${studioId}`,
+      studioData
+      );
+      const {status} = response.data
+      console.log("postdata ===>", response.data)
+      return response.data;
+   
+     };
 
 }
 

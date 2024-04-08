@@ -225,6 +225,69 @@ function AddNewStudio({ setSelectTab }) {
   }, [studioDetails?.amenities]);
 
   const handleSubmitButtonClick = () => {
+    if (isEditMode) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Create it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const updatedRoomsDetails = studioDetails.roomsDetails.map(
+            (room) => ({
+              ...room,
+              roomPhotos: room.roomPhotosUrl,
+            })
+          );
+
+          const updatedRoomsDetailsWithoutUrl = updatedRoomsDetails.map(
+            (room) => {
+              const { roomPhotosUrl, ...updatedRoom } = room;
+              return updatedRoom;
+            }
+          );
+
+          const updatedStudioDetails = {
+            ...studioDetails,
+            roomsDetails: updatedRoomsDetailsWithoutUrl,
+          };
+          console.log("updatedStudioDetails", updatedStudioDetails);
+
+          appAndmoreApi
+            .updateStudio(updatedStudioDetails)
+            .then((response) => {
+              console.log(
+                "====================> data create huaa hai   ",
+                response
+              );
+              if (response) {
+                Swal.fire({
+                  title: "Studio Created!",
+                  text: "Your Data has been saved.",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching studios:", error);
+              if (error) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              }
+            });
+        }
+      });
+    }
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
