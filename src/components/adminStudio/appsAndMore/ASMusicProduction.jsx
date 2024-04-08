@@ -146,9 +146,9 @@ function ASMusicProduction({
                         }}
                       >
                         <div className={style.studioImage}>
-                          {products.studioPhotos ? (
+                          {products.servicePhotos ? (
                             <img
-                              src={products.studioPhotos}
+                              src={products.servicePhotos[0]}
                               alt=""
                               onError={(e) => {
                                 e.target.src = imageNotFound;
@@ -162,7 +162,7 @@ function ASMusicProduction({
                       </td>
                       <td>Starting from ₹{products.price}</td>
                       <td>
-                        {products.address}
+                        {products?.packages?.length}
                         <br />
                         <small> {products.state}</small>
                       </td>

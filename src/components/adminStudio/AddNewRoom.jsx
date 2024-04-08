@@ -27,6 +27,7 @@ function AddNewRoom({
   rooms,
   indexofrooms,
   setIndexofrooms,
+  showMode,
 }) {
   const currentRoomsData = rooms[indexofrooms] || "";
   const customStyles = {
@@ -351,7 +352,14 @@ function AddNewRoom({
     <>
       <div className={style.addNewStudioTitle}>Add new room</div>
       <div className={style.addNewRoomPage}>
-        <div>
+        <div
+          style={{
+            position: showMode ? "relative" : "",
+            overflow: "hidden",
+          }}
+        >
+          {showMode ? <p className={style.showmode}></p> : ""}
+
           <div>
             <div className={style.addNewStudioinputBox}>
               <label htmlFor="RoomName">Room Name</label>
@@ -394,36 +402,21 @@ function AddNewRoom({
                 onChange={handleDiscountChange}
               />
             </div>
-
-            <div className={style.defaultLabel}>Booking Days</div>
-            {/* <div className={style.amenitesCheckbox}>
-              {days.map((day) => (
-                <div key={day.id}>
-                  <input
-                    type="checkbox"
-                    id={day.id}
-                    value={day.id}
-                    checked={selectedDate.includes(day.id)}
-                    onChange={() => handledaysCheckboxChange(day.id)}
-                  />
-                  &nbsp;
-                  <label htmlFor={day.id}>{day.name}</label>
-                </div>
-              ))}
-            </div> */}
-
-            <Select
-              id="Dates"
-              mode="multiple"
-              placeholder="Select Bookig Dates"
-              value={selectedDate}
-              onChange={setSelectedDate}
-              // style={customStyles}
-              options={filteredDates?.map((item) => ({
-                value: item,
-                label: item,
-              }))}
-            />
+            <div className={style.addNewStudioinputBox}>
+              <label htmlFor="Dates">Booking Days </label>
+              <Select
+                id="Dates"
+                mode="multiple"
+                placeholder="Select Bookig Dates"
+                value={selectedDate}
+                onChange={setSelectedDate}
+                // style={customStyles}
+                options={filteredDates?.map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
+              />
+            </div>
 
             <div className={style.addNewStudioinputBox}>
               <label>General Start & End Time</label>
@@ -464,36 +457,22 @@ function AddNewRoom({
               setGetimgUrl={setGetimgUrl}
               getimgUrl={getimgUrl}
             />
+            <div className={style.addNewStudioinputBox}>
+              <label htmlFor="roomAmenities">Amenities </label>
 
-            <div className={style.defaultLabel}>Amenities</div>
-            {/* <div className={style.amenitesCheckbox}>
-              {amenitiesList.map((amenity) => (
-                <div key={amenity.id}>
-                  <input
-                    type="checkbox"
-                    id={amenity.id}
-                    value={amenity.id}
-                    checked={selectedAmenities.includes(amenity.id)}
-                    onChange={() => handleCheckboxChange(amenity.id)}
-                  />
-                  &nbsp;
-                  <label htmlFor={amenity.id}>{amenity.label}</label>
-                </div>
-              ))}
-              
-            </div> */}
-            <Select
-              id="Amenites"
-              mode="multiple"
-              placeholder="Select Amenites"
-              value={selectedAmenities}
-              onChange={setSelectedAmenities}
-              // style={customStyles}
-              options={filteredAmenities?.map((item) => ({
-                value: item,
-                label: item,
-              }))}
-            />
+              <Select
+                id="roomAmenities"
+                mode="multiple"
+                placeholder="Select Amenites"
+                value={selectedAmenities}
+                onChange={setSelectedAmenities}
+                // style={customStyles}
+                options={filteredAmenities?.map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
+              />
+            </div>
 
             <div className={style.addNewStudioinputBox2}>
               <label htmlFor="RoomDetails">Room Details</label>

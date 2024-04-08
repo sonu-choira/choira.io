@@ -3,6 +3,7 @@ import cross from "../../../assets/cross.svg";
 import style from "../studios/studio.module.css";
 import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
+import { FaEye } from "react-icons/fa6";
 
 function AddmultipleServises({
   service,
@@ -11,7 +12,9 @@ function AddmultipleServises({
   isEditMode,
   setShowServices,
   setIndexofServices,
+  showMode,
 }) {
+  // alert(showMode);
   useEffect(() => {
     console.log("ho raha hai change ", service);
   }, [service]);
@@ -97,13 +100,7 @@ function AddmultipleServises({
 
                 {team?.photo_url?.length ? (
                   <div>
-                    <img
-                    // src={
-                    //   team.photo_url.length
-                    //     ? URL.createObjectURL(team.photo_url[0])
-                    //     : ""
-                    // }
-                    />
+                    <img src={team?.photo_url[0]} />
                   </div>
                 ) : (
                   ""
@@ -138,7 +135,11 @@ function AddmultipleServises({
                   />
                 </div>
                 <div className={style.editpencil}>
-                  <FaPencilAlt onClick={() => handleEditService(index)} />
+                  {showMode ? (
+                    <FaEye onClick={() => handleEditService(index)} />
+                  ) : (
+                    <FaPencilAlt onClick={() => handleEditService(index)} />
+                  )}
                 </div>
               </div>
               {service.length > 1 && (
@@ -179,6 +180,7 @@ function AddmultipleServises({
                 {team.photo_url && (
                   <div>
                     <img
+                      src={team?.photo_url[0]}
                       // src={
                       //   team.photo_url.length > 0
                       //     ? URL.createObjectURL(team.photo_url[0])
@@ -227,7 +229,11 @@ function AddmultipleServises({
                   />
                 </div>
                 <div className={style.editpencil}>
-                  <FaPencilAlt onClick={() => handleEditService(index)} />
+                  {showMode ? (
+                    <FaEye onClick={() => handleEditService(index)} />
+                  ) : (
+                    <FaPencilAlt onClick={() => handleEditService(index)} />
+                  )}
                 </div>
               </div>
 

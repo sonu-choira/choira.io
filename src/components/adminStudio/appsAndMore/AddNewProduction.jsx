@@ -29,7 +29,8 @@ import Swal from "sweetalert2";
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
   const navCount = data?.state?.navCount;
-  const [showMode, setshowMode] = useState(data?.state?.showMode || false);
+  const showMode = data?.state?.showMode || false;
+
   // console.log("data.state", data.state.productData._id);
   let serviceId = data?.state?.productData?._id;
   let bookingPageCount;
@@ -96,7 +97,7 @@ function AddNewProduction({ setSelectTab }) {
     discographyDetails: [],
     featuredReviews: [],
     fullName: "",
-    isActive: 0,
+    service_status: 0,
     packages: [],
     price: "",
     reviews: [],
@@ -112,26 +113,42 @@ function AddNewProduction({ setSelectTab }) {
     startingPrice: "",
     offerings: [],
     TotalServices: "",
-    servicePlans: [],
-    servicePhotos: [],
+
+    ServicePhotos: [],
     description: [],
     portfolio: [],
     userReviews: {},
+    packages: [],
+
     type: bookingPageCount,
-    isActive: 0,
+    isActive: 1,
   });
 
   const handelSavebtn = () => {
-    setsendataToApi((prev) => ({
-      ...prev,
+    // setsendataToApi((prev) => ({
+    //   ...prev,
+    //   serviceName: serviceData.fullName,
+    //   startingPrice: serviceData.price,
+    //   offerings: serviceData.amenities,
+    //   TotalServices: serviceData.packages.length,
+    //   servicePlans: serviceData.packages,
+    //   servicePhotos: serviceData.servicePhotos,
+    //   description: serviceData.aboutUs,
+    //   packages: serviceData.packages,
+    // }));
+
+    const updatedData = {
+      ...sendataToApi, // Copy the current state
       serviceName: serviceData.fullName,
       startingPrice: serviceData.price,
       offerings: serviceData.amenities,
-      TotalServices: serviceData.packages.length,
-      servicePlans: serviceData.packages,
-      servicePhotos: serviceData.servicePhotos,
+      TotalServices: serviceData?.packages?.length,
+      packages: serviceData.packages,
+      ServicePhotos: getimgUrl,
       description: serviceData.aboutUs,
-    }));
+    };
+    console.log(updatedData);
+
     if (isEditMode) {
       Swal.fire({
         title: "Are you sure?",
@@ -144,7 +161,7 @@ function AddNewProduction({ setSelectTab }) {
       }).then((result) => {
         if (result.isConfirmed) {
           appAndmoreApi
-            .updateService(serviceId, sendataToApi)
+            .updateService(serviceId, updatedData)
             .then((response) => {
               if (response) {
                 Swal.fire({
@@ -186,7 +203,7 @@ function AddNewProduction({ setSelectTab }) {
       }).then((result) => {
         if (result.isConfirmed) {
           appAndmoreApi
-            .createService(sendataToApi)
+            .createService(updatedData)
             .then((response) => {
               if (response) {
                 Swal.fire({
@@ -418,6 +435,7 @@ function AddNewProduction({ setSelectTab }) {
               setService={setService}
               service={service}
               isEditMode={isEditMode}
+              showMode={showMode}
             />
           ) : (
             <>
@@ -511,6 +529,7 @@ function AddNewProduction({ setSelectTab }) {
                     </div>
                     <div>
                       <AddmultipleServises
+                        showMode={showMode}
                         teamDetails={teamDetails}
                         setTeamsDetails={setTeamsDetails}
                         data={data}
@@ -532,6 +551,7 @@ function AddNewProduction({ setSelectTab }) {
                       setImages={setImages}
                       isEditMode={isEditMode}
                       getimgUrl={getimgUrl}
+                      setGetimgUrl={setGetimgUrl}
                     />
 
                     <div
@@ -611,7 +631,7 @@ function AddNewProduction({ setSelectTab }) {
               </form>
               <StudioFooter
                 backOnclick={gotoadminpage}
-                saveOnclick={handelSavebtn}
+                saveOnclick={showMode ? "" : handelSavebtn}
               />
             </>
           )}

@@ -47,8 +47,11 @@ function AddNewStudio({ setSelectTab }) {
 
   const data = useLocation();
   console.log("the data id  ================== >", data?.state?.productData);
+
+  const userStudioid = data?.state?.productData?._id;
   // alert(data.state.navCount);
-  const [showMode, setshowMode] = useState(data?.state?.showMode || false);
+  const showMode = data?.state?.showMode || false;
+  // const [showMode, setshowMode] = useState(data?.state?.showMode || false);
 
   const navCount = data?.state?.navCount;
   const [tabCount, setTabCount] = useState();
@@ -233,6 +236,68 @@ function AddNewStudio({ setSelectTab }) {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Update  it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const updatedRoomsDetails = studioDetails.roomsDetails.map(
+            (room) => ({
+              ...room,
+              roomPhotos: room.roomPhotosUrl,
+            })
+          );
+
+          const updatedRoomsDetailsWithoutUrl = updatedRoomsDetails.map(
+            (room) => {
+              const { roomPhotosUrl, ...updatedRoom } = room;
+              return updatedRoom;
+            }
+          );
+
+          const updatedStudioDetails = {
+            ...studioDetails,
+            roomsDetails: updatedRoomsDetailsWithoutUrl,
+          };
+          console.log("updatedStudioDetails", updatedStudioDetails);
+
+          appAndmoreApi
+            .updateStudio(userStudioid, updatedStudioDetails)
+            .then((response) => {
+              console.log(
+                "====================> data create huaa hai   ",
+                response
+              );
+              if (response) {
+                Swal.fire({
+                  title: "Studio Update!",
+                  text: "Your Data has been saved.",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching studios:", error);
+              if (error) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              }
+            });
+        }
+      });
+    } else {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
         confirmButtonText: "Yes, Create it!",
       }).then((result) => {
         if (result.isConfirmed) {
@@ -257,7 +322,7 @@ function AddNewStudio({ setSelectTab }) {
           console.log("updatedStudioDetails", updatedStudioDetails);
 
           appAndmoreApi
-            .updateStudio(updatedStudioDetails)
+            .createStudio(updatedStudioDetails)
             .then((response) => {
               console.log(
                 "====================> data create huaa hai   ",
@@ -288,108 +353,7 @@ function AddNewStudio({ setSelectTab }) {
         }
       });
     }
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Create it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedRoomsDetails = studioDetails.roomsDetails.map((room) => ({
-          ...room,
-          roomPhotos: room.roomPhotosUrl,
-        }));
-
-        const updatedRoomsDetailsWithoutUrl = updatedRoomsDetails.map(
-          (room) => {
-            const { roomPhotosUrl, ...updatedRoom } = room;
-            return updatedRoom;
-          }
-        );
-
-        const updatedStudioDetails = {
-          ...studioDetails,
-          roomsDetails: updatedRoomsDetailsWithoutUrl,
-        };
-        console.log("updatedStudioDetails", updatedStudioDetails);
-
-        appAndmoreApi
-          .createStudio(updatedStudioDetails)
-          .then((response) => {
-            console.log(
-              "====================> data create huaa hai   ",
-              response
-            );
-            if (response) {
-              Swal.fire({
-                title: "Studio Created!",
-                text: "Your Data has been saved.",
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1800,
-              });
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching studios:", error);
-            if (error) {
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Something went wrong!",
-                showConfirmButton: false,
-                timer: 1800,
-              });
-            }
-          });
-      }
-    });
   };
-
-  // const [sendStudioDetailtApi, setSendStudioDetailtApi] = useState({
-  //   fullName: "",
-  //   setStudioDetails: "",
-  //   mapLink: "",
-  //   city: "",
-  //   state: "",
-  //   area: "",
-  //   pincode: "",
-  //   pricePerHour: "",
-  //   availabilities: [],
-  //   amenities: [],
-  //   totalRooms: "",
-  //   roomsDetails: [],
-  //   maxGuests: "",
-  //   studioPhotos: [],
-  //   aboutUs: "",
-  //   teamDetails: [],
-  //   clientPhotos: [],
-  //   reviews: {},
-  //   featuredReviews: [],
-  // });
-
-  // useEffect(() => {
-  //   setSendStudioDetailtApi((prev) => {
-  //     return { ...prev, ...studioDetails };
-  //   });
-  // }, [studioDetails]);
-
-  // useEffect(() => {
-  //   console.log(
-  //     "sendStudioDetailtApi change huaa haiiiiiiiii-=======>->>>",
-  //     sendStudioDetailtApi
-  //   );
-  // }, [sendStudioDetailtApi]);
-  // const handleSubmit = (event) => {
-  //   event.preventDefault(); // Prevent default form submission behavior
-  //   // Your submission logic goes here
-  // };
-  // setSendStudioDetailtApi({
-
-  // });
 
   return (
     <>
@@ -426,6 +390,7 @@ function AddNewStudio({ setSelectTab }) {
               setrooms={setrooms}
               setIndexofrooms={setIndexofrooms}
               indexofrooms={indexofrooms}
+              showMode={showMode}
             />
           ) : (
             <>
@@ -440,7 +405,6 @@ function AddNewStudio({ setSelectTab }) {
                   : "Add new studio"}
               </div>
               <form className={style.addNewStudioPage}>
-                {/* {showMode ? ()} */}
                 <div
                   style={{
                     position: showMode ? "relative" : "",
@@ -707,6 +671,7 @@ function AddNewStudio({ setSelectTab }) {
                           indexofrooms={indexofrooms}
                           isEditMode={isEditMode}
                           setIndexofrooms={setIndexofrooms}
+                          showMode={showMode}
                         />
                       </div>
                       <div>
@@ -729,7 +694,7 @@ function AddNewStudio({ setSelectTab }) {
                 setSelectTab={setSelectTab}
                 backOnclick={gotoadminpage}
                 saveType={"submit"}
-                saveOnclick={handleSubmitButtonClick}
+                saveOnclick={showMode ? "" : handleSubmitButtonClick}
               />
             </>
           )}

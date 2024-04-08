@@ -3,6 +3,7 @@ import cross from "../../../assets/cross.svg";
 import style from "../studios/studio.module.css";
 import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 function AddMultipleRooms({
   rooms,
@@ -11,6 +12,7 @@ function AddMultipleRooms({
   isEditMode,
   setshowRoomsDetails,
   setIndexofrooms,
+  showMode,
 }) {
   // useEffect(() => {
   //   console.log("ho raha hai change ", rooms);
@@ -152,7 +154,11 @@ function AddMultipleRooms({
                   />
                 </div>
                 <div className={style.editpencil}>
-                  <FaPencilAlt onClick={() => handelEditRooms(index)} />
+                  {showMode ? (
+                    <FaEye onClick={() => handelEditRooms(index)} />
+                  ) : (
+                    <FaPencilAlt onClick={() => handelEditRooms(index)} />
+                  )}
                 </div>
               </div>
               {rooms.length > 1 && (

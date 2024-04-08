@@ -166,7 +166,7 @@ function DragAndDropImageDiv({
                                 ? imageUrl
                                 : typeof imageUrl === "object" // Check if it's an object (e.g., File or Blob)
                                 ? URL.createObjectURL(imageUrl)
-                                : undefined // Default to undefined if imageUrl is not a string or object
+                                : "" // Default to undefined if imageUrl is not a string or object
                             }
                             alt={`Uploaded Image ${index + 1}`}
                             style={{

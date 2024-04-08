@@ -43,7 +43,7 @@ function AdminDashboardLayout() {
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
             <div>
-              <input type="text" placeholder="search" />
+              <input type="text" placeholder="Search" />
             </div>
             <div>
               <IoSearch />

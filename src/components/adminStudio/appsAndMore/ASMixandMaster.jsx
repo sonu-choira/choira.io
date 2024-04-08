@@ -145,9 +145,9 @@ function ASMixandMaster({
                         }}
                       >
                         <div className={style.studioImage} style={{}}>
-                          {product.studioPhotos ? (
+                          {product.servicePhotos ? (
                             <img
-                              src={product.studioPhotos}
+                              src={product.servicePhotos[0]}
                               alt=""
                               onError={(e) => {
                                 e.target.src = imageNotFound;

@@ -23,6 +23,7 @@ function AddNewServices2({
   setService,
   indexofServices,
   isEditMode,
+  showMode,
 }) {
   const [items, setItems] = useState([
     "Wifi",
@@ -33,6 +34,7 @@ function AddNewServices2({
     "Banjo",
     "Car Parking",
   ]);
+  const [getimgUrl, setGetimgUrl] = useState([]);
 
   const inputRef = useRef(null);
 
@@ -92,12 +94,12 @@ function AddNewServices2({
     setService((prerooms) => {
       prerooms.map((rm, idex) => {
         if (idex === indexofServices) {
-          rm.photo_url = images;
+          rm.photo_url = getimgUrl;
         }
       });
       return prerooms;
     });
-  }, [images]);
+  }, [getimgUrl]);
   useEffect(() => {
     setService((prerooms) => {
       prerooms.map((rm, idex) => {
@@ -178,7 +180,13 @@ function AddNewServices2({
       <div className={style.addNewStudioTitle}>Add New Services</div>
       <div className={style.addNewStudioPage}>
         <div style={{ height: "90%" }}>
-          <div>
+          <div
+            style={{
+              position: showMode ? "relative" : "",
+              overflow: "hidden",
+            }}
+          >
+            {showMode ? <p className={style.showmode}></p> : ""}
             <div className={style.addNewStudioinputBox}>
               <label htmlFor="serviceName">Service Name</label>
               <input
@@ -218,6 +226,8 @@ function AddNewServices2({
               images={images}
               setImages={setImages}
               isEditMode={isEditMode}
+              getimgUrl={getimgUrl}
+              setGetimgUrl={setGetimgUrl}
             />
             <div className={style.addNewStudioinputBox}>
               <label htmlFor="Amenities">Amenities</label>

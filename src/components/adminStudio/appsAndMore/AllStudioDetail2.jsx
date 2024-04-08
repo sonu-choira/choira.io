@@ -182,7 +182,7 @@ function AllStudioDetail2({
               <tr>
                 <th>
                   <div className={style.headingContainer}>
-                    Studioa
+                    Studio
                     <div className={style.filterBox}>
                       <RiExpandUpDownLine />
                     </div>
@@ -259,7 +259,7 @@ function AllStudioDetail2({
                         <div className={style.studioImage}>
                           {products.studioPhotos ? (
                             <img
-                              src={products.studioPhotos}
+                              src={products.studioPhotos[0]}
                               alt=""
                               onError={(e) => {
                                 e.target.src = imageNotFound;
