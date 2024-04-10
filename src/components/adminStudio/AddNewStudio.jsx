@@ -30,7 +30,7 @@ import Swal from "sweetalert2";
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
   const [images, setImages] = useState([]);
-  const [getimgUrl, setGetimgUrl] = useState([]);
+
   const [isOver, setIsOver] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -73,7 +73,7 @@ function AddNewStudio({ setSelectTab }) {
       bookingStartTime: [],
       bookingEndTime: [],
       roomPhotos: [],
-      roomPhotosUrl: [],
+
       amenities: [],
       roomDetails: "",
     },
@@ -147,11 +147,11 @@ function AddNewStudio({ setSelectTab }) {
   }, [studioDetails]);
 
   useEffect(() => {
-    setStudioDetails((prevdata) => {
-      prevdata.studioPhotos = getimgUrl;
-      return prevdata;
-    });
-  }, [getimgUrl.length]);
+    setStudioDetails((prevData) => ({
+      ...prevData, // Copy previous data
+      studioPhotos: images, // Update only the studioPhotos property
+    }));
+  }, [images]);
 
   useEffect(() => {
     setStudioDetails((prevdata) => {
@@ -205,7 +205,6 @@ function AddNewStudio({ setSelectTab }) {
   useEffect(() => {
     if (studioDetails?.studioPhotos?.length)
       setImages(studioDetails.studioPhotos);
-    setGetimgUrl(studioDetails.studioPhotos);
   }, [studioDetails?.studioPhotos?.length]);
 
   const studioamenitiesList = [
@@ -228,57 +227,65 @@ function AddNewStudio({ setSelectTab }) {
   }, [studioDetails?.amenities]);
 
   const handleSubmitButtonClick = () => {
-    if (isEditMode) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, Update  it!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const updatedRoomsDetails = studioDetails.roomsDetails.map(
-            (room) => ({
-              ...room,
-              roomPhotos: room.roomPhotosUrl,
-            })
-          );
+    let hasError = false;
 
-          const updatedRoomsDetailsWithoutUrl = updatedRoomsDetails.map(
-            (room) => {
-              const { roomPhotosUrl, ...updatedRoom } = room;
-              return updatedRoom;
-            }
-          );
+    studioDetails.studioPhotos.forEach((element, index) => {
+      if (typeof element === "object") {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please upload STUDIO images first!",
+          showConfirmButton: false,
+          timer: 1800,
+        });
+        hasError = true;
+      }
+    });
 
-          const updatedStudioDetails = {
-            ...studioDetails,
-            roomsDetails: updatedRoomsDetailsWithoutUrl,
-          };
-          console.log("updatedStudioDetails", updatedStudioDetails);
+    studioDetails.roomsDetails.forEach((room, roomIndex) => {
+      room.roomPhotos.forEach((element, photoIndex) => {
+        if (typeof element === "object") {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Please upload images for room  ${room.roomName.toUpperCase()} first!`,
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          hasError = true;
+        }
+      });
+    });
 
-          appAndmoreApi
-            .updateStudio(userStudioid, updatedStudioDetails)
-            .then((response) => {
-              console.log(
-                "====================> data create huaa hai   ",
-                response
-              );
-              if (response) {
-                Swal.fire({
-                  title: "Studio Update!",
-                  text: "Your Data has been saved.",
-                  icon: "success",
-                  showConfirmButton: false,
-                  timer: 1800,
-                });
-              }
-            })
-            .catch((error) => {
-              console.error("Error fetching studios:", error);
-              if (error) {
+    if (!hasError) {
+      if (isEditMode) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Update it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log("studioDetails", studioDetails);
+            appAndmoreApi
+              .updateStudio(userStudioid, studioDetails)
+              .then((response) => {
+                console.log("Studio updated:", response);
+                if (response) {
+                  Swal.fire({
+                    title: "Studio Updated!",
+                    text: "Your data has been saved.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error("Error updating studio:", error);
                 Swal.fire({
                   icon: "error",
                   title: "Oops...",
@@ -286,61 +293,37 @@ function AddNewStudio({ setSelectTab }) {
                   showConfirmButton: false,
                   timer: 1800,
                 });
-              }
-            });
-        }
-      });
-    } else {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, Create it!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const updatedRoomsDetails = studioDetails.roomsDetails.map(
-            (room) => ({
-              ...room,
-              roomPhotos: room.roomPhotosUrl,
-            })
-          );
-
-          const updatedRoomsDetailsWithoutUrl = updatedRoomsDetails.map(
-            (room) => {
-              const { roomPhotosUrl, ...updatedRoom } = room;
-              return updatedRoom;
-            }
-          );
-
-          const updatedStudioDetails = {
-            ...studioDetails,
-            roomsDetails: updatedRoomsDetailsWithoutUrl,
-          };
-          console.log("updatedStudioDetails", updatedStudioDetails);
-
-          appAndmoreApi
-            .createStudio(updatedStudioDetails)
-            .then((response) => {
-              console.log(
-                "====================> data create huaa hai   ",
-                response
-              );
-              if (response) {
-                Swal.fire({
-                  title: "Studio Created!",
-                  text: "Your Data has been saved.",
-                  icon: "success",
-                  showConfirmButton: false,
-                  timer: 1800,
-                });
-              }
-            })
-            .catch((error) => {
-              console.error("Error fetching studios:", error);
-              if (error) {
+              });
+            console.log("studioDetails", studioDetails);
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Create it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            appAndmoreApi
+              .createStudio(studioDetails)
+              .then((response) => {
+                console.log("Studio created:", response);
+                if (response) {
+                  Swal.fire({
+                    title: "Studio Created!",
+                    text: "Your data has been saved.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error("Error creating studio:", error);
                 Swal.fire({
                   icon: "error",
                   title: "Oops...",
@@ -348,10 +331,10 @@ function AddNewStudio({ setSelectTab }) {
                   showConfirmButton: false,
                   timer: 1800,
                 });
-              }
-            });
-        }
-      });
+              });
+          }
+        });
+      }
     }
   };
 
@@ -528,8 +511,6 @@ function AddNewStudio({ setSelectTab }) {
                   </div>
                   <div>
                     <DragAndDropImageDiv
-                      setGetimgUrl={setGetimgUrl}
-                      getimgUrl={getimgUrl}
                       images={images}
                       setImages={setImages}
                       isEditMode={isEditMode}

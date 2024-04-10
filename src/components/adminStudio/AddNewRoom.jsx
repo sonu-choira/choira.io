@@ -38,7 +38,6 @@ function AddNewRoom({
   const [selectedDate, setSelectedDate] = useState([]);
   const [time, setTime] = useState([]);
   const [bookingtime, setBookingtime] = useState([]);
-  const [getimgUrl, setGetimgUrl] = useState([]);
 
   let genreralStartTime;
   let genreralEndTime;
@@ -85,27 +84,23 @@ function AddNewRoom({
   );
 
   useEffect(() => {
-    setrooms((prerooms) => {
-      prerooms.map((rm, idex) => {
-        if (idex === indexofrooms) {
-          rm.roomPhotos = images;
+    setrooms((prevRooms) => {
+      return prevRooms.map((room, idx) => {
+        if (idx === indexofrooms) {
+          return {
+            ...room, // Copy the previous room data
+            roomPhotos: images, // Update roomPhotos with the new images
+          };
+        } else {
+          return room;
         }
       });
-      return prerooms;
     });
   }, [images]);
 
   useEffect(() => {
-    setrooms((prerooms) => {
-      prerooms.map((rm, idex) => {
-        if (idex === indexofrooms) {
-          rm.roomPhotosUrl = getimgUrl;
-        }
-      });
-      return prerooms;
-    });
-  }, [getimgUrl]);
-
+    console.log("images", images);
+  }, [images]);
   useEffect(() => {
     setrooms((prerooms) => {
       prerooms.map((rm, idex) => {
@@ -454,8 +449,6 @@ function AddNewRoom({
               images={images}
               setImages={setImages}
               isEditMode={isEditMode}
-              setGetimgUrl={setGetimgUrl}
-              getimgUrl={getimgUrl}
             />
             <div className={style.addNewStudioinputBox}>
               <label htmlFor="roomAmenities">Amenities </label>

@@ -177,28 +177,14 @@ function AddmultipleServises({
                   style={{ display: "none" }}
                   onChange={(event) => handlePhotoChange(event, index)}
                 /> */}
-                {team.photo_url && (
-                  <div>
-                    <img
-                      src={team?.photo_url[0]}
-                      // src={
-                      //   team.photo_url.length > 0
-                      //     ? URL.createObjectURL(team.photo_url[0])
-                      //     : ""
-                      // }
-                      // alt={`Team ${index} photo_url`}
-                      style={{
-                        maxWidth: "100px",
-                        maxHeight: "100px",
-                      }}
-                    />
-                    {/* <span
-                      className={style.cancelImageUpload}
-                      onClick={() => handleCancelImage(index)}
-                    >
-                      <img src={cross} alt="" />
-                    </span> */}
-                  </div>
+                {team?.photo_url?.length ? (
+                  <>
+                    <div>
+                      <img src={team?.photo_url[0]} />
+                    </div>
+                  </>
+                ) : (
+                  ""
                 )}
               </div>
               <div>

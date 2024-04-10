@@ -9,16 +9,9 @@ import Swal from "sweetalert2";
 import ChoiraLoder2 from "../../../components/loader/ChoiraLoder2";
 import loder from "../../../assets/gifs/loading.gif";
 
-function DragAndDropImageDiv({
-  images,
-  setImages,
-  isEditMode,
-  getimgUrl,
-  setGetimgUrl,
-}) {
+function DragAndDropImageDiv({ images, setImages, isEditMode }) {
   // to use this drag and drop component please pass a prop of use state
   // const [images, setImages] = useState([]);
-  // const [getimgUrl, setGetimgUrl] = useState([]);
 
   // and isEditMode
 
@@ -46,7 +39,27 @@ function DragAndDropImageDiv({
           console.log("Image links created:", response.images);
           if (response.images) {
             setshowloader(false);
-            setGetimgUrl(response.images);
+
+            let testarry = [];
+            console.log("check");
+            for (let imgurl of images) {
+              try {
+                if (imgurl.includes("http")) {
+                  // Change `include` to `includes`
+                  testarry.push(imgurl); // Add the valid URL to testarry
+                }
+              } catch (error) {
+                console.error("Error in loop:", error);
+              }
+            }
+            console.log("check2");
+
+            testarry = [...testarry, ...response.images];
+            console.log("testarry.........", testarry);
+            setImages(testarry);
+
+            // Update the images state with testarry
+
             Swal.fire({
               title: "Images uploaded!",
               text: "Images uploaded!",
@@ -61,9 +74,7 @@ function DragAndDropImageDiv({
         });
     }
   };
-  useEffect(() => {
-    console.log("getimgUrl", getimgUrl);
-  }, [getimgUrl]);
+
   useEffect(() => {
     console.log("images chmaghe huaa hai ", images);
   }, [images]);

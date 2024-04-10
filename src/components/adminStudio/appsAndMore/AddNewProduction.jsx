@@ -38,6 +38,24 @@ function AddNewProduction({ setSelectTab }) {
     bookingPageCount = data?.state?.bookingPageCount;
   }
   // const [productionData, setProductionData] = useState(initialState)
+
+  const navigate = useNavigate();
+  const gotoadminpage = () => {
+    navigate("/adminDashboard");
+  };
+
+  useEffect(() => {
+    setIsEditMode(data.state?.isEditMode);
+    console.log("the data id  ================== >", data.state?.productData);
+  }, []);
+
+  useEffect(() => {
+    if (data.state?.productData) {
+      setProductionData(data.state.productData);
+    } else {
+      setProductionData({});
+    }
+  }, [data.state?.productData]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [addon, setAddon] = useState();
 
@@ -51,7 +69,7 @@ function AddNewProduction({ setSelectTab }) {
   const [discography, setDiscography] = useState([""]);
 
   const [images, setImages] = useState([]);
-  const [getimgUrl, setGetimgUrl] = useState([]);
+  const [productionData, setProductionData] = useState({});
 
   const [addNewServicesformData, setAddNewServicesformData] = useState([]);
 
@@ -124,19 +142,15 @@ function AddNewProduction({ setSelectTab }) {
     isActive: 1,
   });
 
-  const handelSavebtn = () => {
-    // setsendataToApi((prev) => ({
-    //   ...prev,
-    //   serviceName: serviceData.fullName,
-    //   startingPrice: serviceData.price,
-    //   offerings: serviceData.amenities,
-    //   TotalServices: serviceData.packages.length,
-    //   servicePlans: serviceData.packages,
-    //   servicePhotos: serviceData.servicePhotos,
-    //   description: serviceData.aboutUs,
-    //   packages: serviceData.packages,
-    // }));
+  // useEffect(() => {
+  //   if (data.state?.productData) {
+  //     setSelectedItems(
+  //       productionData?.amenities?.map((item) => item?.name || item) || []
+  //     );
+  //   }
+  // }, [data.state?.productData]);
 
+  const handelSavebtn = () => {
     const updatedData = {
       ...sendataToApi, // Copy the current state
       serviceName: serviceData.fullName,
@@ -144,95 +158,127 @@ function AddNewProduction({ setSelectTab }) {
       offerings: serviceData.amenities,
       TotalServices: serviceData?.packages?.length,
       packages: serviceData.packages,
-      ServicePhotos: getimgUrl,
+      ServicePhotos: images,
       description: serviceData.aboutUs,
     };
     console.log(updatedData);
+    let hasError = false;
 
-    if (isEditMode) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, Edit service!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          appAndmoreApi
-            .updateService(serviceId, updatedData)
-            .then((response) => {
-              if (response) {
-                Swal.fire({
-                  title: "Service Updated!",
-                  text: "Your Data  has been saved.",
-                  icon: "success",
-                  showConfirmButton: false,
-                  timer: 1800,
-                });
-              }
-              console.log(
-                `====================> data create huaa hai  ${bookingPageCount} `,
-                response
-              );
-            })
-            .catch((error) => {
-              if (error) {
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops...",
-                  text: "Something went wrong!",
-                  showConfirmButton: false,
-                  timer: 1800,
-                });
-              }
-              console.error("Error fetching studios:", error);
-            });
+    serviceData.servicePhotos.forEach((element, index) => {
+      if (typeof element === "object") {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please upload SERVICE images first!",
+          showConfirmButton: false,
+          timer: 1800,
+        });
+        hasError = true;
+      }
+    });
+
+    serviceData?.packages?.forEach((packages, roomIndex) => {
+      packages?.photo_url?.forEach((element, photoIndex) => {
+        if (typeof element === "object") {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Please upload images for room  ${packages.name.toUpperCase()} first!`,
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          hasError = true;
         }
       });
-    } else {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, Create service!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          appAndmoreApi
-            .createService(updatedData)
-            .then((response) => {
-              if (response) {
-                Swal.fire({
-                  title: "Service Created!",
-                  text: "Your Data  has been saved.",
-                  icon: "success",
-                  showConfirmButton: false,
-                  timer: 1800,
-                });
-              }
-              console.log(
-                `====================> data create huaa hai  ${bookingPageCount} `,
-                response
-              );
-            })
-            .catch((error) => {
-              if (error) {
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops...",
-                  text: "Something went wrong!",
-                  showConfirmButton: false,
-                  timer: 1800,
-                });
-              }
-              console.error("Error fetching studios:", error);
-            });
-        }
-      });
+    });
+
+    if (!hasError) {
+      if (isEditMode) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Edit service!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log("updatedData", updatedData);
+            appAndmoreApi
+              .updateService(serviceId, updatedData)
+              .then((response) => {
+                if (response) {
+                  Swal.fire({
+                    title: "Service Updated!",
+                    text: "Your Data  has been saved.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+                console.log(
+                  `====================> data create huaa hai  ${bookingPageCount} `,
+                  response
+                );
+              })
+              .catch((error) => {
+                if (error) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+                console.error("Error fetching studios:", error);
+              });
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Create service!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            appAndmoreApi
+              .createService(updatedData)
+              .then((response) => {
+                if (response) {
+                  Swal.fire({
+                    title: "Service Created!",
+                    text: "Your Data  has been saved.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+                console.log(
+                  `====================> data create huaa hai  ${bookingPageCount} `,
+                  response
+                );
+              })
+              .catch((error) => {
+                if (error) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+                console.error("Error fetching studios:", error);
+              });
+          }
+        });
+      }
     }
   };
   // useEffect(() => {
@@ -246,7 +292,7 @@ function AddNewProduction({ setSelectTab }) {
       startingPrice: serviceData.price,
       offerings: serviceData.amenities,
       TotalServices: serviceData?.packages?.length,
-      servicePlans: serviceData.packages,
+      packages: serviceData.packages,
       servicePhotos: serviceData.servicePhotos,
       description: serviceData.aboutUs,
     }));
@@ -261,10 +307,10 @@ function AddNewProduction({ setSelectTab }) {
 
   useEffect(() => {
     setServiceData((prevdata) => {
-      prevdata.servicePhotos = getimgUrl;
+      prevdata.servicePhotos = images;
       return prevdata;
     });
-  }, [getimgUrl]);
+  }, [images]);
   useEffect(() => {
     setServiceData((prevdata) => {
       prevdata.amenities = selectedItems;
@@ -322,25 +368,6 @@ function AddNewProduction({ setSelectTab }) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [services, setServices] = useState([]);
-
-  const navigate = useNavigate();
-  const gotoadminpage = () => {
-    navigate("/adminDashboard");
-  };
-
-  useEffect(() => {
-    setIsEditMode(data.state?.isEditMode);
-    console.log("the data id  ================== >", data.state?.productData);
-  }, []);
-
-  const [productionData, setProductionData] = useState({});
-  useEffect(() => {
-    if (data.state?.productData) {
-      setProductionData(data.state.productData);
-    } else {
-      setProductionData({});
-    }
-  }, [data.state?.productData]);
 
   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
 
@@ -400,6 +427,21 @@ function AddNewProduction({ setSelectTab }) {
     setShowServices(true);
     setIndexofServices(i);
   };
+  useEffect(() => {
+    if (isEditMode) {
+      const tempaminities = productionData?.amenities;
+      console.log("tempaminities:", tempaminities);
+      if (tempaminities && tempaminities.length > 0) {
+        const slectedtempaminities = tempaminities.map(
+          (item) => item?.name || item
+        );
+        console.log("selectedDateNames:", slectedtempaminities);
+        setSelectedItems(slectedtempaminities);
+      } else {
+        setSelectedItems([]);
+      }
+    }
+  }, [isEditMode]);
 
   return (
     <>
@@ -480,7 +522,7 @@ function AddNewProduction({ setSelectTab }) {
 
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="Amenities">Amenities </label>
-                      {isEditMode ? (
+                      {/* {isEditMode ? (
                         <Select
                           id="Amenities"
                           mode="multiple"
@@ -496,21 +538,23 @@ function AddNewProduction({ setSelectTab }) {
                             value: item.name,
                             label: item.name,
                           }))}
-                        />
-                      ) : (
-                        <Select
-                          id="Amenities"
-                          mode="multiple"
-                          placeholder="Select one or more Amenities"
-                          value={selectedItems}
-                          onChange={setSelectedItems}
-                          style={customStyles}
-                          options={filteredOptions.map((item) => ({
-                            value: item,
-                            label: item,
-                          }))}
-                        />
-                      )}
+                        /> */}
+                      {/* ) :  */}
+                      {/* ( */}
+                      <Select
+                        id="Amenities"
+                        mode="multiple"
+                        placeholder="Select one or more Amenities"
+                        value={selectedItems}
+                        onChange={setSelectedItems}
+                        style={customStyles}
+                        options={filteredOptions.map((item) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                      />
+                      {/* )
+                      } */}
                     </div>
 
                     <div className={style.addNewStudioinputBox2}>
@@ -550,8 +594,6 @@ function AddNewProduction({ setSelectTab }) {
                       images={images}
                       setImages={setImages}
                       isEditMode={isEditMode}
-                      getimgUrl={getimgUrl}
-                      setGetimgUrl={setGetimgUrl}
                     />
 
                     <div
