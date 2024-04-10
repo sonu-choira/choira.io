@@ -657,12 +657,12 @@ td {
   justify-content: space-evenly;
   width: 100%;
   /* height: 100%; */
-  border: 2px solid red;
+  /* border: 2px solid red; */
   margin-bottom: 5%;
 }
 .tableActionbtn > div:nth-child(2) {
   width: 35%;
-  border: 2px solid green;
+  /* border: 2px solid green; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -682,7 +682,7 @@ td {
 }
 .tableActionbtn > div:nth-child(1) {
   width: 60%;
-  border: 2px solid pink;
+  /* border: 2px solid pink; */
 }
 .tableActionbtn select {
   /* background-color: red; */
