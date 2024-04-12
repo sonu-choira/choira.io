@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/pages/home/terms.scss"],"names":[],"mappings":"AAIA,QACI,eAAA,CAGJ,YACI,YAAA,CAGJ,aACI,YAAA,CAEJ,MACI,eAAA","file":"21.34552a34.chunk.css","sourcesContent":["p,h3{\n    text-align: left;\n}\n\nh4{\n    text-align: left;\n}\n\n.Indivcolor{\n    padding: 20px;\n}\n\n.changecolor{\n    padding: 10px;\n}\nul li{\n    text-align: left;\n}"]}

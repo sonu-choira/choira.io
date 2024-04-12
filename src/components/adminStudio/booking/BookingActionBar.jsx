@@ -12,11 +12,11 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
   const navigate = useNavigate();
   const gotoAddNew = (bookingPageCount) => {
     if (bookingPageCount === "c1") {
-      // navigate("/studio/add");
+      navigate("/studio/add");
     } else {
-      // navigate("/service/musicProduction/add", {
-      //   state: { navCount: 3, bookingPageCount: bookingPageCount },
-      // });
+      navigate("/service/musicProduction/add", {
+        state: { navCount: 3, bookingPageCount: bookingPageCount },
+      });
     }
   };
   const gotoSlotBooking = () => {
@@ -145,14 +145,13 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
                 height: "50%",
                 width: "15%",
                 gap: "5%",
-                backgroundColor: "#ADB5BD",
               }}
             />
           ) : (
             ""
           )}
 
-          {/* {pagetype !== "apps"
+          {pagetype !== "apps"
             ? ""
             : (bookingPageCount === "c2" || bookingPageCount === "c3") && (
                 <Button
@@ -160,7 +159,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
                   icon={<MdNoteAdd />}
                   style={{ height: "50%", width: "15%", gap: "5%" }}
                 />
-              )} */}
+              )}
         </div>
       </div>
     </>
