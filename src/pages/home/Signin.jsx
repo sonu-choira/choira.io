@@ -411,17 +411,17 @@ function Signin() {
   // api integration ----------------------------------------
   const [apiOtp, setApiOtp] = useState();
   const checkLoginData = () => {
-    const role = mobileNumber === "9876543210" ? "tester" : "user";
+    const role = mobileNumber === "9898989898" ? "tester" : "user";
     AuthService.login(mobileNumber, "NUMBER", role).then((response) => {
       console.log("res------", response);
       if (response.status) {
-        TokenService.setUser(response.user);
+        TokenService.setUser(response.user.role);
         TokenService.setData("token", response.token);
       } else {
         console.log("Not get Token");
       }
 
-      if (response.newUser === false && response.role === "tester") {
+      if (response.user.role === "admin") {
         console.log(response.newUser);
         navigate("/adminDashboard");
       } else if (response.newUser === true) {

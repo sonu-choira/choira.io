@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import style from "../../pages/home/signinBackup.module.css";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "antd";
+import Swal from "sweetalert2";
 
 const OptVerify = ({
   mobileNumber,
@@ -88,12 +89,14 @@ const OptVerify = ({
       // if (enteredOTP === generatedOTP) {
       if (enteredOTP === apiOtp) {
         console.log("OTP is correct. Redirect or perform another action.");
-        <Alert
-          message="OTP is correct."
-          type="success"
-          style={{ zIndex: 100 }}
-        />;
-        // alert("OTP is correct.");
+        Swal.fire({
+          title: "OTP is Correct!",
+          text: "Welcome back 😊 ",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
         gotoBooking();
         setCheckOtp(false);
         localStorage.setItem("isSignin", "true");

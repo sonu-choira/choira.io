@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import cross from "../../../assets/cross.svg";
 import style from "../studios/studio.module.css";
 import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
+import imageUploadapi from "../../../services/imageUploadapi";
+import Swal from "sweetalert2";
 
 function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
   useEffect(() => {
@@ -22,6 +24,24 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
     const newTeams = [...teamDetails];
     newTeams[index].photo = event.target.files[0];
     setTeamsDetails(newTeams);
+    let imagefile = event.target.files[0];
+    imageUploadapi.singleImgUpload(imagefile).then((response) => {
+      console.log("Image links created:", response.imageUrl);
+      const newTeams = [...teamDetails];
+
+      newTeams[index].photo = response?.imageUrl;
+      setTeamsDetails(newTeams);
+
+      if (response.imageUrl) {
+        Swal.fire({
+          title: "Images uploaded!",
+          text: "Images uploaded!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1800,
+        });
+      }
+    });
   };
 
   const handleInputChange = (event, index, field) => {
@@ -79,8 +99,18 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                     {team.photo ? (
                       <div>
                         <img
-                          src={URL.createObjectURL(team.photo)}
-                          alt={`Team ${index} Photo`}
+                          // src={URL.createObjectURL(team.photo)}
+                          src={team.photo}
+                          // src={
+                          //   team.photo
+                          //     ? team.photo.startsWith("http")
+                          //       ? team.photo // If `team.photo[0]` is a string URL
+                          //       : team.photo instanceof Blob
+                          //       ? URL.createObjectURL(team.photo) // If `team.roomPhotos[0]` is a Blob, create a URL for it
+                          //       : undefined // Default to undefined if `team.roomPhotos[0]` is not a string URL or a Blob
+                          //     : undefined // Default to undefined if `team.roomPhotos` is an empty array
+                          // }
+                          // alt={`Team ${index} Photo`}
                           style={{
                             maxWidth: "100px",
                             maxHeight: "100px",
@@ -171,14 +201,27 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                   />
                   {team.photo && (
                     <div>
-                      <img
-                        src={URL.createObjectURL(team.photo)}
-                        alt={`Team ${index} Photo`}
-                        style={{
-                          maxWidth: "100px",
-                          maxHeight: "100px",
-                        }}
-                      />
+                      {typeof team.photo === "string" &&
+                      team.photo.startsWith("http") ? (
+                        <img
+                          src={team.photo}
+                          alt={`Team ${index} Photo`}
+                          style={{
+                            maxWidth: "100px",
+                            maxHeight: "100px",
+                          }}
+                        />
+                      ) : team.photo instanceof Blob ||
+                        team.photo instanceof File ? (
+                        <img
+                          src={URL.createObjectURL(team.photo)}
+                          alt={`Team ${index} Photo`}
+                          style={{
+                            maxWidth: "100px",
+                            maxHeight: "100px",
+                          }}
+                        />
+                      ) : null}
                       <span
                         className={style.cancelImageUpload}
                         onClick={() => handleCancelImage(index, "photo")}
@@ -199,10 +242,10 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                   />
                   <input
                     type="text"
-                    placeholder="Profile"
+                    placeholder="designation"
                     // value={team.profile}
                     onChange={(event) =>
-                      handleInputChange(event, index, "profile")
+                      handleInputChange(event, index, "designation")
                     }
                   />
                 </div>

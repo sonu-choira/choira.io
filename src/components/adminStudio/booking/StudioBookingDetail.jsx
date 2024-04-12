@@ -15,6 +15,9 @@ import { LuFilePlus } from "react-icons/lu";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import bookingPageApi from "../../../services/bookingPageApi";
+import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import { IoCalendarOutline } from "react-icons/io5";
+import { BiSearchAlt } from "react-icons/bi";
 let PageSize = 10;
 
 function StudioBookingDetail({
@@ -63,6 +66,19 @@ function StudioBookingDetail({
   return (
     <>
       <div className={style.studioTabelDiv}>
+        <div className={style.searchDiv}>
+          <div>
+            <p>Search by Date </p>
+            <label htmlFor="selectDate">
+              <IoCalendarOutline />
+            </label>
+            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
+          </div>
+          <div>
+            <BiSearchAlt /> <br />
+            <input type="text" placeholder="Search" />
+          </div>
+        </div>
         <div>
           <table>
             <thead className={style.studiotabelHead}>
@@ -78,20 +94,25 @@ function StudioBookingDetail({
               </tr>
             </thead>
             <tbody>
-              {currentTableData.map((products, i) => {
-                return (
-                  <tr key={i}>
-                    <td>{products.userName}</td>
-                    <td style={{ textAlign: "center" }}>
-                      {products.userPhone}
-                    </td>
 
-                    <td>{products.studioName}</td>
-                    <td>{products.planId}</td>
-                    <td>{products.bookingDate}</td>
-                    <td>₹{products.totalPrice}</td>
-                    <td className={style.tableActionbtn}>
-                      {/* <div>
+              {products.length === 0 ? (
+                <ChoiraLoder2 />
+              ) : (
+                currentTableData.map((products, i) => {
+                  return (
+                    <tr key={i}>
+                      <td>{products.userName}</td>
+                      <td style={{ textAlign: "center" }}>
+                        {products.userPhone}
+                      </td>
+
+                      <td>{products.studioName}</td>
+                      <td>{products.planId}</td>
+                      <td>{products.bookingDate}</td>
+                      <td>₹{products.totalPrice}</td>
+                      <td className={style.tableActionbtn}>
+                        {/* <div>
+
                         <select
                           value={
                             selectedStatus[products._id] ||
@@ -113,22 +134,25 @@ function StudioBookingDetail({
                           <option value={2}>Cancelled</option>
                         </select>
                       </div> */}
-                      <div>
-                        <GrShare
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            // gotoShowDetails(products._id);
-                          }}
-                        />{" "}
-                        &nbsp;
-                        <RiDeleteBin5Fill
-                          style={{ color: "red", cursor: "pointer" }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+
+                        <div>
+                          <GrShare
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              // gotoShowDetails(products._id);
+                            }}
+                          />{" "}
+                          &nbsp;
+                          <RiDeleteBin5Fill
+                            style={{ color: "red", cursor: "pointer" }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+
             </tbody>
           </table>
         </div>

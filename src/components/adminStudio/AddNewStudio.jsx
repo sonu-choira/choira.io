@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   MdAddAPhoto,
   MdCancel,
@@ -19,9 +19,18 @@ import { Select } from "antd";
 import { FaPencilAlt } from "react-icons/fa";
 import DragAndDropImageDiv from "../../pages/admin/layout/DragAndDropImageDiv";
 import AddMultipleTeam from "../../pages/admin/layout/AddMultipleTeam";
+import AddNewServices2 from "./appsAndMore/AddNewServices2";
+import AddmultipleServises from "../../pages/admin/layout/AddmultipleServises";
+import AddMultipleRooms from "../../pages/admin/layout/AddMultipleRooms";
+import AddNewRoom from "./AddNewRoom";
+import Button from "../../pages/admin/layout/Button";
+import appAndmoreApi from "../../services/appAndmoreApi";
+import Swal from "sweetalert2";
 
 function AddNewStudio({ setSelectTab }) {
+  const submitButtonRef = useRef(null);
   const [images, setImages] = useState([]);
+
   const [isOver, setIsOver] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -38,163 +47,295 @@ function AddNewStudio({ setSelectTab }) {
 
   const data = useLocation();
   console.log("the data id  ================== >", data?.state?.productData);
+
+  const userStudioid = data?.state?.productData?._id;
   // alert(data.state.navCount);
-  const [showMode, setshowMode] = useState(data?.state?.showMode || false);
+  const showMode = data?.state?.showMode || false;
+  // const [showMode, setshowMode] = useState(data?.state?.showMode || false);
 
   const navCount = data?.state?.navCount;
   const [tabCount, setTabCount] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
   const [teamDetails, setTeamsDetails] = useState([
-    { photo: null, name: "", profile: "", designation: "" },
+    { photo: null, name: "", designation: "" },
   ]);
+  const [selectedStudioAmenities, setSelectedStudioAmenities] = useState([]);
+
+  const [rooms, setrooms] = useState([
+    {
+      roomName: "",
+      area: "",
+      pricePerHour: "",
+      discountPercentage: "",
+      bookingDays: [],
+      generalStartTime: "",
+      generalEndTime: "",
+      bookingStartTime: [],
+      bookingEndTime: [],
+      roomPhotos: [],
+
+      amenities: [],
+      roomDetails: "",
+    },
+  ]);
+  const [showRoomsDetails, setshowRoomsDetails] = useState(false);
+  const [indexofrooms, setIndexofrooms] = useState();
+  useEffect(() => {
+    console.log("teamDetails", teamDetails);
+  }, [teamDetails]);
 
   const [studioDetails, setStudioDetails] = useState({
-    fullName: "",
-    area: "",
-    totalRooms: "",
-    pincode: "",
-    city: "",
+    aboutUs: {},
+    address: "",
     amenities: [],
-    aboutUs: {
-      aboutUs: "",
-      services: "",
-      infrastructure: "",
-    },
-    // teamDetails: [{ photo: null, name: "", profile: "", designation: "" }],
-    studioPhotos: [],
+    area: "",
+    availabilities: [],
+    city: "",
+    clientPhotos: [],
+    creationTimeStamp: "",
+    featuredReviews: "",
+    fullName: "",
+    isActive: "",
+    latitude: "",
+    location: { coordinates: [], type: "" },
+    longitude: "",
+    mapLink: "",
     maxGuests: "",
+    overallAvgRating: "",
+    pincode: "",
+    pricePerHour: "",
+    reviews: {},
+    roomsDetails: [],
     state: "",
-    iframeCode: "",
+    studioPhotos: [],
+    teamDetails: [],
+    totalRooms: "",
+    _id: "",
   });
 
-  useEffect(() => {
-    if (data?.state?.productData) setStudioDetails(data?.state?.productData);
-  }, [data?.state?.productData]);
+  // const [saveAddData, setsaveAddData] = useState({
+  //   aboutUs: {},
+  //   address: "",
+  //   amenities: [],
+  //   area: "",
+  //   availabilities: [],
+  //   city: "",
+  //   clientPhotos: [],
+  //   creationTimeStamp: "",
+  //   featuredReviews: "",
+  //   fullName: "",
+  //   isActive: "",
+  //   latitude: "",
+  //   location: { coordinates: [], type: "" },
+  //   longitude: "",
+  //   mapLink: "",
+  //   maxGuests: "",
+  //   overallAvgRating: "",
+  //   pincode: "",
+  //   pricePerHour: "",
+  //   reviews: {},
+  //   roomsDetails: [],
+  //   state: "",
+  //   studioPhotos: [],
+  //   teamDetails: [],
+  //   totalRooms: "",
+  //   _id: "",
+  // });
 
+  useEffect(() => {
+    console.log("studioDetails change huaa hai ", studioDetails);
+  }, [studioDetails]);
+
+  useEffect(() => {
+    setStudioDetails((prevData) => ({
+      ...prevData, // Copy previous data
+      studioPhotos: images, // Update only the studioPhotos property
+    }));
+  }, [images]);
+
+  useEffect(() => {
+    setStudioDetails((prevdata) => {
+      prevdata.teamDetails = teamDetails;
+      return prevdata;
+    });
+  }, [teamDetails.length]);
+
+  // useEffect(() => {
+  //   setStudioDetails((prevdata) => {
+  //     prevdata.roomsDetails = rooms;
+  //     return prevdata;
+  //   });
+  // }, [rooms?.length]);
+
+  useEffect(() => {
+    setStudioDetails((prevdata) => {
+      return {
+        ...prevdata,
+        roomsDetails: rooms,
+      };
+    });
+  }, [rooms]);
+
+  useEffect(() => {
+    setStudioDetails((prevdata) => {
+      prevdata.amenities = selectedStudioAmenities.map((name, index) => ({
+        id: index,
+        name,
+      }));
+      return prevdata;
+    });
+  }, [selectedStudioAmenities.length]);
+
+  // useEffect(() => {
+  //   console.log("saveAddData change huaa hai ", saveAddData);
+  //   // setsaveAddData((prev)=>{
+  //   //   return {...prev,studioDetails}
+  //   // })
+  // }, [saveAddData]);
+
+  useEffect(() => {
+    if (data?.state?.productData) {
+      setStudioDetails(data?.state?.productData);
+      setrooms(data?.state?.productData.roomsDetails);
+    }
+  }, [data?.state?.productData]);
+  useEffect(() => {
+    console.log("room updated ", rooms);
+  }, [rooms]);
   useEffect(() => {
     if (studioDetails?.studioPhotos?.length)
       setImages(studioDetails.studioPhotos);
   }, [studioDetails?.studioPhotos?.length]);
 
-  const amenitiesList = [
-    { id: "wifi", label: "Wifi" },
-    { id: "ac", label: "AC" },
-    { id: "dj", label: "DJ" },
-    { id: "piano", label: "Piano" },
-    { id: "drum", label: "Drum" },
-    { id: "carparking", label: "Car Parking" },
-    { id: "banjo", label: "Banjo" },
+  const studioamenitiesList = [
+    "Wifi",
+    "AC",
+    "DJ",
+    "Piano",
+    "Drum",
+    "Car Parking",
+    "Banjo",
   ];
+  const filteredAmenities = studioamenitiesList.filter(
+    (o) => !selectedStudioAmenities.includes(o)
+  );
 
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  useEffect(() => {
+    setSelectedStudioAmenities(
+      studioDetails?.amenities?.map((item) => item?.name || item) || []
+    );
+  }, [studioDetails?.amenities]);
 
-  const handleCheckboxChange = (id) => {
-    const updatedAmenities = selectedAmenities.includes(id)
-      ? selectedAmenities.filter((amenity) => amenity !== id)
-      : [...selectedAmenities, id];
+  const handleSubmitButtonClick = () => {
+    let hasError = false;
 
-    setSelectedAmenities(updatedAmenities);
-    console.log(selectedAmenities);
-  };
-  const [iframeCode, setIframeCode] = useState("");
-  const [hasContent, setHasContent] = useState(false);
+    studioDetails.studioPhotos.forEach((element, index) => {
+      if (typeof element === "object") {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please upload STUDIO images first!",
+          showConfirmButton: false,
+          timer: 1800,
+        });
+        hasError = true;
+      }
+    });
 
-  const handleIframeCodeChange = (e) => {
-    const inputCode = e.target.value;
+    studioDetails.roomsDetails.forEach((room, roomIndex) => {
+      room.roomPhotos.forEach((element, photoIndex) => {
+        if (typeof element === "object") {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Please upload images for room  ${room.roomName.toUpperCase()} first!`,
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          hasError = true;
+        }
+      });
+    });
 
-    // Update the state with the user-entered iframe code
-    setIframeCode(inputCode);
-
-    // Update hasContent state based on whether there is content in the textarea
-    setHasContent(inputCode.trim() !== "");
-  };
-
-  // --------------------------roomsaaaa ---------------------
-  const [selectedOption, setSelectedOption] = useState("0");
-  if (data?.state?.productData?.totalRooms?.length) {
-    // setSelectedOption(studioDetails?.totalRooms);
-    console.log(data?.state?.productData?.totalRooms);
-    setSelectedOption(data?.state?.productData?.totalRooms);
-  }
-  const [serviceDetails, setServiceDetails] = useState([]);
-  const [addNewServicesformData, setAddNewServicesformData] = useState([]);
-  const [showServices, setShowServices] = useState(false);
-
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
-    setServiceDetails([]);
-  };
-
-  const handleServiceChange = (event, index) => {
-    const updatedServiceDetails = [...serviceDetails];
-    updatedServiceDetails[index] = event.target.value;
-    setServiceDetails(updatedServiceDetails);
-  };
-  const [indexofServices, setIndexofServices] = useState();
-  const handleEditService = (i) => {
-    setShowServices(true);
-    setIndexofServices(i);
-  };
-
-  const renderServiceDivs = () => {
-    const divs = [];
-
-    for (let i = 0; i < parseInt(selectedOption, 10); i++) {
-      const currentServiceData = addNewServicesformData[i] || {};
-
-      const serviceDiv = (
-        <div key={i} className={style.addTeamDetailDynamicDiv}>
-          <div className={style.addTeamDetailMainDiv}>
-            <div>
-              <label
-                style={{ cursor: "pointer" }}
-                htmlFor={`uploadServicePhoto`}
-              >
-                {/* <MdOutlineAddBox /> */}
-              </label>
-
-              <img
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-                // src={
-                //   currentServiceData.images.length > 0
-                //     ? URL.createObjectURL(currentServiceData.images[0])
-                //     : ""
-                // }
-                alt=""
-              />
-            </div>
-            <div>
-              <input
-                readOnly
-                type="text"
-                value={studioDetails?.roomsDetails?.roomName}
-                placeholder="Name"
-              />
-              <input
-                type="text"
-                placeholder="Profile"
-                value={`starting price from ₹ ${currentServiceData.startingPrice}`}
-              />
-            </div>
-            <div className={style.editpencil}>
-              <FaPencilAlt
-                onClick={() => {
-                  handleEditService(i);
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      );
-
-      divs.push(serviceDiv);
+    if (!hasError) {
+      if (isEditMode) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Update it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log("studioDetails", studioDetails);
+            appAndmoreApi
+              .updateStudio(userStudioid, studioDetails)
+              .then((response) => {
+                console.log("Studio updated:", response);
+                if (response) {
+                  Swal.fire({
+                    title: "Studio Updated!",
+                    text: "Your data has been saved.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error("Error updating studio:", error);
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              });
+            console.log("studioDetails", studioDetails);
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Create it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            appAndmoreApi
+              .createStudio(studioDetails)
+              .then((response) => {
+                console.log("Studio created:", response);
+                if (response) {
+                  Swal.fire({
+                    title: "Studio Created!",
+                    text: "Your data has been saved.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error("Error creating studio:", error);
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                  showConfirmButton: false,
+                  timer: 1800,
+                });
+              });
+          }
+        });
+      }
     }
-
-    return divs;
   };
 
   return (
@@ -208,7 +349,7 @@ function AddNewStudio({ setSelectTab }) {
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
             <div>
-              <input type="text" placeholder="search" />
+              <input required type="text" placeholder="search" />
             </div>
             <div>
               <IoSearch />
@@ -224,330 +365,320 @@ function AddNewStudio({ setSelectTab }) {
             </div>
           </div>
 
-          <div className={style.addNewStudioTitle} style={{ marginTop: "-2%" }}>
-            {isEditMode && showMode
-              ? "Studio details"
-              : isEditMode
-              ? "Edit Studio"
-              : "Add new studio"}
-          </div>
-          <div className={style.addNewStudioPage}>
-            {/* {showMode ? ()} */}
-
-            <div
-              style={{
-                position: showMode ? "relative" : "",
-                overflow: "hidden",
-              }}
-            >
-              {showMode ? <p className={style.showmode}></p> : ""}
-
-              <div>
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="studioName">Studio Name</label>
-                  <input
-                    type="text"
-                    id="studioName"
-                    placeholder="Enter Studio Area"
-                    name="studioName"
-                    value={studioDetails?.fullName}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        fullName: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="area">Total Area</label>
-                  <input
-                    type="text"
-                    id="area"
-                    placeholder="Enter Approx. Area"
-                    name="area"
-                    value={studioDetails?.area}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        area: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Rooms">Rooms</label>
-                  <select
-                    id="Rooms"
-                    name="totalRooms"
-                    onChange={handleChange}
-                    value={selectedOption}
-                  >
-                    <option value="0">Select No. of Services</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                  </select>
-                </div>
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="pincode">Studio Pincode</label>
-                  <input
-                    type="text"
-                    id="pincode"
-                    name="pincode"
-                    placeholder="Enter Pincode"
-                    value={studioDetails?.pincode}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        pincode: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="addcity">Studio city</label>
-                  <input
-                    list="city"
-                    id="addcity"
-                    placeholder="Select city Name"
-                    name="addcity"
-                    value={studioDetails?.city}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        city: e.target.value,
-                      })
-                    }
-                  />
-                  <datalist id="city">
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Bombay">Bombay</option>
-                  </datalist>
-                </div>
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Amenities">Amenities </label>
-
-                  <Select
-                    id="Amenities"
-                    mode="multiple"
-                    className=""
-                    placeholder="Select one or more Amenities"
-                    value={
-                      studioDetails?.amenities?.map((item) => item.name) || []
-                    }
-                    onChange={setSelectedItems}
-                    style={customStyles}
-                    options={studioDetails?.amenities?.map((item) => ({
-                      value: item.name,
-                      label: item.name,
-                    }))}
-                  />
-                </div>
+          {showRoomsDetails ? (
+            <AddNewRoom
+              setshowRoomsDetails={setshowRoomsDetails}
+              isEditMode={isEditMode}
+              rooms={rooms}
+              setrooms={setrooms}
+              setIndexofrooms={setIndexofrooms}
+              indexofrooms={indexofrooms}
+              showMode={showMode}
+            />
+          ) : (
+            <>
+              <div
+                className={style.addNewStudioTitle}
+                style={{ marginTop: "-2%" }}
+              >
+                {isEditMode && showMode
+                  ? "Studio details"
+                  : isEditMode
+                  ? "Edit Studio"
+                  : "Add new studio"}
               </div>
-              <div>
-                <DragAndDropImageDiv
-                  images={images}
-                  setImages={setImages}
-                  isEditMode={isEditMode}
-                />
-
-                <div
-                  className={style.addNewStudioinputBox}
-                  style={{ paddingTop: "2%" }}
-                >
-                  <label htmlFor="guest">Max Guests</label>
-
-                  <select
-                    id="guest"
-                    value={studioDetails?.maxGuests}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        maxGuests: e.target.value,
-                      })
-                    }
-                  >
-                    <option>Select Maximum Guest allowed</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="addstate">Select State</label>
-                  <input
-                    list="state"
-                    id="addstate"
-                    placeholder="Select state Name"
-                    name="state"
-                    value={studioDetails?.state}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        state: e.target.value,
-                      })
-                    }
-                  />
-                  <datalist id="state">
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Bombay">Bombay</option>
-                  </datalist>
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label
-                    htmlFor="iframeCode"
-                    style={{
-                      display: "block",
-                      marginBottom: "10px",
-                      fontSize: "18px",
-                    }}
-                  >
-                    Google Maps Embed Code
-                  </label>
-                  <input
-                    type="text"
-                    id="iframeCode"
-                    placeholder="Paste Google Maps Embed Code here"
-                    value={iframeCode}
-                    onChange={handleIframeCodeChange}
-                  />
-                </div>
+              <form className={style.addNewStudioPage}>
                 <div
                   style={{
-                    fontSize: "1vmax",
-                    fontWeight: "600",
-                    paddingTop: "2%",
-                  }}
-                >
-                  Location
-                </div>
-                <div
-                  className={style.showlocationDiv}
-                  style={{
-                    width: "100%",
-                    height: "40%",
-
+                    position: showMode ? "relative" : "",
                     overflow: "hidden",
-                    border: "1px solid #ddd",
-                    borderRadius: "8px",
                   }}
                 >
-                  {hasContent ? (
-                    <div
-                      dangerouslySetInnerHTML={{ __html: iframeCode }}
-                      style={{ width: "100%", height: "100%" }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                      }}
-                    >
-                      <span style={{ fontSize: "18px", color: "#888" }}>
-                        Location will be visible here
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+                  {showMode ? <p className={style.showmode}></p> : ""}
 
-            <div style={{ position: showMode ? "relative" : "" }}>
-              {showMode ? <p className={style.showmode}></p> : ""}
-
-              <div>
-                <div className={style.addNewStudioinputBox2}>
-                  <label htmlFor="aboutStudio">About Studio</label>
-                  <textarea
-                    type="text"
-                    id="aboutStudio"
-                    placeholder="Enter Studio Details"
-                    value={studioDetails?.aboutUs?.aboutUs}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        aboutUs: {
-                          ...studioDetails?.aboutUs,
-                          aboutUs: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </div>
-                <div className={style.addNewStudioinputBox2}>
-                  <label htmlFor="studioService">Studio Services</label>
-                  <textarea
-                    type="text"
-                    id="studioService"
-                    placeholder="Enter Studio Services"
-                    value={studioDetails?.aboutUs?.services}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        aboutUs: {
-                          ...studioDetails?.aboutUs,
-                          services: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </div>
-                <div className={style.addNewStudioinputBox2}>
-                  <label htmlFor="area">Total Area</label>
-                  <textarea
-                    type="text"
-                    id="area"
-                    placeholder="Enter Approx. Area"
-                    value={studioDetails?.aboutUs?.infrastructure}
-                    onChange={(e) =>
-                      setStudioDetails({
-                        ...studioDetails,
-                        aboutUs: {
-                          ...studioDetails?.aboutUs,
-                          infrastructure: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </div>
-                <div className={style.roomAndClassSection}>
-                  <div>{selectedOption !== "0" && renderServiceDivs()}</div>
                   <div>
-                    <AddMultipleTeam
-                      teamDetails={teamDetails}
-                      setTeamsDetails={setTeamsDetails}
-                      data={data}
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="studioName">Studio Name</label>
+                      <input
+                        required
+                        type="text"
+                        id="studioName"
+                        placeholder="Enter Studio Area"
+                        name="studioName"
+                        value={studioDetails?.fullName}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            fullName: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="area">Total Area</label>
+                      <input
+                        required
+                        type="text"
+                        id="area"
+                        placeholder="Enter Approx. Area"
+                        name="area"
+                        value={studioDetails?.area}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            area: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="pincode">Studio Pincode</label>
+                      <input
+                        required
+                        type="text"
+                        id="pincode"
+                        name="pincode"
+                        placeholder="Enter Pincode"
+                        value={studioDetails?.pincode}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            pincode: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="addcity">Studio city</label>
+                      <input
+                        required
+                        list="city"
+                        id="addcity"
+                        placeholder="Select city Name"
+                        name="addcity"
+                        value={studioDetails?.city}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            city: e.target.value,
+                          })
+                        }
+                      />
+                      <datalist id="city">
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Bombay">Bombay</option>
+                      </datalist>
+                    </div>
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="Amenities">Amenities </label>
+
+                      <Select
+                        required
+                        id="Amenities"
+                        mode="multiple"
+                        className=""
+                        placeholder="Select one or more Amenities"
+                        value={selectedStudioAmenities}
+                        onChange={setSelectedStudioAmenities}
+                        // style={customStyles}
+                        options={filteredAmenities?.map((item) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                      />
+                    </div>
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="studioName">Studio MapLink</label>
+                      <input
+                        required
+                        type="text"
+                        id="studioName"
+                        placeholder="Enter Studio MapLink"
+                        name="studioName"
+                        value={studioDetails?.mapLink}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            mapLink: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <DragAndDropImageDiv
+                      images={images}
+                      setImages={setImages}
                       isEditMode={isEditMode}
                     />
+
+                    <div
+                      className={style.addNewStudioinputBox}
+                      style={{ paddingTop: "2%" }}
+                    >
+                      <label htmlFor="guest">Max Guests</label>
+
+                      <select
+                        required
+                        id="guest"
+                        value={studioDetails?.maxGuests}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            maxGuests: e.target.value,
+                          })
+                        }
+                      >
+                        <option>Select Maximum Guest allowed</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                      </select>
+                    </div>
+
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="addstate">Select State</label>
+                      <input
+                        required
+                        list="state"
+                        id="addstate"
+                        placeholder="Select state Name"
+                        name="state"
+                        value={studioDetails?.state}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            state: e.target.value,
+                          })
+                        }
+                      />
+                      <datalist id="state">
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Bombay">Bombay</option>
+                      </datalist>
+                    </div>
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="address">Studio Address</label>
+                      <input
+                        required
+                        type="text"
+                        id="address"
+                        placeholder="Enter Studio Area"
+                        name="studioName"
+                        value={studioDetails?.address}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            address: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            {/* <p className={style.showmode}></p> */}
-          </div>
-          <StudioFooter
-            setSelectTab={setSelectTab}
-            backOnclick={gotoadminpage}
-          />
+                <div style={{ position: showMode ? "relative" : "" }}>
+                  {showMode ? <p className={style.showmode}></p> : ""}
+
+                  <div>
+                    <div className={style.addNewStudioinputBox2}>
+                      <label htmlFor="aboutStudio">About Studio</label>
+                      <textarea
+                        type="text"
+                        id="aboutStudio"
+                        placeholder="Enter Studio Details"
+                        value={studioDetails?.aboutUs?.aboutUs}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            aboutUs: {
+                              ...studioDetails?.aboutUs,
+                              aboutUs: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                    <div className={style.addNewStudioinputBox2}>
+                      <label htmlFor="studioService">Studio Services</label>
+                      <textarea
+                        type="text"
+                        id="studioService"
+                        placeholder="Enter Studio Services"
+                        value={studioDetails?.aboutUs?.services}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            aboutUs: {
+                              ...studioDetails?.aboutUs,
+                              services: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                    <div className={style.addNewStudioinputBox2}>
+                      <label htmlFor="infrastructure">Infrastructure</label>
+                      <textarea
+                        type="text"
+                        id="infrastructure"
+                        placeholder="Enter Approx. Area"
+                        value={studioDetails?.aboutUs?.infrastructure}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            aboutUs: {
+                              ...studioDetails?.aboutUs,
+                              infrastructure: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className={style.roomAndClassSection}>
+                      <div>
+                        <AddMultipleRooms
+                          rooms={rooms}
+                          setrooms={setrooms}
+                          setshowRoomsDetails={setshowRoomsDetails}
+                          showRoomsDetails={showRoomsDetails}
+                          indexofrooms={indexofrooms}
+                          isEditMode={isEditMode}
+                          setIndexofrooms={setIndexofrooms}
+                          showMode={showMode}
+                        />
+                      </div>
+                      <div>
+                        <AddMultipleTeam
+                          teamDetails={teamDetails}
+                          setTeamsDetails={setTeamsDetails}
+                          data={data}
+                          isEditMode={isEditMode}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button style={{ display: "none" }} ref={submitButtonRef}>
+                  submit
+                </button>
+                {/* <p className={style.showmode}></p> */}
+              </form>
+              <StudioFooter
+                setSelectTab={setSelectTab}
+                backOnclick={gotoadminpage}
+                saveType={"submit"}
+                saveOnclick={showMode ? "" : handleSubmitButtonClick}
+              />
+            </>
+          )}
         </div>
       </div>
     </>

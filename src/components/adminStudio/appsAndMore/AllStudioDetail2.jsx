@@ -4,6 +4,7 @@ import style from "../../../pages/admin/studios/studio.module.css";
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
+import Button from "../../../pages/admin/layout/Button";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
@@ -18,6 +19,16 @@ import { useNavigate } from "react-router-dom";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 import ChoiraLoader from "../../loader/ChoiraLoader";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import { IoCalendarOutline } from "react-icons/io5";
+import { BiSearchAlt } from "react-icons/bi";
+import { RiExpandUpDownLine } from "react-icons/ri";
+import { CiFilter } from "react-icons/ci";
+import { DatePicker, Space } from "antd";
+import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter";
+import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
+const onChange = (date, dateString) => {
+  console.log(date, dateString);
+};
 
 let PageSize = 10;
 
@@ -28,6 +39,7 @@ function AllStudioDetail2({
   setPageCount,
   pageCount,
   totalPage,
+  bookingPageCount,
 }) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
@@ -96,18 +108,140 @@ function AllStudioDetail2({
       [studioId]: !prevStatus[studioId], // Toggle the switch state
     }));
   };
+  const [showpricefilter, setshowpricefilter] = useState(false);
+  const handelpriceFilter = () => {
+    setshowpricefilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowloactionfilter(false);
+        setShowRoomFilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
+
+  const [showloactionfilter, setshowloactionfilter] = useState(false);
+  const handellocationFilter = () => {
+    setshowloactionfilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setShowRoomFilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
+
+  const [showRoomFilter, setShowRoomFilter] = useState(false);
+  const handelRoomFilter = () => {
+    setShowRoomFilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setshowloactionfilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
+
+  const [showstatusFilter, setShowstatusFilter] = useState(false);
+  const handelStatusFilter = () => {
+    setShowstatusFilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setshowloactionfilter(false);
+        setShowRoomFilter(false);
+      }
+      return !prevState;
+    });
+  };
+
+  const city = ["Mumbai", "Delhi", "Bangalore", "Chennai"];
+  const room = ["1", "2", "3", "4", "5"];
+  const status = ["active", "inactive"];
+
   return (
     <>
       <div className={style.studioTabelDiv}>
+        <div className={style.searchDiv}>
+          <div>
+            <DatePicker onChange={onChange} className={style.antCustomcss} />
+          </div>
+          <div>
+            <BiSearchAlt /> <br />
+            <input type="text" placeholder="Search" />
+          </div>
+        </div>
         <div>
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th>Studio</th>
-                <th>Price</th>
-                <th>Location</th>
-                <th>No. of Rooms</th>
-                <th>Activity Status</th>
+
+                <th>
+                  <div className={style.headingContainer}>
+                    Studio
+                    <div className={style.filterBox}>
+                      <RiExpandUpDownLine />
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div className={style.headingContainer}>
+                    Price
+                    <div className={style.filterBox}>
+                      <span onClick={handelpriceFilter}>
+                        <CiFilter />
+                      </span>
+                      {showpricefilter ? <PriceFilter /> : ""}
+                    </div>
+                  </div>
+                </th>
+
+                <th>
+                  <div className={style.headingContainer}>
+                    Location
+                    <div className={style.filterBox}>
+                      <span onClick={handellocationFilter}>
+                        <CiFilter />
+                      </span>
+                      {showloactionfilter ? <CheckboxFilter data={city} /> : ""}
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div className={style.headingContainer}>
+                    No. of Rooms
+                    <div className={style.filterBox}>
+                      <span onClick={handelRoomFilter}>
+                        <CiFilter />
+                      </span>
+                      {showRoomFilter ? <CheckboxFilter data={room} /> : ""}
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div className={style.headingContainer}>
+                    Activity Status
+                    <div className={style.filterBox}>
+                      <span onClick={handelStatusFilter}>
+                        <CiFilter />
+                      </span>
+                      {showstatusFilter ? (
+                        <CheckboxFilter
+                          data={status}
+                          cusstyle={{ left: "-355%" }}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                </th>
+
               </tr>
             </thead>
             <tbody>
@@ -117,11 +251,17 @@ function AllStudioDetail2({
                 products.map((products) => {
                   return (
                     <tr key={products._id}>
-                      <td style={{ display: "flex", alignItems: "center" }}>
+                      <td
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "100%",
+                        }}
+                      >
                         <div className={style.studioImage}>
                           {products.studioPhotos ? (
                             <img
-                              src={products.studioPhotos}
+                              src={products.studioPhotos[0]}
                               alt=""
                               onError={(e) => {
                                 e.target.src = imageNotFound;
@@ -193,6 +333,7 @@ function AllStudioDetail2({
           pageCount={pageCount}
           totalPage={totalPage}
           setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>

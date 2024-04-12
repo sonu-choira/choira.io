@@ -67,7 +67,7 @@ function AllStudioPageDetailsPage() {
           if (response.status) {
             setProducts(response.services.results);
             console.log("lkasdnflkjsdnf", response.status);
-            setTotalPage(response.services.totalPages);
+            setTotalPage(response.paginate.totalPages);
           }
         })
         .catch((error) => {
@@ -86,7 +86,7 @@ function AllStudioPageDetailsPage() {
           console.log("response.data.studios", response.studios);
           if (response.studios) {
             setProducts(response.studios);
-            setTotalPage(response.studios.paginate.totalPages);
+            setTotalPage(response.paginate.totalPages);
 
             // setPageCount(response.paginate.page);
           }
@@ -113,6 +113,7 @@ function AllStudioPageDetailsPage() {
             totalPage={totalPage}
             setPageCount={setPageCount}
             pageCount={pageCount}
+            bookingPageCount={bookingPageCount}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
@@ -122,6 +123,7 @@ function AllStudioPageDetailsPage() {
             totalPage={totalPage}
             setPageCount={setPageCount}
             pageCount={pageCount}
+            bookingPageCount={bookingPageCount}
           />
         ) : bookingPageCount === "c3" ? (
           <ASMixandMaster
@@ -130,6 +132,7 @@ function AllStudioPageDetailsPage() {
             totalPage={totalPage}
             setPageCount={setPageCount}
             pageCount={pageCount}
+            bookingPageCount={bookingPageCount}
           />
         ) : (
           <Artist />

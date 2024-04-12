@@ -18,6 +18,8 @@ import { LuFilePlus } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import { IoCalendarOutline } from "react-icons/io5";
+import { BiSearchAlt } from "react-icons/bi";
 
 let PageSize = 10;
 
@@ -28,6 +30,7 @@ function ASMusicProduction({
   setPageCount,
   pageCount,
   totalPage,
+  bookingPageCount,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -103,6 +106,19 @@ function ASMusicProduction({
   return (
     <>
       <div className={style.studioTabelDiv}>
+        <div className={style.searchDiv}>
+          <div>
+            <p>Search by Date </p>
+            <label htmlFor="selectDate">
+              <IoCalendarOutline />
+            </label>
+            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
+          </div>
+          <div>
+            <BiSearchAlt /> <br />
+            <input type="text" placeholder="Search" />
+          </div>
+        </div>
         <div>
           <table>
             <thead className={style.studiotabelHead}>
@@ -122,7 +138,13 @@ function ASMusicProduction({
                 currentTableData.map((products) => {
                   return (
                     <tr key={products._id}>
-                      <td style={{ display: "flex", alignItems: "center" }}>
+                      <td
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "100%",
+                        }}
+                      >
                         <div className={style.studioImage}>
                           {products.servicePhotos ? (
                             <img
@@ -140,7 +162,7 @@ function ASMusicProduction({
                       </td>
                       <td>Starting from ₹{products.price}</td>
                       <td>
-                        {products.address}
+                        {products?.packages?.length}
                         <br />
                         <small> {products.state}</small>
                       </td>
@@ -197,6 +219,7 @@ function ASMusicProduction({
           pageCount={pageCount}
           totalPage={totalPage}
           setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>

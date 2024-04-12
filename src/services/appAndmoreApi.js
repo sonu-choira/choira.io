@@ -32,9 +32,53 @@ class Appapi{
     console.log("res ===>", response.data)
     return response.data;
    };
+
+ createService = async (serviceData) => {
+    const response = await api.post(`services/create`, 
+      serviceData
+    );
+    const {status} = response.data
+    console.log("postdata ===>", response.data)
+    return response.data;
+
+   };
  
 
+   createStudio = async (studioData) => {
+      const response = await api.post(`studios/create`,
+        studioData
+      );
+      const {status} = response.data
+      console.log("postdata ===>", response.data)
+      return response.data;
+   
+     };
+
+   updateService = async (serviceId, serviceData) => {
+      const response = await api.put(`services/update/${serviceId}`,
+      serviceData
+      );
+      const {status} = response.data
+      console.log("postdata ===>", response.data)
+      return response.data;
+   
+     };
+     
+   updateStudio = async (studioId, studioData) => {
+      const response = await api.patch(`studios/${studioId}`,
+      studioData
+      );
+      const {status} = response.data
+      console.log("postdata ===>", response.data)
+      return response.data;
+   
+     };
+
 }
+
+
+
+
 
 
 export default new Appapi();

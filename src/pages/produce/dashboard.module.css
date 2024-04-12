@@ -17,12 +17,12 @@ body {
 }
 .tabActive {
   border-radius: 5px;
-  padding: 3%;
+  /* padding: 3%; */
   background-color: rgba(255, 199, 1, 0.2);
 }
 .padding {
-  padding: 10%;
   cursor: pointer;
+  /* border: 2px solid blue; */
 }
 .sidebar {
   width: 12%;
@@ -86,6 +86,10 @@ body {
   align-items: center;
   gap: 10%;
   color: white;
+  margin-bottom: 5%;
+  padding-left: 4%;
+  /* border: 2px solid red; */
+  min-height: 5vh !important;
 }
 .community {
   width: 100%;
@@ -1367,7 +1371,7 @@ body {
   background-color: #eee;
 }
 
-input {
+.chat-input input {
   flex: 1;
   padding: 8px;
 }

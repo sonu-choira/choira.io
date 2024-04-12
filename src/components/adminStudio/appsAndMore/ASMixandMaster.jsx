@@ -18,6 +18,8 @@ import { LuFilePlus } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import { IoCalendarOutline } from "react-icons/io5";
+import { BiSearchAlt } from "react-icons/bi";
 
 let PageSize = 10;
 
@@ -28,6 +30,7 @@ function ASMixandMaster({
   setPageCount,
   pageCount,
   totalPage,
+  bookingPageCount,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -102,6 +105,19 @@ function ASMixandMaster({
   return (
     <>
       <div className={style.studioTabelDiv}>
+        <div className={style.searchDiv}>
+          <div>
+            <p>Search by Date </p>
+            <label htmlFor="selectDate">
+              <IoCalendarOutline />
+            </label>
+            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
+          </div>
+          <div>
+            <BiSearchAlt /> <br />
+            <input type="text" placeholder="Search" />
+          </div>
+        </div>
         <div>
           <table>
             <thead className={style.studiotabelHead}>
@@ -114,15 +130,21 @@ function ASMixandMaster({
                 <th>Activity Status</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className={style.tbody}>
               {products.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
                 products.map((product) => {
                   return (
                     <tr key={product._id}>
-                      <td style={{ display: "flex", alignItems: "center" }}>
-                        <div className={style.studioImage}>
+                      <td
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "100%",
+                        }}
+                      >
+                        <div className={style.studioImage} style={{}}>
                           {product.servicePhotos ? (
                             <img
                               src={product.servicePhotos[0]}
@@ -192,6 +214,7 @@ function ASMixandMaster({
           pageCount={pageCount}
           totalPage={totalPage}
           setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>
