@@ -180,6 +180,7 @@ function AllStudioDetail2({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
+
                 <th>
                   <div className={style.headingContainer}>
                     Studio
@@ -240,6 +241,7 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
+
               </tr>
             </thead>
             <tbody>
@@ -310,7 +312,7 @@ function AllStudioDetail2({
                           <MdEdit
                             style={{ color: "#ffc701", cursor: "pointer" }}
                             onClick={() => {
-                              gotoEdit(products._id);
+                              // gotoEdit(products._id);
                             }}
                           />
                           <RiDeleteBin5Fill

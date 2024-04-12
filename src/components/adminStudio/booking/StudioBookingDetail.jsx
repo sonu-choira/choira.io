@@ -94,6 +94,7 @@ function StudioBookingDetail({
               </tr>
             </thead>
             <tbody>
+
               {products.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
@@ -111,6 +112,7 @@ function StudioBookingDetail({
                       <td>₹{products.totalPrice}</td>
                       <td className={style.tableActionbtn}>
                         {/* <div>
+
                         <select
                           value={
                             selectedStatus[products._id] ||
@@ -132,6 +134,7 @@ function StudioBookingDetail({
                           <option value={2}>Cancelled</option>
                         </select>
                       </div> */}
+
                         <div>
                           <GrShare
                             style={{ cursor: "pointer" }}
@@ -149,6 +152,7 @@ function StudioBookingDetail({
                   );
                 })
               )}
+
             </tbody>
           </table>
         </div>

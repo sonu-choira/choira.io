@@ -193,7 +193,7 @@ function ASMixandMaster({
                           <MdEdit
                             style={{ color: "#ffc701", cursor: "pointer" }}
                             onClick={() => {
-                              gotoEdit(product._id);
+                              // gotoEdit(product._id);
                             }}
                           />
                           <RiDeleteBin5Fill

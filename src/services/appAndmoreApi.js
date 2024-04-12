@@ -10,6 +10,7 @@ class Appapi{
     params: {
       limit: 10,
       page :pageCount,
+      sortBy: "_id:desc"
       // active: active
     }
   });
@@ -24,6 +25,7 @@ class Appapi{
             serviceType: Type,
             active: active,
             page:pageCount,
+            sortBy: "_id:desc"
         }
     });
     const {status} = response.data
