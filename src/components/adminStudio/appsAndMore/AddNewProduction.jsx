@@ -6,9 +6,8 @@ import {
   MdOutlineSettings,
 } from "react-icons/md";
 import style from "../../../pages/admin/studios/studio.module.css";
-import { FaPencilAlt } from "react-icons/fa";
+// test
 
-import upload from "../../../assets/upload.svg";
 import cross from "../../../assets/cross.svg";
 import StudioFooter from "../StudioFooter";
 import { Select } from "antd";
@@ -18,9 +17,7 @@ import { IoSearch } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { FaRegBell } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
-import AddNewServices from "./AddNewServices";
 import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
-import AddMultipleTeam from "../../../pages/admin/layout/AddMultipleTeam";
 import AddmultipleServises from "../../../pages/admin/layout/AddmultipleServises";
 import AddNewServices2 from "./AddNewServices2";
 import appAndmoreApi from "../../../services/appAndmoreApi";
