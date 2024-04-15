@@ -35,11 +35,11 @@ let PageSize = 10;
 function AllStudioDetail2({
   products,
   setProducts,
-  pageDetails,
   setPageCount,
   pageCount,
   totalPage,
   bookingPageCount,
+  setTotalPage,
 }) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
@@ -77,29 +77,29 @@ function AllStudioDetail2({
   //   return products.slice(firstPageIndex, lastPageIndex);
   // }, [currentPage, products]);
 
-  const [selectedStatus, setSelectedStatus] = useState({});
+  // const [selectedStatus, setSelectedStatus] = useState({});
 
-  const handleChange = (productId, event) => {
-    setSelectedStatus((prevStatus) => ({
-      ...prevStatus,
-      [productId]: event.target.value,
-    }));
-  };
+  // const handleChange = (productId, event) => {
+  //   setSelectedStatus((prevStatus) => ({
+  //     ...prevStatus,
+  //     [productId]: event.target.value,
+  //   }));
+  // };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Cancelled":
-        return "#FFDDDD";
-      case "Pending":
-        return "#CAE2FF";
-      case "Complete":
-        return "#DDFFF3";
-      case "Active":
-        return "#FFF3CA";
-      default:
-        return "";
-    }
-  };
+  // const getStatusColor = (status) => {
+  //   switch (status) {
+  //     case "Cancelled":
+  //       return "#FFDDDD";
+  //     case "Pending":
+  //       return "#CAE2FF";
+  //     case "Complete":
+  //       return "#DDFFF3";
+  //     case "Active":
+  //       return "#FFF3CA";
+  //     default:
+  //       return "";
+  //   }
+  // };
   const [activityStatus, setActivityStatus] = useState({});
   const handleSwitchChange = (studioId, status) => {
     console.log(status);
@@ -119,6 +119,12 @@ function AllStudioDetail2({
       }
       return !prevState;
     });
+  };
+  const closeAllFilter = () => {
+    setshowloactionfilter(false);
+    setShowRoomFilter(false);
+    setShowstatusFilter(false);
+    setshowpricefilter(false);
   };
 
   const [showloactionfilter, setshowloactionfilter] = useState(false);
@@ -160,9 +166,29 @@ function AllStudioDetail2({
     });
   };
 
+  let sendFilterDataToapi = {
+    startPrice: "",
+    endPrice: "",
+    city: "",
+    roomCount: "",
+    status: "",
+  };
+
   const city = ["Mumbai", "Delhi", "Bangalore", "Chennai"];
   const room = ["1", "2", "3", "4", "5"];
   const status = ["active", "inactive"];
+
+  const [selectedCity, setSelectedCity] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState([]);
+
+  useEffect(() => {
+    sendFilterDataToapi.city = selectedCity[0];
+    sendFilterDataToapi.roomCount = selectedRoom[0];
+    sendFilterDataToapi.status = selectedStatus[0];
+
+    console.log(sendFilterDataToapi);
+  }, [selectedCity, selectedRoom, selectedStatus]);
 
   return (
     <>
@@ -191,7 +217,13 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Price
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedRoom.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
                       <span onClick={handelpriceFilter}>
                         <CiFilter />
                       </span>
@@ -203,11 +235,30 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Location
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedCity.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
                       <span onClick={handellocationFilter}>
                         <CiFilter />
                       </span>
-                      {showloactionfilter ? <CheckboxFilter data={city} /> : ""}
+                      {showloactionfilter ? (
+                        <CheckboxFilter
+                          data={city}
+                          setSelectedData={setSelectedCity}
+                          selectedData={selectedCity}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          closeAllFilter={closeAllFilter}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </th>
@@ -218,7 +269,19 @@ function AllStudioDetail2({
                       <span onClick={handelRoomFilter}>
                         <CiFilter />
                       </span>
-                      {showRoomFilter ? <CheckboxFilter data={room} /> : ""}
+                      {showRoomFilter ? (
+                        <CheckboxFilter
+                          data={room}
+                          selectedData={selectedRoom}
+                          setSelectedData={setSelectedRoom}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </th>
@@ -233,6 +296,13 @@ function AllStudioDetail2({
                         <CheckboxFilter
                           data={status}
                           cusstyle={{ left: "-355%" }}
+                          disabledsearch={true}
+                          selectedData={selectedStatus}
+                          setSelectedData={setSelectedStatus}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
                         />
                       ) : (
                         ""

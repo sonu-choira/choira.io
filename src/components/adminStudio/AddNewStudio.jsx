@@ -111,7 +111,7 @@ function AddNewStudio({ setSelectTab }) {
     state: "",
     studioPhotos: [],
     teamDetails: [],
-    totalRooms: "",
+    totalRooms: 0,
     _id: "",
   });
 
@@ -143,6 +143,14 @@ function AddNewStudio({ setSelectTab }) {
   //   totalRooms: "",
   //   _id: "",
   // });
+
+  useEffect(() => {
+    setStudioDetails((prevData) => ({
+      ...prevData,
+      totalRooms: rooms.length,
+    }));
+    // console.log(rooms.length);
+  }, [rooms.length]);
 
   useEffect(() => {
     console.log("studioDetails change huaa hai ", studioDetails);

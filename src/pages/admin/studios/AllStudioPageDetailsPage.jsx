@@ -112,6 +112,7 @@ function AllStudioPageDetailsPage() {
             setProducts={setProducts}
             totalPage={totalPage}
             setPageCount={setPageCount}
+            setTotalPage={setTotalPage}
             pageCount={pageCount}
             bookingPageCount={bookingPageCount}
           />

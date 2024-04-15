@@ -72,6 +72,19 @@ class Appapi{
    
      };
 
+     filterData = async (limit, city) => {
+      const response = await api.get(`/studios-all`,{ 
+          params: {
+              limit: limit,
+              city: city,
+              // active: active,
+              // page:pageCount,
+          }
+      });
+      const {status} = response.data
+      console.log("res ===>", response.data)
+      return response.data;
+     };
 }
 
 
