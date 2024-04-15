@@ -30,6 +30,7 @@ function AddNewRoom({
   showMode,
 }) {
   const currentRoomsData = rooms[indexofrooms] || "";
+
   const customStyles = {
     height: "90%",
     overFlow: "scroll",
@@ -97,6 +98,21 @@ function AddNewRoom({
       });
     });
   }, [images]);
+
+  useEffect(() => {
+    setrooms((prevRooms) => {
+      return prevRooms.map((room, idx) => {
+        if (idx === indexofrooms) {
+          return {
+            ...room, // Copy the previous room data
+            roomId: indexofrooms + 1,
+          };
+        } else {
+          return room;
+        }
+      });
+    });
+  }, []);
 
   useEffect(() => {
     console.log("images", images);
@@ -312,8 +328,9 @@ function AddNewRoom({
     setrooms((prevRooms) => {
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
-        ...currentRoomsData,
-        pricePerHour: value,
+        ...updatedRooms[indexofrooms],
+        pricePerHour: parseFloat(value),
+        basePrice: parseFloat(value), // Update basePrice as well
       };
       return updatedRooms;
     });
@@ -325,7 +342,7 @@ function AddNewRoom({
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
         ...currentRoomsData,
-        discountPercentage: value,
+        discountPercentage: parseFloat(value),
       };
       return updatedRooms;
     });
@@ -394,6 +411,8 @@ function AddNewRoom({
                 id="Discount"
                 placeholder="Enter Discount"
                 value={currentRoomsData?.discountPercentage}
+                min={0}
+                max={100}
                 onChange={handleDiscountChange}
               />
             </div>
