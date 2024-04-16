@@ -37,7 +37,7 @@ function CheckboxFilter({
     if (selectedData.length > 0) {
       let city = sendFilterDataToapi.city;
       let limit = sendFilterDataToapi.limit;
-      setProducts("");
+      setProducts([]);
       appAndmoreApi
         .filterData(limit, city)
         .then((response) => {
@@ -51,7 +51,8 @@ function CheckboxFilter({
       closeAllFilter();
     } else {
       closeAllFilter();
-      setProducts("");
+      setProducts([]);
+
       hitallstudioApi();
     }
   };

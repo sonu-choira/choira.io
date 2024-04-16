@@ -72,11 +72,27 @@ class Appapi{
    
      };
 
-     filterData = async (limit, city) => {
+     filterData = async (limit, city,searchText) => {
       const response = await api.get(`/studios-all`,{ 
           params: {
               limit: limit,
               city: city,
+              searchText: searchText,
+              // active: active,
+              // page:pageCount,
+          }
+      });
+      const {status} = response.data
+      console.log("res ===>", response.data)
+      return response.data;
+     };
+
+     filterServiceData = async (serviceType, serviceName) => {
+      const response = await api.get(`/services`,{ 
+          params: {
+            serviceType: serviceType,
+              serviceName: serviceName,
+              // searchText: searchText,
               // active: active,
               // page:pageCount,
           }

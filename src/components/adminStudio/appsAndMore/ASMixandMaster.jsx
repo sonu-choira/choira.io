@@ -20,17 +20,18 @@ import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
+import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 
 let PageSize = 10;
 
 function ASMixandMaster({
   products,
   setProducts,
-  pageDetails,
   setPageCount,
   pageCount,
   totalPage,
   bookingPageCount,
+  setTotalPage,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -105,19 +106,11 @@ function ASMixandMaster({
   return (
     <>
       <div className={style.studioTabelDiv}>
-        <div className={style.searchDiv}>
-          <div>
-            <p>Search by Date </p>
-            <label htmlFor="selectDate">
-              <IoCalendarOutline />
-            </label>
-            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
-          </div>
-          <div>
-            <BiSearchAlt /> <br />
-            <input type="text" placeholder="Search" />
-          </div>
-        </div>
+        <DateAndSearchFilter
+          setProducts={setProducts}
+          setTotalPage={setTotalPage}
+          bookingPageCount={bookingPageCount}
+        />
         <div>
           <table>
             <thead className={style.studiotabelHead}>
@@ -161,7 +154,7 @@ function ASMixandMaster({
                       </td>
                       <td>Starting from ₹{product.price}</td>
                       <td>
-                        {product.address}
+                        {product.totalPlans}
                         <br />
                         <small> {product.state}</small>
                       </td>

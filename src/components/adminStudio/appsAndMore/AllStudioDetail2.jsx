@@ -26,9 +26,7 @@ import { CiFilter } from "react-icons/ci";
 import { DatePicker, Space } from "antd";
 import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
-const onChange = (date, dateString) => {
-  console.log(date, dateString);
-};
+import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 
 let PageSize = 10;
 
@@ -193,15 +191,11 @@ function AllStudioDetail2({
   return (
     <>
       <div className={style.studioTabelDiv}>
-        <div className={style.searchDiv}>
-          <div>
-            <DatePicker onChange={onChange} className={style.antCustomcss} />
-          </div>
-          <div>
-            <BiSearchAlt /> <br />
-            <input type="text" placeholder="Search" />
-          </div>
-        </div>
+        <DateAndSearchFilter
+          setProducts={setProducts}
+          setTotalPage={setTotalPage}
+          bookingPageCount={bookingPageCount}
+        />
         <div>
           <table>
             <thead className={style.studiotabelHead}>

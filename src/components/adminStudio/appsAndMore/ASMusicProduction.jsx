@@ -20,17 +20,18 @@ import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
+import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 
 let PageSize = 10;
 
 function ASMusicProduction({
   products,
   setProducts,
-  pageDetails,
   setPageCount,
   pageCount,
   totalPage,
   bookingPageCount,
+  setTotalPage,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -73,11 +74,11 @@ function ASMusicProduction({
       [studioId]: !prevStatus[studioId], // Toggle the switch state
     }));
   };
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return products.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, products]);
+  // const currentTableData = useMemo(() => {
+  //   const firstPageIndex = (currentPage - 1) * PageSize;
+  //   const lastPageIndex = firstPageIndex + PageSize;
+  //   return products.slice(firstPageIndex, lastPageIndex);
+  // }, [currentPage, products]);
 
   const [selectedStatus, setSelectedStatus] = useState({});
 
@@ -87,38 +88,16 @@ function ASMusicProduction({
       [productId]: event.target.value,
     }));
   };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Cancelled":
-        return "#FFDDDD";
-      case "Pending":
-        return "#CAE2FF";
-      case "Complete":
-        return "#DDFFF3";
-      case "Active":
-        return "#FFF3CA";
-      default:
-        return "";
-    }
-  };
+  console.log("products...", products);
 
   return (
     <>
       <div className={style.studioTabelDiv}>
-        <div className={style.searchDiv}>
-          <div>
-            <p>Search by Date </p>
-            <label htmlFor="selectDate">
-              <IoCalendarOutline />
-            </label>
-            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
-          </div>
-          <div>
-            <BiSearchAlt /> <br />
-            <input type="text" placeholder="Search" />
-          </div>
-        </div>
+        <DateAndSearchFilter
+          setProducts={setProducts}
+          setTotalPage={setTotalPage}
+          bookingPageCount={bookingPageCount}
+        />
         <div>
           <table>
             <thead className={style.studiotabelHead}>
@@ -135,7 +114,7 @@ function ASMusicProduction({
               {products.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
-                currentTableData.map((products) => {
+                products?.map((products) => {
                   return (
                     <tr key={products._id}>
                       <td
