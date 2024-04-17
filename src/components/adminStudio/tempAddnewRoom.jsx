@@ -23,48 +23,54 @@
 // function AddNewRoom({
 //   setshowRoomsDetails,
 //   isEditMode,
-//   setRooms,
+//   setrooms,
 //   rooms,
 //   indexofrooms,
 //   setIndexofrooms,
+//   showMode,
 // }) {
 //   const currentRoomsData = rooms[indexofrooms] || "";
+
 //   const customStyles = {
 //     height: "90%",
 //     overFlow: "scroll",
 //   };
+//   const [selectedAmenities, setSelectedAmenities] = useState([]);
+//   const [selectedDate, setSelectedDate] = useState([]);
+//   const [time, setTime] = useState([]);
+//   const [bookingtime, setBookingtime] = useState([]);
+
 //   let genreralStartTime;
 //   let genreralEndTime;
 //   let bookingStartTime;
 //   let bookingEndTime;
-//   // useEffect(() => {
-//   //   if (currentRoomsData?.generalTime?.startTime?.length == 5) {
-//   //     genreralStartTime = String(
-//   //       `${currentRoomsData?.generalTime?.startTime}:00`
-//   //     );
-//   //     genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}:00`);
+//   useEffect(() => {
+//     if (currentRoomsData?.generalTime?.startTime?.length == 5) {
+//       genreralStartTime = String(
+//         `${currentRoomsData?.generalTime?.startTime}:00`
+//       );
+//       genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}:00`);
 
-//   //     bookingStartTime = String(`${currentRoomsData?.generalStartTime}:00`);
-//   //     bookingEndTime = String(`${currentRoomsData?.generalEndTime}:00`);
-//   //   } else {
-//   //     genreralStartTime = String(`${currentRoomsData?.generalTime?.startTime}`);
-//   //     genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}`);
+//       bookingStartTime = String(`${currentRoomsData?.generalStartTime}:00`);
+//       bookingEndTime = String(`${currentRoomsData?.generalEndTime}:00`);
+//     } else {
+//       genreralStartTime = String(`${currentRoomsData?.generalTime?.startTime}`);
+//       genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}`);
 
-//   //     bookingStartTime = String(`${currentRoomsData?.generalStartTime}`);
-//   //     bookingEndTime = String(`${currentRoomsData?.generalEndTime}`);
-//   //   }
+//       bookingStartTime = String(`${currentRoomsData?.generalStartTime}`);
+//       bookingEndTime = String(`${currentRoomsData?.generalEndTime}`);
+//     }
 
-//   //   console.log("genreralStartTime", genreralStartTime);
-//   //   console.log("genreralStartTime", typeof genreralStartTime);
+//     console.log("genreralStartTime", genreralStartTime);
+//     console.log("genreralStartTime", typeof genreralStartTime);
 
-//   //   console.log("genreralEndTime", genreralEndTime);
-//   // }, [currentRoomsData]);
+//     console.log("genreralEndTime", genreralEndTime);
+//   }, [currentRoomsData]);
 
 //   useEffect(() => {
 //     console.log("rooms ka details change huaa haiiiiiiiiiiiiiiii");
 //   }, [rooms]);
 
-//   console.log("indexofrooms", indexofrooms);
 //   useEffect(() => {
 //     console.log("currentRoomsData------>/", currentRoomsData);
 //     console.log(
@@ -78,8 +84,89 @@
 //     currentRoomsData ? currentRoomsData.roomPhotos : []
 //   );
 
-//   const [time, setTime] = useState();
-//   const [bookingtime, setBookingtime] = useState();
+//   useEffect(() => {
+//     setrooms((prevRooms) => {
+//       return prevRooms.map((room, idx) => {
+//         if (idx === indexofrooms) {
+//           return {
+//             ...room, // Copy the previous room data
+//             roomPhotos: images, // Update roomPhotos with the new images
+//           };
+//         } else {
+//           return room;
+//         }
+//       });
+//     });
+//   }, [images]);
+
+//   useEffect(() => {
+//     setrooms((prevRooms) => {
+//       return prevRooms.map((room, idx) => {
+//         if (idx === indexofrooms) {
+//           return {
+//             ...room, // Copy the previous room data
+//             roomId: indexofrooms + 1,
+//           };
+//         } else {
+//           return room;
+//         }
+//       });
+//     });
+//   }, []);
+
+//   useEffect(() => {
+//     console.log("images", images);
+//   }, [images]);
+//   useEffect(() => {
+//     setrooms((prerooms) => {
+//       prerooms.map((rm, idex) => {
+//         if (idex === indexofrooms) {
+//           rm.amenities = selectedAmenities;
+//         }
+//       });
+//       return prerooms;
+//     });
+//   }, [selectedAmenities.length]);
+
+//   useEffect(() => {
+//     setrooms((prerooms) => {
+//       prerooms.map((rm, idex) => {
+//         if (idex === indexofrooms) {
+//           console.log("selectedDate", selectedDate);
+//           rm.bookingDays = selectedDate;
+//         }
+//       });
+//       return prerooms;
+//     });
+//   }, [selectedDate.length]);
+
+//   useEffect(() => {
+//     console.log("====>>>>>>>", rooms);
+//   }, [rooms]);
+
+//   useEffect(() => {
+//     setrooms((prerooms) => {
+//       prerooms.map((rm, idex) => {
+//         if (idex === indexofrooms) {
+//           rm.bookingStartTime = time[0];
+//           rm.bookingEndTime = time[1];
+//         }
+//       });
+//       return prerooms;
+//     });
+//   }, [bookingtime.length]);
+
+//   useEffect(() => {
+//     setrooms((prerooms) => {
+//       prerooms.map((rm, idex) => {
+//         if (idex === indexofrooms) {
+//           rm.generalStartTime = time[0];
+//           rm.generalEndTime = time[1];
+//         }
+//       });
+//       return prerooms;
+//     });
+//   }, [time.length]);
 
 //   const handelGeneralTime = (time, timeString) => {
 //     console.log(time, timeString);
@@ -117,7 +204,6 @@
 //     "Saturday",
 //     "Sunday",
 //   ];
-//   const [selectedAmenities, setSelectedAmenities] = useState([]);
 
 //   const amenitiesList = [
 //     "Wifi",
@@ -128,13 +214,32 @@
 //     "Car Parking",
 //     "Banjo",
 //   ];
-//   const [selectedDate, setSelectedDate] = useState([]);
 
-//   useEffect(() => {
-//     setSelectedDate(
-//       currentRoomsData?.bookingDays?.map((item) => item.name) || []
-//     );
-//   }, [currentRoomsData?.bookingDays]);
+//   // useEffect(() => {
+//   //   if (isEditMode) {
+//   //     setSelectedDate(
+//   //       currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
+//   //     );
+//   //     console.log(
+//   //       "currentRoomsData?.bookingDays?.map((item) => item?.name)",
+//   //       currentRoomsData?.bookingDays?.map((item) => item?.name)
+//   //     );
+//   //   }
+//   // }, [currentRoomsData?.bookingDays?.length]);
+
+//   // useEffect(() => {
+//   //   if (isEditMode) {
+//   //     const bookingDays = currentRoomsData?.bookingDays;
+//   //     console.log("currentRoomsData:", currentRoomsData);
+//   //     if (bookingDays && bookingDays.length > 0) {
+//   //       const selectedDateNames = bookingDays.map((item) => item?.name || item);
+//   //       console.log("selectedDateNames:", selectedDateNames);
+//   //       setSelectedDate(selectedDateNames);
+//   //     } else {
+//   //       setSelectedDate([]);
+//   //     }
+//   //   }
+//   // }, [isEditMode]);
 
 //   const filteredDates = days.filter((o) => !selectedDate.includes(o));
 
@@ -147,6 +252,12 @@
 //       currentRoomsData?.amenities?.map((item) => item) || []
 //     );
 //   }, [currentRoomsData?.amenities]);
+
+//   useEffect(() => {
+//     setSelectedDate(
+//       currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
+//     );
+//   }, [currentRoomsData?.bookingDays]);
 
 //   // const handleCheckboxChange = (id) => {
 //   //   const updatedAmenities = selectedAmenities.includes(id)
@@ -161,39 +272,36 @@
 //     console.log("selectedDate updated:", selectedDate);
 //   }, [selectedDate]);
 
-//   const handledaysCheckboxChange = (id) => {
-//     const updatedDays = selectedDate.includes(id)
-//       ? selectedDate.filter((day) => day !== id)
-//       : [...selectedDate, id];
+//   // const handledaysCheckboxChange = (id) => {
+//   //   const updatedDays = selectedDate.includes(id)
+//   //     ? selectedDate.filter((day) => day !== id)
+//   //     : [...selectedDate, id];
 
-//     setSelectedDate(updatedDays);
-//     console.log(selectedDate);
-//   };
-//   const [iframeCode, setIframeCode] = useState("");
-//   const [hasContent, setHasContent] = useState(false);
+//   //   setSelectedDate(updatedDays);
+//   //   console.log(selectedDate);
+//   // };
 
-//   const handleIframeCodeChange = (e) => {
-//     const inputCode = e.target.value;
-
-//     // Update the state with the user-entered iframe code
-//     setIframeCode(inputCode);
-
-//     // Update hasContent state based on whether there is content in the textarea
-//     setHasContent(inputCode.trim() !== "");
-//   };
-
-//   const [name, setName] = useState("");
-//   const onNameChange = (event) => {
-//     setName(event.target.value);
-//   };
-
+//   // const [temproomdetails, settemproomdetails] = useState( {
+//   //   roomName: "",
+//   //   area: "",
+//   //   pricePerHour: "",
+//   //   discountPercentage: "",
+//   //   bookingDays: [],
+//   //   generalStartTime: "",
+//   //   generalEndTime: "",
+//   //   bookingStartTime: [],
+//   //   bookingEndTime: [],
+//   //   roomPhotos: [],
+//   //   amenities: [],
+//   //   roomDetails: "",
+//   // },)
 //   useEffect(() => {
 //     console.log("room k details mila", rooms);
 //   }, [rooms]);
 
 //   const handleRoomNameChange = (event) => {
 //     const { value } = event.target;
-//     setRooms((prevRooms) => {
+//     setrooms((prevRooms) => {
 //       const updatedRooms = [...prevRooms];
 //       updatedRooms[indexofrooms] = {
 //         ...currentRoomsData,
@@ -205,7 +313,7 @@
 
 //   const handleRoomAreaChange = (event) => {
 //     const { value } = event.target;
-//     setRooms((prevRooms) => {
+//     setrooms((prevRooms) => {
 //       const updatedRooms = [...prevRooms];
 //       updatedRooms[indexofrooms] = {
 //         ...currentRoomsData,
@@ -217,11 +325,12 @@
 
 //   const handlePricePerHourChange = (event) => {
 //     const { value } = event.target;
-//     setRooms((prevRooms) => {
+//     setrooms((prevRooms) => {
 //       const updatedRooms = [...prevRooms];
 //       updatedRooms[indexofrooms] = {
-//         ...currentRoomsData,
-//         pricePerHour: value,
+//         ...updatedRooms[indexofrooms],
+//         pricePerHour: parseFloat(value),
+//         basePrice: parseFloat(value), // Update basePrice as well
 //       };
 //       return updatedRooms;
 //     });
@@ -229,11 +338,11 @@
 
 //   const handleDiscountChange = (event) => {
 //     const { value } = event.target;
-//     setRooms((prevRooms) => {
+//     setrooms((prevRooms) => {
 //       const updatedRooms = [...prevRooms];
 //       updatedRooms[indexofrooms] = {
 //         ...currentRoomsData,
-//         discountPercentage: value,
+//         discountPercentage: parseFloat(value),
 //       };
 //       return updatedRooms;
 //     });
@@ -241,7 +350,7 @@
 
 //   const handleRoomDetailsChange = (event) => {
 //     const { value } = event.target;
-//     setRooms((prevRooms) => {
+//     setrooms((prevRooms) => {
 //       const updatedRooms = [...prevRooms];
 //       updatedRooms[indexofrooms] = {
 //         ...currentRoomsData,
@@ -255,7 +364,14 @@
 //     <>
 //       <div className={style.addNewStudioTitle}>Add new room</div>
 //       <div className={style.addNewRoomPage}>
-//         <div>
+//         <div
+//           style={{
+//             position: showMode ? "relative" : "",
+//             overflow: "hidden",
+//           }}
+//         >
+//           {showMode ? <p className={style.showmode}></p> : ""}
+
 //           <div>
 //             <div className={style.addNewStudioinputBox}>
 //               <label htmlFor="RoomName">Room Name</label>
@@ -295,39 +411,26 @@
 //                 id="Discount"
 //                 placeholder="Enter Discount"
 //                 value={currentRoomsData?.discountPercentage}
+//                 min={0}
+//                 max={100}
 //                 onChange={handleDiscountChange}
 //               />
 //             </div>
-
-//             <div className={style.defaultLabel}>Booking Days</div>
-//             {/* <div className={style.amenitesCheckbox}>
-//               {days.map((day) => (
-//                 <div key={day.id}>
-//                   <input
-//                     type="checkbox"
-//                     id={day.id}
-//                     value={day.id}
-//                     checked={selectedDate.includes(day.id)}
-//                     onChange={() => handledaysCheckboxChange(day.id)}
-//                   />
-//                   &nbsp;
-//                   <label htmlFor={day.id}>{day.name}</label>
-//                 </div>
-//               ))}
-//             </div> */}
-
-//             <Select
-//               id="Dates"
-//               mode="multiple"
-//               placeholder="Select Bookig Dates"
-//               value={selectedDate}
-//               onChange={setSelectedDate}
-//               // style={customStyles}
-//               options={filteredDates?.map((item) => ({
-//                 value: item,
-//                 label: item,
-//               }))}
-//             />
+//             <div className={style.addNewStudioinputBox}>
+//               <label htmlFor="Dates">Booking Days </label>
+//               <Select
+//                 id="Dates"
+//                 mode="multiple"
+//                 placeholder="Select Bookig Dates"
+//                 value={selectedDate}
+//                 onChange={setSelectedDate}
+//                 // style={customStyles}
+//                 options={filteredDates?.map((item) => ({
+//                   value: item,
+//                   label: item,
+//                 }))}
+//               />
+//             </div>
 
 //             <div className={style.addNewStudioinputBox}>
 //               <label>General Start & End Time</label>
@@ -366,36 +469,22 @@
 //               setImages={setImages}
 //               isEditMode={isEditMode}
 //             />
+//             <div className={style.addNewStudioinputBox}>
+//               <label htmlFor="roomAmenities">Amenities </label>
 
-//             <div className={style.defaultLabel}>Amenities</div>
-//             {/* <div className={style.amenitesCheckbox}>
-//               {amenitiesList.map((amenity) => (
-//                 <div key={amenity.id}>
-//                   <input
-//                     type="checkbox"
-//                     id={amenity.id}
-//                     value={amenity.id}
-//                     checked={selectedAmenities.includes(amenity.id)}
-//                     onChange={() => handleCheckboxChange(amenity.id)}
-//                   />
-//                   &nbsp;
-//                   <label htmlFor={amenity.id}>{amenity.label}</label>
-//                 </div>
-//               ))}
-
-//             </div> */}
-//             <Select
-//               id="Amenites"
-//               mode="multiple"
-//               placeholder="Select Amenites"
-//               value={selectedAmenities}
-//               onChange={setSelectedAmenities}
-//               // style={customStyles}
-//               options={filteredAmenities?.map((item) => ({
-//                 value: item,
-//                 label: item,
-//               }))}
-//             />
+//               <Select
+//                 id="roomAmenities"
+//                 mode="multiple"
+//                 placeholder="Select Amenites"
+//                 value={selectedAmenities}
+//                 onChange={setSelectedAmenities}
+//                 // style={customStyles}
+//                 options={filteredAmenities?.map((item) => ({
+//                   value: item,
+//                   label: item,
+//                 }))}
+//               />
+//             </div>
 
 //             <div className={style.addNewStudioinputBox2}>
 //               <label htmlFor="RoomDetails">Room Details</label>
@@ -424,14 +513,18 @@
 
 //               <TimePicker.RangePicker
 //                 onChange={handelbookingTime}
-//                 // defaultValue={
-//                 //   isEditMode
-//                 //     ? [
-//                 //         dayjs(`${bookingStartTime}`, "HH:mm:ss"),
-//                 //         dayjs(`${bookingEndTime}`, "HH:mm:ss"),
-//                 //       ]
-//                 //     : []
-//                 // }
+//                 defaultValue={
+//                   isEditMode
+//                     ? [
+//                         dayjs(bookingStartTime, "HH:mm:ss"),
+//                         dayjs(bookingEndTime, "HH:mm:ss"),
+//                       ]
+//                     : // ? [
+//                       //     dayjs(`${bookingStartTime}`, "HH:mm:ss"),
+//                       //     dayjs(`${bookingEndTime}`, "HH:mm:ss"),
+//                       //   ]
+//                       []
+//                 }
 //                 style={{ height: "100%", outline: "none" }}
 //               />
 //             </div>

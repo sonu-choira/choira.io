@@ -71,6 +71,7 @@ function AddNewStudio({ setSelectTab }) {
       bookingDays: [],
       generalStartTime: "",
       generalEndTime: "",
+      availabilities: [],
       bookingStartTime: [],
       bookingEndTime: [],
       roomPhotos: [],

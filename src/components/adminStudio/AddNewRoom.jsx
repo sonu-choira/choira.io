@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MdAddAPhoto } from "react-icons/md";
+import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import upload from "../../assets/img/upload.png";
 import style from "../../pages/admin/studios/studio.module.css";
+import cross from "../../assets/cross.svg";
 
 import {
   FaCheckDouble,
@@ -30,7 +31,7 @@ function AddNewRoom({
   showMode,
 }) {
   const currentRoomsData = rooms[indexofrooms] || "";
-
+  const format = "HH:mm";
   const customStyles = {
     height: "90%",
     overFlow: "scroll",
@@ -38,46 +39,42 @@ function AddNewRoom({
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [selectedDate, setSelectedDate] = useState([]);
   const [time, setTime] = useState([]);
-  const [bookingtime, setBookingtime] = useState([]);
+  const [generalTime, setGeneralTime] = useState(
+    currentRoomsData.generalEndTime && currentRoomsData.generalStartTime
+      ? {
+          generalStartTime: currentRoomsData.generalStartTime,
+          generalEndTime: currentRoomsData.generalEndTime,
+        }
+      : {
+          generalStartTime: "00:00",
+          generalEndTime: "00:00",
+        }
+  );
+  const handleAddDetails = () => {
+    setDetails((prevDetails) => [...prevDetails, ""]); // Add an empty string to the details array
+  };
+  // const [generalTime, setGeneralTime] = useState({
+  //   generalEndTime: "",
+  //   generalStartTime: ""
 
-  let genreralStartTime;
-  let genreralEndTime;
-  let bookingStartTime;
-  let bookingEndTime;
-  useEffect(() => {
-    if (currentRoomsData?.generalTime?.startTime?.length == 5) {
-      genreralStartTime = String(
-        `${currentRoomsData?.generalTime?.startTime}:00`
-      );
-      genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}:00`);
+  // })
+  // const [bookingTimes, setBookingTimes] = useState([
+  //   { startTime: "00:00", endTime: "00:00" },
 
-      bookingStartTime = String(`${currentRoomsData?.generalStartTime}:00`);
-      bookingEndTime = String(`${currentRoomsData?.generalEndTime}:00`);
-    } else {
-      genreralStartTime = String(`${currentRoomsData?.generalTime?.startTime}`);
-      genreralEndTime = String(`${currentRoomsData?.generalTime?.endTime}`);
+  // ]);
 
-      bookingStartTime = String(`${currentRoomsData?.generalStartTime}`);
-      bookingEndTime = String(`${currentRoomsData?.generalEndTime}`);
-    }
+  const [bookingTimes, setBookingTimes] = useState(
+    currentRoomsData?.availabilities
+      ? [...currentRoomsData.availabilities]
+      : [{ startTime: "00:00", endTime: "00:00" }]
+  );
 
-    console.log("genreralStartTime", genreralStartTime);
-    console.log("genreralStartTime", typeof genreralStartTime);
+  // let genreralStartTime;
+  // let genreralEndTime;
 
-    console.log("genreralEndTime", genreralEndTime);
-  }, [currentRoomsData]);
-
-  useEffect(() => {
-    console.log("rooms ka details change huaa haiiiiiiiiiiiiiiii");
-  }, [rooms]);
-
-  useEffect(() => {
-    console.log("currentRoomsData------>/", currentRoomsData);
-    console.log(
-      "currentRoomsData?.generalTime?.startTime",
-      `${currentRoomsData?.generalTime?.startTime}:00`
-    );
-  }, []);
+  const [details, setDetails] = useState(
+    currentRoomsData.details ? currentRoomsData.details : []
+  );
 
   const inputRef = useRef(null);
   const [images, setImages] = useState(
@@ -128,17 +125,17 @@ function AddNewRoom({
     });
   }, [selectedAmenities.length]);
 
-  useEffect(() => {
-    setrooms((prerooms) => {
-      prerooms.map((rm, idex) => {
-        if (idex === indexofrooms) {
-          console.log("selectedDate", selectedDate);
-          rm.bookingDays = selectedDate;
-        }
-      });
-      return prerooms;
-    });
-  }, [selectedDate.length]);
+  // useEffect(() => {
+  //   setrooms((prerooms) => {
+  //     prerooms.map((rm, idex) => {
+  //       if (idex === indexofrooms) {
+  //         console.log("selectedDate", selectedDate);
+  //         rm.bookingDays = selectedDate;
+  //       }
+  //     });
+  //     return prerooms;
+  //   });
+  // }, [selectedDate.length]);
 
   useEffect(() => {
     console.log("====>>>>>>>", rooms);
@@ -146,39 +143,85 @@ function AddNewRoom({
 
   useEffect(() => {
     setrooms((prerooms) => {
-      prerooms.map((rm, idex) => {
+      return prerooms.map((rm, idex) => {
         if (idex === indexofrooms) {
-          rm.bookingStartTime = time[0];
-          rm.bookingEndTime = time[1];
+          return { ...rm, availabilities: bookingTimes };
         }
+        return rm;
       });
-      return prerooms;
     });
-  }, [bookingtime.length]);
+  }, [bookingTimes]);
 
   useEffect(() => {
     setrooms((prerooms) => {
-      prerooms.map((rm, idex) => {
-        if (idex === indexofrooms) {
-          rm.generalStartTime = time[0];
-          rm.generalEndTime = time[1];
-        }
+      return prerooms.map((room) => {
+        return {
+          ...room,
+          generalStartTime: generalTime.generalStartTime,
+          generalEndTime: generalTime.generalEndTime,
+        };
       });
-      return prerooms;
     });
-  }, [time.length]);
+  }, [generalTime]);
 
   const handelGeneralTime = (time, timeString) => {
     console.log(time, timeString);
     console.log("time is ", time);
     console.log("timeString is ", timeString);
-    setTime(timeString);
+    setGeneralTime({
+      generalStartTime: timeString[0],
+      generalEndTime: timeString[1],
+    });
   };
-  const handelbookingTime = (time, timeString) => {
-    console.log(time, timeString);
-    console.log("bookingt time is ", time);
-    console.log(" boolking timeString is ", timeString);
-    setBookingtime(timeString);
+
+  useEffect(() => {
+    currentRoomsData.generalStartTime = generalTime.generalStartTime;
+    currentRoomsData.generalEndTime = generalTime.generalEndTime;
+  }, [generalTime]);
+
+  useEffect(() => {
+    // Ensure there's always at least one booking time range displayed
+    if (bookingTimes.length === 0) {
+      setBookingTimes([[{ startTime: "00:00", endTime: "00:00" }]]);
+    }
+  }, [bookingTimes]);
+
+  const handleAddBookingTime = () => {
+    // Add a new booking time range to the array
+    setBookingTimes([
+      ...bookingTimes,
+      { startTime: "00:00", endTime: "00:00" },
+    ]);
+  };
+
+  const handleCancelBooking = (index) => {
+    // if (bookingTimes.length > 1 && index >= 0 && index < bookingTimes.length) {
+    const newBookingTimes = [...bookingTimes];
+    // alert(index);
+    newBookingTimes.splice(index, 1);
+    console.log(newBookingTimes);
+    setBookingTimes(newBookingTimes);
+    // }
+  };
+
+  useEffect(() => {
+    console.log("bookingTimes", bookingTimes);
+  }, [bookingTimes]);
+
+  // const handelbookingTime = (time, timeString, index) => {
+  //   console.log("timeString is", timeString);
+  //   const updatedBookingTimes = [...bookingTimes];
+  //   updatedBookingTimes[index] = timeString;
+  //   setBookingTimes(updatedBookingTimes);
+  // };
+  const handelbookingTime = (time, timeString, index) => {
+    console.log("timeString is", timeString);
+    const updatedBookingTimes = [...bookingTimes];
+    updatedBookingTimes[index] = {
+      startTime: timeString[0],
+      endTime: timeString[1],
+    };
+    setBookingTimes(updatedBookingTimes);
   };
 
   const abdefaultValue = ["18:30:56", "23:30:56"];
@@ -295,6 +338,7 @@ function AddNewRoom({
   //   amenities: [],
   //   roomDetails: "",
   // },)
+
   useEffect(() => {
     console.log("room k details mila", rooms);
   }, [rooms]);
@@ -348,17 +392,18 @@ function AddNewRoom({
     });
   };
 
-  const handleRoomDetailsChange = (event) => {
-    const { value } = event.target;
-    setrooms((prevRooms) => {
-      const updatedRooms = [...prevRooms];
-      updatedRooms[indexofrooms] = {
-        ...currentRoomsData,
-        roomDetails: value,
-      };
-      return updatedRooms;
-    });
+  const handleRoomDetailsChange = (e, index) => {
+    const updatedDetails = [...details];
+    updatedDetails[index] = e.target.value;
+    setDetails(updatedDetails);
   };
+
+  // useEffect(() => {
+  //   setrooms((prevRooms) => ({
+  //     ...prevRooms,
+  //     details: details,
+  //   }));
+  // }, [details.length]);
 
   return (
     <>
@@ -434,36 +479,36 @@ function AddNewRoom({
 
             <div className={style.addNewStudioinputBox}>
               <label>General Start & End Time</label>
+
               <TimePicker.RangePicker
+                format={format}
                 onChange={handelGeneralTime}
                 // defaultValue={[
                 //   dayjs("1:30:00", "HH:mm:ss"),
                 //   dayjs("2:30:56", "HH:mm:ss"),
                 // ]}
-                // defaultValue={
-                //   isEditMode
-                //     ? [
-                //         dayjs(`${genreralStartTime}`, "HH:mm:ss"),
-                //         dayjs(`${genreralEndTime}`, "HH:mm:ss"),
-                //       ]
-                //     : []
-                // }
+
+                value={
+                  currentRoomsData?.generalStartTime
+                    ? [
+                        dayjs(
+                          `${currentRoomsData.generalStartTime}`,
+                          `${format}`
+                        ),
+                        dayjs(
+                          `${currentRoomsData.generalEndTime}`,
+                          `${format}`
+                        ),
+                      ]
+                    : [dayjs("00:00", `${format}`), dayjs("00:00", `${format}`)]
+                }
                 style={{ height: "100%", outline: "none" }}
               />
             </div>
-            {/* <div className={style.addNewStudioinputBox}>
-              <label>Booking Start Time</label>
-              <select>
-                <option>Select Booking Start Time</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </div> */}
           </div>
-          <div>
+          <div
+          //  style={{ overflow: "visible" }}
+          >
             <DragAndDropImageDiv
               images={images}
               setImages={setImages}
@@ -486,48 +531,85 @@ function AddNewRoom({
               />
             </div>
 
-            <div className={style.addNewStudioinputBox2}>
-              <label htmlFor="RoomDetails">Room Details</label>
-              <textarea
-                type="text"
-                id="RoomDetails"
-                placeholder="Enter Room Details"
-                value={currentRoomsData?.details?.map((item) => item) || []}
-                onChange={handleRoomDetailsChange}
-              />
-            </div>
-            {/* <div className={style.addNewStudioinputBox}>
-              <label>General End Time</label>
+            {details.length === 0 ? (
+              <div className={style.addNewStudioinputBox2}>
+                <label htmlFor="RoomDetails">Room Details</label>
+                <textarea
+                  type="text"
+                  id="RoomDetails"
+                  placeholder="Enter Room Details"
+                  value={""} // Empty value
+                  onChange={(e) => handleRoomDetailsChange(e, 0)} // You can use any index, as there's only one textarea
+                />
+              </div>
+            ) : (
+              details.map((detail, index) => (
+                <div className={style.addNewStudioinputBox2} key={index}>
+                  <label htmlFor="RoomDetails">Room Details</label>
+                  <textarea
+                    type="text"
+                    id="RoomDetails"
+                    placeholder="Enter Room Details"
+                    value={detail}
+                    onChange={(e) => handleRoomDetailsChange(e, index)}
+                  />
+                </div>
+              ))
+            )}
+            <span className={style.addTeamDetailbtn} onClick={handleAddDetails}>
+              <MdOutlineAddBox /> &nbsp;<div>Add Booking Time</div>
+            </span>
 
-              <select>
-                <option>Select General End Time</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </div> */}
-            <div className={style.addNewStudioinputBox}>
-              <label>Booking start & End Time</label>
-
-              <TimePicker.RangePicker
-                onChange={handelbookingTime}
-                defaultValue={
-                  isEditMode
-                    ? [
-                        dayjs(bookingStartTime, "HH:mm:ss"),
-                        dayjs(bookingEndTime, "HH:mm:ss"),
-                      ]
-                    : // ? [
-                      //     dayjs(`${bookingStartTime}`, "HH:mm:ss"),
-                      //     dayjs(`${bookingEndTime}`, "HH:mm:ss"),
-                      //   ]
-                      []
-                }
-                style={{ height: "100%", outline: "none" }}
-              />
-            </div>
+            <label className={style.defaultLabel}>
+              Booking start & End Time
+            </label>
+            {bookingTimes.map((bt, index) => (
+              <>
+                <div
+                  key={index}
+                  className={style.addNewStudioinputBox}
+                  style={{
+                    position: "relative",
+                    maxHeight: "6vh",
+                    minHeight: "6vh",
+                  }}
+                >
+                  <TimePicker.RangePicker
+                    format={format}
+                    onChange={(time, timeString) =>
+                      handelbookingTime(time, timeString, index)
+                    }
+                    value={
+                      bt.startTime === ""
+                        ? [dayjs("00:00", "HH:mm"), dayjs("00:00", "HH:mm")]
+                        : [
+                            dayjs(bt.startTime, "HH:mm"),
+                            dayjs(bt.endTime, "HH:mm"),
+                          ]
+                    }
+                    style={{
+                      height: "100%",
+                      outline: "none",
+                      justifySelf: "flex-end",
+                    }}
+                  />
+                  {bookingTimes.length > 1 && (
+                    <span
+                      className={style.cancelImageUpload}
+                      onClick={() => handleCancelBooking(index)}
+                    >
+                      <img src={cross} alt="" />
+                    </span>
+                  )}
+                </div>
+              </>
+            ))}
+            <span
+              className={style.addTeamDetailbtn}
+              onClick={handleAddBookingTime}
+            >
+              <MdOutlineAddBox /> &nbsp;<div>Add Booking Time</div>
+            </span>
           </div>
         </div>
       </div>
