@@ -39,7 +39,7 @@ function CheckboxFilter({
       let limit = sendFilterDataToapi.limit;
       setProducts([]);
       appAndmoreApi
-        .filterData(limit, city)
+        .filterData(sendFilterDataToapi)
         .then((response) => {
           console.log("filter applied:", response);
           setProducts(response.studios);

@@ -1,14 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "../../../../pages/admin/studios/studio.module.css";
 import { DatePicker } from "antd";
 import { BiSearchAlt } from "react-icons/bi";
 import appAndmoreApi from "../../../../services/appAndmoreApi";
 
-function DateAndSearchFilter({ setProducts, setTotalPage, bookingPageCount }) {
+function DateAndSearchFilter({
+  setProducts,
+  setTotalPage,
+  bookingPageCount,
+  filterNav,
+  setfilterNav,
+  // searchQuery,
+  // setSearchQuery,
+  sendFilterDataToapi,
+}) {
+  console.log(sendFilterDataToapi, "details ke andr mila");
   const onChange = (date, dateString) => {
     console.log(date, dateString);
   };
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    console.log(typeof sendFilterDataToapi);
+    // let updatedfilterdata =
+
+    sendFilterDataToapi.searchText = searchQuery;
+
+    console.log(sendFilterDataToapi);
+  }, [searchQuery]);
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -26,23 +45,29 @@ function DateAndSearchFilter({ setProducts, setTotalPage, bookingPageCount }) {
     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
       // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
+      sendFilterDataToapi.serviceType = idToUse;
+      sendFilterDataToapi.serviceName = searchText;
       appAndmoreApi
-        .filterServiceData(idToUse, searchText)
+        .filterServiceData(sendFilterDataToapi)
         .then((response) => {
           console.log("filter applied:", response);
           setProducts(response.services.results);
           setTotalPage(response.paginate.totalPages);
+          setfilterNav(true);
         })
         .catch((error) => {
           console.error("Error filter studio:", error);
         });
     } else if (bookingPageCount === "c1") {
+      sendFilterDataToapi.page = 1;
+
       appAndmoreApi
-        .filterData(undefined, undefined, searchText)
+        .filterData(sendFilterDataToapi)
         .then((response) => {
           console.log("filter applied:", response);
           setProducts(response.studios);
           setTotalPage(response.paginate.totalPages);
+          setfilterNav(true);
         })
         .catch((error) => {
           console.error("Error filter studio:", error);
@@ -51,7 +76,7 @@ function DateAndSearchFilter({ setProducts, setTotalPage, bookingPageCount }) {
   };
 
   const handleChange = (event) => {
-    setSearchQuery(event.target.value);
+    setSearchQuery(event.target.value.trim());
   };
 
   return (

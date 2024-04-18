@@ -1220,6 +1220,17 @@ td {
   cursor: pointer;
   /* mix-blend-mode: color-burn black; */
 }
+.cancelDetailsUpload {
+  position: absolute;
+  /* float: left; */
+  top: 20%;
+  right: 0%;
+  font-size: 1vmax;
+
+  color: #ffc701;
+  cursor: pointer;
+  /* mix-blend-mode: color-burn black; */
+}
 .addNewStudioPage .addNewStudioinputBox {
   height: 20%;
 }

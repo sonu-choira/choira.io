@@ -32,8 +32,14 @@ function ASMixandMaster({
   totalPage,
   bookingPageCount,
   setTotalPage,
+  sendFilterDataToapi,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    sendFilterDataToapi = {};
+    sendFilterDataToapi.serviceName = "";
+    sendFilterDataToapi.serviceType = "";
+  }, []);
 
   const navigate = useNavigate();
 
@@ -110,6 +116,7 @@ function ASMixandMaster({
           setProducts={setProducts}
           setTotalPage={setTotalPage}
           bookingPageCount={bookingPageCount}
+          sendFilterDataToapi={sendFilterDataToapi}
         />
         <div>
           <table>

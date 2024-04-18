@@ -72,30 +72,33 @@ class Appapi{
    
      };
 
-     filterData = async (limit, city,searchText) => {
+     filterData = async (allfilterData) => {
+
+    const filteredObject = {};
+    for (const key in allfilterData) {
+      if (allfilterData[key]) {
+        filteredObject[key] = allfilterData[key];
+      }
+    }
+      filteredObject.limit = 10;
       const response = await api.get(`/studios-all`,{ 
-          params: {
-              limit: limit,
-              city: city,
-              searchText: searchText,
-              // active: active,
-              // page:pageCount,
-          }
+          params: filteredObject
       });
       const {status} = response.data
       console.log("res ===>", response.data)
       return response.data;
      };
 
-     filterServiceData = async (serviceType, serviceName) => {
+     filterServiceData = async (allserviceFiltrer) => {
+      const filteredObject = {};
+      for (const key in allserviceFiltrer) {
+        if (allserviceFiltrer[key]) {
+          filteredObject[key] = allserviceFiltrer[key];
+        }
+      }
+        filteredObject.limit = 10;
       const response = await api.get(`/services`,{ 
-          params: {
-            serviceType: serviceType,
-              serviceName: serviceName,
-              // searchText: searchText,
-              // active: active,
-              // page:pageCount,
-          }
+          params: filteredObject
       });
       const {status} = response.data
       console.log("res ===>", response.data)

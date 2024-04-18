@@ -38,6 +38,9 @@ function AllStudioDetail2({
   totalPage,
   bookingPageCount,
   setTotalPage,
+  filterNav,
+  setfilterNav,
+  sendFilterDataToapi,
 }) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
@@ -69,35 +72,6 @@ function AllStudioDetail2({
     });
   };
 
-  // const currentTableData = useMemo(() => {
-  //   const firstPageIndex = (currentPage - 1) * PageSize;
-  //   const lastPageIndex = firstPageIndex + PageSize;
-  //   return products.slice(firstPageIndex, lastPageIndex);
-  // }, [currentPage, products]);
-
-  // const [selectedStatus, setSelectedStatus] = useState({});
-
-  // const handleChange = (productId, event) => {
-  //   setSelectedStatus((prevStatus) => ({
-  //     ...prevStatus,
-  //     [productId]: event.target.value,
-  //   }));
-  // };
-
-  // const getStatusColor = (status) => {
-  //   switch (status) {
-  //     case "Cancelled":
-  //       return "#FFDDDD";
-  //     case "Pending":
-  //       return "#CAE2FF";
-  //     case "Complete":
-  //       return "#DDFFF3";
-  //     case "Active":
-  //       return "#FFF3CA";
-  //     default:
-  //       return "";
-  //   }
-  // };
   const [activityStatus, setActivityStatus] = useState({});
   const handleSwitchChange = (studioId, status) => {
     console.log(status);
@@ -164,14 +138,6 @@ function AllStudioDetail2({
     });
   };
 
-  let sendFilterDataToapi = {
-    startPrice: "",
-    endPrice: "",
-    city: "",
-    roomCount: "",
-    status: "",
-  };
-
   const city = ["Mumbai", "Delhi", "Bangalore", "Chennai"];
   const room = ["1", "2", "3", "4", "5"];
   const status = ["active", "inactive"];
@@ -195,6 +161,9 @@ function AllStudioDetail2({
           setProducts={setProducts}
           setTotalPage={setTotalPage}
           bookingPageCount={bookingPageCount}
+          filterNav={filterNav}
+          setfilterNav={setfilterNav}
+          sendFilterDataToapi={sendFilterDataToapi}
         />
         <div>
           <table>
@@ -249,6 +218,7 @@ function AllStudioDetail2({
                           setTotalPage={setTotalPage}
                           bookingPageCount={bookingPageCount}
                           closeAllFilter={closeAllFilter}
+                          setfilterNav={setfilterNav}
                         />
                       ) : (
                         ""
@@ -272,6 +242,7 @@ function AllStudioDetail2({
                           setProducts={setProducts}
                           setTotalPage={setTotalPage}
                           bookingPageCount={bookingPageCount}
+                          setfilterNav={setfilterNav}
                         />
                       ) : (
                         ""
@@ -297,6 +268,7 @@ function AllStudioDetail2({
                           setProducts={setProducts}
                           setTotalPage={setTotalPage}
                           bookingPageCount={bookingPageCount}
+                          setfilterNav={setfilterNav}
                         />
                       ) : (
                         ""

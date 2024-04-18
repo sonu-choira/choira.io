@@ -73,7 +73,7 @@ function AddNewRoom({
   // let genreralEndTime;
 
   const [details, setDetails] = useState(
-    currentRoomsData.details ? currentRoomsData.details : []
+    currentRoomsData.details ? currentRoomsData.details : [[]]
   );
 
   const inputRef = useRef(null);
@@ -258,32 +258,6 @@ function AddNewRoom({
     "Banjo",
   ];
 
-  // useEffect(() => {
-  //   if (isEditMode) {
-  //     setSelectedDate(
-  //       currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
-  //     );
-  //     console.log(
-  //       "currentRoomsData?.bookingDays?.map((item) => item?.name)",
-  //       currentRoomsData?.bookingDays?.map((item) => item?.name)
-  //     );
-  //   }
-  // }, [currentRoomsData?.bookingDays?.length]);
-
-  // useEffect(() => {
-  //   if (isEditMode) {
-  //     const bookingDays = currentRoomsData?.bookingDays;
-  //     console.log("currentRoomsData:", currentRoomsData);
-  //     if (bookingDays && bookingDays.length > 0) {
-  //       const selectedDateNames = bookingDays.map((item) => item?.name || item);
-  //       console.log("selectedDateNames:", selectedDateNames);
-  //       setSelectedDate(selectedDateNames);
-  //     } else {
-  //       setSelectedDate([]);
-  //     }
-  //   }
-  // }, [isEditMode]);
-
   const filteredDates = days.filter((o) => !selectedDate.includes(o));
 
   const filteredAmenities = amenitiesList.filter(
@@ -302,42 +276,9 @@ function AddNewRoom({
     );
   }, [currentRoomsData?.bookingDays]);
 
-  // const handleCheckboxChange = (id) => {
-  //   const updatedAmenities = selectedAmenities.includes(id)
-  //     ? selectedAmenities.filter((amenity) => amenity !== id)
-  //     : [...selectedAmenities, id];
-
-  //   setSelectedAmenities(updatedAmenities);
-  //   console.log(selectedAmenities);
-  // };
-
   useEffect(() => {
     console.log("selectedDate updated:", selectedDate);
   }, [selectedDate]);
-
-  // const handledaysCheckboxChange = (id) => {
-  //   const updatedDays = selectedDate.includes(id)
-  //     ? selectedDate.filter((day) => day !== id)
-  //     : [...selectedDate, id];
-
-  //   setSelectedDate(updatedDays);
-  //   console.log(selectedDate);
-  // };
-
-  // const [temproomdetails, settemproomdetails] = useState( {
-  //   roomName: "",
-  //   area: "",
-  //   pricePerHour: "",
-  //   discountPercentage: "",
-  //   bookingDays: [],
-  //   generalStartTime: "",
-  //   generalEndTime: "",
-  //   bookingStartTime: [],
-  //   bookingEndTime: [],
-  //   roomPhotos: [],
-  //   amenities: [],
-  //   roomDetails: "",
-  // },)
 
   useEffect(() => {
     console.log("room k details mila", rooms);
@@ -391,7 +332,6 @@ function AddNewRoom({
       return updatedRooms;
     });
   };
-
   const handleRoomDetailsChange = (e, index) => {
     const updatedDetails = [...details];
     updatedDetails[index] = e.target.value;
@@ -403,7 +343,17 @@ function AddNewRoom({
   //     ...prevRooms,
   //     details: details,
   //   }));
-  // }, [details.length]);
+  // }, [details]);
+
+  useEffect(() => {
+    currentRoomsData.details = details;
+  }, [details]);
+
+  const handleCancelDetails = (index) => {
+    let teampDetail = [...details];
+    teampDetail.splice(index, 1);
+    setDetails(teampDetail);
+  };
 
   return (
     <>
@@ -532,33 +482,64 @@ function AddNewRoom({
             </div>
 
             {details.length === 0 ? (
-              <div className={style.addNewStudioinputBox2}>
+              <div
+                className={style.addNewStudioinputBox2}
+                style={{ position: "relative" }}
+              >
                 <label htmlFor="RoomDetails">Room Details</label>
                 <textarea
                   type="text"
                   id="RoomDetails"
                   placeholder="Enter Room Details"
                   value={""} // Empty value
-                  onChange={(e) => handleRoomDetailsChange(e, 0)} // You can use any index, as there's only one textarea
+                  onChange={(e) => handleRoomDetailsChange(e, 0)}
                 />
+                {details.length > 1 && (
+                  <span
+                    className={style.cancelDetailsUpload}
+                    onClick={() => handleCancelDetails(0)}
+                  >
+                    <img src={cross} alt="" />
+                  </span>
+                )}
               </div>
             ) : (
               details.map((detail, index) => (
-                <div className={style.addNewStudioinputBox2} key={index}>
-                  <label htmlFor="RoomDetails">Room Details</label>
-                  <textarea
-                    type="text"
-                    id="RoomDetails"
-                    placeholder="Enter Room Details"
-                    value={detail}
-                    onChange={(e) => handleRoomDetailsChange(e, index)}
-                  />
-                </div>
+                <>
+                  <div
+                    className={style.addNewStudioinputBox2}
+                    key={index}
+                    style={{ position: "relative" }}
+                  >
+                    <label htmlFor="RoomDetails">Room Details</label>
+                    <textarea
+                      type="text"
+                      id="RoomDetails"
+                      placeholder="Enter Room Details"
+                      value={detail}
+                      onChange={(e) => handleRoomDetailsChange(e, index)}
+                    />
+
+                    {details.length > 1 && (
+                      <span
+                        className={style.cancelDetailsUpload}
+                        onClick={() => handleCancelDetails(index)}
+                      >
+                        <img src={cross} alt="" />
+                      </span>
+                    )}
+                  </div>
+                </>
               ))
             )}
-            <span className={style.addTeamDetailbtn} onClick={handleAddDetails}>
-              <MdOutlineAddBox /> &nbsp;<div>Add Booking Time</div>
-            </span>
+            {details.length < 3 && (
+              <span
+                className={style.addTeamDetailbtn}
+                onClick={handleAddDetails}
+              >
+                <MdOutlineAddBox /> &nbsp;<div>Add Booking Time</div>
+              </span>
+            )}
 
             <label className={style.defaultLabel}>
               Booking start & End Time

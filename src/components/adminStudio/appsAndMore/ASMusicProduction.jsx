@@ -32,6 +32,7 @@ function ASMusicProduction({
   totalPage,
   bookingPageCount,
   setTotalPage,
+  sendFilterDataToapi,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -50,6 +51,12 @@ function ASMusicProduction({
       },
     });
   };
+  useEffect(() => {
+    sendFilterDataToapi = {};
+    sendFilterDataToapi.serviceName = "";
+    sendFilterDataToapi.serviceType = "";
+    // console.log(sendFilterDataToapi, "aaaaaaaaaaa");
+  }, []);
 
   const gotoShowMusicProduction = (id) => {
     const isEditMode = true;
@@ -97,6 +104,7 @@ function ASMusicProduction({
           setProducts={setProducts}
           setTotalPage={setTotalPage}
           bookingPageCount={bookingPageCount}
+          sendFilterDataToapi={sendFilterDataToapi}
         />
         <div>
           <table>

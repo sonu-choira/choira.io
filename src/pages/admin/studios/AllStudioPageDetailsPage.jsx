@@ -38,62 +38,121 @@ import WebDashboard2 from "../../produce/WebDashBoard2";
 
 // services
 import Appapi from "../../../services/appAndmoreApi";
+import appAndmoreApi from "../../../services/appAndmoreApi";
+
+let sendFilterDataToapi = {
+  startPrice: "",
+  endPrice: "",
+  city: "",
+  roomCount: "",
+  status: "",
+  searchText: "",
+};
 
 function AllStudioPageDetailsPage() {
   const [bookingPageCount, setBookingPageCount] = useState("c1");
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
+  const [filterNav, setfilterNav] = useState(false);
 
   const navigate = useNavigate();
   const gotoSignin = () => {
     navigate("/signin");
   };
 
+  let hasFilter = false;
+
+  useEffect(() => {
+    console.log("sendFilterDataToapi", sendFilterDataToapi);
+  }, [sendFilterDataToapi]);
+
   useEffect(() => {
     console.log("bookingPageCount-----", bookingPageCount);
     setProducts([]);
+    // checking if filter has any data
+    for (const key in sendFilterDataToapi) {
+      if (sendFilterDataToapi[key]) {
+        hasFilter = true;
+        break;
+      }
+    }
 
     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
       // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
-      Appapi.getServices("10", idToUse, 1, pageCount)
-        .then((response) => {
-          console.log(
-            `====================> response ${bookingPageCount}`,
-            response
-          );
-          if (response.status) {
+      if (hasFilter && !hasFilter.page) {
+        console.log("sendFilterDataToapi", sendFilterDataToapi);
+        // alert("filter");
+        sendFilterDataToapi.page = pageCount;
+        sendFilterDataToapi.serviceType = idToUse;
+        appAndmoreApi
+          .filterServiceData(sendFilterDataToapi)
+          .then((response) => {
+            console.log("filter applied:", response);
             setProducts(response.services.results);
-            console.log("lkasdnflkjsdnf", response.status);
             setTotalPage(response.paginate.totalPages);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
+            setfilterNav(true);
+          })
+          .catch((error) => {
+            console.error("Error filter studio:", error);
+          });
+      } else {
+        const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
+        // alert("main");
+
+        Appapi.getServices("10", idToUse, 1, pageCount)
+          .then((response) => {
+            console.log(
+              `====================> response ${bookingPageCount}`,
+              response
+            );
+            if (response.status) {
+              setProducts(response.services.results);
+              console.log("lkasdnflkjsdnf", response.status);
+              setTotalPage(response.paginate.totalPages);
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching studios:", error);
+          });
+      }
     } else if (bookingPageCount === "c1") {
       const limit = 64;
       const active = 1;
       // const type = bookingPageCount;
-      Appapi.getStudios(limit, active, pageCount)
-        .then((response) => {
-          console.log(
-            `====================> response ${bookingPageCount}`,
-            response
-          );
-          console.log("response.data.studios", response.studios);
-          if (response.studios) {
+      if (hasFilter) {
+        sendFilterDataToapi.page = pageCount;
+        appAndmoreApi
+          .filterData(sendFilterDataToapi)
+          .then((response) => {
+            console.log("filter applied:", response);
             setProducts(response.studios);
             setTotalPage(response.paginate.totalPages);
+          })
+          .catch((error) => {
+            console.error("Error filter studio:", error);
+          });
+      } else {
+        Appapi.getStudios(limit, active, pageCount)
+          .then((response) => {
+            console.log(
+              `====================> response ${bookingPageCount}`,
+              response
+            );
+            console.log("response.data.studios", response.studios);
+            if (response.studios) {
+              setProducts(response.studios);
+              setTotalPage(response.paginate.totalPages);
 
-            // setPageCount(response.paginate.page);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
+              // setPageCount(response.paginate.page);
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching studios:", error);
+          });
+      }
     }
   }, [bookingPageCount, pageCount]);
   const pagetype = "apps";
@@ -108,6 +167,7 @@ function AllStudioPageDetailsPage() {
         />
         {bookingPageCount === "c1" ? (
           <AllStudioDetail2
+            sendFilterDataToapi={sendFilterDataToapi}
             products={products}
             setProducts={setProducts}
             totalPage={totalPage}
@@ -115,6 +175,8 @@ function AllStudioPageDetailsPage() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             bookingPageCount={bookingPageCount}
+            filterNav={filterNav}
+            setfilterNav={setfilterNav}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
@@ -126,6 +188,8 @@ function AllStudioPageDetailsPage() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             bookingPageCount={bookingPageCount}
+            filterNav={filterNav}
+            sendFilterDataToapi={sendFilterDataToapi}
           />
         ) : bookingPageCount === "c3" ? (
           <ASMixandMaster
@@ -136,6 +200,8 @@ function AllStudioPageDetailsPage() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             bookingPageCount={bookingPageCount}
+            filterNav={filterNav}
+            sendFilterDataToapi={sendFilterDataToapi}
           />
         ) : (
           <Artist />
