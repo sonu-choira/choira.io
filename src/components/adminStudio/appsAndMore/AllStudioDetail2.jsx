@@ -180,17 +180,15 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Price
-                    <div
-                      className={style.filterBox}
-                      style={{
-                        backgroundColor:
-                          selectedRoom.length > 0 ? "#ffc70133" : "",
-                      }}
-                    >
+                    <div className={style.filterBox}>
                       <span onClick={handelpriceFilter}>
                         <CiFilter />
                       </span>
-                      {showpricefilter ? <PriceFilter /> : ""}
+                      {showpricefilter ? (
+                        <PriceFilter closeAllFilter={closeAllFilter} />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </th>
@@ -229,7 +227,13 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     No. of Rooms
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedRoom.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
                       <span onClick={handelRoomFilter}>
                         <CiFilter />
                       </span>
@@ -243,6 +247,7 @@ function AllStudioDetail2({
                           setTotalPage={setTotalPage}
                           bookingPageCount={bookingPageCount}
                           setfilterNav={setfilterNav}
+                          closeAllFilter={closeAllFilter}
                         />
                       ) : (
                         ""
@@ -269,6 +274,7 @@ function AllStudioDetail2({
                           setTotalPage={setTotalPage}
                           bookingPageCount={bookingPageCount}
                           setfilterNav={setfilterNav}
+                          closeAllFilter={closeAllFilter}
                         />
                       ) : (
                         ""

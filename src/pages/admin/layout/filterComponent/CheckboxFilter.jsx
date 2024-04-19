@@ -27,9 +27,9 @@ function CheckboxFilter({
     const { name, checked } = event.target;
 
     if (checked) {
-      setSelectedData([...selectedData, name]);
+      setSelectedData([name]); // Set only the clicked checkbox as selected
     } else {
-      setSelectedData(selectedData.filter((item) => item !== name));
+      setSelectedData([]); // Clear the selectedData array
     }
   };
 
@@ -129,9 +129,27 @@ function CheckboxFilter({
     // Check if all values are empty
   };
 
+  useEffect(() => {
+    // Function to handle click events outside of the filter box
+    const handleClickOutside = (event) => {
+      const filterBox = document.getElementById("filterBox"); // Assuming the filter box has an ID "filterBox"
+      if (filterBox && !filterBox.contains(event.target)) {
+        closeAllFilter(); // Call closeAllFilter function if clicked outside the filter box
+      }
+    };
+
+    // Attach event listener to document body to handle click events
+    document.body.addEventListener("click", handleClickOutside);
+
+    // Cleanup function to remove event listener when component unmounts
+    return () => {
+      document.body.removeEventListener("click", handleClickOutside);
+    };
+  }, [closeAllFilter]);
+
   return (
     <>
-      <div className={style.filteractionBox2} style={cusstyle}>
+      <div className={style.filteractionBox2} style={cusstyle} id="filterBox">
         {disabledsearch ? (
           ""
         ) : (

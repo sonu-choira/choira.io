@@ -82,7 +82,7 @@ function AllStudioPageDetailsPage() {
       // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
-      if (hasFilter && !hasFilter.page) {
+      if (hasFilter) {
         console.log("sendFilterDataToapi", sendFilterDataToapi);
         // alert("filter");
         sendFilterDataToapi.page = pageCount;
