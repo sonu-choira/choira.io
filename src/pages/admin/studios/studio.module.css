@@ -390,7 +390,7 @@ input[type="number"] {
   background-color: white;
 }
 .bookingStudiobtn > div:nth-child(1) > div > div:hover {
-  background-color: #ffc701;
+  background-color: #ffc801ab;
   cursor: pointer;
   color: black;
 }

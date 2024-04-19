@@ -7,6 +7,8 @@ const instance = axios.create({
   baseURL: `${SERVER_API}`, // HOST_API,
   headers: {
     "Content-Type": "application/json",
+    // "ngrok-skip-browser-warning":"test",
+    // "User-Agent":"postman"
     // "Access-Control-Allow-Origin" : "*"
   },
 });

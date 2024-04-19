@@ -423,7 +423,7 @@ function Signin() {
 
       if (response.user.role === "admin") {
         console.log(response.newUser);
-        navigate("/adminDashboard");
+        navigate("/adminDashboard/Apps&More/studio");
       } else if (response.newUser === true) {
         console.log(response.newUser);
         localStorage.removeItem("token");

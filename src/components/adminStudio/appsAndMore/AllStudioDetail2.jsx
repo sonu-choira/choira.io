@@ -148,8 +148,8 @@ function AllStudioDetail2({
 
   useEffect(() => {
     sendFilterDataToapi.city = selectedCity[0];
-    sendFilterDataToapi.roomCount = selectedRoom[0];
-    sendFilterDataToapi.status = selectedStatus[0];
+    sendFilterDataToapi.totalRooms = selectedRoom[0];
+    sendFilterDataToapi.status = selectedStatus[0] === "active" ? 1 : 0;
 
     console.log(sendFilterDataToapi);
   }, [selectedCity, selectedRoom, selectedStatus]);
@@ -258,7 +258,13 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Activity Status
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedStatus.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
                       <span onClick={handelStatusFilter}>
                         <CiFilter />
                       </span>

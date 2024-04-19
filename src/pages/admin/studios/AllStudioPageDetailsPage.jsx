@@ -30,7 +30,7 @@ import MusicProduction from "../../../components/adminStudio/booking/MusicProduc
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ASMusicProduction from "../../../components/adminStudio/appsAndMore/ASMusicProduction";
 import ASMixandMaster from "../../../components/adminStudio/appsAndMore/ASMixandMaster";
 import AllStudioDetail2 from "../../../components/adminStudio/appsAndMore/AllStudioDetail2";
@@ -41,10 +41,10 @@ import Appapi from "../../../services/appAndmoreApi";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 
 let sendFilterDataToapi = {
-  startPrice: "",
-  endPrice: "",
+  minPricePerHour: "",
+  maxPricePerHour: "",
   city: "",
-  roomCount: "",
+  totalRooms: "",
   status: "",
   searchText: "",
 };
@@ -55,6 +55,20 @@ function AllStudioPageDetailsPage() {
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
+
+  let { page: paramData } = useParams();
+  console.log("paramData", paramData);
+
+  // setBookingPageCount("c2");
+  useEffect(() => {
+    if (paramData == "studio") {
+      setBookingPageCount("c1");
+    } else if (paramData == "musicproduction") {
+      setBookingPageCount("c2");
+    } else if (paramData == "mixmaster") {
+      setBookingPageCount("c3");
+    }
+  }, [paramData]);
 
   const navigate = useNavigate();
   const gotoSignin = () => {

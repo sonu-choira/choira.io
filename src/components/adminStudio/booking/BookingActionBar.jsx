@@ -5,11 +5,14 @@ import { LuFilePlus } from "react-icons/lu";
 import style from "../../../pages/admin/studios/studio.module.css";
 import { FaDownload } from "react-icons/fa";
 import { MdNoteAdd } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
   console.log(bookingPageCount);
   const navigate = useNavigate();
+
+  let { navOption: pageData } = useParams();
+
   const gotoAddNew = (bookingPageCount) => {
     if (bookingPageCount === "c1") {
       navigate("/studio/add", {
@@ -26,6 +29,27 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
       state: { navCount: 4 },
     });
   };
+  const gotoMusicProduction = () => {
+    if (pageData == "Apps&More") {
+      navigate("/adminDashboard/Apps&More/musicproduction");
+    } else {
+      navigate("/adminDashboard/Bookings/musicproduction");
+    }
+  };
+  const gotoStudio = () => {
+    if (pageData == "Apps&More") {
+      navigate("/adminDashboard/Apps&More/studio");
+    } else {
+      navigate("/adminDashboard/Bookings/studio");
+    }
+  };
+  const gotoMixMaster = () => {
+    if (pageData == "Apps&More") {
+      navigate("/adminDashboard/Apps&More/mixmaster");
+    } else {
+      navigate("/adminDashboard/Bookings/mixmaster");
+    }
+  };
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
@@ -38,6 +62,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               }}
               onClick={() => {
                 setBookingPageCount("c1");
+                gotoStudio();
               }}
             >
               Studio
@@ -48,6 +73,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               }}
               onClick={() => {
                 setBookingPageCount("c2");
+                gotoMusicProduction();
               }}
             >
               Music Production
@@ -69,6 +95,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               }}
               onClick={() => {
                 setBookingPageCount("c3");
+                gotoMixMaster();
               }}
             >
               Mix-Master
