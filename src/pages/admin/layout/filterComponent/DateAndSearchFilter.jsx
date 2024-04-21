@@ -13,20 +13,28 @@ function DateAndSearchFilter({
   // searchQuery,
   // setSearchQuery,
   sendFilterDataToapi,
+  selectedDate,
+  // setSelectedDate,
 }) {
-  console.log(sendFilterDataToapi, "details ke andr mila");
+  // console.log(sendFilterDataToapi, "details ke andr mila");
   const onChange = (date, dateString) => {
-    console.log(date, dateString);
+    console.log(dateString);
+    // setSelectedDate(dateString);
+    selectedDate = dateString;
+    if (selectedDate) {
+      sendDataToApi();
+    }
   };
+
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    console.log(typeof sendFilterDataToapi);
+    // console.log(typeof sendFilterDataToapi);
     // let updatedfilterdata =
 
     sendFilterDataToapi.searchText = searchQuery;
 
-    console.log(sendFilterDataToapi);
+    // console.log(sendFilterDataToapi);
   }, [searchQuery]);
 
   const handleKeyPress = (event) => {

@@ -45,8 +45,9 @@ let sendFilterDataToapi = {
   maxPricePerHour: "",
   city: "",
   totalRooms: "",
-  status: "",
+  active: "",
   searchText: "",
+  creationTimeStamp: "",
 };
 
 function AllStudioPageDetailsPage() {

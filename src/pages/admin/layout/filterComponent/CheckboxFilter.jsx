@@ -35,8 +35,6 @@ function CheckboxFilter({
 
   const sendFilterDatatoapi = () => {
     if (selectedData.length > 0) {
-      let city = sendFilterDataToapi.city;
-      let limit = sendFilterDataToapi.limit;
       setProducts([]);
       appAndmoreApi
         .filterData(sendFilterDataToapi)

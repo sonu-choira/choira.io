@@ -145,14 +145,28 @@ function AllStudioDetail2({
   const [selectedCity, setSelectedCity] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
+  // const [selectedDate, setSelectedDate] = useState();
+  let selectedDate = "";
+  const [priceFilter, setPriceFilter] = useState({
+    minPrice: "",
+    maxPrice: "",
+  });
 
   useEffect(() => {
     sendFilterDataToapi.city = selectedCity[0];
     sendFilterDataToapi.totalRooms = selectedRoom[0];
-    sendFilterDataToapi.status = selectedStatus[0] === "active" ? 1 : 0;
+    sendFilterDataToapi.active =
+      selectedStatus[0] === "active"
+        ? 1
+        : selectedStatus[0] === "actinactiveive"
+        ? "0"
+        : "";
+    sendFilterDataToapi.minPricePerHour = priceFilter.minPrice;
+    sendFilterDataToapi.maxPricePerHour = priceFilter.maxPrice;
+    sendFilterDataToapi.creationTimeStamp = selectedDate;
 
     console.log(sendFilterDataToapi);
-  }, [selectedCity, selectedRoom, selectedStatus]);
+  }, [selectedCity, selectedRoom, selectedStatus, priceFilter, selectedDate]);
 
   return (
     <>
@@ -164,6 +178,8 @@ function AllStudioDetail2({
           filterNav={filterNav}
           setfilterNav={setfilterNav}
           sendFilterDataToapi={sendFilterDataToapi}
+          selectedDate={selectedDate}
+          // setSelectedDate={setSelectedDate}
         />
         <div>
           <table>
@@ -180,12 +196,29 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Price
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          priceFilter.minPrice || priceFilter.maxPrice !== ""
+                            ? "#ffc70133"
+                            : "",
+                      }}
+                    >
                       <span onClick={handelpriceFilter}>
                         <CiFilter />
                       </span>
                       {showpricefilter ? (
-                        <PriceFilter closeAllFilter={closeAllFilter} />
+                        <PriceFilter
+                          closeAllFilter={closeAllFilter}
+                          priceFilter={priceFilter}
+                          setPriceFilter={setPriceFilter}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          setfilterNav={setfilterNav}
+                        />
                       ) : (
                         ""
                       )}
