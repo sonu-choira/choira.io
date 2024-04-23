@@ -48,6 +48,7 @@ let sendFilterDataToapi = {
   active: "",
   searchText: "",
   creationTimeStamp: "",
+  sortBy: "",
 };
 
 function AllStudioPageDetailsPage() {
@@ -138,6 +139,7 @@ function AllStudioPageDetailsPage() {
       const active = 1;
       // const type = bookingPageCount;
       if (hasFilter) {
+        delete sendFilterDataToapi.serviceType;
         sendFilterDataToapi.page = pageCount;
         appAndmoreApi
           .filterData(sendFilterDataToapi)

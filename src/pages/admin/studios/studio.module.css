@@ -439,7 +439,7 @@ input[type="number"] {
 
 .searchDiv {
   /* border: 2px solid red; */
-  width: 100%;
+  width: 96%;
   height: 8vh;
   display: flex;
   align-items: center;
@@ -456,7 +456,7 @@ input[type="number"] {
     border: 2px solid #f3f6f9;
     border-radius: 10px;
   }
-  > div:last-child {
+  > div:nth-child(2) {
     width: 72%;
     border: 2px solid #f3f6f9;
     /* border: 2px solid red; */
@@ -471,6 +471,20 @@ input[type="number"] {
       border: none;
       outline: none;
     }
+  }
+}
+.clearFilter {
+  border: 2px solid transparent;
+  width: 9vw;
+  button {
+    height: 100%;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5%;
+    font-size: 1.2vmax;
+    transition: ease-in-out 1s;
   }
 }
 .antCustomcss {
@@ -630,6 +644,9 @@ input[type="number"] {
   align-items: center;
   justify-content: flex-start;
   gap: 5%;
+  input[type="checkbox"] {
+    accent-color: #ffc701;
+  }
 }
 
 .studiotabelHead > tr > th:nth-child(1) {
@@ -654,10 +671,10 @@ td {
 }
 .tableActionbtn {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-evenly;
   width: 100%;
-  /* height: 100%; */
+  height: 100%;
   /* border: 2px solid red; */
   margin-bottom: 5%;
 }
@@ -825,6 +842,25 @@ td {
   padding: 1.8%;
   margin-top: 0%;
   height: 80%;
+}
+.addPriceAndCountryInput {
+  width: 100%;
+  border: 2px solid red;
+  height: 6vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4%;
+  > div {
+    width: 48%;
+    border: 2px solid red;
+    height: 90%;
+    border-radius: 10px;
+    > select {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 .editPencilinput {
   position: relative;

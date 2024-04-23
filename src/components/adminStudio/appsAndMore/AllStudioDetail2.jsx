@@ -27,6 +27,7 @@ import { DatePicker, Space } from "antd";
 import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
 import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import appAndmoreApi from "../../../services/appAndmoreApi";
 
 let PageSize = 10;
 
@@ -143,14 +144,22 @@ function AllStudioDetail2({
   const status = ["active", "inactive"];
 
   const [selectedCity, setSelectedCity] = useState([]);
+  const [shortby, setShortby] = useState("creationTimeStamp:asc");
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
-  // const [selectedDate, setSelectedDate] = useState();
-  let selectedDate = "";
+  // var selectedDate = "";
   const [priceFilter, setPriceFilter] = useState({
     minPrice: "",
     maxPrice: "",
   });
+
+  const handelShortbyClick = () => {
+    if (shortby == "creationTimeStamp:asc") {
+      setShortby("creationTimeStamp:desc");
+    } else {
+      setShortby("creationTimeStamp:asc");
+    }
+  };
 
   useEffect(() => {
     sendFilterDataToapi.city = selectedCity[0];
@@ -158,15 +167,37 @@ function AllStudioDetail2({
     sendFilterDataToapi.active =
       selectedStatus[0] === "active"
         ? 1
-        : selectedStatus[0] === "actinactiveive"
+        : selectedStatus[0] === "inactive"
         ? "0"
         : "";
     sendFilterDataToapi.minPricePerHour = priceFilter.minPrice;
     sendFilterDataToapi.maxPricePerHour = priceFilter.maxPrice;
-    sendFilterDataToapi.creationTimeStamp = selectedDate;
+    // sendFilterDataToapi.creationTimeStamp = selectedDate;
+    sendFilterDataToapi.sortBy = shortby;
 
     console.log(sendFilterDataToapi);
-  }, [selectedCity, selectedRoom, selectedStatus, priceFilter, selectedDate]);
+  }, [
+    selectedCity,
+    selectedRoom,
+    selectedStatus,
+    priceFilter,
+    // selectedDate,
+    shortby,
+  ]);
+
+  useEffect(() => {
+    setProducts([]);
+    appAndmoreApi
+      .filterData(sendFilterDataToapi)
+      .then((response) => {
+        console.log("filter applied:", response);
+        setProducts(response.studios);
+        setTotalPage(response.paginate.totalPages);
+      })
+      .catch((error) => {
+        console.error("Error filter studio:", error);
+      });
+  }, [shortby]);
 
   return (
     <>
@@ -178,8 +209,11 @@ function AllStudioDetail2({
           filterNav={filterNav}
           setfilterNav={setfilterNav}
           sendFilterDataToapi={sendFilterDataToapi}
-          selectedDate={selectedDate}
-          // setSelectedDate={setSelectedDate}
+          setSelectedCity={setSelectedCity}
+          setSelectedRoom={setSelectedRoom}
+          setSelectedStatus={setSelectedStatus}
+          setPriceFilter={setPriceFilter}
+          setShortby={setShortby}
         />
         <div>
           <table>
@@ -188,7 +222,16 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Studio
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      onClick={handelShortbyClick}
+                      style={{
+                        backgroundColor:
+                          shortby !== "creationTimeStamp:asc"
+                            ? "#ffc70133"
+                            : "",
+                      }}
+                    >
                       <RiExpandUpDownLine />
                     </div>
                   </div>

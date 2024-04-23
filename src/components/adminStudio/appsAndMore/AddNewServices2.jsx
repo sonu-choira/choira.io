@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Divider, Input, Select, Space, Button } from "antd";
-import { MdAddAPhoto } from "react-icons/md";
+import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import upload from "../../../assets/img/upload.png";
 import style from "../../../pages/admin/studios/studio.module.css";
@@ -174,6 +174,42 @@ function AddNewServices2({
     });
   };
 
+  const [countryWithPrice, setCountryWithPrice] = useState([
+    { "India(₹)": "" },
+    { "USA($)": "" },
+    { "Japan(¥)": "" },
+  ]);
+  const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState([[]]);
+  const [filteredCountryData, setFilteredCountryData] = useState([
+    { "India(₹)": "" },
+    { "USA($)": "" },
+    { "Japan(¥)": "" },
+  ]);
+
+  const [countryWithPrice2, setCountryWithPrice2] = useState([
+    { "India(₹)": "" },
+    { "USA($)": "" },
+    { "Japan(¥)": "" },
+  ]);
+
+  const handelMultipleCountryPriceDiv = () => {
+    setAddMultiplePriceDiv((prev) => {
+      return [...prev, []];
+    });
+  };
+  useEffect(() => {
+    console.log(addMultiplePriceDiv);
+  }, [addMultiplePriceDiv]);
+  // Function to handle country selection
+  const handleCountrySelect = (selectedCountry) => {
+    // Update filteredCountryData with non-selected countries
+    console.log(selectedCountry);
+    const updatedFilteredData = countryWithPrice.filter(
+      (country) => Object.keys(country)[0] !== selectedCountry
+    );
+    setFilteredCountryData(updatedFilteredData);
+    console.log(updatedFilteredData);
+  };
   return (
     <>
       <div className={style.addNewStudioTitle}>Add New Services</div>
@@ -197,7 +233,7 @@ function AddNewServices2({
               />
             </div>
 
-            <div className={style.addNewStudioinputBox}>
+            {/* <div className={style.addNewStudioinputBox}>
               <label htmlFor="startingPrice">Price Starting From</label>
               <input
                 type="text"
@@ -206,7 +242,41 @@ function AddNewServices2({
                 value={currentServiceData.price}
                 onChange={handlePriceChange}
               />
-            </div>
+            </div> */}
+            {addMultiplePriceDiv.map((el, index) => (
+              <div className={style.addPriceAndCountryInput}>
+                <div>
+                  <select
+                    name="price"
+                    id=""
+                    onChange={(e) => handleCountrySelect(e.target.value)}
+                    // value={}
+                  >
+                    <option value="" default>
+                      select County{" "}
+                    </option>
+                    {filteredCountryData.map((country, index) => {
+                      const countryName = Object.keys(country)[0];
+                      return (
+                        <option key={index} value={countryName}>
+                          {countryName}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div></div>
+              </div>
+            ))}
+
+            {addMultiplePriceDiv.length <= 2 && (
+              <span
+                className={style.addTeamDetailbtn}
+                onClick={handelMultipleCountryPriceDiv}
+              >
+                <MdOutlineAddBox /> &nbsp;<div>Add new Rooms</div>
+              </span>
+            )}
 
             <div className={style.addNewStudioinputBox2}>
               <label htmlFor="serviceDetails">Service Details</label>
