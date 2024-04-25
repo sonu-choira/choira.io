@@ -16,6 +16,7 @@ import {
 import StudioFooter from "../StudioFooter";
 import cross from "../../../assets/cross.svg";
 import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
+import { MdCancel } from "react-icons/md";
 
 function AddNewServices2({
   setShowServices,
@@ -180,10 +181,16 @@ function AddNewServices2({
     { "Japan(¥)": "" },
   ]);
   const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState([[]]);
+  // const [filteredCountryData, setFilteredCountryData] = useState([
+  //   { "India(₹)": "" },
+  //   { "USA($)": "" },
+  //   { "Japan(¥)": "" },
+  // ]);
+
   const [filteredCountryData, setFilteredCountryData] = useState([
-    { "India(₹)": "" },
-    { "USA($)": "" },
-    { "Japan(¥)": "" },
+    "India(₹)",
+    "USA($)",
+    "Japan(¥)",
   ]);
 
   const [countryWithPrice2, setCountryWithPrice2] = useState([
@@ -200,16 +207,68 @@ function AddNewServices2({
   useEffect(() => {
     console.log(addMultiplePriceDiv);
   }, [addMultiplePriceDiv]);
+
   // Function to handle country selection
-  const handleCountrySelect = (selectedCountry) => {
-    // Update filteredCountryData with non-selected countries
+  const [selectedCountry, setSelectedCountry] = useState([]);
+  useEffect(() => {
     console.log(selectedCountry);
-    const updatedFilteredData = countryWithPrice.filter(
-      (country) => Object.keys(country)[0] !== selectedCountry
-    );
-    setFilteredCountryData(updatedFilteredData);
-    console.log(updatedFilteredData);
+  }, [selectedCountry]);
+  // useEffect(() => {
+  //   console.log("selectedCountry");
+  //   console.log(selectedCountry);
+
+  //   // const updatedFilteredData = filteredCountryData.filter(
+  //   //   (country) => Object.keys(country)[0] !== selectedCountry
+  //   // );
+  //   // // setSelectedCountry(updatedSelectedCountry);
+
+  //   // setFilteredCountryData(updatedFilteredData);
+  // }, [selectedCountry]);
+
+  const [countryPrice, setCountryPrice] = useState([]);
+
+  const handleCountrySelect = (fnselectedCountry, index) => {
+    console.log("------------");
+    setSelectedCountry((prev) => {
+      prev[index] = fnselectedCountry;
+      return [...prev];
+    });
   };
+  const handleFilter = (index) => {
+    // if (index > 0 && selectedCountry.length > 1) {
+    //   console.log("run huaa haiiiiiiiiiii");
+    //   const updatedFilteredData = filteredCountryData.filter(
+    //     (country) => !selectedCountry.includes(Object.keys(country)[0])
+    //   );
+    //   console.log(updatedFilteredData);
+    //   setFilteredCountryData(updatedFilteredData);
+    // }
+  };
+
+  const handleCancelcountry = (index) => {
+    if (addMultiplePriceDiv.length > 1) {
+      const newdata = [...addMultiplePriceDiv];
+      newdata.splice(index, 1);
+      setAddMultiplePriceDiv(newdata);
+      let newCountyData = [...selectedCountry];
+      newCountyData.splice(index, 1);
+      setSelectedCountry(newCountyData);
+
+      let newPrice = [...countryPrice];
+      newPrice.splice(index, 1);
+      setCountryPrice(newPrice);
+    }
+  };
+  const handelCountryPrice = (value, index) => {
+    setCountryPrice((prev) => {
+      prev[index] = value;
+      return [...prev];
+    });
+  };
+  useEffect(() => {
+    console.log("countryPrice", countryPrice);
+  }, [countryPrice]);
+
   return (
     <>
       <div className={style.addNewStudioTitle}>Add New Services</div>
@@ -245,27 +304,64 @@ function AddNewServices2({
             </div> */}
             {addMultiplePriceDiv.map((el, index) => (
               <div className={style.addPriceAndCountryInput}>
+                {/* {selectedCountry[index]}
+                {index} */}
                 <div>
                   <select
                     name="price"
                     id=""
-                    onChange={(e) => handleCountrySelect(e.target.value)}
-                    // value={}
+                    onChange={(e) => handleCountrySelect(e.target.value, index)}
+                    value={selectedCountry[index]}
+                    onClick={() => {
+                      handleFilter(index);
+                    }}
+                    style={{
+                      color: selectedCountry[index] ? "black" : "#757575",
+                    }}
                   >
-                    <option value="" default>
-                      select County{" "}
-                    </option>
+                    {selectedCountry[index] ? (
+                      <option value={selectedCountry[index]}>
+                        {selectedCountry[index]}
+                      </option>
+                    ) : (
+                      <option value="" default>
+                        select County
+                      </option>
+                    )}
+
                     {filteredCountryData.map((country, index) => {
-                      const countryName = Object.keys(country)[0];
-                      return (
-                        <option key={index} value={countryName}>
-                          {countryName}
-                        </option>
-                      );
+                      if (!selectedCountry.includes(country)) {
+                        return (
+                          <option key={index} value={country}>
+                            {country}
+                          </option>
+                        );
+                      }
                     })}
                   </select>
                 </div>
-                <div></div>
+                {/* {countryPrice.map((price,index)=>{
+
+                })} */}
+
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Enter Price"
+                    onChange={(event) => {
+                      handelCountryPrice(event.target.value, index);
+                    }}
+                  />
+                </div>
+                {addMultiplePriceDiv.length > 1 && (
+                  <span
+                    style={{ cursor: "pointer", top: "-22%" }}
+                    className={style.cancelTeamDetailUpload}
+                    onClick={() => handleCancelcountry(index)}
+                  >
+                    <MdCancel style={{ fontSize: "1.2vmax" }} />
+                  </span>
+                )}
               </div>
             ))}
 
@@ -274,7 +370,7 @@ function AddNewServices2({
                 className={style.addTeamDetailbtn}
                 onClick={handelMultipleCountryPriceDiv}
               >
-                <MdOutlineAddBox /> &nbsp;<div>Add new Rooms</div>
+                <MdOutlineAddBox /> &nbsp;<div>Add new country</div>
               </span>
             )}
 

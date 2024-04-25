@@ -191,35 +191,28 @@
 //     { "USA($)": "" },
 //     { "Japan(¥)": "" },
 //   ]);
-//   const [lastFilterData, setLastFilterData] = useState("");
 
 //   const handelMultipleCountryPriceDiv = () => {
 //     setAddMultiplePriceDiv((prev) => {
 //       return [...prev, []];
 //     });
-//     console.log("lastFilterData", lastFilterData);
-//     const updatedFilteredData = filteredCountryData.filter(
-//       (country) => Object.keys(country)[0] !== lastFilterData
-//     );
-//     setFilteredCountryData(updatedFilteredData);
-//     console.log("updatedFilteredData", updatedFilteredData);
 //   };
-
 //   useEffect(() => {
 //     console.log(addMultiplePriceDiv);
 //   }, [addMultiplePriceDiv]);
 //   // Function to handle country selection
 //   const [selectedCountry, setSelectedCountry] = useState([]);
-
-//   const handleCountrySelect = (fnselectedCountry) => {
+//   const handleCountrySelect = (selectedCountry) => {
 //     // Update filteredCountryData with non-selected countries
-//     setLastFilterData(fnselectedCountry);
-//     // lastFilterData = fnselectedCountry;
-//     console.log("lastFilterData = fnselectedCountry;", lastFilterData);
 //     setSelectedCountry((prev) => {
-//       return [...prev, fnselectedCountry];
+//       return [...prev, selectedCountry];
 //     });
-//     console.log(fnselectedCountry);
+//     console.log(selectedCountry);
+//     const updatedFilteredData = filteredCountryData.filter(
+//       (country) => Object.keys(country)[0] !== selectedCountry
+//     );
+//     setFilteredCountryData(updatedFilteredData);
+//     console.log(updatedFilteredData);
 //   };
 //   return (
 //     <>
@@ -284,29 +277,27 @@
 //                         })}
 //                       </>
 //                     )} */}
-
-//                     <option value="" disabled>
-//                       select County
-//                     </option>
-
-//                     {/* {selectedCountry[index] ? (
+//                     {selectedCountry[index] ? (
 //                       <option value={selectedCountry[index]}>
 //                         {selectedCountry[index]}
 //                       </option>
 //                     ) : (
-//                       <option value="" disabled>
+//                       <option value="" default>
 //                         select County
 //                       </option>
-//                     )} */}
-
-//                     {filteredCountryData.map((country, index) => {
-//                       const countryName = Object.keys(country)[0];
-//                       return (
-//                         <option key={index} value={countryName}>
-//                           {countryName}
-//                         </option>
-//                       );
-//                     })}
+//                     )}
+//                     {!selectedCountry[index] && (
+//                       <>
+//                         {filteredCountryData.map((country, index) => {
+//                           const countryName = Object.keys(country)[0];
+//                           return (
+//                             <option key={index} value={countryName}>
+//                               {countryName}
+//                             </option>
+//                           );
+//                         })}
+//                       </>
+//                     )}
 //                   </select>
 //                 </div>
 //                 <div></div>
@@ -318,7 +309,7 @@
 //                 className={style.addTeamDetailbtn}
 //                 onClick={handelMultipleCountryPriceDiv}
 //               >
-//                 <MdOutlineAddBox /> &nbsp;<div>Add new Rooms</div>
+//                 <MdOutlineAddBox /> &nbsp;<div>Add new country</div>
 //               </span>
 //             )}
 

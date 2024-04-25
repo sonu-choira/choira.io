@@ -38,7 +38,11 @@ function AddNewProduction({ setSelectTab }) {
 
   const navigate = useNavigate();
   const gotoadminpage = () => {
-    navigate("/adminDashboard");
+    if (bookingPageCount == "c2") {
+      navigate("/adminDashboard/Apps&More/musicproduction");
+    } else if (bookingPageCount == "c3") {
+      navigate("/adminDashboard/Apps&More/mixmaster");
+    }
   };
 
   useEffect(() => {

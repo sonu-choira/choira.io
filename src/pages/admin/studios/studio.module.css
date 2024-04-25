@@ -844,21 +844,30 @@ td {
   height: 80%;
 }
 .addPriceAndCountryInput {
-  width: 100%;
-  border: 2px solid red;
+  width: 98.9%;
+  border: 2px solid transparent;
   height: 6vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
   gap: 4%;
   > div {
     width: 48%;
-    border: 2px solid red;
+    border: 2px solid #dddddd;
     height: 90%;
     border-radius: 10px;
-    > select {
+    > select,
+    input {
       width: 100%;
       height: 100%;
+      border: none;
+      outline: none;
+      border-radius: 10px;
+      color: #757575;
+    }
+    > input {
+      color: black;
     }
   }
 }

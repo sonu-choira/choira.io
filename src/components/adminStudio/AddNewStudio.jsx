@@ -42,7 +42,7 @@ function AddNewStudio({ setSelectTab }) {
   };
   const navigate = useNavigate();
   const gotoadminpage = () => {
-    navigate("/adminDashboard");
+    navigate("/adminDashboard/Apps&More/studio");
   };
 
   const data = useLocation();
