@@ -65,7 +65,29 @@ function AddNewProduction({ setSelectTab }) {
   ]);
 
   const [service, setService] = useState([
-    { photo_url: [], name: "", about: "", amenites: [], price: "" },
+    {
+      photo_url: [],
+      name: "",
+      about: "",
+      amenites: [],
+      pricing: {
+        USA: {
+          price: 0,
+          basePrice: 0,
+          discountPercentage: 0,
+        },
+        IN: {
+          price: 0,
+          basePrice: 0,
+          discountPercentage: 0,
+        },
+        JP: {
+          price: 0,
+          basePrice: 0,
+          discountPercentage: 0,
+        },
+      },
+    },
   ]);
   const [discography, setDiscography] = useState([""]);
 

@@ -176,11 +176,36 @@ function AddNewServices2({
   };
 
   const [countryWithPrice, setCountryWithPrice] = useState([
-    { "India(₹)": "" },
-    { "USA($)": "" },
-    { "Japan(¥)": "" },
+    { "India(₹)": 100 },
+    { "USA($)": 200 },
+    { "Japan(¥)": 300 },
   ]);
-  const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState([[]]);
+
+  const [apiData, setApiData] = useState([
+    { IN: { prize: 100 } },
+    { USA: { prize: 200 } },
+  ]);
+  const [countryPrice, setCountryPrice] = useState([]);
+  useEffect(() => {
+    console.log("apiData-----------------------------------");
+
+    console.log(apiData);
+  }, [apiData]);
+
+  useEffect(() => {
+    let scon = [];
+    let sp = [];
+    apiData.map((item) => {
+      scon.push(Object.keys(item)[0]);
+      sp.push(item[Object.keys(item)[0]]?.prize);
+    });
+    console.log(scon);
+    setSelectedCountry(scon);
+    setCountryPrice(sp);
+  }, [apiData]);
+  const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState(
+    Array.from({ length: apiData.length }, () => [])
+  );
   // const [filteredCountryData, setFilteredCountryData] = useState([
   //   { "India(₹)": "" },
   //   { "USA($)": "" },
@@ -188,9 +213,9 @@ function AddNewServices2({
   // ]);
 
   const [filteredCountryData, setFilteredCountryData] = useState([
-    "India(₹)",
-    "USA($)",
-    "Japan(¥)",
+    "IN",
+    "USA",
+    "JP",
   ]);
 
   const [countryWithPrice2, setCountryWithPrice2] = useState([
@@ -213,19 +238,6 @@ function AddNewServices2({
   useEffect(() => {
     console.log(selectedCountry);
   }, [selectedCountry]);
-  // useEffect(() => {
-  //   console.log("selectedCountry");
-  //   console.log(selectedCountry);
-
-  //   // const updatedFilteredData = filteredCountryData.filter(
-  //   //   (country) => Object.keys(country)[0] !== selectedCountry
-  //   // );
-  //   // // setSelectedCountry(updatedSelectedCountry);
-
-  //   // setFilteredCountryData(updatedFilteredData);
-  // }, [selectedCountry]);
-
-  const [countryPrice, setCountryPrice] = useState([]);
 
   const handleCountrySelect = (fnselectedCountry, index) => {
     console.log("------------");
@@ -233,16 +245,6 @@ function AddNewServices2({
       prev[index] = fnselectedCountry;
       return [...prev];
     });
-  };
-  const handleFilter = (index) => {
-    // if (index > 0 && selectedCountry.length > 1) {
-    //   console.log("run huaa haiiiiiiiiiii");
-    //   const updatedFilteredData = filteredCountryData.filter(
-    //     (country) => !selectedCountry.includes(Object.keys(country)[0])
-    //   );
-    //   console.log(updatedFilteredData);
-    //   setFilteredCountryData(updatedFilteredData);
-    // }
   };
 
   const handleCancelcountry = (index) => {
@@ -268,6 +270,47 @@ function AddNewServices2({
   useEffect(() => {
     console.log("countryPrice", countryPrice);
   }, [countryPrice]);
+  let countryWithPriceobj = {};
+  useEffect(() => {
+    selectedCountry.map((name, index) => {
+      return (countryWithPriceobj[name] = countryPrice[index]);
+    });
+  }, [countryPrice, selectedCountry]);
+
+  useEffect(() => {
+    console.log("countryWithPriceobj", countryWithPriceobj);
+  }, [countryWithPriceobj]);
+
+  useEffect(() => {
+    if (countryWithPriceobj && Object.keys(countryWithPriceobj).length > 0) {
+      setService((prevService) => {
+        return prevService.map((item, index) => {
+          if (index === indexofServices) {
+            return {
+              ...item,
+              pricing: {
+                ...(item.pricing || {}), // Ensure pricing object is defined
+                USA: {
+                  ...(item.pricing?.USA || {}), // Ensure USA object is defined
+                  basePrice: countryWithPriceobj["USA($)"] || 0,
+                },
+                IN: {
+                  ...(item.pricing?.IN || {}), // Ensure IN object is defined
+                  basePrice: countryWithPriceobj["India(₹)"] || 0,
+                },
+                JP: {
+                  ...(item.pricing?.JP || {}), // Ensure JP object is defined
+                  basePrice: countryWithPriceobj["Japan(¥)"] || 0,
+                },
+              },
+            };
+          } else {
+            return item;
+          }
+        });
+      });
+    }
+  }, [countryPrice, selectedCountry]);
 
   return (
     <>
@@ -292,29 +335,14 @@ function AddNewServices2({
               />
             </div>
 
-            {/* <div className={style.addNewStudioinputBox}>
-              <label htmlFor="startingPrice">Price Starting From</label>
-              <input
-                type="text"
-                id="startingPrice"
-                placeholder="Enter price"
-                value={currentServiceData.price}
-                onChange={handlePriceChange}
-              />
-            </div> */}
             {addMultiplePriceDiv.map((el, index) => (
               <div className={style.addPriceAndCountryInput}>
-                {/* {selectedCountry[index]}
-                {index} */}
                 <div>
                   <select
                     name="price"
                     id=""
                     onChange={(e) => handleCountrySelect(e.target.value, index)}
                     value={selectedCountry[index]}
-                    onClick={() => {
-                      handleFilter(index);
-                    }}
                     style={{
                       color: selectedCountry[index] ? "black" : "#757575",
                     }}
@@ -340,9 +368,7 @@ function AddNewServices2({
                     })}
                   </select>
                 </div>
-                {/* {countryPrice.map((price,index)=>{
-
-                })} */}
+                {countryPrice.map((price, index) => {})}
 
                 <div>
                   <input
@@ -351,15 +377,18 @@ function AddNewServices2({
                     onChange={(event) => {
                       handelCountryPrice(event.target.value, index);
                     }}
+                    value={countryPrice[index]}
                   />
                 </div>
                 {addMultiplePriceDiv.length > 1 && (
                   <span
-                    style={{ cursor: "pointer", top: "-22%" }}
+                    style={{ cursor: "pointer", top: "-15%", right: "-1.5%" }}
                     className={style.cancelTeamDetailUpload}
                     onClick={() => handleCancelcountry(index)}
                   >
-                    <MdCancel style={{ fontSize: "1.2vmax" }} />
+                    <MdCancel
+                      style={{ fontSize: "1.2vmax", color: "#7575759a" }}
+                    />
                   </span>
                 )}
               </div>

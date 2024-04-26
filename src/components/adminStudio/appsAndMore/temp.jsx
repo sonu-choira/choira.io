@@ -16,6 +16,7 @@
 // import StudioFooter from "../StudioFooter";
 // import cross from "../../../assets/cross.svg";
 // import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
+// import { MdCancel } from "react-icons/md";
 
 // function AddNewServices2({
 //   setShowServices,
@@ -175,15 +176,46 @@
 //   };
 
 //   const [countryWithPrice, setCountryWithPrice] = useState([
-//     { "India(₹)": "" },
-//     { "USA($)": "" },
-//     { "Japan(¥)": "" },
+//     { "India(₹)": 100 },
+//     { "USA($)": 200 },
+//     { "Japan(¥)": 300 },
 //   ]);
-//   const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState([[]]);
+
+//   const [apiData, setApiData] = useState([
+//     { IN: { prize: 100 } },
+//     { USA: { prize: 200 } },
+//   ]);
+//   const [countryPrice, setCountryPrice] = useState([]);
+//   useEffect(() => {
+//     console.log("apiData-----------------------------------");
+
+//     console.log(apiData);
+//   }, [apiData]);
+
+//   useEffect(() => {
+//     let scon = [];
+//     let sp = [];
+//     apiData.map((item) => {
+//       scon.push(Object.keys(item)[0]);
+//       sp.push(item[Object.keys(item)[0]]?.prize);
+//     });
+//     console.log(scon);
+//     setSelectedCountry(scon);
+//     setCountryPrice(sp);
+//   }, [apiData]);
+//   const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState(
+//     Array.from({ length: apiData.length }, () => [])
+//   );
+//   // const [filteredCountryData, setFilteredCountryData] = useState([
+//   //   { "India(₹)": "" },
+//   //   { "USA($)": "" },
+//   //   { "Japan(¥)": "" },
+//   // ]);
+
 //   const [filteredCountryData, setFilteredCountryData] = useState([
-//     { "India(₹)": "" },
-//     { "USA($)": "" },
-//     { "Japan(¥)": "" },
+//     "IN",
+//     "USA",
+//     "JP",
 //   ]);
 
 //   const [countryWithPrice2, setCountryWithPrice2] = useState([
@@ -191,36 +223,95 @@
 //     { "USA($)": "" },
 //     { "Japan(¥)": "" },
 //   ]);
-//   const [lastFilterData, setLastFilterData] = useState("");
 
 //   const handelMultipleCountryPriceDiv = () => {
 //     setAddMultiplePriceDiv((prev) => {
 //       return [...prev, []];
 //     });
-//     console.log("lastFilterData", lastFilterData);
-//     const updatedFilteredData = filteredCountryData.filter(
-//       (country) => Object.keys(country)[0] !== lastFilterData
-//     );
-//     setFilteredCountryData(updatedFilteredData);
-//     console.log("updatedFilteredData", updatedFilteredData);
 //   };
-
 //   useEffect(() => {
 //     console.log(addMultiplePriceDiv);
 //   }, [addMultiplePriceDiv]);
+
 //   // Function to handle country selection
 //   const [selectedCountry, setSelectedCountry] = useState([]);
+//   useEffect(() => {
+//     console.log(selectedCountry);
+//   }, [selectedCountry]);
 
-//   const handleCountrySelect = (fnselectedCountry) => {
-//     // Update filteredCountryData with non-selected countries
-//     setLastFilterData(fnselectedCountry);
-//     // lastFilterData = fnselectedCountry;
-//     console.log("lastFilterData = fnselectedCountry;", lastFilterData);
+//   const handleCountrySelect = (fnselectedCountry, index) => {
+//     console.log("------------");
 //     setSelectedCountry((prev) => {
-//       return [...prev, fnselectedCountry];
+//       prev[index] = fnselectedCountry;
+//       return [...prev];
 //     });
-//     console.log(fnselectedCountry);
 //   };
+
+//   const handleCancelcountry = (index) => {
+//     if (addMultiplePriceDiv.length > 1) {
+//       const newdata = [...addMultiplePriceDiv];
+//       newdata.splice(index, 1);
+//       setAddMultiplePriceDiv(newdata);
+//       let newCountyData = [...selectedCountry];
+//       newCountyData.splice(index, 1);
+//       setSelectedCountry(newCountyData);
+
+//       let newPrice = [...countryPrice];
+//       newPrice.splice(index, 1);
+//       setCountryPrice(newPrice);
+//     }
+//   };
+//   const handelCountryPrice = (value, index) => {
+//     setCountryPrice((prev) => {
+//       prev[index] = value;
+//       return [...prev];
+//     });
+//   };
+//   useEffect(() => {
+//     console.log("countryPrice", countryPrice);
+//   }, [countryPrice]);
+//   let countryWithPriceobj = {};
+//   useEffect(() => {
+//     selectedCountry.map((name, index) => {
+//       return (countryWithPriceobj[name] = countryPrice[index]);
+//     });
+//   }, [countryPrice, selectedCountry]);
+
+//   useEffect(() => {
+//     console.log("countryWithPriceobj", countryWithPriceobj);
+//   }, [countryWithPriceobj]);
+
+//   useEffect(() => {
+//     if (countryWithPriceobj && Object.keys(countryWithPriceobj).length > 0) {
+//       setService((prevService) => {
+//         return prevService.map((item, index) => {
+//           if (index === indexofServices) {
+//             return {
+//               ...item,
+//               pricing: {
+//                 ...(item.pricing || {}), // Ensure pricing object is defined
+//                 USA: {
+//                   ...(item.pricing?.USA || {}), // Ensure USA object is defined
+//                   basePrice: countryWithPriceobj["USA($)"] || 0,
+//                 },
+//                 IN: {
+//                   ...(item.pricing?.IN || {}), // Ensure IN object is defined
+//                   basePrice: countryWithPriceobj["India(₹)"] || 0,
+//                 },
+//                 JP: {
+//                   ...(item.pricing?.JP || {}), // Ensure JP object is defined
+//                   basePrice: countryWithPriceobj["Japan(¥)"] || 0,
+//                 },
+//               },
+//             };
+//           } else {
+//             return item;
+//           }
+//         });
+//       });
+//     }
+//   }, [countryPrice, selectedCountry]);
+
 //   return (
 //     <>
 //       <div className={style.addNewStudioTitle}>Add New Services</div>
@@ -244,72 +335,62 @@
 //               />
 //             </div>
 
-//             {/* <div className={style.addNewStudioinputBox}>
-//               <label htmlFor="startingPrice">Price Starting From</label>
-//               <input
-//                 type="text"
-//                 id="startingPrice"
-//                 placeholder="Enter price"
-//                 value={currentServiceData.price}
-//                 onChange={handlePriceChange}
-//               />
-//             </div> */}
 //             {addMultiplePriceDiv.map((el, index) => (
 //               <div className={style.addPriceAndCountryInput}>
-//                 {selectedCountry[index]}
-//                 {index}
 //                 <div>
 //                   <select
 //                     name="price"
 //                     id=""
-//                     onChange={(e) => handleCountrySelect(e.target.value)}
+//                     onChange={(e) => handleCountrySelect(e.target.value, index)}
 //                     value={selectedCountry[index]}
+//                     style={{
+//                       color: selectedCountry[index] ? "black" : "#757575",
+//                     }}
 //                   >
-//                     {/* {selectedCountry[index] ? (
-//                       <option value="" default>
-//                         {selectedCountry[index]}
-//                       </option>
-//                     ) : (
-//                       <>
-//                         <option value="" default>
-//                           select County{" "}
-//                         </option>
-//                         {filteredCountryData.map((country, index) => {
-//                           const countryName = Object.keys(country)[0];
-//                           return (
-//                             <option key={index} value={countryName}>
-//                               {countryName}
-//                             </option>
-//                           );
-//                         })}
-//                       </>
-//                     )} */}
-
-//                     <option value="" disabled>
-//                       select County
-//                     </option>
-
-//                     {/* {selectedCountry[index] ? (
+//                     {selectedCountry[index] ? (
 //                       <option value={selectedCountry[index]}>
 //                         {selectedCountry[index]}
 //                       </option>
 //                     ) : (
-//                       <option value="" disabled>
+//                       <option value="" default>
 //                         select County
 //                       </option>
-//                     )} */}
+//                     )}
 
 //                     {filteredCountryData.map((country, index) => {
-//                       const countryName = Object.keys(country)[0];
-//                       return (
-//                         <option key={index} value={countryName}>
-//                           {countryName}
-//                         </option>
-//                       );
+//                       if (!selectedCountry.includes(country)) {
+//                         return (
+//                           <option key={index} value={country}>
+//                             {country}
+//                           </option>
+//                         );
+//                       }
 //                     })}
 //                   </select>
 //                 </div>
-//                 <div></div>
+//                 {countryPrice.map((price, index) => {})}
+
+//                 <div>
+//                   <input
+//                     type="text"
+//                     placeholder="Enter Price"
+//                     onChange={(event) => {
+//                       handelCountryPrice(event.target.value, index);
+//                     }}
+//                     value={countryPrice[index]}
+//                   />
+//                 </div>
+//                 {addMultiplePriceDiv.length > 1 && (
+//                   <span
+//                     style={{ cursor: "pointer", top: "-15%", right: "-1.5%" }}
+//                     className={style.cancelTeamDetailUpload}
+//                     onClick={() => handleCancelcountry(index)}
+//                   >
+//                     <MdCancel
+//                       style={{ fontSize: "1.2vmax", color: "#7575759a" }}
+//                     />
+//                   </span>
+//                 )}
 //               </div>
 //             ))}
 
@@ -318,7 +399,7 @@
 //                 className={style.addTeamDetailbtn}
 //                 onClick={handelMultipleCountryPriceDiv}
 //               >
-//                 <MdOutlineAddBox /> &nbsp;<div>Add new Rooms</div>
+//                 <MdOutlineAddBox /> &nbsp;<div>Add new country</div>
 //               </span>
 //             )}
 
