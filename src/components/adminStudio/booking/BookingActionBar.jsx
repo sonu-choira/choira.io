@@ -7,7 +7,12 @@ import { FaDownload } from "react-icons/fa";
 import { MdNoteAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 
-function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
+function BookingActionBar({
+  setBookingPageCount,
+  bookingPageCount,
+  pagetype,
+  downloadAllData,
+}) {
   console.log(bookingPageCount);
   const navigate = useNavigate();
 
@@ -140,8 +145,8 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               height: "50%",
               width: "15%",
               gap: "5%",
-              backgroundColor: "#ADB5BD",
             }}
+            onClick={downloadAllData}
           />
           {(bookingPageCount === "c1") & (pagetype != "apps") ? (
             <Button

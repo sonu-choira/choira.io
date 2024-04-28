@@ -545,25 +545,6 @@ function AddNewProduction({ setSelectTab }) {
 
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="Amenities">Amenities </label>
-                      {/* {isEditMode ? (
-                        <Select
-                          id="Amenities"
-                          mode="multiple"
-                          placeholder="Select one or more Amenities"
-                          value={
-                            productionData?.amenities?.map(
-                              (item) => item?.name || item
-                            ) || []
-                          }
-                          onChange={setSelectedItems}
-                          style={customStyles}
-                          options={productionData?.amenities?.map((item) => ({
-                            value: item.name,
-                            label: item.name,
-                          }))}
-                        /> */}
-                      {/* ) :  */}
-                      {/* ( */}
                       <Select
                         id="Amenities"
                         mode="multiple"
@@ -638,15 +619,6 @@ function AddNewProduction({ setSelectTab }) {
                         }))}
                       />
                     </div>
-
-                    {/* <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="ProductionName">Production Name </label>
-                      <input
-                        type="text"
-                        id="ProductionName"
-                        placeholder="Enter Production Name"
-                      />
-                    </div> */}
 
                     <div>
                       <label htmlFor={`Discography`}>Discography</label>

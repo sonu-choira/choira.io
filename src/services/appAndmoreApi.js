@@ -112,6 +112,28 @@ class Appapi{
       console.log("res ===>", response.data)
       return response.data;
      };
+
+
+     downloadData = async (allfilterData) => {
+
+      const filteredObject = {};
+      for (const key in allfilterData) {
+        if (allfilterData[key]) {
+          filteredObject[key] = allfilterData[key];
+        }
+      }
+        
+        const response = await api.get(`/exportStudiosData`,{ 
+            params: filteredObject
+        });
+        const {status} = response.data
+        console.log("res ===>", response.data)
+        return response.data;
+       };
+
+
+
+
 }
 
 

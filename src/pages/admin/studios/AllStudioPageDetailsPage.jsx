@@ -83,6 +83,28 @@ function AllStudioPageDetailsPage() {
     console.log("sendFilterDataToapi", sendFilterDataToapi);
   }, [sendFilterDataToapi]);
 
+  let downloadAllData = () => {
+    if (hasFilter) {
+      appAndmoreApi
+        .downloadData(sendFilterDataToapi)
+        .then((response) => {
+          console.log("filter applied:", response);
+        })
+        .catch((error) => {
+          console.error("Error filter studio:", error);
+        });
+    } else {
+      appAndmoreApi
+        .downloadData()
+        .then((response) => {
+          console.log("filter applied:", response);
+        })
+        .catch((error) => {
+          console.error("Error filter studio:", error);
+        });
+    }
+  };
+
   useEffect(() => {
     console.log("bookingPageCount-----", bookingPageCount);
     setProducts([]);
@@ -181,6 +203,7 @@ function AllStudioPageDetailsPage() {
           pagetype={pagetype}
           bookingPageCount={bookingPageCount}
           setBookingPageCount={setBookingPageCount}
+          downloadAllData={downloadAllData}
         />
         {bookingPageCount === "c1" ? (
           <AllStudioDetail2
