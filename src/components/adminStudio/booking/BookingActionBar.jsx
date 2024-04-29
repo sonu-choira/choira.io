@@ -6,6 +6,7 @@ import style from "../../../pages/admin/studios/studio.module.css";
 import { FaDownload } from "react-icons/fa";
 import { MdNoteAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
+import appAndmoreApi from "../../../services/appAndmoreApi";
 
 function BookingActionBar({
   setBookingPageCount,
@@ -16,7 +17,45 @@ function BookingActionBar({
   console.log(bookingPageCount);
   const navigate = useNavigate();
 
-  let { navOption: pageData } = useParams();
+  let { navOption: pageData, page: type } = useParams();
+  console.log("page ka data ", useParams());
+
+  const downloadBookingsData = () => {
+    let bookingData = {
+      type: "c1",
+    };
+    if (pageData == "Bookings" && type == "studio") {
+      bookingData.type = "c1";
+      appAndmoreApi
+        .downloadBookingServiceData(bookingData)
+        .then((response) => {
+          console.log("data download", response);
+        })
+        .catch((error) => {
+          console.error("Error download data:", error);
+        });
+    } else if (pageData == "Bookings" && type == "musicproduction") {
+      bookingData.type = "c2";
+      appAndmoreApi
+        .downloadBookingServiceData(bookingData)
+        .then((response) => {
+          console.log("data download", response);
+        })
+        .catch((error) => {
+          console.error("Error download data:", error);
+        });
+    } else if (pageData == "Bookings" && type == "mixmaster") {
+      bookingData.type = "c3";
+      appAndmoreApi
+        .downloadBookingServiceData(bookingData)
+        .then((response) => {
+          console.log("data download", response);
+        })
+        .catch((error) => {
+          console.error("Error download data:", error);
+        });
+    }
+  };
 
   const gotoAddNew = (bookingPageCount) => {
     if (bookingPageCount === "c1") {
@@ -146,7 +185,9 @@ function BookingActionBar({
               width: "15%",
               gap: "5%",
             }}
-            onClick={downloadAllData}
+            onClick={
+              pagetype == "apps" ? downloadAllData : downloadBookingsData
+            }
           />
           {(bookingPageCount === "c1") & (pagetype != "apps") ? (
             <Button

@@ -176,36 +176,11 @@ function AddNewServices2({
   };
 
   const [countryWithPrice, setCountryWithPrice] = useState([
-    { "India(₹)": 100 },
-    { "USA($)": 200 },
-    { "Japan(¥)": 300 },
+    { "India(₹)": "" },
+    { "USA($)": "" },
+    { "Japan(¥)": "" },
   ]);
-
-  const [apiData, setApiData] = useState([
-    { IN: { prize: 100 } },
-    { USA: { prize: 200 } },
-  ]);
-  const [countryPrice, setCountryPrice] = useState([]);
-  useEffect(() => {
-    console.log("apiData-----------------------------------");
-
-    console.log(apiData);
-  }, [apiData]);
-
-  useEffect(() => {
-    let scon = [];
-    let sp = [];
-    apiData.map((item) => {
-      scon.push(Object.keys(item)[0]);
-      sp.push(item[Object.keys(item)[0]]?.prize);
-    });
-    console.log(scon);
-    setSelectedCountry(scon);
-    setCountryPrice(sp);
-  }, [apiData]);
-  const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState(
-    Array.from({ length: apiData.length }, () => [])
-  );
+  const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState([[]]);
   // const [filteredCountryData, setFilteredCountryData] = useState([
   //   { "India(₹)": "" },
   //   { "USA($)": "" },
@@ -213,9 +188,9 @@ function AddNewServices2({
   // ]);
 
   const [filteredCountryData, setFilteredCountryData] = useState([
-    "IN",
-    "USA",
-    "JP",
+    "India(₹)",
+    "USA($)",
+    "Japan(¥)",
   ]);
 
   const [countryWithPrice2, setCountryWithPrice2] = useState([
@@ -238,6 +213,8 @@ function AddNewServices2({
   useEffect(() => {
     console.log(selectedCountry);
   }, [selectedCountry]);
+
+  const [countryPrice, setCountryPrice] = useState([]);
 
   const handleCountrySelect = (fnselectedCountry, index) => {
     console.log("------------");

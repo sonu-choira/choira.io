@@ -149,6 +149,7 @@ function DateAndSearchFilter({
   let filterData = { ...sendFilterDataToapi };
   delete filterData.sortBy;
   delete filterData.page;
+  delete filterData.serviceType;
   let hasFilter = false;
   for (const key in filterData) {
     if (filterData[key]) {
@@ -164,15 +165,23 @@ function DateAndSearchFilter({
     });
     console.log(sendFilterDataToapi);
     try {
-      setSelectedCity([]);
-      setShortby("creationTimeStamp:asc");
-      setSelectedRoom([]);
-      setSelectedStatus([]);
-      setSearchQuery("");
-      setPriceFilter({
-        minPrice: "",
-        maxPrice: "",
-      });
+      if (bookingPageCount == "c1") {
+        // setSelectedCity([]);
+        // setShortby("creationTimeStamp:asc");
+        // setSelectedRoom([]);
+        // setSelectedStatus([]);
+        // setSearchQuery("");
+        // setPriceFilter({
+        //   minPrice: "",
+        //   maxPrice: "",
+        // });
+        // hitallstudioApi();
+        window.location.reload();
+      } else {
+        // setSearchQuery("");
+        // hitallstudioApi();
+        window.location.reload();
+      }
     } catch (e) {
       console.log(e);
     }

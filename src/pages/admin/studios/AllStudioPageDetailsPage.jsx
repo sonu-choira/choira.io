@@ -84,25 +84,56 @@ function AllStudioPageDetailsPage() {
   }, [sendFilterDataToapi]);
 
   let downloadAllData = () => {
-    if (hasFilter) {
+    // if (hasFilter) {
+    if (bookingPageCount === "c2" || bookingPageCount === "c3") {
+      // Corrected the id assignments
+      const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
+      let tempData = { ...sendFilterDataToapi };
+
+      delete tempData.serviceType;
+      tempData.type = idToUse;
       appAndmoreApi
-        .downloadData(sendFilterDataToapi)
+        .downloadServiceData(tempData)
         .then((response) => {
-          console.log("filter applied:", response);
+          console.log("data download", response);
         })
         .catch((error) => {
-          console.error("Error filter studio:", error);
+          console.error("Error download studio:", error);
         });
     } else {
+      let tempData = { ...sendFilterDataToapi };
+      delete tempData.sortBy;
+      delete tempData.page;
       appAndmoreApi
-        .downloadData()
+        .downloadData(tempData)
         .then((response) => {
-          console.log("filter applied:", response);
+          console.log("data download:", response);
         })
         .catch((error) => {
           console.error("Error filter studio:", error);
         });
     }
+    // } else {
+    // if (bookingPageCount == "c1") {
+    //   appAndmoreApi
+    //     .downloadData()
+    //     .then((response) => {
+    //       console.log("filter applied:", response);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error filter studio:", error);
+    //     });
+    // } else {
+    //   appAndmoreApi
+    //     .downloadServiceData()
+    //     .then((response) => {
+    //       console.log("filter applied:", response);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error filter studio:", error);
+    //     });
+    // }
+    // }
   };
 
   useEffect(() => {

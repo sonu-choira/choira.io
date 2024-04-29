@@ -1,4 +1,5 @@
 
+import fileDownload from "js-file-download";
 import api from "./api"
 
 class Appapi{
@@ -124,8 +125,46 @@ class Appapi{
       }
         
         const response = await api.get(`/exportStudiosData`,{ 
-            params: filteredObject
-        });
+            params: filteredObject,
+            responseType:'blob',
+        }).then((res)=>{
+          fileDownload(res.data,"studioData.xlsx")
+        })
+        const {status} = response.data
+        console.log("res ===>", response.data)
+        return response.data;
+       };
+
+     downloadServiceData = async (allfilterData) => {
+
+      const filteredObject = {};
+      for (const key in allfilterData) {
+        if (allfilterData[key]) {
+          filteredObject[key] = allfilterData[key];
+        }
+      }
+        
+        const response = await api.get(`/exportServicesData`,{ 
+            params: filteredObject,
+            responseType:'blob',
+        }).then((res)=>{
+          fileDownload(res.data,"serviceData.xlsx")
+        })
+        const {status} = response.data
+        console.log("res ===>", response.data)
+        return response.data;
+       };
+
+     downloadBookingServiceData = async (type) => {
+
+   
+        
+        const response = await api.get(`exportBookingData`,{ 
+            params: type,
+            responseType:'blob',
+        }).then((res)=>{
+          fileDownload(res.data,"bookings.xlsx")
+        })
         const {status} = response.data
         console.log("res ===>", response.data)
         return response.data;
