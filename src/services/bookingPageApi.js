@@ -2,13 +2,15 @@
 import api from "./api"
 
  class bookingApi {
-  getBookings = async (limit ,active) => {
+  getBookings = async (limit, active,bookingType,category) => {
   
 
-    const response = await api.get(`/bookings/services`, {
+    const response = await api.get(`/bookings`, {
       params: {
         limit: limit,
-        active: active
+        active: active,
+        bookingType: bookingType,
+        category: category,
       }
     });
     const {status} = response.data
@@ -32,7 +34,8 @@ import api from "./api"
    updateStatus = async (id, selectedstatus) => {
     const response = await api.post(`/bookings/update`,{
       bookingId: id,
-      status: selectedstatus
+      
+      bookingStatus: parseInt(selectedstatus),
     });
     const {status} = response.data
     console.log("res ===>", response.data)

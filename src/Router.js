@@ -63,7 +63,7 @@ const Routing = () => {
     // <Router>
       <Suspense fallback={<ChoiraLoader/>}>
         <Routes>
-        <Route exact path='/' element={<Home/>} />
+        <Route exact path='/' element={<Signin/>} />
           <Route exact path='/signin' element={<Signin/>} />
           <Route exact path='/signup' element={<Signup/>} />
           <Route exact path='/deleteAccount' element={<DeleteAccount/>} />
@@ -89,7 +89,9 @@ const Routing = () => {
 
           <Route exact path='/studios' element={<Studios/>} />
           <Route exact path='/allStudioPageDetailsPage' element={<AllStudioPageDetailsPage/>} />
-          <Route exact path='/adminDashboard' element={<AdminDashboardLayout/>} />
+          <Route path='/adminDashboard/:navOption/:page' element={<AdminDashboardLayout/>} />
+          <Route path='/adminDashboard/:navOption' element={<AdminDashboardLayout/>} />
+          <Route path='/adminDashboard' element={<AdminDashboardLayout/>} />
           <Route exact path='/booking' element={<BookingPages/>} />
           <Route exact path='/studio/edit' element={<AddNewStudio/>} />
           <Route exact path='/studio/add' element={<AddNewStudio/>} />

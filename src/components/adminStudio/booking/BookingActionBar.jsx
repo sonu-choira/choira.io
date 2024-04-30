@@ -5,14 +5,63 @@ import { LuFilePlus } from "react-icons/lu";
 import style from "../../../pages/admin/studios/studio.module.css";
 import { FaDownload } from "react-icons/fa";
 import { MdNoteAdd } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import appAndmoreApi from "../../../services/appAndmoreApi";
 
-function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
+function BookingActionBar({
+  setBookingPageCount,
+  bookingPageCount,
+  pagetype,
+  downloadAllData,
+}) {
   console.log(bookingPageCount);
   const navigate = useNavigate();
+
+  let { navOption: pageData, page: type } = useParams();
+  console.log("page ka data ", useParams());
+
+  const downloadBookingsData = () => {
+    let bookingData = {
+      type: "c1",
+    };
+    if (pageData == "Bookings" && type == "studio") {
+      bookingData.type = "c1";
+      appAndmoreApi
+        .downloadBookingServiceData(bookingData)
+        .then((response) => {
+          console.log("data download", response);
+        })
+        .catch((error) => {
+          console.error("Error download data:", error);
+        });
+    } else if (pageData == "Bookings" && type == "musicproduction") {
+      bookingData.type = "c2";
+      appAndmoreApi
+        .downloadBookingServiceData(bookingData)
+        .then((response) => {
+          console.log("data download", response);
+        })
+        .catch((error) => {
+          console.error("Error download data:", error);
+        });
+    } else if (pageData == "Bookings" && type == "mixmaster") {
+      bookingData.type = "c3";
+      appAndmoreApi
+        .downloadBookingServiceData(bookingData)
+        .then((response) => {
+          console.log("data download", response);
+        })
+        .catch((error) => {
+          console.error("Error download data:", error);
+        });
+    }
+  };
+
   const gotoAddNew = (bookingPageCount) => {
     if (bookingPageCount === "c1") {
-      navigate("/studio/add");
+      navigate("/studio/add", {
+        state: { navCount: 3, bookingPageCount: bookingPageCount },
+      });
     } else {
       navigate("/service/musicProduction/add", {
         state: { navCount: 3, bookingPageCount: bookingPageCount },
@@ -23,6 +72,27 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
     navigate("/service/AddSlotBooking", {
       state: { navCount: 4 },
     });
+  };
+  const gotoMusicProduction = () => {
+    if (pageData == "Apps&More") {
+      navigate("/adminDashboard/Apps&More/musicproduction");
+    } else {
+      navigate("/adminDashboard/Bookings/musicproduction");
+    }
+  };
+  const gotoStudio = () => {
+    if (pageData == "Apps&More") {
+      navigate("/adminDashboard/Apps&More/studio");
+    } else {
+      navigate("/adminDashboard/Bookings/studio");
+    }
+  };
+  const gotoMixMaster = () => {
+    if (pageData == "Apps&More") {
+      navigate("/adminDashboard/Apps&More/mixmaster");
+    } else {
+      navigate("/adminDashboard/Bookings/mixmaster");
+    }
   };
   return (
     <>
@@ -36,6 +106,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               }}
               onClick={() => {
                 setBookingPageCount("c1");
+                gotoStudio();
               }}
             >
               Studio
@@ -46,6 +117,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               }}
               onClick={() => {
                 setBookingPageCount("c2");
+                gotoMusicProduction();
               }}
             >
               Music Production
@@ -67,6 +139,7 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               }}
               onClick={() => {
                 setBookingPageCount("c3");
+                gotoMixMaster();
               }}
             >
               Mix-Master
@@ -111,8 +184,10 @@ function BookingActionBar({ setBookingPageCount, bookingPageCount, pagetype }) {
               height: "50%",
               width: "15%",
               gap: "5%",
-              backgroundColor: "#ADB5BD",
             }}
+            onClick={
+              pagetype == "apps" ? downloadAllData : downloadBookingsData
+            }
           />
           {(bookingPageCount === "c1") & (pagetype != "apps") ? (
             <Button

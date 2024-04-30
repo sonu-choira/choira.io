@@ -6,9 +6,8 @@ import {
   MdOutlineSettings,
 } from "react-icons/md";
 import style from "../../../pages/admin/studios/studio.module.css";
-import { FaPencilAlt } from "react-icons/fa";
+// test
 
-import upload from "../../../assets/upload.svg";
 import cross from "../../../assets/cross.svg";
 import StudioFooter from "../StudioFooter";
 import { Select } from "antd";
@@ -18,49 +17,32 @@ import { IoSearch } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { FaRegBell } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
-import AddNewServices from "./AddNewServices";
+import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
+import AddmultipleServises from "../../../pages/admin/layout/AddmultipleServises";
+import AddNewServices2 from "./AddNewServices2";
+import appAndmoreApi from "../../../services/appAndmoreApi";
+import Swal from "sweetalert2";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
   const navCount = data?.state?.navCount;
-  const [showMode, setshowMode] = useState(data?.state?.showMode || false);
+  const showMode = data?.state?.showMode || false;
+
+  // console.log("data.state", data.state.productData._id);
+  let serviceId = data?.state?.productData?._id;
+  let bookingPageCount;
+  if (data?.state?.bookingPageCount) {
+    bookingPageCount = data?.state?.bookingPageCount;
+  }
   // const [productionData, setProductionData] = useState(initialState)
-  const [selectedOption, setSelectedOption] = useState("0");
-
-  const [addNewServicesformData, setAddNewServicesformData] = useState([]);
-
-  const initializeServicesArray = () => {
-    const initialArray = [];
-    const selectedOptionCount = parseInt(selectedOption, 10);
-
-    for (let i = 0; i < selectedOptionCount; i++) {
-      initialArray.push({
-        serviceName: "",
-        startingPrice: "",
-        serviceDetails: "",
-        images: [],
-        amenities: [],
-      });
-    }
-
-    setAddNewServicesformData(initialArray);
-  };
-
-  useEffect(() => {
-    // Initialize the array when the selectedOption changes
-    initializeServicesArray();
-  }, [selectedOption]);
-
-  useEffect(() => {
-    console.log("hii", addNewServicesformData);
-  }, [addNewServicesformData]);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [showServices, setShowServices] = useState(false);
-  const [services, setServices] = useState([]);
 
   const navigate = useNavigate();
   const gotoadminpage = () => {
-    navigate("/adminDashboard");
+    if (bookingPageCount == "c2") {
+      navigate("/adminDashboard/Apps&More/musicproduction");
+    } else if (bookingPageCount == "c3") {
+      navigate("/adminDashboard/Apps&More/mixmaster");
+    }
   };
 
   useEffect(() => {
@@ -68,12 +50,6 @@ function AddNewProduction({ setSelectTab }) {
     console.log("the data id  ================== >", data.state?.productData);
   }, []);
 
-  let bookingPageCount;
-  if (data?.state?.bookingPageCount) {
-    bookingPageCount = data?.state?.bookingPageCount;
-  }
-
-  const [productionData, setProductionData] = useState({});
   useEffect(() => {
     if (data.state?.productData) {
       setProductionData(data.state.productData);
@@ -81,104 +57,361 @@ function AddNewProduction({ setSelectTab }) {
       setProductionData({});
     }
   }, [data.state?.productData]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [addon, setAddon] = useState();
 
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [teamDetails, setTeamsDetails] = useState([
+    { photo: null, name: "", profile: "", designation: "" },
+  ]);
 
-  const [teams, setTeams] = useState([{ photo: null, name: "", profile: "" }]);
-
-  const handleAddTeamDetail = () => {
-    const newTeam = { photo: null, name: "", profile: "" };
-    setTeams([...teams, newTeam]);
-    console.log(teams);
-  };
-
-  const handlePhotoChange = (event, index) => {
-    const newTeams = [...teams];
-    newTeams[index].photo = event.target.files[0];
-    setTeams(newTeams);
-  };
-
-  const handleInputChange = (event, index, field) => {
-    const newTeams = [...teams];
-    newTeams[index][field] = event.target.value;
-    setTeams(newTeams);
-  };
-
-  const handleCancelImage = (index) => {
-    const newTeams = [...teams];
-    newTeams[index].photo = null;
-    setTeams(newTeams);
-  };
-
-  const handleCancelTeam = (index) => {
-    if (teams.length > 1) {
-      const newTeams = [...teams];
-      newTeams.splice(index, 1);
-      setTeams(newTeams);
-    }
-  };
-
-  const hideAddPhotoIcon = (team) => {
-    return team.photo ? { display: "none" } : {};
-  };
+  const [service, setService] = useState([
+    {
+      photo_url: [],
+      name: "",
+      about: "",
+      amenites: [],
+      pricing: {
+        USA: {
+          price: 0,
+          basePrice: 0,
+          discountPercentage: 0,
+        },
+        IN: {
+          price: 0,
+          basePrice: 0,
+          discountPercentage: 0,
+        },
+        JP: {
+          price: 0,
+          basePrice: 0,
+          discountPercentage: 0,
+        },
+      },
+    },
+  ]);
+  const [discography, setDiscography] = useState([""]);
 
   const [images, setImages] = useState([]);
-  const [isOver, setIsOver] = useState(false);
+  const [productionData, setProductionData] = useState({});
 
-  const handleImageChange = (event) => {
-    const selectedImages = Array.from(event.target.files);
-    const newImages = [
-      ...images,
-      ...selectedImages.slice(0, 5 - images.length),
-    ];
-    setImages(newImages);
-  };
+  const [addNewServicesformData, setAddNewServicesformData] = useState([]);
 
-  const handleRemoveImage = (index) => {
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    setImages(newImages);
-  };
+  useEffect(() => {
+    console.log("addNewServicesformData-------", addNewServicesformData);
+  }, [setAddNewServicesformData]);
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    setIsOver(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsOver(false);
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    setIsOver(false);
-
-    const draggedIndex = event.dataTransfer.getData("text/plain");
-    const droppedIndex = images.length;
-
-    // Prevent dropping the item back into its original position
-    if (draggedIndex === droppedIndex.toString()) {
-      return;
+  useEffect(() => {
+    if (data?.state?.productData?.packages?.length) {
+      // setStudioDetails(data?.state?.productData);
+      console.log(
+        "data?.state?.productData.packages",
+        data?.state?.productData.packages
+      );
+      setService(data?.state?.productData.packages);
     }
+  }, [data?.state?.productData?.packages]);
+  // useEffect(() => {
+  //   console.log("servicese chnage huaa hai ", service);
+  // }, [service]);
 
-    const draggedImage = images[draggedIndex];
-    const newImages = [...images];
-    newImages.splice(draggedIndex, 1);
-    newImages.splice(droppedIndex, 0, draggedImage);
+  useEffect(() => {
+    console.log("addNewServicesformData", addNewServicesformData);
+    console.log("origiunal data", data?.state?.productData?.packages);
+  }, [addNewServicesformData]);
 
-    setImages(newImages);
+  // const [serviceData, setStudioDetails] = useState({
+  //   productionName: "",
+  //   services: "",
+  //   amenities: [],
+  //   about: "",
+  //   servicePhotos: [],
+  //   addOns: [],
+  //   discography: [],
+  //   // teams: [{ photo: null, name: "", profile: "" }],
+  // });
+
+  const [serviceData, setServiceData] = useState({
+    aboutUs: "",
+    amenities: [],
+    clientPhotos: [],
+    creationTimeStamp: "",
+    discographyDetails: [],
+    featuredReviews: [],
+    fullName: "",
+    service_status: 0,
+    packages: [],
+    price: "",
+    reviews: [],
+    servicePhotos: [],
+    service_id: "",
+    type: bookingPageCount,
+    workDetails: [],
+    addOns: [],
+  });
+
+  const [sendataToApi, setsendataToApi] = useState({
+    serviceName: "",
+    startingPrice: "",
+    offerings: [],
+    TotalServices: "",
+
+    ServicePhotos: [],
+    description: [],
+    portfolio: [],
+    userReviews: {},
+    packages: [],
+
+    type: bookingPageCount,
+    isActive: 1,
+  });
+
+  // useEffect(() => {
+  //   if (data.state?.productData) {
+  //     setSelectedItems(
+  //       productionData?.amenities?.map((item) => item?.name || item) || []
+  //     );
+  //   }
+  // }, [data.state?.productData]);
+
+  const handelSavebtn = () => {
+    const updatedData = {
+      ...sendataToApi, // Copy the current state
+      serviceName: serviceData.fullName,
+      startingPrice: serviceData.price,
+      offerings: serviceData.amenities,
+      TotalServices: serviceData?.packages?.length,
+      packages: serviceData.packages,
+      ServicePhotos: images,
+      description: serviceData.aboutUs,
+    };
+    console.log(updatedData);
+    let hasError = false;
+
+    serviceData.servicePhotos.forEach((element, index) => {
+      if (typeof element === "object") {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please upload SERVICE images first!",
+          showConfirmButton: false,
+          timer: 1800,
+        });
+        hasError = true;
+      }
+    });
+
+    serviceData?.packages?.forEach((packages, roomIndex) => {
+      packages?.photo_url?.forEach((element, photoIndex) => {
+        if (typeof element === "object") {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Please upload images for room  ${packages.name.toUpperCase()} first!`,
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          hasError = true;
+        }
+      });
+    });
+
+    if (!hasError) {
+      if (isEditMode) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Edit service!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log("updatedData", updatedData);
+            appAndmoreApi
+              .updateService(serviceId, updatedData)
+              .then((response) => {
+                if (response) {
+                  Swal.fire({
+                    title: "Service Updated!",
+                    text: "Your Data  has been saved.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+                console.log(
+                  `====================> data create huaa hai  ${bookingPageCount} `,
+                  response
+                );
+              })
+              .catch((error) => {
+                if (error) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+                console.error("Error fetching studios:", error);
+              });
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Create service!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            appAndmoreApi
+              .createService(updatedData)
+              .then((response) => {
+                if (response) {
+                  Swal.fire({
+                    title: "Service Created!",
+                    text: "Your Data  has been saved.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+                console.log(
+                  `====================> data create huaa hai  ${bookingPageCount} `,
+                  response
+                );
+              })
+              .catch((error) => {
+                if (error) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                    showConfirmButton: false,
+                    timer: 1800,
+                  });
+                }
+                console.error("Error fetching studios:", error);
+              });
+          }
+        });
+      }
+    }
   };
+  // useEffect(() => {
+  //   console.log("sendataToApi ===>", sendataToApi);
+  // }, [sendataToApi]);
+
+  useEffect(() => {
+    setsendataToApi((prev) => ({
+      ...prev,
+      serviceName: serviceData.fullName,
+      startingPrice: serviceData.price,
+      offerings: serviceData.amenities,
+      TotalServices: serviceData?.packages?.length,
+      packages: serviceData.packages,
+      servicePhotos: serviceData.servicePhotos,
+      description: serviceData.aboutUs,
+    }));
+  }, [serviceData]);
+
+  useEffect(() => {
+    console.log(
+      "service ka data chnage ho raha haiiiiiiiii======>",
+      serviceData
+    );
+  }, [images]);
+
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.servicePhotos = images;
+      return prevdata;
+    });
+  }, [images]);
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.amenities = selectedItems;
+      return prevdata;
+    });
+  }, [selectedItems]);
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.packages = service;
+      return prevdata;
+    });
+  }, [service]);
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.addOns = addon;
+      return prevdata;
+    });
+  }, [addon]);
+  useEffect(() => {
+    setServiceData((prevdata) => {
+      prevdata.discographyDetails = discography;
+      return prevdata;
+    });
+  }, [discography]);
+
+  useEffect(() => {
+    console.log("service data chnage huaa hai ", serviceData);
+  }, [serviceData]);
+
+  const handleStudioDetailsChange = (event, field) => {
+    setServiceData((prevState) => ({
+      ...prevState,
+      [field]: event.target.value,
+    }));
+    console.log(field);
+  };
+
+  useEffect(() => {
+    if (data?.state?.productData) setServiceData(data?.state?.productData);
+  }, [data?.state?.productData]);
+
+  useEffect(() => {
+    if (serviceData?.servicePhotos?.length)
+      setImages(serviceData.servicePhotos);
+  }, [serviceData?.servicePhotos?.length]);
+
+  // useEffect(() => {
+  //   // Initialize the array when the selectedOption changes
+  //   initializeServicesArray();
+  // }, [selectedOption]);
+
+  useEffect(() => {
+    console.log("addNewServicesformData", addNewServicesformData);
+  }, [addNewServicesformData]);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [showServices, setShowServices] = useState(false);
+  const [services, setServices] = useState([]);
 
   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
-  const [selectedItems, setSelectedItems] = useState([]);
+
+  const addonlist = [
+    "Wifi",
+    "AC",
+    "DJ",
+    "Piano",
+    "Drum",
+    "Banjo",
+    "Car Parking",
+  ];
+
+  const filterAddon = addonlist.filter((o) => !addon?.includes(o));
 
   const filteredOptions = OPTIONS.filter((o) => !selectedItems.includes(o));
 
   const customStyles = {
     height: "90%",
+    overFlow: "scroll",
   };
-
-  const [discography, setDiscography] = useState([""]);
 
   const handleDiscographyInputChange = (index, value) => {
     const updatedDiscography = [...discography];
@@ -202,10 +435,10 @@ function AddNewProduction({ setSelectTab }) {
   // this code is for render multiple div based on select
   const [serviceDetails, setServiceDetails] = useState([]);
 
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
-    setServiceDetails([]);
-  };
+  // const handleChange = (event) => {
+  //   setSelectedOption(event.target.value);
+  //   setServiceDetails([]);
+  // };
 
   const handleServiceChange = (event, index) => {
     const updatedServiceDetails = [...serviceDetails];
@@ -217,92 +450,21 @@ function AddNewProduction({ setSelectTab }) {
     setShowServices(true);
     setIndexofServices(i);
   };
-  const renderServiceDivs = () => {
-    const divs = [];
-
-    for (let i = 0; i < parseInt(selectedOption, 10); i++) {
-      const currentServiceData = addNewServicesformData[i] || {};
-
-      const serviceDiv = currentServiceData.serviceName ? (
-        // currentServiceData.images.length > 0 ? (
-        // Display service with data
-        <div key={i} className={style.addTeamDetailDynamicDiv}>
-          <div className={style.addTeamDetailMainDiv}>
-            <div>
-              <label
-                style={{ cursor: "pointer" }}
-                htmlFor={`uploadServicePhoto`}
-              >
-                {/* <MdOutlineAddBox /> */}
-              </label>
-
-              <img
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-                src={
-                  currentServiceData.images.length > 0
-                    ? URL.createObjectURL(currentServiceData.images[0])
-                    : ""
-                }
-                alt=""
-              />
-            </div>
-            <div>
-              <input
-                readOnly
-                type="text"
-                value={currentServiceData.serviceName}
-                placeholder="Name"
-              />
-              <input
-                type="text"
-                placeholder="Profile"
-                value={`starting price from ₹ ${currentServiceData.startingPrice}`}
-              />
-            </div>
-            <div className={style.editpencil}>
-              <FaPencilAlt
-                onClick={() => {
-                  handleEditService(i);
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      ) : (
-        // Display editable service div
-        <div
-          key={i}
-          className={`${style.addNewStudioinputBox} ${style.editPencilinput}`}
-        >
-          <label htmlFor={`ProductionName${i + 1}`}>Service {i + 1}</label>
-          <input
-            className={style.editPencilinput}
-            type="text"
-            id={`ProductionName${i + 1}`}
-            name={`ProductionName${i + 1}`}
-            value={serviceDetails[i] || ""}
-            placeholder={`Enter Service ${i + 1} Details`}
-            onChange={(e) => handleServiceChange(e, i)}
-          />
-          <div className={style.editpencil}>
-            <FaPencilAlt
-              onClick={() => {
-                handleEditService(i);
-              }}
-            />
-          </div>
-        </div>
-      );
-
-      divs.push(serviceDiv);
+  useEffect(() => {
+    if (isEditMode) {
+      const tempaminities = productionData?.amenities;
+      console.log("tempaminities:", tempaminities);
+      if (tempaminities && tempaminities.length > 0) {
+        const slectedtempaminities = tempaminities.map(
+          (item) => item?.name || item
+        );
+        console.log("selectedDateNames:", slectedtempaminities);
+        setSelectedItems(slectedtempaminities);
+      } else {
+        setSelectedItems([]);
+      }
     }
-
-    return divs;
-  };
+  }, [isEditMode]);
 
   return (
     <>
@@ -331,13 +493,14 @@ function AddNewProduction({ setSelectTab }) {
             </div>
           </div>
           {showServices ? (
-            <AddNewServices
-              setServices={setServices}
+            <AddNewServices2
               setShowServices={setShowServices}
-              setAddNewServicesformData={setAddNewServicesformData}
-              addNewServicesformData={addNewServicesformData}
               setIndexofServices={setIndexofServices}
               indexofServices={indexofServices}
+              setService={setService}
+              service={service}
+              isEditMode={isEditMode}
+              showMode={showMode}
             />
           ) : (
             <>
@@ -359,7 +522,7 @@ function AddNewProduction({ setSelectTab }) {
                   ? "Add New Mix & Master"
                   : ""}
               </div>
-              <div
+              <form
                 className={style.addNewStudioPage}
                 // style={{ maxHeight: "fit-content" }}
               >
@@ -372,65 +535,30 @@ function AddNewProduction({ setSelectTab }) {
                         type="text"
                         id="ProductionName"
                         name="ProductionName"
-                        value={productionData.fullName}
+                        value={serviceData.fullName}
                         placeholder="Enter Production Name"
+                        onChange={(event) =>
+                          handleStudioDetailsChange(event, "fullName")
+                        }
                       />
                     </div>
 
                     <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="Services">Services</label>
-                      <select
-                        id="Services"
-                        name="Services"
-                        onChange={handleChange}
-                        value={selectedOption}
-                      >
-                        <option value="0">Select No. of Services</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                      </select>
-                    </div>
-                    <div className={style.addNewStudioinputBox}>
                       <label htmlFor="Amenities">Amenities </label>
-                      {isEditMode ? (
-                        <Select
-                          id="Amenities"
-                          mode="multiple"
-                          placeholder="Select one or more Amenities"
-                          value={
-                            productionData?.amenities?.map(
-                              (item) => item.name
-                            ) || []
-                          }
-                          onChange={setSelectedItems}
-                          style={customStyles}
-                          options={productionData?.amenities?.map((item) => ({
-                            value: item.name,
-                            label: item.name,
-                          }))}
-                        />
-                      ) : (
-                        <Select
-                          id="Amenities"
-                          mode="multiple"
-                          placeholder="Select one or more Amenities"
-                          value={selectedItems}
-                          onChange={setSelectedItems}
-                          style={customStyles}
-                          options={filteredOptions.map((item) => ({
-                            value: item,
-                            label: item,
-                          }))}
-                        />
-                      )}
+                      <Select
+                        id="Amenities"
+                        mode="multiple"
+                        placeholder="Select one or more Amenities"
+                        value={selectedItems}
+                        onChange={setSelectedItems}
+                        style={customStyles}
+                        options={filteredOptions.map((item) => ({
+                          value: item,
+                          label: item,
+                        }))}
+                      />
+                      {/* )
+                      } */}
                     </div>
 
                     <div className={style.addNewStudioinputBox2}>
@@ -440,152 +568,37 @@ function AddNewProduction({ setSelectTab }) {
                         type="text"
                         id="About"
                         placeholder="Enter About Services"
-                        value={productionData?.aboutUs?.aboutUs}
+                        value={productionData?.aboutUs}
+                        name="aboutUs"
+                        onChange={(event) =>
+                          handleStudioDetailsChange(event, "aboutUs")
+                        }
                       />
                     </div>
-
-                    {selectedOption !== "0" && renderServiceDivs()}
+                    <div>
+                      <AddmultipleServises
+                        showMode={showMode}
+                        teamDetails={teamDetails}
+                        setTeamsDetails={setTeamsDetails}
+                        data={data}
+                        isEditMode={isEditMode}
+                        setIndexofServices={setIndexofServices}
+                        indexofServices={indexofServices}
+                        showServices={showServices}
+                        setShowServices={setShowServices}
+                        service={service}
+                        setService={setService}
+                      />
+                    </div>
                   </div>
 
                   {/* -------------------second side start here -------------- */}
                   <div>
-                    <div className={style.addNewStudioimgBox}>
-                      <label htmlFor="selectimg">Image</label>
-                      <br />
-                      <div>
-                        <label className={style.abs} htmlFor="">
-                          {images.length === 0 ? (
-                            <div>
-                              <label htmlFor="selectimg">
-                                <img src={upload} alt="" />
-                                <div>
-                                  Drag and Drop or <span>Browse</span> <br /> to
-                                  upload
-                                </div>
-                              </label>
-                            </div>
-                          ) : (
-                            <div
-                              className={`${style.showMultipleStudioImage} ${
-                                isOver ? "drag-over" : ""
-                              }`}
-                              onDrop={handleDrop}
-                              onDragOver={handleDragOver}
-                              onDragLeave={handleDragLeave}
-                            >
-                              {isEditMode ? (
-                                <div>
-                                  {productionData?.servicePhotos?.map(
-                                    (image, index) => {
-                                      if (
-                                        image instanceof Blob ||
-                                        image instanceof File
-                                      ) {
-                                        return (
-                                          <div
-                                            key={index}
-                                            draggable
-                                            onDragStart={(e) => {
-                                              e.dataTransfer.setData(
-                                                "text/plain",
-                                                index
-                                              );
-                                            }}
-                                          >
-                                            <img
-                                              src={URL.createObjectURL(image)}
-                                              alt={`Uploaded Image ${
-                                                index + 1
-                                              }`}
-                                              style={{
-                                                width: "100%",
-                                                height: "100%",
-                                              }}
-                                            />
-                                            <span
-                                              className={
-                                                style.cancelImageUpload
-                                              }
-                                              style={{ right: "-10%" }}
-                                              onClick={() =>
-                                                handleRemoveImage(index)
-                                              }
-                                            >
-                                              <img src={cross} alt="" />
-                                            </span>
-                                          </div>
-                                        );
-                                      } else {
-                                        console.error(
-                                          "Invalid image type at index",
-                                          index,
-                                          ":",
-                                          image
-                                        );
-
-                                        return null;
-                                      }
-                                    }
-                                  )}
-                                </div>
-                              ) : (
-                                <div>
-                                  {images.map((image, index) => (
-                                    <div
-                                      key={index}
-                                      draggable
-                                      onDragStart={(e) => {
-                                        e.dataTransfer.setData(
-                                          "text/plain",
-                                          index
-                                        );
-                                      }}
-                                    >
-                                      <img
-                                        src={URL.createObjectURL(image)}
-                                        alt={`Uploaded Image ${index + 1}`}
-                                        style={{
-                                          width: "100%",
-                                          height: "100%",
-                                        }}
-                                      />
-                                      <span
-                                        className={style.cancelImageUpload}
-                                        style={{ right: "-10%" }}
-                                        onClick={() => handleRemoveImage(index)}
-                                      >
-                                        <img src={cross} alt="" />
-                                      </span>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                              {images.length <= 4 && (
-                                <div>
-                                  <label
-                                    htmlFor="selectimg"
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      paddingTop: "15%",
-                                    }}
-                                  >
-                                    <img src={upload} alt="" /> Upload
-                                  </label>
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </label>
-                        <input
-                          type="file"
-                          multiple
-                          accept=".jpeg,.png,.svg,.webp,.jpg,.jfif"
-                          id="selectimg"
-                          onChange={handleImageChange}
-                        />
-                      </div>
-                    </div>
+                    <DragAndDropImageDiv
+                      images={images}
+                      setImages={setImages}
+                      isEditMode={isEditMode}
+                    />
 
                     <div
                       className={style.addNewStudioinputBox}
@@ -593,27 +606,19 @@ function AddNewProduction({ setSelectTab }) {
                     >
                       <label htmlFor="Amenities">Add-ons </label>
                       <Select
+                        disabled
                         id="Amenities"
                         mode="multiple"
                         placeholder="Select one or more Add-ons"
-                        value={selectedItems}
-                        onChange={setSelectedItems}
+                        value={addon}
+                        onChange={setAddon}
                         style={customStyles}
-                        options={filteredOptions.map((item) => ({
+                        options={filterAddon.map((item) => ({
                           value: item,
                           label: item,
                         }))}
                       />
                     </div>
-
-                    {/* <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="ProductionName">Production Name </label>
-                      <input
-                        type="text"
-                        id="ProductionName"
-                        placeholder="Enter Production Name"
-                      />
-                    </div> */}
 
                     <div>
                       <label htmlFor={`Discography`}>Discography</label>
@@ -621,6 +626,8 @@ function AddNewProduction({ setSelectTab }) {
                         <div className={style.Discography} key={index}>
                           <div>
                             <input
+                              style={{ cursor: "not-allowed" }}
+                              disabled
                               type="text"
                               id={`Discography-${index}`}
                               value={value}
@@ -645,183 +652,24 @@ function AddNewProduction({ setSelectTab }) {
                       ))}
                       {discography.length < 3 && (
                         <div
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "not-allowed" }}
+                          // style={{ cursor: "pointer" }}
                           className={style.addDiscography}
-                          onClick={handleAddDiscography}
+                          // onClick={
+                          //   handleAddDiscography
+                          // }
                         >
                           <VscDiffAdded /> Add Discography
                         </div>
                       )}
                     </div>
-
-                    <div>
-                      <div className={style.addTeamDetailDiv}>
-                        <label htmlFor="Teams">Teams</label>
-                        {isEditMode ? (
-                          <div className={style.addTeamDetailDynamicDiv}>
-                            {productionData?.workDetails?.map((team, index) => (
-                              <div
-                                key={index}
-                                className={style.addTeamDetailMainDiv}
-                              >
-                                <div>
-                                  <label
-                                    style={{ cursor: "pointer" }}
-                                    htmlFor={`uploadteamPhoto-${index}`}
-                                  >
-                                    <MdAddAPhoto
-                                      style={hideAddPhotoIcon(team)}
-                                    />
-                                  </label>
-                                  <input
-                                    type="file"
-                                    id={`uploadteamPhoto-${index}`}
-                                    style={{ display: "none" }}
-                                    onChange={(event) =>
-                                      handlePhotoChange(event, index)
-                                    }
-                                  />
-                                  {team.imgUrl && (
-                                    <div>
-                                      <img
-                                        src={team.imgUrl}
-                                        alt={`Team ${index} Photo`}
-                                        style={{
-                                          maxWidth: "100px",
-                                          maxHeight: "100px",
-                                        }}
-                                      />
-                                      <span
-                                        className={style.cancelImageUpload}
-                                        onClick={() => handleCancelImage(index)}
-                                      >
-                                        <img src={cross} alt="" />
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                                <div>
-                                  <input
-                                    type="text"
-                                    placeholder="Name"
-                                    value={team.name}
-                                    onChange={(event) =>
-                                      handleInputChange(event, index, "name")
-                                    }
-                                  />
-                                  <input
-                                    type="text"
-                                    placeholder="Profile"
-                                    value={team.designation}
-                                    onChange={(event) =>
-                                      handleInputChange(event, index, "profile")
-                                    }
-                                  />
-                                </div>
-                                {teams.length > 1 && (
-                                  <span
-                                    style={{ cursor: "pointer" }}
-                                    className={style.cancelTeamDetailUpload}
-                                    onClick={() => handleCancelTeam(index)}
-                                  >
-                                    <img src={cross} alt="" />
-                                  </span>
-                                )}
-                              </div>
-                            ))}
-                            <span
-                              className={style.addTeamDetailbtn}
-                              onClick={handleAddTeamDetail}
-                            >
-                              <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
-                            </span>
-                          </div>
-                        ) : (
-                          <div className={style.addTeamDetailDynamicDiv}>
-                            {teams.map((team, index) => (
-                              <div
-                                key={index}
-                                className={style.addTeamDetailMainDiv}
-                              >
-                                <div>
-                                  <label
-                                    style={{ cursor: "pointer" }}
-                                    htmlFor={`uploadteamPhoto-${index}`}
-                                  >
-                                    <MdAddAPhoto
-                                      style={hideAddPhotoIcon(team)}
-                                    />
-                                  </label>
-                                  <input
-                                    type="file"
-                                    id={`uploadteamPhoto-${index}`}
-                                    style={{ display: "none" }}
-                                    onChange={(event) =>
-                                      handlePhotoChange(event, index)
-                                    }
-                                  />
-                                  {team.photo && (
-                                    <div>
-                                      <img
-                                        src={URL.createObjectURL(team.photo)}
-                                        alt={`Team ${index} Photo`}
-                                        style={{
-                                          maxWidth: "100px",
-                                          maxHeight: "100px",
-                                        }}
-                                      />
-                                      <span
-                                        className={style.cancelImageUpload}
-                                        onClick={() => handleCancelImage(index)}
-                                      >
-                                        <img src={cross} alt="" />
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                                <div>
-                                  <input
-                                    type="text"
-                                    placeholder="Name"
-                                    value={team.name}
-                                    onChange={(event) =>
-                                      handleInputChange(event, index, "name")
-                                    }
-                                  />
-                                  <input
-                                    type="text"
-                                    placeholder="Profile"
-                                    value={team.profile}
-                                    onChange={(event) =>
-                                      handleInputChange(event, index, "profile")
-                                    }
-                                  />
-                                </div>
-                                {teams.length > 1 && (
-                                  <span
-                                    style={{ cursor: "pointer" }}
-                                    className={style.cancelTeamDetailUpload}
-                                    onClick={() => handleCancelTeam(index)}
-                                  >
-                                    <img src={cross} alt="" />
-                                  </span>
-                                )}
-                              </div>
-                            ))}
-                            <span
-                              className={style.addTeamDetailbtn}
-                              onClick={handleAddTeamDetail}
-                            >
-                              <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
                   </div>
                 </div>
-              </div>
-              <StudioFooter backOnclick={gotoadminpage} />
+              </form>
+              <StudioFooter
+                backOnclick={gotoadminpage}
+                saveOnclick={showMode ? "" : handelSavebtn}
+              />
             </>
           )}
         </div>

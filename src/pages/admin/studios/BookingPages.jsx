@@ -8,13 +8,26 @@ import MusicProduction from "../../../components/adminStudio/booking/MusicProduc
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 import bookingPageApi from "../../../services/bookingPageApi";
 
 function BookingPages() {
   const [bookingPageCount, setBookingPageCount] = useState("c1");
   const [products, setProducts] = useState([]);
+  let { page: paramData } = useParams();
+
+  // setBookingPageCount("c2");
+
+  useEffect(() => {
+    if (paramData == "studio") {
+      setBookingPageCount("c1");
+    } else if (paramData == "musicproduction") {
+      setBookingPageCount("c2");
+    } else if (paramData == "mixmaster") {
+      setBookingPageCount("c3");
+    }
+  }, [paramData]);
 
   const navigate = useNavigate();
   const gotoSignin = () => {
@@ -26,7 +39,8 @@ function BookingPages() {
     try {
       const updateddata = products.map((prd) => {
         if (prd._id === productId) {
-          prd.status = parseInt(event.target.value);
+          prd.bookingStatus = parseInt(event.target.value);
+          console.log(" prd.status", prd.bookingStatus);
         }
         return prd;
       });
@@ -88,11 +102,13 @@ function BookingPages() {
           console.error("Error fetching studios:", error);
         });
     } else if (bookingPageCount === "c1") {
-      const limit = 64;
+      const limit = 10;
       const active = 1;
+      const bookingType = 1;
+      const category = bookingPageCount;
       // const type = bookingPageCount;
       bookingPageApi
-        .getBookings(limit, active)
+        .getBookings(limit, active, bookingType, category)
         .then((response) => {
           console.log("====================> response C1", response);
           if (response.data) {

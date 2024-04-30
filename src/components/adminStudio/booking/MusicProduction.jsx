@@ -13,6 +13,9 @@ import Switch from "../../../pages/admin/layout/Switch";
 import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
 import axios from "axios";
+import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import { IoCalendarOutline } from "react-icons/io5";
+import { BiSearchAlt } from "react-icons/bi";
 let PageSize = 10;
 
 function MusicProduction({
@@ -34,6 +37,19 @@ function MusicProduction({
   return (
     <>
       <div className={style.studioTabelDiv}>
+        <div className={style.searchDiv}>
+          <div>
+            <p>Search by Date </p>
+            <label htmlFor="selectDate">
+              <IoCalendarOutline />
+            </label>
+            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
+          </div>
+          <div>
+            <BiSearchAlt /> <br />
+            <input type="text" placeholder="Search" />
+          </div>
+        </div>
         <div>
           <table>
             <thead className={style.studiotabelHead}>
@@ -48,51 +64,58 @@ function MusicProduction({
               </tr>
             </thead>
             <tbody>
-              {currentTableData.map((products, i) => {
-                return (
-                  <tr key={i}>
-                    <td style={{ textAlign: "center" }}>#{products._id}</td>
-                    <td>{products.userFullName}</td>
+              {products.length === 0 ? (
+                <ChoiraLoder2 />
+              ) : (
+                currentTableData.map((products, i) => {
+                  return (
+                    <tr key={i}>
+                      <td style={{ textAlign: "center" }}>#{products._id}</td>
+                      <td>{products.userFullName}</td>
 
-                    <td>{products.userPhone}</td>
-                    <td>{products.serviceFullName}</td>
-                    <td>₹{products.totalPrice}</td>
-                    <td className={style.tableActionbtn}>
-                      <div>
-                        <select
-                          value={
-                            selectedStatus[products._id] || products.status
-                          }
-                          onChange={(e) => handleChange(products._id, e)}
-                          style={{
-                            backgroundColor: getStatusColor(products.status),
-                          }}
-                        >
-                          <option value="" disabled>
-                            Select Status
-                          </option>
-                          <option value={0}>Active</option>
-                          {/* <option value="Pending">Pending</option> */}
-                          <option value={1}>Complete</option>
-                          <option value={2}>Cancelled</option>
-                        </select>
-                      </div>
-                      <div style={{ width: "25%" }}>
-                        <GrShare
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            // gotoShowDetails(products._id);
-                          }}
-                        />
+                      <td>{products.userPhone}</td>
+                      <td>{products.serviceFullName}</td>
+                      <td>₹{products.totalPrice}</td>
+                      <td className={style.tableActionbtn}>
+                        <div>
+                          <select
+                            value={
+                              selectedStatus[products._id] ||
+                              products.bookingStatus
+                            }
+                            onChange={(e) => handleChange(products._id, e)}
+                            style={{
+                              backgroundColor: getStatusColor(
+                                products.bookingStatus
+                              ),
+                            }}
+                          >
+                            <option value="" disabled>
+                              Select Status
+                            </option>
+                            <option value={0}>Active</option>
+                            {/* <option value="Pending">Pending</option> */}
+                            <option value={1}>Complete</option>
+                            <option value={2}>Cancelled</option>
+                          </select>
+                        </div>
+                        <div style={{ width: "25%" }}>
+                          <GrShare
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              // gotoShowDetails(products._id);
+                            }}
+                          />
 
-                        <RiDeleteBin5Fill
-                          style={{ color: "red", cursor: "pointer" }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                          <RiDeleteBin5Fill
+                            style={{ color: "red", cursor: "pointer" }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

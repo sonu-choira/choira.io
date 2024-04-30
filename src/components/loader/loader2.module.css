@@ -1,0 +1,15 @@
+.parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+  width: 78%;
+
+  position: fixed;
+  /* border: 2px solid red; */
+}
+.child {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

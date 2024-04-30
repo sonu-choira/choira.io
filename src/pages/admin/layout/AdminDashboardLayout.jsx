@@ -17,9 +17,25 @@ import AllStudioPageDetailsPage from "../studios/AllStudioPageDetailsPage";
 import BookingPages from "../studios/BookingPages";
 import AddNewProduction from "../../../components/adminStudio/appsAndMore/AddNewProduction";
 import AddNewServices from "../../../components/adminStudio/appsAndMore/AddNewServices";
+import { useNavigate } from "react-router-dom";
+import AddNewRoom from "../../../components/adminStudio/AddNewRoom";
 
 function AdminDashboardLayout() {
+  const navigate = useNavigate();
   const [tabCount, setTabCount] = useState(3);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    // console.log("Token from localStorage:", token);
+    if (token === null || token === undefined) {
+      const isSignin = localStorage.getItem("isSignin");
+      if (isSignin) {
+        navigate("/landingpage");
+      } else {
+        navigate("/signin");
+      }
+    }
+  }, []);
+
   return (
     <>
       <div className={style.wrapper}>
@@ -27,7 +43,7 @@ function AdminDashboardLayout() {
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
             <div>
-              <input type="text" placeholder="search" />
+              <input type="text" placeholder="Search" />
             </div>
             <div>
               <IoSearch />

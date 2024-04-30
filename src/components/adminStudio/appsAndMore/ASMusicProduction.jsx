@@ -17,16 +17,22 @@ import imageNotFound from "../../../assets/imagesNotFound.png";
 import { LuFilePlus } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import { IoCalendarOutline } from "react-icons/io5";
+import { BiSearchAlt } from "react-icons/bi";
+import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 
 let PageSize = 10;
 
 function ASMusicProduction({
   products,
   setProducts,
-  pageDetails,
   setPageCount,
   pageCount,
   totalPage,
+  bookingPageCount,
+  setTotalPage,
+  sendFilterDataToapi,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -45,6 +51,12 @@ function ASMusicProduction({
       },
     });
   };
+  useEffect(() => {
+    sendFilterDataToapi = {};
+    sendFilterDataToapi.serviceName = "";
+    sendFilterDataToapi.serviceType = "";
+    // console.log(sendFilterDataToapi, "aaaaaaaaaaa");
+  }, []);
 
   const gotoShowMusicProduction = (id) => {
     const isEditMode = true;
@@ -69,11 +81,11 @@ function ASMusicProduction({
       [studioId]: !prevStatus[studioId], // Toggle the switch state
     }));
   };
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return products.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, products]);
+  // const currentTableData = useMemo(() => {
+  //   const firstPageIndex = (currentPage - 1) * PageSize;
+  //   const lastPageIndex = firstPageIndex + PageSize;
+  //   return products.slice(firstPageIndex, lastPageIndex);
+  // }, [currentPage, products]);
 
   const [selectedStatus, setSelectedStatus] = useState({});
 
@@ -83,25 +95,17 @@ function ASMusicProduction({
       [productId]: event.target.value,
     }));
   };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Cancelled":
-        return "#FFDDDD";
-      case "Pending":
-        return "#CAE2FF";
-      case "Complete":
-        return "#DDFFF3";
-      case "Active":
-        return "#FFF3CA";
-      default:
-        return "";
-    }
-  };
+  console.log("products...", products);
 
   return (
     <>
       <div className={style.studioTabelDiv}>
+        <DateAndSearchFilter
+          setProducts={setProducts}
+          setTotalPage={setTotalPage}
+          bookingPageCount={bookingPageCount}
+          sendFilterDataToapi={sendFilterDataToapi}
+        />
         <div>
           <table>
             <thead className={style.studiotabelHead}>
@@ -115,74 +119,84 @@ function ASMusicProduction({
               </tr>
             </thead>
             <tbody>
-              {currentTableData.map((products) => {
-                return (
-                  <tr key={products._id}>
-                    <td style={{ display: "flex", alignItems: "center" }}>
-                      <div className={style.studioImage}>
-                        {products.studioPhotos ? (
-                          <img
-                            src={products.studioPhotos}
-                            alt=""
-                            onError={(e) => {
-                              e.target.src = imageNotFound;
+              {products.length === 0 ? (
+                <ChoiraLoder2 />
+              ) : (
+                products?.map((products) => {
+                  return (
+                    <tr key={products._id}>
+                      <td
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "100%",
+                        }}
+                      >
+                        <div className={style.studioImage}>
+                          {products.servicePhotos ? (
+                            <img
+                              src={products.servicePhotos[0]}
+                              alt=""
+                              onError={(e) => {
+                                e.target.src = imageNotFound;
+                              }}
+                            />
+                          ) : (
+                            <img src={imageNotFound} alt="" />
+                          )}
+                        </div>
+                        &nbsp;&nbsp;{products.fullName}
+                      </td>
+                      <td>Starting from ₹{products.price}</td>
+                      <td>
+                        {products?.packages?.length}
+                        <br />
+                        <small> {products.state}</small>
+                      </td>
+                      <td>{products.creationTimeStamp}</td>
+
+                      <td className={style.tableActionbtn}>
+                        <div>
+                          <label className="switch">
+                            <input
+                              type="checkbox"
+                              checked={
+                                products.isActive === 1
+                                // ? activityStatus[products._id]
+                                // : false
+                              }
+                              onChange={() =>
+                                handleSwitchChange(
+                                  products._id,
+                                  products.isActive
+                                )
+                              }
+                            />
+                            <span className="slider"></span>
+                          </label>
+                        </div>
+                        <div>
+                          <GrShare
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              gotoShowMusicProduction(products._id);
                             }}
                           />
-                        ) : (
-                          <img src={imageNotFound} alt="" />
-                        )}
-                      </div>
-                      &nbsp;&nbsp;{products.fullName}
-                    </td>
-                    <td>Starting from ₹{products.price}</td>
-                    <td>
-                      {products.address}
-                      <br />
-                      <small> {products.state}</small>
-                    </td>
-                    <td>{products.creationTimeStamp}</td>
-
-                    <td className={style.tableActionbtn}>
-                      <div>
-                        <label className="switch">
-                          <input
-                            type="checkbox"
-                            checked={
-                              products.isActive === 1
-                              // ? activityStatus[products._id]
-                              // : false
-                            }
-                            onChange={() =>
-                              handleSwitchChange(
-                                products._id,
-                                products.isActive
-                              )
-                            }
+                          <MdEdit
+                            style={{ color: "#ffc701", cursor: "pointer" }}
+                            onClick={() => {
+                              gotoEdit(products._id);
+                            }}
                           />
-                          <span className="slider"></span>
-                        </label>
-                      </div>
-                      <div>
-                        <GrShare
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            gotoShowMusicProduction(products._id);
-                          }}
-                        />
-                        <MdEdit
-                          style={{ color: "#ffc701", cursor: "pointer" }}
-                          onClick={() => {
-                            gotoEdit(products._id);
-                          }}
-                        />
-                        <RiDeleteBin5Fill
-                          style={{ color: "red", cursor: "pointer" }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                          <RiDeleteBin5Fill
+                            style={{ color: "red", cursor: "pointer" }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -192,6 +206,7 @@ function ASMusicProduction({
           pageCount={pageCount}
           totalPage={totalPage}
           setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>
