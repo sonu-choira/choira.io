@@ -7,6 +7,7 @@ import community from "../../assets/img/dashboard_img/community.svg";
 import tanmay from "../../assets/img/dashboard_img/tanmay.png";
 import ProfileEdit from "./ProfileEdit";
 import { useNavigate, useParams } from "react-router-dom";
+import { AiOutlineTeam } from "react-icons/ai";
 
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   let { navOption: pageData } = useParams();
@@ -14,7 +15,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   useEffect(() => {
     if (pageData == "Studios") {
       setTabCount(1);
-    } else if (pageData == "Produce") {
+    } else if (pageData == "Teams") {
       setTabCount(2);
     } else if (pageData == "Apps&More") {
       setTabCount(3);
@@ -85,15 +86,15 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 className={tabCount === 2 ? style.tabActive : style.padding}
                 onClick={() => {
                   if (navCount) {
-                    navigate("/adminDashboard/Produce");
+                    navigate("/adminDashboard/Teams/Arm");
                   } else {
                     setTabCount(2);
-                    navigate("/adminDashboard/Produce");
+                    navigate("/adminDashboard/Teams/Arm");
                   }
                 }}
               >
-                <img src={produce} alt="" />
-                Produce
+                <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />
+                Teams
               </div>
               <div
                 className={tabCount === 3 ? style.tabActive : style.padding}

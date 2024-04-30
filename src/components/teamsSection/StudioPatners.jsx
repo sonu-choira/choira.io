@@ -1,37 +1,37 @@
 import React, { useEffect, useMemo, useState } from "react";
-import style from "../../../pages/admin/studios/studio.module.css";
+import style from "../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-import Button from "../../../pages/admin/layout/Button";
+import Button from "../../pages/admin/layout/Button";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 
-// import Button from "../../../pages/admin/layout/Button";
-import Switch from "../../../pages/admin/layout/Switch";
-import Pagination from "../../../pages/admin/studios/Pagination";
+// import Button from "../../pages/admin/layout/Button";
+import Switch from "../../pages/admin/layout/Switch";
+import Pagination from "../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
-import imageNotFound from "../../../assets/imagesNotFound.png";
+import imageNotFound from "../../assets/imagesNotFound.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import PaginationNav from "../../../pages/admin/layout/PaginationNav";
-import ChoiraLoader from "../../loader/ChoiraLoader";
-import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import PaginationNav from "../../pages/admin/layout/PaginationNav";
+import ChoiraLoader from "../loader/ChoiraLoader";
+import ChoiraLoder2 from "../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import { RiExpandUpDownLine } from "react-icons/ri";
 import { CiFilter } from "react-icons/ci";
 import { DatePicker, Space } from "antd";
-import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter";
-import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
-import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
-import appAndmoreApi from "../../../services/appAndmoreApi";
+import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
+import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
+import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import appAndmoreApi from "../../services/appAndmoreApi";
 
 let PageSize = 10;
 
-function AllStudioDetail2({
+function StudioPatners({
   products,
   setProducts,
   setPageCount,
@@ -185,19 +185,19 @@ function AllStudioDetail2({
     shortby,
   ]);
 
-  useEffect(() => {
-    setProducts([]);
-    appAndmoreApi
-      .filterData(sendFilterDataToapi)
-      .then((response) => {
-        console.log("filter applied:", response);
-        setProducts(response.studios);
-        setTotalPage(response.paginate.totalPages);
-      })
-      .catch((error) => {
-        console.error("Error filter studio:", error);
-      });
-  }, [shortby]);
+  // useEffect(() => {
+  //   setProducts([]);
+  //   appAndmoreApi
+  //     .filterData(sendFilterDataToapi)
+  //     .then((response) => {
+  //       console.log("filter applied:", response);
+  //       setProducts(response.studios);
+  //       setTotalPage(response.paginate.totalPages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error filter studio:", error);
+  //     });
+  // }, [shortby]);
 
   return (
     <>
@@ -219,9 +219,9 @@ function AllStudioDetail2({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th>
+                <th style={{ width: "10%" }}>
                   <div className={style.headingContainer}>
-                    Studio
+                    S.No.
                     <div
                       className={style.filterBox}
                       onClick={handelShortbyClick}
@@ -238,7 +238,7 @@ function AllStudioDetail2({
                 </th>
                 <th>
                   <div className={style.headingContainer}>
-                    Price
+                    Partner Name
                     <div
                       className={style.filterBox}
                       style={{
@@ -251,27 +251,26 @@ function AllStudioDetail2({
                       <span onClick={handelpriceFilter}>
                         <CiFilter />
                       </span>
-                      {showpricefilter ? (
-                        <PriceFilter
-                          closeAllFilter={closeAllFilter}
-                          priceFilter={priceFilter}
-                          setPriceFilter={setPriceFilter}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          setfilterNav={setfilterNav}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {showpricefilter
+                        ? // <PriceFilter
+                          //   closeAllFilter={closeAllFilter}
+                          //   priceFilter={priceFilter}
+                          //   setPriceFilter={setPriceFilter}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          // />
+                          ""
+                        : ""}
                     </div>
                   </div>
                 </th>
 
-                <th>
+                <th style={{ width: "20%" }}>
                   <div className={style.headingContainer}>
-                    Location
+                    Email
                     <div
                       className={style.filterBox}
                       style={{
@@ -300,9 +299,9 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
-                <th>
+                <th style={{ width: "20%" }}>
                   <div className={style.headingContainer}>
-                    No. of Rooms
+                    Studio Name
                     <div
                       className={style.filterBox}
                       style={{
@@ -313,21 +312,50 @@ function AllStudioDetail2({
                       <span onClick={handelRoomFilter}>
                         <CiFilter />
                       </span>
-                      {showRoomFilter ? (
-                        <CheckboxFilter
-                          data={room}
-                          selectedData={selectedRoom}
-                          setSelectedData={setSelectedRoom}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          setfilterNav={setfilterNav}
-                          closeAllFilter={closeAllFilter}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {showRoomFilter
+                        ? // <CheckboxFilter
+                          //   data={room}
+                          //   selectedData={selectedRoom}
+                          //   setSelectedData={setSelectedRoom}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          //   closeAllFilter={closeAllFilter}
+                          ""
+                        : // />
+                          ""}
+                    </div>
+                  </div>
+                </th>
+                <th style={{ width: "20%" }}>
+                  <div className={style.headingContainer}>
+                    Date
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedRoom.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
+                      <span onClick={handelRoomFilter}>
+                        <CiFilter />
+                      </span>
+                      {showRoomFilter
+                        ? // <CheckboxFilter
+                          //   data={room}
+                          //   selectedData={selectedRoom}
+                          //   setSelectedData={setSelectedRoom}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          //   closeAllFilter={closeAllFilter}
+                          // />
+                          ""
+                        : ""}
                     </div>
                   </div>
                 </th>
@@ -462,4 +490,4 @@ function AllStudioDetail2({
   );
 }
 
-export default AllStudioDetail2;
+export default StudioPatners;

@@ -122,16 +122,7 @@ function BookingActionBar({
             >
               Music Production
             </div>
-            {/* <div
-              style={{
-                backgroundColor: bookingPageCount === "c3" ? "#ffc701" : "",
-              }}
-              onClick={() => {
-                setBookingPageCount("c3");
-              }}
-            >
-              Artist
-            </div> */}
+
             <div
               style={{
                 borderRight: "none",
@@ -216,16 +207,6 @@ function BookingActionBar({
           ) : (
             ""
           )}
-
-          {/* {pagetype !== "apps"
-            ? ""
-            : (bookingPageCount === "c2" || bookingPageCount === "c3") && (
-                <Button
-                  name={"Add New"}
-                  icon={<MdNoteAdd />}
-                  style={{ height: "50%", width: "15%", gap: "5%" }}
-                />
-              )} */}
         </div>
       </div>
     </>
