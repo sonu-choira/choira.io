@@ -8,13 +8,26 @@ import MusicProduction from "../../../components/adminStudio/booking/MusicProduc
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 import bookingPageApi from "../../../services/bookingPageApi";
 
 function BookingPages() {
   const [bookingPageCount, setBookingPageCount] = useState("c1");
   const [products, setProducts] = useState([]);
+  let { page: paramData } = useParams();
+
+  // setBookingPageCount("c2");
+
+  useEffect(() => {
+    if (paramData == "studio") {
+      setBookingPageCount("c1");
+    } else if (paramData == "musicproduction") {
+      setBookingPageCount("c2");
+    } else if (paramData == "mixmaster") {
+      setBookingPageCount("c3");
+    }
+  }, [paramData]);
 
   const navigate = useNavigate();
   const gotoSignin = () => {

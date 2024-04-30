@@ -26,20 +26,22 @@ import { CiFilter } from "react-icons/ci";
 import { DatePicker, Space } from "antd";
 import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
-const onChange = (date, dateString) => {
-  console.log(date, dateString);
-};
+import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import appAndmoreApi from "../../../services/appAndmoreApi";
 
 let PageSize = 10;
 
 function AllStudioDetail2({
   products,
   setProducts,
-  pageDetails,
   setPageCount,
   pageCount,
   totalPage,
   bookingPageCount,
+  setTotalPage,
+  filterNav,
+  setfilterNav,
+  sendFilterDataToapi,
 }) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
@@ -71,35 +73,6 @@ function AllStudioDetail2({
     });
   };
 
-  // const currentTableData = useMemo(() => {
-  //   const firstPageIndex = (currentPage - 1) * PageSize;
-  //   const lastPageIndex = firstPageIndex + PageSize;
-  //   return products.slice(firstPageIndex, lastPageIndex);
-  // }, [currentPage, products]);
-
-  const [selectedStatus, setSelectedStatus] = useState({});
-
-  const handleChange = (productId, event) => {
-    setSelectedStatus((prevStatus) => ({
-      ...prevStatus,
-      [productId]: event.target.value,
-    }));
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Cancelled":
-        return "#FFDDDD";
-      case "Pending":
-        return "#CAE2FF";
-      case "Complete":
-        return "#DDFFF3";
-      case "Active":
-        return "#FFF3CA";
-      default:
-        return "";
-    }
-  };
   const [activityStatus, setActivityStatus] = useState({});
   const handleSwitchChange = (studioId, status) => {
     console.log(status);
@@ -119,6 +92,12 @@ function AllStudioDetail2({
       }
       return !prevState;
     });
+  };
+  const closeAllFilter = () => {
+    setshowloactionfilter(false);
+    setShowRoomFilter(false);
+    setShowstatusFilter(false);
+    setshowpricefilter(false);
   };
 
   const [showloactionfilter, setshowloactionfilter] = useState(false);
@@ -164,18 +143,78 @@ function AllStudioDetail2({
   const room = ["1", "2", "3", "4", "5"];
   const status = ["active", "inactive"];
 
+  const [selectedCity, setSelectedCity] = useState([]);
+  const [shortby, setShortby] = useState("creationTimeStamp:asc");
+  const [selectedRoom, setSelectedRoom] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState([]);
+  // var selectedDate = "";
+  const [priceFilter, setPriceFilter] = useState({
+    minPrice: "",
+    maxPrice: "",
+  });
+
+  const handelShortbyClick = () => {
+    if (shortby == "creationTimeStamp:asc") {
+      setShortby("creationTimeStamp:desc");
+    } else {
+      setShortby("creationTimeStamp:asc");
+    }
+  };
+
+  useEffect(() => {
+    sendFilterDataToapi.city = selectedCity[0];
+    sendFilterDataToapi.totalRooms = selectedRoom[0];
+    sendFilterDataToapi.active =
+      selectedStatus[0] === "active"
+        ? 1
+        : selectedStatus[0] === "inactive"
+        ? "0"
+        : "";
+    sendFilterDataToapi.minPricePerHour = priceFilter.minPrice;
+    sendFilterDataToapi.maxPricePerHour = priceFilter.maxPrice;
+    // sendFilterDataToapi.creationTimeStamp = selectedDate;
+    sendFilterDataToapi.sortBy = shortby;
+
+    console.log(sendFilterDataToapi);
+  }, [
+    selectedCity,
+    selectedRoom,
+    selectedStatus,
+    priceFilter,
+    // selectedDate,
+    shortby,
+  ]);
+
+  useEffect(() => {
+    setProducts([]);
+    appAndmoreApi
+      .filterData(sendFilterDataToapi)
+      .then((response) => {
+        console.log("filter applied:", response);
+        setProducts(response.studios);
+        setTotalPage(response.paginate.totalPages);
+      })
+      .catch((error) => {
+        console.error("Error filter studio:", error);
+      });
+  }, [shortby]);
+
   return (
     <>
       <div className={style.studioTabelDiv}>
-        <div className={style.searchDiv}>
-          <div>
-            <DatePicker onChange={onChange} className={style.antCustomcss} />
-          </div>
-          <div>
-            <BiSearchAlt /> <br />
-            <input type="text" placeholder="Search" />
-          </div>
-        </div>
+        <DateAndSearchFilter
+          setProducts={setProducts}
+          setTotalPage={setTotalPage}
+          bookingPageCount={bookingPageCount}
+          filterNav={filterNav}
+          setfilterNav={setfilterNav}
+          sendFilterDataToapi={sendFilterDataToapi}
+          setSelectedCity={setSelectedCity}
+          setSelectedRoom={setSelectedRoom}
+          setSelectedStatus={setSelectedStatus}
+          setPriceFilter={setPriceFilter}
+          setShortby={setShortby}
+        />
         <div>
           <table>
             <thead className={style.studiotabelHead}>
@@ -184,7 +223,16 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Studio
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      onClick={handelShortbyClick}
+                      style={{
+                        backgroundColor:
+                          shortby !== "creationTimeStamp:asc"
+                            ? "#ffc70133"
+                            : "",
+                      }}
+                    >
                       <RiExpandUpDownLine />
                     </div>
                   </div>
@@ -192,11 +240,32 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Price
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          priceFilter.minPrice || priceFilter.maxPrice !== ""
+                            ? "#ffc70133"
+                            : "",
+                      }}
+                    >
                       <span onClick={handelpriceFilter}>
                         <CiFilter />
                       </span>
-                      {showpricefilter ? <PriceFilter /> : ""}
+                      {showpricefilter ? (
+                        <PriceFilter
+                          closeAllFilter={closeAllFilter}
+                          priceFilter={priceFilter}
+                          setPriceFilter={setPriceFilter}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          setfilterNav={setfilterNav}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </th>
@@ -204,29 +273,75 @@ function AllStudioDetail2({
                 <th>
                   <div className={style.headingContainer}>
                     Location
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedCity.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
                       <span onClick={handellocationFilter}>
                         <CiFilter />
                       </span>
-                      {showloactionfilter ? <CheckboxFilter data={city} /> : ""}
+                      {showloactionfilter ? (
+                        <CheckboxFilter
+                          data={city}
+                          setSelectedData={setSelectedCity}
+                          selectedData={selectedCity}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          closeAllFilter={closeAllFilter}
+                          setfilterNav={setfilterNav}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </th>
                 <th>
                   <div className={style.headingContainer}>
                     No. of Rooms
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedRoom.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
                       <span onClick={handelRoomFilter}>
                         <CiFilter />
                       </span>
-                      {showRoomFilter ? <CheckboxFilter data={room} /> : ""}
+                      {showRoomFilter ? (
+                        <CheckboxFilter
+                          data={room}
+                          selectedData={selectedRoom}
+                          setSelectedData={setSelectedRoom}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          setfilterNav={setfilterNav}
+                          closeAllFilter={closeAllFilter}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </th>
                 <th>
                   <div className={style.headingContainer}>
                     Activity Status
-                    <div className={style.filterBox}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedStatus.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
                       <span onClick={handelStatusFilter}>
                         <CiFilter />
                       </span>
@@ -234,6 +349,15 @@ function AllStudioDetail2({
                         <CheckboxFilter
                           data={status}
                           cusstyle={{ left: "-355%" }}
+                          disabledsearch={true}
+                          selectedData={selectedStatus}
+                          setSelectedData={setSelectedStatus}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          setfilterNav={setfilterNav}
+                          closeAllFilter={closeAllFilter}
                         />
                       ) : (
                         ""

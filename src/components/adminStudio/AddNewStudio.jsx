@@ -42,7 +42,7 @@ function AddNewStudio({ setSelectTab }) {
   };
   const navigate = useNavigate();
   const gotoadminpage = () => {
-    navigate("/adminDashboard");
+    navigate("/adminDashboard/Apps&More/studio");
   };
 
   const data = useLocation();
@@ -57,12 +57,13 @@ function AddNewStudio({ setSelectTab }) {
   const [tabCount, setTabCount] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
   const [teamDetails, setTeamsDetails] = useState([
-    { photo: null, name: "", designation: "" },
+    { id: 1, photo: null, name: "", designation: "" },
   ]);
   const [selectedStudioAmenities, setSelectedStudioAmenities] = useState([]);
 
   const [rooms, setrooms] = useState([
     {
+      roomId: 1,
       roomName: "",
       area: "",
       pricePerHour: "",
@@ -70,12 +71,14 @@ function AddNewStudio({ setSelectTab }) {
       bookingDays: [],
       generalStartTime: "",
       generalEndTime: "",
+      availabilities: [],
       bookingStartTime: [],
       bookingEndTime: [],
       roomPhotos: [],
+      basePrice: "",
 
       amenities: [],
-      roomDetails: "",
+      details: [],
     },
   ]);
   const [showRoomsDetails, setshowRoomsDetails] = useState(false);
@@ -109,7 +112,7 @@ function AddNewStudio({ setSelectTab }) {
     state: "",
     studioPhotos: [],
     teamDetails: [],
-    totalRooms: "",
+    totalRooms: 0,
     _id: "",
   });
 
@@ -141,6 +144,14 @@ function AddNewStudio({ setSelectTab }) {
   //   totalRooms: "",
   //   _id: "",
   // });
+
+  useEffect(() => {
+    setStudioDetails((prevData) => ({
+      ...prevData,
+      totalRooms: rooms.length,
+    }));
+    // console.log(rooms.length);
+  }, [rooms.length]);
 
   useEffect(() => {
     console.log("studioDetails change huaa hai ", studioDetails);
@@ -258,6 +269,17 @@ function AddNewStudio({ setSelectTab }) {
     });
 
     if (!hasError) {
+      const updatedStudioDetails = {
+        ...studioDetails,
+        roomsDetails: studioDetails.roomsDetails.map((room) => ({
+          ...room,
+          bookingDays: room.bookingDays.map((day, index) => ({
+            id: index,
+            name: day,
+          })),
+        })),
+      };
+
       if (isEditMode) {
         Swal.fire({
           title: "Are you sure?",
@@ -269,9 +291,9 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Update it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log("studioDetails", studioDetails);
+            console.log("studioDetails", updatedStudioDetails);
             appAndmoreApi
-              .updateStudio(userStudioid, studioDetails)
+              .updateStudio(userStudioid, updatedStudioDetails)
               .then((response) => {
                 console.log("Studio updated:", response);
                 if (response) {
@@ -294,7 +316,7 @@ function AddNewStudio({ setSelectTab }) {
                   timer: 1800,
                 });
               });
-            console.log("studioDetails", studioDetails);
+            console.log("studioDetails", updatedStudioDetails);
           }
         });
       } else {
@@ -309,7 +331,7 @@ function AddNewStudio({ setSelectTab }) {
         }).then((result) => {
           if (result.isConfirmed) {
             appAndmoreApi
-              .createStudio(studioDetails)
+              .createStudio(updatedStudioDetails)
               .then((response) => {
                 console.log("Studio created:", response);
                 if (response) {
@@ -332,6 +354,7 @@ function AddNewStudio({ setSelectTab }) {
                   timer: 1800,
                 });
               });
+            console.log("updatedStudioDetails", updatedStudioDetails);
           }
         });
       }

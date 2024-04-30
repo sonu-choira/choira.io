@@ -390,7 +390,7 @@ input[type="number"] {
   background-color: white;
 }
 .bookingStudiobtn > div:nth-child(1) > div > div:hover {
-  background-color: #ffc701;
+  background-color: #ffc801ab;
   cursor: pointer;
   color: black;
 }
@@ -439,7 +439,7 @@ input[type="number"] {
 
 .searchDiv {
   /* border: 2px solid red; */
-  width: 100%;
+  width: 96%;
   height: 8vh;
   display: flex;
   align-items: center;
@@ -456,7 +456,7 @@ input[type="number"] {
     border: 2px solid #f3f6f9;
     border-radius: 10px;
   }
-  > div:last-child {
+  > div:nth-child(2) {
     width: 72%;
     border: 2px solid #f3f6f9;
     /* border: 2px solid red; */
@@ -471,6 +471,20 @@ input[type="number"] {
       border: none;
       outline: none;
     }
+  }
+}
+.clearFilter {
+  border: 2px solid transparent;
+  width: 9vw;
+  button {
+    height: 100%;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5%;
+    font-size: 1.2vmax;
+    transition: ease-in-out 1s;
   }
 }
 .antCustomcss {
@@ -551,6 +565,7 @@ input[type="number"] {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   top: 85%;
   left: 43%;
+  z-index: 1000;
   background-color: white;
   transition: 1s ease-in-out;
   border-radius: 10px;
@@ -629,6 +644,9 @@ input[type="number"] {
   align-items: center;
   justify-content: flex-start;
   gap: 5%;
+  input[type="checkbox"] {
+    accent-color: #ffc701;
+  }
 }
 
 .studiotabelHead > tr > th:nth-child(1) {
@@ -653,10 +671,10 @@ td {
 }
 .tableActionbtn {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-evenly;
   width: 100%;
-  /* height: 100%; */
+  height: 100%;
   /* border: 2px solid red; */
   margin-bottom: 5%;
 }
@@ -824,6 +842,34 @@ td {
   padding: 1.8%;
   margin-top: 0%;
   height: 80%;
+}
+.addPriceAndCountryInput {
+  width: 98.9%;
+  border: 2px solid transparent;
+  height: 6vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  gap: 4%;
+  > div {
+    width: 48%;
+    border: 2px solid #dddddd;
+    height: 90%;
+    border-radius: 10px;
+    > select,
+    input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      border-radius: 10px;
+      color: #7575759a;
+    }
+    > input {
+      color: black;
+    }
+  }
 }
 .editPencilinput {
   position: relative;
@@ -1152,15 +1198,27 @@ td {
 }
 .addNewRoomPage > div {
   width: 100%;
+  min-height: fit-content;
   height: 140%;
   /* border: 2px solid blue; */
   border-radius: 10px;
+  /* max-height: fit-content; */
   background-color: white;
   padding-bottom: 5%;
+  overflow-y: scroll;
 }
 .addNewRoomPage > div:first-child {
   display: flex;
   justify-content: space-around;
+}
+.addNewRoomPage > div:last-child > div:last-child {
+  /* border: 2px solid green; */
+  height: 108% !important;
+  overflow-y: scroll;
+  /* min-height: fit-content; */
+}
+.addNewRoomPage > div:last-child > div:last-child::-webkit-scrollbar {
+  width: 0px !important;
 }
 .addNewRoomPage > div > div {
   width: 45%;
@@ -1201,6 +1259,17 @@ td {
   position: absolute;
   /* float: left; */
   top: -12%;
+  right: 0%;
+  font-size: 1vmax;
+
+  color: #ffc701;
+  cursor: pointer;
+  /* mix-blend-mode: color-burn black; */
+}
+.cancelDetailsUpload {
+  position: absolute;
+  /* float: left; */
+  top: 20%;
   right: 0%;
   font-size: 1vmax;
 

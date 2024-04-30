@@ -89,7 +89,9 @@ const Routing = () => {
 
           <Route exact path='/studios' element={<Studios/>} />
           <Route exact path='/allStudioPageDetailsPage' element={<AllStudioPageDetailsPage/>} />
-          <Route exact path='/adminDashboard' element={<AdminDashboardLayout/>} />
+          <Route path='/adminDashboard/:navOption/:page' element={<AdminDashboardLayout/>} />
+          <Route path='/adminDashboard/:navOption' element={<AdminDashboardLayout/>} />
+          <Route path='/adminDashboard' element={<AdminDashboardLayout/>} />
           <Route exact path='/booking' element={<BookingPages/>} />
           <Route exact path='/studio/edit' element={<AddNewStudio/>} />
           <Route exact path='/studio/add' element={<AddNewStudio/>} />

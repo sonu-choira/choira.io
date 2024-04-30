@@ -38,7 +38,11 @@ function AddNewProduction({ setSelectTab }) {
 
   const navigate = useNavigate();
   const gotoadminpage = () => {
-    navigate("/adminDashboard");
+    if (bookingPageCount == "c2") {
+      navigate("/adminDashboard/Apps&More/musicproduction");
+    } else if (bookingPageCount == "c3") {
+      navigate("/adminDashboard/Apps&More/mixmaster");
+    }
   };
 
   useEffect(() => {
@@ -61,7 +65,29 @@ function AddNewProduction({ setSelectTab }) {
   ]);
 
   const [service, setService] = useState([
-    { photo_url: [], name: "", about: "", amenites: [], price: "" },
+    {
+      photo_url: [],
+      name: "",
+      about: "",
+      amenites: [],
+      pricing: {
+        USA: {
+          price: 0,
+          basePrice: 0,
+          discountPercentage: 0,
+        },
+        IN: {
+          price: 0,
+          basePrice: 0,
+          discountPercentage: 0,
+        },
+        JP: {
+          price: 0,
+          basePrice: 0,
+          discountPercentage: 0,
+        },
+      },
+    },
   ]);
   const [discography, setDiscography] = useState([""]);
 
@@ -520,25 +546,6 @@ function AddNewProduction({ setSelectTab }) {
 
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="Amenities">Amenities </label>
-                      {/* {isEditMode ? (
-                        <Select
-                          id="Amenities"
-                          mode="multiple"
-                          placeholder="Select one or more Amenities"
-                          value={
-                            productionData?.amenities?.map(
-                              (item) => item?.name || item
-                            ) || []
-                          }
-                          onChange={setSelectedItems}
-                          style={customStyles}
-                          options={productionData?.amenities?.map((item) => ({
-                            value: item.name,
-                            label: item.name,
-                          }))}
-                        /> */}
-                      {/* ) :  */}
-                      {/* ( */}
                       <Select
                         id="Amenities"
                         mode="multiple"
@@ -614,15 +621,6 @@ function AddNewProduction({ setSelectTab }) {
                         }))}
                       />
                     </div>
-
-                    {/* <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="ProductionName">Production Name </label>
-                      <input
-                        type="text"
-                        id="ProductionName"
-                        placeholder="Enter Production Name"
-                      />
-                    </div> */}
 
                     <div>
                       <label htmlFor={`Discography`}>Discography</label>

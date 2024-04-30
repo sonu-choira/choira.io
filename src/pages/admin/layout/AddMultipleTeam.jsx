@@ -13,16 +13,31 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
   }, [data?.state?.productData?.teamDetails?.length]);
 
   const handleAddTeamDetail = () => {
-    const newTeam = { photo: null, name: "", designation: "" };
+    const newTeam = {
+      id: teamDetails.length + 1,
+      photo: null,
+      name: "",
+      designation: "",
+      imgUrl: null,
+    };
     setTeamsDetails([...teamDetails, newTeam]);
     console.log(teamDetails);
   };
+
+  // useEffect(() => {
+  //   const updatedTeamDetails = teamDetails.map((team, index) => ({
+  //     ...team,
+  //     id: index + 1,
+  //   }));
+  //   setTeamsDetails([...updatedTeamDetails]);
+  // }, [teamDetails.length]);
 
   const handlePhotoChange = (event, index) => {
     console.log("event.target.files[0]");
     console.log(event.target.files[0]);
     const newTeams = [...teamDetails];
     newTeams[index].photo = event.target.files[0];
+    newTeams[index].imgUrl = event.target.files[0];
     setTeamsDetails(newTeams);
     let imagefile = event.target.files[0];
     imageUploadapi.singleImgUpload(imagefile).then((response) => {
@@ -30,6 +45,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
       const newTeams = [...teamDetails];
 
       newTeams[index].photo = response?.imageUrl;
+      newTeams[index].imgUrl = response?.imageUrl;
       setTeamsDetails(newTeams);
 
       if (response.imageUrl) {
