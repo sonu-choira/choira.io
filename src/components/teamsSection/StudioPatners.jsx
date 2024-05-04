@@ -398,42 +398,23 @@ function StudioPatners({
               {products?.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
-                products?.map((products) => {
+                products?.map((products, index) => {
                   return (
                     <tr key={products._id}>
                       <td
                         style={{
                           display: "flex",
                           alignItems: "center",
+                          justifyContent: "center",
                           height: "100%",
                         }}
                       >
-                        <div className={style.studioImage}>
-                          {products.studioPhotos ? (
-                            <img
-                              src={products.studioPhotos[0]}
-                              alt=""
-                              onError={(e) => {
-                                e.target.src = imageNotFound;
-                              }}
-                            />
-                          ) : (
-                            <img src={imageNotFound} alt="" />
-                          )}
-                        </div>
-                        &nbsp;&nbsp;{products.fullName}
+                        {index + 1}
                       </td>
-                      <td>
-                        ₹{products.pricePerHour}
-                        <br />
-                        <small>per hour</small>
-                      </td>
-                      <td>
-                        {products.address}
-                        <br />
-                        <small> {products.state}</small>
-                      </td>
-                      <td>{products.totalRooms}</td>
+                      <td>{products.firstName}</td>
+                      <td>{products.email}</td>
+                      <td>{products.studioName}</td>
+                      <td>{products.creationTimeStamp}</td>
                       <td className={style.tableActionbtn}>
                         <div>
                           <label className="switch">

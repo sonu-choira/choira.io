@@ -24,7 +24,7 @@ function AllteamDetails() {
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
 
-  const [teamsPageCount, setTeamsPageCount] = useState("t1");
+  const [teamsPageCount, setTeamsPageCount] = useState("t2");
   let { page: currentPage, navOption: currentNav } = useParams();
   console.log("currentPage", currentPage);
   console.log("currentNav", currentNav);
@@ -82,11 +82,11 @@ function AllteamDetails() {
           .getTeams("10", idToUse, 1, pageCount)
           .then((response) => {
             console.log(
-              `====================> response ${teamsPageCount}`,
+              `====================> response from team ${response}`,
               response
             );
             if (response.status) {
-              setProducts(response.services.results);
+              setProducts(response.owners);
               console.log("lkasdnflkjsdnf", response.status);
               setTotalPage(response.paginate.totalPages);
             }
