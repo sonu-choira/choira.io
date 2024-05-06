@@ -4,13 +4,15 @@ import api from "./api"
 
 class teamApi{
   
- getTeams = async (limit,active ,pageCount) => {
+ getStudioOwners = async (limit,active ,pageCount,shortby) => {
   
 
-  const response = await api.get(`/owners`, {
+  const response = await api.get(`/owner`, {
     params: {
       limit: 10,
-      skip :pageCount,
+      page :pageCount,
+      sortDirection: shortby,
+      sortField :"creationTimeStamp"
       // active: active
     }
   });

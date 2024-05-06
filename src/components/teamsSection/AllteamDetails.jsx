@@ -23,8 +23,9 @@ function AllteamDetails() {
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
+  const [shortby, setShortby] = useState("asc");
 
-  const [teamsPageCount, setTeamsPageCount] = useState("t2");
+  const [teamsPageCount, setTeamsPageCount] = useState("t1");
   let { page: currentPage, navOption: currentNav } = useParams();
   console.log("currentPage", currentPage);
   console.log("currentNav", currentNav);
@@ -56,45 +57,65 @@ function AllteamDetails() {
 
     if (teamsPageCount === "t2" || teamsPageCount === "t3") {
       // Corrected the id assignments
-      const idToUse = teamsPageCount === "t2" ? "t2" : "t3";
+      let idToUse = teamsPageCount === "t2" ? "t2" : "t3";
 
-      if (hasFilter) {
-        console.log("sendFilterDataToapi", sendFilterDataToapi);
-        // alert("filter");
-        sendFilterDataToapi.page = pageCount;
-        sendFilterDataToapi.serviceType = idToUse;
-        // teamsApi
-        //   .filterServiceData(sendFilterDataToapi)
-        //   .then((response) => {
-        //     console.log("filter applied:", response);
-        //     setProducts(response.services.results);
-        //     setTotalPage(response.paginate.totalPages);
-        //     setfilterNav(true);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error filter studio:", error);
-        //   });
-      } else {
-        const idToUse = teamsPageCount === "t2" ? "t2" : "t3";
-        // alert("main");
+      // if (hasFilter) {
+      //   console.log("sendFilterDataToapi", sendFilterDataToapi);
+      //   alert(teamsPageCount);
+      //   console.log(sendFilterDataToapi);
+      //   // alert(JSON.stringify(sendFilterDataToapi));
 
-        teamsApi
-          .getTeams("10", idToUse, 1, pageCount)
-          .then((response) => {
-            console.log(
-              `====================> response from team ${response}`,
-              response
-            );
-            if (response.status) {
-              setProducts(response.owners);
-              console.log("lkasdnflkjsdnf", response.status);
-              setTotalPage(response.paginate.totalPages);
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching studios:", error);
-          });
-      }
+      //   // alert("filter");
+      //   sendFilterDataToapi.page = pageCount;
+      //   sendFilterDataToapi.serviceType = idToUse;
+      //   // teamsApi
+      //   //   .filterServiceData(sendFilterDataToapi)
+      //   //   .then((response) => {
+      //   //     console.log("filter applied:", response);
+      //   //     setProducts(response.services.results);
+      //   //     setTotalPage(response.paginate.totalPages);
+      //   //     setfilterNav(true);
+      //   //   })
+      //   //   .catch((error) => {
+      //   //     console.error("Error filter studio:", error);
+      //   //   });
+      // } else {
+      //   const idToUse = teamsPageCount === "t2" ? "t2" : "t3";
+      //   // alert("main");
+
+      //   teamsApi
+      //     .getStudioOwners("10", idToUse, 1, pageCount)
+      //     .then((response) => {
+      //       console.log(
+      //         `====================> response from team ${response}`,
+      //         response
+      //       );
+      //       if (response.status) {
+      //         setProducts(response.owners);
+      //         console.log("lkasdnflkjsdnf", response.status);
+      //         setTotalPage(response.paginate.totalPages);
+      //       }
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error fetching studios:", error);
+      //     });
+      // }
+      teamsApi
+        .getStudioOwners("10", idToUse, pageCount, shortby)
+        .then((response) => {
+          console.log(
+            `====================> response from team ${response}`,
+            response
+          );
+          if (response.status) {
+            setProducts(response.owners);
+            console.log("lkasdnflkjsdnf", response.status);
+            setTotalPage(response.paginate.totalPages);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
     } else if (teamsPageCount === "t1") {
       const limit = 64;
       const active = 1;
@@ -114,7 +135,7 @@ function AllteamDetails() {
         //   });
       } else {
         teamsApi
-          .getTeams(limit, active, pageCount)
+          .getStudioOwners(limit, active, pageCount)
           .then((response) => {
             console.log(
               `====================> response ${teamsPageCount}`,
@@ -133,7 +154,8 @@ function AllteamDetails() {
           });
       }
     }
-  }, [teamsPageCount, pageCount]);
+    console.log(teamsPageCount, "inside useEffect");
+  }, [teamsPageCount, pageCount, shortby]);
   return (
     <>
       <div
@@ -157,9 +179,11 @@ function AllteamDetails() {
             setPageCount={setPageCount}
             setTotalPage={setTotalPage}
             pageCount={pageCount}
-            // teamsPageCount={teamsPageCount}
+            teamsPageCount={teamsPageCount}
             filterNav={filterNav}
             setfilterNav={setfilterNav}
+            setShortby={setShortby}
+            shortby={shortby}
           />
         ) : currentNav == "Teams" && currentPage == "Artist" ? (
           "t3"

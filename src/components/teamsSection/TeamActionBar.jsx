@@ -7,6 +7,7 @@ import { FaDownload } from "react-icons/fa";
 import { MdNoteAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import appAndmoreApi from "../../services/appAndmoreApi";
+import { useNavigateRouter } from "../../navigateRoute";
 
 function TeamsActionBar({
   pagetype,
@@ -14,55 +15,57 @@ function TeamsActionBar({
   teamsPageCount,
   setTeamsPageCount,
 }) {
+  const router = useNavigateRouter();
+
   console.log(teamsPageCount);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   let { navOption: pageData, page: type } = useParams();
   console.log("page ka data ", useParams());
 
   const gotoAddNew = (teamsPageCount) => {
     if (teamsPageCount === "t1") {
-      navigate("/studio/add", {
+      router.push("/studio/add", {
         state: { navCount: 3, teamsPageCount: teamsPageCount },
       });
     } else {
-      navigate("/service/musicProduction/add", {
+      router.push("/service/musicProduction/add", {
         state: { navCount: 3, teamsPageCount: teamsPageCount },
       });
     }
   };
   const gotoSlotBooking = () => {
-    navigate("/service/AddSlotBooking", {
+    router.push("/service/AddSlotBooking", {
       state: { navCount: 4 },
     });
   };
 
   const gotoStudioPatners = () => {
     if (pageData == "Teams") {
-      navigate("/adminDashboard/Teams/StudioPatners");
+      router.push("/adminDashboard/Teams/StudioPatners");
     } else {
-      navigate("/adminDashboard/Bookings/musicproduction");
+      router.push("/adminDashboard/Bookings/musicproduction");
     }
   };
   const gotoARM = () => {
     if (pageData == "Teams") {
-      navigate("/adminDashboard/Teams/Arm");
+      router.push("/adminDashboard/Teams/Arm");
     } else {
-      navigate("/adminDashboard/Bookings/studio");
+      router.push("/adminDashboard/Bookings/studio");
     }
   };
   const gotoArtist = () => {
     if (pageData == "Teams") {
-      navigate("/adminDashboard/Teams/Artist");
+      router.push("/adminDashboard/Teams/Artist");
     } else {
-      navigate("/adminDashboard/Bookings/mixmaster");
+      router.push("/adminDashboard/Bookings/mixmaster");
     }
   };
   const gotoMusicProducer = () => {
     if (pageData == "Teams") {
-      navigate("/adminDashboard/Teams/MusicProducer");
+      router.push("/adminDashboard/Teams/MusicProducer");
     } else {
-      navigate("/adminDashboard/Bookings/mixmaster");
+      router.push("/adminDashboard/Bookings/mixmaster");
     }
   };
   return (
@@ -129,6 +132,7 @@ function TeamsActionBar({
               gap: "5%",
               backgroundColor: "#ADB5BD",
             }}
+            // onClick={router.back}
           />
           <Button
             name={"Share"}
@@ -139,6 +143,7 @@ function TeamsActionBar({
               gap: "5%",
               backgroundColor: "#ADB5BD",
             }}
+            // onClick={router.forward}
           />
           <Button
             name={"Download"}

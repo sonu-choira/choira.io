@@ -42,6 +42,9 @@ function StudioPatners({
   filterNav,
   setfilterNav,
   sendFilterDataToapi,
+  teamsPageCount,
+  shortby,
+  setShortby,
 }) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
@@ -144,7 +147,7 @@ function StudioPatners({
   const status = ["active", "inactive"];
 
   const [selectedCity, setSelectedCity] = useState([]);
-  const [shortby, setShortby] = useState("creationTimeStamp:asc");
+
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
   // var selectedDate = "";
@@ -154,10 +157,10 @@ function StudioPatners({
   });
 
   const handelShortbyClick = () => {
-    if (shortby == "creationTimeStamp:asc") {
-      setShortby("creationTimeStamp:desc");
+    if (shortby == "desc") {
+      setShortby("asc");
     } else {
-      setShortby("creationTimeStamp:asc");
+      setShortby("desc");
     }
   };
 
@@ -226,10 +229,7 @@ function StudioPatners({
                       className={style.filterBox}
                       onClick={handelShortbyClick}
                       style={{
-                        backgroundColor:
-                          shortby !== "creationTimeStamp:asc"
-                            ? "#ffc70133"
-                            : "",
+                        backgroundColor: shortby !== "asc" ? "#ffc70133" : "",
                       }}
                     >
                       <RiExpandUpDownLine />
@@ -281,21 +281,20 @@ function StudioPatners({
                       <span onClick={handellocationFilter}>
                         <CiFilter />
                       </span>
-                      {showloactionfilter ? (
-                        <CheckboxFilter
-                          data={city}
-                          setSelectedData={setSelectedCity}
-                          selectedData={selectedCity}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          closeAllFilter={closeAllFilter}
-                          setfilterNav={setfilterNav}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {showloactionfilter
+                        ? // <CheckboxFilter
+                          //   data={city}
+                          //   setSelectedData={setSelectedCity}
+                          //   selectedData={selectedCity}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   closeAllFilter={closeAllFilter}
+                          //   setfilterNav={setfilterNav}
+                          // />
+                          ""
+                        : ""}
                     </div>
                   </div>
                 </th>
@@ -359,7 +358,7 @@ function StudioPatners({
                     </div>
                   </div>
                 </th>
-                <th>
+                <th style={{ width: "12%" }}>
                   <div className={style.headingContainer}>
                     Activity Status
                     <div
@@ -372,23 +371,22 @@ function StudioPatners({
                       <span onClick={handelStatusFilter}>
                         <CiFilter />
                       </span>
-                      {showstatusFilter ? (
-                        <CheckboxFilter
-                          data={status}
-                          cusstyle={{ left: "-355%" }}
-                          disabledsearch={true}
-                          selectedData={selectedStatus}
-                          setSelectedData={setSelectedStatus}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          setfilterNav={setfilterNav}
-                          closeAllFilter={closeAllFilter}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {showstatusFilter
+                        ? ""
+                        : // <CheckboxFilter
+                          //   data={status}
+                          //   cusstyle={{ left: "-355%" }}
+                          //   disabledsearch={true}
+                          //   selectedData={selectedStatus}
+                          //   setSelectedData={setSelectedStatus}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          //   closeAllFilter={closeAllFilter}
+                          // />
+                          ""}
                     </div>
                   </div>
                 </th>
@@ -416,36 +414,17 @@ function StudioPatners({
                       <td>{products.studioName}</td>
                       <td>{products.creationTimeStamp}</td>
                       <td className={style.tableActionbtn}>
-                        <div>
-                          <label className="switch">
-                            <input
-                              type="checkbox"
-                              checked={
-                                products.isActive === 1
-                                // ? activityStatus[products._id]
-                                // : false
-                              }
-                              onChange={() =>
-                                handleSwitchChange(
-                                  products._id,
-                                  products.isActive
-                                )
-                              }
-                            />
-                            <span className="slider"></span>
-                          </label>
-                        </div>
-                        <div>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                          }}
+                        >
                           <GrShare
                             style={{ cursor: "pointer" }}
                             onClick={() => gotoShowStudioDetaisl(products._id)}
                           />
-                          <MdEdit
-                            style={{ color: "#ffc701", cursor: "pointer" }}
-                            onClick={() => {
-                              gotoEdit(products._id);
-                            }}
-                          />
+
                           <RiDeleteBin5Fill
                             style={{ color: "red", cursor: "pointer" }}
                           />
