@@ -7,14 +7,18 @@ import community from "../../assets/img/dashboard_img/community.svg";
 import tanmay from "../../assets/img/dashboard_img/tanmay.png";
 import ProfileEdit from "./ProfileEdit";
 import { useNavigate, useParams } from "react-router-dom";
+import { AiOutlineTeam } from "react-icons/ai";
+import { useNavigateRouter } from "../../navigateRoute";
 
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
+  const router = useNavigateRouter();
+
   let { navOption: pageData } = useParams();
 
   useEffect(() => {
     if (pageData == "Studios") {
       setTabCount(1);
-    } else if (pageData == "Produce") {
+    } else if (pageData == "Teams") {
       setTabCount(2);
     } else if (pageData == "Apps&More") {
       setTabCount(3);
@@ -32,31 +36,31 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const editProfiletab = () => {
     setEditProfile(true);
   };
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const gotoAllStudioDetailPage = () => {
     // navigate("/allStudioPageDetailsPage");
     if (navCount) {
-      navigate("/adminDashboard/Apps&More/studio");
+      router.push("/adminDashboard/Apps&More/studio");
     } else {
       setTabCount(3);
-      navigate("/adminDashboard/Apps&More/studio");
+      router.push("/adminDashboard/Apps&More/studio");
     }
   };
   const gotoBookings = () => {
     if (navCount) {
-      navigate("/adminDashboard/Bookings/studio");
+      router.push("/adminDashboard/Bookings/studio");
     } else {
       setTabCount(4);
-      navigate("/adminDashboard/Bookings/studio");
+      router.push("/adminDashboard/Bookings/studio");
     }
   };
   const gotoStudios = () => {
-    // navigate("/studios");
+    // router.push("/studios");
     if (navCount) {
-      navigate("/adminDashboard/Studios");
+      router.push("/adminDashboard/Studios");
     } else {
       setTabCount(1);
-      navigate("/adminDashboard/Studios");
+      router.push("/adminDashboard/Studios");
     }
   };
 
@@ -85,15 +89,15 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 className={tabCount === 2 ? style.tabActive : style.padding}
                 onClick={() => {
                   if (navCount) {
-                    navigate("/adminDashboard/Produce");
+                    router.push("/adminDashboard/Teams/Arm");
                   } else {
                     setTabCount(2);
-                    navigate("/adminDashboard/Produce");
+                    router.push("/adminDashboard/Teams/Arm");
                   }
                 }}
               >
-                <img src={produce} alt="" />
-                Produce
+                <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />
+                Teams
               </div>
               <div
                 className={tabCount === 3 ? style.tabActive : style.padding}

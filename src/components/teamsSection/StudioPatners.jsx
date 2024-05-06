@@ -1,37 +1,37 @@
 import React, { useEffect, useMemo, useState } from "react";
-import style from "../../../pages/admin/studios/studio.module.css";
+import style from "../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-import Button from "../../../pages/admin/layout/Button";
+import Button from "../../pages/admin/layout/Button";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 
-// import Button from "../../../pages/admin/layout/Button";
-import Switch from "../../../pages/admin/layout/Switch";
-import Pagination from "../../../pages/admin/studios/Pagination";
+// import Button from "../../pages/admin/layout/Button";
+import Switch from "../../pages/admin/layout/Switch";
+import Pagination from "../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
-import imageNotFound from "../../../assets/imagesNotFound.png";
+import imageNotFound from "../../assets/imagesNotFound.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import PaginationNav from "../../../pages/admin/layout/PaginationNav";
-import ChoiraLoader from "../../loader/ChoiraLoader";
-import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import PaginationNav from "../../pages/admin/layout/PaginationNav";
+import ChoiraLoader from "../loader/ChoiraLoader";
+import ChoiraLoder2 from "../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import { RiExpandUpDownLine } from "react-icons/ri";
 import { CiFilter } from "react-icons/ci";
 import { DatePicker, Space } from "antd";
-import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter";
-import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
-import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
-import appAndmoreApi from "../../../services/appAndmoreApi";
+import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
+import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
+import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import appAndmoreApi from "../../services/appAndmoreApi";
 
 let PageSize = 10;
 
-function AllStudioDetail2({
+function StudioPatners({
   products,
   setProducts,
   setPageCount,
@@ -42,6 +42,9 @@ function AllStudioDetail2({
   filterNav,
   setfilterNav,
   sendFilterDataToapi,
+  teamsPageCount,
+  shortby,
+  setShortby,
 }) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
@@ -144,7 +147,7 @@ function AllStudioDetail2({
   const status = ["active", "inactive"];
 
   const [selectedCity, setSelectedCity] = useState([]);
-  const [shortby, setShortby] = useState("creationTimeStamp:asc");
+
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
   // var selectedDate = "";
@@ -154,10 +157,10 @@ function AllStudioDetail2({
   });
 
   const handelShortbyClick = () => {
-    if (shortby == "creationTimeStamp:asc") {
-      setShortby("creationTimeStamp:desc");
+    if (shortby == "desc") {
+      setShortby("asc");
     } else {
-      setShortby("creationTimeStamp:asc");
+      setShortby("desc");
     }
   };
 
@@ -185,19 +188,19 @@ function AllStudioDetail2({
     shortby,
   ]);
 
-  useEffect(() => {
-    setProducts([]);
-    appAndmoreApi
-      .filterData(sendFilterDataToapi)
-      .then((response) => {
-        console.log("filter applied:", response);
-        setProducts(response.studios);
-        setTotalPage(response.paginate.totalPages);
-      })
-      .catch((error) => {
-        console.error("Error filter studio:", error);
-      });
-  }, [shortby]);
+  // useEffect(() => {
+  //   setProducts([]);
+  //   appAndmoreApi
+  //     .filterData(sendFilterDataToapi)
+  //     .then((response) => {
+  //       console.log("filter applied:", response);
+  //       setProducts(response.studios);
+  //       setTotalPage(response.paginate.totalPages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error filter studio:", error);
+  //     });
+  // }, [shortby]);
 
   return (
     <>
@@ -219,17 +222,14 @@ function AllStudioDetail2({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th>
+                <th style={{ width: "10%" }}>
                   <div className={style.headingContainer}>
-                    Studio
+                    S.No.
                     <div
                       className={style.filterBox}
                       onClick={handelShortbyClick}
                       style={{
-                        backgroundColor:
-                          shortby !== "creationTimeStamp:asc"
-                            ? "#ffc70133"
-                            : "",
+                        backgroundColor: shortby !== "asc" ? "#ffc70133" : "",
                       }}
                     >
                       <RiExpandUpDownLine />
@@ -238,7 +238,7 @@ function AllStudioDetail2({
                 </th>
                 <th>
                   <div className={style.headingContainer}>
-                    Price
+                    Partner Name
                     <div
                       className={style.filterBox}
                       style={{
@@ -251,27 +251,26 @@ function AllStudioDetail2({
                       <span onClick={handelpriceFilter}>
                         <CiFilter />
                       </span>
-                      {showpricefilter ? (
-                        <PriceFilter
-                          closeAllFilter={closeAllFilter}
-                          priceFilter={priceFilter}
-                          setPriceFilter={setPriceFilter}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          setfilterNav={setfilterNav}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {showpricefilter
+                        ? // <PriceFilter
+                          //   closeAllFilter={closeAllFilter}
+                          //   priceFilter={priceFilter}
+                          //   setPriceFilter={setPriceFilter}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          // />
+                          ""
+                        : ""}
                     </div>
                   </div>
                 </th>
 
-                <th>
+                <th style={{ width: "20%" }}>
                   <div className={style.headingContainer}>
-                    Location
+                    Email
                     <div
                       className={style.filterBox}
                       style={{
@@ -282,27 +281,26 @@ function AllStudioDetail2({
                       <span onClick={handellocationFilter}>
                         <CiFilter />
                       </span>
-                      {showloactionfilter ? (
-                        <CheckboxFilter
-                          data={city}
-                          setSelectedData={setSelectedCity}
-                          selectedData={selectedCity}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          closeAllFilter={closeAllFilter}
-                          setfilterNav={setfilterNav}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {showloactionfilter
+                        ? // <CheckboxFilter
+                          //   data={city}
+                          //   setSelectedData={setSelectedCity}
+                          //   selectedData={selectedCity}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   closeAllFilter={closeAllFilter}
+                          //   setfilterNav={setfilterNav}
+                          // />
+                          ""
+                        : ""}
                     </div>
                   </div>
                 </th>
-                <th>
+                <th style={{ width: "20%" }}>
                   <div className={style.headingContainer}>
-                    No. of Rooms
+                    Studio Name
                     <div
                       className={style.filterBox}
                       style={{
@@ -313,25 +311,54 @@ function AllStudioDetail2({
                       <span onClick={handelRoomFilter}>
                         <CiFilter />
                       </span>
-                      {showRoomFilter ? (
-                        <CheckboxFilter
-                          data={room}
-                          selectedData={selectedRoom}
-                          setSelectedData={setSelectedRoom}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          setfilterNav={setfilterNav}
-                          closeAllFilter={closeAllFilter}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {showRoomFilter
+                        ? // <CheckboxFilter
+                          //   data={room}
+                          //   selectedData={selectedRoom}
+                          //   setSelectedData={setSelectedRoom}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          //   closeAllFilter={closeAllFilter}
+                          ""
+                        : // />
+                          ""}
                     </div>
                   </div>
                 </th>
-                <th>
+                <th style={{ width: "20%" }}>
+                  <div className={style.headingContainer}>
+                    Date
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedRoom.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
+                      <span onClick={handelRoomFilter}>
+                        <CiFilter />
+                      </span>
+                      {showRoomFilter
+                        ? // <CheckboxFilter
+                          //   data={room}
+                          //   selectedData={selectedRoom}
+                          //   setSelectedData={setSelectedRoom}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          //   closeAllFilter={closeAllFilter}
+                          // />
+                          ""
+                        : ""}
+                    </div>
+                  </div>
+                </th>
+                <th style={{ width: "12%" }}>
                   <div className={style.headingContainer}>
                     Activity Status
                     <div
@@ -344,23 +371,22 @@ function AllStudioDetail2({
                       <span onClick={handelStatusFilter}>
                         <CiFilter />
                       </span>
-                      {showstatusFilter ? (
-                        <CheckboxFilter
-                          data={status}
-                          cusstyle={{ left: "-355%" }}
-                          disabledsearch={true}
-                          selectedData={selectedStatus}
-                          setSelectedData={setSelectedStatus}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          setfilterNav={setfilterNav}
-                          closeAllFilter={closeAllFilter}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {showstatusFilter
+                        ? ""
+                        : // <CheckboxFilter
+                          //   data={status}
+                          //   cusstyle={{ left: "-355%" }}
+                          //   disabledsearch={true}
+                          //   selectedData={selectedStatus}
+                          //   setSelectedData={setSelectedStatus}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          //   closeAllFilter={closeAllFilter}
+                          // />
+                          ""}
                     </div>
                   </div>
                 </th>
@@ -370,73 +396,35 @@ function AllStudioDetail2({
               {products?.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
-                products?.map((products) => {
+                products?.map((products, index) => {
                   return (
                     <tr key={products._id}>
                       <td
                         style={{
                           display: "flex",
                           alignItems: "center",
+                          justifyContent: "center",
                           height: "100%",
                         }}
                       >
-                        <div className={style.studioImage}>
-                          {products.studioPhotos ? (
-                            <img
-                              src={products.studioPhotos[0]}
-                              alt=""
-                              onError={(e) => {
-                                e.target.src = imageNotFound;
-                              }}
-                            />
-                          ) : (
-                            <img src={imageNotFound} alt="" />
-                          )}
-                        </div>
-                        &nbsp;&nbsp;{products.fullName}
+                        {index + 1}
                       </td>
-                      <td>
-                        ₹{products.pricePerHour}
-                        <br />
-                        <small>per hour</small>
-                      </td>
-                      <td>
-                        {products.address}
-                        <br />
-                        <small> {products.state}</small>
-                      </td>
-                      <td>{products.totalRooms}</td>
+                      <td>{products.firstName}</td>
+                      <td>{products.email}</td>
+                      <td>{products.studioName}</td>
+                      <td>{products.creationTimeStamp}</td>
                       <td className={style.tableActionbtn}>
-                        <div>
-                          <label className="switch">
-                            <input
-                              type="checkbox"
-                              checked={
-                                products.isActive === 1
-                                // ? activityStatus[products._id]
-                                // : false
-                              }
-                              onChange={() =>
-                                handleSwitchChange(
-                                  products._id,
-                                  products.isActive
-                                )
-                              }
-                            />
-                            <span className="slider"></span>
-                          </label>
-                        </div>
-                        <div>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                          }}
+                        >
                           <GrShare
                             style={{ cursor: "pointer" }}
                             onClick={() => gotoShowStudioDetaisl(products._id)}
                           />
-                          <MdEdit
-                            style={{ color: "#ffc701", cursor: "pointer" }}
-                            onClick={() => {
-                              gotoEdit(products._id);
-                            }}
-                          />
+
                           <RiDeleteBin5Fill
                             style={{ color: "red", cursor: "pointer" }}
                           />
@@ -462,4 +450,4 @@ function AllStudioDetail2({
   );
 }
 
-export default AllStudioDetail2;
+export default StudioPatners;

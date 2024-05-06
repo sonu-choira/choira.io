@@ -61,7 +61,6 @@ function AllStudioPageDetailsPage() {
   let { page: paramData } = useParams();
   console.log("paramData", paramData);
 
-  // setBookingPageCount("c2");
   useEffect(() => {
     if (paramData == "studio") {
       setBookingPageCount("c1");
@@ -84,7 +83,6 @@ function AllStudioPageDetailsPage() {
   }, [sendFilterDataToapi]);
 
   let downloadAllData = () => {
-    // if (hasFilter) {
     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
       // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
@@ -113,27 +111,6 @@ function AllStudioPageDetailsPage() {
           console.error("Error filter studio:", error);
         });
     }
-    // } else {
-    // if (bookingPageCount == "c1") {
-    //   appAndmoreApi
-    //     .downloadData()
-    //     .then((response) => {
-    //       console.log("filter applied:", response);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error filter studio:", error);
-    //     });
-    // } else {
-    //   appAndmoreApi
-    //     .downloadServiceData()
-    //     .then((response) => {
-    //       console.log("filter applied:", response);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error filter studio:", error);
-    //     });
-    // }
-    // }
   };
 
   useEffect(() => {
@@ -229,7 +206,10 @@ function AllStudioPageDetailsPage() {
 
   return (
     <>
-      <div className={style.allStudioDetailsPage}>
+      <div
+        className={style.allStudioDetailsPage}
+        // style={{ border: "2px solid red" }}
+      >
         <BookingActionBar
           pagetype={pagetype}
           bookingPageCount={bookingPageCount}
