@@ -211,6 +211,7 @@ function AddNewServices2({
   // Function to handle country selection
   const [selectedCountry, setSelectedCountry] = useState([]);
   useEffect(() => {
+    console.log("selectedCountry");
     console.log(selectedCountry);
   }, [selectedCountry]);
 
