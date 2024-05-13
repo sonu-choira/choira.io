@@ -9,6 +9,7 @@ import ProfileEdit from "./ProfileEdit";
 import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineTeam } from "react-icons/ai";
 import { useNavigateRouter } from "../../navigateRoute";
+import { FaRegUser } from "react-icons/fa";
 
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const router = useNavigateRouter();
@@ -16,7 +17,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   let { navOption: pageData } = useParams();
 
   useEffect(() => {
-    if (pageData == "Studios") {
+    if (pageData == "User") {
       setTabCount(1);
     } else if (pageData == "Teams") {
       setTabCount(2);
@@ -55,12 +56,12 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     }
   };
   const gotoStudios = () => {
-    // router.push("/studios");
+    // router.push("/User");
     if (navCount) {
-      router.push("/adminDashboard/Studios");
+      router.push("/adminDashboard/User");
     } else {
       setTabCount(1);
-      router.push("/adminDashboard/Studios");
+      router.push("/adminDashboard/User");
     }
   };
 
@@ -82,8 +83,8 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 className={tabCount === 1 ? style.tabActive : style.padding}
                 onClick={gotoStudios}
               >
-                <img src={community} alt="" />
-                Studios
+                <FaRegUser style={{ fontSize: "1vmax" }} />
+                User
               </div>
               <div
                 className={tabCount === 2 ? style.tabActive : style.padding}

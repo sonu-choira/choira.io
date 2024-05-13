@@ -7,6 +7,7 @@ import {googleanayticsaction} from "./pages/google-anaylitics"
 import { useEffect } from "react";
 
 function App() {
+  console.log(process.env);
 
   useEffect(()=>{
     googleanayticsaction.initgoogleanaytics('G-840J53TBNV')

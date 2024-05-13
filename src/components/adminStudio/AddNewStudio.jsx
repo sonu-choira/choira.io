@@ -94,6 +94,7 @@ function AddNewStudio({ setSelectTab }) {
     area: "",
     availabilities: [],
     city: "",
+    country: "",
     clientPhotos: [],
     creationTimeStamp: "",
     featuredReviews: "",
@@ -586,6 +587,27 @@ function AddNewStudio({ setSelectTab }) {
                         <option value="Delhi">Delhi</option>
                         <option value="Bombay">Bombay</option>
                       </datalist>
+                    </div>
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="addstate">Select Country</label>
+                      <select
+                        name=""
+                        id=""
+                        value={studioDetails?.country}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            country: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="" disabled selected>
+                          Select Country
+                        </option>
+                        <option value="IN">India</option>
+                        <option value="USA">USA</option>
+                        <option value="JP">Japan</option>
+                      </select>
                     </div>
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="address">Studio Address</label>
