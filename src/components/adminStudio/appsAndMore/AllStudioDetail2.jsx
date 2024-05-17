@@ -197,6 +197,10 @@ function AllStudioDetail2({
       .catch((error) => {
         console.error("Error filter studio:", error);
       });
+
+    return () => {
+      setProducts([]);
+    };
   }, [shortby]);
 
   return (

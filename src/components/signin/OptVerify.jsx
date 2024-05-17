@@ -3,6 +3,7 @@ import style from "../../pages/home/signinBackup.module.css";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "antd";
 import Swal from "sweetalert2";
+import deleteAccountapi from "../../services/deleteAccountapi";
 
 const OptVerify = ({
   mobileNumber,
@@ -18,6 +19,8 @@ const OptVerify = ({
   setDeleteCheckOtp,
   setDeleteAccount,
   apiOtp,
+  sendPhoneNumber,
+  setdisableBtn,
 }) => {
   const [seconds, setSeconds] = useState(30);
   const [generatedOTP, setGeneratedOTP] = useState("");
@@ -31,7 +34,7 @@ const OptVerify = ({
 
   useEffect(() => {
     // Generate a random OTP when the component mounts
-    generateOTP();
+    // generateOTP();
 
     // Start the timer
     const timer = setInterval(() => {
@@ -49,20 +52,21 @@ const OptVerify = ({
     }
   }, [enteredOTP]);
 
-  const generateOTP = () => {
-    const otp = Math.floor(Math.random() * 10000)
-      .toString()
-      .padStart(4, "0");
-    console.log(` ingnore this otp ${otp}`);
-    // alert("your otp is " + otp);
-    alert("your otp is " + apiOtp);
-    setGeneratedOTP(otp);
-  };
+  // const generateOTP = () => {
+  //   const otp = Math.floor(Math.random() * 10000)
+  //     .toString()
+  //     .padStart(4, "0");
+  //   console.log(` ingnore this otp ${otp}`);
+  //   // alert("your otp is " + otp);
+  //   alert("your otp is " + apiOtp);
+  //   setGeneratedOTP(otp);
+  // };
 
   const restartTimer = () => {
     // Reset the timer to its initial value and generate a new OTP
     setSeconds(30);
-    generateOTP();
+    sendPhoneNumber();
+    // generateOTP();
   };
 
   const handleOTPChange = (index, value) => {
@@ -115,21 +119,54 @@ const OptVerify = ({
   }, [checkOtp]);
   // this is for DeleteAccount page
   useEffect(() => {
-    if (deletecheckOtp === false) {
-      if (enteredOTP === generatedOTP) {
-        console.log("OTP is correct. Redirect or perform another action.");
-        alert("OTP is correct.");
-        // setDeletepopup(true);
+    if (!deletecheckOtp) {
+      setdisableBtn(true);
+      deleteAccountapi
+        .checkOtp(countryCode + mobileNumber, enteredOTP)
+        .then((res) => {
+          if (res.status) {
+            console.log("res", res);
 
-        setDeleteCheckOtp(false);
-        setDeleteAccount(3);
-      } else {
-        console.log("Incorrect OTP. Please try again.");
-        alert("Incorrect OTP. Please try again.");
-        setDeleteCheckOtp(true);
-      }
+            Swal.fire({
+              icon: "success",
+              title: "OTP is correct.",
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            setDeleteAccount(3);
+            setDeleteCheckOtp(false); // Change to true since OTP is correct
+            setdisableBtn(false);
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: res.message,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            // alert("Please enter a valid OTP.");
+            setDeleteCheckOtp(true); // Change to false since OTP is incorrect
+            setdisableBtn(false);
+          }
+        })
+        .catch((err) => {
+          console.log("err", err);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "An error occurred. Please try again.",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          setDeleteCheckOtp(true); // Set to false if there's an error
+          setdisableBtn(false);
+        });
     }
   }, [deletecheckOtp]);
+
+  // useEffect(() => {
+
+  // }, [deletecheckOtp])
 
   //This part is for signup page
   useEffect(() => {

@@ -407,7 +407,7 @@ function StudioPatners({
                           height: "100%",
                         }}
                       >
-                        {index + 1}
+                        {index + 1 * (pageCount - 1) * 10 + 1}
                       </td>
                       <td>{products.firstName}</td>
                       <td>{products.email}</td>

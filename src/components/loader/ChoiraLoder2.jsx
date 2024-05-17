@@ -5,9 +5,13 @@ import nodata from "./nodataFound.png";
 function ChoiraLoder2() {
   const [noDataFound, setnoDataFound] = useState(false);
   useEffect(() => {
-    setTimeout(() => {
+    let abc = setTimeout(() => {
       setnoDataFound(true);
     }, 5000);
+
+    return () => {
+      clearTimeout(abc);
+    };
   });
 
   return (

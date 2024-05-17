@@ -443,7 +443,7 @@ function AddNewStudio({ setSelectTab }) {
                       <label htmlFor="area">Total Area</label>
                       <input
                         required
-                        type="text"
+                        type="number"
                         id="area"
                         placeholder="Enter Approx. Area"
                         name="area"
@@ -461,7 +461,7 @@ function AddNewStudio({ setSelectTab }) {
                       <label htmlFor="pincode">Studio Pincode</label>
                       <input
                         required
-                        type="text"
+                        type="number"
                         id="pincode"
                         name="pincode"
                         placeholder="Enter Pincode"
@@ -605,7 +605,7 @@ function AddNewStudio({ setSelectTab }) {
                           Select Country
                         </option>
                         <option value="IN">India</option>
-                        <option value="USA">USA</option>
+                        <option value="US">USA</option>
                         <option value="JP">Japan</option>
                       </select>
                     </div>

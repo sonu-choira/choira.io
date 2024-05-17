@@ -3,6 +3,7 @@ import style from "../../../admin/studios/studio.module.css";
 import Button from "../Button";
 import { logDOM } from "@testing-library/react";
 import appAndmoreApi from "../../../../services/appAndmoreApi";
+import userApi from "../../../../services/userApi";
 
 function CheckboxFilter({
   data,
@@ -15,10 +16,11 @@ function CheckboxFilter({
   setTotalPage,
   bookingPageCount,
   closeAllFilter,
+  userFiler,
+  pageCount,
+  setPageCount,
+  userAllFilterData,
 }) {
-  // Array of city names
-  // const [selectedData, setSelectedData] = useState([]);
-
   useEffect(() => {
     console.log("selectedData", selectedData);
   }, [selectedData]);
@@ -50,14 +52,37 @@ function CheckboxFilter({
     } else {
       closeAllFilter();
       setProducts([]);
-
       hitallstudioApi();
+    }
+  };
+
+  const sendUserFilterData = () => {
+    if (selectedData.length > 0) {
+      setProducts([]);
+      setPageCount(1);
+      let status;
+      if (selectedData == "active") {
+        status = 1;
+        userAllFilterData.status = status;
+      } else {
+        status = 0;
+        userAllFilterData.status = status;
+      }
+      userApi
+        .getAllUser(pageCount, userAllFilterData)
+        .then((response) => {
+          console.log("filter applied:", response);
+          setProducts(response.users);
+          setTotalPage(response.paginate.totalPages);
+        })
+        .catch((error) => {
+          console.error("Error filter studio:", error);
+        });
     }
   };
 
   const hitallstudioApi = () => {
     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
-      // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
       appAndmoreApi
@@ -79,7 +104,7 @@ function CheckboxFilter({
     } else if (bookingPageCount === "c1") {
       const limit = 64;
       const active = 1;
-      // const type = bookingPageCount;
+
       appAndmoreApi
         .getStudios(limit, active)
         .then((response) => {
@@ -91,13 +116,12 @@ function CheckboxFilter({
           if (response.studios) {
             setProducts(response.studios);
             setTotalPage(response.paginate.totalPages);
-
-            // setPageCount(response.paginate.page);
           }
         })
         .catch((error) => {
           console.error("Error fetching studios:", error);
         });
+    } else {
     }
   };
 
@@ -118,28 +142,52 @@ function CheckboxFilter({
         closeAllFilter();
         hitallstudioApi();
       } else {
-        // alert("Keys are not empty.");
         hitallstudioApi();
         closeAllFilter();
       }
     }
+  };
 
-    // Check if all values are empty
+  const resetUserFilter = () => {
+    if (selectedData.length > 0) {
+      setSelectedData([]);
+      setProducts([]);
+      setPageCount(1);
+
+      // checking if filter has any data
+
+      // const type =  ;
+      userAllFilterData.status = undefined;
+
+      userApi
+        .getAllUser(pageCount, userAllFilterData)
+        .then((response) => {
+          console.log(`====================> response `, response);
+          console.log("response.data.users", response.users);
+          if (response.users) {
+            setProducts(response.users);
+            setTotalPage(response.paginate.totalPages);
+
+            // setPageCount(response.paginate.page);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
+    }
+    closeAllFilter();
   };
 
   useEffect(() => {
-    // Function to handle click events outside of the filter box
     const handleClickOutside = (event) => {
-      const filterBox = document.getElementById("filterBox"); // Assuming the filter box has an ID "filterBox"
+      const filterBox = document.getElementById("filterBox");
       if (filterBox && !filterBox.contains(event.target)) {
-        closeAllFilter(); // Call closeAllFilter function if clicked outside the filter box
+        closeAllFilter();
       }
     };
 
-    // Attach event listener to document body to handle click events
     document.body.addEventListener("click", handleClickOutside);
 
-    // Cleanup function to remove event listener when component unmounts
     return () => {
       document.body.removeEventListener("click", handleClickOutside);
     };
@@ -176,13 +224,15 @@ function CheckboxFilter({
           className={style.topborder}
         >
           <p
-            onClick={resetFilter}
+            onClick={!userFiler ? resetFilter : resetUserFilter}
             style={{ color: selectedData.length > 0 ? "#FFC701" : "" }}
           >
-            {" "}
-            reset{" "}
+            reset
           </p>
-          <Button name={"ok"} onClick={sendFilterDatatoapi} />
+          <Button
+            name={"ok"}
+            onClick={!userFiler ? sendFilterDatatoapi : sendUserFilterData}
+          />
         </div>
       </div>
     </>

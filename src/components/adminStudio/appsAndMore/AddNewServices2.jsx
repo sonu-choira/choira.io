@@ -350,7 +350,7 @@ function AddNewServices2({
 
                 <div>
                   <input
-                    type="text"
+                    type="number"
                     placeholder="Enter Price"
                     onChange={(event) => {
                       handelCountryPrice(event.target.value, index);

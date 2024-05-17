@@ -382,7 +382,7 @@ function AddNewRoom({
             <div className={style.addNewStudioinputBox}>
               <label htmlFor="RoomArea">Room Area</label>
               <input
-                type="text"
+                type="number"
                 id="RoomArea"
                 placeholder="Enter Approx. Area"
                 value={currentRoomsData?.area}

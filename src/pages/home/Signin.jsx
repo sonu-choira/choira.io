@@ -411,26 +411,28 @@ function Signin() {
   // api integration ----------------------------------------
   const [apiOtp, setApiOtp] = useState();
   const checkLoginData = () => {
-    const role = mobileNumber === "9898989898" ? "tester" : "user";
-    AuthService.login(mobileNumber, "NUMBER", role).then((response) => {
-      console.log("res------", response);
-      if (response.status) {
-        TokenService.setUser(response.user.role);
-        TokenService.setData("token", response.token);
-      } else {
-        console.log("Not get Token");
-      }
+    const role = mobileNumber === "9898989898" ? "admin" : "user";
+    AuthService.login(countryCode + mobileNumber, "NUMBER", role).then(
+      (response) => {
+        console.log("res------", response);
+        if (response.status) {
+          TokenService.setUser(response.user.role);
+          TokenService.setData("token", response.token);
+        } else {
+          console.log("Not get Token");
+        }
 
-      if (response.user.role === "admin") {
-        console.log(response.newUser);
-        navigate("/adminDashboard/Apps&More/studio");
-      } else if (response.newUser === true) {
-        console.log(response.newUser);
-        localStorage.removeItem("token");
-        setApiOtp(response.otp);
-        setSign(2);
+        if (response.user.role === "admin") {
+          console.log(response.newUser);
+          navigate("/adminDashboard/Apps&More/studio");
+        } else if (response.newUser === true) {
+          console.log(response.newUser);
+          localStorage.removeItem("token");
+          setApiOtp(response.otp);
+          setSign(2);
+        }
       }
-    });
+    );
   };
 
   const handleMobileNumberChange = (e) => {
