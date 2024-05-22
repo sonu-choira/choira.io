@@ -1,193 +1,161 @@
-import React, { useState } from "react";
-import { MdAddAPhoto, MdOutlineSettings } from "react-icons/md";
-import { IoMdAddCircle } from "react-icons/io";
-import upload from "../../assets/img/upload.png";
+import React, { useEffect, useState } from "react";
+import { GrSubtractCircle, GrAddCircle } from "react-icons/gr";
 import style from "../../pages/admin/studios/studio.module.css";
+import { useLocation } from "react-router-dom";
+import ChoiraLoder2 from "../loader/ChoiraLoder2";
 
-import {
-  FaCheckDouble,
-  FaFilter,
-  FaRegBell,
-  FaRegClock,
-  FaShare,
-} from "react-icons/fa6";
-import StudioFooter from "./StudioFooter";
-import WebDashboard2 from "../../pages/produce/WebDashBoard2";
-import { IoSearch } from "react-icons/io5";
-import { GoDotFill } from "react-icons/go";
-import { useLocation, useNavigate } from "react-router-dom";
-
-function ChooseTimeSlot({ setSelectTab }) {
+function ChooseTimeSlot({
+  allTimeSlots,
+  hitapi,
+  timeSlotApiData,
+  setallTimeSlots,
+}) {
   const data = useLocation();
-  const [tabCount, setTabCount] = useState();
-  const navCount = data?.state?.navCount;
-  const days = [
-    { id: "Monday", label: "Monday" },
-    { id: "Tuesday", label: "Tuesday" },
-    { id: "wednesday", label: "wednesday" },
-    { id: "thursday", label: "thursday" },
-    { id: "friday", label: "friday" },
-    { id: "Saturday", label: "Saturday" },
-    { id: "sunday", label: "sunday" },
-  ];
-  const amenitiesList = [
-    { id: "wifi", label: "Wifi" },
-    { id: "ac", label: "AC" },
-    { id: "dj", label: "DJ" },
-    { id: "piano", label: "Piano" },
-    { id: "drum", label: "Drum" },
-    { id: "carparking", label: "Car Parking" },
-    { id: "banjo", label: "Banjo" },
-  ];
 
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [selectedDate, setSelectedDate] = useState([]);
+  const [counter, setCounter] = useState(1);
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
-  const handleCheckboxChange = (id) => {
-    const updatedAmenities = selectedAmenities.includes(id)
-      ? selectedAmenities.filter((amenity) => amenity !== id)
-      : [...selectedAmenities, id];
-
-    setSelectedAmenities(updatedAmenities);
-    console.log(selectedAmenities);
+  const handelCounter = (type) => {
+    setCounter((prevCounter) => {
+      if (type === "add" && prevCounter < 24) {
+        let ans = prevCounter + 1;
+        timeSlotApiData.current.bookingHours = ans;
+        return ans;
+      } else if (type === "sub" && prevCounter > 1) {
+        let ans = prevCounter - 1;
+        timeSlotApiData.current.bookingHours = ans;
+        return ans;
+      }
+      return prevCounter;
+    });
   };
-  const handledaysCheckboxChange = (id) => {
-    const updaeddays = selectedDate.includes(id)
-      ? selectedDate.filter((day) => day !== id)
-      : [...selectedDate, id];
 
-    setSelectedDate(updaeddays);
-    console.log(selectedDate);
+  useEffect(async () => {
+    await setallTimeSlots({});
+    hitapi();
+  }, [counter]);
+
+  const allSlots = allTimeSlots?.allSlots || [];
+  const availableSlots = allTimeSlots?.availableSlots || [];
+  const bookedSlots = allTimeSlots?.bookedSlots || [];
+
+  // Find unavailable slots by checking which allSlots are not in availableSlots
+  let unavailableSlots = allSlots.filter((slot) => {
+    return !availableSlots.some(
+      (availableSlot) =>
+        availableSlot.startTime === slot.startTime &&
+        availableSlot.endTime === slot.endTime
+    );
+  });
+
+  // Combine unavailableSlots and bookedSlots
+  unavailableSlots = [...unavailableSlots, ...bookedSlots];
+
+  console.log("unavailableSlots", unavailableSlots);
+
+  const chunkArray = (array, size) => {
+    const result = [];
+    for (let i = 0; i < array.length; i += size) {
+      result.push(array.slice(i, i + size));
+    }
+    return result;
   };
-  const [iframeCode, setIframeCode] = useState("");
-  const [hasContent, setHasContent] = useState(false);
 
-  const handleIframeCodeChange = (e) => {
-    const inputCode = e.target.value;
+  useEffect(() => {
+    console.log("selectedSlot", selectedSlot);
+  }, [selectedSlot]);
 
-    // Update the state with the user-entered iframe code
-    setIframeCode(inputCode);
+  const chunkedTimeSlots = chunkArray(allSlots, 4);
 
-    // Update hasContent state based on whether there is content in the textarea
-    setHasContent(inputCode.trim() !== "");
+  const handleSlotClick = (slot) => {
+    if (
+      unavailableSlots.some(
+        (unavailableSlot) =>
+          unavailableSlot.startTime === slot.startTime &&
+          unavailableSlot.endTime === slot.endTime
+      )
+    ) {
+      return; // Do nothing if the slot is unavailable
+    }
+
+    if (slot === selectedSlot) {
+      setSelectedSlot(null); // Deselect the slot if it's already selected
+    } else {
+      setSelectedSlot(slot); // Select the clicked slot
+    }
   };
-  const navigate = useNavigate();
-  const backOnclick = () => {
-    navigate("/adminDashboard");
-  };
+  console.log(!allTimeSlots?.status);
+  console.log(allTimeSlots);
+
   return (
-    <>
-      <div className={style.wrapper}>
-        <WebDashboard2
-          navCount={navCount}
-          tabCount={tabCount}
-          setTabCount={setTabCount}
-        />
-        <div className={style.studioMainScreen}>
-          <div className={style.studioHeader}>
+    <div className={style.timeSlotDiv}>
+      {!allTimeSlots?.status ? (
+        <ChoiraLoder2 />
+      ) : (
+        <div className={style.mainSlotDiv}>
+          <div>
             <div>
-              <input type="text" placeholder="search" />
+              <h3>Choose Time Slot</h3>
             </div>
-            <div>
-              <IoSearch />
-            </div>
-            <div>
-              <div className={style.notifyIcon}>
-                <GoDotFill />
-              </div>
-              <FaRegBell />
-            </div>
-            <div>
-              <MdOutlineSettings />
-            </div>
-          </div>
-          <div className={style.addNewStudioTitle}>Slot Booking</div>
-          <div className={style.addNewStudioPage}>
-            <div style={{ height: "80%" }}>
+            <div className={style.counterMaindiv}>
               <div>
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="UserName">User Name</label>
-                  <input
-                    type="text"
-                    id="UserName"
-                    placeholder="Enter User Name"
-                  />
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Mobilenumber">Mobile number</label>
-                  <input
-                    type="text"
-                    id="Mobilenumber"
-                    placeholder="Enter Mobile number"
-                  />
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Email">Email</label>
-                  <input type="email" id="Email" placeholder="Enter Email id" />
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label>Booking Hours</label>
-
-                  <select>
-                    <option>Choose Booking Hours</option>
-                    <option>1 Hour</option>
-                    <option>2 Hour</option>
-                    <option>3 Hour</option>
-                    <option>4 Hour</option>
-                    <option>5 Hour</option>
-                  </select>
-                </div>
+                <b>Choose</b>
+                <small>Hour 1-24</small>
               </div>
-              {/* secod side  */}
-              <div>
-                <div className={style.addNewStudioinputBox}>
-                  <label>Studio</label>
-
-                  <select>
-                    <option>Select Studio</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </div>
-                <div className={style.addNewStudioinputBox}>
-                  <label>Room</label>
-
-                  <select>
-                    <option>Select Room</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Date">Date</label>
-                  <input type="date" id="RoomArea" placeholder="Enter Date" />
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="TimeSlot">Time Slot</label>
-                  <input
-                    type="time"
-                    id="TimeSlot"
-                    placeholder="Enter Time Slot"
-                  />
-                </div>
+              <div className={style.counterDiv}>
+                <GrSubtractCircle
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    handelCounter("sub");
+                  }}
+                />
+                <p>{counter}</p>
+                <GrAddCircle
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    handelCounter("add");
+                  }}
+                />
               </div>
             </div>
           </div>
-          <StudioFooter setSelectTab={setSelectTab} backOnclick={backOnclick} />
+          <div className={style.allSlots}>
+            {chunkedTimeSlots.map((chunk, index) => (
+              <div key={index} className={style.selectSlotDiv}>
+                {chunk.map((slot, idx) => (
+                  <div
+                    key={idx}
+                    className={`${style.slots} ${
+                      slot === selectedSlot ? style.selected : ""
+                    } ${
+                      unavailableSlots.some(
+                        (unavailableSlot) =>
+                          unavailableSlot.startTime === slot.startTime &&
+                          unavailableSlot.endTime === slot.endTime
+                      )
+                        ? style.unavailable
+                        : ""
+                    }`}
+                    onClick={() => handleSlotClick(slot)}
+                    style={{
+                      cursor: unavailableSlots.some(
+                        (unavailableSlot) =>
+                          unavailableSlot.startTime === slot.startTime &&
+                          unavailableSlot.endTime === slot.endTime
+                      )
+                        ? "not-allowed"
+                        : "pointer",
+                    }}
+                  >
+                    {slot.startTime} - {slot.endTime}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 }
 
