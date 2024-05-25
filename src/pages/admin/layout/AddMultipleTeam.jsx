@@ -24,23 +24,25 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
     console.log(teamDetails);
   };
 
-  // useEffect(() => {
-  //   const updatedTeamDetails = teamDetails.map((team, index) => ({
-  //     ...team,
-  //     id: index + 1,
-  //   }));
-  //   setTeamsDetails([...updatedTeamDetails]);
-  // }, [teamDetails.length]);
-
   const handlePhotoChange = (event, index) => {
-    console.log("event.target.files[0]");
-    console.log(event.target.files[0]);
+    const imageFile = event.target.files[0];
+
+    if (imageFile.size > 1048576) {
+      Swal.fire({
+        icon: "error",
+        title: "File too large",
+        text: "Each file should be less than 1MB",
+        showConfirmButton: true,
+      });
+      return;
+    }
+
     const newTeams = [...teamDetails];
-    newTeams[index].photo = event.target.files[0];
-    newTeams[index].imgUrl = event.target.files[0];
+    newTeams[index].photo = imageFile;
+    newTeams[index].imgUrl = imageFile;
     setTeamsDetails(newTeams);
-    let imagefile = event.target.files[0];
-    imageUploadapi.singleImgUpload(imagefile).then((response) => {
+
+    imageUploadapi.singleImgUpload(imageFile).then((response) => {
       console.log("Image links created:", response.imageUrl);
       const newTeams = [...teamDetails];
 
@@ -86,6 +88,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
   const hideAddPhotoIcon = (team, type) => {
     return team[type] ? { display: "none" } : {};
   };
+
   return (
     <>
       <div className={style.addTeamDetailDiv}>
@@ -115,18 +118,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                     {team.photo ? (
                       <div>
                         <img
-                          // src={URL.createObjectURL(team.photo)}
                           src={team.photo}
-                          // src={
-                          //   team.photo
-                          //     ? team.photo.startsWith("http")
-                          //       ? team.photo // If `team.photo[0]` is a string URL
-                          //       : team.photo instanceof Blob
-                          //       ? URL.createObjectURL(team.photo) // If `team.roomPhotos[0]` is a Blob, create a URL for it
-                          //       : undefined // Default to undefined if `team.roomPhotos[0]` is not a string URL or a Blob
-                          //     : undefined // Default to undefined if `team.roomPhotos` is an empty array
-                          // }
-                          // alt={`Team ${index} Photo`}
                           style={{
                             maxWidth: "100px",
                             maxHeight: "100px",
@@ -210,7 +202,6 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                   </label>
                   <input
                     type="file"
-                    // value={studioDetails?.teamDetails}
                     id={`uploadteamPhoto-${index}`}
                     style={{ display: "none" }}
                     onChange={(event) => handlePhotoChange(event, index)}
@@ -259,7 +250,6 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                   <input
                     type="text"
                     placeholder="designation"
-                    // value={team.profile}
                     onChange={(event) =>
                       handleInputChange(event, index, "designation")
                     }

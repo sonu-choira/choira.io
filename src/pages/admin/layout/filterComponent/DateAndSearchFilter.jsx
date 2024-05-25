@@ -45,16 +45,16 @@ function DateAndSearchFilter({
       value: [dayjs().add(-30, "d"), dayjs()],
     },
     {
-      label: "Last 3 Month",
-      value: [dayjs().add(-3, "m"), dayjs()],
+      label: "Last 90 Days",
+      value: [dayjs().add(-90, "d"), dayjs()],
     },
     {
       label: "Last 6 Month",
-      value: [dayjs().add(-6, "m"), dayjs()],
+      value: [dayjs().add(-180, "d"), dayjs()],
     },
     {
       label: "Last year",
-      value: [dayjs().add(-1, "y"), dayjs()],
+      value: [dayjs().add(-365, "d"), dayjs()],
     },
   ];
   // console.log(sendFilterDataToapi, "details ke andr mila");
@@ -276,12 +276,18 @@ function DateAndSearchFilter({
     <>
       <div className={style.searchDiv}>
         <div>
-          {/* <DatePicker onChange={onChange} /> */}
-          <RangePicker
-            presets={rangePresets}
-            onChange={onRangeChange}
-            className={style.antCustomcss}
-          />
+          {userFiler ? (
+            <RangePicker
+              presets={rangePresets}
+              onChange={onRangeChange}
+              className={style.antCustomcss}
+            />
+          ) : (
+            <DatePicker
+              onChange={onChange}
+              style={{ width: "100%", height: "100%" }}
+            />
+          )}
         </div>
         <div>
           <BiSearchAlt /> <br />

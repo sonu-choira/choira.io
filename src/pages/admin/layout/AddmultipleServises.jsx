@@ -55,10 +55,16 @@ function AddmultipleServises({
 
   const handleInputChange = (event, index, field) => {
     const newTeams = [...service];
-    newTeams[index][field] = event.target.value;
+
+    // Check if the input type is number and convert the value
+    const value =
+      event.target.type === "number"
+        ? parseInt(event.target.value, 10)
+        : event.target.value;
+
+    newTeams[index][field] = value;
     setService(newTeams);
   };
-
   const handleCancelImage = (index) => {
     const newTeams = [...service];
     newTeams[index].photo_url = null;
@@ -126,7 +132,7 @@ function AddmultipleServises({
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
-                    type="text"
+                    type="number"
                     placeholder=""
                     value={team.price}
                     onChange={(event) =>
@@ -206,7 +212,7 @@ function AddmultipleServises({
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
-                    type="text"
+                    type="number"
                     placeholder=""
                     value={team.price}
                     onChange={(event) =>

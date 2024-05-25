@@ -59,11 +59,11 @@ function AddNewServices2({
       const tempaminities = currentServiceData?.amenites;
       console.log("tempaminities:", tempaminities);
       if (tempaminities && tempaminities.length > 0) {
-        const slectedtempaminities = tempaminities.map(
+        const selectedtempaminities = tempaminities.map(
           (item) => item?.name || item
         );
-        console.log("selectedDateNames:", slectedtempaminities);
-        setSelectedItems(slectedtempaminities);
+        console.log("selectedDateNames:", selectedtempaminities);
+        setSelectedItems(selectedtempaminities);
       } else {
         setSelectedItems([]);
       }
@@ -180,17 +180,36 @@ function AddNewServices2({
     { "USA($)": "" },
     { "Japan(¥)": "" },
   ]);
-  const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState([[]]);
-  // const [filteredCountryData, setFilteredCountryData] = useState([
-  //   { "India(₹)": "" },
-  //   { "USA($)": "" },
-  //   { "Japan(¥)": "" },
-  // ]);
+
+  let apiCountryPrice = currentServiceData?.pricing;
+  console.log("apiCountryPrice", apiCountryPrice);
+
+  // Function to handle country selection
+  const [selectedCountry, setSelectedCountry] = useState(
+    isEditMode && apiCountryPrice ? Object.keys(apiCountryPrice) : []
+  );
+
+  const [countryPrice, setCountryPrice] = useState(
+    isEditMode && apiCountryPrice
+      ? Object.values(apiCountryPrice).map((country) => country.price)
+      : []
+  );
+
+  const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState(
+    isEditMode && selectedCountry.length > 0
+      ? Array(selectedCountry.length).fill([])
+      : [[]]
+  );
+
+  useEffect(() => {
+    console.log("selectedCountry");
+    console.log(selectedCountry);
+  }, [selectedCountry]);
 
   const [filteredCountryData, setFilteredCountryData] = useState([
-    "India(₹)",
-    "USA($)",
-    "Japan(¥)",
+    "IN",
+    "USA",
+    "JP",
   ]);
 
   const [countryWithPrice2, setCountryWithPrice2] = useState([
@@ -208,15 +227,6 @@ function AddNewServices2({
     console.log(addMultiplePriceDiv);
   }, [addMultiplePriceDiv]);
 
-  // Function to handle country selection
-  const [selectedCountry, setSelectedCountry] = useState([]);
-  useEffect(() => {
-    console.log("selectedCountry");
-    console.log(selectedCountry);
-  }, [selectedCountry]);
-
-  const [countryPrice, setCountryPrice] = useState([]);
-
   const handleCountrySelect = (fnselectedCountry, index) => {
     console.log("------------");
     setSelectedCountry((prev) => {
@@ -224,6 +234,13 @@ function AddNewServices2({
       return [...prev];
     });
   };
+
+  // const selectedCountry = Object.keys(apiCountryPrice);
+
+  // // Extracting countryPrice from apiCountryPrice
+  // const countryPrice = Object.values(apiCountryPrice).map(
+  //   (country) => country.price
+  // );
 
   const handleCancelcountry = (index) => {
     if (addMultiplePriceDiv.length > 1) {
@@ -261,29 +278,33 @@ function AddNewServices2({
 
   useEffect(() => {
     if (countryWithPriceobj && Object.keys(countryWithPriceobj).length > 0) {
+      console.log("---------------------checking");
+
       setService((prevService) => {
         return prevService.map((item, index) => {
           if (index === indexofServices) {
+            console.log("---------------------checking222");
+
             return {
               ...item,
               pricing: {
                 ...(item.pricing || {}), // Ensure pricing object is defined
                 USA: {
                   ...(item.pricing?.USA || {}), // Ensure USA object is defined
-                  basePrice: countryWithPriceobj["USA($)"] || 0,
+                  basePrice: countryWithPriceobj["USA"] || 0,
                 },
                 IN: {
                   ...(item.pricing?.IN || {}), // Ensure IN object is defined
-                  basePrice: countryWithPriceobj["India(₹)"] || 0,
+                  basePrice: countryWithPriceobj["IN"] || 0,
                 },
                 JP: {
                   ...(item.pricing?.JP || {}), // Ensure JP object is defined
-                  basePrice: countryWithPriceobj["Japan(¥)"] || 0,
+                  basePrice: countryWithPriceobj["JP"] || 0,
                 },
               },
             };
           } else {
-            return item;
+            return { ...item };
           }
         });
       });
@@ -327,7 +348,11 @@ function AddNewServices2({
                   >
                     {selectedCountry[index] ? (
                       <option value={selectedCountry[index]}>
-                        {selectedCountry[index]}
+                        {selectedCountry[index] == "IN"
+                          ? "India(₹)"
+                          : selectedCountry[index] == "USA"
+                          ? "USA($)"
+                          : "Japan(¥)"}
                       </option>
                     ) : (
                       <option value="" default>

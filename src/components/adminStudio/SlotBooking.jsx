@@ -62,6 +62,7 @@ function SlotBooking({ setSelectTab }) {
 
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [selectedDate, setSelectedDate] = useState([]);
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
   const handleCheckboxChange = (id) => {
     const updatedAmenities = selectedAmenities.includes(id)
@@ -124,6 +125,19 @@ function SlotBooking({ setSelectTab }) {
   }, [selectRooms]);
   const [allTimeSlots, setallTimeSlots] = useState({});
 
+  let hitapi = () => {
+    timeSlotApi
+      .getAllSolts(timeSlotApiData.current)
+      .then((res) => {
+        console.log(res);
+        setshowAllSlots(true);
+        setallTimeSlots(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     console.log("timeSlotApiData");
     console.log(timeSlotApiData);
@@ -147,20 +161,36 @@ function SlotBooking({ setSelectTab }) {
     // If all fields are filled, call the API
     hitapi();
   };
-
-  let hitapi = () => {
-    timeSlotApi
-      .getAllSolts(timeSlotApiData.current)
-      .then((res) => {
-        console.log(res);
-        setshowAllSlots(true);
-        setallTimeSlots(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handelSavebtn = () => {
+    if (showAllSlots) {
+      if (selectedSlot) {
+        setshowAllSlots(false);
+      } else {
+        alert("Please choose a slot");
+      }
+    } else if (selectedSlot) {
+      alert("sendingData to api");
+      timeSlotApi
+        .getAllSolts(timeSlotApiData.current)
+        .then((res) => {
+          console.log(res);
+          setshowAllSlots(true);
+          setallTimeSlots(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
-  console.log("testing..............");
+  const [disabled, setDisabled] = useState(true);
+  const handelUsertype = (val) => {
+    if (val == "registered") {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  };
+
   return (
     <>
       <div className={style.wrapper}>
@@ -194,17 +224,36 @@ function SlotBooking({ setSelectTab }) {
               setallTimeSlots={setallTimeSlots}
               hitapi={hitapi}
               timeSlotApiData={timeSlotApiData}
+              selectedSlot={selectedSlot}
+              setSelectedSlot={setSelectedSlot}
             />
           ) : (
             <div className={style.addNewStudioPage}>
               <div style={{ height: "80%" }}>
                 <div>
                   <div className={style.addNewStudioinputBox}>
+                    <label htmlFor="UserName">Select User type</label>
+                    <select
+                      name=""
+                      id=""
+                      onChange={(event) => {
+                        handelUsertype(event.target.value);
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Select User type
+                      </option>
+                      <option value="registered">Registered</option>
+                      <option value="offline">Offline</option>
+                    </select>
+                  </div>
+                  <div className={style.addNewStudioinputBox}>
                     <label htmlFor="UserName">User Name</label>
                     <input
                       type="text"
                       id="UserName"
                       placeholder="Enter User Name"
+                      disabled={disabled}
                       onChange={(e) => {
                         timeSlotApiData.current.userName = e.target.value;
                       }}
@@ -221,6 +270,7 @@ function SlotBooking({ setSelectTab }) {
                       onChange={(e) => {
                         timeSlotApiData.current.mobile = e.target.value;
                       }}
+                      disabled={disabled}
                       // value={timeSlotApiData.current?.mobile}
                     />
                   </div>
@@ -234,6 +284,7 @@ function SlotBooking({ setSelectTab }) {
                       onChange={(e) => {
                         timeSlotApiData.current.email = e.target.value;
                       }}
+                      disabled={disabled}
                       // value={timeSlotApiData.current?.email}
                     />
                   </div>
@@ -325,7 +376,11 @@ function SlotBooking({ setSelectTab }) {
             </div>
           )}
 
-          <StudioFooter setSelectTab={setSelectTab} backOnclick={backOnclick} />
+          <StudioFooter
+            sname={showAllSlots ? "Save" : "Book"}
+            backOnclick={backOnclick}
+            saveOnclick={handelSavebtn}
+          />
         </div>
       </div>
     </>

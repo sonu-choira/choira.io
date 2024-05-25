@@ -152,6 +152,7 @@ function TeamsActionBar({
               height: "50%",
               width: "15%",
               gap: "5%",
+              backgroundColor: "#ADB5BD",
             }}
             // onClick={
             //   pagetype == "apps" ? downloadAllData : downloadBookingsData
@@ -161,7 +162,12 @@ function TeamsActionBar({
             <Button
               name={"Slot Booking"}
               icon={<LuFilePlus />}
-              style={{ height: "50%", width: "20%", gap: "5%" }}
+              style={{
+                height: "50%",
+                width: "20%",
+                gap: "5%",
+                backgroundColor: "#ADB5BD",
+              }}
               onClick={gotoSlotBooking}
             />
           ) : (
@@ -176,10 +182,15 @@ function TeamsActionBar({
             <Button
               name={"Add New"}
               onClick={() => {
-                gotoAddNew(teamsPageCount);
+                // gotoAddNew(teamsPageCount);
               }}
               icon={<MdNoteAdd />}
-              style={{ height: "50%", width: "18%", gap: "5%" }}
+              style={{
+                height: "50%",
+                width: "18%",
+                gap: "5%",
+                backgroundColor: "#ADB5BD",
+              }}
             />
           ) : (
             ""

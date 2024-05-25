@@ -10,14 +10,6 @@ import ChoiraLoder2 from "../../../components/loader/ChoiraLoder2";
 import loder from "../../../assets/gifs/loading.gif";
 
 function DragAndDropImageDiv({ images, setImages, isEditMode }) {
-  // to use this drag and drop component please pass a prop of use state
-  // const [images, setImages] = useState([]);
-
-  // and isEditMode
-
-  // useEffect(() => {
-  //   setShouldUpload(true);
-  // }, [images.length]);
   const [showloader, setshowloader] = useState(false);
 
   const uploadimagetoDataBase = (e) => {
@@ -37,6 +29,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
         .multipleImgUpload(images)
         .then((response) => {
           console.log("Image links created:", response.images);
+          console.log(response);
           if (response.images) {
             setshowloader(false);
 
@@ -45,8 +38,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
             for (let imgurl of images) {
               try {
                 if (imgurl.includes("http")) {
-                  // Change `include` to `includes`
-                  testarry.push(imgurl); // Add the valid URL to testarry
+                  testarry.push(imgurl);
                 }
               } catch (error) {
                 console.error("Error in loop:", error);
@@ -57,8 +49,6 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
             testarry = [...testarry, ...response.images];
             console.log("testarry.........", testarry);
             setImages(testarry);
-
-            // Update the images state with testarry
 
             Swal.fire({
               title: "Images uploaded!",
@@ -76,16 +66,32 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
   };
 
   useEffect(() => {
-    console.log("images chmaghe huaa hai ", images);
+    console.log("images changed", images);
   }, [images]);
+
   const [isOver, setIsOver] = useState(false);
+
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
-    const newImages = [
-      ...images,
-      ...selectedImages.slice(0, 5 - images.length),
-    ];
-    setImages(newImages);
+    const newImages = [];
+
+    selectedImages.forEach((image) => {
+      if (image.size > 1048576) {
+        Swal.fire({
+          icon: "error",
+          title: "File too large",
+          text: "Each file should be less than 1MB",
+          showConfirmButton: true,
+        });
+      } else {
+        newImages.push(image);
+      }
+    });
+
+    setImages((prevImages) => [
+      ...prevImages,
+      ...newImages.slice(0, 5 - images.length),
+    ]);
   };
 
   const handleRemoveImage = (index) => {
@@ -110,7 +116,6 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
     const draggedIndex = event.dataTransfer.getData("text/plain");
     const droppedIndex = images.length;
 
-    // Prevent dropping the item back into its original position
     if (draggedIndex === droppedIndex.toString()) {
       return;
     }
@@ -122,6 +127,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
 
     setImages(newImages);
   };
+
   return (
     <>
       <form
@@ -170,14 +176,13 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
                           }}
                         >
                           <img
-                            // src={imageUrl}
                             src={
                               typeof imageUrl === "string" &&
                               imageUrl.startsWith("http")
                                 ? imageUrl
-                                : typeof imageUrl === "object" // Check if it's an object (e.g., File or Blob)
+                                : typeof imageUrl === "object"
                                 ? URL.createObjectURL(imageUrl)
-                                : "" // Default to undefined if imageUrl is not a string or object
+                                : ""
                             }
                             alt={`Uploaded Image ${index + 1}`}
                             style={{
@@ -210,9 +215,9 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
                               typeof image === "string" &&
                               image.startsWith("http")
                                 ? image
-                                : typeof image === "object" // Check if it's an object (e.g., File or Blob)
+                                : typeof image === "object"
                                 ? URL.createObjectURL(image)
-                                : undefined // Default to undefined if imageUrl is not a string or object
+                                : undefined
                             }
                             alt={`Uploaded Image ${index + 1}`}
                             style={{

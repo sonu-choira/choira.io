@@ -15,6 +15,7 @@ import userApi from "../../services/userApi";
 import imageNotFound from "../../assets/imagesNotFound.png";
 import { FaRegEye } from "react-icons/fa";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
+import UserProfile from "./UserProfile";
 
 let userAllFilterData = {
   sortfield: "",
@@ -158,263 +159,272 @@ function ShowAllUser() {
     setShortByEmail(!shortByEmail);
   };
   const [userFilterText, setUserFilterText] = useState("");
+  const [showUserProfile, setShowUserProfile] = useState(false);
 
   return (
-    <div
-      className={style.allStudioDetailsPage}
-      // style={{ border: "2px solid red" }}
-    >
-      <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
-        <div>
-          <div style={{ background: "none" }}>All User</div>
-        </div>
-        <div>
-          <Button
-            name={"Export"}
-            icon={<FaDownload />}
-            style={{ height: "60%", gap: "5%" }}
-          />
-        </div>
-      </div>
+    <>
+      {showUserProfile ? (
+        <UserProfile />
+      ) : (
+        <>
+          <div className={style.allStudioDetailsPage}>
+            <div
+              className={style.bookingStudiobtn}
+              style={{ marginBottom: "2%" }}
+            >
+              <div>
+                <div style={{ background: "none" }}>All User</div>
+              </div>
+              <div>
+                <Button
+                  name={"Export"}
+                  icon={<FaDownload />}
+                  style={{ height: "60%", gap: "5%" }}
+                />
+              </div>
+            </div>
 
-      <div className={style.studioTabelDiv}>
-        <DateAndSearchFilter
-          // setProducts={setProducts}
-          // setTotalPage={setTotalPage}
-          // bookingPageCount={bookingPageCount}
-          // filterNav={filterNav}
-          // setfilterNav={setfilterNav}
-          // sendFilterDataToapi={sendFilterDataToapi}
-          // setSelectedCity={setSelectedCity}
-          // setSelectedRoom={setSelectedRoom}
-          // setSelectedStatus={setSelectedStatus}
-          // setPriceFilter={setPriceFilter}
-          // setShortby={setShortby}
-          // bookingPageCount={bookingPageCount}
-          // setfilterNav={setfilterNav}
-          setProducts={setProducts}
-          setTotalPage={setTotalPage}
-          pageCount={pageCount}
-          setPageCount={setPageCount}
-          userFiler={userFiler}
-          setUserFilterText={setUserFilterText}
-          userFilterText={userFilterText}
-          userAllFilterData={userAllFilterData}
-        />
-        <div>
-          <table>
-            <thead className={style.studiotabelHead}>
-              <tr>
-                <th style={{ width: "8%" }}>
-                  <div className={style.headingContainer}>
-                    S.No.
-                    <div
-                      className={style.filterBox}
-                      onClick={handleSortBySrNo}
-                      style={{
-                        backgroundColor: shortBySrNo ? "#ffc70133" : "",
-                      }}
-                    >
-                      <RiExpandUpDownLine />
-                    </div>
-                  </div>
-                </th>
-                <th style={{ width: "20%" }}>
-                  <div className={style.headingContainer}>
-                    Users
-                    <div
-                      className={style.filterBox}
-                      onClick={handleSortByUser}
-                      style={{
-                        backgroundColor: shortByUser ? "#ffc70133" : "",
-                      }}
-                    >
-                      <span
-                      //  onClick={handelpriceFilter}
-                      >
-                        <RiExpandUpDownLine />
-                      </span>
-                    </div>
-                  </div>
-                </th>
+            <div className={style.studioTabelDiv}>
+              <DateAndSearchFilter
+                // setProducts={setProducts}
+                // setTotalPage={setTotalPage}
+                // bookingPageCount={bookingPageCount}
+                // filterNav={filterNav}
+                // setfilterNav={setfilterNav}
+                // sendFilterDataToapi={sendFilterDataToapi}
+                // setSelectedCity={setSelectedCity}
+                // setSelectedRoom={setSelectedRoom}
+                // setSelectedStatus={setSelectedStatus}
+                // setPriceFilter={setPriceFilter}
+                // setShortby={setShortby}
+                // bookingPageCount={bookingPageCount}
+                // setfilterNav={setfilterNav}
+                setProducts={setProducts}
+                setTotalPage={setTotalPage}
+                pageCount={pageCount}
+                setPageCount={setPageCount}
+                userFiler={userFiler}
+                setUserFilterText={setUserFilterText}
+                userFilterText={userFilterText}
+                userAllFilterData={userAllFilterData}
+              />
+              <div>
+                <table>
+                  <thead className={style.studiotabelHead}>
+                    <tr>
+                      <th style={{ width: "8%" }}>
+                        <div className={style.headingContainer}>
+                          S.No.
+                          <div
+                            className={style.filterBox}
+                            onClick={handleSortBySrNo}
+                            style={{
+                              backgroundColor: shortBySrNo ? "#ffc70133" : "",
+                            }}
+                          >
+                            <RiExpandUpDownLine />
+                          </div>
+                        </div>
+                      </th>
+                      <th style={{ width: "20%" }}>
+                        <div className={style.headingContainer}>
+                          Users
+                          <div
+                            className={style.filterBox}
+                            onClick={handleSortByUser}
+                            style={{
+                              backgroundColor: shortByUser ? "#ffc70133" : "",
+                            }}
+                          >
+                            <span
+                            //  onClick={handelpriceFilter}
+                            >
+                              <RiExpandUpDownLine />
+                            </span>
+                          </div>
+                        </div>
+                      </th>
 
-                <th style={{ width: "10%" }}>
-                  <div className={style.headingContainer}>
-                    Mobile
-                    <div
-                      className={style.filterBox}
-                      style={{
-                        visibility: "hidden",
-                      }}
-                    >
-                      <span
-                      //  onClick={handellocationFilter}
-                      >
-                        <RiExpandUpDownLine />
-                      </span>
-                    </div>
-                  </div>
-                </th>
-                <th style={{ width: "20%" }}>
-                  <div className={style.headingContainer}>
-                    Email
-                    <div
-                      className={style.filterBox}
-                      onClick={handleSortByEmail}
-                      style={{
-                        backgroundColor: shortByEmail ? "#ffc70133" : "",
-                      }}
-                    >
-                      <span
-                      // onClick={handelRoomFilter}
-                      >
-                        <RiExpandUpDownLine />
-                      </span>
-                    </div>
-                  </div>
-                </th>
-                <th style={{ width: "10%" }}>
-                  <div className={style.headingContainer}>
-                    Created on
-                    <div
-                      className={style.filterBox}
-                      style={{
-                        visibility: "hidden",
-                      }}
-                    >
-                      <span
-                      // onClick={handelRoomFilter}
-                      >
-                        <CiFilter />
-                      </span>
-                    </div>
-                  </div>
-                </th>
-                <th style={{ width: "10%" }}>
-                  <div className={style.headingContainer}>
-                    Activity Status
-                    <div
-                      className={style.filterBox}
-                      style={{
-                        backgroundColor:
-                          selectedStatus.length > 0 ? "#ffc70133" : "",
-                      }}
-                    >
-                      <span onClick={handelStatusFilter}>
-                        <CiFilter />
-                      </span>
-                      {showstatusFilter ? (
-                        <CheckboxFilter
-                          data={status}
-                          cusstyle={{ left: "-355%" }}
-                          disabledsearch={true}
-                          selectedData={selectedStatus}
-                          setSelectedData={setSelectedStatus}
-                          // sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          pageCount={pageCount}
-                          setPageCount={setPageCount}
-                          // bookingPageCount={bookingPageCount}
-                          // setfilterNav={setfilterNav}
-                          closeAllFilter={closeAllFilter}
-                          userFiler={userFiler}
-                          userAllFilterData={userAllFilterData}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {products?.length === 0 ? (
-                <ChoiraLoder2 />
-              ) : (
-                products?.map((products, index) => {
-                  return (
-                    <tr key={products._id}>
-                      <td
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          height: "100%",
-                        }}
-                      >
-                        {index + 1 * (pageCount - 1) * 10 + 1}
-                      </td>
-                      <td
-                        style={{
-                          // border: "1px solid red",
-                          height: "100%",
-                          width: "20%",
-                        }}
-                      >
-                        <td
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            // justifyContent: "space-around",
-                            height: "100%",
-                            width: "100%",
-                            // border: "1px solid #e6e6e6",
-                          }}
-                        >
-                          <div className={style.studioImage}>
-                            {products.studioPhotos ? (
-                              <img
-                                src={products.profileUrl}
-                                alt=""
-                                onError={(e) => {
-                                  e.target.src = imageNotFound;
-                                }}
+                      <th style={{ width: "10%" }}>
+                        <div className={style.headingContainer}>
+                          Mobile
+                          <div
+                            className={style.filterBox}
+                            style={{
+                              visibility: "hidden",
+                            }}
+                          >
+                            <span
+                            //  onClick={handellocationFilter}
+                            >
+                              <RiExpandUpDownLine />
+                            </span>
+                          </div>
+                        </div>
+                      </th>
+                      <th style={{ width: "20%" }}>
+                        <div className={style.headingContainer}>
+                          Email
+                          <div
+                            className={style.filterBox}
+                            onClick={handleSortByEmail}
+                            style={{
+                              backgroundColor: shortByEmail ? "#ffc70133" : "",
+                            }}
+                          >
+                            <span
+                            // onClick={handelRoomFilter}
+                            >
+                              <RiExpandUpDownLine />
+                            </span>
+                          </div>
+                        </div>
+                      </th>
+                      <th style={{ width: "10%" }}>
+                        <div className={style.headingContainer}>
+                          Created on
+                          <div
+                            className={style.filterBox}
+                            style={{
+                              visibility: "hidden",
+                            }}
+                          >
+                            <span
+                            // onClick={handelRoomFilter}
+                            >
+                              <CiFilter />
+                            </span>
+                          </div>
+                        </div>
+                      </th>
+                      <th style={{ width: "10%" }}>
+                        <div className={style.headingContainer}>
+                          Activity Status
+                          <div
+                            className={style.filterBox}
+                            style={{
+                              backgroundColor:
+                                selectedStatus.length > 0 ? "#ffc70133" : "",
+                            }}
+                          >
+                            <span onClick={handelStatusFilter}>
+                              <CiFilter />
+                            </span>
+                            {showstatusFilter ? (
+                              <CheckboxFilter
+                                data={status}
+                                cusstyle={{ left: "-355%" }}
+                                disabledsearch={true}
+                                selectedData={selectedStatus}
+                                setSelectedData={setSelectedStatus}
+                                // sendFilterDataToapi={sendFilterDataToapi}
+                                setProducts={setProducts}
+                                setTotalPage={setTotalPage}
+                                pageCount={pageCount}
+                                setPageCount={setPageCount}
+                                // bookingPageCount={bookingPageCount}
+                                // setfilterNav={setfilterNav}
+                                closeAllFilter={closeAllFilter}
+                                userFiler={userFiler}
+                                userAllFilterData={userAllFilterData}
                               />
                             ) : (
-                              <img src={imageNotFound} alt="" />
+                              ""
                             )}
                           </div>
-                          <br />
-                          &nbsp;&nbsp;{products.fullName}
-                        </td>
-                      </td>
-
-                      <td>{products.phone}</td>
-                      <td>{products.email}</td>
-                      <td>{products.creationTimeStamp}</td>
-                      <td className={style.tableActionbtn}>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-around",
-                          }}
-                        >
-                          <FaRegEye style={{ cursor: "pointer" }} />
-
-                          <RiDeleteBin5Fill
-                            style={{ color: "red", cursor: "pointer" }}
-                          />
                         </div>
-                      </td>
+                      </th>
                     </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div className={style.tabelpaginationDiv}>
-        <PaginationNav
-          pageCount={pageCount}
-          totalPage={totalPage}
-          setPageCount={setPageCount}
-          // bookingPageCount={bookingPageCount}
-        />
-      </div>
-    </div>
+                  </thead>
+                  <tbody>
+                    {products?.length === 0 ? (
+                      <ChoiraLoder2 />
+                    ) : (
+                      products?.map((products, index) => {
+                        return (
+                          <tr key={products._id}>
+                            <td
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                height: "100%",
+                              }}
+                            >
+                              {index + 1 * (pageCount - 1) * 10 + 1}
+                            </td>
+                            <td
+                              style={{
+                                // border: "1px solid red",
+                                height: "100%",
+                                width: "20%",
+                              }}
+                            >
+                              <td
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  // justifyContent: "space-around",
+                                  height: "100%",
+                                  width: "100%",
+                                  // border: "1px solid #e6e6e6",
+                                }}
+                              >
+                                <div className={style.studioImage}>
+                                  {products.studioPhotos ? (
+                                    <img
+                                      src={products.profileUrl}
+                                      alt=""
+                                      onError={(e) => {
+                                        e.target.src = imageNotFound;
+                                      }}
+                                    />
+                                  ) : (
+                                    <img src={imageNotFound} alt="" />
+                                  )}
+                                </div>
+                                <br />
+                                &nbsp;&nbsp;{products.fullName}
+                              </td>
+                            </td>
+
+                            <td>{products.phone}</td>
+                            <td>{products.email}</td>
+                            <td>{products.creationTimeStamp}</td>
+                            <td className={style.tableActionbtn}>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-around",
+                                }}
+                              >
+                                <FaRegEye style={{ cursor: "pointer" }} />
+
+                                <RiDeleteBin5Fill
+                                  style={{ color: "red", cursor: "pointer" }}
+                                />
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className={style.tabelpaginationDiv}>
+              <PaginationNav
+                pageCount={pageCount}
+                totalPage={totalPage}
+                setPageCount={setPageCount}
+                // bookingPageCount={bookingPageCount}
+              />
+            </div>
+          </div>{" "}
+        </>
+      )}
+    </>
   );
 }
 

@@ -39,9 +39,9 @@ function AddNewProduction({ setSelectTab }) {
   const navigate = useNavigate();
   const gotoadminpage = () => {
     if (bookingPageCount == "c2") {
-      navigate("/adminDashboard/Apps&More/musicproduction");
+      navigate("/adminDashboard/Apps&More/studio");
     } else if (bookingPageCount == "c3") {
-      navigate("/adminDashboard/Apps&More/mixmaster");
+      navigate("/adminDashboard/Apps&More/studio");
     }
   };
 
@@ -89,6 +89,7 @@ function AddNewProduction({ setSelectTab }) {
       },
     },
   ]);
+
   const [discography, setDiscography] = useState([""]);
 
   const [images, setImages] = useState([]);
@@ -119,17 +120,6 @@ function AddNewProduction({ setSelectTab }) {
     console.log("origiunal data", data?.state?.productData?.packages);
   }, [addNewServicesformData]);
 
-  // const [serviceData, setStudioDetails] = useState({
-  //   productionName: "",
-  //   services: "",
-  //   amenities: [],
-  //   about: "",
-  //   servicePhotos: [],
-  //   addOns: [],
-  //   discography: [],
-  //   // teams: [{ photo: null, name: "", profile: "" }],
-  // });
-
   const [serviceData, setServiceData] = useState({
     aboutUs: "",
     amenities: [],
@@ -140,7 +130,7 @@ function AddNewProduction({ setSelectTab }) {
     fullName: "",
     service_status: 0,
     packages: [],
-    price: "",
+    price: 0,
     reviews: [],
     servicePhotos: [],
     service_id: "",
@@ -154,36 +144,51 @@ function AddNewProduction({ setSelectTab }) {
     startingPrice: "",
     offerings: [],
     TotalServices: "",
-
     ServicePhotos: [],
     description: [],
     portfolio: [],
     userReviews: {},
     packages: [],
-
     type: bookingPageCount,
     isActive: 1,
   });
 
-  // useEffect(() => {
-  //   if (data.state?.productData) {
-  //     setSelectedItems(
-  //       productionData?.amenities?.map((item) => item?.name || item) || []
-  //     );
-  //   }
-  // }, [data.state?.productData]);
+  useEffect(() => {
+    // Check if there are packages and set the starting price from the first package
+    if (serviceData.packages.length > 0) {
+      const startingPrice = serviceData.packages[0].price || 0;
+      setServiceData((prev) => ({
+        ...prev,
+        price: startingPrice,
+      }));
+    }
+  }, [serviceData.packages]);
 
-  const handelSavebtn = () => {
-    const updatedData = {
-      ...sendataToApi, // Copy the current state
+  useEffect(() => {
+    setsendataToApi((prev) => ({
+      ...prev,
       serviceName: serviceData.fullName,
       startingPrice: serviceData.price,
       offerings: serviceData.amenities,
-      TotalServices: serviceData?.packages?.length,
+      TotalServices: serviceData.packages.length,
+      packages: serviceData.packages,
+      ServicePhotos: serviceData.servicePhotos,
+      description: serviceData.aboutUs,
+    }));
+  }, [serviceData]);
+
+  const handelSavebtn = () => {
+    const updatedData = {
+      ...sendataToApi,
+      serviceName: serviceData.fullName,
+      startingPrice: serviceData.price,
+      offerings: serviceData.amenities,
+      TotalServices: serviceData.packages.length,
       packages: serviceData.packages,
       ServicePhotos: images,
       description: serviceData.aboutUs,
     };
+
     console.log(updatedData);
     let hasError = false;
 
@@ -200,8 +205,8 @@ function AddNewProduction({ setSelectTab }) {
       }
     });
 
-    serviceData?.packages?.forEach((packages, roomIndex) => {
-      packages?.photo_url?.forEach((element, photoIndex) => {
+    serviceData.packages.forEach((packages, roomIndex) => {
+      packages.photo_url.forEach((element, photoIndex) => {
         if (typeof element === "object") {
           Swal.fire({
             icon: "error",
@@ -234,7 +239,7 @@ function AddNewProduction({ setSelectTab }) {
                 if (response) {
                   Swal.fire({
                     title: "Service Updated!",
-                    text: "Your Data  has been saved.",
+                    text: "Your Data has been saved.",
                     icon: "success",
                     showConfirmButton: false,
                     timer: 1800,
@@ -276,7 +281,7 @@ function AddNewProduction({ setSelectTab }) {
                 if (response) {
                   Swal.fire({
                     title: "Service Created!",
-                    text: "Your Data  has been saved.",
+                    text: "Your Data has been saved.",
                     icon: "success",
                     showConfirmButton: false,
                     timer: 1800,
@@ -304,17 +309,15 @@ function AddNewProduction({ setSelectTab }) {
       }
     }
   };
-  // useEffect(() => {
-  //   console.log("sendataToApi ===>", sendataToApi);
-  // }, [sendataToApi]);
 
+  // This useEffect will keep sendataToApi in sync with serviceData when serviceData changes
   useEffect(() => {
     setsendataToApi((prev) => ({
       ...prev,
       serviceName: serviceData.fullName,
       startingPrice: serviceData.price,
       offerings: serviceData.amenities,
-      TotalServices: serviceData?.packages?.length,
+      TotalServices: serviceData.packages.length,
       packages: serviceData.packages,
       servicePhotos: serviceData.servicePhotos,
       description: serviceData.aboutUs,

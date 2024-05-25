@@ -4,19 +4,26 @@ import { IoIosArrowBack } from "react-icons/io";
 import style from "../../pages/admin/studios/studio.module.css";
 import { useNavigate } from "react-router-dom";
 
-function StudioFooter({ backOnclick, saveOnclick, saveType, backType }) {
+function StudioFooter({
+  backOnclick,
+  saveOnclick,
+  saveType,
+  backType,
+  bname,
+  sname,
+}) {
   return (
     <>
       <div className={style.studioFooter}>
         <Button
-          name={"Back"}
+          name={bname ? bname : "Back"}
           icon={<IoIosArrowBack />}
           style={{ height: "55%" }}
           onClick={backOnclick}
           type={backType}
         />
         <Button
-          name={"Save"}
+          name={sname ? sname : "Save"}
           onClick={saveOnclick}
           style={{ height: "55%" }}
           type={saveType}

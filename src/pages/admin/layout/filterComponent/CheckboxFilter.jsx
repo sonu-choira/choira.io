@@ -64,8 +64,8 @@ function CheckboxFilter({
       if (selectedData == "active") {
         status = 1;
         userAllFilterData.status = status;
-      } else {
-        status = 0;
+      } else if (selectedData == "inactive") {
+        status = "0";
         userAllFilterData.status = status;
       }
       userApi

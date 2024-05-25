@@ -9,11 +9,12 @@ function ChooseTimeSlot({
   hitapi,
   timeSlotApiData,
   setallTimeSlots,
+  setSelectedSlot,
+  selectedSlot,
 }) {
   const data = useLocation();
 
   const [counter, setCounter] = useState(1);
-  const [selectedSlot, setSelectedSlot] = useState(null);
 
   const handelCounter = (type) => {
     setCounter((prevCounter) => {

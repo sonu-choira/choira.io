@@ -71,7 +71,7 @@ function BookingActionBar({
     }
   };
   const gotoSlotBooking = () => {
-    router.push("/service/AddSlotBooking", {
+    router.push("/adminDashboard/Bookings/AddSlotBooking", {
       state: { navCount: 4 },
     });
   };

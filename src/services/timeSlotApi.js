@@ -25,6 +25,17 @@ class slotapi{
   return response.data;
  };
 
+ createSlot = async (slotData) => {
+  let {studioId,roomId,bookingDate,bookingHours} = slotData
+  
+
+  const response = await api.post(`/bookings/create`, {
+    studioId,roomId,bookingDate,bookingHours
+  });
+  console.log("res ===>", response.data)
+  return response.data;
+ };
+
 
  
 
