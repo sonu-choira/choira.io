@@ -44,7 +44,11 @@ function AddNewServices2({
   }, [currentServiceData]);
 
   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState(
+    currentServiceData?.amenites
+      ? currentServiceData?.amenites?.map((item) => item?.name || item) || []
+      : []
+  );
 
   // useEffect(() => {
   //   if (isEditMode) {
@@ -291,15 +295,15 @@ function AddNewServices2({
                 ...(item.pricing || {}), // Ensure pricing object is defined
                 USA: {
                   ...(item.pricing?.USA || {}), // Ensure USA object is defined
-                  basePrice: countryWithPriceobj["USA"] || 0,
+                  basePrice: parseFloat(countryWithPriceobj["USA"]) || 0,
                 },
                 IN: {
                   ...(item.pricing?.IN || {}), // Ensure IN object is defined
-                  basePrice: countryWithPriceobj["IN"] || 0,
+                  basePrice: parseFloat(countryWithPriceobj["IN"]) || 0,
                 },
                 JP: {
                   ...(item.pricing?.JP || {}), // Ensure JP object is defined
-                  basePrice: countryWithPriceobj["JP"] || 0,
+                  basePrice: parseFloat(countryWithPriceobj["JP"]) || 0,
                 },
               },
             };
@@ -309,7 +313,7 @@ function AddNewServices2({
         });
       });
     }
-  }, [countryPrice, selectedCountry]);
+  }, [countryWithPriceobj, indexofServices]);
 
   return (
     <>

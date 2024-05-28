@@ -37,31 +37,17 @@ function AddNewRoom({
     overFlow: "scroll",
   };
   const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [selectedDate, setSelectedDate] = useState([]);
-  const [time, setTime] = useState([]);
-  const [generalTime, setGeneralTime] = useState(
-    currentRoomsData.generalEndTime && currentRoomsData.generalStartTime
-      ? {
-          generalStartTime: currentRoomsData.generalStartTime,
-          generalEndTime: currentRoomsData.generalEndTime,
-        }
-      : {
-          generalStartTime: "00:00",
-          generalEndTime: "00:00",
-        }
+  const [selectedDate, setSelectedDate] = useState(
+    currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
   );
+  const [time, setTime] = useState([]);
+  const [generalTime, setGeneralTime] = useState({
+    startTime: currentRoomsData?.generalTime?.startTime || "00:00",
+    endTime: currentRoomsData?.generalTime?.endTime || "00:00",
+  });
   const handleAddDetails = () => {
     setDetails((prevDetails) => [...prevDetails, ""]); // Add an empty string to the details array
   };
-  // const [generalTime, setGeneralTime] = useState({
-  //   generalEndTime: "",
-  //   generalStartTime: ""
-
-  // })
-  // const [bookingTimes, setBookingTimes] = useState([
-  //   { startTime: "00:00", endTime: "00:00" },
-
-  // ]);
 
   const [bookingTimes, setBookingTimes] = useState(
     currentRoomsData?.availabilities
@@ -157,27 +143,21 @@ function AddNewRoom({
       return prerooms.map((room) => {
         return {
           ...room,
-          generalStartTime: generalTime.generalStartTime,
-          generalEndTime: generalTime.generalEndTime,
+          generalTime: {
+            startTime: generalTime.startTime,
+            endTime: generalTime.endTime,
+          },
         };
       });
     });
   }, [generalTime]);
 
-  const handelGeneralTime = (time, timeString) => {
-    console.log(time, timeString);
-    console.log("time is ", time);
-    console.log("timeString is ", timeString);
+  const handelGeneralTime = (_, timeString) => {
     setGeneralTime({
-      generalStartTime: timeString[0],
-      generalEndTime: timeString[1],
+      startTime: timeString[0],
+      endTime: timeString[1],
     });
   };
-
-  useEffect(() => {
-    currentRoomsData.generalStartTime = generalTime.generalStartTime;
-    currentRoomsData.generalEndTime = generalTime.generalEndTime;
-  }, [generalTime]);
 
   useEffect(() => {
     // Ensure there's always at least one booking time range displayed
@@ -270,15 +250,16 @@ function AddNewRoom({
     );
   }, [currentRoomsData?.amenities]);
 
-  useEffect(() => {
-    setSelectedDate(
-      currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
-    );
-  }, [currentRoomsData?.bookingDays]);
+  // useEffect(() => {
+  //   setSelectedDate(
+  //     currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
+  //   );
+  // }, [currentRoomsData?.bookingDays]);
 
   useEffect(() => {
     console.log("selectedDate updated:", selectedDate);
-  }, [selectedDate]);
+    currentRoomsData.bookingDays = selectedDate;
+  }, [selectedDate.length]);
 
   useEffect(() => {
     console.log("room k details mila", rooms);
@@ -307,7 +288,6 @@ function AddNewRoom({
       return updatedRooms;
     });
   };
-
   const handlePricePerHourChange = (event) => {
     const { value } = event.target;
     setrooms((prevRooms) => {
@@ -317,6 +297,10 @@ function AddNewRoom({
         pricePerHour: parseFloat(value),
         basePrice: parseFloat(value), // Update basePrice as well
       };
+      console.log(
+        "updatedRooms--------------------------------------",
+        updatedRooms
+      );
       return updatedRooms;
     });
   };
@@ -433,25 +417,10 @@ function AddNewRoom({
               <TimePicker.RangePicker
                 format={format}
                 onChange={handelGeneralTime}
-                // defaultValue={[
-                //   dayjs("1:30:00", "HH:mm:ss"),
-                //   dayjs("2:30:56", "HH:mm:ss"),
-                // ]}
-
-                value={
-                  currentRoomsData?.generalStartTime
-                    ? [
-                        dayjs(
-                          `${currentRoomsData.generalStartTime}`,
-                          `${format}`
-                        ),
-                        dayjs(
-                          `${currentRoomsData.generalEndTime}`,
-                          `${format}`
-                        ),
-                      ]
-                    : [dayjs("00:00", `${format}`), dayjs("00:00", `${format}`)]
-                }
+                value={[
+                  dayjs(generalTime.startTime, format),
+                  dayjs(generalTime.endTime, format),
+                ]}
                 style={{ height: "100%", outline: "none" }}
               />
             </div>

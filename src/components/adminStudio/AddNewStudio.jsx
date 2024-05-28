@@ -69,13 +69,17 @@ function AddNewStudio({ setSelectTab }) {
       pricePerHour: "",
       discountPercentage: "",
       bookingDays: [],
-      generalStartTime: "",
-      generalEndTime: "",
+      generalTime: {
+        startTime: "",
+        endTime: "",
+      },
+      // generalStartTime: "",
+      // generalEndTime: "",
       availabilities: [],
       bookingStartTime: [],
       bookingEndTime: [],
       roomPhotos: [],
-      basePrice: "",
+      basePrice: 0,
 
       amenities: [],
       details: [],
@@ -116,35 +120,6 @@ function AddNewStudio({ setSelectTab }) {
     totalRooms: 0,
     _id: "",
   });
-
-  // const [saveAddData, setsaveAddData] = useState({
-  //   aboutUs: {},
-  //   address: "",
-  //   amenities: [],
-  //   area: "",
-  //   availabilities: [],
-  //   city: "",
-  //   clientPhotos: [],
-  //   creationTimeStamp: "",
-  //   featuredReviews: "",
-  //   fullName: "",
-  //   isActive: "",
-  //   latitude: "",
-  //   location: { coordinates: [], type: "" },
-  //   longitude: "",
-  //   mapLink: "",
-  //   maxGuests: "",
-  //   overallAvgRating: "",
-  //   pincode: "",
-  //   pricePerHour: "",
-  //   reviews: {},
-  //   roomsDetails: [],
-  //   state: "",
-  //   studioPhotos: [],
-  //   teamDetails: [],
-  //   totalRooms: "",
-  //   _id: "",
-  // });
 
   useEffect(() => {
     setStudioDetails((prevData) => ({
@@ -269,16 +244,46 @@ function AddNewStudio({ setSelectTab }) {
       });
     });
 
+    const correctDataTypes = (data) => {
+      return {
+        ...data,
+        area: parseInt(data.area, 10),
+        maxGuests: data.maxGuests === "" ? null : data.maxGuests,
+        featuredReviews: Array.isArray(data.featuredReviews)
+          ? data.featuredReviews
+          : [],
+        amenities: data.amenities.map((amenity) => ({
+          ...amenity,
+          id: amenity.id.toString(),
+        })),
+        roomsDetails: data.roomsDetails.map((room) => ({
+          ...room,
+          area: room.area.toString(),
+          pricePerHour: parseInt(room.pricePerHour, 10),
+          basePrice:
+            room.basePrice === "" || null ? 0 : parseInt(room.basePrice, 10),
+          discountPercentage: parseInt(room.discountPercentage, 10),
+        })),
+      };
+    };
+
     if (!hasError) {
       const updatedStudioDetails = {
         ...studioDetails,
-        roomsDetails: studioDetails.roomsDetails.map((room) => ({
-          ...room,
-          bookingDays: room.bookingDays.map((day, index) => ({
-            id: index,
-            name: day,
-          })),
-        })),
+        roomsDetails: studioDetails.roomsDetails.map((room) => {
+          const isArrayOfStrings =
+            Array.isArray(room.bookingDays) &&
+            room.bookingDays.every((day) => typeof day === "string");
+          return {
+            ...room,
+            bookingDays: isArrayOfStrings
+              ? room.bookingDays.map((day, index) => ({
+                  id: index,
+                  name: day,
+                }))
+              : room.bookingDays,
+          };
+        }),
       };
 
       if (isEditMode) {
@@ -292,9 +297,10 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Update it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log("studioDetails", updatedStudioDetails);
+            const correctedRealData = correctDataTypes(updatedStudioDetails);
+            console.log("studioDetails", correctedRealData);
             appAndmoreApi
-              .updateStudio(userStudioid, updatedStudioDetails)
+              .updateStudio(userStudioid, correctedRealData)
               .then((response) => {
                 console.log("Studio updated:", response);
                 if (response) {
@@ -317,7 +323,7 @@ function AddNewStudio({ setSelectTab }) {
                   timer: 1800,
                 });
               });
-            console.log("studioDetails", updatedStudioDetails);
+            console.log("studioDetails", correctedRealData);
           }
         });
       } else {
@@ -331,8 +337,10 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Create it!",
         }).then((result) => {
           if (result.isConfirmed) {
+            const correctedRealData = correctDataTypes(updatedStudioDetails);
+
             appAndmoreApi
-              .createStudio(updatedStudioDetails)
+              .createStudio(correctedRealData)
               .then((response) => {
                 console.log("Studio created:", response);
                 if (response) {
@@ -355,7 +363,7 @@ function AddNewStudio({ setSelectTab }) {
                   timer: 1800,
                 });
               });
-            console.log("updatedStudioDetails", updatedStudioDetails);
+            console.log("correctedRealData", correctedRealData);
           }
         });
       }

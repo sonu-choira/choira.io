@@ -16,7 +16,7 @@ function BookingActionBar({
   downloadAllData,
 }) {
   console.log(bookingPageCount);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const router = useNavigateRouter();
 
   let { navOption: pageData, page: type } = useParams();
@@ -61,11 +61,11 @@ function BookingActionBar({
 
   const gotoAddNew = (bookingPageCount) => {
     if (bookingPageCount === "c1") {
-      router.push("/studio/add", {
+      navigate("/studio/add", {
         state: { navCount: 3, bookingPageCount: bookingPageCount },
       });
     } else {
-      router.push("/service/musicProduction/add", {
+      navigate("/service/musicProduction/add", {
         state: { navCount: 3, bookingPageCount: bookingPageCount },
       });
     }

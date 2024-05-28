@@ -38,11 +38,13 @@ function AddNewProduction({ setSelectTab }) {
 
   const navigate = useNavigate();
   const gotoadminpage = () => {
-    if (bookingPageCount == "c2") {
-      navigate("/adminDashboard/Apps&More/studio");
-    } else if (bookingPageCount == "c3") {
-      navigate("/adminDashboard/Apps&More/studio");
-    }
+    // alert(bookingPageCount);
+    // if (bookingPageCount == "c2") {
+    //   navigate("/adminDashboard/Apps&More/studio");
+    // } else if (bookingPageCount == "c3") {
+    //   navigate("/adminDashboard/Apps&More/studio");
+    // }
+    navigate("/adminDashboard/Apps&More/studio");
   };
 
   useEffect(() => {
@@ -143,7 +145,7 @@ function AddNewProduction({ setSelectTab }) {
     serviceName: "",
     startingPrice: "",
     offerings: [],
-    TotalServices: "",
+    totalPlans: 0,
     ServicePhotos: [],
     description: [],
     portfolio: [],
@@ -170,21 +172,25 @@ function AddNewProduction({ setSelectTab }) {
       serviceName: serviceData.fullName,
       startingPrice: serviceData.price,
       offerings: serviceData.amenities,
-      TotalServices: serviceData.packages.length,
+      totalPlans: serviceData.packages.length,
       packages: serviceData.packages,
       ServicePhotos: serviceData.servicePhotos,
       description: serviceData.aboutUs,
     }));
+    console.log(
+      "serviceData.totalPlans----------------------------",
+      serviceData.packages.length
+    );
   }, [serviceData]);
 
   const handelSavebtn = () => {
     const updatedData = {
       ...sendataToApi,
-      serviceName: serviceData.fullName,
-      startingPrice: serviceData.price,
-      offerings: serviceData.amenities,
-      TotalServices: serviceData.packages.length,
-      packages: serviceData.packages,
+      // serviceName: serviceData.fullName,
+      // startingPrice: serviceData.price,
+      // offerings: serviceData.amenities,
+      // totalPlans: serviceData.packages.length,
+      // packages: serviceData.packages,
       ServicePhotos: images,
       description: serviceData.aboutUs,
     };
@@ -304,6 +310,8 @@ function AddNewProduction({ setSelectTab }) {
                 }
                 console.error("Error fetching studios:", error);
               });
+
+            console.log("updatedData", updatedData);
           }
         });
       }
@@ -317,7 +325,7 @@ function AddNewProduction({ setSelectTab }) {
       serviceName: serviceData.fullName,
       startingPrice: serviceData.price,
       offerings: serviceData.amenities,
-      TotalServices: serviceData.packages.length,
+      totalPlans: serviceData.packages.length,
       packages: serviceData.packages,
       servicePhotos: serviceData.servicePhotos,
       description: serviceData.aboutUs,
@@ -571,7 +579,7 @@ function AddNewProduction({ setSelectTab }) {
                         type="text"
                         id="About"
                         placeholder="Enter About Services"
-                        value={productionData?.aboutUs}
+                        value={serviceData?.aboutUs}
                         name="aboutUs"
                         onChange={(event) =>
                           handleStudioDetailsChange(event, "aboutUs")

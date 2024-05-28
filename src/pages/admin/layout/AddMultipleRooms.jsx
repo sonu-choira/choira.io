@@ -38,12 +38,15 @@ function AddMultipleRooms({
   const handleAddTeamDetail = () => {
     const newTeam = {
       roomName: "",
-      roomArea: "",
+
       pricePerHour: "",
       discount: "",
       bookingDays: [],
-      generalStartTime: "",
-      generalEndTime: "",
+
+      generalTime: {
+        startTime: "",
+        endTime: "",
+      },
       bookingStartTime: [],
       bookingEndTime: [],
       roomPhotos: [],
@@ -141,7 +144,7 @@ function AddMultipleRooms({
                       fontSize: "1vmax",
                     }}
                   >
-                    pricePerHour ₹
+                    PricePerHour ₹
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
@@ -210,7 +213,7 @@ function AddMultipleRooms({
               <div>
                 <input
                   type="text"
-                  placeholder="roomName"
+                  placeholder="RoomName"
                   value={team.roomName}
                   onChange={(event) =>
                     handleInputChange(event, index, "roomName")
