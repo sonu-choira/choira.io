@@ -35,6 +35,7 @@ import ASMusicProduction from "../../../components/adminStudio/appsAndMore/ASMus
 import ASMixandMaster from "../../../components/adminStudio/appsAndMore/ASMixandMaster";
 import AllStudioDetail2 from "../../../components/adminStudio/appsAndMore/AllStudioDetail2";
 import WebDashboard2 from "../../produce/WebDashBoard2";
+import { useLocation } from "react-router-dom";
 
 // services
 import Appapi from "../../../services/appAndmoreApi";
@@ -60,13 +61,20 @@ function AllStudioPageDetailsPage() {
 
   let { page: paramData } = useParams();
   console.log("paramData", paramData);
+  const location = useLocation();
 
   useEffect(() => {
-    if (paramData == "studio") {
+    if (paramData == "studio" || location.pathname.includes("/studio")) {
       setBookingPageCount("c1");
-    } else if (paramData == "musicproduction") {
+    } else if (
+      paramData == "musicproduction" ||
+      location.pathname.includes("/musicproduction")
+    ) {
       setBookingPageCount("c2");
-    } else if (paramData == "mixmaster") {
+    } else if (
+      paramData == "mixmaster" ||
+      location.pathname.includes("/mixmaster")
+    ) {
       setBookingPageCount("c3");
     }
   }, [paramData]);

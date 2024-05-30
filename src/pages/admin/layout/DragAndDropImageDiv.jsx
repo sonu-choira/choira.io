@@ -258,7 +258,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
           <input
             type="file"
             multiple
-            accept=".jpeg,.png,.svg,.webp,.jpg,.jfif"
+            accept=".jpeg,.png,.jpg,.jfif"
             id="selectimg"
             onChange={handleImageChange}
           />

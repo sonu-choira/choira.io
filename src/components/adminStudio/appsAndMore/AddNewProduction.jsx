@@ -72,6 +72,9 @@ function AddNewProduction({ setSelectTab }) {
       name: "",
       about: "",
       amenites: [],
+
+      planId: 1,
+      price: 0,
       pricing: {
         USA: {
           price: 0,
@@ -125,31 +128,31 @@ function AddNewProduction({ setSelectTab }) {
   const [serviceData, setServiceData] = useState({
     aboutUs: "",
     amenities: [],
-    clientPhotos: [],
+    userPhotos: [],
     creationTimeStamp: "",
-    discographyDetails: [],
-    featuredReviews: [],
+    discography: [],
+    starredReviews: [],
     fullName: "",
     service_status: 0,
     packages: [],
     price: 0,
-    reviews: [],
+    userReviews: [],
     servicePhotos: [],
     service_id: "",
     type: bookingPageCount,
     workDetails: [],
-    addOns: [],
+    // addOns: [],
   });
 
   const [sendataToApi, setsendataToApi] = useState({
     serviceName: "",
     startingPrice: "",
     offerings: [],
-    totalPlans: 0,
+    TotalServices: 0,
     ServicePhotos: [],
     description: [],
     portfolio: [],
-    userReviews: {},
+    userReviews: [],
     packages: [],
     type: bookingPageCount,
     isActive: 1,
@@ -172,13 +175,13 @@ function AddNewProduction({ setSelectTab }) {
       serviceName: serviceData.fullName,
       startingPrice: serviceData.price,
       offerings: serviceData.amenities,
-      totalPlans: serviceData.packages.length,
+      TotalServices: serviceData.packages.length,
       packages: serviceData.packages,
       ServicePhotos: serviceData.servicePhotos,
       description: serviceData.aboutUs,
     }));
     console.log(
-      "serviceData.totalPlans----------------------------",
+      "serviceData.TotalServices----------------------------",
       serviceData.packages.length
     );
   }, [serviceData]);
@@ -186,11 +189,11 @@ function AddNewProduction({ setSelectTab }) {
   const handelSavebtn = () => {
     const updatedData = {
       ...sendataToApi,
-      // serviceName: serviceData.fullName,
-      // startingPrice: serviceData.price,
-      // offerings: serviceData.amenities,
-      // totalPlans: serviceData.packages.length,
-      // packages: serviceData.packages,
+      serviceName: serviceData.fullName,
+      startingPrice: serviceData.price,
+      offerings: serviceData.amenities,
+      TotalServices: serviceData.packages.length,
+      packages: serviceData.packages,
       ServicePhotos: images,
       description: serviceData.aboutUs,
     };
@@ -310,9 +313,8 @@ function AddNewProduction({ setSelectTab }) {
                 }
                 console.error("Error fetching studios:", error);
               });
-
-            console.log("updatedData", updatedData);
           }
+          console.log("updatedData", updatedData);
         });
       }
     }
@@ -325,7 +327,7 @@ function AddNewProduction({ setSelectTab }) {
       serviceName: serviceData.fullName,
       startingPrice: serviceData.price,
       offerings: serviceData.amenities,
-      totalPlans: serviceData.packages.length,
+      TotalServices: serviceData.packages.length,
       packages: serviceData.packages,
       servicePhotos: serviceData.servicePhotos,
       description: serviceData.aboutUs,
@@ -347,28 +349,32 @@ function AddNewProduction({ setSelectTab }) {
   }, [images]);
   useEffect(() => {
     setServiceData((prevdata) => {
-      prevdata.amenities = selectedItems;
+      prevdata.amenities = selectedItems.map((name, index) => ({
+        id: index,
+        name,
+      }));
       return prevdata;
     });
-  }, [selectedItems]);
+  }, [selectedItems.length]);
+
   useEffect(() => {
     setServiceData((prevdata) => {
       prevdata.packages = service;
       return prevdata;
     });
   }, [service]);
-  useEffect(() => {
-    setServiceData((prevdata) => {
-      prevdata.addOns = addon;
-      return prevdata;
-    });
-  }, [addon]);
-  useEffect(() => {
-    setServiceData((prevdata) => {
-      prevdata.discographyDetails = discography;
-      return prevdata;
-    });
-  }, [discography]);
+  // useEffect(() => {
+  //   setServiceData((prevdata) => {
+  //     prevdata.addOns = addon;
+  //     return prevdata;
+  //   });
+  // }, [addon]);
+  // useEffect(() => {
+  //   setServiceData((prevdata) => {
+  //     prevdata.discography = discography;
+  //     return prevdata;
+  //   });
+  // }, [discography]);
 
   useEffect(() => {
     console.log("service data chnage huaa hai ", serviceData);
@@ -425,21 +431,21 @@ function AddNewProduction({ setSelectTab }) {
   };
 
   const handleDiscographyInputChange = (index, value) => {
-    const updatedDiscography = [...discography];
-    updatedDiscography[index] = value;
-    setDiscography(updatedDiscography);
+    // const updatedDiscography = [...discography];
+    // updatedDiscography[index] = value;
+    // setDiscography(updatedDiscography);
   };
 
-  const handleAddDiscography = () => {
-    // if (discography.length < 3) {
-    setDiscography([...discography, ""]);
-    // }
-  };
+  // const handleAddDiscography = () => {
+  //   // if (discography.length < 3) {
+  //   setDiscography([...discography, ""]);
+  //   // }
+  // };
 
   const handleRemoveDiscography = (index) => {
-    const updatedDiscography = [...discography];
-    updatedDiscography.splice(index, 1);
-    setDiscography(updatedDiscography);
+    // const updatedDiscography = [...discography];
+    // updatedDiscography.splice(index, 1);
+    // setDiscography(updatedDiscography);
   };
   const [tabCount, setTabCount] = useState();
 
@@ -451,16 +457,8 @@ function AddNewProduction({ setSelectTab }) {
   //   setServiceDetails([]);
   // };
 
-  const handleServiceChange = (event, index) => {
-    const updatedServiceDetails = [...serviceDetails];
-    updatedServiceDetails[index] = event.target.value;
-    setServiceDetails(updatedServiceDetails);
-  };
   const [indexofServices, setIndexofServices] = useState();
-  const handleEditService = (i) => {
-    setShowServices(true);
-    setIndexofServices(i);
-  };
+
   useEffect(() => {
     if (isEditMode) {
       const tempaminities = productionData?.amenities;

@@ -84,11 +84,60 @@ function AddNewServices2({
       updatedService[indexofServices] = {
         ...updatedService[indexofServices], // Copy the existing object
         name: event.target.value, // Update the 'name' property
+        planId: service.length + 1,
       };
       return updatedService; // Return the updated array
     });
   };
 
+  const onDisCountChange = (event) => {
+    setService((prevService) => {
+      const updatedService = [...prevService]; // Copy the existing service array
+      updatedService[indexofServices] = {
+        ...updatedService[indexofServices], // Copy the existing object
+        pricing: {
+          ...updatedService[indexofServices].pricing, // Copy the existing pricing object
+          [Object.keys(updatedService[indexofServices].pricing)[0]]: {
+            ...updatedService[indexofServices].pricing[
+              Object.keys(updatedService[indexofServices].pricing)[0]
+            ], // Copy the existing pricing for the first region
+            discountPercentage: parseFloat(event.target.value), // Update the 'discountPercentage' property
+          },
+        },
+      };
+      return updatedService; // Return the updated array
+    });
+  };
+
+  useEffect(() => {
+    let dis =
+      currentServiceData.pricing[Object.keys(currentServiceData.pricing)[0]]
+        .discountPercentage;
+    let price1 =
+      currentServiceData.pricing[Object.keys(currentServiceData.pricing)[0]]
+        .price;
+    let price2 =
+      currentServiceData.pricing[Object.keys(currentServiceData.pricing)[1]]
+        .price;
+    let price3 =
+      currentServiceData.pricing[Object.keys(currentServiceData.pricing)[2]]
+        .price;
+
+    let cal = (price, dis) => {
+      let discountedAmount = (price * dis) / 100;
+      let basePrice = price + discountedAmount;
+      return basePrice;
+    };
+    currentServiceData.pricing[
+      Object.keys(currentServiceData.pricing)[0]
+    ].basePrice = cal(price1, dis);
+    currentServiceData.pricing[
+      Object.keys(currentServiceData.pricing)[1]
+    ].basePrice = cal(price2, dis);
+    currentServiceData.pricing[
+      Object.keys(currentServiceData.pricing)[2]
+    ].basePrice = cal(price3, dis);
+  }, [currentServiceData.pricing]);
   // useEffect(() => {
   //   if()
 
@@ -105,13 +154,19 @@ function AddNewServices2({
     });
   }, [images]);
   useEffect(() => {
-    setService((prerooms) => {
-      prerooms.map((rm, idex) => {
-        if (idex === indexofServices) {
-          rm.amenites = selectedItems;
+    setService((prevRooms) => {
+      return prevRooms.map((room, idx) => {
+        if (idx === indexofServices) {
+          return {
+            ...room,
+            amenites: selectedItems.map((item, index) => ({
+              id: index,
+              name: item,
+            })),
+          };
         }
+        return room;
       });
-      return prerooms;
     });
   }, [selectedItems.length]);
 
@@ -239,13 +294,6 @@ function AddNewServices2({
     });
   };
 
-  // const selectedCountry = Object.keys(apiCountryPrice);
-
-  // // Extracting countryPrice from apiCountryPrice
-  // const countryPrice = Object.values(apiCountryPrice).map(
-  //   (country) => country.price
-  // );
-
   const handleCancelcountry = (index) => {
     if (addMultiplePriceDiv.length > 1) {
       const newdata = [...addMultiplePriceDiv];
@@ -289,21 +337,27 @@ function AddNewServices2({
           if (index === indexofServices) {
             console.log("---------------------checking222");
 
+            const updatedINPrice = parseFloat(countryWithPriceobj["IN"]) || 0;
+
             return {
               ...item,
+              price: updatedINPrice, // Update the price property to match IN.price
               pricing: {
                 ...(item.pricing || {}), // Ensure pricing object is defined
                 USA: {
                   ...(item.pricing?.USA || {}), // Ensure USA object is defined
                   basePrice: parseFloat(countryWithPriceobj["USA"]) || 0,
+                  price: parseFloat(countryWithPriceobj["USA"]) || 0,
                 },
                 IN: {
                   ...(item.pricing?.IN || {}), // Ensure IN object is defined
-                  basePrice: parseFloat(countryWithPriceobj["IN"]) || 0,
+                  basePrice: updatedINPrice,
+                  price: updatedINPrice, // Ensure IN price matches the basePrice
                 },
                 JP: {
                   ...(item.pricing?.JP || {}), // Ensure JP object is defined
                   basePrice: parseFloat(countryWithPriceobj["JP"]) || 0,
+                  price: parseFloat(countryWithPriceobj["JP"]) || 0,
                 },
               },
             };
@@ -409,6 +463,24 @@ function AddNewServices2({
                 <MdOutlineAddBox /> &nbsp;<div>Add new country</div>
               </span>
             )}
+
+            <div className={style.addNewStudioinputBox}>
+              <label htmlFor="GlobalDiscountPercentage">
+                Global Discount Percentage
+              </label>
+              <input
+                type="number"
+                id="GlobalDiscountPercentage"
+                placeholder="Enter Global Discount Percentage"
+                name="globalDiscountPercentage"
+                value={
+                  currentServiceData.pricing[
+                    Object.keys(currentServiceData.pricing)[0]
+                  ].discountPercentage
+                }
+                onChange={onDisCountChange}
+              />
+            </div>
 
             <div className={style.addNewStudioinputBox2}>
               <label htmlFor="serviceDetails">Service Details</label>

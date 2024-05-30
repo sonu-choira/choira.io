@@ -260,8 +260,7 @@ function AddNewStudio({ setSelectTab }) {
           ...room,
           area: room.area.toString(),
           pricePerHour: parseInt(room.pricePerHour, 10),
-          basePrice:
-            room.basePrice === "" || null ? 0 : parseInt(room.basePrice, 10),
+
           discountPercentage: parseInt(room.discountPercentage, 10),
         })),
       };

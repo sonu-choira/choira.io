@@ -68,6 +68,20 @@ function AddNewRoom({
   );
 
   useEffect(() => {
+    let dis = currentRoomsData.discountPercentage;
+    let price = currentRoomsData.pricePerHour;
+
+    let cal = (price, dis) => {
+      let discountedAmount = (price * dis) / 100;
+      let calculatedBasePrice = price + discountedAmount; // Renamed to avoid conflict
+      return calculatedBasePrice;
+    };
+    currentRoomsData.basePrice = cal(price, dis);
+
+    // Update basePrice in state or do something with it here
+  }, [currentRoomsData.pricePerHour, currentRoomsData.discountPercentage]);
+
+  useEffect(() => {
     setrooms((prevRooms) => {
       return prevRooms.map((room, idx) => {
         if (idx === indexofrooms) {
@@ -295,7 +309,6 @@ function AddNewRoom({
       updatedRooms[indexofrooms] = {
         ...updatedRooms[indexofrooms],
         pricePerHour: parseFloat(value),
-        basePrice: parseFloat(value), // Update basePrice as well
       };
       console.log(
         "updatedRooms--------------------------------------",
