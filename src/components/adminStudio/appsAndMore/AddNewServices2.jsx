@@ -93,50 +93,58 @@ function AddNewServices2({
   const onDisCountChange = (event) => {
     setService((prevService) => {
       const updatedService = [...prevService]; // Copy the existing service array
-      updatedService[indexofServices] = {
-        ...updatedService[indexofServices], // Copy the existing object
-        pricing: {
-          ...updatedService[indexofServices].pricing, // Copy the existing pricing object
-          [Object.keys(updatedService[indexofServices].pricing)[0]]: {
-            ...updatedService[indexofServices].pricing[
-              Object.keys(updatedService[indexofServices].pricing)[0]
-            ], // Copy the existing pricing for the first region
-            discountPercentage: parseFloat(event.target.value), // Update the 'discountPercentage' property
+
+      // Check if currentServiceData exists and has the 'pricing' property
+      if (currentServiceData && currentServiceData.pricing) {
+        updatedService[indexofServices] = {
+          ...updatedService[indexofServices], // Copy the existing object
+          pricing: {
+            ...updatedService[indexofServices].pricing, // Copy the existing pricing object
+            // Check if the first region exists in 'pricing' object
+            ...(Object.keys(updatedService[indexofServices].pricing)[0] && {
+              [Object.keys(updatedService[indexofServices].pricing)[0]]: {
+                ...updatedService[indexofServices].pricing[
+                  Object.keys(updatedService[indexofServices].pricing)[0]
+                ], // Copy the existing pricing for the first region
+                discountPercentage: parseFloat(event.target.value), // Update the 'discountPercentage' property
+              },
+            }),
           },
-        },
-      };
+        };
+      }
+
       return updatedService; // Return the updated array
     });
   };
 
   useEffect(() => {
-    let dis =
-      currentServiceData.pricing[Object.keys(currentServiceData.pricing)[0]]
-        .discountPercentage;
-    let price1 =
-      currentServiceData.pricing[Object.keys(currentServiceData.pricing)[0]]
-        .price;
-    let price2 =
-      currentServiceData.pricing[Object.keys(currentServiceData.pricing)[1]]
-        .price;
-    let price3 =
-      currentServiceData.pricing[Object.keys(currentServiceData.pricing)[2]]
-        .price;
+    if (currentServiceData && currentServiceData.pricing) {
+      const firstRegion = Object.keys(currentServiceData.pricing)[0];
+      if (firstRegion) {
+        const dis = currentServiceData.pricing[firstRegion].discountPercentage;
+        const price1 = currentServiceData.pricing[firstRegion].price;
+        const price2 =
+          currentServiceData.pricing[Object.keys(currentServiceData.pricing)[1]]
+            .price;
+        const price3 =
+          currentServiceData.pricing[Object.keys(currentServiceData.pricing)[2]]
+            .price;
 
-    let cal = (price, dis) => {
-      let discountedAmount = (price * dis) / 100;
-      let basePrice = price + discountedAmount;
-      return basePrice;
-    };
-    currentServiceData.pricing[
-      Object.keys(currentServiceData.pricing)[0]
-    ].basePrice = cal(price1, dis);
-    currentServiceData.pricing[
-      Object.keys(currentServiceData.pricing)[1]
-    ].basePrice = cal(price2, dis);
-    currentServiceData.pricing[
-      Object.keys(currentServiceData.pricing)[2]
-    ].basePrice = cal(price3, dis);
+        const cal = (price, dis) => {
+          const discountedAmount = (price * dis) / 100;
+          const basePrice = price + discountedAmount;
+          return basePrice;
+        };
+
+        currentServiceData.pricing[firstRegion].basePrice = cal(price1, dis);
+        currentServiceData.pricing[
+          Object.keys(currentServiceData.pricing)[1]
+        ].basePrice = cal(price2, dis);
+        currentServiceData.pricing[
+          Object.keys(currentServiceData.pricing)[2]
+        ].basePrice = cal(price3, dis);
+      }
+    }
   }, [currentServiceData.pricing]);
   // useEffect(() => {
   //   if()
@@ -474,9 +482,13 @@ function AddNewServices2({
                 placeholder="Enter Global Discount Percentage"
                 name="globalDiscountPercentage"
                 value={
-                  currentServiceData.pricing[
-                    Object.keys(currentServiceData.pricing)[0]
-                  ].discountPercentage
+                  currentServiceData &&
+                  currentServiceData.pricing &&
+                  Object.keys(currentServiceData.pricing).length > 0
+                    ? currentServiceData.pricing[
+                        Object.keys(currentServiceData.pricing)[0]
+                      ]?.discountPercentage ?? ""
+                    : ""
                 }
                 onChange={onDisCountChange}
               />
