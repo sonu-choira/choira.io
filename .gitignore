@@ -29,3 +29,5 @@ yarn-error.log*
 .env
 .build
 build.zip
+build1
+build2
