@@ -20,6 +20,7 @@ import DragAndDropImageDiv from "../../pages/admin/layout/DragAndDropImageDiv";
 import { TimePicker } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 
 function AddNewRoom({
   setshowRoomsDetails,
@@ -446,7 +447,7 @@ function AddNewRoom({
               setImages={setImages}
               isEditMode={isEditMode}
             />
-            <div className={style.addNewStudioinputBox}>
+            {/* <div className={style.addNewStudioinputBox}>
               <label htmlFor="roomAmenities">Amenities </label>
 
               <Select
@@ -461,7 +462,11 @@ function AddNewRoom({
                   label: item,
                 }))}
               />
-            </div>
+            </div> */}
+            <MultipleSelect
+              selectedItems={selectedAmenities}
+              setSelectedItems={setSelectedAmenities}
+            />
 
             {details.length === 0 ? (
               <div

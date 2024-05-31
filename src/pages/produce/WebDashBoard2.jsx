@@ -90,10 +90,10 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 className={tabCount === 2 ? style.tabActive : style.padding}
                 onClick={() => {
                   if (navCount) {
-                    router.push("/adminDashboard/Teams/Arm");
+                    router.push("/adminDashboard/Teams/StudioPatners");
                   } else {
                     setTabCount(2);
-                    router.push("/adminDashboard/Teams/Arm");
+                    router.push("/adminDashboard/Teams/StudioPatners");
                   }
                 }}
               >

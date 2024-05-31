@@ -1525,8 +1525,19 @@ td {
     width: 95%;
     height: 90%;
     border-radius: 10px;
-    border: 2px solid red;
+    /* border: 2px solid red; */
   }
+}
+.userProjectStatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 0.3em;
+}
+.leftBorder {
+  border-left: 5px solid #ffc701 !important;
 }
 /* ---------------userProfile Section end-------- */
 

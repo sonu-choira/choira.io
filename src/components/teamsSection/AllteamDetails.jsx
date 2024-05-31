@@ -25,7 +25,7 @@ function AllteamDetails() {
   const [filterNav, setfilterNav] = useState(false);
   const [shortby, setShortby] = useState("asc");
 
-  const [teamsPageCount, setTeamsPageCount] = useState("t1");
+  const [teamsPageCount, setTeamsPageCount] = useState("t2");
   let { page: currentPage, navOption: currentNav } = useParams();
   console.log("currentPage", currentPage);
   console.log("currentNav", currentNav);

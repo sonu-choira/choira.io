@@ -22,6 +22,7 @@ import AddmultipleServises from "../../../pages/admin/layout/AddmultipleServises
 import AddNewServices2 from "./AddNewServices2";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import Swal from "sweetalert2";
+import MultipleSelect from "../../../pages/admin/layout/MultipleSelect";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
@@ -551,7 +552,7 @@ function AddNewProduction({ setSelectTab }) {
                         }
                       />
                     </div>
-
+                    {/* 
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="Amenities">Amenities </label>
                       <Select
@@ -566,9 +567,13 @@ function AddNewProduction({ setSelectTab }) {
                           label: item,
                         }))}
                       />
-                      {/* )
-                      } */}
-                    </div>
+                  
+                    </div> */}
+
+                    <MultipleSelect
+                      selectedItems={selectedItems}
+                      setSelectedItems={setSelectedItems}
+                    />
 
                     <div className={style.addNewStudioinputBox2}>
                       <label htmlFor="About">About</label>

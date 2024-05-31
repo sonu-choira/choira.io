@@ -26,6 +26,7 @@ import AddNewRoom from "./AddNewRoom";
 import Button from "../../pages/admin/layout/Button";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import Swal from "sweetalert2";
+import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -504,7 +505,7 @@ function AddNewStudio({ setSelectTab }) {
                         <option value="Bombay">Bombay</option>
                       </datalist>
                     </div>
-                    <div className={style.addNewStudioinputBox}>
+                    {/* <div className={style.addNewStudioinputBox}>
                       <label htmlFor="Amenities">Amenities </label>
 
                       <Select
@@ -521,7 +522,13 @@ function AddNewStudio({ setSelectTab }) {
                           label: item,
                         }))}
                       />
-                    </div>
+                    </div> */}
+
+                    <MultipleSelect
+                      selectedItems={selectedStudioAmenities}
+                      setSelectedItems={setSelectedStudioAmenities}
+                    />
+
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="studioName">Studio MapLink</label>
                       <input

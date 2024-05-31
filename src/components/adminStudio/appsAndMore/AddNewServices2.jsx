@@ -17,6 +17,7 @@ import StudioFooter from "../StudioFooter";
 import cross from "../../../assets/cross.svg";
 import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
 import { MdCancel } from "react-icons/md";
+import MultipleSelect from "../../../pages/admin/layout/MultipleSelect";
 
 function AddNewServices2({
   setShowServices,
@@ -512,7 +513,7 @@ function AddNewServices2({
               setImages={setImages}
               isEditMode={isEditMode}
             />
-            <div className={style.addNewStudioinputBox}>
+            {/* <div className={style.addNewStudioinputBox}>
               <label htmlFor="Amenities">Amenities</label>
 
               <Select
@@ -527,7 +528,12 @@ function AddNewServices2({
                   label: item,
                 }))}
               />
-            </div>
+            </div> */}
+
+            <MultipleSelect
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
+            />
           </div>
         </div>
       </div>
