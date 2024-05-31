@@ -1152,15 +1152,27 @@ td {
 }
 .addNewRoomPage > div {
   width: 100%;
+  min-height: fit-content;
   height: 140%;
   /* border: 2px solid blue; */
   border-radius: 10px;
+  /* max-height: fit-content; */
   background-color: white;
   padding-bottom: 5%;
+  overflow-y: scroll;
 }
 .addNewRoomPage > div:first-child {
   display: flex;
   justify-content: space-around;
+}
+.addNewRoomPage > div:last-child > div:last-child {
+  /* border: 2px solid green; */
+  height: 108% !important;
+  overflow-y: scroll;
+  /* min-height: fit-content; */
+}
+.addNewRoomPage > div:last-child > div:last-child::-webkit-scrollbar {
+  width: 0px !important;
 }
 .addNewRoomPage > div > div {
   width: 45%;
@@ -1201,6 +1213,17 @@ td {
   position: absolute;
   /* float: left; */
   top: -12%;
+  right: 0%;
+  font-size: 1vmax;
+
+  color: #ffc701;
+  cursor: pointer;
+  /* mix-blend-mode: color-burn black; */
+}
+.cancelDetailsUpload {
+  position: absolute;
+  /* float: left; */
+  top: 20%;
   right: 0%;
   font-size: 1vmax;
 

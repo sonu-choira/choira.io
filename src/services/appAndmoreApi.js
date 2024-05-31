@@ -72,6 +72,38 @@ class Appapi{
    
      };
 
+     filterData = async (allfilterData) => {
+
+    const filteredObject = {};
+    for (const key in allfilterData) {
+      if (allfilterData[key]) {
+        filteredObject[key] = allfilterData[key];
+      }
+    }
+      filteredObject.limit = 10;
+      const response = await api.get(`/studios-all`,{ 
+          params: filteredObject
+      });
+      const {status} = response.data
+      console.log("res ===>", response.data)
+      return response.data;
+     };
+
+     filterServiceData = async (allserviceFiltrer) => {
+      const filteredObject = {};
+      for (const key in allserviceFiltrer) {
+        if (allserviceFiltrer[key]) {
+          filteredObject[key] = allserviceFiltrer[key];
+        }
+      }
+        filteredObject.limit = 10;
+      const response = await api.get(`/services`,{ 
+          params: filteredObject
+      });
+      const {status} = response.data
+      console.log("res ===>", response.data)
+      return response.data;
+     };
 }
 
 
