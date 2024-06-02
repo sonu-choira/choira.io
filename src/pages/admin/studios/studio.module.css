@@ -291,17 +291,22 @@ input[type="number"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 40%;
+  width: 50%;
   height: 100%;
 }
 .paginationgoto {
   width: 40%;
+  height: 100%;
   /* border: 2px solid pink; */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 .paginationgoto > input {
   padding-left: 3%;
   height: 3.5vh;
   width: 40%;
+  height: 80%;
   border: none;
   outline: none;
   margin-right: 5%;
@@ -1534,7 +1539,8 @@ td {
   justify-content: center;
   border: 2px solid black;
   border-radius: 5px;
-  padding: 0.3em;
+  font-size: 1vmax;
+  padding: 0.2em;
 }
 .leftBorder {
   border-left: 5px solid #ffc701 !important;

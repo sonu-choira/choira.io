@@ -161,6 +161,12 @@ function ShowAllUser() {
   const [userFilterText, setUserFilterText] = useState("");
   const [showUserProfile, setShowUserProfile] = useState(false);
 
+  const viewUserProfile = (id) => {
+    console.log("viewUserProfile", id);
+
+    // setShowUserProfile(true);
+  };
+
   return (
     <>
       {showUserProfile ? (
@@ -398,7 +404,12 @@ function ShowAllUser() {
                                   justifyContent: "space-around",
                                 }}
                               >
-                                <FaRegEye style={{ cursor: "pointer" }} />
+                                <FaRegEye
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    viewUserProfile(products._id);
+                                  }}
+                                />
 
                                 <RiDeleteBin5Fill
                                   style={{ color: "red", cursor: "pointer" }}

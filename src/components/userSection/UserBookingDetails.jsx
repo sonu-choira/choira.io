@@ -366,7 +366,7 @@ function UserBookingDetails({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "12%" }}>
+                <th style={{ width: "15%" }}>
                   <div className={style.headingContainer}>
                     Project Status
                     <div
@@ -398,7 +398,7 @@ function UserBookingDetails({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "10%" }}>
+                <th style={{ width: "8%" }}>
                   <div className={style.headingContainer}>
                     <div
                       className={style.filterBox}
