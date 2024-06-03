@@ -1,11 +1,11 @@
 import React from "react";
 
 import "../layout/layout.css";
-function Button({ name, icon, onClick, style, type }) {
+function Button({ name, icon, onClick, style, type, disabled }) {
   return (
     <>
       <button
-        className="reuseablebtn"
+        className={`${disabled ? "btndisabled" : "reuseablebtn"}`}
         onClick={onClick}
         style={style}
         type={type}

@@ -9,8 +9,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import bookingPageApi from "../../services/bookingPageApi";
 import UserAcount from "./UserAcount";
 import teamsApi from "../../services/teamsApi";
+import UserServiceBooking from "./UserServiceBooking";
 
-function UserProfile() {
+function UserProfile({ userAllDetails, setShowUserProfile }) {
   // const [products, setProducts] = useState([]);
   // const handleChange = () => {};
 
@@ -194,7 +195,10 @@ function UserProfile() {
     console.log(teamsPageCount, "inside useEffect");
   }, [teamsPageCount, pageCount, shortby]);
 
-  const [showAccount, setShowAccount] = useState(false);
+  const [sidebarPageCount, setSidebarPageCount] = useState(1);
+  const backOnclick = () => {
+    setShowUserProfile(false);
+  };
 
   return (
     <>
@@ -203,27 +207,54 @@ function UserProfile() {
           <div className={style.profilesidebar}>
             <div
               onClick={() => {
-                setShowAccount(true);
+                setSidebarPageCount(1);
               }}
-              className={showAccount ? style.leftBorder : ""}
+              className={sidebarPageCount == 1 ? style.leftBorder : ""}
             >
               <LuUser2 /> Account
             </div>
             <div
-              className={!showAccount ? style.leftBorder : ""}
+              className={sidebarPageCount == 2 ? style.leftBorder : ""}
               onClick={() => {
-                setShowAccount(false);
+                setSidebarPageCount(2);
               }}
             >
-              <IoCalendarClearOutline /> Booking
+              <IoCalendarClearOutline /> Studio Booking
+            </div>
+            <div
+              className={sidebarPageCount == 3 ? style.leftBorder : ""}
+              onClick={() => {
+                setSidebarPageCount(3);
+              }}
+            >
+              <IoCalendarClearOutline />
+              Service Booking
             </div>
           </div>
-          <div className={style.UserbookingDetails}>
+          <div
+            className={style.UserbookingDetails}
+            style={!sidebarPageCount == 1 ? { backgroundColor: "#F0F0F0" } : {}}
+          >
             <div>
-              {showAccount ? (
-                <UserAcount />
-              ) : (
+              {sidebarPageCount == 1 ? (
+                <UserAcount userAllDetails={userAllDetails} />
+              ) : sidebarPageCount == 2 ? (
                 <UserBookingDetails
+                  sendFilterDataToapi={sendFilterDataToapi}
+                  products={products}
+                  setProducts={setProducts}
+                  totalPage={totalPage}
+                  setPageCount={setPageCount}
+                  setTotalPage={setTotalPage}
+                  pageCount={pageCount}
+                  teamsPageCount={teamsPageCount}
+                  filterNav={filterNav}
+                  setfilterNav={setfilterNav}
+                  setShortby={setShortby}
+                  shortby={shortby}
+                />
+              ) : (
+                <UserServiceBooking
                   sendFilterDataToapi={sendFilterDataToapi}
                   products={products}
                   setProducts={setProducts}
@@ -245,8 +276,10 @@ function UserProfile() {
         </div>
 
         <StudioFooter
-        //  backOnclick={backOnclick}
-        //   saveOnclick={handelSavebtn}
+          backOnclick={backOnclick}
+          saveDisabled={true}
+          // disabled={true}
+          //   saveOnclick={handelSavebtn}
         />
       </div>
     </>

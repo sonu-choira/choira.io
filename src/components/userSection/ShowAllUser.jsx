@@ -16,6 +16,8 @@ import imageNotFound from "../../assets/imagesNotFound.png";
 import { FaRegEye } from "react-icons/fa";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import UserProfile from "./UserProfile";
+import Alert from "antd/es/alert/Alert";
+import { errorAlert } from "../../pages/admin/layout/Alert";
 
 let userAllFilterData = {
   sortfield: "",
@@ -160,11 +162,40 @@ function ShowAllUser() {
   };
   const [userFilterText, setUserFilterText] = useState("");
   const [showUserProfile, setShowUserProfile] = useState(false);
+  const [userAllDetails, setuserAllDetails] = useState("");
+
+  const showUserDetails = (id) => {
+    console.log("id", id);
+    setuserAllDetails("");
+    setShowUserProfile(true);
+
+    userApi
+      .getSpecificUser(id)
+      .then((response) => {
+        console.log(`====================> response `, response);
+        // console.log("response.data.users", response.data.user);
+        console.log("response.users", response.user);
+
+        if (response.user) {
+          setuserAllDetails(response.user);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching studios:", error);
+        setShowUserProfile(false);
+        errorAlert("Something went wrong");
+      });
+
+    // setShowUserProfile(true);
+  };
 
   return (
     <>
       {showUserProfile ? (
-        <UserProfile />
+        <UserProfile
+          userAllDetails={userAllDetails}
+          setShowUserProfile={setShowUserProfile}
+        />
       ) : (
         <>
           <div className={style.allStudioDetailsPage}>
@@ -398,7 +429,12 @@ function ShowAllUser() {
                                   justifyContent: "space-around",
                                 }}
                               >
-                                <FaRegEye style={{ cursor: "pointer" }} />
+                                <FaRegEye
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    showUserDetails(products._id);
+                                  }}
+                                />
 
                                 <RiDeleteBin5Fill
                                   style={{ color: "red", cursor: "pointer" }}

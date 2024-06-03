@@ -11,6 +11,8 @@ function StudioFooter({
   backType,
   bname,
   sname,
+  backDisabled,
+  saveDisabled,
 }) {
   return (
     <>
@@ -21,12 +23,14 @@ function StudioFooter({
           style={{ height: "55%" }}
           onClick={backOnclick}
           type={backType}
+          disabled={backDisabled}
         />
         <Button
           name={sname ? sname : "Save"}
           onClick={saveOnclick}
           style={{ height: "55%" }}
           type={saveType}
+          disabled={saveDisabled}
         />
       </div>
     </>

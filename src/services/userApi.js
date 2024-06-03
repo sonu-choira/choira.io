@@ -39,6 +39,17 @@ class userApi{
   return response.data;
  };
 
+ getSpecificUser = async (userid) => {
+
+  const response = await api.get(`/users/${userid}`, {
+    
+  });
+  console.log("user data res ===>", response.data)
+  return response.data;
+ };
+
+ 
+
 //  getServices = async (limit, Type, active ,pageCount) => {
 //     const response = await api.get(`/services`,{ 
 //         params: {

@@ -11,6 +11,19 @@
   outline: none;
   border: none;
 }
+.btndisabled {
+  width: fit-content;
+  height: 20%;
+  border-radius: 5px;
+  background-color: grey;
+  color: black;
+  font-size: 1vmax;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  border: none;
+}
 
 /* The switch - the box around the slider */
 .switch {
