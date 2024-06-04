@@ -10,8 +10,9 @@ import bookingPageApi from "../../services/bookingPageApi";
 import UserAcount from "./UserAcount";
 import teamsApi from "../../services/teamsApi";
 import UserServiceBooking from "./UserServiceBooking";
+import userApi from "../../services/userApi";
 
-function UserProfile({ userAllDetails, setShowUserProfile }) {
+function UserProfile({ userAllDetails, setShowUserProfile, userid }) {
   // const [products, setProducts] = useState([]);
   // const handleChange = () => {};
 
@@ -23,8 +24,9 @@ function UserProfile({ userAllDetails, setShowUserProfile }) {
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
   const [shortby, setShortby] = useState("asc");
+  const [sidebarPageCount, setSidebarPageCount] = useState(1);
 
-  const [teamsPageCount, setTeamsPageCount] = useState("t2");
+  // const [userPageCount, setUserPageCount] = useState("t3");
 
   // setBookingPageCount("c2");
 
@@ -83,7 +85,7 @@ function UserProfile({ userAllDetails, setShowUserProfile }) {
   let sendFilterDataToapi = {};
   let hasFilter = false;
   useEffect(() => {
-    console.log("teamsPageCount-----", teamsPageCount);
+    console.log("sidebarPageCount-----", sidebarPageCount);
     setProducts([]);
     // checking if filter has any data
     for (const key in sendFilterDataToapi) {
@@ -93,19 +95,21 @@ function UserProfile({ userAllDetails, setShowUserProfile }) {
       }
     }
 
-    if (teamsPageCount === "t2" || teamsPageCount === "t3") {
+    if (sidebarPageCount === 2) {
       // Corrected the id assignments
-      let idToUse = teamsPageCount === "t2" ? "t2" : "t3";
+
+      const limit = 10;
+      const active = 1;
 
       // if (hasFilter) {
       //   console.log("sendFilterDataToapi", sendFilterDataToapi);
-      //   alert(teamsPageCount);
+      //   alert(sidebarPageCount);
       //   console.log(sendFilterDataToapi);
       //   // alert(JSON.stringify(sendFilterDataToapi));
 
       //   // alert("filter");
       //   sendFilterDataToapi.page = pageCount;
-      //   sendFilterDataToapi.serviceType = idToUse;
+      //   sendFilterDataToapi.serviceType = sidebarPageCount;
       //   // teamsApi
       //   //   .filterServiceData(sendFilterDataToapi)
       //   //   .then((response) => {
@@ -118,28 +122,29 @@ function UserProfile({ userAllDetails, setShowUserProfile }) {
       //   //     console.error("Error filter studio:", error);
       //   //   });
       // } else {
-      //   const idToUse = teamsPageCount === "t2" ? "t2" : "t3";
+      //   const sidebarPageCount = sidebarPageCount === "t2" ? "t2" : "t3";
       //   // alert("main");
 
-      //   teamsApi
-      //     .getStudioOwners("10", idToUse, 1, pageCount)
-      //     .then((response) => {
-      //       console.log(
-      //         `====================> response from team ${response}`,
-      //         response
-      //       );
-      //       if (response.status) {
-      //         setProducts(response.owners);
-      //         console.log("lkasdnflkjsdnf", response.status);
-      //         setTotalPage(response.paginate.totalPages);
-      //       }
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error fetching studios:", error);
-      //     });
-      // }
-      teamsApi
-        .getStudioOwners("10", idToUse, pageCount, shortby)
+      // teamsApi
+      //   .getuserStudioBooking(limit, active, pageCount)
+      //   .then((response) => {
+      //     console.log(
+      //       `====================> response ${sidebarPageCount}`,
+      //       response
+      //     );
+      //     console.log("response.data.studios", response.studios);
+      //     if (response.studios) {
+      //       setProducts(response.studios);
+      //       setTotalPage(response.paginate.totalPages);
+
+      //       // setPageCount(response.paginate.page);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error fetching studios:", error);
+      //   });
+      userApi
+        .getuserStudioBooking(userAllDetails._id, pageCount)
         .then((response) => {
           console.log(
             `====================> response from team ${response}`,
@@ -154,48 +159,51 @@ function UserProfile({ userAllDetails, setShowUserProfile }) {
         .catch((error) => {
           console.error("Error fetching studios:", error);
         });
-    } else if (teamsPageCount === "t1") {
-      const limit = 64;
+    } else if (sidebarPageCount === 3) {
+      const limit = 10;
       const active = 1;
-      // const type = teamsPageCount;
-      if (hasFilter) {
-        // delete sendFilterDataToapi.serviceType;
-        // sendFilterDataToapi.page = pageCount;
-        // teamsApi
-        //   .filterData(sendFilterDataToapi)
-        //   .then((response) => {
-        //     console.log("filter applied:", response);
-        //     setProducts(response.studios);
-        //     setTotalPage(response.paginate.totalPages);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error filter studio:", error);
-        //   });
-      } else {
-        teamsApi
-          .getStudioOwners(limit, active, pageCount)
-          .then((response) => {
-            console.log(
-              `====================> response ${teamsPageCount}`,
-              response
-            );
-            console.log("response.data.studios", response.studios);
-            if (response.studios) {
-              setProducts(response.studios);
-              setTotalPage(response.paginate.totalPages);
 
-              // setPageCount(response.paginate.page);
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching studios:", error);
-          });
-      }
+      // const type = sidebarPageCount;
+      // if (hasFilter) {
+      // delete sendFilterDataToapi.serviceType;
+      // sendFilterDataToapi.page = pageCount;
+      // teamsApi
+      //   .filterData(sendFilterDataToapi)
+      //   .then((response) => {
+      //     console.log("filter applied:", response);
+      //     setProducts(response.studios);
+      //     setTotalPage(response.paginate.totalPages);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error filter studio:", error);
+      //   });
+      // } else {
+      // console.log(
+      //   userAllDetails._id,
+      //   "Apiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii-------userid"
+      // );
+      userApi
+        .getUserServiceBooking(userAllDetails._id, pageCount)
+        .then((response) => {
+          console.log(
+            `====================> response ${sidebarPageCount}`,
+            response
+          );
+          console.log("response.data.studios", response.studios);
+          if (response.studios) {
+            setProducts(response.studios);
+            setTotalPage(response.paginate.totalPages);
+            // setPageCount(response.paginate.page);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
+      // }
     }
-    console.log(teamsPageCount, "inside useEffect");
-  }, [teamsPageCount, pageCount, shortby]);
+    console.log(sidebarPageCount, "inside useEffect");
+  }, [sidebarPageCount, pageCount, shortby]);
 
-  const [sidebarPageCount, setSidebarPageCount] = useState(1);
   const backOnclick = () => {
     setShowUserProfile(false);
   };
@@ -247,7 +255,7 @@ function UserProfile({ userAllDetails, setShowUserProfile }) {
                   setPageCount={setPageCount}
                   setTotalPage={setTotalPage}
                   pageCount={pageCount}
-                  teamsPageCount={teamsPageCount}
+                  sidebarPageCount={sidebarPageCount}
                   filterNav={filterNav}
                   setfilterNav={setfilterNav}
                   setShortby={setShortby}
@@ -262,7 +270,7 @@ function UserProfile({ userAllDetails, setShowUserProfile }) {
                   setPageCount={setPageCount}
                   setTotalPage={setTotalPage}
                   pageCount={pageCount}
-                  teamsPageCount={teamsPageCount}
+                  sidebarPageCount={sidebarPageCount}
                   filterNav={filterNav}
                   setfilterNav={setfilterNav}
                   setShortby={setShortby}

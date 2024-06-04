@@ -48,6 +48,38 @@ class userApi{
   return response.data;
  };
 
+
+ getuserStudioBooking = async (userId,pageCount) => {
+  
+
+  const response = await api.get(`/bookings/user/`, {
+    params: {
+      userId: userId,
+      limit: 10,
+      page :pageCount,
+      // active: active
+    }
+  });
+  console.log(" user service data res ===>", response.data)
+  return response.data;
+ };
+
+
+ getUserServiceBooking = async (userId,pageCount) => {
+  
+
+  const response = await api.get(`/bookings/services`, {
+    params: {
+      userId: userId,
+      limit: 10,
+      page :pageCount,
+      // active: active
+    }
+  });
+  console.log(" user service data res ===>", response.data)
+  return response.data;
+ };
+
  
 
 //  getServices = async (limit, Type, active ,pageCount) => {

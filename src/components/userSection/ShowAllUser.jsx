@@ -163,9 +163,11 @@ function ShowAllUser() {
   const [userFilterText, setUserFilterText] = useState("");
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [userAllDetails, setuserAllDetails] = useState("");
-
+  let userid = "";
   const showUserDetails = (id) => {
     console.log("id", id);
+    userid = id;
+    console.log(userid, "user id is------------------------");
     setuserAllDetails("");
     setShowUserProfile(true);
 
@@ -195,6 +197,7 @@ function ShowAllUser() {
         <UserProfile
           userAllDetails={userAllDetails}
           setShowUserProfile={setShowUserProfile}
+          userid={userid}
         />
       ) : (
         <>
