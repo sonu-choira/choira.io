@@ -134,7 +134,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
         className={style.addNewStudioimgBox}
         action="/upload"
         method="post"
-        enctype="multipart/form-data"
+        encType="multipart/form-data"
       >
         <label htmlFor="selectimg">Image</label>
         <br />

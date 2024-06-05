@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 
-import singer from "../../assets/img/singer2.png";
+import singer from "../../assets/img/singer3.png";
 import signStyle from "../home/signinBackup.module.css";
 import logo from "../../assets/img/logo-choira.svg";
 import google from "../../assets/img/google.png";

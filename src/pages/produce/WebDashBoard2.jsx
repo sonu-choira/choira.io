@@ -8,66 +8,54 @@ import tanmay from "../../assets/img/dashboard_img/tanmay.png";
 import ProfileEdit from "./ProfileEdit";
 import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineTeam } from "react-icons/ai";
-import { useNavigateRouter } from "../../navigateRoute";
 import { FaRegUser } from "react-icons/fa";
 
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
-  const router = useNavigateRouter();
-
+  const navigate = useNavigate();
   let { navOption: pageData } = useParams();
 
   useEffect(() => {
-    if (pageData == "User") {
+    if (pageData === "User") {
       setTabCount(1);
-    } else if (pageData == "Teams") {
+    } else if (pageData === "Teams") {
       setTabCount(2);
-    } else if (pageData == "Apps&More") {
+    } else if (pageData === "Apps&More") {
       setTabCount(3);
-    } else if (pageData == "Bookings") {
+    } else if (pageData === "Bookings") {
       setTabCount(4);
     }
-  }, [pageData]);
+  }, [pageData, setTabCount]);
 
-  if (navCount) {
-    setTabCount(navCount);
-    // alert(navCount);
-  }
+  useEffect(() => {
+    if (navCount) {
+      setTabCount(navCount);
+    }
+  }, [navCount, setTabCount]);
 
   const [editProfile, setEditProfile] = useState(false);
   const editProfiletab = () => {
     setEditProfile(true);
   };
-  // const navigate = useNavigate();
+
   const gotoAllStudioDetailPage = () => {
-    // navigate("/allStudioPageDetailsPage");
-    if (navCount) {
-      router.push("/adminDashboard/Apps&More/studio");
-    } else {
-      setTabCount(3);
-      router.push("/adminDashboard/Apps&More/studio");
-    }
-  };
-  const gotoBookings = () => {
-    if (navCount) {
-      router.push("/adminDashboard/Bookings/studio");
-    } else {
-      setTabCount(4);
-      router.push("/adminDashboard/Bookings/studio");
-    }
-  };
-  const gotoStudios = () => {
-    // router.push("/User");
-    if (navCount) {
-      router.push("/adminDashboard/User");
-    } else {
-      setTabCount(1);
-      router.push("/adminDashboard/User");
-    }
+    setTabCount(3);
+    navigate("/adminDashboard/Apps&More/studio");
   };
 
-  // useEffect(() => {
-  // if(tabCount)
-  // }, [tabCount])
+  const gotoBookings = () => {
+    setTabCount(4);
+    navigate("/adminDashboard/Bookings/studio");
+  };
+
+  const gotoStudios = () => {
+    setTabCount(1);
+    navigate("/adminDashboard/User");
+  };
+
+  const gotoTeams = () => {
+    setTabCount(2);
+    navigate("/adminDashboard/Teams/StudioPatners");
+  };
 
   return (
     <>
@@ -88,14 +76,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
               </div>
               <div
                 className={tabCount === 2 ? style.tabActive : style.padding}
-                onClick={() => {
-                  if (navCount) {
-                    router.push("/adminDashboard/Teams/StudioPatners");
-                  } else {
-                    setTabCount(2);
-                    router.push("/adminDashboard/Teams/StudioPatners");
-                  }
-                }}
+                onClick={gotoTeams}
               >
                 <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />
                 Teams

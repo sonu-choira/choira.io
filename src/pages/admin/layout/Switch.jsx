@@ -5,7 +5,7 @@ function Switch({ status }) {
   return (
     <>
       <label class="switch">
-        <input type="checkbox" checked={status} />
+        <input type="checkbox" checked={status} readOnly />
         <span class="slider"></span>
       </label>
     </>
