@@ -130,11 +130,11 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
 
   return (
     <>
-      <form
+      <div
         className={style.addNewStudioimgBox}
-        action="/upload"
-        method="post"
-        encType="multipart/form-data"
+        // action="/upload"
+        // method="post"
+        // encType="multipart/form-data"
       >
         <label htmlFor="selectimg">Image</label>
         <br />
@@ -274,7 +274,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
             onClick={uploadimagetoDataBase}
           />
         </span>
-      </form>
+      </div>
     </>
   );
 }

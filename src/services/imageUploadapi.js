@@ -17,7 +17,11 @@ class imgapi {
 
       const config = {
         headers: {
-          'Content-Type': `multipart/form-data; boundary=${formData._boundary}` // Manually set the boundary
+          'Content-Type': `multipart/form-data; boundary=${formData._boundary}` ,
+          
+        
+
+         
         }
       };
 

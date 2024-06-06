@@ -147,13 +147,13 @@ function UserProfile({ userAllDetails, setShowUserProfile, userid }) {
         .getuserStudioBooking(userAllDetails._id, pageCount)
         .then((response) => {
           console.log(
-            `====================> response from team ${response}`,
+            `====================> response from studio booking ${response.data.users}`,
             response
           );
-          if (response.status) {
-            setProducts(response.owners);
+          if (response) {
+            setProducts(response.data.allStudioBooking);
             console.log("lkasdnflkjsdnf", response.status);
-            setTotalPage(response.paginate.totalPages);
+            setTotalPage(response.data.paginate.totalPages);
           }
         })
         .catch((error) => {
@@ -186,13 +186,17 @@ function UserProfile({ userAllDetails, setShowUserProfile, userid }) {
         .getUserServiceBooking(userAllDetails._id, pageCount)
         .then((response) => {
           console.log(
-            `====================> response ${sidebarPageCount}`,
+            `====================> response user service ${sidebarPageCount}`,
             response
           );
-          console.log("response.data.studios", response.studios);
-          if (response.studios) {
-            setProducts(response.studios);
+          console.log("response.data", response.data);
+          if (response) {
+            setProducts(response.data);
             setTotalPage(response.paginate.totalPages);
+            console.log(
+              "response.paginate.totalPages",
+              response.paginate.totalPages
+            );
             // setPageCount(response.paginate.page);
           }
         })

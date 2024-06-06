@@ -52,16 +52,17 @@ class userApi{
  getuserStudioBooking = async (userId,pageCount) => {
   
 
-  const response = await api.get(`/bookings/user/`, {
+  const response = await api.get(`/bookings/user/${userId}`, {
     params: {
-      userId: userId,
+    
+      source: "website",
       limit: 10,
       page :pageCount,
       // active: active
     }
   });
-  console.log(" user service data res ===>", response.data)
-  return response.data;
+  console.log(" user service data res ===>", response)
+  return response;
  };
 
 

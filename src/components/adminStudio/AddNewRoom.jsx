@@ -418,9 +418,10 @@ function AddNewRoom({
                 value={selectedDate}
                 onChange={setSelectedDate}
                 // style={customStyles}
-                options={filteredDates?.map((item) => ({
+                options={filteredDates?.map((item, index) => ({
                   value: item,
                   label: item,
+                  key: index,
                 }))}
               />
             </div>

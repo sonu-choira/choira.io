@@ -440,7 +440,7 @@ function AddNewServices2({
                 </div>
                 {countryPrice.map((price, index) => {})}
 
-                <div>
+                <div key={index}>
                   <input
                     type="number"
                     placeholder="Enter Price"

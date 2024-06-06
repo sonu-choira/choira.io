@@ -24,15 +24,14 @@ function TeamsActionBar({
   console.log("page ka data ", useParams());
 
   const gotoAddNew = (teamsPageCount) => {
-    if (teamsPageCount === "t1") {
-      router.push("/studio/add", {
-        state: { navCount: 3, teamsPageCount: teamsPageCount },
-      });
-    } else {
-      router.push("/service/musicProduction/add", {
-        state: { navCount: 3, teamsPageCount: teamsPageCount },
-      });
+    if (teamsPageCount === "t2") {
+      router.push("/adminDashboard/Teams/AddStudiPatner");
     }
+    // else {
+    //   router.push("/service/musicProduction/add", {
+    //     state: { navCount: 3, teamsPageCount: teamsPageCount },
+    //   });
+    // }
   };
   const gotoSlotBooking = () => {
     router.push("/service/AddSlotBooking", {
@@ -182,14 +181,14 @@ function TeamsActionBar({
             <Button
               name={"Add New"}
               onClick={() => {
-                // gotoAddNew(teamsPageCount);
+                gotoAddNew(teamsPageCount);
               }}
               icon={<MdNoteAdd />}
               style={{
                 height: "50%",
                 width: "18%",
                 gap: "5%",
-                backgroundColor: "#ADB5BD",
+                // backgroundColor: "#ADB5BD",
               }}
             />
           ) : (

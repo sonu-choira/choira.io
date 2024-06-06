@@ -46,9 +46,10 @@ function MultipleSelect({ selectedItems = [], setSelectedItems = () => {} }) {
         placeholder="Select one or more Amenities"
         value={selectedItems}
         onChange={setSelectedItems}
-        options={filteredAmenities.map((item) => ({
+        options={filteredAmenities.map((item, index) => ({
           value: item,
           label: item,
+          key: index,
         }))}
         dropdownRender={(menu) => (
           <>

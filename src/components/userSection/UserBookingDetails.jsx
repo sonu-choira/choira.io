@@ -419,19 +419,19 @@ function UserBookingDetails({
                   return (
                     <tr key={products._id}>
                       <td
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          height: "100%",
-                        }}
+                      // style={{
+                      //   display: "flex",
+                      //   alignItems: "center",
+                      //   justifyContent: "center",
+                      //   height: "100%",
+                      // }}
                       >
-                        {index + 1 * (pageCount - 1) * 10 + 1}
+                        {products._id}
                       </td>
-                      <td>{products.firstName}</td>
-                      <td>{products.email}</td>
+                      <td>{products?.studioData?.fullName}</td>
+                      <td>{products.bookingDate}</td>
                       <td>{products.studioName}</td>
-                      <td>{products.creationTimeStamp}</td>
+                      <td>{products.abc}</td>
                       <td className={style.tableActionbtn}>
                         <div className={style.userProjectStatus}>Pending</div>
                       </td>

@@ -22,6 +22,7 @@ import ChoiraLoader from "./components/loader/ChoiraLoader";
 import AllStudioPageDetailsPage from "./pages/admin/studios/AllStudioPageDetailsPage.jsx";
 import AddNewStudio from "../src/components/adminStudio/AddNewStudio.jsx";
 import AddNewProduction from "../src/components/adminStudio/appsAndMore/AddNewProduction.jsx";
+import StudioPatners from "./components/teamsSection/StudioPatners.jsx";
 
 // import Signup from "./pages/home/Signup.jsx";
 
@@ -56,6 +57,8 @@ const AddProduction = lazy(()=> import("../src/components/adminStudio/appsAndMor
 const ShowBookingsDetail = lazy(()=> import("../src/components/adminStudio/booking/ShowBookingDetails.jsx"))
 const SlotBooking = lazy(()=> import("../src/components/adminStudio/SlotBooking.jsx"))
 const ChooseTimeSlot = lazy(()=> import("../src/components/adminStudio/ChooseTimeSlot.jsx"))
+const AddNewStudioPatner = lazy(()=> import("../src/components/teamsSection/AddNewStudioPatner.jsx"))
+
 
 
           {/* admin page  ends ========================> */}
@@ -102,6 +105,7 @@ const Routing = () => {
           <Route exact path='/service/musicProduction/add' element={<AddNewProduction/>} />
           <Route exact path='/service/showBookingDetails' element={<ShowBookingsDetail/>} />
           <Route exact path='/adminDashboard/Bookings/AddSlotBooking' element={<SlotBooking/>} />
+          <Route exact path='/adminDashboard/Teams/AddStudiPatner' element={<AddNewStudioPatner/>} />
           {/* <Route exact path='/service/AddSlotBooking' element={<ChooseTimeSlot/>} /> */}
           {/* admin page route ends ========================> */}
 
