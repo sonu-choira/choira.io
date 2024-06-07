@@ -30,6 +30,7 @@ function DateAndSearchFilter({
   userFilterText,
   setUserFilterText,
   userAllFilterData,
+  csstyle,
 }) {
   const rangePresets = [
     {
@@ -274,7 +275,7 @@ function DateAndSearchFilter({
   // console.log(sendFilterDataToapi);
   return (
     <>
-      <div className={style.searchDiv}>
+      <div className={style.searchDiv} style={csstyle}>
         <div>
           {userFiler ? (
             <RangePicker

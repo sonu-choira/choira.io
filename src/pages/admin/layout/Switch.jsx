@@ -4,9 +4,9 @@ import "../layout/layout.css";
 function Switch({ status }) {
   return (
     <>
-      <label class="switch">
+      <label className="switch">
         <input type="checkbox" checked={status} readOnly />
-        <span class="slider"></span>
+        <span className="slider"></span>
       </label>
     </>
   );

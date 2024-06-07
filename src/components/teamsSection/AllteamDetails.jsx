@@ -17,6 +17,7 @@ import AllStudioDetail from "../adminStudio/AllStudioDetail";
 import AllStudioDetail2 from "../adminStudio/appsAndMore/AllStudioDetail2";
 import StudioPatners from "./StudioPatners";
 import teamsApi from "../../services/teamsApi";
+import Subadmin from "./Subadmin";
 
 function AllteamDetails() {
   const [products, setProducts] = useState([]);
@@ -133,7 +134,7 @@ function AllteamDetails() {
         //   .catch((error) => {
         //     console.error("Error filter studio:", error);
         //   });
-      } else {
+      } else if (teamsPageCount == "t1") {
         teamsApi
           .getStudioOwners(limit, active, pageCount)
           .then((response) => {
@@ -142,7 +143,7 @@ function AllteamDetails() {
               response
             );
             console.log("response.data.studios", response.studios);
-            if (response.studios) {
+            if (response) {
               setProducts(response.studios);
               setTotalPage(response.paginate.totalPages);
 
@@ -168,7 +169,20 @@ function AllteamDetails() {
           setTeamsPageCount={setTeamsPageCount}
         />
         {currentNav == "Teams" && currentPage == "Arm" ? (
-          ""
+          <Subadmin
+            sendFilterDataToapi={sendFilterDataToapi}
+            products={products}
+            setProducts={setProducts}
+            totalPage={totalPage}
+            setPageCount={setPageCount}
+            setTotalPage={setTotalPage}
+            pageCount={pageCount}
+            teamsPageCount={teamsPageCount}
+            filterNav={filterNav}
+            setfilterNav={setfilterNav}
+            setShortby={setShortby}
+            shortby={shortby}
+          />
         ) : // <AllStudioDetail />
         currentNav == "Teams" && currentPage == "StudioPatners" ? (
           <StudioPatners

@@ -26,7 +26,12 @@ function TeamsActionBar({
   const gotoAddNew = (teamsPageCount) => {
     if (teamsPageCount === "t2") {
       router.push("/adminDashboard/Teams/AddStudiPatner");
+    } else if (teamsPageCount === "t1") {
+      router.push("/adminDashboard/Teams/AddNewArm");
     }
+    //  else {
+    //   router.push("/adminDashboard/Teams/AddStudiPatner");
+    // }
     // else {
     //   router.push("/service/musicProduction/add", {
     //     state: { navCount: 3, teamsPageCount: teamsPageCount },

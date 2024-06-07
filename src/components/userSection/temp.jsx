@@ -1,194 +1,97 @@
 import React, { useEffect, useState } from "react";
-import StudioPatners from "../teamsSection/StudioPatners";
-import TeamsActionBar from "../teamsSection/TeamActionBar";
 import style from "../../pages/admin/studios/studio.module.css";
 import Button from "../../pages/admin/layout/Button";
-import { FaDownload } from "react-icons/fa6";
-import teamsApi from "../../services/teamsApi";
-import PaginationNav from "../../pages/admin/layout/PaginationNav";
-import ChoiraLoder2 from "../loader/ChoiraLoder2";
-import { CiFilter } from "react-icons/ci";
-import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import { FaDownload, FaRegEye } from "react-icons/fa";
 import { RiDeleteBin5Fill, RiExpandUpDownLine } from "react-icons/ri";
-import { GrShare } from "react-icons/gr";
+import { CiFilter } from "react-icons/ci";
 import userApi from "../../services/userApi";
 import imageNotFound from "../../assets/imagesNotFound.png";
-import { FaRegEye } from "react-icons/fa";
+import PaginationNav from "../../pages/admin/layout/PaginationNav";
+import ChoiraLoder2 from "../loader/ChoiraLoder2";
+import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import UserProfile from "./UserProfile";
-import Alert from "antd/es/alert/Alert";
 import { errorAlert } from "../../pages/admin/layout/Alert";
 
-let userAllFilterData = {
+const userAllFilterData = {
   sortfield: "",
   status: "",
   searchUser: "",
   startDate: undefined,
   endDate: undefined,
 };
+
 function ShowAllUser() {
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
-  const [filterNav, setfilterNav] = useState(false);
-  const [shortby, setShortby] = useState(false);
-  const status = ["active", "inactive"];
-
+  const [filterNav, setFilterNav] = useState(false);
   const [shortBySrNo, setShortBySrNo] = useState(false);
   const [shortByUser, setShortByUser] = useState(false);
   const [shortByEmail, setShortByEmail] = useState(false);
-
-  const handelStatusFilter = () => {
-    setShowstatusFilter((prevState) => {
-      if (!prevState) {
-        // If toggling to true, set other filters to false
-
-        setShowRoomFilter(false);
-      }
-      return !prevState;
-    });
-  };
-
-  useEffect(() => {
-    console.log(" -----");
-    setProducts([]);
-
-    // checking if filter has any data
-
-    console.log(selectedStatus);
-    if (selectedStatus[0]) {
-      let status;
-      if (selectedStatus[0] == "active") {
-        status = 1;
-        userAllFilterData.status = status;
-      } else if (selectedStatus[0] == "inactive") {
-        status = 0;
-        userAllFilterData.status = status;
-      } else {
-        status = undefined;
-        userAllFilterData.status = status;
-      }
-      userApi
-        .getAllUser(pageCount, userAllFilterData)
-        .then((response) => {
-          console.log(`====================> response `, response);
-          console.log("response.data.users", response.users);
-          if (response.users) {
-            setProducts(response.users);
-            setTotalPage(response.paginate.totalPages);
-
-            // setPageCount(response.paginate.page);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
-    } else {
-      let dataTosend;
-
-      if (shortByUser) {
-        dataTosend = "fullName";
-        userAllFilterData.sortfield = dataTosend;
-      } else if (shortByEmail) {
-        dataTosend = "email";
-        userAllFilterData.sortfield = dataTosend;
-      } else {
-        dataTosend = "";
-        userAllFilterData.sortfield = dataTosend;
-      }
-      userApi
-        .getAllUser(pageCount, userAllFilterData)
-        .then((response) => {
-          console.log(`====================> response `, response);
-          console.log("response.data.users", response.users);
-          if (response.users) {
-            setProducts(response.users);
-            setTotalPage(response.paginate.totalPages);
-
-            // setPageCount(response.paginate.page);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
-    }
-
-    // const type =  ;
-
-    console.log("inside useEffect");
-  }, [pageCount, shortByUser, shortByEmail]);
-
-  const [selectedCity, setSelectedCity] = useState([]);
-
   const [selectedStatus, setSelectedStatus] = useState([]);
   const [showstatusFilter, setShowstatusFilter] = useState(false);
-  const closeAllFilter = () => {
-    setShowstatusFilter(false);
-  };
+  const [showUserProfile, setShowUserProfile] = useState(false);
+  const [userAllDetails, setUserAllDetails] = useState("");
 
-  // var selectedDate = "";
-  const [priceFilter, setPriceFilter] = useState({
-    minPrice: "",
-    maxPrice: "",
-  });
-  const [showRoomFilter, setShowRoomFilter] = useState(false);
-  const [showCityFilter, setShowCityFilter] = useState(false);
-  const userFiler = true;
+  const status = ["active", "inactive"];
+
+  useEffect(() => {
+    setProducts([]);
+    if (selectedStatus.length > 0) {
+      const status =
+        selectedStatus[0] === "active"
+          ? 1
+          : selectedStatus[0] === "inactive"
+          ? 0
+          : undefined;
+      userAllFilterData.status = status;
+    }
+    userApi
+      .getAllUser(pageCount, userAllFilterData)
+      .then((response) => {
+        if (response.users) {
+          setProducts(response.users);
+          setTotalPage(response.paginate.totalPages);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+  }, [pageCount, shortByUser, shortByEmail, selectedStatus]);
 
   const handleSortBySrNo = () => {
-    console.log("shortBySrNo", shortBySrNo);
-
-    setShortBySrNo(!shortBySrNo);
+    setShortBySrNo((prev) => !prev);
     setShortByUser(false);
     setShortByEmail(false);
   };
-  useEffect(() => {
-    console.log("shortBySrNo", shortBySrNo);
-    if (shortBySrNo) {
-      setProducts((prev) => [...prev].reverse());
-    }
-  }, [shortBySrNo]);
 
   const handleSortByUser = () => {
     setShortBySrNo(false);
-    setShortByUser(!shortByUser);
+    setShortByUser((prev) => !prev);
     setShortByEmail(false);
   };
 
   const handleSortByEmail = () => {
     setShortBySrNo(false);
     setShortByUser(false);
-    setShortByEmail(!shortByEmail);
+    setShortByEmail((prev) => !prev);
   };
-  const [userFilterText, setUserFilterText] = useState("");
-  const [showUserProfile, setShowUserProfile] = useState(false);
-  const [userAllDetails, setuserAllDetails] = useState("");
-  let userid = "";
-  const showUserDetails = (id) => {
-    console.log("id", id);
-    userid = id;
-    console.log(userid, "user id is------------------------");
-    setuserAllDetails("");
-    setShowUserProfile(true);
 
+  const showUserDetails = (id) => {
+    setShowUserProfile(true);
     userApi
       .getSpecificUser(id)
       .then((response) => {
-        console.log(`====================> response `, response);
-        // console.log("response.data.users", response.data.user);
-        console.log("response.users", response.user);
-
         if (response.user) {
-          setuserAllDetails(response.user);
+          setUserAllDetails(response.user);
         }
       })
       .catch((error) => {
-        console.error("Error fetching studios:", error);
+        console.error("Error fetching user details:", error);
         setShowUserProfile(false);
         errorAlert("Something went wrong");
       });
-
-    // setShowUserProfile(true);
   };
 
   return (
