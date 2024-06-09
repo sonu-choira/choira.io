@@ -10,6 +10,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AiOutlineTeam } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { useLocale } from "antd/es/locale";
+import { LuHome } from "react-icons/lu";
 
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
@@ -17,14 +18,16 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   let { pathname } = useLocation();
 
   useEffect(() => {
-    if (pathname.includes("User")) {
+    if (pathname.includes("Overview")) {
       setTabCount(1);
-    } else if (pathname.includes("Teams")) {
+    } else if (pathname.includes("User")) {
       setTabCount(2);
-    } else if (pathname.includes("Apps&More")) {
+    } else if (pathname.includes("Teams")) {
       setTabCount(3);
-    } else if (pathname.includes("Bookings")) {
+    } else if (pathname.includes("Apps&More")) {
       setTabCount(4);
+    } else if (pathname.includes("Bookings")) {
+      setTabCount(5);
     }
   }, [pathname, setTabCount]);
 
@@ -40,22 +43,26 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   };
 
   const gotoAllStudioDetailPage = () => {
-    setTabCount(3);
+    setTabCount(4);
     navigate("/adminDashboard/Apps&More/studio");
   };
 
   const gotoBookings = () => {
-    setTabCount(4);
+    setTabCount(5);
     navigate("/adminDashboard/Bookings/studio");
   };
 
-  const gotoStudios = () => {
+  const gotoOverview = () => {
     setTabCount(1);
+    navigate("/adminDashboard/Overview");
+  };
+  const gotoStudios = () => {
+    setTabCount(2);
     navigate("/adminDashboard/User");
   };
 
   const gotoTeams = () => {
-    setTabCount(2);
+    setTabCount(3);
     navigate("/adminDashboard/Teams/StudioPatners");
   };
 
@@ -71,27 +78,34 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
             <div className={style.community}>
               <div
                 className={tabCount === 1 ? style.tabActive : style.padding}
+                onClick={gotoOverview}
+              >
+                <LuHome style={{ fontSize: "1vmax" }} />
+                DashBoard
+              </div>
+              <div
+                className={tabCount === 2 ? style.tabActive : style.padding}
                 onClick={gotoStudios}
               >
                 <FaRegUser style={{ fontSize: "1vmax" }} />
                 User
               </div>
               <div
-                className={tabCount === 2 ? style.tabActive : style.padding}
+                className={tabCount === 3 ? style.tabActive : style.padding}
                 onClick={gotoTeams}
               >
                 <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />
                 Teams
               </div>
               <div
-                className={tabCount === 3 ? style.tabActive : style.padding}
+                className={tabCount === 4 ? style.tabActive : style.padding}
                 onClick={gotoAllStudioDetailPage}
               >
                 <img src={produce} alt="" />
                 App & More
               </div>
               <div
-                className={tabCount === 4 ? style.tabActive : style.padding}
+                className={tabCount === 5 ? style.tabActive : style.padding}
                 onClick={gotoBookings}
               >
                 <img src={produce} alt="" />
