@@ -1,23 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MdAddAPhoto, MdOutlineSettings } from "react-icons/md";
-import { IoMdAddCircle } from "react-icons/io";
-import upload from "../../assets/img/upload.png";
-import style from "../../pages/admin/studios/studio.module.css";
-
-import {
-  FaCheckDouble,
-  FaFilter,
-  FaRegBell,
-  FaRegClock,
-  FaShare,
-} from "react-icons/fa6";
-import WebDashboard2 from "../../pages/produce/WebDashBoard2";
 import { IoSearch } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
-import { useLocation, useNavigate } from "react-router-dom";
-import timeSlotApi from "../../services/timeSlotApi";
-import { event, send } from "react-ga";
+import { FaRegBell } from "react-icons/fa6";
+import { MdOutlineSettings } from "react-icons/md";
+import WebDashboard2 from "../../pages/produce/WebDashBoard2";
 import StudioFooter from "../adminStudio/StudioFooter";
+import timeSlotApi from "../../services/timeSlotApi";
+import style from "../../pages/admin/studios/studio.module.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 
 function AddNewArm({ setSelectTab }) {
   const timeSlotApiData = useRef({
@@ -27,24 +18,34 @@ function AddNewArm({ setSelectTab }) {
     permission: [],
     password: "",
   });
-  const [test, settest] = useState(timeSlotApiData);
-  // const timeSlotApiData = useRef({
-  //   userName: "ss",
-  //   mobile: "aa",
-  //   email: "aaa",
-  //   studioId: "63d1225e1b3a159c2ce0799e",
-  //   roomId: "1",
-  //   bookingDate: "2024-05-18",
-  //   bookingHours: "1",
-  // });
+  const { values, errors, handleBlur, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      userName: "",
+      mobile: "",
+      email: "",
+      permission: [],
+      password: "",
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
 
+  console.log(values);
+
+  const [selectedData, setSelectedData] = useState([]);
   const data = useLocation();
   const [tabCount, setTabCount] = useState();
   const navCount = data?.state?.navCount;
-  const [showAllSlots, setshowAllSlots] = useState(false);
-
   const [allStudio, setAllStudio] = useState([]);
-  let checkboxdata = [
+  const [showAllSlots, setshowAllSlots] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedStudioid, setselectedStudioid] = useState("");
+  const [selectRooms, setselectRooms] = useState([]);
+  const [allTimeSlots, setallTimeSlots] = useState({});
+  const navigate = useNavigate();
+
+  const checkboxdata = [
     "Dashboard",
     "Team",
     "User",
@@ -54,142 +55,56 @@ function AddNewArm({ setSelectTab }) {
     "Promotions",
     "Notifications",
   ];
-  const [selectedData, setSelectedData] = useState([]);
 
   useEffect(() => {
     timeSlotApi
       .getonlyStudio()
-      .then((res) => {
-        console.log(res.studios);
-        setAllStudio(res.studios);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then((res) => setAllStudio(res.studios))
+      .catch((err) => console.log(err));
   }, []);
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
-
-    if (checked) {
-      setSelectedData((prev) => [...prev, name]);
-    } else {
-      setSelectedData((prev) => prev.filter((item) => item !== name));
-    }
+    setSelectedData((prev) =>
+      checked ? [...prev, name] : prev.filter((item) => item !== name)
+    );
   };
 
   useEffect(() => {
-    console.log("selectedData", selectedData);
     timeSlotApiData.current.permission = selectedData;
   }, [selectedData]);
 
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [selectedDate, setSelectedDate] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
-
-  const handledaysCheckboxChange = (id) => {
-    const updaeddays = selectedDate.includes(id)
-      ? selectedDate.filter((day) => day !== id)
-      : [...selectedDate, id];
-
-    setSelectedDate(updaeddays);
-    console.log(selectedDate);
-  };
-  const [iframeCode, setIframeCode] = useState("");
-  const [hasContent, setHasContent] = useState(false);
-
-  const handleIframeCodeChange = (e) => {
-    const inputCode = e.target.value;
-
-    // Update the state with the user-entered iframe code
-    setIframeCode(inputCode);
-
-    // Update hasContent state based on whether there is content in the textarea
-    setHasContent(inputCode.trim() !== "");
-  };
-  const navigate = useNavigate();
   const backOnclick = () => {
     navigate("/adminDashboard/Teams/StudioPatners");
   };
-  const [selectedStudioid, setselectedStudioid] = useState("");
-  const [selectRooms, setselectRooms] = useState([]);
-  useEffect(() => {
-    console.log("selectedStudioid");
-    console.log(selectedStudioid);
-  }, [selectedStudioid]);
 
   const handelStudioid = (e) => {
     let id = e.target.value;
-    console.log("id");
-    console.log(id);
     setselectedStudioid(id);
-
     timeSlotApiData.current.studioId = id;
-    let ans = allStudio.filter((allStudio) => allStudio._id == id);
-    console.log("ans");
-    console.log(ans[0].roomsDetails);
-    setselectRooms(ans[0].roomsDetails);
+    let selectedStudio = allStudio.find((studio) => studio._id === id);
+    setselectRooms(selectedStudio ? selectedStudio.roomsDetails : []);
   };
-  useEffect(() => {
-    console.log("selectRooms");
-    console.log(selectRooms);
-  }, [selectRooms]);
-  const [allTimeSlots, setallTimeSlots] = useState({});
 
-  let hitapi = () => {
+  const hitapi = () => {
     timeSlotApi
       .getAllSolts(timeSlotApiData.current)
       .then((res) => {
-        console.log(res);
         setshowAllSlots(true);
         setallTimeSlots(res);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   };
-
-  useEffect(() => {
-    console.log("timeSlotApiData");
-    console.log(timeSlotApiData);
-  }, [timeSlotApiData.current]);
 
   const sendTimeSlotDataToApi = (event) => {
     event.preventDefault();
-    // Get all keys of the object
-    let ans = Object.keys(timeSlotApiData.current);
-
-    // Check if any field is empty
-    for (let check of ans) {
-      if (timeSlotApiData.current[check] === "") {
-        alert(`Please fill ${check} fields`);
+    for (let key of Object.keys(timeSlotApiData.current)) {
+      if (timeSlotApiData.current[key] === "") {
+        alert(`Please fill ${key} fields`);
         return;
       }
     }
-
-    // If all fields are filled, call the API
     hitapi();
-  };
-  const handelSavebtn = () => {
-    if (showAllSlots) {
-      if (selectedSlot) {
-        setshowAllSlots(false);
-      } else {
-        alert("Please choose a slot");
-      }
-    } else if (selectedSlot) {
-      alert("sendingData to api");
-      timeSlotApi
-        .getAllSolts(timeSlotApiData.current)
-        .then((res) => {
-          console.log(res);
-          setshowAllSlots(true);
-          setallTimeSlots(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
   };
 
   return (
@@ -200,7 +115,7 @@ function AddNewArm({ setSelectTab }) {
           tabCount={tabCount}
           setTabCount={setTabCount}
         />
-        <form className={style.studioMainScreen}>
+        <form className={style.studioMainScreen} onSubmit={handleSubmit}>
           <div className={style.studioHeader}>
             <div>
               <input type="text" placeholder="search" />
@@ -220,7 +135,10 @@ function AddNewArm({ setSelectTab }) {
           </div>
           <div className={style.addNewStudioTitle}>Add New ARM</div>
 
-          <div className={style.addNewStudioPage}>
+          <div
+            className={style.addNewStudioPage}
+            style={{ overflow: "hidden" }}
+          >
             <div style={{ height: "80%" }}>
               <div>
                 <div className={style.addNewStudioinputBox}>
@@ -228,11 +146,15 @@ function AddNewArm({ setSelectTab }) {
                   <input
                     type="text"
                     id="UserName"
+                    name="userName"
                     placeholder="Enter Fullname Name"
-                    onChange={(e) => {
-                      timeSlotApiData.current.userName = e.target.value;
-                    }}
-                    // value={timeSlotApiData.current?.userName}
+                    value={values.userName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+
+                    // onChange={(e) => {
+                    //   timeSlotApiData.current.userName = e.target.value;
+                    // }}
                   />
                 </div>
 
@@ -241,34 +163,17 @@ function AddNewArm({ setSelectTab }) {
                   <input
                     type="email"
                     id="Email"
+                    name="email"
                     placeholder="Enter Email id"
-                    onChange={(e) => {
-                      timeSlotApiData.current.email = e.target.value;
-                    }}
-
-                    // value={timeSlotApiData.current?.email}
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    // onChange={(e) => {
+                    //   timeSlotApiData.current.email = e.target.value;
+                    // }}
                   />
                 </div>
 
-                {/* <div className={style.addNewStudioinputBox}>
-                  <label>Studio</label>
-
-                  <select
-                    onChange={(event) => {
-                      handelStudioid(event);
-                    }}
-                    value={selectedStudioid}
-                  >
-                    <option value="" disabled selected>
-                      Select Studio
-                    </option>
-                    {allStudio?.map((studio) => (
-                      <option key={studio._id} value={studio._id}>
-                        {studio.fullName}
-                      </option>
-                    ))}
-                  </select>
-                </div> */}
                 <label htmlFor="" className={style.label}>
                   Permission
                 </label>
@@ -282,40 +187,30 @@ function AddNewArm({ setSelectTab }) {
                         type="checkbox"
                         name={item}
                         id={item}
-                        // checked={selectedData.includes(item)}
-                        onChange={handleCheckboxChange}
+                        value={values.item}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        // onChange={handleCheckboxChange}
                       />
                       <label htmlFor={item}>{item}</label>
                     </div>
                   ))}
                 </div>
-
-                {/* <div className={style.addNewStudioinputBox}>
-                  <label>Booking Hours</label>
-
-                  <select>
-                    <option>Choose Booking Hours</option>
-                    <option>1 Hour</option>
-                    <option>2 Hour</option>
-                    <option>3 Hour</option>
-                    <option>4 Hour</option>
-                    <option>5 Hour</option>
-                  </select>
-                </div> */}
               </div>
-              {/* secod side  */}
               <div>
                 <div className={style.addNewStudioinputBox}>
                   <label htmlFor="Mobilenumber">Mobile number</label>
                   <input
                     type="number"
                     id="Mobilenumber"
+                    name="mobile"
                     placeholder="Enter Mobile number"
-                    onChange={(e) => {
-                      timeSlotApiData.current.mobile = e.target.value;
-                    }}
-
-                    // value={timeSlotApiData.current?.mobile}
+                    value={values.mobile}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    // onChange={(e) => {
+                    //   timeSlotApiData.current.mobile = e.target.value;
+                    // }}
                   />
                 </div>
 
@@ -323,17 +218,19 @@ function AddNewArm({ setSelectTab }) {
                   className={style.addNewStudioinputBox}
                   style={{ cursor: "pointer" }}
                 >
-                  <label htmlFor="password"> Enter Password</label>
+                  <label htmlFor="password">Enter Password</label>
                   <input
                     style={{ cursor: "pointer" }}
                     type="text"
                     id="password"
-                    placeholder="Enter PassWord"
-                    onChange={(e) => {
-                      timeSlotApiData.current.password = e.target.value;
-                    }}
-                    // disabled
-                    // onClick={sendTimeSlotDataToApi}
+                    name="password"
+                    placeholder="Enter Password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    // onChange={(e) => {
+                    //   timeSlotApiData.current.password = e.target.value;
+                    // }}
                   />
                 </div>
               </div>
@@ -341,9 +238,9 @@ function AddNewArm({ setSelectTab }) {
           </div>
           <StudioFooter
             backOnclick={backOnclick}
-            saveOnclick={(event) => {
-              sendTimeSlotDataToApi(event);
-            }}
+            // saveOnclick={(event) => {
+            //   sendTimeSlotDataToApi(event);
+            // }}
             saveType={"submit"}
           />
         </form>

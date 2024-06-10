@@ -7,6 +7,11 @@ import t2 from "../../../assets/img/adminOverview/t2.png";
 import t3 from "../../../assets/img/adminOverview/t3.png";
 import t4 from "../../../assets/img/adminOverview/t4.png";
 import MyChart from "../../../components/charts/MyChart";
+import DoughnutChart from "../../../components/charts/DoughnutChart";
+import LineGraph from "../../../components/charts/LineGraph";
+import BarGraph from "../../../components/charts/BarGraph";
+import AreaGraph from "../../../components/charts/AreaGraph";
+import SimpleLineChart from "../../../components/charts/SimpleLineChart";
 function Overview() {
   const data = [
     {
@@ -55,7 +60,29 @@ function Overview() {
         </div>
 
         <MyChart />
-        {/* <div className={style.overviewPage2}></div> */}
+        <div className={style.overviewPage2}>
+          <div>
+            <DoughnutChart />
+          </div>
+          <div>
+            <LineGraph />
+          </div>
+        </div>
+        <div className={style.overviewPage3}>
+          <div>
+            <BarGraph />
+          </div>
+          <div>
+            <AreaGraph />
+          </div>
+        </div>
+        <br />
+        <br />
+        <div className={style.overviewPage4}>
+          <div>
+            <SimpleLineChart />
+          </div>
+        </div>
       </div>
     </>
   );

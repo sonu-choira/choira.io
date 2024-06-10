@@ -2,6 +2,8 @@ import React from "react";
 import Button from "../../pages/admin/layout/Button";
 
 import style from "../../pages/admin/studios/studio.module.css";
+import { BsGraphUpArrow } from "react-icons/bs";
+import { MdOutlineFileDownload } from "react-icons/md";
 import {
   LineChart,
   Line,
@@ -14,6 +16,7 @@ import {
   Area,
   AreaChart,
 } from "recharts";
+import ChartNav from "./ChartNav";
 
 const data = [
   { name: "SEP", app: 80, production: 60 },
@@ -33,9 +36,20 @@ const data = [
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="custom-tooltip">
+      <div
+        className={style.customTooltip}
+        style={{
+          backgroundColor: "#fff",
+          border: "1px solid #ccc",
+          padding: "10px",
+        }}
+      >
         <p className="label">{`${label}`}</p>
-        <p className="value">{`₹${payload[0].value.toLocaleString()}`}</p>
+        {payload.map((entry, index) => (
+          <p key={`item-${index}`} style={{ color: entry.color }}>{`${
+            entry.name
+          }: ₹${entry.value.toLocaleString()}`}</p>
+        ))}
       </div>
     );
   }
@@ -45,12 +59,8 @@ const CustomTooltip = ({ active, payload, label }) => {
 const MyChart = ({ appColor = "#FFAA00", productionColor = "#00FF00" }) => {
   return (
     <div className={style.transactionChart}>
-      <div className={style.chartNav}>
-        <div></div>
-        <div>
-          <Button name={"export "} />
-        </div>
-      </div>
+      <ChartNav chartTitle={"Transaction "} />
+
       <ResponsiveContainer width="100%" height="80%">
         <AreaChart
           data={data}

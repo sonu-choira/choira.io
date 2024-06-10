@@ -20,6 +20,17 @@ class teamApi{
   return response.data;
  };
 
+ getStudioPartner = async () => {
+  
+
+  const response = await api.get(`studios/unassignedstudios`, {
+  
+  });
+  console.log("res ===>", response.data)
+  return response.data;
+ };
+
+
 //  getServices = async (limit, Type, active ,pageCount) => {
 //     const response = await api.get(`/services`,{ 
 //         params: {
