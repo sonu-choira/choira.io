@@ -23,6 +23,7 @@
   justify-content: center;
   outline: none;
   border: none;
+  cursor: not-allowed;
 }
 
 /* The switch - the box around the slider */

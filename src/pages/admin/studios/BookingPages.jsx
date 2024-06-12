@@ -102,7 +102,7 @@ function BookingPages() {
           console.error("Error fetching studios:", error);
         });
     } else if (bookingPageCount === "c1") {
-      const limit = 10;
+      const limit = 1000;
       const active = 1;
       const bookingType = 1;
       const category = bookingPageCount;

@@ -3,6 +3,7 @@ import { GrSubtractCircle, GrAddCircle } from "react-icons/gr";
 import style from "../../pages/admin/studios/studio.module.css";
 import { useLocation } from "react-router-dom";
 import ChoiraLoder2 from "../loader/ChoiraLoder2";
+import { set } from "react-ga";
 
 function ChooseTimeSlot({
   allTimeSlots,
@@ -11,20 +12,34 @@ function ChooseTimeSlot({
   setallTimeSlots,
   setSelectedSlot,
   selectedSlot,
+  setTimeSlotApiData,
 }) {
   const data = useLocation();
 
-  const [counter, setCounter] = useState(1);
+  const [counter, setCounter] = useState(Number(timeSlotApiData.bookingHours));
 
   const handelCounter = (type) => {
     setCounter((prevCounter) => {
       if (type === "add" && prevCounter < 24) {
         let ans = prevCounter + 1;
-        timeSlotApiData.current.bookingHours = ans;
+        setTimeSlotApiData((prevState) => {
+          return {
+            ...prevState,
+            bookingHours: ans,
+            totalPrice: prevState.actualBasePrice * ans,
+          };
+        });
+
         return ans;
       } else if (type === "sub" && prevCounter > 1) {
         let ans = prevCounter - 1;
-        timeSlotApiData.current.bookingHours = ans;
+        setTimeSlotApiData((prevState) => {
+          return {
+            ...prevState,
+            bookingHours: ans,
+            totalPrice: prevState.actualBasePrice * ans,
+          };
+        });
         return ans;
       }
       return prevCounter;
@@ -64,6 +79,14 @@ function ChooseTimeSlot({
 
   useEffect(() => {
     console.log("selectedSlot", selectedSlot);
+    if (selectedSlot) {
+      setTimeSlotApiData((prev) => ({
+        ...prev,
+        bookingTime: selectedSlot,
+      }));
+    } else {
+      // timeSlotApiData.current.bookingTime = "";
+    }
   }, [selectedSlot]);
 
   const chunkedTimeSlots = chunkArray(allSlots, 4);

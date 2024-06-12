@@ -776,7 +776,7 @@ td {
   width: 70%;
   height: 95%;
   /* border: 2px solid red; */
-  overflow-y: scroll;
+  overflow-y: auto;
   /* position: relative; */
 }
 

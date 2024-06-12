@@ -22,19 +22,28 @@ import ChooseTimeSlot from "./ChooseTimeSlot";
 import userApi from "../../services/userApi";
 import SearchAndSelectInput from "../../pages/admin/layout/SearchAndSelectInput";
 import SearchSelectInput from "../../pages/admin/layout/SearchAndSelectInput";
+import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+import ChoiraLoder2 from "../loader/ChoiraLoder2";
+import ChoiraLoader from "../loader/ChoiraLoader";
 
 function SlotBooking({ setSelectTab }) {
   const [timeSlotApiData, setTimeSlotApiData] = useState({
-    userType: "",
-    userName: "",
-    mobile: "",
+    bookingType: "",
+    fullName: "",
+    phoneNumber: "",
     email: "",
     studioId: "",
     roomId: "",
     bookingDate: "",
     bookingHours: "1",
+    totalPrice: "",
+    bookingTime: "",
+    actualBasePrice: "",
+    serviceType: "c1",
+    userId: "",
+    tempUserName: "",
   });
-
+  // let navigate = useNavigate();
   const data = useLocation();
   const [tabCount, setTabCount] = useState();
   const navCount = data?.state?.navCount;
@@ -42,6 +51,7 @@ function SlotBooking({ setSelectTab }) {
 
   const [allStudio, setAllStudio] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const [showLoader, setshowLoader] = useState(false);
 
   useEffect(() => {
     timeSlotApi
@@ -87,6 +97,7 @@ function SlotBooking({ setSelectTab }) {
     // Update hasContent state based on whether there is content in the textarea
     setHasContent(inputCode.trim() !== "");
   };
+  const [disabled, setDisabled] = useState(false);
 
   const navigate = useNavigate();
   const backOnclick = () => {
@@ -104,6 +115,13 @@ function SlotBooking({ setSelectTab }) {
   }, [selectedStudioid]);
 
   const handelStudioid = (e) => {
+    setTimeSlotApiData((prevData) => ({
+      ...prevData,
+      roomId: "",
+      totalPrice: "",
+    }));
+
+    setselectRooms([]);
     let id = e.target.value;
     console.log("id");
     console.log(id);
@@ -116,8 +134,19 @@ function SlotBooking({ setSelectTab }) {
 
     let ans = allStudio.filter((allStudio) => allStudio._id == id);
     console.log("ans");
+    console.log(ans);
     console.log(ans[0].roomsDetails);
     setselectRooms(ans[0].roomsDetails);
+  };
+  const handelRoomSelect = (room) => {
+    console.log("room", room);
+    setTimeSlotApiData((prevData) => ({
+      ...prevData,
+      roomId: room.roomId,
+      // totalPrice: room.pricePerHour,
+      totalPrice: room.pricePerHour * prevData?.bookingHours,
+      actualBasePrice: room.pricePerHour,
+    }));
   };
   useEffect(() => {
     console.log("selectRooms");
@@ -150,8 +179,13 @@ function SlotBooking({ setSelectTab }) {
 
     if (disabled) {
       delete newData.email;
-      delete newData.mobile;
+      delete newData.phoneNumber;
+      delete newData.fullName;
+      delete newData.tempUserName;
     }
+    delete newData.bookingTime;
+    delete newData.actualBasePrice;
+    delete newData.serviceType;
 
     let ans = Object.keys(newData);
 
@@ -164,9 +198,45 @@ function SlotBooking({ setSelectTab }) {
 
     hitapi();
   };
+  const slotBookingApi = () => {
+    let newData = { ...timeSlotApiData };
+    delete newData.actualBasePrice;
+    delete newData.bookingHours;
+    delete newData.tempUserName;
+
+    if (disabled) {
+      delete newData.email;
+      delete newData.phoneNumber;
+      delete newData.fullName;
+    }
+    console.log(newData);
+    setshowLoader(true);
+    timeSlotApi
+      .offlineStudioBooking(newData)
+      .then((res) => {
+        console.log(res);
+        if (res.status) {
+          setshowAllSlots(false);
+          setshowLoader(false);
+          sucessAlret("Booking done");
+          navigate("/adminDashboard/Bookings/studio");
+        } else {
+          errorAlert("Booking failed");
+          setshowLoader(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        errorAlert("Booking failed");
+
+        setshowLoader(false);
+      });
+  };
   const handelSavebtn = () => {
     if (showAllSlots) {
       if (selectedSlot) {
+        console.log("timeSlotApiData", timeSlotApiData);
+        // slotBookingApi();
         setshowAllSlots(false);
       } else {
         alert("Please choose a slot");
@@ -185,23 +255,22 @@ function SlotBooking({ setSelectTab }) {
         });
     }
   };
-  const [disabled, setDisabled] = useState(false);
   const handelUsertype = (val) => {
     if (val == "registered") {
       setDisabled(true);
       setTimeSlotApiData((prevData) => ({
         ...prevData,
-        userName: "",
+        fullName: "",
         email: "",
-        mobile: "",
-        userType: val,
+        phoneNumber: "",
+        bookingType: val,
       }));
     } else {
       setDisabled(false);
       setTimeSlotApiData((prevData) => ({
         ...prevData,
 
-        userType: val,
+        bookingType: val,
       }));
     }
   };
@@ -209,9 +278,10 @@ function SlotBooking({ setSelectTab }) {
     // Handle user selection change here
     setTimeSlotApiData((prevData) => ({
       ...prevData,
-      userName: newValue.value,
+      userId: newValue.value,
+      tempUserName: newValue.label,
     }));
-    console.log("Selected user:", newValue.value);
+    console.log("Selected user:", newValue);
   };
   async function fetchUserList(username) {
     let dataToSend = {
@@ -222,7 +292,7 @@ function SlotBooking({ setSelectTab }) {
       console.log("response.data.users", response.users);
       return response.users.map((user) => ({
         label: `${user.fullName} `,
-        value: user.fullName,
+        value: user._id,
       }));
     } catch (error) {
       console.error("Error fetching user list:", error);
@@ -265,182 +335,223 @@ function SlotBooking({ setSelectTab }) {
             </div>
           </div>
           <div className={style.addNewStudioTitle}>Slot Booking</div>
+
           {showAllSlots ? (
             <ChooseTimeSlot
               allTimeSlots={allTimeSlots}
               setallTimeSlots={setallTimeSlots}
               hitapi={hitapi}
               timeSlotApiData={timeSlotApiData}
+              setTimeSlotApiData={setTimeSlotApiData}
               selectedSlot={selectedSlot}
               setSelectedSlot={setSelectedSlot}
             />
           ) : (
             <div className={style.addNewStudioPage}>
-              <div style={{ height: "80%" }}>
-                <div>
-                  <div className={style.addNewStudioinputBox}>
-                    <label htmlFor="UserName">Select User type</label>
-                    <select
-                      name=""
-                      id=""
-                      onChange={(event) => {
-                        handelUsertype(event.target.value);
-                      }}
-                    >
-                      <option value="" disabled selected>
-                        Select User type
-                      </option>
-                      <option value="registered">Registered</option>
-                      <option value="offline">Offline</option>
-                    </select>
-                  </div>
-                  {!disabled ? (
+              {showLoader ? (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#F0F0F0",
+                  }}
+                >
+                  <ChoiraLoader />
+                </div>
+              ) : (
+                <div style={{ height: "70%" }}>
+                  <div>
                     <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="UserName">User Name</label>
+                      <label htmlFor="booking">Select Booking type</label>
+                      <select
+                        name=""
+                        id="booking"
+                        onChange={(event) => {
+                          handelUsertype(event.target.value);
+                        }}
+                        value={timeSlotApiData.bookingType}
+                      >
+                        <option value="" disabled selected>
+                          Select User type
+                        </option>
+                        <option value="registered">Registered</option>
+                        <option value="offline">Offline</option>
+                      </select>
+                    </div>
+                    {!disabled ? (
+                      <div className={style.addNewStudioinputBox}>
+                        <label htmlFor="UserName">User Name</label>
+                        <input
+                          type="text"
+                          id="UserName"
+                          placeholder="Enter User Name"
+                          disabled={disabled}
+                          value={timeSlotApiData.fullName}
+                          onChange={(e) => {
+                            setTimeSlotApiData((prevData) => ({
+                              ...prevData,
+                              fullName: e.target.value,
+                            }));
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className={style.addNewStudioinputBox}>
+                        <label htmlFor="UserName">User Name</label>
+                        <SearchSelectInput
+                          placeholder="Select users"
+                          fetchOptions={fetchUserList}
+                          onChange={handleUserChange}
+                          defaultValue={timeSlotApiData?.tempUserName}
+                          style={{
+                            width: "100%",
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="Mobilenumber">Mobile number</label>
                       <input
-                        type="text"
-                        id="UserName"
-                        placeholder="Enter User Name"
-                        disabled={disabled}
+                        type="number"
+                        id="Mobilenumber"
+                        placeholder="Enter Mobile number"
+                        value={timeSlotApiData.phoneNumber}
                         onChange={(e) => {
                           setTimeSlotApiData((prevData) => ({
                             ...prevData,
-                            userName: e.target.value,
+                            phoneNumber: e.target.value,
                           }));
                         }}
+                        disabled={disabled}
                       />
                     </div>
-                  ) : (
+
                     <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="UserName">User Name</label>
-                      <SearchSelectInput
-                        placeholder="Select users"
-                        fetchOptions={fetchUserList}
-                        onChange={handleUserChange}
-                        style={{
-                          width: "100%",
+                      <label htmlFor="Email">Email</label>
+                      <input
+                        type="email"
+                        id="Email"
+                        placeholder="Enter Email id"
+                        value={timeSlotApiData.email}
+                        onChange={(e) => {
+                          setTimeSlotApiData((prevData) => ({
+                            ...prevData,
+                            email: e.target.value,
+                          }));
+                        }}
+                        disabled={disabled}
+                      />
+                    </div>
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="price">Total Price</label>
+                      <input
+                        type="number"
+                        id="price"
+                        placeholder="Your Total Price"
+                        value={timeSlotApiData?.totalPrice}
+                        disabled={true}
+                      />
+                    </div>
+                  </div>
+                  {/* secod side  */}
+                  <div>
+                    <div className={style.addNewStudioinputBox}>
+                      <label>Studio</label>
+
+                      <select
+                        onChange={(event) => {
+                          handelStudioid(event);
+                        }}
+                        value={selectedStudioid}
+                      >
+                        <option value="" disabled selected>
+                          Select Studio
+                        </option>
+                        {allStudio?.map((studio) => (
+                          <option key={studio._id} value={studio._id}>
+                            {studio.fullName}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className={style.addNewStudioinputBox}>
+                      <label>Room</label>
+                      <select
+                        onChange={(event) => {
+                          const selectedRoomId = Number(event.target.value);
+                          const selectedRoom = selectRooms.find(
+                            (room) => room.roomId === selectedRoomId
+                          );
+                          console.log(selectedRoom, "selectedRoom");
+                          handelRoomSelect(selectedRoom);
+                        }}
+                        value={timeSlotApiData.roomId}
+                      >
+                        <option value="" disabled>
+                          Select Room
+                        </option>
+                        {selectRooms?.map((room) => (
+                          <option key={room.roomId} value={room.roomId}>
+                            {room.roomName}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="Date">Date</label>
+                      <input
+                        type="date"
+                        id="RoomArea"
+                        min={getCurrentDate()}
+                        value={timeSlotApiData.bookingDate}
+                        placeholder="Enter Date"
+                        onChange={(event) => {
+                          setTimeSlotApiData((prevData) => ({
+                            ...prevData,
+                            bookingDate: event.target.value,
+                          }));
+                          console.log("timeSlotApiData");
+                          console.log(timeSlotApiData);
                         }}
                       />
                     </div>
-                  )}
 
-                  <div className={style.addNewStudioinputBox}>
-                    <label htmlFor="Mobilenumber">Mobile number</label>
-                    <input
-                      type="number"
-                      id="Mobilenumber"
-                      placeholder="Enter Mobile number"
-                      value={timeSlotApiData.mobile}
-                      onChange={(e) => {
-                        setTimeSlotApiData((prevData) => ({
-                          ...prevData,
-                          mobile: e.target.value,
-                        }));
-                      }}
-                      disabled={disabled}
-                    />
-                  </div>
-
-                  <div className={style.addNewStudioinputBox}>
-                    <label htmlFor="Email">Email</label>
-                    <input
-                      type="email"
-                      id="Email"
-                      placeholder="Enter Email id"
-                      value={timeSlotApiData.email}
-                      onChange={(e) => {
-                        setTimeSlotApiData((prevData) => ({
-                          ...prevData,
-                          email: e.target.value,
-                        }));
-                      }}
-                      disabled={disabled}
-                    />
-                  </div>
-                </div>
-                {/* secod side  */}
-                <div>
-                  <div className={style.addNewStudioinputBox}>
-                    <label>Studio</label>
-
-                    <select
-                      onChange={(event) => {
-                        handelStudioid(event);
-                      }}
-                      value={selectedStudioid}
-                    >
-                      <option value="" disabled selected>
-                        Select Studio
-                      </option>
-                      {allStudio?.map((studio) => (
-                        <option key={studio._id} value={studio._id}>
-                          {studio.fullName}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className={style.addNewStudioinputBox}>
-                    <label>Room</label>
-
-                    <select
-                      onChange={(event) => {
-                        setTimeSlotApiData((prevData) => ({
-                          ...prevData,
-                          roomId: event.target.value,
-                        }));
-                      }}
-                      value={timeSlotApiData.roomId}
-                    >
-                      <option value="" disabled selected>
-                        Select Room
-                      </option>
-                      {selectRooms?.map((room, index) => (
-                        <option value={room.roomId}>{room.roomName}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className={style.addNewStudioinputBox}>
-                    <label htmlFor="Date">Date</label>
-                    <input
-                      type="date"
-                      id="RoomArea"
-                      min={getCurrentDate()}
-                      placeholder="Enter Date"
-                      onChange={(event) => {
-                        setTimeSlotApiData((prevData) => ({
-                          ...prevData,
-                          bookingDate: event.target.value,
-                        }));
-                        console.log("timeSlotApiData");
-                        console.log(timeSlotApiData);
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    className={style.addNewStudioinputBox}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <label htmlFor="TimeSlot">Time Slot</label>
-                    <input
+                    <div
+                      className={style.addNewStudioinputBox}
                       style={{ cursor: "pointer" }}
-                      type="text"
-                      id="TimeSlot"
-                      placeholder="Click to select time slot"
-                      onClick={sendTimeSlotDataToApi}
-                    />
+                    >
+                      <label htmlFor="TimeSlot">Time Slot</label>
+                      <input
+                        style={{ cursor: "pointer" }}
+                        type="text"
+                        id="TimeSlot"
+                        readOnly
+                        // disabled={timeSlotApiData?.bookingTime && true}
+                        placeholder="Click to select time slot"
+                        value={
+                          timeSlotApiData?.bookingTime &&
+                          `${timeSlotApiData?.bookingTime?.startTime} - ${timeSlotApiData?.bookingTime?.endTime}`
+                        }
+                        onClick={sendTimeSlotDataToApi}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 
           <StudioFooter
             sname={showAllSlots ? "Save" : "Book"}
-            saveDisabled={!showAllSlots && true}
+            saveDisabled={!timeSlotApiData?.bookingTime && true}
             backOnclick={backOnclick}
-            saveOnclick={handelSavebtn}
+            saveOnclick={!showAllSlots ? slotBookingApi : handelSavebtn}
           />
         </div>
       </div>

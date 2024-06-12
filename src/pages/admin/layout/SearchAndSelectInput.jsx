@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Select, Spin } from "antd";
 import debounce from "lodash/debounce";
-import { change } from "redux-form";
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
   const [fetching, setFetching] = useState(false);
@@ -42,8 +41,8 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
   );
 }
 
-function SearchSelectInput({ fetchOptions, onChange, ...props }) {
-  const [value, setValue] = useState([]);
+function SearchSelectInput({ fetchOptions, onChange, defaultValue, ...props }) {
+  const [value, setValue] = useState(defaultValue || []);
 
   useEffect(() => {
     console.log("value", value);
