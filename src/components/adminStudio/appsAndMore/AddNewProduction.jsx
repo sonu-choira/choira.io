@@ -137,7 +137,7 @@ function AddNewProduction({ setSelectTab }) {
     service_status: 0,
     packages: [],
     price: 0,
-    userReviews: [],
+    userReviews: {},
     servicePhotos: [],
     service_id: "",
     type: bookingPageCount,

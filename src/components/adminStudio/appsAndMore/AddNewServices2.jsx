@@ -541,6 +541,9 @@ function AddNewServices2({
         backOnclick={() => {
           setShowServices(false);
         }}
+        saveOnclick={() => {
+          setShowServices(false);
+        }}
       />
     </>
   );

@@ -97,7 +97,7 @@ function SlotBooking({ setSelectTab }) {
     // Update hasContent state based on whether there is content in the textarea
     setHasContent(inputCode.trim() !== "");
   };
-  const [disabled, setDisabled] = useState(false);
+  const [registered, setregistered] = useState(false);
 
   const navigate = useNavigate();
   const backOnclick = () => {
@@ -177,7 +177,7 @@ function SlotBooking({ setSelectTab }) {
     console.log(timeSlotApiData);
     let newData = { ...timeSlotApiData };
 
-    if (disabled) {
+    if (registered) {
       delete newData.email;
       delete newData.phoneNumber;
       delete newData.fullName;
@@ -186,6 +186,8 @@ function SlotBooking({ setSelectTab }) {
     delete newData.bookingTime;
     delete newData.actualBasePrice;
     delete newData.serviceType;
+    delete newData.userId;
+    delete newData.tempUserName;
 
     let ans = Object.keys(newData);
 
@@ -204,12 +206,20 @@ function SlotBooking({ setSelectTab }) {
     delete newData.bookingHours;
     delete newData.tempUserName;
 
-    if (disabled) {
+    if (registered) {
       delete newData.email;
       delete newData.phoneNumber;
       delete newData.fullName;
+    } else {
+      delete newData.userId;
     }
     console.log(newData);
+    let ans = Object.keys(newData);
+    for (let check of ans) {
+      if (newData[check] === "") {
+        return;
+      }
+    }
     setshowLoader(true);
     timeSlotApi
       .offlineStudioBooking(newData)
@@ -232,6 +242,7 @@ function SlotBooking({ setSelectTab }) {
         setshowLoader(false);
       });
   };
+
   const handelSavebtn = () => {
     if (showAllSlots) {
       if (selectedSlot) {
@@ -257,7 +268,7 @@ function SlotBooking({ setSelectTab }) {
   };
   const handelUsertype = (val) => {
     if (val == "registered") {
-      setDisabled(true);
+      setregistered(true);
       setTimeSlotApiData((prevData) => ({
         ...prevData,
         fullName: "",
@@ -266,7 +277,7 @@ function SlotBooking({ setSelectTab }) {
         bookingType: val,
       }));
     } else {
-      setDisabled(false);
+      setregistered(false);
       setTimeSlotApiData((prevData) => ({
         ...prevData,
 
@@ -381,14 +392,14 @@ function SlotBooking({ setSelectTab }) {
                         <option value="offline">Offline</option>
                       </select>
                     </div>
-                    {!disabled ? (
+                    {!registered ? (
                       <div className={style.addNewStudioinputBox}>
                         <label htmlFor="UserName">User Name</label>
                         <input
                           type="text"
                           id="UserName"
                           placeholder="Enter User Name"
-                          disabled={disabled}
+                          disabled={registered}
                           value={timeSlotApiData.fullName}
                           onChange={(e) => {
                             setTimeSlotApiData((prevData) => ({
@@ -412,40 +423,44 @@ function SlotBooking({ setSelectTab }) {
                         />
                       </div>
                     )}
+                    {!registered && (
+                      <div className={style.addNewStudioinputBox}>
+                        <label htmlFor="Mobilenumber">Mobile number</label>
+                        <input
+                          type="number"
+                          id="Mobilenumber"
+                          placeholder="Enter Mobile number"
+                          value={timeSlotApiData.phoneNumber}
+                          onChange={(e) => {
+                            setTimeSlotApiData((prevData) => ({
+                              ...prevData,
+                              phoneNumber: e.target.value,
+                            }));
+                          }}
+                          disabled={registered}
+                        />
+                      </div>
+                    )}
 
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="Mobilenumber">Mobile number</label>
-                      <input
-                        type="number"
-                        id="Mobilenumber"
-                        placeholder="Enter Mobile number"
-                        value={timeSlotApiData.phoneNumber}
-                        onChange={(e) => {
-                          setTimeSlotApiData((prevData) => ({
-                            ...prevData,
-                            phoneNumber: e.target.value,
-                          }));
-                        }}
-                        disabled={disabled}
-                      />
-                    </div>
+                    {!registered && (
+                      <div className={style.addNewStudioinputBox}>
+                        <label htmlFor="Email">Email</label>
+                        <input
+                          type="email"
+                          id="Email"
+                          placeholder="Enter Email id"
+                          value={timeSlotApiData.email}
+                          onChange={(e) => {
+                            setTimeSlotApiData((prevData) => ({
+                              ...prevData,
+                              email: e.target.value,
+                            }));
+                          }}
+                          disabled={registered}
+                        />
+                      </div>
+                    )}
 
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="Email">Email</label>
-                      <input
-                        type="email"
-                        id="Email"
-                        placeholder="Enter Email id"
-                        value={timeSlotApiData.email}
-                        onChange={(e) => {
-                          setTimeSlotApiData((prevData) => ({
-                            ...prevData,
-                            email: e.target.value,
-                          }));
-                        }}
-                        disabled={disabled}
-                      />
-                    </div>
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="price">Total Price</label>
                       <input
