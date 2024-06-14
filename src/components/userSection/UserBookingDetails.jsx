@@ -33,6 +33,7 @@ import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../services/appAndmoreApi";
+import moment from "moment";
 
 let PageSize = 10;
 
@@ -429,7 +430,11 @@ function UserBookingDetails({
                         {products._id}
                       </td>
                       <td>{products?.studioData?.fullName}</td>
-                      <td>{products.bookingDate}</td>
+                      <td>
+                        {moment(products.bookingDate).format(
+                          "DD/MM/YYYY hh:mm:ss a"
+                        )}
+                      </td>
                       <td>{products.studioName}</td>
                       <td>{products.abc}</td>
                       <td className={style.tableActionbtn}>

@@ -69,6 +69,23 @@ class userApi{
  getUserServiceBooking = async (userId,pageCount) => {
   
 
+  const response = await api.get(`/bookings/services/${userId}`, {
+    params: {
+    
+      source: "website",
+      limit: 10,
+      page :pageCount,
+      // active: active
+    }
+  });
+  console.log(" user service data res ===>", response)
+  return response;
+ };
+
+
+ getUserServiceBooking = async (userId,pageCount) => {
+  
+
   const response = await api.get(`/bookings/services`, {
     params: {
       userId: userId,

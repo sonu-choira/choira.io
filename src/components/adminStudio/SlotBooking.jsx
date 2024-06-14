@@ -220,6 +220,7 @@ function SlotBooking({ setSelectTab }) {
         return;
       }
     }
+    newData.bookingDate = newData.bookingDate + "T00:00:00.000Z";
     setshowLoader(true);
     timeSlotApi
       .offlineStudioBooking(newData)

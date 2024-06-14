@@ -530,7 +530,16 @@ input[type="number"] {
   justify-content: space-around;
   /* border: 2px solid red; */
 }
-
+.shortTableData {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.shortTableData:hover {
+  overflow: visible;
+  white-space: normal;
+  background-color: #f0f0f0; /* Optional: Highlight on hover */
+}
 .filterBox {
   width: 2vw;
   height: 4vh;
