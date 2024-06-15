@@ -124,8 +124,12 @@ function AddNewStudioPatner({ setSelectTab }) {
     teamsApi
       .addStudioPartner(addPartnerData.current)
       .then((res) => {
+        if (res.status) {
+          sucessAlret("Studio Partner Sucessfully Added");
+        } else {
+          errorAlert(res.message);
+        }
         console.log(res);
-        sucessAlret("Studio Partner Sucessfully Added");
       })
       .catch((err) => {
         errorAlert("something went wrong");
