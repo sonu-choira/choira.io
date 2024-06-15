@@ -39,7 +39,7 @@ class slotapi{
  offlineStudioBooking = async (data) => {
   
 
-  const response = await api.post(`/booking/adminBooking`, data);
+  const response = await api.post(`/booking/adminBookings`, data);
   console.log("res ===>", response.data)
   return response.data;
  };                 

@@ -217,6 +217,8 @@ function StudioPatners({
           setSelectedStatus={setSelectedStatus}
           setPriceFilter={setPriceFilter}
           setShortby={setShortby}
+          dateDisable={true}
+          searchDisable={true}
         />
         <div>
           <table>

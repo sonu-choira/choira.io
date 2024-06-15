@@ -31,6 +31,8 @@ function DateAndSearchFilter({
   setUserFilterText,
   userAllFilterData,
   csstyle,
+  dateDisable,
+  searchDisable,
 }) {
   const rangePresets = [
     {
@@ -282,11 +284,13 @@ function DateAndSearchFilter({
               presets={rangePresets}
               onChange={onRangeChange}
               className={style.antCustomcss}
+              disabled={dateDisable}
             />
           ) : (
             <DatePicker
               onChange={onChange}
               style={{ width: "100%", height: "100%" }}
+              disabled={dateDisable}
             />
           )}
         </div>
@@ -298,6 +302,8 @@ function DateAndSearchFilter({
             value={!userFiler ? searchQuery : userFilterText}
             onChange={handleChange}
             onKeyPress={handleKeyPress}
+            disabled={searchDisable}
+            className={searchDisable && style.disabled}
           />
         </div>
         {hasFilter ? (

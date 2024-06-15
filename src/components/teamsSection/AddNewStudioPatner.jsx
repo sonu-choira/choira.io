@@ -18,19 +18,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import timeSlotApi from "../../services/timeSlotApi";
 import { event, send } from "react-ga";
 import StudioFooter from "../adminStudio/StudioFooter";
+import teamsApi from "../../services/teamsApi";
+import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 
 function AddNewStudioPatner({ setSelectTab }) {
-  const timeSlotApiData = useRef({
-    userName: "",
-    mobile: "",
+  const addPartnerData = useRef({
+    firstName: "",
+    lastName: "",
     email: "",
     studioId: "",
     password: "",
   });
-  const [test, settest] = useState(timeSlotApiData);
-  // const timeSlotApiData = useRef({
-  //   userName: "ss",
-  //   mobile: "aa",
+  const [test, settest] = useState(addPartnerData);
+  // const addPartnerData = useRef({
+  //   firstName: "ss",
+  //   lastName: "aa",
   //   email: "aaa",
   //   studioId: "63d1225e1b3a159c2ce0799e",
   //   roomId: "1",
@@ -106,7 +108,7 @@ function AddNewStudioPatner({ setSelectTab }) {
     console.log(id);
     setselectedStudioid(id);
 
-    timeSlotApiData.current.studioId = id;
+    addPartnerData.current.studioId = id;
     let ans = allStudio.filter((allStudio) => allStudio._id == id);
     console.log("ans");
     console.log(ans[0].roomsDetails);
@@ -119,31 +121,31 @@ function AddNewStudioPatner({ setSelectTab }) {
   const [allTimeSlots, setallTimeSlots] = useState({});
 
   let hitapi = () => {
-    timeSlotApi
-      .getAllSolts(timeSlotApiData.current)
+    teamsApi
+      .addStudioPartner(addPartnerData.current)
       .then((res) => {
         console.log(res);
-        setshowAllSlots(true);
-        setallTimeSlots(res);
+        sucessAlret("Studio Partner Sucessfully Added");
       })
       .catch((err) => {
+        errorAlert("something went wrong");
         console.log(err);
       });
   };
 
   useEffect(() => {
-    console.log("timeSlotApiData");
-    console.log(timeSlotApiData);
-  }, [timeSlotApiData.current]);
+    console.log("addPartnerData");
+    console.log(addPartnerData);
+  }, [addPartnerData.current]);
 
   const sendTimeSlotDataToApi = (event) => {
     event.preventDefault();
     // Get all keys of the object
-    let ans = Object.keys(timeSlotApiData.current);
+    let ans = Object.keys(addPartnerData.current);
 
     // Check if any field is empty
     for (let check of ans) {
-      if (timeSlotApiData.current[check] === "") {
+      if (addPartnerData.current[check] === "") {
         alert(`Please fill ${check} fields`);
         return;
       }
@@ -151,27 +153,6 @@ function AddNewStudioPatner({ setSelectTab }) {
 
     // If all fields are filled, call the API
     hitapi();
-  };
-  const handelSavebtn = () => {
-    if (showAllSlots) {
-      if (selectedSlot) {
-        setshowAllSlots(false);
-      } else {
-        alert("Please choose a slot");
-      }
-    } else if (selectedSlot) {
-      alert("sendingData to api");
-      timeSlotApi
-        .getAllSolts(timeSlotApiData.current)
-        .then((res) => {
-          console.log(res);
-          setshowAllSlots(true);
-          setallTimeSlots(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
   };
 
   return (
@@ -200,21 +181,21 @@ function AddNewStudioPatner({ setSelectTab }) {
               <MdOutlineSettings />
             </div>
           </div>
-          <div className={style.addNewStudioTitle}>Add Studio Patner</div>
+          <div className={style.addNewStudioTitle}>Add Studio Partner</div>
 
           <div className={style.addNewStudioPage}>
             <div style={{ height: "80%" }}>
               <div>
                 <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="UserName">User Full Name</label>
+                  <label htmlFor="firstName">User First Name</label>
                   <input
                     type="text"
-                    id="UserName"
+                    id="firstName"
                     placeholder="Enter Fullname Name"
                     onChange={(e) => {
-                      timeSlotApiData.current.userName = e.target.value;
+                      addPartnerData.current.firstName = e.target.value;
                     }}
-                    // value={timeSlotApiData.current?.userName}
+                    // value={addPartnerData.current?.firstName}
                   />
                 </div>
 
@@ -225,10 +206,10 @@ function AddNewStudioPatner({ setSelectTab }) {
                     id="Email"
                     placeholder="Enter Email id"
                     onChange={(e) => {
-                      timeSlotApiData.current.email = e.target.value;
+                      addPartnerData.current.email = e.target.value;
                     }}
 
-                    // value={timeSlotApiData.current?.email}
+                    // value={addPartnerData.current?.email}
                   />
                 </div>
 
@@ -268,16 +249,16 @@ function AddNewStudioPatner({ setSelectTab }) {
               {/* secod side  */}
               <div>
                 <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Mobilenumber">Mobile number</label>
+                  <label htmlFor="lastName">Last Name</label>
                   <input
-                    type="number"
-                    id="Mobilenumber"
-                    placeholder="Enter Mobile number"
+                    type="text"
+                    id="lastName"
+                    placeholder="Enter Last Name"
                     onChange={(e) => {
-                      timeSlotApiData.current.mobile = e.target.value;
+                      addPartnerData.current.lastName = e.target.value;
                     }}
 
-                    // value={timeSlotApiData.current?.mobile}
+                    // value={addPartnerData.current?.lastName}
                   />
                 </div>
 
@@ -292,7 +273,7 @@ function AddNewStudioPatner({ setSelectTab }) {
                     id="password"
                     placeholder="Enter PassWord"
                     onChange={(e) => {
-                      timeSlotApiData.current.password = e.target.value;
+                      addPartnerData.current.password = e.target.value;
                     }}
                     // disabled
                     // onClick={sendTimeSlotDataToApi}

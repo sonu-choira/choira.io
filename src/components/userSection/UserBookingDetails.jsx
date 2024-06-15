@@ -231,7 +231,7 @@ function UserBookingDetails({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th style={{ width: "15%" }}>
+                <th style={{ width: "8%" }}>
                   <div className={style.headingContainer}>
                     Booking Id
                     <div
@@ -277,7 +277,7 @@ function UserBookingDetails({
                   </div>
                 </th>
 
-                <th style={{ width: "10%" }}>
+                <th style={{ width: "12%" }}>
                   <div className={style.headingContainer}>
                     No. of hours
                     <div
@@ -337,7 +337,7 @@ function UserBookingDetails({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "20%" }}>
+                <th style={{ width: "10%" }}>
                   <div className={style.headingContainer}>
                     Time Slot
                     <div
@@ -418,25 +418,23 @@ function UserBookingDetails({
               ) : (
                 products?.map((products, index) => {
                   return (
-                    <tr key={products._id}>
-                      <td
-                      // style={{
-                      //   display: "flex",
-                      //   alignItems: "center",
-                      //   justifyContent: "center",
-                      //   height: "100%",
-                      // }}
-                      >
-                        {products._id}
+                    <tr key={products?._id}>
+                      <td>
+                        <span title={products._id}>
+                          {products._id.substring(0, 6)}
+                        </span>
                       </td>
-                      <td>{products?.studioData?.fullName}</td>
+                      <td>{products?.studioName}</td>
+                      <td>{products?.no_of_hours} Hour</td>
                       <td>
                         {moment(products.bookingDate).format(
                           "DD/MM/YYYY hh:mm:ss a"
                         )}
                       </td>
-                      <td>{products.studioName}</td>
-                      <td>{products.abc}</td>
+                      <td>
+                        {products?.bookingTime?.startTime}-
+                        {products?.bookingTime?.endTime}
+                      </td>
                       <td className={style.tableActionbtn}>
                         <div className={style.userProjectStatus}>Pending</div>
                       </td>

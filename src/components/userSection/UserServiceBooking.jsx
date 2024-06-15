@@ -344,7 +344,7 @@ function UserServiceBooking({
                 </th>
                 <th style={{ width: "20%" }}>
                   <div className={style.headingContainer}>
-                    Time Slot
+                    Price
                     <div
                       className={style.filterBox}
                       style={{
@@ -414,7 +414,11 @@ function UserServiceBooking({
                 products?.map((products, index) => {
                   return (
                     <tr key={products._id}>
-                      <td>{products._id}</td>
+                      <td>
+                        <span title={products._id}>
+                          {products._id.substring(0, 6)}
+                        </span>
+                      </td>
                       <td>{products.serviceFullName}</td>
                       <td>{products?.package?.name}</td>
                       <td>

@@ -35,7 +35,16 @@ class teamApi{
 //    };
 
  
+addStudioPartner = async (data) => {
+  // let {studioId,roomId,bookingDate,bookingHours} = slotData
+  
 
+  const response = await api.post(`/owners/create`, 
+    data
+  );
+  console.log("res ===>", response.data)
+  return response.data;
+ };
 
 
 }
