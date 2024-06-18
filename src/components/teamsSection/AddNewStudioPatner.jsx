@@ -19,6 +19,7 @@ import timeSlotApi from "../../services/timeSlotApi";
 import { event, send } from "react-ga";
 import StudioFooter from "../adminStudio/StudioFooter";
 import teamsApi from "../../services/teamsApi";
+
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 
 function AddNewStudioPatner({ setSelectTab }) {
@@ -48,15 +49,24 @@ function AddNewStudioPatner({ setSelectTab }) {
   const [allStudio, setAllStudio] = useState([]);
 
   useEffect(() => {
-    timeSlotApi
-      .getonlyStudio()
+    // timeSlotApi
+    //   .getonlyStudio()
+    //   .then((res) => {
+    //     console.log(res.studios);
+    //     setAllStudio(res.studios);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    teamsApi
+      .getStudioPartner()
       .then((res) => {
         console.log(res.studios);
+
         setAllStudio(res.studios);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   }, []);
 
   const [selectedAmenities, setSelectedAmenities] = useState([]);

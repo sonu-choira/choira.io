@@ -62,6 +62,7 @@ const AddNewArm = lazy(()=> import("../src/components/teamsSection/AddNewArm.jsx
 
 
 
+
           {/* admin page  ends ========================> */}
 
 
@@ -108,6 +109,9 @@ const Routing = () => {
           <Route exact path='/adminDashboard/Bookings/AddSlotBooking' element={<SlotBooking/>} />
           <Route exact path='/adminDashboard/Teams/AddStudioPatner' element={<AddNewStudioPatner/>} />
           <Route exact path='/adminDashboard/Teams/AddNewArm' element={<AddNewArm/>} />
+        
+
+
           {/* <Route exact path='/service/AddSlotBooking' element={<ChooseTimeSlot/>} /> */}
           {/* admin page route ends ========================> */}
 

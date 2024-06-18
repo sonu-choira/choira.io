@@ -101,11 +101,11 @@ body {
 }
 .section1 {
   width: 100%;
-  height: 40%;
+  height: 70%;
   /* border: 2px solid blue; */
   display: flex;
   flex-direction: column;
-  gap: 12%;
+  gap: 4%;
 }
 .section2 {
   /* border: 2px solid pink; */
@@ -1437,7 +1437,7 @@ body {
     /* filter: blur(0px) !important; */
   }
   .section1 > div:first-child {
-    /* border: 2px solid red; */
+    border: 2px solid red;
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import AddNewRoom from "../../../components/adminStudio/AddNewRoom";
 import AllteamDetails from "../../../components/teamsSection/AllteamDetails";
 import ShowAllUser from "../../../components/userSection/ShowAllUser";
+import Overview from "../adminDashboardOverview/Overview";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -60,12 +61,13 @@ function AdminDashboardLayout() {
               <MdOutlineSettings />
             </div>
           </div>
-          {tabCount === 1 && <ShowAllUser />}
-          {tabCount === 2 && <AllteamDetails />}
+          {tabCount === 1 && <Overview />}
+          {tabCount === 2 && <ShowAllUser />}
+          {tabCount === 3 && <AllteamDetails />}
 
-          {tabCount === 3 ? (
+          {tabCount === 4 ? (
             <AllStudioPageDetailsPage />
-          ) : tabCount === 4 ? (
+          ) : tabCount === 5 ? (
             <BookingPages />
           ) : (
             ""
