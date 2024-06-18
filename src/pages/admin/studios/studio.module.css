@@ -22,6 +22,10 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+.disabled {
+  cursor: not-allowed;
+  /* background-color: #adb5bd; */
+}
 .wrapper {
   width: 100vw;
   height: 100vh;
@@ -505,7 +509,8 @@ input[type="number"] {
   height: 85%;
   /* border: 2px solid blue; */
 
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .studioTabelDiv > div:nth-child(2) table {
   table-layout: auto;
@@ -528,10 +533,19 @@ input[type="number"] {
 .headingContainer {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   /* border: 2px solid red; */
 }
-
+.shortTableData {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.shortTableData:hover {
+  overflow: visible;
+  white-space: normal;
+  background-color: #f0f0f0; /* Optional: Highlight on hover */
+}
 .filterBox {
   width: 2vw;
   height: 4vh;
@@ -609,7 +623,7 @@ input[type="number"] {
   width: 9vw;
   min-height: fit-content;
   max-height: fit-content;
-  border: 2px solid red;
+  /* border: 2px solid red; */
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   top: 85%;
   left: 43%;
@@ -644,7 +658,7 @@ input[type="number"] {
   }
 }
 .fltercheckboxdiv {
-  border: 2px solid red;
+  /* border: 2px solid red; */
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -695,10 +709,11 @@ input[type="number"] {
 }
 
 td {
-  text-align: start;
+  text-align: start !important;
   /* padding-left: 2%; */
   padding: 1rem;
-  text-align: left;
+  /* padding-left: 2%; */
+  /* text-align: left; */
   /* border-bottom: 1px solid #ddd; */
 }
 .tableActionbtn {
@@ -777,7 +792,7 @@ td {
   width: 70%;
   height: 95%;
   /* border: 2px solid red; */
-  overflow-y: scroll;
+  overflow-y: auto;
   /* position: relative; */
 }
 

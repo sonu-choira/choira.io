@@ -6,7 +6,7 @@ export const errorAlert = (msg) => {
     title: "Oops...",
     text: msg ? msg : "Something went wrong!",
     showConfirmButton: false,
-    timer: 1500
+    timer: 1500,
 
   });
 };

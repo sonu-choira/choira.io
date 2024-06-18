@@ -25,7 +25,7 @@ import Overview from "../adminDashboardOverview/Overview";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
-  const [tabCount, setTabCount] = useState(3);
+  const [tabCount, setTabCount] = useState(1);
   useEffect(() => {
     const token = localStorage.getItem("token");
     // console.log("Token from localStorage:", token);

@@ -107,7 +107,7 @@ const Routing = () => {
           <Route exact path='/service/musicProduction/add' element={<AddNewProduction/>} />
           <Route exact path='/service/showBookingDetails' element={<ShowBookingsDetail/>} />
           <Route exact path='/adminDashboard/Bookings/AddSlotBooking' element={<SlotBooking/>} />
-          <Route exact path='/adminDashboard/Teams/AddStudiPatner' element={<AddNewStudioPatner/>} />
+          <Route exact path='/adminDashboard/Teams/AddStudioPatner' element={<AddNewStudioPatner/>} />
           <Route exact path='/adminDashboard/Teams/AddNewArm' element={<AddNewArm/>} />
         
 

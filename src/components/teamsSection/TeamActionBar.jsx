@@ -25,12 +25,12 @@ function TeamsActionBar({
 
   const gotoAddNew = (teamsPageCount) => {
     if (teamsPageCount === "t2") {
-      router.push("/adminDashboard/Teams/AddStudiPatner");
+      router.push("/adminDashboard/Teams/AddStudioPatner");
     } else if (teamsPageCount === "t1") {
       router.push("/adminDashboard/Teams/AddNewArm");
     }
     //  else {
-    //   router.push("/adminDashboard/Teams/AddStudiPatner");
+    //   router.push("/adminDashboard/Teams/AddStudioPatner");
     // }
     // else {
     //   router.push("/service/musicProduction/add", {
@@ -80,11 +80,13 @@ function TeamsActionBar({
             <div
               style={{
                 borderLeft: "none",
-                backgroundColor: teamsPageCount === "t1" ? "#ffc701" : "",
+                // backgroundColor: teamsPageCount === "t1" ? "#ffc701" : "",
+                backgroundColor: "#ADB5BD",
+                cursor: "not-allowed",
               }}
               onClick={() => {
-                setTeamsPageCount("t1");
-                gotoARM();
+                // setTeamsPageCount("t1");
+                // gotoARM();
               }}
             >
               ARM
@@ -103,11 +105,13 @@ function TeamsActionBar({
 
             <div
               style={{
-                backgroundColor: teamsPageCount === "t3" ? "#ffc701" : "",
+                // backgroundColor: teamsPageCount === "t3" ? "#ffc701" : "",
+                backgroundColor: "#ADB5BD",
+                cursor: "not-allowed",
               }}
               onClick={() => {
-                setTeamsPageCount("t3");
-                gotoArtist();
+                // setTeamsPageCount("t3");
+                // gotoArtist();
               }}
             >
               Artist
@@ -115,11 +119,13 @@ function TeamsActionBar({
             <div
               style={{
                 borderRight: "none",
-                backgroundColor: teamsPageCount === "t4" ? "#ffc701" : "",
+                // backgroundColor: teamsPageCount === "t4" ? "#ffc701" : "",
+                backgroundColor: "#ADB5BD",
+                cursor: "not-allowed",
               }}
               onClick={() => {
-                setTeamsPageCount("t4");
-                gotoMusicProducer();
+                // setTeamsPageCount("t4");
+                // gotoMusicProducer();
               }}
             >
               Music Producers
@@ -129,6 +135,7 @@ function TeamsActionBar({
         <div style={{ justifyContent: teamsPageCount === "t1" ? "" : "end" }}>
           <Button
             name={"Filter"}
+            disabled={true}
             icon={<FaFilter />}
             style={{
               height: "50%",
@@ -136,10 +143,12 @@ function TeamsActionBar({
               gap: "5%",
               backgroundColor: "#ADB5BD",
             }}
+
             // onClick={router.back}
           />
           <Button
             name={"Share"}
+            disabled={true}
             icon={<FaShare />}
             style={{
               height: "50%",
@@ -151,6 +160,7 @@ function TeamsActionBar({
           />
           <Button
             name={"Download"}
+            disabled={true}
             icon={<FaDownload />}
             style={{
               height: "50%",

@@ -250,9 +250,12 @@ input[type="number"] {
 }
 .paginationgoto {
   width: 60%;
+  height: 100%;
   /* border: 2px solid pink; */
 }
 .paginationgoto > input {
+  height: 4vh;
+  padding-left: 3%;
   width: 40%;
   border: none;
   outline: none;

@@ -27,6 +27,7 @@ import Button from "../../pages/admin/layout/Button";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import Swal from "sweetalert2";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
+import { errorAlert } from "../../pages/admin/layout/Alert";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -298,6 +299,18 @@ function AddNewStudio({ setSelectTab }) {
         }).then((result) => {
           if (result.isConfirmed) {
             const correctedRealData = correctDataTypes(updatedStudioDetails);
+            if (
+              correctedRealData.maxGuests === "" ||
+              correctedRealData.maxGuests === null
+            ) {
+              errorAlert("Please enter max guests");
+              console.log(
+                "correctedRealData.maxGuests",
+                correctedRealData.maxGuests
+              );
+              return;
+            }
+
             console.log("studioDetails", correctedRealData);
             appAndmoreApi
               .updateStudio(userStudioid, correctedRealData)
@@ -337,7 +350,19 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Create it!",
         }).then((result) => {
           if (result.isConfirmed) {
+            alert("Studio created");
             const correctedRealData = correctDataTypes(updatedStudioDetails);
+            if (
+              correctedRealData.maxGuests === "" ||
+              correctedRealData.maxGuests === null
+            ) {
+              errorAlert("Please enter max guests");
+              console.log(
+                "correctedRealData.maxGuests",
+                correctedRealData.maxGuests
+              );
+              return;
+            }
 
             appAndmoreApi
               .createStudio(correctedRealData)

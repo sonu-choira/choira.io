@@ -134,7 +134,7 @@ function AllteamDetails() {
         //   .catch((error) => {
         //     console.error("Error filter studio:", error);
         //   });
-      } else if (teamsPageCount == "t1") {
+
         teamsApi
           .getStudioOwners(limit, active, pageCount)
           .then((response) => {
@@ -154,6 +154,9 @@ function AllteamDetails() {
             console.error("Error fetching studios:", error);
           });
       }
+      // else if (teamsPageCount == "t1") {
+
+      // }
     }
     console.log(teamsPageCount, "inside useEffect");
   }, [teamsPageCount, pageCount, shortby]);

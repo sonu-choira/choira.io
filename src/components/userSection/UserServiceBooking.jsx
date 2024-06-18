@@ -5,6 +5,7 @@ import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import Button from "../../pages/admin/layout/Button";
+import moment from "moment";
 
 import { IoIosArrowBack } from "react-icons/io";
 import {
@@ -230,7 +231,12 @@ function UserServiceBooking({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th style={{ width: "15%" }}>
+                <th
+                  style={{
+                    width: "5%",
+                  }}
+                  className={style.shortTableData}
+                >
                   <div className={style.headingContainer}>
                     Booking Id
                     <div
@@ -244,17 +250,17 @@ function UserServiceBooking({
                     </div>
                   </div>
                 </th>
-                <th>
+                <th style={{ width: "20%" }}>
                   <div className={style.headingContainer}>
                     Service Name
                     <div
                       className={style.filterBox}
-                      style={{
-                        backgroundColor:
-                          priceFilter.minPrice || priceFilter.maxPrice !== ""
-                            ? "#ffc70133"
-                            : "",
-                      }}
+                      // style={{
+                      //   backgroundColor:
+                      //     priceFilter.minPrice || priceFilter.maxPrice !== ""
+                      //       ? "#ffc70133"
+                      //       : "",
+                      // }}
                     >
                       <span onClick={handelpriceFilter}>
                         <CiFilter />
@@ -276,9 +282,9 @@ function UserServiceBooking({
                   </div>
                 </th>
 
-                <th style={{ width: "10%" }}>
+                <th style={{ width: "20%" }}>
                   <div className={style.headingContainer}>
-                    No. of hours
+                    Package Name
                     <div
                       className={style.filterBox}
                       style={{
@@ -338,7 +344,7 @@ function UserServiceBooking({
                 </th>
                 <th style={{ width: "20%" }}>
                   <div className={style.headingContainer}>
-                    Time Slot
+                    Price
                     <div
                       className={style.filterBox}
                       style={{
@@ -366,7 +372,7 @@ function UserServiceBooking({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "12%" }}>
+                <th style={{ width: "15%" }}>
                   <div className={style.headingContainer}>
                     Project Status
                     <div
@@ -398,17 +404,7 @@ function UserServiceBooking({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "10%" }}>
-                  <div className={style.headingContainer}>
-                    <div
-                      className={style.filterBox}
-                      style={{
-                        backgroundColor:
-                          selectedStatus.length > 0 ? "#ffc70133" : "",
-                      }}
-                    ></div>
-                  </div>
-                </th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -418,22 +414,27 @@ function UserServiceBooking({
                 products?.map((products, index) => {
                   return (
                     <tr key={products._id}>
-                      <td
-                      // style={{
-                      //   display: "flex",
-                      //   alignItems: "center",
-                      //   justifyContent: "center",
-                      //   height: "100%",
-                      // }}
-                      >
-                        {products._id}
+                      <td>
+                        <span title={products._id}>
+                          {products._id.substring(0, 6)}
+                        </span>
                       </td>
-                      <td>{products._id}</td>
-                      <td>{products.email}</td>
-                      <td>{products.studioName}</td>
-                      <td>{products.creationTimeStamp}</td>
+                      <td>{products.serviceFullName}</td>
+                      <td>{products?.package?.name}</td>
+                      <td>
+                        {moment(products.bookingDate).format(
+                          "DD/MM/YYYY hh:mm:ss a"
+                        )}
+                      </td>
+                      <td>{products.totalPrice}</td>
                       <td className={style.tableActionbtn}>
-                        <div className={style.userProjectStatus}>Pending</div>
+                        <div className={style.userProjectStatus}>
+                          {products.bookingStatus == 0
+                            ? "Pending"
+                            : products.bookingStatus == 1
+                            ? "Complete"
+                            : "Rejected"}
+                        </div>
                       </td>
                       <td style={{ textAlign: "center" }}>
                         <FaRegEye />

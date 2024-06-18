@@ -586,6 +586,9 @@ function AddNewRoom({
         backOnclick={() => {
           setshowRoomsDetails(false);
         }}
+        saveOnclick={() => {
+          setshowRoomsDetails(false);
+        }}
       />
     </>
   );

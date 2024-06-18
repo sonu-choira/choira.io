@@ -18,6 +18,7 @@ import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFil
 import UserProfile from "./UserProfile";
 import Alert from "antd/es/alert/Alert";
 import { errorAlert } from "../../pages/admin/layout/Alert";
+import moment from "moment";
 
 let userAllFilterData = {
   sortfield: "",
@@ -213,6 +214,7 @@ function ShowAllUser() {
                 name={"Export"}
                 icon={<FaDownload />}
                 style={{ height: "60%", gap: "5%" }}
+                disabled={true}
               />
             </div>
           </div>
@@ -366,7 +368,11 @@ function ShowAllUser() {
                         </td>
                         <td>{product.phone}</td>
                         <td>{product.email}</td>
-                        <td>{product.creationTimeStamp}</td>
+                        <td>
+                          {moment(products.creationTimeStamp).format(
+                            "DD/MM/YYYY hh:mm:ss a"
+                          )}
+                        </td>
                         <td className={style.tableActionbtn}>
                           <div
                             style={{

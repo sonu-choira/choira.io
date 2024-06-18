@@ -4,6 +4,7 @@ import user from "../../assets/img/userNotFound.jpg";
 import style from "../../pages/admin/studios/studio.module.css";
 import ChoiraLoder2 from "../loader/ChoiraLoder2";
 import ChoiraLoader from "../loader/ChoiraLoader";
+import moment from "moment";
 
 function UserAcount({ userAllDetails }) {
   return (
@@ -99,7 +100,9 @@ function UserAcount({ userAllDetails }) {
                   id="register"
                   placeholder="User Registered on"
                   name="register"
-                  value={userAllDetails.creationTimeStamp}
+                  value={moment(userAllDetails.createdAt).format(
+                    "MMMM Do YYYY, hh:mm:ss a"
+                  )}
                 />
               </div>
             </div>
