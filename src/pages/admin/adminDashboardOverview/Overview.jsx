@@ -12,6 +12,9 @@ import LineGraph from "../../../components/charts/LineGraph";
 import BarGraph from "../../../components/charts/BarGraph";
 import AreaGraph from "../../../components/charts/AreaGraph";
 import SimpleLineChart from "../../../components/charts/SimpleLineChart";
+import Swal from "sweetalert2";
+import { useLocation } from "react-router-dom";
+
 function Overview() {
   const data = [
     {
@@ -39,6 +42,26 @@ function Overview() {
       image: t4,
     },
   ];
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname.includes("Overview")) {
+      Swal.fire({
+        title: "<strong>Under Development </strong>",
+        icon: "info",
+        html: `
+         This Page is Under Development.
+         The Data Of this Page is not Real.
+        `,
+        // showCloseButton: true,
+        // showCancelButton: true,
+        focusConfirm: false,
+
+        confirmButtonAriaLabel: "Ok",
+      });
+    }
+  }, []);
   return (
     <>
       <div className={style.overviewPage1}>

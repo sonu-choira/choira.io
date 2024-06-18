@@ -25,7 +25,7 @@ import Overview from "../adminDashboardOverview/Overview";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
-  const [tabCount, setTabCount] = useState(1);
+  const [tabCount, setTabCount] = useState(2);
   useEffect(() => {
     const token = localStorage.getItem("token");
     // console.log("Token from localStorage:", token);
@@ -69,6 +69,8 @@ function AdminDashboardLayout() {
             <AllStudioPageDetailsPage />
           ) : tabCount === 5 ? (
             <BookingPages />
+          ) : tabCount === 6 ? (
+            ""
           ) : (
             ""
           )}

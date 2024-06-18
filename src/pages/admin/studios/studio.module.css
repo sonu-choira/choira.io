@@ -26,12 +26,16 @@ input[type="number"] {
   cursor: not-allowed;
   /* background-color: #adb5bd; */
 }
+.puredisabled {
+  cursor: not-allowed;
+  background-color: #adb5bd4f;
+}
 .wrapper {
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: row;
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
 }
 .studioMainScreen {
   width: 88vw;
@@ -533,7 +537,7 @@ input[type="number"] {
 .headingContainer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   /* border: 2px solid red; */
 }
 .shortTableData {
@@ -709,12 +713,16 @@ input[type="number"] {
 }
 
 td {
-  text-align: start !important;
+  text-align: center !important;
   /* padding-left: 2%; */
   padding: 1rem;
   /* padding-left: 2%; */
   /* text-align: left; */
   /* border-bottom: 1px solid #ddd; */
+  text-align: left;
+}
+.customUserTd > td {
+  text-align: start !important;
 }
 .tableActionbtn {
   display: flex;

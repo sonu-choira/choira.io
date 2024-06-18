@@ -191,6 +191,16 @@ function ShowAllUser() {
 
     // setShowUserProfile(true);
   };
+  const downloadUserData = () => {
+    userApi
+      .downloadUserData(userAllFilterData)
+      .then((response) => {
+        console.log("data download", response);
+      })
+      .catch((error) => {
+        console.error("Error download data:", error);
+      });
+  };
 
   return (
     <>
@@ -211,10 +221,11 @@ function ShowAllUser() {
             </div>
             <div>
               <Button
-                name={"Export"}
+                name={"Download"}
                 icon={<FaDownload />}
                 style={{ height: "60%", gap: "5%" }}
-                disabled={true}
+                // disabled={true}
+                onClick={downloadUserData}
               />
             </div>
           </div>

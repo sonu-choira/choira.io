@@ -118,6 +118,27 @@ class userApi{
 
 
 
+ downloadUserData = async (allfilterData) => {
+
+  const filteredObject = {};
+  for (const key in allfilterData) {
+    if (allfilterData[key]) {
+      filteredObject[key] = allfilterData[key];
+    }
+  }
+    
+    const response = await api.get(`/userData/exports`,{ 
+        params: filteredObject,
+        responseType:'blob',
+    }).then((res)=>{
+      fileDownload(res.data,"userData.xlsx")
+    })
+    const {status} = response.data
+    console.log("res ===>", response.data)
+    return response.data;
+   };
+
+
 }
 
 

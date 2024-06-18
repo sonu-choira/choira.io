@@ -11,7 +11,7 @@ import { AiOutlineTeam } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { useLocale } from "antd/es/locale";
 import { LuHome } from "react-icons/lu";
-
+import { TbSpeakerphone } from "react-icons/tb";
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
 
@@ -28,6 +28,8 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       setTabCount(4);
     } else if (pathname.includes("Bookings")) {
       setTabCount(5);
+    } else if (pathname.includes("Promotions")) {
+      setTabCount(6);
     }
   }, [pathname, setTabCount]);
 
@@ -50,6 +52,10 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const gotoBookings = () => {
     setTabCount(5);
     navigate("/adminDashboard/Bookings/studio");
+  };
+  const gotoPromotions = () => {
+    setTabCount(6);
+    // navigate("/adminDashboard/Bookings/studio");
   };
 
   const gotoOverview = () => {
@@ -111,6 +117,13 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 <img src={produce} alt="" />
                 Bookings
               </div>
+              {/* <div
+                className={tabCount === 6 ? style.tabActive : style.padding}
+                onClick={gotoPromotions}
+              >
+                <TbSpeakerphone style={{ fontSize: "1vmax" }} />
+                Promotions
+              </div> */}
             </div>
           </div>
 

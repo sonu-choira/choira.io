@@ -418,7 +418,7 @@ function UserBookingDetails({
               ) : (
                 products?.map((products, index) => {
                   return (
-                    <tr key={products?._id}>
+                    <tr key={products?._id} className={style.customUserTd}>
                       <td>
                         <span title={products._id}>
                           {products._id.substring(0, 6)}

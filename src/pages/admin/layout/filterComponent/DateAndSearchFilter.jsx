@@ -233,46 +233,43 @@ function DateAndSearchFilter({
     } else {
     }
   };
-  let filterData = { ...sendFilterDataToapi };
-  delete filterData.sortBy;
-  delete filterData.page;
-  delete filterData.serviceType;
-  let hasFilter = false;
-  for (const key in filterData) {
-    if (filterData[key]) {
-      hasFilter = true;
-      break;
-    }
-  }
-  const clearAllFilter = () => {
-    const keys = Object.keys(sendFilterDataToapi);
+  // let filterData = { ...sendFilterDataToapi };
+  // let filterData2 = { ...userAllFilterData };
+  // delete filterData.sortBy;
+  // delete filterData.page;
+  // delete filterData.serviceType;
+  // let hasFilter = false;
+  // for (const key in filterData) {
+  //   if (filterData[key]) {
+  //     hasFilter = true;
+  //     break;
+  //   }
+  // }
+  // for (const key in filterData2) {
+  //   if (filterData[key]) {
+  //     hasFilter = true;
 
-    keys.forEach((key) => {
-      sendFilterDataToapi[key] = "";
-    });
-    console.log(sendFilterDataToapi);
-    try {
-      if (bookingPageCount == "c1") {
-        // setSelectedCity([]);
-        // setShortby("creationTimeStamp:asc");
-        // setSelectedRoom([]);
-        // setSelectedStatus([]);
-        // setSearchQuery("");
-        // setPriceFilter({
-        //   minPrice: "",
-        //   maxPrice: "",
-        // });
-        // hitallstudioApi();
-        window.location.reload();
-      } else {
-        // setSearchQuery("");
-        // hitallstudioApi();
-        window.location.reload();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-    console.log(sendFilterDataToapi, "sendFilterDataToapi");
+  //     break;
+  //   }
+  // }
+
+  const filterData = sendFilterDataToapi ? { ...sendFilterDataToapi } : {};
+  const filterData2 = userAllFilterData ? { ...userAllFilterData } : {};
+
+  // Delete specified keys from filterData
+  ["sortBy", "page", "serviceType"].forEach((key) => delete filterData[key]);
+
+  // Check if there are any truthy values in filterData or filterData2
+  const hasFilter =
+    Object.values(filterData).some(
+      (value) => value !== "" && value !== undefined
+    ) ||
+    Object.values(filterData2).some(
+      (value) => value !== "" && value !== undefined
+    );
+
+  const clearAllFilter = () => {
+    window.location.reload();
   };
   // console.log(sendFilterDataToapi);
   return (

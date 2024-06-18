@@ -67,16 +67,20 @@ function StudioBookingDetail({
     <>
       <div className={style.studioTabelDiv}>
         <div className={style.searchDiv}>
-          <div>
+          <div className={style.puredisabled}>
             <p>Search by Date </p>
             <label htmlFor="selectDate">
               <IoCalendarOutline />
             </label>
             {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
           </div>
-          <div>
+          <div className={style.puredisabled}>
             <BiSearchAlt /> <br />
-            <input type="text" placeholder="Search" />
+            <input
+              type="text"
+              placeholder="Search"
+              className={style.puredisabled}
+            />
           </div>
         </div>
         <div>
