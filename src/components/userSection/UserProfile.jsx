@@ -30,6 +30,24 @@ function UserProfile({ userAllDetails, setShowUserProfile, userid }) {
 
   // setBookingPageCount("c2");
 
+  const profileSidebarOptions = [
+    {
+      id: 1,
+      icon: <LuUser2 style={{ fontSize: "1.2vmax" }} />,
+      title: "Account",
+    },
+    {
+      id: 2,
+      icon: <IoCalendarClearOutline style={{ fontSize: "1.2vmax" }} />,
+      title: "Studio Booking",
+    },
+    {
+      id: 3,
+      icon: <IoCalendarClearOutline style={{ fontSize: "1.2vmax" }} />,
+      title: "Service Booking",
+    },
+  ];
+
   const navigate = useNavigate();
   const gotoSignin = () => {
     navigate("/signin");
@@ -217,32 +235,19 @@ function UserProfile({ userAllDetails, setShowUserProfile, userid }) {
       <div className={style.userProfileSection}>
         <div>
           <div className={style.profilesidebar}>
-            <div
-              onClick={() => {
-                setSidebarPageCount(1);
-              }}
-              className={sidebarPageCount == 1 ? style.leftBorder : ""}
-            >
-              <LuUser2 /> Account
-            </div>
-            <div
-              className={sidebarPageCount == 2 ? style.leftBorder : ""}
-              onClick={() => {
-                setSidebarPageCount(2);
-              }}
-            >
-              <IoCalendarClearOutline /> Studio Booking
-            </div>
-            <div
-              className={sidebarPageCount == 3 ? style.leftBorder : ""}
-              onClick={() => {
-                setSidebarPageCount(3);
-              }}
-            >
-              <IoCalendarClearOutline />
-              Service Booking
-            </div>
+            {profileSidebarOptions.map((option) => (
+              <div
+                key={option.id}
+                onClick={() => setSidebarPageCount(option.id)}
+                className={
+                  sidebarPageCount === option.id ? style.leftBorder : ""
+                }
+              >
+                {option.icon} {option.title}
+              </div>
+            ))}
           </div>
+
           <div
             className={style.UserbookingDetails}
             style={!sidebarPageCount == 1 ? { backgroundColor: "#F0F0F0" } : {}}

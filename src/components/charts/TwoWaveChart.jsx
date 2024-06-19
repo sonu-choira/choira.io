@@ -56,7 +56,10 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-const MyChart = ({ appColor = "#FFAA00", productionColor = "#00FF00" }) => {
+const TwoWaveChart = ({
+  appColor = "#FFAA00",
+  productionColor = "#00FF00",
+}) => {
   return (
     <div className={style.transactionChart}>
       <ChartNav chartTitle={"Transaction "} />
@@ -101,4 +104,4 @@ const MyChart = ({ appColor = "#FFAA00", productionColor = "#00FF00" }) => {
   );
 };
 
-export default MyChart;
+export default TwoWaveChart;

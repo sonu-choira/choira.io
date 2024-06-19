@@ -436,7 +436,23 @@ function UserBookingDetails({
                         {products?.bookingTime?.endTime}
                       </td>
                       <td className={style.tableActionbtn}>
-                        <div className={style.userProjectStatus}>Pending</div>
+                        <div
+                          className={style.userProjectStatus}
+                          style={{
+                            backgroundColor:
+                              parseInt(products.bookingStatus) === 0
+                                ? "#FFF3CA"
+                                : parseInt(products.bookingStatus) == 1
+                                ? "#DDFFF3"
+                                : "#FFDDDD",
+                          }}
+                        >
+                          {parseInt(products.bookingStatus) === 0
+                            ? "Pending"
+                            : parseInt(products.bookingStatus) == 1
+                            ? "Complete"
+                            : "Cancelled"}
+                        </div>
                       </td>
                       <td style={{ textAlign: "center" }}>
                         <FaRegEye />

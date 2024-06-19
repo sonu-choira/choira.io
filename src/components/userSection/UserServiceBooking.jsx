@@ -428,12 +428,22 @@ function UserServiceBooking({
                       </td>
                       <td>{products.totalPrice}</td>
                       <td className={style.tableActionbtn}>
-                        <div className={style.userProjectStatus}>
-                          {products.bookingStatus == 0
+                        <div
+                          className={style.userProjectStatus}
+                          style={{
+                            backgroundColor:
+                              parseInt(products.bookingStatus) === 0
+                                ? "#FFF3CA"
+                                : parseInt(products.bookingStatus) == 1
+                                ? "#DDFFF3"
+                                : "#FFDDDD",
+                          }}
+                        >
+                          {parseInt(products.bookingStatus) === 0
                             ? "Pending"
-                            : products.bookingStatus == 1
+                            : parseInt(products.bookingStatus) == 1
                             ? "Complete"
-                            : "Rejected"}
+                            : "Cancelled"}
                         </div>
                       </td>
                       <td style={{ textAlign: "center" }}>

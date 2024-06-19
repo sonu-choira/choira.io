@@ -399,7 +399,7 @@ function AllStudioDetail2({
                         </div>
                         &nbsp;&nbsp;{products.fullName}
                       </td>
-                      <td>
+                      <td style={{ padding: "0px 8rem 0px 0px" }}>
                         ₹{products.pricePerHour}
                         <br />
                         <small>per hour</small>

@@ -55,7 +55,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   };
   const gotoPromotions = () => {
     setTabCount(6);
-    // navigate("/adminDashboard/Bookings/studio");
+    navigate("/adminDashboard/Promotions");
   };
 
   const gotoOverview = () => {
@@ -117,13 +117,13 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 <img src={produce} alt="" />
                 Bookings
               </div>
-              {/* <div
+              <div
                 className={tabCount === 6 ? style.tabActive : style.padding}
                 onClick={gotoPromotions}
               >
                 <TbSpeakerphone style={{ fontSize: "1vmax" }} />
                 Promotions
-              </div> */}
+              </div>
             </div>
           </div>
 

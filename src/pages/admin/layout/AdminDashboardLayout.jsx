@@ -22,6 +22,7 @@ import AddNewRoom from "../../../components/adminStudio/AddNewRoom";
 import AllteamDetails from "../../../components/teamsSection/AllteamDetails";
 import ShowAllUser from "../../../components/userSection/ShowAllUser";
 import Overview from "../adminDashboardOverview/Overview";
+import Promotions from "../../../components/pramotation/Promotions";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ function AdminDashboardLayout() {
           ) : tabCount === 5 ? (
             <BookingPages />
           ) : tabCount === 6 ? (
-            ""
+            <Promotions />
           ) : (
             ""
           )}

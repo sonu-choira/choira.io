@@ -100,7 +100,6 @@ const Routing = () => {
           <Route path='/adminDashboard/:navOption/:page' element={<AdminDashboardLayout/>} />
           <Route path='/adminDashboard/:navOption' element={<AdminDashboardLayout/>} />
           <Route path='/adminDashboard' element={<AdminDashboardLayout/>} />
-          <Route exact path='/booking' element={<BookingPages/>} />
           <Route exact path='/studio/edit' element={<AddNewStudio/>} />
           <Route exact path='/studio/add' element={<AddNewStudio/>} />
           <Route exact path='/service/musicProduction/edit' element={<AddNewProduction/>} />
