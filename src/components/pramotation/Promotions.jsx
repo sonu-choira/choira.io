@@ -11,6 +11,7 @@ import { CiDiscount1 } from "react-icons/ci";
 import { PiSquaresFour } from "react-icons/pi";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import Banner from "./Banner";
+import Discount from "./Discount";
 function Promotions({ userAllDetails, setShowUserProfile, userid }) {
   // const [products, setProducts] = useState([]);
   // const handleChange = () => {};
@@ -197,7 +198,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
                 // <UserAcount userAllDetails={userAllDetails} />
                 <Banner />
               ) : sidebarPageCount == 2 ? (
-                ""
+                <Discount />
               ) : sidebarPageCount == 3 ? (
                 ""
               ) : sidebarPageCount == 4 ? (
