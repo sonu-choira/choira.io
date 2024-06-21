@@ -55,7 +55,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   };
   const gotoPromotions = () => {
     setTabCount(6);
-    navigate("/adminDashboard/Promotions");
+    navigate("/adminDashboard/Promotions/Banner");
   };
 
   const gotoOverview = () => {

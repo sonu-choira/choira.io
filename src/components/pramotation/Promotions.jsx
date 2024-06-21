@@ -3,7 +3,7 @@ import style from "../../pages/admin/studios/studio.module.css";
 import { LuUser2 } from "react-icons/lu";
 import { IoCalendarClearOutline } from "react-icons/io5";
 import StudioFooter from "../adminStudio/StudioFooter";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import bookingPageApi from "../../services/bookingPageApi";
 import userApi from "../../services/userApi";
 import { IoImageOutline } from "react-icons/io5";
@@ -22,6 +22,16 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
   const [pageCount, setPageCount] = useState(1);
   const [shortby, setShortby] = useState("asc");
   const [sidebarPageCount, setSidebarPageCount] = useState(1);
+  const { pathname } = useLocation();
+  useEffect(() => {
+    if (pathname.includes("Banner")) {
+      setSidebarPageCount(1);
+    } else if (pathname.includes("Discounts")) {
+      setSidebarPageCount(2);
+    } else if (pathname.includes("Integrations")) {
+      setSidebarPageCount(3);
+    }
+  }, [sidebarPageCount]);
 
   // const [userPageCount, setUserPageCount] = useState("t3");
 
@@ -134,18 +144,21 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
       icon: <IoImageOutline style={{ fontSize: "1.2vmax" }} />,
       title: "Banner",
       description: "Ensure your app stands out with captivating banners!",
+      navigate: "/adminDashboard/Promotions/Banner",
     },
     {
       id: 2,
       icon: <CiDiscount1 style={{ fontSize: "1.2vmax" }} />,
       title: "Discounts",
       description: "Attract users with amazing discounts!",
+      navigate: "/adminDashboard/Promotions/Discounts",
     },
     {
       id: 3,
       icon: <PiSquaresFour style={{ fontSize: "1.2vmax" }} />,
       title: "Integrations",
       description: "Boost functionality with seamless integrations!",
+      navigate: "/adminDashboard/Promotions/Integrations",
     },
     {
       id: 4,
@@ -153,12 +166,15 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
       title: "Notifications",
       description: "Ensure your app stands out with captivating banners!",
       disable: true,
+      navigate: "/adminDashboard/Promotions/Notifications",
     },
   ];
 
   const backOnclick = () => {
     setShowUserProfile(false);
   };
+  const [showFooter, setShowFooter] = useState(false);
+  const [showTable, setShowTable] = useState(true);
 
   return (
     <>
@@ -168,9 +184,12 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
             {sidebarOptions.map((option) => (
               <div
                 key={option.id}
-                onClick={() =>
-                  !option.disable && setSidebarPageCount(option.id)
-                }
+                onClick={() => {
+                  if (!option.disable) {
+                    setSidebarPageCount(option.id);
+                    navigate(option.navigate); // Corrected navigation function chaining
+                  }
+                }}
                 style={{
                   height: sidebarPageCount === option.id ? "15%" : "",
                   backgroundColor: option.disable && "#F0F0F0",
@@ -196,9 +215,15 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
             <div>
               {sidebarPageCount == 1 ? (
                 // <UserAcount userAllDetails={userAllDetails} />
+
                 <Banner />
               ) : sidebarPageCount == 2 ? (
-                <Discount />
+                <Discount
+                  setShowFooter={setShowFooter}
+                  showFooter={showFooter}
+                  setShowTable={setShowTable}
+                  showTable={showTable}
+                />
               ) : sidebarPageCount == 3 ? (
                 ""
               ) : sidebarPageCount == 4 ? (
@@ -212,12 +237,17 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
           </div>
         </div>
 
-        {/* <StudioFooter
-          backOnclick={backOnclick}
-          saveDisabled={true}
-          // disabled={true}
-          //   saveOnclick={handelSavebtn}
-        /> */}
+        {sidebarPageCount == 2 && showFooter && (
+          <StudioFooter
+            backOnclick={() => {
+              setShowFooter(false);
+              setShowTable(true);
+            }}
+            saveDisabled={true}
+            // disabled={true}
+            //   saveOnclick={handelSavebtn}
+          />
+        )}
       </div>
     </>
   );
