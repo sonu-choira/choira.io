@@ -2,8 +2,6 @@ import React from "react";
 import style from "../studios/studio.module.css";
 
 function CustomSelect({
-  type,
-  placeholder,
   name,
   value,
   onChange,
@@ -11,19 +9,19 @@ function CustomSelect({
   htmlFor,
   label,
   options,
-  data,
+  defaultOption,
 }) {
   return (
     <div className={style.customInput}>
-      <label htmlFor={htmlFor}>Max Guests</label>
+      <label htmlFor={htmlFor}>{label}</label>
 
-      <select id={id}>
-        <option>Select Maximum Guest allowed</option>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
+      <select id={id} onChange={onChange} value={value} name={name}>
+        <option value="" disabled selected>
+          {defaultOption}
+        </option>
+        {options?.map((option) => (
+          <option value={option}>{option}</option>
+        ))}
       </select>
     </div>
   );

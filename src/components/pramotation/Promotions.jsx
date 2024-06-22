@@ -12,6 +12,7 @@ import { PiSquaresFour } from "react-icons/pi";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import Banner from "./Banner";
 import Discount from "./Discount";
+import Integration from "./Integration";
 function Promotions({ userAllDetails, setShowUserProfile, userid }) {
   // const [products, setProducts] = useState([]);
   // const handleChange = () => {};
@@ -225,7 +226,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
                   showTable={showTable}
                 />
               ) : sidebarPageCount == 3 ? (
-                ""
+                <Integration />
               ) : sidebarPageCount == 4 ? (
                 ""
               ) : (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import style from "../../pages/admin/studios/studio.module.css";
 import { FaPencilAlt } from "react-icons/fa";
 import upload from "../../assets/upload.svg";
@@ -6,6 +6,7 @@ import Button from "../../pages/admin/layout/Button";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
 import { MdDragHandle } from "react-icons/md";
+import { errorAlert } from "../../pages/admin/layout/Alert";
 
 function Banner() {
   const [mainBannerData, setMainBannerData] = useState([]);
@@ -18,88 +19,122 @@ function Banner() {
   const [mainBannerEdit, setMainBannerEdit] = useState(false);
   const [exclusiveBannerEdit, setExclusiveBannerEdit] = useState(false);
 
-  // Function to handle drag start
+  const [isMainBannerValidUrl, setIsMainBannerValidUrl] = useState(true); // Define state for URL validity
+  const [isExclusiveValidUrl, setIsExclusiveValidUrl] = useState(true); // Define state for URL validity
+
+  const isValidUrl = (url) => {
+    const urlPattern = new RegExp(
+      "^(https?:\\/\\/)?" + // validate the scheme
+        "((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|" + // domain name
+        "localhost|" + // localhost
+        "\\d{1,3}\\.(\\d{1,3}\\.){2}\\d{1,3}|" + // OR ipv4
+        "\\[([a-fA-F\\d:]+)\\])" + // OR ipv6
+        "(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*" + // port and path
+        "(\\?[;&a-zA-Z\\d%_.~+=-]*)?" + // query string
+        "(\\#[-a-zA-Z\\d_]*)?$", // fragment locator
+      "i"
+    );
+    return urlPattern.test(url);
+  };
+
+  const handleFileUpload = (event, setImage, data, setData) => {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 1048576) {
+        errorAlert("File size should be less than 1MB");
+        event.target.value = "";
+        return;
+      }
+      const imgUrl = URL.createObjectURL(file);
+      setImage(imgUrl);
+    }
+  };
+
+  const handleEditBannerFileUpload = (event, index, type) => {
+    const setData =
+      type === "main" ? setMainBannerData : setExclusiveBannerData;
+    handleFileUpload(event, (imgUrl) => {
+      const newData = [...setData];
+      newData[index].imgUrl = imgUrl;
+      setData(newData);
+    });
+  };
+
+  const handleBannerFileUpload = (event, setImage) => {
+    handleFileUpload(event, setImage);
+  };
+
+  const handleAddBanner = (type) => {
+    const newData = type === "main" ? mainBannerData : exclusiveBannerData;
+    const setNewData =
+      type === "main" ? setMainBannerData : setExclusiveBannerData;
+    const newImg = type === "main" ? newMainBannerImg : newExclusiveBannerImg;
+    const newUrl = type === "main" ? newMainBannerUrl : newExclusiveBannerUrl;
+
+    if (newImg && isValidUrl(newUrl)) {
+      setNewData([...newData, { imgUrl: newImg, url: newUrl }]);
+      if (type === "main") {
+        setNewMainBannerImg("");
+        setNewMainBannerUrl("");
+        setIsMainBannerValidUrl(true); // Reset URL validity state
+      } else {
+        setNewExclusiveBannerImg("");
+        setNewExclusiveBannerUrl("");
+        setIsExclusiveValidUrl(true); // Reset URL validity state
+      }
+      document.getElementById(`${type}Banner`).value = "";
+    } else {
+      errorAlert("Please provide a valid URL");
+      if (type === "main") {
+        setIsMainBannerValidUrl(false); // Set URL validity state
+      } else {
+        setIsExclusiveValidUrl(false); // Set URL validity state
+      }
+    }
+  };
+
   const handleDragStart = (event, index, type) => {
     event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("type", type);
   };
 
-  // Function to handle drop
-  const handleDrop = (event, targetIndex, targetType) => {
-    const index = event.dataTransfer.getData("index");
-    const type = event.dataTransfer.getData("type");
+  const handleDrop = (event, index, type) => {
+    const draggedIndex = event.dataTransfer.getData("index");
+    const draggedType = event.dataTransfer.getData("type");
 
-    if (type === targetType) {
-      let newData =
-        targetType === "main" ? [...mainBannerData] : [...exclusiveBannerData];
-      const item = newData.splice(index, 1)[0];
-      newData.splice(targetIndex, 0, item);
+    if (draggedType !== type) return;
 
-      targetType === "main"
-        ? setMainBannerData(newData)
-        : setExclusiveBannerData(newData);
+    let updatedData;
+    if (type === "main") {
+      updatedData = [...mainBannerData];
+    } else if (type === "exclusive") {
+      updatedData = [...exclusiveBannerData];
+    }
+    const [draggedItem] = updatedData.splice(draggedIndex, 1);
+    updatedData.splice(index, 0, draggedItem);
+
+    if (type === "main") {
+      setMainBannerData(updatedData);
+    } else if (type === "exclusive") {
+      setExclusiveBannerData(updatedData);
+    }
+  };
+
+  const checkUrlEdit = (e, setValidUrl) => {
+    if (!isValidUrl(e.target.value)) {
+      e.target.style.border = "2px solid red";
+      setValidUrl(false);
     } else {
-      console.warn(
-        "Dragging between main and exclusive banners is not implemented."
-      );
+      e.target.style.border = "none";
+      setValidUrl(true);
     }
   };
 
-  const handleEditMainBannerFileUpload = (event, index) => {
-    const file = event.target.files[0];
-    if (file) {
-      const newImg = [...mainBannerData];
-      newImg[index].imgUrl = URL.createObjectURL(file);
-      setMainBannerData(newImg);
-    }
-  };
-
-  const handleEditExclusiveBannerFileUpload = (event, index) => {
-    const file = event.target.files[0];
-    if (file) {
-      const newImg = [...exclusiveBannerData];
-      newImg[index].imgUrl = URL.createObjectURL(file);
-      setExclusiveBannerData(newImg);
-    }
-  };
-
-  const handleMainBannerFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imgUrl = URL.createObjectURL(file);
-      setNewMainBannerImg(imgUrl);
-    }
-  };
-
-  const handleExclusiveBannerFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imgUrl = URL.createObjectURL(file);
-      setNewExclusiveBannerImg(imgUrl);
-    }
-  };
-
-  const handleAddMainBanner = () => {
-    if (newMainBannerImg && newMainBannerUrl) {
-      setMainBannerData([
-        ...mainBannerData,
-        { imgUrl: newMainBannerImg, url: newMainBannerUrl },
-      ]);
-      setNewMainBannerImg("");
-      setNewMainBannerUrl("");
-      document.getElementById("mainBanner").value = "";
-    }
-  };
-
-  const handleAddExclusiveBanner = () => {
-    if (newExclusiveBannerImg && newExclusiveBannerUrl) {
-      setExclusiveBannerData([
-        ...exclusiveBannerData,
-        { imgUrl: newExclusiveBannerImg, url: newExclusiveBannerUrl },
-      ]);
-      setNewExclusiveBannerImg("");
-      setNewExclusiveBannerUrl("");
-      document.getElementById("exclusiveBanner").value = "";
+  const handleSave = (isValidUrl, setEdit, errorMessage) => {
+    if (isValidUrl) {
+      setEdit(false);
+    } else {
+      errorAlert(errorMessage);
     }
   };
 
@@ -113,7 +148,13 @@ function Banner() {
               name={"Save"}
               icon={<HiOutlineCheckCircle />}
               style={{ height: "90%", gap: "5px" }}
-              onClick={() => setMainBannerEdit(false)}
+              onClick={() =>
+                handleSave(
+                  isMainBannerValidUrl,
+                  setMainBannerEdit,
+                  "Please enter a valid URL"
+                )
+              }
             />
           ) : (
             <FaPencilAlt
@@ -122,6 +163,9 @@ function Banner() {
             />
           )}
         </span>
+        <br />
+        <br />
+
         {mainBannerData.length > 0 && (
           <div className={style.bannerMain}>
             {mainBannerData.map((data, index) => (
@@ -156,7 +200,7 @@ function Banner() {
                       type="file"
                       style={{ display: "none" }}
                       onChange={(event) =>
-                        handleEditMainBannerFileUpload(event, index)
+                        handleEditBannerFileUpload(event, index, "main")
                       }
                     />
                   </label>
@@ -179,6 +223,9 @@ function Banner() {
                       const newData = [...mainBannerData];
                       newData[index].url = e.target.value;
                       setMainBannerData(newData);
+                    }}
+                    onKeyUp={(e) => {
+                      checkUrlEdit(e, setIsMainBannerValidUrl);
                     }}
                   />
                 </div>
@@ -231,7 +278,9 @@ function Banner() {
               type="file"
               id="mainBanner"
               style={{ display: "none" }}
-              onChange={handleMainBannerFileUpload}
+              onChange={(event) =>
+                handleBannerFileUpload(event, setNewMainBannerImg)
+              }
             />
           </label>
           <div>
@@ -243,11 +292,10 @@ function Banner() {
             />
           </div>
           <div>
-            <Button name={"Add"} onClick={handleAddMainBanner} />
+            <Button name={"Add"} onClick={() => handleAddBanner("main")} />
           </div>
         </div>
       </div>
-      <br />
       <br />
       <div>
         <span>
@@ -257,7 +305,13 @@ function Banner() {
               name={"Save"}
               icon={<HiOutlineCheckCircle />}
               style={{ height: "90%", gap: "5px" }}
-              onClick={() => setExclusiveBannerEdit(false)}
+              onClick={() =>
+                handleSave(
+                  isExclusiveValidUrl,
+                  setExclusiveBannerEdit,
+                  "Please enter a valid URL"
+                )
+              }
             />
           ) : (
             <FaPencilAlt
@@ -266,6 +320,8 @@ function Banner() {
             />
           )}
         </span>
+        <br />
+        <br />
         {exclusiveBannerData.length > 0 && (
           <div className={style.bannerMain}>
             {exclusiveBannerData.map((data, index) => (
@@ -302,7 +358,7 @@ function Banner() {
                       type="file"
                       style={{ display: "none" }}
                       onChange={(event) =>
-                        handleEditExclusiveBannerFileUpload(event, index)
+                        handleEditBannerFileUpload(event, index, "exclusive")
                       }
                     />
                   </label>
@@ -325,6 +381,9 @@ function Banner() {
                       const newData = [...exclusiveBannerData];
                       newData[index].url = e.target.value;
                       setExclusiveBannerData(newData);
+                    }}
+                    onKeyUp={(e) => {
+                      checkUrlEdit(e, setIsExclusiveValidUrl);
                     }}
                   />
                 </div>
@@ -379,7 +438,9 @@ function Banner() {
               type="file"
               id="exclusiveBanner"
               style={{ display: "none" }}
-              onChange={handleExclusiveBannerFileUpload}
+              onChange={(event) =>
+                handleBannerFileUpload(event, setNewExclusiveBannerImg)
+              }
             />
           </label>
           <div>
@@ -391,7 +452,7 @@ function Banner() {
             />
           </div>
           <div>
-            <Button name={"Add"} onClick={handleAddExclusiveBanner} />
+            <Button name={"Add"} onClick={() => handleAddBanner("exclusive")} />
           </div>
         </div>
       </div>

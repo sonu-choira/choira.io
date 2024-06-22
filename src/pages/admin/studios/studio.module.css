@@ -991,7 +991,7 @@ td {
   width: 100%;
   min-height: 9vh;
   /* max-height: 9vh; */
-  max-height: fit-content;
+  max-height: 9vh !important;
   /* border: 2px solid green; */
   display: flex;
   flex-direction: column;
@@ -1005,8 +1005,8 @@ td {
 .addNewStudioinputBox input,
 .addNewStudioinputBox select {
   border-radius: 10px;
-  /* height: 6vh; */
-  height: 50%;
+  height: 6vh;
+  /* height: 50%; */
   width: 100%;
   outline: none;
   border: 2px solid #dddddd;
@@ -1020,7 +1020,7 @@ td {
 .addNewStudioinputBox select {
   padding: 1.8%;
   margin-top: 0%;
-  height: 50%;
+  height: 100%;
 }
 
 .customInput {
@@ -2005,7 +2005,56 @@ td {
     /* border: 2px solid green; */
   }
 }
-
+/* -------------------IntegrationPage-------------------------- */
+.IntegrationPage {
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  > div:first-child {
+    width: 100%;
+    height: 6vh;
+    /* border: 2px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 5%;
+    font-size: 1vmax;
+    font-weight: 600;
+    /* border: 2px solid red; */
+    margin-bottom: 2%;
+  }
+  > div:nth-child(2) {
+    width: 100%;
+    height: 94%;
+    /* border: 2px solid #dddddd; */
+    border-radius: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+}
+.integrationMain {
+  width: 100%;
+  height: 9vh;
+  /* border: 2px solid red; */
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2% 0 2%;
+  background-color: #f0f0f0;
+  margin-bottom: 15px;
+  > span {
+    font-size: 1vmax;
+    font-weight: 600;
+  }
+}
 @media only screen and (min-width: 1024px) and (max-width: 1903px) {
   .addNewStudioPage .addNewStudioinputBox {
     height: 10%;
