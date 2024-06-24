@@ -30,6 +30,10 @@ input[type="number"] {
   cursor: not-allowed;
   background-color: #adb5bd4f;
 }
+.error {
+  font-size: 12px;
+  color: red;
+}
 .wrapper {
   width: 100vw;
   height: 100vh;

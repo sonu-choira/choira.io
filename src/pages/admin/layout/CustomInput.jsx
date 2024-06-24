@@ -10,6 +10,10 @@ function CustomInput({
   id,
   htmlFor,
   label,
+  onBlur,
+  error,
+  touched,
+  disabled,
 }) {
   return (
     <div className={style.customInput}>
@@ -21,7 +25,10 @@ function CustomInput({
         onChange={onChange}
         value={value}
         name={name}
+        onBlur={onBlur}
+        className={disabled ? style.disabled : ""}
       />
+      {error && touched ? <p className={style.error}>{error}</p> : null}
     </div>
   );
 }
