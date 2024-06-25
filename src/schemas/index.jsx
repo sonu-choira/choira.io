@@ -18,3 +18,17 @@ export const armSchema = Yup.object().shape({
       (val) => val && val.toString().length === 10
     ),
 });
+
+export const studioPartner = Yup.object().shape({
+  firstName: Yup.string()
+    .required("First Name is required")
+    .min(4, "Too Short!"),
+  lastName: Yup.string().required("Last Name is required").min(4, "Too Short!"),
+  studioId: Yup.string().required("Studio id is required").min(4, "Too Short!"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(8, "password too short"),
+});

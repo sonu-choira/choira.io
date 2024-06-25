@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdAddAPhoto, MdOutlineSettings } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import upload from "../../assets/img/upload.png";
@@ -21,121 +21,24 @@ import StudioFooter from "../adminStudio/StudioFooter";
 import teamsApi from "../../services/teamsApi";
 
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+import { useFormik } from "formik";
+import CustomInput from "../../pages/admin/layout/CustomInput";
+import { studioPartner } from "../../schemas";
+import * as Yup from "yup";
 
-function AddNewStudioPatner({ setSelectTab }) {
-  const addPartnerData = useRef({
-    firstName: "",
-    lastName: "",
-    email: "",
-    studioId: "",
-    password: "",
-  });
-  const [test, settest] = useState(addPartnerData);
-  // const addPartnerData = useRef({
-  //   firstName: "ss",
-  //   lastName: "aa",
-  //   email: "aaa",
-  //   studioId: "63d1225e1b3a159c2ce0799e",
-  //   roomId: "1",
-  //   bookingDate: "2024-05-18",
-  //   bookingHours: "1",
-  // });
-
+function AddNewStudioPartner({ setSelectTab }) {
+  const [allStudio, setAllStudio] = useState([]);
   const data = useLocation();
   const [tabCount, setTabCount] = useState();
   const navCount = data?.state?.navCount;
   const [showAllSlots, setshowAllSlots] = useState(false);
-
-  const [allStudio, setAllStudio] = useState([]);
-
-  useEffect(() => {
-    // timeSlotApi
-    //   .getonlyStudio()
-    //   .then((res) => {
-    //     console.log(res.studios);
-    //     setAllStudio(res.studios);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    teamsApi
-      .getStudioPartner()
-      .then((res) => {
-        console.log(res.studios);
-
-        setAllStudio(res.studios);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [selectedDate, setSelectedDate] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
-
-  const handleCheckboxChange = (id) => {
-    const updatedAmenities = selectedAmenities.includes(id)
-      ? selectedAmenities.filter((amenity) => amenity !== id)
-      : [...selectedAmenities, id];
-
-    setSelectedAmenities(updatedAmenities);
-    console.log(selectedAmenities);
-  };
-  const handledaysCheckboxChange = (id) => {
-    const updaeddays = selectedDate.includes(id)
-      ? selectedDate.filter((day) => day !== id)
-      : [...selectedDate, id];
-
-    setSelectedDate(updaeddays);
-    console.log(selectedDate);
-  };
-  const [iframeCode, setIframeCode] = useState("");
-  const [hasContent, setHasContent] = useState(false);
-
-  const handleIframeCodeChange = (e) => {
-    const inputCode = e.target.value;
-
-    // Update the state with the user-entered iframe code
-    setIframeCode(inputCode);
-
-    // Update hasContent state based on whether there is content in the textarea
-    setHasContent(inputCode.trim() !== "");
-  };
   const navigate = useNavigate();
-  const backOnclick = () => {
-    navigate("/adminDashboard/Teams/StudioPatners");
-  };
-  const [selectedStudioid, setselectedStudioid] = useState("");
-  const [selectRooms, setselectRooms] = useState([]);
-  useEffect(() => {
-    console.log("selectedStudioid");
-    console.log(selectedStudioid);
-  }, [selectedStudioid]);
-
-  const handelStudioid = (e) => {
-    let id = e.target.value;
-    console.log("id");
-    console.log(id);
-    setselectedStudioid(id);
-
-    addPartnerData.current.studioId = id;
-    let ans = allStudio.filter((allStudio) => allStudio._id == id);
-    console.log("ans");
-    console.log(ans[0].roomsDetails);
-    setselectRooms(ans[0].roomsDetails);
-  };
-  useEffect(() => {
-    console.log("selectRooms");
-    console.log(selectRooms);
-  }, [selectRooms]);
-  const [allTimeSlots, setallTimeSlots] = useState({});
-
-  let hitapi = () => {
+  const hitapi = (partnerData) => {
     teamsApi
-      .addStudioPartner(addPartnerData.current)
+      .addStudioPartner(partnerData)
       .then((res) => {
         if (res.status) {
-          sucessAlret("Studio Partner Sucessfully Added");
+          sucessAlret("Studio Partner Successfully Added");
         } else {
           errorAlert(res.message);
         }
@@ -147,26 +50,37 @@ function AddNewStudioPatner({ setSelectTab }) {
       });
   };
 
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      studioId: "",
+      password: "",
+    },
+    validationSchema: studioPartner,
+    onSubmit: (values) => {
+      hitapi(values);
+      console.log(values);
+      // navigate("/adminDashboard/Teams/StudioPartners");
+    },
+  });
+
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    formik;
+
   useEffect(() => {
-    console.log("addPartnerData");
-    console.log(addPartnerData);
-  }, [addPartnerData.current]);
+    teamsApi
+      .getStudioPartner()
+      .then((res) => {
+        console.log(res.studios);
+        setAllStudio(res.studios);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
-  const sendTimeSlotDataToApi = (event) => {
-    event.preventDefault();
-    // Get all keys of the object
-    let ans = Object.keys(addPartnerData.current);
-
-    // Check if any field is empty
-    for (let check of ans) {
-      if (addPartnerData.current[check] === "") {
-        alert(`Please fill ${check} fields`);
-        return;
-      }
-    }
-
-    // If all fields are filled, call the API
-    hitapi();
+  const backOnclick = () => {
+    navigate("/adminDashboard/Teams/StudioPartners");
   };
 
   return (
@@ -177,7 +91,7 @@ function AddNewStudioPatner({ setSelectTab }) {
           tabCount={tabCount}
           setTabCount={setTabCount}
         />
-        <form className={style.studioMainScreen}>
+        <form className={style.studioMainScreen} onSubmit={handleSubmit}>
           <div className={style.studioHeader}>
             <div>
               <input type="text" placeholder="search" />
@@ -197,46 +111,42 @@ function AddNewStudioPatner({ setSelectTab }) {
           </div>
           <div className={style.addNewStudioTitle}>Add Studio Partner</div>
 
-          <div className={style.addNewStudioPage}>
+          <form className={style.addNewStudioPage}>
             <div style={{ height: "80%" }}>
               <div>
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="firstName">User First Name</label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    placeholder="Enter Fullname Name"
-                    onChange={(e) => {
-                      addPartnerData.current.firstName = e.target.value;
-                    }}
-                    // value={addPartnerData.current?.firstName}
-                  />
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Email">Email</label>
-                  <input
-                    type="email"
-                    id="Email"
-                    placeholder="Enter Email id"
-                    onChange={(e) => {
-                      addPartnerData.current.email = e.target.value;
-                    }}
-
-                    // value={addPartnerData.current?.email}
-                  />
-                </div>
-
+                <CustomInput
+                  type="text"
+                  id="firstName"
+                  placeholder="Enter Full Name"
+                  label="User First Name"
+                  htmlFor="firstName"
+                  onChange={handleChange}
+                  name="firstName"
+                  error={errors.firstName}
+                  touched={touched.firstName}
+                  onBlur={handleBlur}
+                />
+                <CustomInput
+                  type="email"
+                  id="Email"
+                  placeholder="Enter Email id"
+                  label="Email"
+                  htmlFor="Email"
+                  onChange={handleChange}
+                  name="email"
+                  error={errors.email}
+                  touched={touched.email}
+                  onBlur={handleBlur}
+                />
                 <div className={style.addNewStudioinputBox}>
                   <label>Studio</label>
-
                   <select
-                    onChange={(event) => {
-                      handelStudioid(event);
-                    }}
-                    value={selectedStudioid}
+                    onChange={handleChange}
+                    name="studioId"
+                    value={values.studioId}
+                    onBlur={handleBlur}
                   >
-                    <option value="" disabled selected>
+                    <option value="" disabled>
                       Select Studio
                     </option>
                     {allStudio?.map((studio) => (
@@ -245,63 +155,43 @@ function AddNewStudioPatner({ setSelectTab }) {
                       </option>
                     ))}
                   </select>
+                  {touched.studioId && errors.studioId && (
+                    <div className={style.error}>{errors.studioId}</div>
+                  )}
                 </div>
-
-                {/* <div className={style.addNewStudioinputBox}>
-                  <label>Booking Hours</label>
-
-                  <select>
-                    <option>Choose Booking Hours</option>
-                    <option>1 Hour</option>
-                    <option>2 Hour</option>
-                    <option>3 Hour</option>
-                    <option>4 Hour</option>
-                    <option>5 Hour</option>
-                  </select>
-                </div> */}
               </div>
-              {/* secod side  */}
               <div>
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="lastName">Last Name</label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    placeholder="Enter Last Name"
-                    onChange={(e) => {
-                      addPartnerData.current.lastName = e.target.value;
-                    }}
-
-                    // value={addPartnerData.current?.lastName}
-                  />
-                </div>
-
-                <div
-                  className={style.addNewStudioinputBox}
-                  style={{ cursor: "pointer" }}
-                >
-                  <label htmlFor="password"> Enter Password</label>
-                  <input
-                    style={{ cursor: "pointer" }}
-                    type="text"
-                    id="password"
-                    placeholder="Enter PassWord"
-                    onChange={(e) => {
-                      addPartnerData.current.password = e.target.value;
-                    }}
-                    // disabled
-                    // onClick={sendTimeSlotDataToApi}
-                  />
-                </div>
+                <CustomInput
+                  type="text"
+                  id="lastName"
+                  placeholder="Enter Last Name"
+                  label="Last Name"
+                  htmlFor="lastName"
+                  name="lastName"
+                  onChange={handleChange}
+                  error={errors.lastName}
+                  touched={touched.lastName}
+                  onBlur={handleBlur}
+                />
+                <CustomInput
+                  type="text"
+                  id="password"
+                  placeholder="Enter Password"
+                  label="Enter Password"
+                  htmlFor="password"
+                  name="password"
+                  onChange={handleChange}
+                  error={errors.password}
+                  touched={touched.password}
+                  onBlur={handleBlur}
+                />
               </div>
             </div>
-          </div>
+          </form>
           <StudioFooter
             backOnclick={backOnclick}
-            saveOnclick={(event) => {
-              sendTimeSlotDataToApi(event);
-            }}
-            saveType={"submit"}
+            // saveOnclick={handleSubmit}
+            saveType="submit"
           />
         </form>
       </div>
@@ -309,4 +199,4 @@ function AddNewStudioPatner({ setSelectTab }) {
   );
 }
 
-export default AddNewStudioPatner;
+export default AddNewStudioPartner;
