@@ -7,6 +7,8 @@ import { HiOutlineCheckCircle } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
 import { MdDragHandle } from "react-icons/md";
 import { errorAlert } from "../../pages/admin/layout/Alert";
+import AddNewBanner from "./AddNewBanner";
+import { set } from "react-ga";
 
 function Banner() {
   const [mainBannerData, setMainBannerData] = useState([]);
@@ -137,326 +139,354 @@ function Banner() {
       errorAlert(errorMessage);
     }
   };
+  const [showAddPage, setShowAddPage] = useState(false);
 
   return (
-    <div className={style.bannerPage}>
-      <div>
-        <span>
-          Main Banner:
-          {mainBannerEdit ? (
-            <Button
-              name={"Save"}
-              icon={<HiOutlineCheckCircle />}
-              style={{ height: "90%", gap: "5px" }}
-              onClick={() =>
-                handleSave(
-                  isMainBannerValidUrl,
-                  setMainBannerEdit,
-                  "Please enter a valid URL"
-                )
-              }
-            />
-          ) : (
-            <FaPencilAlt
-              onClick={() => setMainBannerEdit(true)}
-              style={{ cursor: "pointer" }}
-            />
-          )}
-        </span>
-        <br />
-        <br />
-
-        {mainBannerData.length > 0 && (
-          <div className={style.bannerMain}>
-            {mainBannerData.map((data, index) => (
-              <div
-                className={style.bannerMainContent}
-                key={index}
-                draggable
-                onDragStart={(event) => handleDragStart(event, index, "main")}
-                onDrop={(event) => handleDrop(event, index, "main")}
-                onDragOver={(event) => event.preventDefault()}
-              >
+    <>
+      {showAddPage ? (
+        <AddNewBanner setShowAddPage={setShowAddPage} />
+      ) : (
+        <div className={style.bannerPage}>
+          <div>
+            <span>
+              Main Banner:
+              <div>
                 {mainBannerEdit ? (
-                  <label
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      border: "1px solid #ccc",
-                    }}
-                  >
-                    {data.imgUrl ? (
-                      <img src={data.imgUrl} alt="" />
-                    ) : (
-                      <img
-                        src={upload}
-                        alt=""
-                        style={{ width: "50%", height: "50%" }}
-                      />
-                    )}
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(event) =>
-                        handleEditBannerFileUpload(event, index, "main")
-                      }
-                    />
-                  </label>
-                ) : (
-                  <div>
-                    <img src={data.imgUrl} alt="" />
-                  </div>
-                )}
-                <div
-                  style={{
-                    border: mainBannerEdit ? "2px solid #e2e2e2" : "none",
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="Type your URL"
-                    value={data.url}
-                    readOnly={!mainBannerEdit}
-                    onChange={(e) => {
-                      const newData = [...mainBannerData];
-                      newData[index].url = e.target.value;
-                      setMainBannerData(newData);
-                    }}
-                    onKeyUp={(e) => {
-                      checkUrlEdit(e, setIsMainBannerValidUrl);
-                    }}
+                  <Button
+                    name={"Save"}
+                    icon={<HiOutlineCheckCircle />}
+                    style={{ height: "90%", gap: "5px" }}
+                    onClick={() =>
+                      handleSave(
+                        isMainBannerValidUrl,
+                        setMainBannerEdit,
+                        "Please enter a valid URL"
+                      )
+                    }
                   />
-                </div>
-                <div>
-                  {mainBannerEdit ? (
-                    <RxCross2
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        const newData = [...mainBannerData];
-                        newData.splice(index, 1);
-                        setMainBannerData(newData);
-                      }}
-                    />
-                  ) : (
-                    <MdDragHandle />
-                  )}
-                </div>
+                ) : (
+                  <FaPencilAlt
+                    onClick={() => setMainBannerEdit(true)}
+                    style={{ cursor: "pointer" }}
+                  />
+                )}
+                <Button
+                  name={"Add"}
+                  icon={<HiOutlineCheckCircle />}
+                  style={{ height: "90%", gap: "5px" }}
+                  onClick={() => setShowAddPage(true)}
+                />
               </div>
-            ))}
-          </div>
-        )}
-        <br />
-        <br />
-        <div
-          className={style.bannerMainContent}
-          style={{ width: "95%" }}
-          onDrop={(event) => handleDrop(event, mainBannerData.length, "main")}
-          onDragOver={(event) => event.preventDefault()}
-        >
-          <label
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              border: "1px solid #ccc",
-            }}
-            htmlFor="mainBanner"
-          >
-            {newMainBannerImg ? (
-              <img src={newMainBannerImg} alt="" />
-            ) : (
-              <img
-                src={upload}
-                alt=""
-                style={{ width: "50%", height: "50%" }}
-              />
+            </span>
+            <br />
+            <br />
+
+            {mainBannerData.length > 0 && (
+              <div className={style.bannerMain}>
+                {mainBannerData.map((data, index) => (
+                  <div
+                    className={style.bannerMainContent}
+                    key={index}
+                    draggable
+                    onDragStart={(event) =>
+                      handleDragStart(event, index, "main")
+                    }
+                    onDrop={(event) => handleDrop(event, index, "main")}
+                    onDragOver={(event) => event.preventDefault()}
+                  >
+                    {mainBannerEdit ? (
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                          border: "1px solid #ccc",
+                        }}
+                      >
+                        {data.imgUrl ? (
+                          <img src={data.imgUrl} alt="" />
+                        ) : (
+                          <img
+                            src={upload}
+                            alt=""
+                            style={{ width: "50%", height: "50%" }}
+                          />
+                        )}
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(event) =>
+                            handleEditBannerFileUpload(event, index, "main")
+                          }
+                        />
+                      </label>
+                    ) : (
+                      <div>
+                        <img src={data.imgUrl} alt="" />
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        border: mainBannerEdit ? "2px solid #e2e2e2" : "none",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        placeholder="Type your URL"
+                        value={data.url}
+                        readOnly={!mainBannerEdit}
+                        onChange={(e) => {
+                          const newData = [...mainBannerData];
+                          newData[index].url = e.target.value;
+                          setMainBannerData(newData);
+                        }}
+                        onKeyUp={(e) => {
+                          checkUrlEdit(e, setIsMainBannerValidUrl);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      {mainBannerEdit ? (
+                        <RxCross2
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            const newData = [...mainBannerData];
+                            newData.splice(index, 1);
+                            setMainBannerData(newData);
+                          }}
+                        />
+                      ) : (
+                        <MdDragHandle />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
-            <input
-              type="file"
-              id="mainBanner"
-              style={{ display: "none" }}
-              onChange={(event) =>
-                handleBannerFileUpload(event, setNewMainBannerImg)
+            <br />
+            <br />
+            <div
+              className={style.bannerMainContent}
+              style={{ width: "95%" }}
+              onDrop={(event) =>
+                handleDrop(event, mainBannerData.length, "main")
               }
-            />
-          </label>
-          <div>
-            <input
-              type="text"
-              placeholder="Type your URL"
-              value={newMainBannerUrl}
-              onChange={(e) => setNewMainBannerUrl(e.target.value)}
-            />
-          </div>
-          <div>
-            <Button name={"Add"} onClick={() => handleAddBanner("main")} />
-          </div>
-        </div>
-      </div>
-      <br />
-      <div>
-        <span>
-          Exclusive Banner:
-          {exclusiveBannerEdit ? (
-            <Button
-              name={"Save"}
-              icon={<HiOutlineCheckCircle />}
-              style={{ height: "90%", gap: "5px" }}
-              onClick={() =>
-                handleSave(
-                  isExclusiveValidUrl,
-                  setExclusiveBannerEdit,
-                  "Please enter a valid URL"
-                )
-              }
-            />
-          ) : (
-            <FaPencilAlt
-              onClick={() => setExclusiveBannerEdit(true)}
-              style={{ cursor: "pointer" }}
-            />
-          )}
-        </span>
-        <br />
-        <br />
-        {exclusiveBannerData.length > 0 && (
-          <div className={style.bannerMain}>
-            {exclusiveBannerData.map((data, index) => (
-              <div
-                className={style.bannerMainContent}
-                key={index}
-                draggable
-                onDragStart={(event) =>
-                  handleDragStart(event, index, "exclusive")
-                }
-                onDrop={(event) => handleDrop(event, index, "exclusive")}
-                onDragOver={(event) => event.preventDefault()}
+              onDragOver={(event) => event.preventDefault()}
+            >
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  border: "1px solid #ccc",
+                }}
+                htmlFor="mainBanner"
               >
-                {exclusiveBannerEdit ? (
-                  <label
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      border: "1px solid #ccc",
-                    }}
-                  >
-                    {data.imgUrl ? (
-                      <img src={data.imgUrl} alt="" />
-                    ) : (
-                      <img
-                        src={upload}
-                        alt=""
-                        style={{ width: "50%", height: "50%" }}
-                      />
-                    )}
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(event) =>
-                        handleEditBannerFileUpload(event, index, "exclusive")
-                      }
-                    />
-                  </label>
+                {newMainBannerImg ? (
+                  <img src={newMainBannerImg} alt="" />
                 ) : (
-                  <div>
-                    <img src={data.imgUrl} alt="" />
-                  </div>
-                )}
-                <div
-                  style={{
-                    border: exclusiveBannerEdit ? "2px solid #e2e2e2" : "none",
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="Type your URL"
-                    value={data.url}
-                    readOnly={!exclusiveBannerEdit}
-                    onChange={(e) => {
-                      const newData = [...exclusiveBannerData];
-                      newData[index].url = e.target.value;
-                      setExclusiveBannerData(newData);
-                    }}
-                    onKeyUp={(e) => {
-                      checkUrlEdit(e, setIsExclusiveValidUrl);
-                    }}
+                  <img
+                    src={upload}
+                    alt=""
+                    style={{ width: "50%", height: "50%" }}
                   />
-                </div>
-                <div>
-                  {exclusiveBannerEdit ? (
-                    <RxCross2
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        const newData = [...exclusiveBannerData];
-                        newData.splice(index, 1);
-                        setExclusiveBannerData(newData);
-                      }}
-                    />
-                  ) : (
-                    <MdDragHandle />
-                  )}
-                </div>
+                )}
+                <input
+                  type="file"
+                  id="mainBanner"
+                  style={{ display: "none" }}
+                  onChange={(event) =>
+                    handleBannerFileUpload(event, setNewMainBannerImg)
+                  }
+                />
+              </label>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Type your URL"
+                  value={newMainBannerUrl}
+                  onChange={(e) => setNewMainBannerUrl(e.target.value)}
+                />
               </div>
-            ))}
+              <div>
+                <Button name={"Add"} onClick={() => handleAddBanner("main")} />
+              </div>
+            </div>
           </div>
-        )}
-        <br />
-        <br />
-        <div
-          className={style.bannerMainContent}
-          style={{ width: "95%" }}
-          onDrop={(event) =>
-            handleDrop(event, exclusiveBannerData.length, "exclusive")
-          }
-          onDragOver={(event) => event.preventDefault()}
-        >
-          <label
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              border: "1px solid #ccc",
-            }}
-            htmlFor="exclusiveBanner"
-          >
-            {newExclusiveBannerImg ? (
-              <img src={newExclusiveBannerImg} alt="" />
-            ) : (
-              <img
-                src={upload}
-                alt=""
-                style={{ width: "50%", height: "50%" }}
-              />
+          <br />
+          <div>
+            <span>
+              Exclusive Banner:
+              {exclusiveBannerEdit ? (
+                <Button
+                  name={"Save"}
+                  icon={<HiOutlineCheckCircle />}
+                  style={{ height: "90%", gap: "5px" }}
+                  onClick={() =>
+                    handleSave(
+                      isExclusiveValidUrl,
+                      setExclusiveBannerEdit,
+                      "Please enter a valid URL"
+                    )
+                  }
+                />
+              ) : (
+                <FaPencilAlt
+                  onClick={() => setExclusiveBannerEdit(true)}
+                  style={{ cursor: "pointer" }}
+                />
+              )}
+            </span>
+            <br />
+            <br />
+            {exclusiveBannerData.length > 0 && (
+              <div className={style.bannerMain}>
+                {exclusiveBannerData.map((data, index) => (
+                  <div
+                    className={style.bannerMainContent}
+                    key={index}
+                    draggable
+                    onDragStart={(event) =>
+                      handleDragStart(event, index, "exclusive")
+                    }
+                    onDrop={(event) => handleDrop(event, index, "exclusive")}
+                    onDragOver={(event) => event.preventDefault()}
+                  >
+                    {exclusiveBannerEdit ? (
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                          border: "1px solid #ccc",
+                        }}
+                      >
+                        {data.imgUrl ? (
+                          <img src={data.imgUrl} alt="" />
+                        ) : (
+                          <img
+                            src={upload}
+                            alt=""
+                            style={{ width: "50%", height: "50%" }}
+                          />
+                        )}
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(event) =>
+                            handleEditBannerFileUpload(
+                              event,
+                              index,
+                              "exclusive"
+                            )
+                          }
+                        />
+                      </label>
+                    ) : (
+                      <div>
+                        <img src={data.imgUrl} alt="" />
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        border: exclusiveBannerEdit
+                          ? "2px solid #e2e2e2"
+                          : "none",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        placeholder="Type your URL"
+                        value={data.url}
+                        readOnly={!exclusiveBannerEdit}
+                        onChange={(e) => {
+                          const newData = [...exclusiveBannerData];
+                          newData[index].url = e.target.value;
+                          setExclusiveBannerData(newData);
+                        }}
+                        onKeyUp={(e) => {
+                          checkUrlEdit(e, setIsExclusiveValidUrl);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      {exclusiveBannerEdit ? (
+                        <RxCross2
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            const newData = [...exclusiveBannerData];
+                            newData.splice(index, 1);
+                            setExclusiveBannerData(newData);
+                          }}
+                        />
+                      ) : (
+                        <MdDragHandle />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
-            <input
-              type="file"
-              id="exclusiveBanner"
-              style={{ display: "none" }}
-              onChange={(event) =>
-                handleBannerFileUpload(event, setNewExclusiveBannerImg)
+            <br />
+            <br />
+            <div
+              className={style.bannerMainContent}
+              style={{ width: "95%" }}
+              onDrop={(event) =>
+                handleDrop(event, exclusiveBannerData.length, "exclusive")
               }
-            />
-          </label>
-          <div>
-            <input
-              type="text"
-              placeholder="Type your URL"
-              value={newExclusiveBannerUrl}
-              onChange={(e) => setNewExclusiveBannerUrl(e.target.value)}
-            />
-          </div>
-          <div>
-            <Button name={"Add"} onClick={() => handleAddBanner("exclusive")} />
+              onDragOver={(event) => event.preventDefault()}
+            >
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  border: "1px solid #ccc",
+                }}
+                htmlFor="exclusiveBanner"
+              >
+                {newExclusiveBannerImg ? (
+                  <img src={newExclusiveBannerImg} alt="" />
+                ) : (
+                  <img
+                    src={upload}
+                    alt=""
+                    style={{ width: "50%", height: "50%" }}
+                  />
+                )}
+                <input
+                  type="file"
+                  id="exclusiveBanner"
+                  style={{ display: "none" }}
+                  onChange={(event) =>
+                    handleBannerFileUpload(event, setNewExclusiveBannerImg)
+                  }
+                />
+              </label>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Type your URL"
+                  value={newExclusiveBannerUrl}
+                  onChange={(e) => setNewExclusiveBannerUrl(e.target.value)}
+                />
+              </div>
+              <div>
+                <Button
+                  name={"Add"}
+                  onClick={() => handleAddBanner("exclusive")}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 
