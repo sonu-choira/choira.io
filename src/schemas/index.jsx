@@ -32,3 +32,68 @@ export const studioPartner = Yup.object().shape({
     .required("Password is required")
     .min(8, "password too short"),
 });
+
+export const bannerSchema = Yup.object().shape({
+  redirectType: Yup.string()
+    .required("Redirect type is required")
+    .oneOf(["External", "in-App"], "Invalid redirect type"),
+
+  redirectUrl: Yup.string().when("redirectType", (redirectType, schema) => {
+    if (redirectType[0] === "External") {
+      return schema
+        .required("Redirect URL is required")
+        .url("Invalid external URL")
+        .min(2, "Too Short!");
+    } else {
+      return Yup.string().nullable();
+    }
+  }),
+
+  bannerType: Yup.string().when("redirectType", (redirectType, schema) => {
+    if (redirectType[0] === "in-App") {
+      return schema.required("Banner type is required");
+    } else {
+      return Yup.string().nullable();
+    }
+  }),
+
+  specify: Yup.string().when("redirectType", (redirectType, schema) => {
+    if (redirectType[0] === "in-App") {
+      return schema.required("Specify destination is required");
+    } else {
+      return Yup.string().nullable();
+    }
+  }),
+
+  studioId: Yup.string().when(["redirectType", "specify"], (Arr, schema) => {
+    console.log(Arr, "specify");
+
+    if (Arr[0] === "in-App" && Arr[1] === "Particular") {
+      return schema.required(
+        "Studio name is required for specific destinations"
+      );
+    } else {
+      return Yup.string().nullable();
+    }
+  }),
+});
+// redirectUrl: Yup.string().when("redirectType", {
+//   is: "External",
+//   then: Yup.string().required("Redirect URL is required").url("Invalid URL"),
+//   otherwise: Yup.string().nullable(),
+// bannerType: Yup.string().when("redirectType", {
+//   is: "in-App",
+//   then: Yup.string().required("Banner type is required"),
+//   otherwise: Yup.string().nullable(),
+// }),
+// specify: Yup.string().when("redirectType", {
+//   is: "in-App",
+//   then: Yup.string().required("Specify is required"),
+//   otherwise: Yup.string().nullable(),
+// }),
+// studioId: Yup.string().when(["redirectType", "specify"], {
+//   is: (redirectType, specify) =>
+//     redirectType === "in-App" && specify === "Particular",
+//   then: Yup.string().required("Studio name is required"),
+//   otherwise: Yup.string().nullable(),
+// }),

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "../../pages/admin/studios/studio.module.css";
 import { FaPencilAlt } from "react-icons/fa";
 import upload from "../../assets/upload.svg";
@@ -10,7 +10,7 @@ import { errorAlert } from "../../pages/admin/layout/Alert";
 import AddNewBanner from "./AddNewBanner";
 import { set } from "react-ga";
 
-function Banner() {
+function Banner({ setProducts, products }) {
   const [mainBannerData, setMainBannerData] = useState([]);
   const [exclusiveBannerData, setExclusiveBannerData] = useState([]);
   const [newMainBannerUrl, setNewMainBannerUrl] = useState("");
@@ -22,7 +22,21 @@ function Banner() {
   const [exclusiveBannerEdit, setExclusiveBannerEdit] = useState(false);
 
   const [isMainBannerValidUrl, setIsMainBannerValidUrl] = useState(true); // Define state for URL validity
-  const [isExclusiveValidUrl, setIsExclusiveValidUrl] = useState(true); // Define state for URL validity
+  const [isExclusiveValidUrl, setIsExclusiveValidUrl] = useState(true);
+  useEffect(() => {
+    if (products) {
+      console.log(
+        "products.filter((type) => type.type === 'ExcBanner')",
+        products.filter((type) => type.type === "ExcBanner")
+      );
+      console.log(products, "products");
+      setExclusiveBannerData(
+        products.filter((type) => type.type === "ExcBanner")
+      );
+      setMainBannerData(products.filter((type) => type.type === "AdBanner"));
+    }
+  }, [products]);
+  // Define state for URL validity
 
   const isValidUrl = (url) => {
     const urlPattern = new RegExp(
@@ -47,17 +61,17 @@ function Banner() {
         event.target.value = "";
         return;
       }
-      const imgUrl = URL.createObjectURL(file);
-      setImage(imgUrl);
+      const photoURL = URL.createObjectURL(file);
+      setImage(photoURL);
     }
   };
 
   const handleEditBannerFileUpload = (event, index, type) => {
     const setData =
       type === "main" ? setMainBannerData : setExclusiveBannerData;
-    handleFileUpload(event, (imgUrl) => {
+    handleFileUpload(event, (photoURL) => {
       const newData = [...setData];
-      newData[index].imgUrl = imgUrl;
+      newData[index].photoURL = photoURL;
       setData(newData);
     });
   };
@@ -74,7 +88,7 @@ function Banner() {
     const newUrl = type === "main" ? newMainBannerUrl : newExclusiveBannerUrl;
 
     if (newImg && isValidUrl(newUrl)) {
-      setNewData([...newData, { imgUrl: newImg, url: newUrl }]);
+      setNewData([...newData, { photoURL: newImg, url: newUrl }]);
       if (type === "main") {
         setNewMainBannerImg("");
         setNewMainBannerUrl("");
@@ -172,7 +186,6 @@ function Banner() {
                 )}
                 <Button
                   name={"Add"}
-                  icon={<HiOutlineCheckCircle />}
                   style={{ height: "90%", gap: "5px" }}
                   onClick={() => setShowAddPage(true)}
                 />
@@ -194,44 +207,21 @@ function Banner() {
                     onDrop={(event) => handleDrop(event, index, "main")}
                     onDragOver={(event) => event.preventDefault()}
                   >
-                    {mainBannerEdit ? (
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
-                          border: "1px solid #ccc",
-                        }}
-                      >
-                        {data.imgUrl ? (
-                          <img src={data.imgUrl} alt="" />
-                        ) : (
-                          <img
-                            src={upload}
-                            alt=""
-                            style={{ width: "50%", height: "50%" }}
-                          />
-                        )}
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(event) =>
-                            handleEditBannerFileUpload(event, index, "main")
-                          }
-                        />
-                      </label>
-                    ) : (
-                      <div>
-                        <img src={data.imgUrl} alt="" />
-                      </div>
-                    )}
+                    <div>
+                      <img src={data.photoURL} alt="" />
+                    </div>
                     <div
                       style={{
                         border: mainBannerEdit ? "2px solid #e2e2e2" : "none",
+                        display: "flex",
                       }}
                     >
-                      <input
+                      <span>{data.banner_redirect}</span>
+                      <span>{data.for}</span>
+                      <span>{data.for}</span>
+                      <span>{data.name}</span>
+                      <span>{data.redirectURL}</span>
+                      {/* <input
                         type="text"
                         placeholder="Type your URL"
                         value={data.url}
@@ -244,7 +234,7 @@ function Banner() {
                         onKeyUp={(e) => {
                           checkUrlEdit(e, setIsMainBannerValidUrl);
                         }}
-                      />
+                      /> */}
                     </div>
                     <div>
                       {mainBannerEdit ? (
@@ -266,78 +256,37 @@ function Banner() {
             )}
             <br />
             <br />
-            <div
-              className={style.bannerMainContent}
-              style={{ width: "95%" }}
-              onDrop={(event) =>
-                handleDrop(event, mainBannerData.length, "main")
-              }
-              onDragOver={(event) => event.preventDefault()}
-            >
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  border: "1px solid #ccc",
-                }}
-                htmlFor="mainBanner"
-              >
-                {newMainBannerImg ? (
-                  <img src={newMainBannerImg} alt="" />
-                ) : (
-                  <img
-                    src={upload}
-                    alt=""
-                    style={{ width: "50%", height: "50%" }}
-                  />
-                )}
-                <input
-                  type="file"
-                  id="mainBanner"
-                  style={{ display: "none" }}
-                  onChange={(event) =>
-                    handleBannerFileUpload(event, setNewMainBannerImg)
-                  }
-                />
-              </label>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Type your URL"
-                  value={newMainBannerUrl}
-                  onChange={(e) => setNewMainBannerUrl(e.target.value)}
-                />
-              </div>
-              <div>
-                <Button name={"Add"} onClick={() => handleAddBanner("main")} />
-              </div>
-            </div>
           </div>
           <br />
           <div>
             <span>
               Exclusive Banner:
-              {exclusiveBannerEdit ? (
+              <div>
+                {exclusiveBannerEdit ? (
+                  <Button
+                    name={"Save"}
+                    icon={<HiOutlineCheckCircle />}
+                    style={{ height: "90%", gap: "5px" }}
+                    onClick={() =>
+                      handleSave(
+                        isExclusiveValidUrl,
+                        setExclusiveBannerEdit,
+                        "Please enter a valid URL"
+                      )
+                    }
+                  />
+                ) : (
+                  <FaPencilAlt
+                    onClick={() => setExclusiveBannerEdit(true)}
+                    style={{ cursor: "pointer" }}
+                  />
+                )}
                 <Button
-                  name={"Save"}
-                  icon={<HiOutlineCheckCircle />}
+                  name={"Add"}
                   style={{ height: "90%", gap: "5px" }}
-                  onClick={() =>
-                    handleSave(
-                      isExclusiveValidUrl,
-                      setExclusiveBannerEdit,
-                      "Please enter a valid URL"
-                    )
-                  }
+                  onClick={() => setShowAddPage(true)}
                 />
-              ) : (
-                <FaPencilAlt
-                  onClick={() => setExclusiveBannerEdit(true)}
-                  style={{ cursor: "pointer" }}
-                />
-              )}
+              </div>
             </span>
             <br />
             <br />
@@ -364,8 +313,8 @@ function Banner() {
                           border: "1px solid #ccc",
                         }}
                       >
-                        {data.imgUrl ? (
-                          <img src={data.imgUrl} alt="" />
+                        {data.photoURL ? (
+                          <img src={data.photoURL} alt="" />
                         ) : (
                           <img
                             src={upload}
@@ -387,7 +336,7 @@ function Banner() {
                       </label>
                     ) : (
                       <div>
-                        <img src={data.imgUrl} alt="" />
+                        <img src={data.photoURL} alt="" />
                       </div>
                     )}
                     <div
@@ -395,9 +344,17 @@ function Banner() {
                         border: exclusiveBannerEdit
                           ? "2px solid #e2e2e2"
                           : "none",
+                        display: "flex",
+
+                        alignItems: "center",
                       }}
                     >
-                      <input
+                      <span>{data.banner_redirect}</span>
+                      <span>{data.for}</span>
+                      <span>{data.for}</span>
+                      <span>{data.name}</span>
+                      <span>{data.redirectURL}</span>
+                      {/* <input
                         type="text"
                         placeholder="Type your URL"
                         value={data.url}
@@ -410,7 +367,7 @@ function Banner() {
                         onKeyUp={(e) => {
                           checkUrlEdit(e, setIsExclusiveValidUrl);
                         }}
-                      />
+                      /> */}
                     </div>
                     <div>
                       {exclusiveBannerEdit ? (
@@ -432,57 +389,6 @@ function Banner() {
             )}
             <br />
             <br />
-            <div
-              className={style.bannerMainContent}
-              style={{ width: "95%" }}
-              onDrop={(event) =>
-                handleDrop(event, exclusiveBannerData.length, "exclusive")
-              }
-              onDragOver={(event) => event.preventDefault()}
-            >
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  border: "1px solid #ccc",
-                }}
-                htmlFor="exclusiveBanner"
-              >
-                {newExclusiveBannerImg ? (
-                  <img src={newExclusiveBannerImg} alt="" />
-                ) : (
-                  <img
-                    src={upload}
-                    alt=""
-                    style={{ width: "50%", height: "50%" }}
-                  />
-                )}
-                <input
-                  type="file"
-                  id="exclusiveBanner"
-                  style={{ display: "none" }}
-                  onChange={(event) =>
-                    handleBannerFileUpload(event, setNewExclusiveBannerImg)
-                  }
-                />
-              </label>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Type your URL"
-                  value={newExclusiveBannerUrl}
-                  onChange={(e) => setNewExclusiveBannerUrl(e.target.value)}
-                />
-              </div>
-              <div>
-                <Button
-                  name={"Add"}
-                  onClick={() => handleAddBanner("exclusive")}
-                />
-              </div>
-            </div>
           </div>
         </div>
       )}

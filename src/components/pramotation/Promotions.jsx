@@ -13,6 +13,7 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import Banner from "./Banner";
 import Discount from "./Discount";
 import Integration from "./Integration";
+import promotionApi from "../../services/promotionApi";
 function Promotions({ userAllDetails, setShowUserProfile, userid }) {
   // const [products, setProducts] = useState([]);
   // const handleChange = () => {};
@@ -87,28 +88,29 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
       }
     }
 
-    if (sidebarPageCount === 2) {
+    if (sidebarPageCount === 1) {
       // Corrected the id assignments
 
-      const limit = 10;
-      const active = 1;
+      // const limit = 10;
+      // const active = 1;
 
-      // userApi
-      //   .getuserStudioBooking(userAllDetails._id, pageCount)
-      //   .then((response) => {
-      //     console.log(
-      //       `====================> response from studio booking ${response.data.users}`,
-      //       response
-      //     );
-      //     if (response) {
-      //       setProducts(response.data.allStudioBooking);
-      //       console.log("lkasdnflkjsdnf", response.status);
-      //       setTotalPage(response.data.paginate.totalPages);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error fetching studios:", error);
-      //   });
+      promotionApi
+        .getAllBanner()
+        .then((response) => {
+          console.log(
+            `====================> response from promotion ${response}`,
+            response.banners
+          );
+          setProducts(response.banners);
+          // if (response) {
+          //   setProducts(response.data.allStudioBooking);
+          //   console.log("lkasdnflkjsdnf", response.status);
+          //   setTotalPage(response.data.paginate.totalPages);
+          // }
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
     } else if (sidebarPageCount === 3) {
       const limit = 10;
       const active = 1;
@@ -137,7 +139,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
       // }
     }
     console.log(sidebarPageCount, "inside useEffect");
-  }, [pageCount, shortby]);
+  }, [pageCount, sidebarPageCount]);
 
   const sidebarOptions = [
     {
@@ -217,7 +219,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
               {sidebarPageCount == 1 ? (
                 // <UserAcount userAllDetails={userAllDetails} />
 
-                <Banner />
+                <Banner setProducts={setProducts} products={products} />
               ) : sidebarPageCount == 2 ? (
                 <Discount
                   setShowFooter={setShowFooter}

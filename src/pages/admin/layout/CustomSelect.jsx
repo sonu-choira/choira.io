@@ -10,6 +10,8 @@ function CustomSelect({
   label,
   options,
   defaultOption,
+  error,
+  touched,
 
   disabled,
 }) {
@@ -32,6 +34,7 @@ function CustomSelect({
           <option value={option}>{option}</option>
         ))}
       </select>
+      {error && touched ? <p className={style.error}>{error}</p> : null}
     </div>
   );
 }
