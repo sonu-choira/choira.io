@@ -178,6 +178,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
   };
   const [showFooter, setShowFooter] = useState(false);
   const [showTable, setShowTable] = useState(true);
+  const [submitData, setSubmitData] = useState(false);
 
   return (
     <>
@@ -226,6 +227,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
                   showFooter={showFooter}
                   setShowTable={setShowTable}
                   showTable={showTable}
+                  submitData={submitData}
                 />
               ) : sidebarPageCount == 3 ? (
                 <Integration />
@@ -245,8 +247,12 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
             backOnclick={() => {
               setShowFooter(false);
               setShowTable(true);
+              setSubmitData(false);
             }}
-            saveDisabled={true}
+            // saveDisabled={true}
+            saveOnclick={() => {
+              setSubmitData(true);
+            }}
             // disabled={true}
             //   saveOnclick={handelSavebtn}
           />

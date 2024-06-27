@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import StudioPatners from "../teamsSection/StudioPatners";
+import StudioPartners from "../teamsSection/StudioPartners";
 import TeamsActionBar from "../teamsSection/TeamActionBar";
 import style from "../../pages/admin/studios/studio.module.css";
 import Button from "../../pages/admin/layout/Button";

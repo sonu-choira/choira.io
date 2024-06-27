@@ -92,7 +92,7 @@ function AddNewArm({ setSelectTab }) {
   }, [values.permission]);
 
   const backOnclick = () => {
-    navigate("/adminDashboard/Teams/StudioPatners");
+    navigate("/adminDashboard/Teams/StudioPartners");
   };
 
   const handelStudioid = (e) => {

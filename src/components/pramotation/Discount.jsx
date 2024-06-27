@@ -6,10 +6,17 @@ import AddNewDiscount from "./AddNewDiscount";
 import { errorAlert } from "../../pages/admin/layout/Alert";
 import { useRef } from "react";
 
-function Discount({ showFooter, setShowFooter, showTable, setShowTable }) {
+function Discount({
+  showFooter,
+  setShowFooter,
+  showTable,
+  setShowTable,
+  submitData,
+}) {
   const addNewBtn = () => {
     setShowTable(false);
     setShowFooter(true);
+    editMode.current = false;
   };
   let editMode = useRef(false);
   // let editData = "";
@@ -47,6 +54,7 @@ function Discount({ showFooter, setShowFooter, showTable, setShowTable }) {
               editData={editData}
               setEditData={setEditData}
               editMode={editMode}
+              submitData={submitData}
             />
           )}
         </div>

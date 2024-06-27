@@ -9,6 +9,8 @@ import { MdDragHandle } from "react-icons/md";
 import { errorAlert } from "../../pages/admin/layout/Alert";
 import AddNewBanner from "./AddNewBanner";
 import { set } from "react-ga";
+import { RxDotFilled } from "react-icons/rx";
+import { BiSolidPencil } from "react-icons/bi";
 
 function Banner({ setProducts, products }) {
   const [mainBannerData, setMainBannerData] = useState([]);
@@ -216,11 +218,34 @@ function Banner({ setProducts, products }) {
                         display: "flex",
                       }}
                     >
-                      <span>{data.banner_redirect}</span>
-                      <span>{data.for}</span>
-                      <span>{data.for}</span>
-                      <span>{data.name}</span>
-                      <span>{data.redirectURL}</span>
+                      {data.banner_redirect && (
+                        <span title={data.banner_redirect}>
+                          <RxDotFilled />
+                          &nbsp; {data.banner_redirect.substring(0, 20)}
+                        </span>
+                      )}
+
+                      {data.for && (
+                        <span title={data.for}>
+                          <RxDotFilled />
+                          &nbsp; {data.for.substring(0, 20)}
+                        </span>
+                      )}
+
+                      {data.name && (
+                        <span title={data.name}>
+                          <RxDotFilled />
+                          &nbsp; {data.name.substring(0, 20)}
+                        </span>
+                      )}
+
+                      {data.redirectURL && (
+                        <span title={data.redirectURL}>
+                          <RxDotFilled />
+                          &nbsp; {data.redirectURL.substring(0, 20)}
+                        </span>
+                      )}
+
                       {/* <input
                         type="text"
                         placeholder="Type your URL"
@@ -238,14 +263,18 @@ function Banner({ setProducts, products }) {
                     </div>
                     <div>
                       {mainBannerEdit ? (
-                        <RxCross2
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            const newData = [...mainBannerData];
-                            newData.splice(index, 1);
-                            setMainBannerData(newData);
-                          }}
-                        />
+                        <>
+                          <BiSolidPencil style={{ cursor: "pointer" }} />
+                          &nbsp;&nbsp;&nbsp;
+                          <RxCross2
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              const newData = [...mainBannerData];
+                              newData.splice(index, 1);
+                              setMainBannerData(newData);
+                            }}
+                          />
+                        </>
                       ) : (
                         <MdDragHandle />
                       )}
@@ -349,11 +378,34 @@ function Banner({ setProducts, products }) {
                         alignItems: "center",
                       }}
                     >
-                      <span>{data.banner_redirect}</span>
-                      <span>{data.for}</span>
-                      <span>{data.for}</span>
-                      <span>{data.name}</span>
-                      <span>{data.redirectURL}</span>
+                      {data.banner_redirect && (
+                        <span title={data.banner_redirect}>
+                          <RxDotFilled />
+                          &nbsp; {data.banner_redirect.substring(0, 20)}
+                        </span>
+                      )}
+
+                      {data.for && (
+                        <span title={data.for}>
+                          <RxDotFilled />
+                          &nbsp; {data.for.substring(0, 20)}
+                        </span>
+                      )}
+
+                      {data.name && (
+                        <span title={data.name}>
+                          <RxDotFilled />
+                          &nbsp; {data.name.substring(0, 20)}
+                        </span>
+                      )}
+
+                      {data.redirectURL && (
+                        <span title={data.redirectURL}>
+                          <RxDotFilled />
+                          &nbsp; {data.redirectURL.substring(0, 20)}
+                        </span>
+                      )}
+
                       {/* <input
                         type="text"
                         placeholder="Type your URL"
@@ -371,14 +423,18 @@ function Banner({ setProducts, products }) {
                     </div>
                     <div>
                       {exclusiveBannerEdit ? (
-                        <RxCross2
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            const newData = [...exclusiveBannerData];
-                            newData.splice(index, 1);
-                            setExclusiveBannerData(newData);
-                          }}
-                        />
+                        <>
+                          <BiSolidPencil style={{ cursor: "pointer" }} />
+                          &nbsp;&nbsp;&nbsp;
+                          <RxCross2
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              const newData = [...exclusiveBannerData];
+                              newData.splice(index, 1);
+                              setExclusiveBannerData(newData);
+                            }}
+                          />
+                        </>
                       ) : (
                         <MdDragHandle />
                       )}

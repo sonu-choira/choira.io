@@ -10,6 +10,8 @@ function CustomTextArea({
   id,
   htmlFor,
   label,
+  error,
+  touched,
 }) {
   return (
     <div className={style.addNewStudioinputBox2}>
@@ -22,6 +24,7 @@ function CustomTextArea({
         value={value}
         name={name}
       />
+      {error && touched ? <p className={style.error}>{error}</p> : null}
     </div>
   );
 }

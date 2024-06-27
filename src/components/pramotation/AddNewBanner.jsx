@@ -54,21 +54,21 @@ function AddNewBanner({ setShowAddPage }) {
     }
   };
 
-  useEffect(() => {
-    console.log(values, "values");
-  }, [values]);
-  useEffect(() => {
-    console.log(errors, "errors");
-    console.log(errors.redirectType);
-    console.log(errors.redirectUrl);
-    console.log(errors.bannerImage);
-    console.log(errors.bannerName);
-    console.log(errors.bannerDescription);
-    console.log(errors.bannerType);
-    console.log(errors.bannerStatus);
-    console.log(errors.studioId);
-    console.log(errors.tempStudioName);
-  }, [errors]);
+  // useEffect(() => {
+  //   console.log(values, "values");
+  // }, [values]);
+  // useEffect(() => {
+  //   console.log(errors, "errors");
+  //   console.log(errors.redirectType);
+  //   console.log(errors.redirectUrl);
+  //   console.log(errors.bannerImage);
+  //   console.log(errors.bannerName);
+  //   console.log(errors.bannerDescription);
+  //   console.log(errors.bannerType);
+  //   console.log(errors.bannerStatus);
+  //   console.log(errors.studioId);
+  //   console.log(errors.tempStudioName);
+  // }, [errors]);
 
   const handelStudioChange = (newValue) => {
     setFieldValue("studioId", newValue.value);
@@ -122,8 +122,11 @@ function AddNewBanner({ setShowAddPage }) {
                 type="file"
                 id="image"
                 onChange={handleFileUpload}
+                onBlur={handleBlur}
               />
             </label>
+            <br />
+            <div className={style.error}>{errors.bannerImage}</div>
           </div>
           <div>
             <CustomSelect

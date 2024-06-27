@@ -44,9 +44,9 @@ function TeamsActionBar({
     });
   };
 
-  const gotoStudioPatners = () => {
+  const gotoStudioPartners = () => {
     if (pageData == "Teams") {
-      router.push("/adminDashboard/Teams/StudioPatners");
+      router.push("/adminDashboard/Teams/StudioPartners");
     } else {
       router.push("/adminDashboard/Bookings/musicproduction");
     }
@@ -97,7 +97,7 @@ function TeamsActionBar({
               }}
               onClick={() => {
                 setTeamsPageCount("t2");
-                gotoStudioPatners();
+                gotoStudioPartners();
               }}
             >
               Studio Patners

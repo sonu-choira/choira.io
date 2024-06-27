@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import style from "../../pages/admin/studios/studio.module.css";
 import CustomInput from "../../pages/admin/layout/CustomInput";
 import CustomTextArea from "../../pages/admin/layout/CustomTextArea";
@@ -7,28 +9,19 @@ import CustomMultipleSelect from "../../pages/admin/layout/CustomMultipleSelect"
 import CustomRangePicker from "../../pages/admin/layout/CustomRangePicker";
 import userApi from "../../services/userApi";
 import SearchSelectInput from "../../pages/admin/layout/SearchAndSelectInput";
+import { DiscountSchema } from "../../schemas";
 
-function AddNewDiscount({
-  editData,
-  setEditData,
-  editMode,
-  // setShowFooter,
-  // setShowTable,
-}) {
-  let option = [
-    "New User Discount",
-    "Discount Recurring",
-    "Event Based",
-    "Special Session",
-    "Specific User",
-  ];
-  console.log(editData);
-  console.log(editMode.current);
-  if (editMode) {
-    // alert("edit mode");
-  }
-  const [discountData, setDiscountData] = useState(
-    editMode.current
+function AddNewDiscount({ editData, setEditData, editMode, submitData }) {
+  const option = {
+    "New User Discount": 0,
+    "Discount Recurring": 1,
+    "Event Based": 2,
+    "Special Session": 3,
+    "Specific User": 4,
+  };
+
+  const formik = useFormik({
+    initialValues: editMode.current
       ? editData
       : {
           discountName: "",
@@ -39,25 +32,25 @@ function AddNewDiscount({
           specialUsers: [],
           searchUser: "",
           maxCapAmount: "",
-          details: "",
-        }
-  );
-  const [selectedDiscount, setSelectedDiscount] = useState("");
-  const [selectedItems, setSelectedItems] = useState([]);
+          description: "",
+        },
+    validationSchema: DiscountSchema,
+    onSubmit: (values) => {
+      console.log(values);
+      // Handle form submission here
+    },
+  });
   useEffect(() => {
-    console.log("discountData", discountData);
-  }, [discountData]);
-
+    console.log(formik.values, "values");
+  }, [formik.values]);
   const handleUserChange = (newValue) => {
-    // Handle user selection change here
-    setDiscountData((prevData) => ({
-      ...prevData,
-      userId: newValue.map((user) => user.value),
-      tempUserName: newValue.map((user) => user.label),
-    }));
-    console.log(
-      "Selected user:",
+    formik.setFieldValue(
+      "specialUsers",
       newValue.map((user) => user.value)
+    );
+    formik.setFieldValue(
+      "searchUser",
+      newValue.map((user) => user.label)
     );
   };
 
@@ -67,51 +60,64 @@ function AddNewDiscount({
     };
     try {
       const response = await userApi.getAllUser(1, dataToSend);
-      console.log("response.data.users", response.users);
       return response.users.map((user) => ({
         label: `${user.fullName} `,
         value: user._id,
       }));
     } catch (error) {
       console.error("Error fetching user list:", error);
-      return []; // return empty array in case of error
+      return [];
     }
   }
+  useEffect(() => {
+    if (submitData) {
+      formik.handleSubmit();
+    }
+  }, [submitData]);
+
+  useEffect(() => {
+    if (editMode.current) {
+      formik.setValues(editData);
+    }
+  }, [editMode, submitData]);
 
   return (
-    <div className={style.addNewDiscountPage}>
+    <form className={style.addNewDiscountPage} onSubmit={formik.handleSubmit}>
       <div>
         <CustomInput
           type="text"
           placeholder="Enter Discount Name"
           label="Discount Name"
-          value={discountData?.discountName}
-          onChange={(e) =>
-            setDiscountData({ ...discountData, discountName: e.target.value })
-          }
+          name="discountName"
+          value={formik.values.discountName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.errors.discountName}
+          touched={formik.touched.discountName}
         />
         <CustomInput
           type="text"
           placeholder="Enter Discount Percentage"
           label="Discount Percentage"
-          value={discountData?.discountPercentage}
-          onChange={(e) =>
-            setDiscountData({
-              ...discountData,
-              discountPercentage: e.target.value,
-            })
-          }
+          name="discountPercentage"
+          value={formik.values.discountPercentage}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.errors.discountPercentage}
+          touched={formik.touched.discountPercentage}
         />
         <CustomInput
           type="text"
-          placeholder="EnterCoupon Code"
+          placeholder="Enter Coupon Code"
           label="Coupon Code"
-          value={discountData?.couponCode}
-          onChange={(e) =>
-            setDiscountData({ ...discountData, couponCode: e.target.value })
-          }
+          name="couponCode"
+          value={formik.values.couponCode}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.errors.couponCode}
+          touched={formik.touched.couponCode}
         />
-        {discountData.discountType === "Specific User" && (
+        {parseInt(formik.values.discountType) === 4 && (
           <div className={style.addNewStudioinputBox}>
             <label htmlFor="UserName">User Name</label>
             <SearchSelectInput
@@ -119,18 +125,23 @@ function AddNewDiscount({
               fetchOptions={fetchUserList}
               onChange={handleUserChange}
               mode="multiple"
-              defaultValue={discountData?.tempUserName?.map((user) => user)}
+              defaultValue={formik.values.searchUser}
               style={{
                 width: "100%",
               }}
             />
+            {formik.errors.specialUsers && formik.touched.specialUsers && (
+              <p className={style.error}>{formik.errors.specialUsers}</p>
+            )}
           </div>
         )}
-        {discountData.discountType === "Event Based" && (
+        {parseInt(formik.values.discountType) === 2 && (
           <CustomRangePicker
             label={"Discount Date"}
-            id={"DiscountDate"}
-            htmlFor={"DiscountDate"}
+            id={"discountDate"}
+            htmlFor={"discountDate"}
+            value={formik.values.discountDate}
+            onChange={(date) => formik.setFieldValue("discountDate", date)}
           />
         )}
       </div>
@@ -141,41 +152,37 @@ function AddNewDiscount({
           htmlFor={"discountType"}
           options={option}
           defaultOption={"Select Discount Type"}
-          // onChange={(e) => setSelectedDiscount(e.target.value)}
-          // value={discountData.discountType}
-          value={discountData?.discountType}
-          disabled={editMode?.current}
-          // readonly={editMode?.current}
+          value={formik.values.discountType}
+          disabled={editMode.current}
           readonly={true}
-          onChange={(e) =>
-            setDiscountData({ ...discountData, discountType: e.target.value })
-          }
+          onChange={(e) => formik.setFieldValue("discountType", e.target.value)}
+          error={formik.errors.discountType}
+          touched={formik.touched.discountType}
         />
         <CustomInput
           type="text"
           placeholder="Enter Max. Cap Amount"
           label="Max. Cap Amount"
-          id={"cap"}
-          htmlFor={"cap"}
-          value={discountData?.maxCapAmount}
-          onChange={(e) =>
-            setDiscountData({ ...discountData, maxCapAmount: e.target.value })
-          }
+          name="maxCapAmount"
+          value={formik.values.maxCapAmount}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.errors.maxCapAmount}
+          touched={formik.touched.maxCapAmount}
         />
-
         <CustomTextArea
           type="text"
           placeholder="Enter Description"
           label="Description"
-          id={"description"}
-          htmlFor={"description"}
-          value={discountData?.details}
-          onChange={(e) =>
-            setDiscountData({ ...discountData, details: e.target.value })
-          }
+          name="description"
+          value={formik.values.description}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.errors.description}
+          touched={formik.touched.description}
         />
       </div>
-    </div>
+    </form>
   );
 }
 

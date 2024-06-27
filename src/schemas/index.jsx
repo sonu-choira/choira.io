@@ -37,6 +37,7 @@ export const bannerSchema = Yup.object().shape({
   redirectType: Yup.string()
     .required("Redirect type is required")
     .oneOf(["External", "in-App"], "Invalid redirect type"),
+  bannerImage: Yup.string().required("Banner Image  is required"),
 
   redirectUrl: Yup.string().when("redirectType", (redirectType, schema) => {
     if (redirectType[0] === "External") {
@@ -77,23 +78,36 @@ export const bannerSchema = Yup.object().shape({
     }
   }),
 });
-// redirectUrl: Yup.string().when("redirectType", {
-//   is: "External",
-//   then: Yup.string().required("Redirect URL is required").url("Invalid URL"),
-//   otherwise: Yup.string().nullable(),
-// bannerType: Yup.string().when("redirectType", {
-//   is: "in-App",
-//   then: Yup.string().required("Banner type is required"),
-//   otherwise: Yup.string().nullable(),
-// }),
-// specify: Yup.string().when("redirectType", {
-//   is: "in-App",
-//   then: Yup.string().required("Specify is required"),
-//   otherwise: Yup.string().nullable(),
-// }),
-// studioId: Yup.string().when(["redirectType", "specify"], {
-//   is: (redirectType, specify) =>
-//     redirectType === "in-App" && specify === "Particular",
-//   then: Yup.string().required("Studio name is required"),
-//   otherwise: Yup.string().nullable(),
-// }),
+
+export const DiscountSchema = Yup.object().shape({
+  discountName: Yup.string().required("Discount Name is required"),
+  discountPercentage: Yup.number()
+    .required("Discount Percentage is required")
+    .min(0, "Percentage must be at least 0")
+    .max(100, "Percentage must be at most 100"),
+  couponCode: Yup.string().required("Coupon Code is required"),
+  discountType: Yup.number().required("Discount Type is required"),
+  maxCapAmount: Yup.number()
+    .required("Max Cap Amount is required")
+    .min(0, "Amount must be at least 0"),
+  description: Yup.string().required("Description is required"),
+  specialUsers: Yup.array()
+    .of(Yup.string())
+    .when("discountType", (discountType, schema) => {
+      console.log("discountType=========>", discountType);
+      if (parseInt(discountType[0]) === 4) {
+        return schema.required("Special Users is required");
+      } else {
+        return Yup.array().nullable();
+      }
+    }),
+  discountDate: Yup.array()
+    .of(Yup.string())
+    .when("discountType", (discountType, schema) => {
+      if (parseInt(discountType[0]) === 2) {
+        return schema.required("Discount Date is required");
+      } else {
+        return Yup.array().nullable();
+      }
+    }),
+});

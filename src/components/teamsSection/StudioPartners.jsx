@@ -31,7 +31,7 @@ import appAndmoreApi from "../../services/appAndmoreApi";
 
 let PageSize = 10;
 
-function StudioPatners({
+function StudioPartners({
   products,
   setProducts,
   setPageCount,
@@ -452,4 +452,4 @@ function StudioPatners({
   );
 }
 
-export default StudioPatners;
+export default StudioPartners;

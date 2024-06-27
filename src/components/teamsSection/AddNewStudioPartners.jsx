@@ -26,7 +26,7 @@ import CustomInput from "../../pages/admin/layout/CustomInput";
 import { studioPartner } from "../../schemas";
 import * as Yup from "yup";
 
-function AddNewStudioPartner({ setSelectTab }) {
+function AddNewStudioPartners({ setSelectTab }) {
   const [allStudio, setAllStudio] = useState([]);
   const data = useLocation();
   const [tabCount, setTabCount] = useState();
@@ -199,4 +199,4 @@ function AddNewStudioPartner({ setSelectTab }) {
   );
 }
 
-export default AddNewStudioPartner;
+export default AddNewStudioPartners;

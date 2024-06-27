@@ -30,9 +30,15 @@ function CustomSelect({
         <option value="" disabled selected>
           {defaultOption}
         </option>
-        {options?.map((option) => (
-          <option value={option}>{option}</option>
-        ))}
+        {Array.isArray(options)
+          ? options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))
+          : Object.keys(options).map((key) => (
+              <option value={options[key]}>{key}</option>
+            ))}
       </select>
       {error && touched ? <p className={style.error}>{error}</p> : null}
     </div>

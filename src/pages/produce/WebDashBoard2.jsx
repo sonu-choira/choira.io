@@ -69,7 +69,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
 
   const gotoTeams = () => {
     setTabCount(3);
-    navigate("/adminDashboard/Teams/StudioPatners");
+    navigate("/adminDashboard/Teams/StudioPartners");
   };
 
   return (

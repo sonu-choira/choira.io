@@ -1915,6 +1915,12 @@ td {
   flex-direction: column;
   gap: 10px;
   padding-bottom: 2%;
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* border: 2px solid red; */
+  }
 }
 .bannerMainContent {
   width: 90%;
@@ -1929,7 +1935,7 @@ td {
   > div:first-child {
     width: 6%;
     height: 70%;
-    border: 2px solid red;
+    /* border: 2px solid red; */
     border-radius: 10px;
     overflow: hidden;
     > img {
