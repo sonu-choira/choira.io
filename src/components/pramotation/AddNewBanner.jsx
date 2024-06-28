@@ -3,7 +3,7 @@ import style from "../../pages/admin/studios/studio.module.css";
 import CustomSelect from "../../pages/admin/layout/CustomSelect";
 import CustomInput from "../../pages/admin/layout/CustomInput";
 import upload from "../../assets/upload.svg";
-import { errorAlert } from "../../pages/admin/layout/Alert";
+import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import { useFormik } from "formik";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import SearchSelectInput from "../../pages/admin/layout/SearchAndSelectInput";
@@ -11,6 +11,7 @@ import StudioFooter from "../adminStudio/StudioFooter";
 import * as Yup from "yup";
 import { bannerSchema } from "../../schemas";
 import { useEffect } from "react";
+import imageUploadapi from "../../services/imageUploadapi";
 
 function AddNewBanner({ setShowAddPage }) {
   const {
@@ -37,7 +38,15 @@ function AddNewBanner({ setShowAddPage }) {
     validationSchema: bannerSchema,
     onSubmit: (values) => {
       console.log(values);
-      alert("Form submitted");
+      // alert("Form submitted");
+      let sendDataToApi = {};
+
+      Object.keys(values).map((key) => {
+        if (`${values[key]}`.length > 0) {
+          sendDataToApi[key] = values[key];
+        }
+      });
+      console.log("sendDataToApi", sendDataToApi);
     },
   });
 
@@ -49,26 +58,19 @@ function AddNewBanner({ setShowAddPage }) {
         event.target.value = "";
         return;
       }
-      const imgUrl = URL.createObjectURL(file);
-      setFieldValue("bannerImage", imgUrl);
+      imageUploadapi
+        .singleImgUpload(file)
+        .then((response) => {
+          console.log("Image links created:", response.imageUrl);
+          setFieldValue("bannerImage", response.imageUrl);
+          sucessAlret("Image uploaded successfully");
+        })
+        .catch((error) => {
+          console.error("Error uploading image:", error);
+          errorAlert("Error uploading image");
+        });
     }
   };
-
-  // useEffect(() => {
-  //   console.log(values, "values");
-  // }, [values]);
-  // useEffect(() => {
-  //   console.log(errors, "errors");
-  //   console.log(errors.redirectType);
-  //   console.log(errors.redirectUrl);
-  //   console.log(errors.bannerImage);
-  //   console.log(errors.bannerName);
-  //   console.log(errors.bannerDescription);
-  //   console.log(errors.bannerType);
-  //   console.log(errors.bannerStatus);
-  //   console.log(errors.studioId);
-  //   console.log(errors.tempStudioName);
-  // }, [errors]);
 
   const handelStudioChange = (newValue) => {
     setFieldValue("studioId", newValue.value);

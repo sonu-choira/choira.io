@@ -5,19 +5,41 @@ import style from "../../pages/admin/studios/studio.module.css";
 import CustomInput from "../../pages/admin/layout/CustomInput";
 import CustomTextArea from "../../pages/admin/layout/CustomTextArea";
 import CustomSelect from "../../pages/admin/layout/CustomSelect";
-import CustomMultipleSelect from "../../pages/admin/layout/CustomMultipleSelect";
 import CustomRangePicker from "../../pages/admin/layout/CustomRangePicker";
 import userApi from "../../services/userApi";
 import SearchSelectInput from "../../pages/admin/layout/SearchAndSelectInput";
 import { DiscountSchema } from "../../schemas";
+import promotionApi from "../../services/promotionApi";
+import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 
-function AddNewDiscount({ editData, setEditData, editMode, submitData }) {
+function AddNewDiscount({
+  editData,
+  setEditData,
+  editMode,
+  submitData,
+  setSubmitData,
+}) {
   const option = {
     "New User Discount": 0,
     "Discount Recurring": 1,
     "Event Based": 2,
     "Special Session": 3,
     "Specific User": 4,
+  };
+
+  const hitApi = (sendDataToApi) => {
+    if (editMode.current) {
+      promotionApi
+        .updateDiscount(editData._id, sendDataToApi)
+        .then((res) => {
+          console.log(res);
+          sucessAlret("Discount Updated Successfully");
+        })
+        .catch((err) => {
+          console.log(err);
+          errorAlert("Error in updating discount");
+        });
+    }
   };
 
   const formik = useFormik({
@@ -33,22 +55,63 @@ function AddNewDiscount({ editData, setEditData, editMode, submitData }) {
           searchUser: "",
           maxCapAmount: "",
           description: "",
+          discountStartDate: "",
+          discountEndDate: "",
         },
     validationSchema: DiscountSchema,
     onSubmit: (values) => {
       console.log(values);
+      let sendDataToApi = {};
+
+      Object.keys(values).map((key) => {
+        if (`${values[key]}`.length > 0) {
+          sendDataToApi[key] = values[key];
+        }
+      });
+      console.log("sendDataToApi", sendDataToApi);
+      // hitApi(sendDataToApi);
+      hitApi(sendDataToApi);
+
       // Handle form submission here
     },
   });
+
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+    setValues,
+  } = formik;
+
+  const handleDateChange = (date, dateString) => {
+    setFieldValue("discountStartDate", dateString[0]);
+    setFieldValue("discountEndDate", dateString[1]);
+    console.log(date, dateString);
+  };
+
   useEffect(() => {
-    console.log(formik.values, "values");
-  }, [formik.values]);
+    if (editMode.current) {
+      setValues(editData);
+    }
+  }, [editData, editMode, setValues]);
+
+  useEffect(() => {
+    if (submitData) {
+      handleSubmit();
+      setSubmitData(false);
+    }
+  }, [submitData, handleSubmit, setSubmitData]);
+
   const handleUserChange = (newValue) => {
-    formik.setFieldValue(
+    setFieldValue(
       "specialUsers",
       newValue.map((user) => user.value)
     );
-    formik.setFieldValue(
+    setFieldValue(
       "searchUser",
       newValue.map((user) => user.label)
     );
@@ -69,80 +132,77 @@ function AddNewDiscount({ editData, setEditData, editMode, submitData }) {
       return [];
     }
   }
-  useEffect(() => {
-    if (submitData) {
-      formik.handleSubmit();
-    }
-  }, [submitData]);
-
-  useEffect(() => {
-    if (editMode.current) {
-      formik.setValues(editData);
-    }
-  }, [editMode, submitData]);
 
   return (
-    <form className={style.addNewDiscountPage} onSubmit={formik.handleSubmit}>
+    <form className={style.addNewDiscountPage} onSubmit={handleSubmit}>
       <div>
         <CustomInput
           type="text"
           placeholder="Enter Discount Name"
           label="Discount Name"
           name="discountName"
-          value={formik.values.discountName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.errors.discountName}
-          touched={formik.touched.discountName}
+          value={values.discountName}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.discountName}
+          touched={touched.discountName}
         />
         <CustomInput
           type="text"
           placeholder="Enter Discount Percentage"
           label="Discount Percentage"
           name="discountPercentage"
-          value={formik.values.discountPercentage}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.errors.discountPercentage}
-          touched={formik.touched.discountPercentage}
+          value={values.discountPercentage}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.discountPercentage}
+          touched={touched.discountPercentage}
         />
         <CustomInput
           type="text"
           placeholder="Enter Coupon Code"
           label="Coupon Code"
           name="couponCode"
-          value={formik.values.couponCode}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.errors.couponCode}
-          touched={formik.touched.couponCode}
+          value={values.couponCode}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.couponCode}
+          touched={touched.couponCode}
         />
-        {parseInt(formik.values.discountType) === 4 && (
+        {parseInt(values.discountType) === 4 && (
           <div className={style.addNewStudioinputBox}>
             <label htmlFor="UserName">User Name</label>
             <SearchSelectInput
               placeholder="Select users"
               fetchOptions={fetchUserList}
               onChange={handleUserChange}
+              name="specialUsers"
               mode="multiple"
-              defaultValue={formik.values.searchUser}
+              defaultValue={values.searchUser}
               style={{
                 width: "100%",
               }}
             />
-            {formik.errors.specialUsers && formik.touched.specialUsers && (
-              <p className={style.error}>{formik.errors.specialUsers}</p>
+            {errors.specialUsers && touched.specialUsers && (
+              <p className={style.error}>{errors.specialUsers}</p>
             )}
           </div>
         )}
-        {parseInt(formik.values.discountType) === 2 && (
+        {parseInt(values.discountType) === 2 && (
           <CustomRangePicker
             label={"Discount Date"}
             id={"discountDate"}
             htmlFor={"discountDate"}
-            value={formik.values.discountDate}
-            onChange={(date) => formik.setFieldValue("discountDate", date)}
+            name={"discountDate"}
+            value={values.discountDate}
+            onChange={handleDateChange}
           />
+        )}
+        {errors.discountStartDate && touched.discountStartDate && (
+          <p className={style.error}>{errors.discountStartDate}</p>
+        )}
+        {errors.discountEndDate && touched.discountEndDate && (
+          <p className={style.error}>{errors.discountEndDate}</p>
         )}
       </div>
       <div>
@@ -152,34 +212,33 @@ function AddNewDiscount({ editData, setEditData, editMode, submitData }) {
           htmlFor={"discountType"}
           options={option}
           defaultOption={"Select Discount Type"}
-          value={formik.values.discountType}
+          value={values.discountType}
           disabled={editMode.current}
-          readonly={true}
-          onChange={(e) => formik.setFieldValue("discountType", e.target.value)}
-          error={formik.errors.discountType}
-          touched={formik.touched.discountType}
+          onChange={(e) => setFieldValue("discountType", e.target.value)}
+          error={errors.discountType}
+          touched={touched.discountType}
         />
         <CustomInput
           type="text"
           placeholder="Enter Max. Cap Amount"
           label="Max. Cap Amount"
           name="maxCapAmount"
-          value={formik.values.maxCapAmount}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.errors.maxCapAmount}
-          touched={formik.touched.maxCapAmount}
+          value={values.maxCapAmount}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.maxCapAmount}
+          touched={touched.maxCapAmount}
         />
         <CustomTextArea
           type="text"
           placeholder="Enter Description"
           label="Description"
           name="description"
-          value={formik.values.description}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.errors.description}
-          touched={formik.touched.description}
+          value={values.description}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.description}
+          touched={touched.description}
         />
       </div>
     </form>

@@ -12,6 +12,16 @@ class promotionApi {
     console.log("Banner detail ===>", response.data);
     return response.data;
   };
+
+  updateDiscount = async (id, discountData) => {
+    const response = await api.patch(`discounts/${id}`,
+      discountData
+    );
+    const {status} = response.data
+    console.log("discount update  ===>", response.data)
+    return response.data;
+ 
+   };
 }
 
 export default new promotionApi();

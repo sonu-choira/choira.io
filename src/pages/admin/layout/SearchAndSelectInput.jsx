@@ -51,6 +51,7 @@ function SearchSelectInput({
   onChange,
   mode,
   defaultValue,
+  name,
   ...props
 }) {
   const [value, setValue] = useState(defaultValue || []);
@@ -62,6 +63,7 @@ function SearchSelectInput({
   return (
     <DebounceSelect
       mode={mode || "single"}
+      name={name}
       value={value}
       onChange={(newValue) => {
         setValue(newValue);

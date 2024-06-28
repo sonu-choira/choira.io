@@ -228,6 +228,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
                   setShowTable={setShowTable}
                   showTable={showTable}
                   submitData={submitData}
+                  setSubmitData={setSubmitData}
                 />
               ) : sidebarPageCount == 3 ? (
                 <Integration />

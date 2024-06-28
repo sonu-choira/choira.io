@@ -94,20 +94,37 @@ export const DiscountSchema = Yup.object().shape({
   specialUsers: Yup.array()
     .of(Yup.string())
     .when("discountType", (discountType, schema) => {
-      console.log("discountType=========>", discountType);
+      // console.log("discountType=========>", discountType);
       if (parseInt(discountType[0]) === 4) {
         return schema.required("Special Users is required");
       } else {
         return Yup.array().nullable();
       }
     }),
-  discountDate: Yup.array()
-    .of(Yup.string())
-    .when("discountType", (discountType, schema) => {
+  // discountDate: Yup.array()
+  //   .of(Yup.string())
+  //   .when("discountType", (discountType, schema) => {
+  //     if (parseInt(discountType[0]) === 2) {
+  //       return schema.required("Discount Date is required");
+  //     } else {
+  //       return Yup.array().nullable();
+  //     }
+  //   }),
+  discountStartDate: Yup.string().when(
+    "discountType",
+    (discountType, schema) => {
       if (parseInt(discountType[0]) === 2) {
-        return schema.required("Discount Date is required");
+        return schema.required("Discount Start Date is required");
       } else {
-        return Yup.array().nullable();
+        return Yup.string().nullable();
       }
-    }),
+    }
+  ),
+  discountEndDate: Yup.string().when("discountType", (discountType, schema) => {
+    if (parseInt(discountType[0]) === 2) {
+      return schema.required("Discount End Date is required");
+    } else {
+      return Yup.string().nullable();
+    }
+  }),
 });

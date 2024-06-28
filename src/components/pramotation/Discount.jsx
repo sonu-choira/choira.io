@@ -12,6 +12,7 @@ function Discount({
   showTable,
   setShowTable,
   submitData,
+  setSubmitData,
 }) {
   const addNewBtn = () => {
     setShowTable(false);
@@ -55,6 +56,7 @@ function Discount({
               setEditData={setEditData}
               editMode={editMode}
               submitData={submitData}
+              setSubmitData={setSubmitData}
             />
           )}
         </div>
