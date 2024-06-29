@@ -2046,7 +2046,7 @@ td {
   > div {
     width: 45%;
     height: 10%;
-    /* border: 2px solid green;  */
+    /* border: 2px solid green; */
   }
   > div:nth-child(1) {
     width: fit-content;
@@ -2058,7 +2058,7 @@ td {
   /* border: 2px dashed #f0f0f0; */
   border-radius: 10px;
   margin-top: 10px;
-  background-color: white;
+  background-color: white !important;
   > div {
     width: 100%;
     height: 100%;

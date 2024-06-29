@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "../../pages/admin/studios/studio.module.css";
 import { FaPencilAlt } from "react-icons/fa";
 import upload from "../../assets/upload.svg";
@@ -156,11 +156,23 @@ function Banner({ setProducts, products }) {
     }
   };
   const [showAddPage, setShowAddPage] = useState(false);
+  const [pageType, setPageType] = useState("");
+  let editMode = useRef(false);
+  const [editData, setEditData] = useState("");
+  const gotoEditPage = (id) => {
+    console.log(id);
+    setEditData(products.filter((item) => item.id === id)[0]);
+  };
 
   return (
     <>
       {showAddPage ? (
-        <AddNewBanner setShowAddPage={setShowAddPage} />
+        <AddNewBanner
+          setShowAddPage={setShowAddPage}
+          pageType={pageType}
+          editMode={editMode}
+          editData={editData}
+        />
       ) : (
         <div className={style.bannerPage}>
           <div>
@@ -189,7 +201,10 @@ function Banner({ setProducts, products }) {
                 <Button
                   name={"Add"}
                   style={{ height: "90%", gap: "5px" }}
-                  onClick={() => setShowAddPage(true)}
+                  onClick={() => {
+                    setShowAddPage(true);
+                    setPageType("AdBanner");
+                  }}
                 />
               </div>
             </span>
@@ -264,7 +279,16 @@ function Banner({ setProducts, products }) {
                     <div>
                       {mainBannerEdit ? (
                         <>
-                          <BiSolidPencil style={{ cursor: "pointer" }} />
+                          <BiSolidPencil
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              setShowAddPage(true);
+                              setPageType("MainBanner");
+                              setMainBannerEdit(false);
+                              gotoEditPage(data.id);
+                              editMode.current = true;
+                            }}
+                          />
                           &nbsp;&nbsp;&nbsp;
                           <RxCross2
                             style={{ cursor: "pointer" }}
@@ -313,7 +337,10 @@ function Banner({ setProducts, products }) {
                 <Button
                   name={"Add"}
                   style={{ height: "90%", gap: "5px" }}
-                  onClick={() => setShowAddPage(true)}
+                  onClick={() => {
+                    setShowAddPage(true);
+                    setPageType("ExcBanner");
+                  }}
                 />
               </div>
             </span>
@@ -424,7 +451,16 @@ function Banner({ setProducts, products }) {
                     <div>
                       {exclusiveBannerEdit ? (
                         <>
-                          <BiSolidPencil style={{ cursor: "pointer" }} />
+                          <BiSolidPencil
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              setShowAddPage(true);
+                              setPageType("MainBanner");
+                              setMainBannerEdit(false);
+                              gotoEditPage(data.id);
+                              editMode.current = true;
+                            }}
+                          />
                           &nbsp;&nbsp;&nbsp;
                           <RxCross2
                             style={{ cursor: "pointer" }}

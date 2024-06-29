@@ -12,8 +12,15 @@ import * as Yup from "yup";
 import { bannerSchema } from "../../schemas";
 import { useEffect } from "react";
 import imageUploadapi from "../../services/imageUploadapi";
+import promotionApi from "../../services/promotionApi";
 
-function AddNewBanner({ setShowAddPage }) {
+function AddNewBanner({
+  setShowAddPage,
+  pageType,
+  editMode,
+  editData,
+  setEditData,
+}) {
   const {
     values,
     errors,
@@ -22,19 +29,23 @@ function AddNewBanner({ setShowAddPage }) {
     handleChange,
     handleSubmit,
     setFieldValue,
+    setValues,
   } = useFormik({
-    initialValues: {
-      redirectType: "",
-      redirectUrl: "",
-      bannerImage: "",
-      bannerName: "",
-      bannerDescription: "",
-      bannerType: "",
-      bannerStatus: "",
-      studioId: "",
-      specify: "",
-      tempStudioName: "", // Used only for display
-    },
+    initialValues: editMode.current
+      ? editData
+      : {
+          banner_redirect: "",
+          redirect_url: "",
+          photoURL: "",
+          name: "",
+          type: "",
+          bannerType: "",
+          entity_id: "",
+          forr: "",
+          tempStudioName: "", // Used only for display
+          active: "",
+          stage: "",
+        },
     validationSchema: bannerSchema,
     onSubmit: (values) => {
       console.log(values);
@@ -47,9 +58,48 @@ function AddNewBanner({ setShowAddPage }) {
         }
       });
       console.log("sendDataToApi", sendDataToApi);
+      hitapi(sendDataToApi);
     },
   });
+  useEffect(() => {
+    if (editMode.current) {
+      setValues(editData);
+    }
+    console.log("editData", editData);
+  }, [editData, editMode, setValues]);
+  useEffect(() => {
+    console.log("values", values);
+  }, [values]);
+  useEffect(() => {
+    setFieldValue("type", pageType);
+  }, [pageType]);
 
+  const hitapi = (sendDataToApi) => {
+    console.log("Api hit", sendDataToApi);
+    if (editMode.current) {
+      promotionApi
+        .updateBanner(editData.id, sendDataToApi)
+        .then((res) => {
+          console.log(res);
+          sucessAlret("Banner Updated Successfully");
+        })
+        .catch((err) => {
+          console.log(err);
+          errorAlert("Error in updating banner");
+        });
+    } else {
+      promotionApi
+        .createBanner(sendDataToApi)
+        .then((res) => {
+          console.log(res);
+          sucessAlret("Banner Created Successfully");
+        })
+        .catch((err) => {
+          console.log(err);
+          errorAlert("Error in creating banner");
+        });
+    }
+  };
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -62,7 +112,7 @@ function AddNewBanner({ setShowAddPage }) {
         .singleImgUpload(file)
         .then((response) => {
           console.log("Image links created:", response.imageUrl);
-          setFieldValue("bannerImage", response.imageUrl);
+          setFieldValue("photoURL", response.imageUrl);
           sucessAlret("Image uploaded successfully");
         })
         .catch((error) => {
@@ -73,7 +123,7 @@ function AddNewBanner({ setShowAddPage }) {
   };
 
   const handelStudioChange = (newValue) => {
-    setFieldValue("studioId", newValue.value);
+    setFieldValue("entity_id", newValue.value);
     setFieldValue("tempStudioName", newValue.label);
   };
 
@@ -94,128 +144,180 @@ function AddNewBanner({ setShowAddPage }) {
   }
 
   return (
-    <form style={{ width: "100%", height: "95%" }} onSubmit={handleSubmit}>
-      <div className={style.AddNewBannerPage}>
-        <div>
-          <span>Add New Banner:</span>
-        </div>
-        <div className={style.AddNewBannerMain}>
+    <>
+      <form style={{ width: "100%", height: "95%" }} onSubmit={handleSubmit}>
+        <div className={style.AddNewBannerPage}>
           <div>
-            <label htmlFor="image">
-              Upload Image
-              <div className={style.AddBannerImage}>
-                {values.bannerImage ? (
-                  <img
-                    src={values.bannerImage}
-                    alt="banner"
-                    style={{ width: "100%", height: "100%" }}
-                  />
-                ) : (
-                  <div>
-                    <img src={upload} alt="upload" />
-                    <p>
-                      Drag and Drop or <br /> <span>Browse</span> to upload.
-                    </p>
-                  </div>
-                )}
-              </div>
-              <input
-                style={{ display: "none" }}
-                type="file"
-                id="image"
-                onChange={handleFileUpload}
-                onBlur={handleBlur}
-              />
-            </label>
-            <br />
-            <div className={style.error}>{errors.bannerImage}</div>
+            <span>Add New Banner:</span>
           </div>
-          <div>
-            <CustomSelect
-              label={"Select Redirect Type"}
-              options={["in-App", "External"]}
-              name={"redirectType"}
-              id={"redirectType"}
-              htmlFor={"redirectType"}
-              defaultOption={"select redirect type"}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.redirectType}
-              error={errors.redirectType}
-              touched={touched.redirectType}
-            />
-
-            {values.redirectType === "External" && (
-              <CustomInput
-                label={"Redirect Link"}
-                name={"redirectUrl"}
-                id={"redirectUrl"}
-                htmlFor={"redirectUrl"}
-                placeholder={"enter redirect link"}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.redirectUrl}
-                error={errors.redirectUrl}
-                touched={touched.redirectUrl}
-              />
-            )}
-            {values.redirectType === "in-App" && (
-              <>
-                <CustomSelect
-                  label={"Banner Type"}
-                  name={"bannerType"}
-                  id={"bannerType"}
-                  htmlFor={"bannerType"}
-                  defaultOption={"select banner type"}
-                  options={["studio", "mix-master", "music-production"]}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.bannerType}
-                  error={errors.bannerType}
-                  touched={touched.bannerType}
-                />
-
-                <CustomSelect
-                  label={"Specify"}
-                  name={"specify"}
-                  id={"specify"}
-                  htmlFor={"specify"}
-                  defaultOption={"select specify"}
-                  options={["Particular", "List"]}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.specify}
-                  error={errors.specify}
-                  touched={touched.specify}
-                />
-
-                {values.specify === "Particular" && (
-                  <div className={style.customInput}>
-                    <label htmlFor="UserName">Studio Name</label>
-                    <SearchSelectInput
-                      placeholder="Search Studio"
-                      fetchOptions={fetchUserList}
-                      onChange={handelStudioChange}
-                      defaultValue={values?.tempStudioName}
+          <div className={style.AddNewBannerMain}>
+            <div>
+              <label htmlFor="image">
+                Upload Image
+                <div className={style.AddBannerImage}>
+                  {values.photoURL ? (
+                    <img
+                      src={values.photoURL}
+                      alt="banner"
                       style={{ width: "100%", height: "100%" }}
                     />
-                    {errors.studioId && touched.studioId && (
-                      <div className={style.error}>{errors.studioId}</div>
-                    )}
-                  </div>
-                )}
-              </>
-            )}
+                  ) : (
+                    <div>
+                      <img src={upload} alt="upload" />
+                      <p>
+                        Drag and Drop or <br /> <span>Browse</span> to upload.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  id="image"
+                  onChange={handleFileUpload}
+                  onBlur={handleBlur}
+                />
+              </label>
+              <br />
+              <div className={style.error}>{errors.photoURL}</div>
+            </div>
+            <div
+              style={{
+                maxHeight: "60vh",
+                overflowY: "auto",
+                paddingRight: "10px",
+              }}
+            >
+              <CustomSelect
+                label={"Select Redirect Type"}
+                options={["in-app", "External"]}
+                name={"banner_redirect"}
+                id={"banner_redirect"}
+                htmlFor={"banner_redirect"}
+                defaultOption={"select redirect type"}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.banner_redirect}
+                error={errors.banner_redirect}
+                touched={touched.banner_redirect}
+              />
+              <CustomInput
+                label={"Banner Name"}
+                name={"name"}
+                id={"bname"}
+                htmlFor={"bname"}
+                placeholder={"enter Banner Name"}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.name}
+                error={errors.name}
+                touched={touched.name}
+              />
+              <CustomSelect
+                label={"Status"}
+                name={"active"}
+                id={"Status"}
+                htmlFor={"Status"}
+                defaultOption={"select Status "}
+                options={{ active: 0, inactive: 1 }}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.active}
+                error={errors.active}
+                touched={touched.active}
+              />
+              <CustomSelect
+                label={"Stage"}
+                name={"stage"}
+                id={"Stage"}
+                htmlFor={"Stage"}
+                defaultOption={"select Stage "}
+                options={[1, 2, 3, 4, 5, 6]}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.stage}
+                error={errors.stage}
+                touched={touched.stage}
+              />
+
+              {values.banner_redirect === "External" && (
+                <CustomInput
+                  label={"Redirect Link"}
+                  name={"redirect_url"}
+                  id={"redirect_url"}
+                  htmlFor={"redirect_url"}
+                  placeholder={"enter redirect link"}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.redirect_url}
+                  error={errors.redirect_url}
+                  touched={touched.redirect_url}
+                />
+              )}
+              {values.banner_redirect === "in-app" && (
+                <>
+                  {/* <CustomSelect
+                    label={"Banner Type"}
+                    name={"bannerType"}
+                    id={"bannerType"}
+                    htmlFor={"bannerType"}
+                    defaultOption={"select banner type"}
+                    options={["studio", "mix-master", "music-production"]}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.bannerType}
+                    error={errors.bannerType}
+                    touched={touched.bannerType}
+                  /> */}
+
+                  <CustomSelect
+                    label={"Specify"}
+                    name={"forr"}
+                    id={"forr"}
+                    htmlFor={"forr"}
+                    defaultOption={"select specify"}
+                    // options={["Particular", "List"]}
+                    options={{
+                      Particular: "page",
+                      List: "list",
+                    }}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.forr}
+                    error={errors.forr}
+                    touched={touched.forr}
+                  />
+
+                  {values.forr === "page" && (
+                    <div className={style.customInput}>
+                      <label htmlFor="UserName">Studio Name</label>
+                      <SearchSelectInput
+                        placeholder="Search Studio"
+                        fetchOptions={fetchUserList}
+                        onChange={handelStudioChange}
+                        defaultValue={values?.tempStudioName}
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                      {errors.entity_id && touched.entity_id && (
+                        <div className={style.error}>{errors.entity_id}</div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
         <StudioFooter
           backOnclick={() => {
             setShowAddPage(false);
+            editMode.current = false;
           }}
           saveDisabled={false}
+          saveType={"submit"}
         />
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
 

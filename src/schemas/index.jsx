@@ -34,42 +34,51 @@ export const studioPartner = Yup.object().shape({
 });
 
 export const bannerSchema = Yup.object().shape({
-  redirectType: Yup.string()
+  banner_redirect: Yup.string()
     .required("Redirect type is required")
-    .oneOf(["External", "in-App"], "Invalid redirect type"),
-  bannerImage: Yup.string().required("Banner Image  is required"),
+    .oneOf(["External", "in-app"], "Invalid redirect type"),
+  photoURL: Yup.string().required("Banner Image  is required"),
+  name: Yup.string().required("Banner Name  is required"),
+  active: Yup.number().required("Status   is required"),
+  stage: Yup.number().required("Stage   is required"),
 
-  redirectUrl: Yup.string().when("redirectType", (redirectType, schema) => {
-    if (redirectType[0] === "External") {
-      return schema
-        .required("Redirect URL is required")
-        .url("Invalid external URL")
-        .min(2, "Too Short!");
-    } else {
-      return Yup.string().nullable();
+  redirect_url: Yup.string().when(
+    "banner_redirect",
+    (banner_redirect, schema) => {
+      if (banner_redirect[0] === "External") {
+        return schema
+          .required("Redirect URL is required")
+          .url("Invalid external URL")
+          .min(2, "Too Short!");
+      } else {
+        return Yup.string().nullable();
+      }
     }
-  }),
+  ),
 
-  bannerType: Yup.string().when("redirectType", (redirectType, schema) => {
-    if (redirectType[0] === "in-App") {
-      return schema.required("Banner type is required");
-    } else {
-      return Yup.string().nullable();
-    }
-  }),
+  // bannerType: Yup.string().when(
+  //   "banner_redirect",
+  //   (banner_redirect, schema) => {
+  //     if (banner_redirect[0] === "in-app") {
+  //       return schema.required("Banner type is required");
+  //     } else {
+  //       return Yup.string().nullable();
+  //     }
+  //   }
+  // ),
 
-  specify: Yup.string().when("redirectType", (redirectType, schema) => {
-    if (redirectType[0] === "in-App") {
+  forr: Yup.string().when("banner_redirect", (banner_redirect, schema) => {
+    if (banner_redirect[0] === "in-app") {
       return schema.required("Specify destination is required");
     } else {
       return Yup.string().nullable();
     }
   }),
 
-  studioId: Yup.string().when(["redirectType", "specify"], (Arr, schema) => {
-    console.log(Arr, "specify");
+  entity_id: Yup.string().when(["banner_redirect", "forr"], (Arr, schema) => {
+    // console.log(Arr, "forr");
 
-    if (Arr[0] === "in-App" && Arr[1] === "Particular") {
+    if (Arr[0] === "in-app" && Arr[1] === "page") {
       return schema.required(
         "Studio name is required for specific destinations"
       );
