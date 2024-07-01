@@ -39,6 +39,21 @@ function AddNewDiscount({
           console.log(err);
           errorAlert("Error in updating discount");
         });
+    } else {
+      promotionApi
+        .createDiscount(sendDataToApi)
+        .then((res) => {
+          console.log(res);
+          if (res.status == true) {
+            sucessAlret("Discount Created Successfully");
+          } else {
+            errorAlert(res.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          errorAlert("Error in creating discount");
+        });
     }
   };
 
@@ -55,8 +70,8 @@ function AddNewDiscount({
           searchUser: "",
           maxCapAmount: "",
           description: "",
-          discountStartDate: "",
-          discountEndDate: "",
+          startDate: "",
+          endDate: "",
         },
     validationSchema: DiscountSchema,
     onSubmit: (values) => {
@@ -64,7 +79,7 @@ function AddNewDiscount({
       let sendDataToApi = {};
 
       Object.keys(values).map((key) => {
-        if (`${values[key]}`.length > 0) {
+        if ((`${values[key]}`.length > 0) & (values[key] !== null)) {
           sendDataToApi[key] = values[key];
         }
       });
@@ -87,9 +102,28 @@ function AddNewDiscount({
     setValues,
   } = formik;
 
+  useEffect(() => {
+    if (!editMode.current) {
+      const resetValues = {
+        discountName: "",
+        discountPercentage: "",
+        couponCode: "",
+        discountType: values.discountType,
+        discountDate: "",
+        specialUsers: [],
+        searchUser: "",
+        maxCapAmount: "",
+        description: "",
+        startDate: "",
+        endDate: "",
+      };
+      setValues(resetValues);
+    }
+  }, [values.discountType]);
+
   const handleDateChange = (date, dateString) => {
-    setFieldValue("discountStartDate", dateString[0]);
-    setFieldValue("discountEndDate", dateString[1]);
+    setFieldValue("startDate", dateString[0]);
+    setFieldValue("endDate", dateString[1]);
     console.log(date, dateString);
   };
 
@@ -198,11 +232,11 @@ function AddNewDiscount({
             onChange={handleDateChange}
           />
         )}
-        {errors.discountStartDate && touched.discountStartDate && (
-          <p className={style.error}>{errors.discountStartDate}</p>
+        {errors.startDate && touched.startDate && (
+          <p className={style.error}>{errors.startDate}</p>
         )}
-        {errors.discountEndDate && touched.discountEndDate && (
-          <p className={style.error}>{errors.discountEndDate}</p>
+        {errors.endDate && touched.endDate && (
+          <p className={style.error}>{errors.endDate}</p>
         )}
       </div>
       <div>

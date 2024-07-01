@@ -36,16 +36,24 @@ export const studioPartner = Yup.object().shape({
 export const bannerSchema = Yup.object().shape({
   banner_redirect: Yup.string()
     .required("Redirect type is required")
-    .oneOf(["External", "in-app"], "Invalid redirect type"),
+    .oneOf(["external", "in-app"], "Invalid redirect type"),
   photoURL: Yup.string().required("Banner Image  is required"),
   name: Yup.string().required("Banner Name  is required"),
-  active: Yup.number().required("Status   is required"),
-  stage: Yup.number().required("Stage   is required"),
+  active: Yup.number()
+    .required("Status   is required")
+    .transform((value, originalValue) => {
+      return Number(originalValue);
+    }),
+  stage: Yup.number()
+    .required("Stage   is required")
+    .transform((value, originalValue) => {
+      return Number(originalValue);
+    }),
 
-  redirect_url: Yup.string().when(
+  redirectURL: Yup.string().when(
     "banner_redirect",
     (banner_redirect, schema) => {
-      if (banner_redirect[0] === "External") {
+      if (banner_redirect[0] === "external") {
         return schema
           .required("Redirect URL is required")
           .url("Invalid external URL")
@@ -119,17 +127,14 @@ export const DiscountSchema = Yup.object().shape({
   //       return Yup.array().nullable();
   //     }
   //   }),
-  discountStartDate: Yup.string().when(
-    "discountType",
-    (discountType, schema) => {
-      if (parseInt(discountType[0]) === 2) {
-        return schema.required("Discount Start Date is required");
-      } else {
-        return Yup.string().nullable();
-      }
+  startDate: Yup.string().when("discountType", (discountType, schema) => {
+    if (parseInt(discountType[0]) === 2) {
+      return schema.required("Discount Start Date is required");
+    } else {
+      return Yup.string().nullable();
     }
-  ),
-  discountEndDate: Yup.string().when("discountType", (discountType, schema) => {
+  }),
+  endDate: Yup.string().when("discountType", (discountType, schema) => {
     if (parseInt(discountType[0]) === 2) {
       return schema.required("Discount End Date is required");
     } else {

@@ -13,6 +13,7 @@ import { bannerSchema } from "../../schemas";
 import { useEffect } from "react";
 import imageUploadapi from "../../services/imageUploadapi";
 import promotionApi from "../../services/promotionApi";
+import { send } from "react-ga";
 
 function AddNewBanner({
   setShowAddPage,
@@ -35,10 +36,10 @@ function AddNewBanner({
       ? editData
       : {
           banner_redirect: "",
-          redirect_url: "",
+          redirectURL: "",
           photoURL: "",
           name: "",
-          type: "",
+          type: pageType,
           bannerType: "",
           entity_id: "",
           forr: "",
@@ -53,17 +54,57 @@ function AddNewBanner({
       let sendDataToApi = {};
 
       Object.keys(values).map((key) => {
-        if (`${values[key]}`.length > 0) {
+        if ((`${values[key]}`.length > 0) & (values[key] !== null)) {
           sendDataToApi[key] = values[key];
         }
       });
+      sendDataToApi.active = parseInt(sendDataToApi.active);
+      sendDataToApi.stage = parseInt(sendDataToApi.stage);
       console.log("sendDataToApi", sendDataToApi);
       hitapi(sendDataToApi);
     },
   });
+
+  useEffect(() => {
+    if (editMode.current) {
+      const resetValues = {
+        banner_redirect: values.banner_redirect,
+        id: values.id,
+        redirectURL: "",
+        photoURL: "",
+        name: "",
+        type: pageType,
+        bannerType: "",
+        entity_id: "",
+        forr: "",
+        tempStudioName: "", // Used only for display
+        active: "",
+        stage: "",
+      };
+      setValues(resetValues);
+    } else {
+      const resetValues = {
+        banner_redirect: values.banner_redirect,
+        redirectURL: "",
+        photoURL: "",
+        name: "",
+        type: pageType,
+        bannerType: "",
+        entity_id: "",
+        forr: "",
+        tempStudioName: "", // Used only for display
+        active: "",
+        stage: "",
+      };
+      setValues(resetValues);
+      console.log("pageType", pageType);
+    }
+  }, [values.banner_redirect]);
+
   useEffect(() => {
     if (editMode.current) {
       setValues(editData);
+      setFieldValue("forr", editData.for);
     }
     console.log("editData", editData);
   }, [editData, editMode, setValues]);
@@ -78,7 +119,7 @@ function AddNewBanner({
     console.log("Api hit", sendDataToApi);
     if (editMode.current) {
       promotionApi
-        .updateBanner(editData.id, sendDataToApi)
+        .updateBanner(sendDataToApi)
         .then((res) => {
           console.log(res);
           sucessAlret("Banner Updated Successfully");
@@ -88,15 +129,20 @@ function AddNewBanner({
           errorAlert("Error in updating banner");
         });
     } else {
+      console.log("Create Banner");
       promotionApi
         .createBanner(sendDataToApi)
         .then((res) => {
           console.log(res);
-          sucessAlret("Banner Created Successfully");
+          if (res.status == true) {
+            sucessAlret("Banner Created Successfully");
+          } else {
+            errorAlert(res.message);
+          }
         })
         .catch((err) => {
           console.log(err);
-          errorAlert("Error in creating banner");
+          errorAlert(err.message);
         });
     }
   };
@@ -190,7 +236,7 @@ function AddNewBanner({
             >
               <CustomSelect
                 label={"Select Redirect Type"}
-                options={["in-app", "External"]}
+                options={["in-app", "external"]}
                 name={"banner_redirect"}
                 id={"banner_redirect"}
                 htmlFor={"banner_redirect"}
@@ -201,57 +247,65 @@ function AddNewBanner({
                 error={errors.banner_redirect}
                 touched={touched.banner_redirect}
               />
-              <CustomInput
-                label={"Banner Name"}
-                name={"name"}
-                id={"bname"}
-                htmlFor={"bname"}
-                placeholder={"enter Banner Name"}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.name}
-                error={errors.name}
-                touched={touched.name}
-              />
-              <CustomSelect
-                label={"Status"}
-                name={"active"}
-                id={"Status"}
-                htmlFor={"Status"}
-                defaultOption={"select Status "}
-                options={{ active: 0, inactive: 1 }}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.active}
-                error={errors.active}
-                touched={touched.active}
-              />
-              <CustomSelect
-                label={"Stage"}
-                name={"stage"}
-                id={"Stage"}
-                htmlFor={"Stage"}
-                defaultOption={"select Stage "}
-                options={[1, 2, 3, 4, 5, 6]}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.stage}
-                error={errors.stage}
-                touched={touched.stage}
-              />
 
-              {values.banner_redirect === "External" && (
+              {values.banner_redirect === "external" ||
+              values.banner_redirect === "in-app" ? (
+                <>
+                  <CustomInput
+                    label={"Banner Name"}
+                    name={"name"}
+                    id={"bname"}
+                    htmlFor={"bname"}
+                    placeholder={"enter Banner Name"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.name}
+                    error={errors.name}
+                    touched={touched.name}
+                  />
+                  <CustomSelect
+                    label={"Status"}
+                    name={"active"}
+                    id={"Status"}
+                    htmlFor={"Status"}
+                    defaultOption={"select Status "}
+                    options={{ active: 1, inactive: 0 }}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.active}
+                    error={errors.active}
+                    touched={touched.active}
+                  />
+                  <CustomSelect
+                    label={"Stage"}
+                    name={"stage"}
+                    id={"Stage"}
+                    htmlFor={"Stage"}
+                    defaultOption={"select Stage "}
+                    options={[1, 2, 3, 4]}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.stage}
+                    error={errors.stage}
+                    touched={touched.stage}
+                  />
+                </>
+              ) : (
+                ""
+              )}
+
+              {values.banner_redirect === "external" && (
                 <CustomInput
                   label={"Redirect Link"}
-                  name={"redirect_url"}
-                  id={"redirect_url"}
-                  htmlFor={"redirect_url"}
+                  name={"redirectURL"}
+                  id={"redirectURL"}
+                  htmlFor={"redirectURL"}
                   placeholder={"enter redirect link"}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.redirect_url}
-                  error={errors.redirect_url}
-                  touched={touched.redirect_url}
+                  value={values.redirectURL}
+                  error={errors.redirectURL}
+                  touched={touched.redirectURL}
                 />
               )}
               {values.banner_redirect === "in-app" && (
@@ -283,7 +337,7 @@ function AddNewBanner({
                     }}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.forr}
+                    value={values.forr || values.for}
                     error={errors.forr}
                     touched={touched.forr}
                   />
@@ -295,7 +349,9 @@ function AddNewBanner({
                         placeholder="Search Studio"
                         fetchOptions={fetchUserList}
                         onChange={handelStudioChange}
-                        defaultValue={values?.tempStudioName}
+                        defaultValue={
+                          values?.tempStudioName || values?.entity_id
+                        }
                         style={{ width: "100%", height: "100%" }}
                       />
                       {errors.entity_id && touched.entity_id && (

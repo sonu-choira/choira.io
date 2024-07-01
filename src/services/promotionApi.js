@@ -12,6 +12,11 @@ class promotionApi {
     console.log("Banner detail ===>", response.data);
     return response.data;
   };
+  createDiscount = async (discountData) => {
+    const response = await api.post("/discounts/create", discountData);
+    console.log("discount create  ===>", response.data)
+    return response.data;
+  }
 
   updateDiscount = async (id, discountData) => {
     const response = await api.patch(`discounts/${id}`,
@@ -22,8 +27,8 @@ class promotionApi {
     return response.data;
  
    };
-  updateBanner = async (id, BannerData) => {
-    const response = await api.patch(`/settings/editBanner/${id}`,
+  updateBanner = async (BannerData) => {
+    const response = await api.patch(`/settings/editBanner`,
       BannerData
     );
     const {status} = response.data
@@ -31,11 +36,12 @@ class promotionApi {
     return response.data;
  
    };
-   createDiscount = async (discountData) => {
-    const response = await api.post("/settings/createBanner", discountData);
-    console.log("discount create  ===>", response.data)
+   createBanner = async (bannerData) => {
+    const response = await api.post("/settings/createBanner", bannerData);
+    console.log("Banner create  ===>", response.data)
     return response.data;
   }
+  
 }
 
 export default new promotionApi();

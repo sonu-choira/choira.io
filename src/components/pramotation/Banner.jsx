@@ -11,6 +11,7 @@ import AddNewBanner from "./AddNewBanner";
 import { set } from "react-ga";
 import { RxDotFilled } from "react-icons/rx";
 import { BiSolidPencil } from "react-icons/bi";
+import { Skeleton } from "antd";
 
 function Banner({ setProducts, products }) {
   const [mainBannerData, setMainBannerData] = useState([]);
@@ -211,7 +212,7 @@ function Banner({ setProducts, products }) {
             <br />
             <br />
 
-            {mainBannerData.length > 0 && (
+            {mainBannerData.length > 0 ? (
               <div className={style.bannerMain}>
                 {mainBannerData.map((data, index) => (
                   <div
@@ -283,7 +284,7 @@ function Banner({ setProducts, products }) {
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               setShowAddPage(true);
-                              setPageType("MainBanner");
+                              setPageType("AdBanner");
                               setMainBannerEdit(false);
                               gotoEditPage(data.id);
                               editMode.current = true;
@@ -306,6 +307,8 @@ function Banner({ setProducts, products }) {
                   </div>
                 ))}
               </div>
+            ) : (
+              <Skeleton active />
             )}
             <br />
             <br />
@@ -346,7 +349,7 @@ function Banner({ setProducts, products }) {
             </span>
             <br />
             <br />
-            {exclusiveBannerData.length > 0 && (
+            {exclusiveBannerData.length > 0 ? (
               <div className={style.bannerMain}>
                 {exclusiveBannerData.map((data, index) => (
                   <div
@@ -455,7 +458,7 @@ function Banner({ setProducts, products }) {
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               setShowAddPage(true);
-                              setPageType("MainBanner");
+                              setPageType("ExcBanner");
                               setMainBannerEdit(false);
                               gotoEditPage(data.id);
                               editMode.current = true;
@@ -478,6 +481,8 @@ function Banner({ setProducts, products }) {
                   </div>
                 ))}
               </div>
+            ) : (
+              <Skeleton active />
             )}
             <br />
             <br />
