@@ -102,7 +102,7 @@ function AllteamDetails() {
       //     });
       // }
       teamsApi
-        .getStudioOwners("10", idToUse, pageCount, shortby)
+        .getStudioOwners("5", idToUse, pageCount, shortby)
         .then((response) => {
           console.log(
             `====================> response from team ${response}`,
@@ -118,7 +118,7 @@ function AllteamDetails() {
           console.error("Error fetching studios:", error);
         });
     } else if (teamsPageCount === "t1") {
-      const limit = 64;
+      const limit = 5;
       const active = 1;
       // const type = teamsPageCount;
       if (hasFilter) {

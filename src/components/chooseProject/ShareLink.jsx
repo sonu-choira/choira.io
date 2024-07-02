@@ -21,7 +21,7 @@ export default function ShareLink({
     if (projectDetails != "") {
       const linkNames = links
         .map((link) =>
-          link.length > 15 ? `${link.substring(0, 15)}...` : link
+          link.length > 15 ? `${link?.substring(0, 15)}...` : link
         )
         .join(", ");
 
@@ -111,7 +111,7 @@ export default function ShareLink({
 
   const displayFileName = (fileName) => {
     const truncatedName =
-      fileName.length > 5 ? fileName.substring(0, 5) : fileName;
+      fileName.length > 5 ? fileName?.substring(0, 5) : fileName;
     const fileExtension = fileName.split(".").pop();
     return `${truncatedName}.${fileExtension}`;
   };

@@ -74,11 +74,17 @@ function MusicProduction({
                 currentTableData.map((products, i) => {
                   return (
                     <tr key={i}>
-                      <td style={{ textAlign: "center" }}>#{products._id}</td>
-                      <td>{products.userFullName}</td>
+                      <td title={products._id} style={{ textAlign: "center" }}>
+                        #{products._id.slice(-5)}
+                      </td>
+                      <td title={products.userFullName}>
+                        {products.userFullName?.substring(0, 20)}
+                      </td>
 
                       <td>{products.userPhone}</td>
-                      <td>{products.serviceFullName}</td>
+                      <td title={products.serviceFullName}>
+                        {products.serviceFullName?.substring(0, 20)}...
+                      </td>
                       <td>₹{products.totalPrice}</td>
                       <td className={style.tableActionbtn}>
                         <div>

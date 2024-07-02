@@ -5,6 +5,7 @@ import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import Button from "../../pages/admin/layout/Button";
+import userNotFound from "../../assets/img/userNotFound.jpg";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
@@ -28,6 +29,7 @@ import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../services/appAndmoreApi";
+import moment from "moment";
 
 let PageSize = 10;
 
@@ -330,7 +332,7 @@ function StudioPartners({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "20%" }}>
+                <th style={{ width: "10%" }}>
                   <div className={style.headingContainer}>
                     Date
                     <div
@@ -401,20 +403,38 @@ function StudioPartners({
                 products?.map((products, index) => {
                   return (
                     <tr key={products._id}>
+                      <td>{index + 1 * (pageCount - 1) * 5 + 1}</td>
                       <td
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          height: "100%",
-                        }}
+                        title={products.firstName}
+                        style={{ display: "flex", alignItems: "center" }}
                       >
-                        {index + 1 * (pageCount - 1) * 10 + 1}
+                        <div
+                          className={
+                            products.ownerImage === ""
+                              ? `${style.studioImageNotFound}`
+                              : `${style.studioImage} `
+                          }
+                        >
+                          <img
+                            src={products?.ownerImage || userNotFound}
+                            alt=""
+                            onError={(e) => (e.target.src = userNotFound)}
+                          />
+                        </div>
+                        &nbsp;&nbsp;{products?.firstName?.substring(0, 30)}
                       </td>
-                      <td>{products.firstName}</td>
-                      <td>{products.email}</td>
+                      {/* <td>{products.firstName}</td> */}
+                      <td title={products.email}>
+                        {products?.email?.substring(0, 15)}...
+                      </td>
                       <td>{products.studioName}</td>
-                      <td>{products.creationTimeStamp}</td>
+
+                      <td>
+                        {moment(products.creationTimeStamp).format(
+                          // "DD/MM/YYYY hh:mm:ss a"
+                          "DD/MM/YYYY "
+                        )}
+                      </td>
                       <td className={style.tableActionbtn}>
                         <div
                           style={{
@@ -424,7 +444,7 @@ function StudioPartners({
                         >
                           <GrShare
                             style={{ cursor: "pointer" }}
-                            onClick={() => gotoShowStudioDetaisl(products._id)}
+                            // onClick={() => gotoShowStudioDetaisl(products._id)}
                           />
 
                           <RiDeleteBin5Fill

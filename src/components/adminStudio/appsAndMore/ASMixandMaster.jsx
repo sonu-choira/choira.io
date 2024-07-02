@@ -21,6 +21,7 @@ import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import moment from "moment";
 
 let PageSize = 10;
 
@@ -143,6 +144,7 @@ function ASMixandMaster({
                           alignItems: "center",
                           height: "100%",
                         }}
+                        title={product.fullName}
                       >
                         <div className={style.studioImage} style={{}}>
                           {product.servicePhotos ? (
@@ -157,7 +159,7 @@ function ASMixandMaster({
                             <img src={imageNotFound} alt="" />
                           )}
                         </div>
-                        &nbsp;&nbsp;{product.fullName}
+                        &nbsp;&nbsp;{product?.fullName?.substring(0, 20)}...
                       </td>
                       <td>Starting from ₹{product.price}</td>
                       <td>
@@ -165,7 +167,9 @@ function ASMixandMaster({
                         <br />
                         <small> {product.state}</small>
                       </td>
-                      <td>{product.creationTimeStamp}</td>
+                      <td>
+                        {moment(products.bookingDate).format("DD/MM/YYYY ")}
+                      </td>
 
                       <td className={style.tableActionbtn}>
                         <div>

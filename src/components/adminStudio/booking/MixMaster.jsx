@@ -68,11 +68,17 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
                 currentTableData.map((products) => {
                   return (
                     <tr>
-                      <td style={{ textAlign: "center" }}>#{products._id}</td>
-                      <td>{products.userFullName}</td>
+                      <td style={{ textAlign: "center" }} title={products._id}>
+                        #{products._id.slice(-5)}
+                      </td>
+                      <td title={products.userFullName}>
+                        {products?.userFullName?.substring(0, 20)}
+                      </td>
 
                       <td>{products.userPhone}</td>
-                      <td>{products.serviceFullName}</td>
+                      <td title={products.serviceFullName}>
+                        {products.serviceFullName?.substring(0, 20)}...
+                      </td>
                       <td style={{ textAlign: "start" }}>
                         Starting price from ₹{products.totalPrice} <br />
                       </td>

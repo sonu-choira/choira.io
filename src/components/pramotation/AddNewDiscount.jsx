@@ -11,6 +11,7 @@ import SearchSelectInput from "../../pages/admin/layout/SearchAndSelectInput";
 import { DiscountSchema } from "../../schemas";
 import promotionApi from "../../services/promotionApi";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+import dayjs from "dayjs";
 
 function AddNewDiscount({
   editData,
@@ -33,7 +34,11 @@ function AddNewDiscount({
         .updateDiscount(editData._id, sendDataToApi)
         .then((res) => {
           console.log(res);
-          sucessAlret("Discount Updated Successfully");
+          if (res.status == true) {
+            sucessAlret("Discount Updated Successfully");
+          } else {
+            errorAlert(res.message);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -170,16 +175,17 @@ function AddNewDiscount({
   return (
     <form className={style.addNewDiscountPage} onSubmit={handleSubmit}>
       <div>
-        <CustomInput
-          type="text"
-          placeholder="Enter Discount Name"
-          label="Discount Name"
-          name="discountName"
-          value={values.discountName}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={errors.discountName}
-          touched={touched.discountName}
+        <CustomSelect
+          label={"Discount Type"}
+          id={"discountType"}
+          htmlFor={"discountType"}
+          options={option}
+          defaultOption={"Select Discount Type"}
+          value={values.discountType}
+          disabled={editMode.current}
+          onChange={(e) => setFieldValue("discountType", e.target.value)}
+          error={errors.discountType}
+          touched={touched.discountType}
         />
         <CustomInput
           type="text"
@@ -228,7 +234,11 @@ function AddNewDiscount({
             id={"discountDate"}
             htmlFor={"discountDate"}
             name={"discountDate"}
-            value={values.discountDate}
+            value={[
+              dayjs(values?.startDate?.substring(0, 10), "YYYY/MM/DD"),
+              dayjs(values?.endDate?.substring(0, 10), "YYYY/MM/DD"),
+            ]}
+            // value={values.discountDate}
             onChange={handleDateChange}
           />
         )}
@@ -240,18 +250,18 @@ function AddNewDiscount({
         )}
       </div>
       <div>
-        <CustomSelect
-          label={"Discount Type"}
-          id={"discountType"}
-          htmlFor={"discountType"}
-          options={option}
-          defaultOption={"Select Discount Type"}
-          value={values.discountType}
-          disabled={editMode.current}
-          onChange={(e) => setFieldValue("discountType", e.target.value)}
-          error={errors.discountType}
-          touched={touched.discountType}
+        <CustomInput
+          type="text"
+          placeholder="Enter Discount Name"
+          label="Discount Name"
+          name="discountName"
+          value={values.discountName}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.discountName}
+          touched={touched.discountName}
         />
+
         <CustomInput
           type="text"
           placeholder="Enter Max. Cap Amount"

@@ -18,6 +18,7 @@ import bookingPageApi from "../../../services/bookingPageApi";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
+import moment from "moment";
 let PageSize = 10;
 
 function StudioBookingDetail({
@@ -104,14 +105,21 @@ function StudioBookingDetail({
                 currentTableData.map((products, i) => {
                   return (
                     <tr key={i}>
-                      <td>{products.userName}</td>
+                      <td title={products.userName}>
+                        {products?.userName?.substring(0, 20)}
+                      </td>
                       <td style={{ textAlign: "center" }}>
                         {products.userPhone}
                       </td>
 
-                      <td>{products.studioName}</td>
+                      <td title={products.studioName}>
+                        {products?.studioName?.substring(0, 20)}
+                      </td>
                       <td>{products.planId}</td>
-                      <td>{products.bookingDate}</td>
+                      <td>
+                        {" "}
+                        {moment(products.bookingDate).format("DD/MM/YYYY ")}
+                      </td>
                       <td>₹{products.totalPrice}</td>
                       <td className={style.tableActionbtn}>
                         {/* <div>
