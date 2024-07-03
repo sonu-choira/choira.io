@@ -144,15 +144,15 @@ function AddMultipleRooms({
                       fontSize: "1vmax",
                     }}
                   >
-                    PricePerHour ₹
+                    BasePrice ₹
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
                     type="text"
                     placeholder=""
-                    value={team.pricePerHour}
+                    value={team.basePrice}
                     onChange={(event) =>
-                      handleInputChange(event, index, "pricePerHour")
+                      handleInputChange(event, index, "basePrice")
                     }
                   />
                 </div>
@@ -227,15 +227,15 @@ function AddMultipleRooms({
                       fontSize: "1vmax",
                     }}
                   >
-                    pricePerHour ₹
+                    Base Price ₹
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
                     type="text"
                     placeholder=""
-                    value={team.pricePerHour}
+                    value={team.basePrice}
                     onChange={(event) =>
-                      handleInputChange(event, index, "pricePerHour")
+                      handleInputChange(event, index, "basePrice")
                     }
                   />
                 </div>

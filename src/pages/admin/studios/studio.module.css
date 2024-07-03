@@ -863,7 +863,7 @@ td {
   justify-content: space-around;
   /* border: 2px solid red; */
   height: 110% !important;
-  border-radius: 15px;
+  /* border-radius: 15px; */
 
   /* min-height: 100%; */
   /* height: fit-content; */

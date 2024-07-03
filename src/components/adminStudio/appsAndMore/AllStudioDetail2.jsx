@@ -401,7 +401,7 @@ function AllStudioDetail2({
                         &nbsp;&nbsp;{products.fullName.substring(0, 20)}...
                       </td>
                       <td style={{ padding: "0px 8rem 0px 0px" }}>
-                        ₹{products?.roomsDetails[0]?.pricePerHour}
+                        ₹{products?.roomsDetails?.[0]?.pricePerHour || "N/A"}
                         <br />
                         <small>per hour</small>
                       </td>

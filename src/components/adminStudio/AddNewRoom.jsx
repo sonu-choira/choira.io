@@ -21,6 +21,7 @@ import { TimePicker } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
+import CustomInput from "../../pages/admin/layout/CustomInput";
 
 function AddNewRoom({
   setshowRoomsDetails,
@@ -70,17 +71,17 @@ function AddNewRoom({
 
   useEffect(() => {
     let dis = currentRoomsData.discountPercentage;
-    let price = currentRoomsData.pricePerHour;
+    let price = currentRoomsData.basePrice;
 
     let cal = (price, dis) => {
       let discountedAmount = (price * dis) / 100;
-      let calculatedBasePrice = price + discountedAmount; // Renamed to avoid conflict
+      let calculatedBasePrice = price - discountedAmount; // Renamed to avoid conflict
       return calculatedBasePrice;
     };
-    currentRoomsData.basePrice = cal(price, dis);
+    currentRoomsData.pricePerHour = cal(price, dis);
 
     // Update basePrice in state or do something with it here
-  }, [currentRoomsData.pricePerHour, currentRoomsData.discountPercentage]);
+  }, [currentRoomsData.basePrice, currentRoomsData.discountPercentage]);
 
   useEffect(() => {
     setrooms((prevRooms) => {
@@ -303,13 +304,13 @@ function AddNewRoom({
       return updatedRooms;
     });
   };
-  const handlePricePerHourChange = (event) => {
+  const handleBasePriceChange = (event) => {
     const { value } = event.target;
     setrooms((prevRooms) => {
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
         ...updatedRooms[indexofrooms],
-        pricePerHour: parseFloat(value),
+        basePrice: parseFloat(value),
       };
       console.log(
         "updatedRooms--------------------------------------",
@@ -358,66 +359,72 @@ function AddNewRoom({
       <div className={style.addNewStudioTitle}>Add new room</div>
       <div className={style.addNewRoomPage}>
         <div
-          style={{
-            position: showMode ? "relative" : "",
-            overflow: "hidden",
-          }}
+          style={{ position: showMode ? "relative" : "", overflow: "hidden" }}
         >
           {showMode ? <p className={style.showmode}></p> : ""}
 
           <div>
-            <div className={style.addNewStudioinputBox}>
-              <label htmlFor="RoomName">Room Name</label>
-              <input
-                type="text"
-                id="RoomName"
-                placeholder="Enter Room Name"
-                value={currentRoomsData?.roomName}
-                onChange={handleRoomNameChange}
-              />
-            </div>
+            <CustomInput
+              label="Room Name"
+              htmlFor="RoomName"
+              type="text"
+              id="RoomName"
+              placeholder="Enter Room Name"
+              value={currentRoomsData?.roomName}
+              onChange={handleRoomNameChange}
+            />
+
+            <CustomInput
+              label="Room Area"
+              htmlFor="RoomArea"
+              type="number"
+              id="RoomArea"
+              placeholder="Enter Approx. Area"
+              value={currentRoomsData?.area}
+              onChange={handleRoomAreaChange}
+            />
+
+            <CustomInput
+              label="Base Price"
+              htmlFor="price"
+              type="number"
+              id="price"
+              placeholder="Enter Price Per Hour"
+              value={currentRoomsData?.basePrice}
+              onChange={handleBasePriceChange}
+            />
+
+            <CustomInput
+              label="Discount"
+              htmlFor="Discount"
+              type="number"
+              id="Discount"
+              placeholder="Enter Discount"
+              value={currentRoomsData?.discountPercentage}
+              min={0}
+              max={100}
+              onChange={handleDiscountChange}
+            />
+
+            <CustomInput
+              label="Price Per Hour"
+              htmlFor="pricePerHour"
+              type="number"
+              id="pricePerHour"
+              placeholder="Enter Price Per Hour"
+              value={currentRoomsData?.pricePerHour}
+              readOnly
+              disabled
+            />
 
             <div className={style.addNewStudioinputBox}>
-              <label htmlFor="RoomArea">Room Area</label>
-              <input
-                type="number"
-                id="RoomArea"
-                placeholder="Enter Approx. Area"
-                value={currentRoomsData?.area}
-                onChange={handleRoomAreaChange}
-              />
-            </div>
-            <div className={style.addNewStudioinputBox}>
-              <label htmlFor="price">Price Per Hour</label>
-              <input
-                type="number"
-                id="price"
-                placeholder="Enter Price Per Hour"
-                value={currentRoomsData?.pricePerHour}
-                onChange={handlePricePerHourChange}
-              />
-            </div>
-            <div className={style.addNewStudioinputBox}>
-              <label htmlFor="Discount">Discount</label>
-              <input
-                type="number"
-                id="Discount"
-                placeholder="Enter Discount"
-                value={currentRoomsData?.discountPercentage}
-                min={0}
-                max={100}
-                onChange={handleDiscountChange}
-              />
-            </div>
-            <div className={style.addNewStudioinputBox}>
-              <label htmlFor="Dates">Booking Days </label>
+              <label htmlFor="Dates">Booking Days</label>
               <Select
                 id="Dates"
                 mode="multiple"
-                placeholder="Select Bookig Dates"
+                placeholder="Select Booking Dates"
                 value={selectedDate}
                 onChange={setSelectedDate}
-                // style={customStyles}
                 options={filteredDates?.map((item, index) => ({
                   value: item,
                   label: item,
@@ -428,42 +435,25 @@ function AddNewRoom({
 
             <div className={style.addNewStudioinputBox}>
               <label>General Start & End Time</label>
-
               <TimePicker.RangePicker
                 format={format}
                 onChange={handelGeneralTime}
                 value={[
-                  dayjs(generalTime.startTime, format),
-                  dayjs(generalTime.endTime, format),
+                  dayjs(generalTime.startTime || "00:00", format),
+                  dayjs(generalTime.endTime || "00:00", format),
                 ]}
                 style={{ height: "100%", outline: "none" }}
               />
             </div>
           </div>
-          <div
-          //  style={{ overflow: "visible" }}
-          >
+
+          <div>
             <DragAndDropImageDiv
               images={images}
               setImages={setImages}
               isEditMode={isEditMode}
             />
-            {/* <div className={style.addNewStudioinputBox}>
-              <label htmlFor="roomAmenities">Amenities </label>
 
-              <Select
-                id="roomAmenities"
-                mode="multiple"
-                placeholder="Select Amenites"
-                value={selectedAmenities}
-                onChange={setSelectedAmenities}
-                // style={customStyles}
-                options={filteredAmenities?.map((item) => ({
-                  value: item,
-                  label: item,
-                }))}
-              />
-            </div> */}
             <MultipleSelect
               selectedItems={selectedAmenities}
               setSelectedItems={setSelectedAmenities}
@@ -479,7 +469,7 @@ function AddNewRoom({
                   type="text"
                   id="RoomDetails"
                   placeholder="Enter Room Details"
-                  value={""} // Empty value
+                  value={""}
                   onChange={(e) => handleRoomDetailsChange(e, 0)}
                 />
                 {details.length > 1 && (
@@ -493,31 +483,29 @@ function AddNewRoom({
               </div>
             ) : (
               details.map((detail, index) => (
-                <>
-                  <div
-                    className={style.addNewStudioinputBox2}
-                    key={index}
-                    style={{ position: "relative" }}
-                  >
-                    <label htmlFor="RoomDetails">Room Details</label>
-                    <textarea
-                      type="text"
-                      id="RoomDetails"
-                      placeholder="Enter Room Details"
-                      value={detail}
-                      onChange={(e) => handleRoomDetailsChange(e, index)}
-                    />
+                <div
+                  className={style.addNewStudioinputBox2}
+                  key={index}
+                  style={{ position: "relative" }}
+                >
+                  <label htmlFor="RoomDetails">Room Details</label>
+                  <textarea
+                    type="text"
+                    id="RoomDetails"
+                    placeholder="Enter Room Details"
+                    value={detail}
+                    onChange={(e) => handleRoomDetailsChange(e, index)}
+                  />
 
-                    {details.length > 1 && (
-                      <span
-                        className={style.cancelDetailsUpload}
-                        onClick={() => handleCancelDetails(index)}
-                      >
-                        <img src={cross} alt="" />
-                      </span>
-                    )}
-                  </div>
-                </>
+                  {details.length > 1 && (
+                    <span
+                      className={style.cancelDetailsUpload}
+                      onClick={() => handleCancelDetails(index)}
+                    >
+                      <img src={cross} alt="" />
+                    </span>
+                  )}
+                </div>
               ))
             )}
             {details.length < 3 && (
@@ -533,45 +521,43 @@ function AddNewRoom({
               Booking start & End Time
             </label>
             {bookingTimes.map((bt, index) => (
-              <>
-                <div
-                  key={index}
-                  className={style.addNewStudioinputBox}
+              <div
+                key={index}
+                className={style.addNewStudioinputBox}
+                style={{
+                  position: "relative",
+                  maxHeight: "6vh",
+                  minHeight: "6vh",
+                }}
+              >
+                <TimePicker.RangePicker
+                  format={format}
+                  onChange={(time, timeString) =>
+                    handelbookingTime(time, timeString, index)
+                  }
+                  value={
+                    bt.startTime === ""
+                      ? [dayjs("00:00", "HH:mm"), dayjs("00:00", "HH:mm")]
+                      : [
+                          dayjs(bt.startTime || "00:00", "HH:mm"),
+                          dayjs(bt.endTime || "00:00", "HH:mm"),
+                        ]
+                  }
                   style={{
-                    position: "relative",
-                    maxHeight: "6vh",
-                    minHeight: "6vh",
+                    height: "100%",
+                    outline: "none",
+                    justifySelf: "flex-end",
                   }}
-                >
-                  <TimePicker.RangePicker
-                    format={format}
-                    onChange={(time, timeString) =>
-                      handelbookingTime(time, timeString, index)
-                    }
-                    value={
-                      bt.startTime === ""
-                        ? [dayjs("00:00", "HH:mm"), dayjs("00:00", "HH:mm")]
-                        : [
-                            dayjs(bt.startTime, "HH:mm"),
-                            dayjs(bt.endTime, "HH:mm"),
-                          ]
-                    }
-                    style={{
-                      height: "100%",
-                      outline: "none",
-                      justifySelf: "flex-end",
-                    }}
-                  />
-                  {bookingTimes.length > 1 && (
-                    <span
-                      className={style.cancelImageUpload}
-                      onClick={() => handleCancelBooking(index)}
-                    >
-                      <img src={cross} alt="" />
-                    </span>
-                  )}
-                </div>
-              </>
+                />
+                {bookingTimes.length > 1 && (
+                  <span
+                    className={style.cancelImageUpload}
+                    onClick={() => handleCancelBooking(index)}
+                  >
+                    <img src={cross} alt="" />
+                  </span>
+                )}
+              </div>
             ))}
             <span
               className={style.addTeamDetailbtn}
@@ -582,6 +568,7 @@ function AddNewRoom({
           </div>
         </div>
       </div>
+
       <StudioFooter
         backOnclick={() => {
           setshowRoomsDetails(false);

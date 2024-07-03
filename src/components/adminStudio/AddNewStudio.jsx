@@ -28,6 +28,8 @@ import appAndmoreApi from "../../services/appAndmoreApi";
 import Swal from "sweetalert2";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 import { errorAlert } from "../../pages/admin/layout/Alert";
+import { useFormik } from "formik";
+import CustomInput from "../../pages/admin/layout/CustomInput";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -121,6 +123,54 @@ function AddNewStudio({ setSelectTab }) {
     teamDetails: [],
     totalRooms: 0,
     _id: "",
+  });
+
+  let initialStudioData = {
+    aboutUs: {},
+    address: "",
+    amenities: [],
+    area: 0,
+    availabilities: [],
+    city: "",
+    country: "",
+    clientPhotos: [],
+    creationTimeStamp: "",
+    featuredReviews: "",
+    fullName: "",
+    isActive: "",
+    latitude: "",
+    location: { coordinates: [], type: "" },
+    longitude: "",
+    mapLink: "",
+    maxGuests: "",
+    overallAvgRating: "",
+    pincode: "",
+    pricePerHour: 0,
+    reviews: {},
+    roomsDetails: [],
+    state: "",
+    studioPhotos: [],
+    teamDetails: [],
+    totalRooms: 0,
+    _id: "",
+  };
+
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+    setValues,
+  } = useFormik({
+    initialValues: initialStudioData,
+    onSubmit: (values) => {
+      console.log(values);
+
+      // Handle form submission here
+    },
   });
 
   useEffect(() => {
@@ -262,6 +312,7 @@ function AddNewStudio({ setSelectTab }) {
           ...room,
           area: room.area.toString(),
           pricePerHour: parseInt(room.pricePerHour, 10),
+          basePrice: parseInt(room.basePrice, 10),
 
           discountPercentage: parseInt(room.discountPercentage, 10),
         })),
@@ -454,124 +505,98 @@ function AddNewStudio({ setSelectTab }) {
                   {showMode ? <p className={style.showmode}></p> : ""}
 
                   <div>
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="studioName">Studio Name</label>
-                      <input
-                        required
-                        type="text"
-                        id="studioName"
-                        placeholder="Enter Studio Area"
-                        name="studioName"
-                        value={studioDetails?.fullName}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            fullName: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
+                    <CustomInput
+                      label="Studio Name"
+                      htmlFor="studioName"
+                      type="text"
+                      id="studioName"
+                      placeholder="Enter Studio Area"
+                      name="studioName"
+                      value={studioDetails?.fullName}
+                      onChange={(e) =>
+                        setStudioDetails({
+                          ...studioDetails,
+                          fullName: e.target.value,
+                        })
+                      }
+                    />
 
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="area">Total Area</label>
-                      <input
-                        required
-                        type="number"
-                        id="area"
-                        placeholder="Enter Approx. Area"
-                        name="area"
-                        value={studioDetails?.area}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            area: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
+                    <CustomInput
+                      label="Total Area"
+                      htmlFor="area"
+                      type="number"
+                      id="area"
+                      placeholder="Enter Approx. Area"
+                      name="area"
+                      value={studioDetails?.area}
+                      onChange={(e) =>
+                        setStudioDetails({
+                          ...studioDetails,
+                          area: e.target.value,
+                        })
+                      }
+                    />
 
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="pincode">Studio Pincode</label>
-                      <input
-                        required
-                        type="number"
-                        id="pincode"
-                        name="pincode"
-                        placeholder="Enter Pincode"
-                        value={studioDetails?.pincode}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            pincode: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
+                    <CustomInput
+                      label="Studio Pincode"
+                      htmlFor="pincode"
+                      type="number"
+                      id="pincode"
+                      placeholder="Enter Pincode"
+                      name="pincode"
+                      value={studioDetails?.pincode}
+                      onChange={(e) =>
+                        setStudioDetails({
+                          ...studioDetails,
+                          pincode: e.target.value,
+                        })
+                      }
+                    />
 
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="addcity">Studio city</label>
-                      <input
-                        required
-                        list="city"
-                        id="addcity"
-                        placeholder="Select city Name"
-                        name="addcity"
-                        value={studioDetails?.city}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            city: e.target.value,
-                          })
-                        }
-                      />
-                      <datalist id="city">
-                        <option value="Mumbai">Mumbai</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Bombay">Bombay</option>
-                      </datalist>
-                    </div>
-                    {/* <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="Amenities">Amenities </label>
-
-                      <Select
-                        required
-                        id="Amenities"
-                        mode="multiple"
-                        className=""
-                        placeholder="Select one or more Amenities"
-                        value={selectedStudioAmenities}
-                        onChange={setSelectedStudioAmenities}
-                        // style={customStyles}
-                        options={filteredAmenities?.map((item) => ({
-                          value: item,
-                          label: item,
-                        }))}
-                      />
-                    </div> */}
+                    <CustomInput
+                      label="Studio City"
+                      htmlFor="addcity"
+                      type="text"
+                      list="city"
+                      id="addcity"
+                      placeholder="Select city Name"
+                      name="addcity"
+                      value={studioDetails?.city}
+                      onChange={(e) =>
+                        setStudioDetails({
+                          ...studioDetails,
+                          city: e.target.value,
+                        })
+                      }
+                    />
+                    <datalist id="city">
+                      <option value="Mumbai">Mumbai</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Bombay">Bombay</option>
+                    </datalist>
 
                     <MultipleSelect
                       selectedItems={selectedStudioAmenities}
                       setSelectedItems={setSelectedStudioAmenities}
                     />
 
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="studioName">Studio MapLink</label>
-                      <input
-                        required
-                        type="text"
-                        id="studioName"
-                        placeholder="Enter Studio MapLink"
-                        name="studioName"
-                        value={studioDetails?.mapLink}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            mapLink: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
+                    <CustomInput
+                      label="Studio MapLink"
+                      htmlFor="mapLink"
+                      type="text"
+                      id="mapLink"
+                      placeholder="Enter Studio MapLink"
+                      name="mapLink"
+                      value={studioDetails?.mapLink}
+                      onChange={(e) =>
+                        setStudioDetails({
+                          ...studioDetails,
+                          mapLink: e.target.value,
+                        })
+                      }
+                    />
                   </div>
+
                   <div>
                     <DragAndDropImageDiv
                       images={images}
@@ -584,7 +609,6 @@ function AddNewStudio({ setSelectTab }) {
                       style={{ paddingTop: "2%" }}
                     >
                       <label htmlFor="guest">Max Guests</label>
-
                       <select
                         required
                         id="guest"
@@ -610,33 +634,32 @@ function AddNewStudio({ setSelectTab }) {
                       </select>
                     </div>
 
+                    <CustomInput
+                      label="Select State"
+                      htmlFor="state"
+                      type="text"
+                      list="state"
+                      id="state"
+                      placeholder="Select state Name"
+                      name="state"
+                      value={studioDetails?.state}
+                      onChange={(e) =>
+                        setStudioDetails({
+                          ...studioDetails,
+                          state: e.target.value,
+                        })
+                      }
+                    />
+                    <datalist id="state">
+                      <option value="Mumbai">Mumbai</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Bombay">Bombay</option>
+                    </datalist>
+
                     <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="addstate">Select State</label>
-                      <input
-                        required
-                        list="state"
-                        id="addstate"
-                        placeholder="Select state Name"
-                        name="state"
-                        value={studioDetails?.state}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            state: e.target.value,
-                          })
-                        }
-                      />
-                      <datalist id="state">
-                        <option value="Mumbai">Mumbai</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Bombay">Bombay</option>
-                      </datalist>
-                    </div>
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="addstate">Select Country</label>
+                      <label htmlFor="country">Select Country</label>
                       <select
-                        name=""
-                        id=""
+                        id="country"
                         value={studioDetails?.country}
                         onChange={(e) =>
                           setStudioDetails({
@@ -653,26 +676,31 @@ function AddNewStudio({ setSelectTab }) {
                         <option value="JP">Japan</option>
                       </select>
                     </div>
-                    <div className={style.addNewStudioinputBox}>
-                      <label htmlFor="address">Studio Address</label>
-                      <input
-                        required
-                        type="text"
-                        id="address"
-                        placeholder="Enter Studio Area"
-                        name="studioName"
-                        value={studioDetails?.address}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            address: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
+
+                    <CustomInput
+                      label="Studio Address"
+                      htmlFor="address"
+                      type="text"
+                      id="address"
+                      placeholder="Enter Studio Area"
+                      name="address"
+                      value={studioDetails?.address}
+                      onChange={(e) =>
+                        setStudioDetails({
+                          ...studioDetails,
+                          address: e.target.value,
+                        })
+                      }
+                    />
                   </div>
                 </div>
-                <div style={{ position: showMode ? "relative" : "" }}>
+
+                <div
+                  style={{
+                    position: showMode ? "relative" : "",
+                    overflow: "hidden",
+                  }}
+                >
                   {showMode ? <p className={style.showmode}></p> : ""}
 
                   <div>
@@ -689,42 +717,6 @@ function AddNewStudio({ setSelectTab }) {
                             aboutUs: {
                               ...studioDetails?.aboutUs,
                               aboutUs: e.target.value,
-                            },
-                          })
-                        }
-                      />
-                    </div>
-                    <div className={style.addNewStudioinputBox2}>
-                      <label htmlFor="studioService">Studio Services</label>
-                      <textarea
-                        type="text"
-                        id="studioService"
-                        placeholder="Enter Studio Services"
-                        value={studioDetails?.aboutUs?.services}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            aboutUs: {
-                              ...studioDetails?.aboutUs,
-                              services: e.target.value,
-                            },
-                          })
-                        }
-                      />
-                    </div>
-                    <div className={style.addNewStudioinputBox2}>
-                      <label htmlFor="infrastructure">Infrastructure</label>
-                      <textarea
-                        type="text"
-                        id="infrastructure"
-                        placeholder="Enter Approx. Area"
-                        value={studioDetails?.aboutUs?.infrastructure}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            aboutUs: {
-                              ...studioDetails?.aboutUs,
-                              infrastructure: e.target.value,
                             },
                           })
                         }
@@ -758,7 +750,6 @@ function AddNewStudio({ setSelectTab }) {
                 <button style={{ display: "none" }} ref={submitButtonRef}>
                   submit
                 </button>
-                {/* <p className={style.showmode}></p> */}
               </form>
               <StudioFooter
                 setSelectTab={setSelectTab}
