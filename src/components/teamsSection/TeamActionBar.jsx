@@ -81,11 +81,11 @@ function TeamsActionBar({
               style={{
                 borderLeft: "none",
                 backgroundColor: teamsPageCount === "t1" ? "#ffc701" : "",
-                // backgroundColor: "#ADB5BD",
-                // cursor: "not-allowed",
+                backgroundColor: "#ADB5BD",
+                cursor: "not-allowed",
               }}
               onClick={() => {
-                setTeamsPageCount("t1");
+                // setTeamsPageCount("t1");
                 gotoARM();
               }}
             >

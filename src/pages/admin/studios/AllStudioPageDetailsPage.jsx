@@ -53,31 +53,26 @@ let sendFilterDataToapi = {
 };
 
 function AllStudioPageDetailsPage() {
-  const [bookingPageCount, setBookingPageCount] = useState("c1");
+  const [bookingPageCount, setBookingPageCount] = useState("c0");
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
 
-  let { page: paramData } = useParams();
-  console.log("paramData", paramData);
-  const location = useLocation();
+  // let { page: paramData } = useParams();
+  // console.log("paramData", paramData);
+  // const location = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    if (paramData == "studio" || location.pathname.includes("/studio")) {
+    if (pathname.includes("/Apps&More/studio")) {
       setBookingPageCount("c1");
-    } else if (
-      paramData == "musicproduction" ||
-      location.pathname.includes("/musicproduction")
-    ) {
+    } else if (pathname.includes("/Apps&More/musicproduction")) {
       setBookingPageCount("c2");
-    } else if (
-      paramData == "mixmaster" ||
-      location.pathname.includes("/mixmaster")
-    ) {
+    } else if (pathname.includes("/Apps&More/mixmaster")) {
       setBookingPageCount("c3");
     }
-  }, [paramData]);
+  }, [pathname, bookingPageCount]);
 
   const navigate = useNavigate();
   const gotoSignin = () => {

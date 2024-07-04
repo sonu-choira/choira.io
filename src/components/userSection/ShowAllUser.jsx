@@ -246,7 +246,7 @@ function ShowAllUser() {
                   <tr>
                     <th style={{ width: "8%" }}>
                       <div className={style.headingContainer}>
-                        S.No.
+                        Sr.No.
                         <div
                           className={style.filterBox}
                           onClick={handleSortBySrNo}
@@ -307,7 +307,7 @@ function ShowAllUser() {
                         </div>
                       </div>
                     </th>
-                    <th style={{ width: "10%" }}>
+                    <th style={{ width: "15%" }}>
                       <div className={style.headingContainer}>
                         Created on
                         <div
@@ -380,8 +380,8 @@ function ShowAllUser() {
                         <td>{product.phone}</td>
                         <td>{product.email}</td>
                         <td>
-                          {moment(products.creationTimeStamp).format(
-                            "DD/MM/YYYY hh:mm:ss a"
+                          {moment(product.creationTimeStamp).format(
+                            "Do MMM  YY, hh:mm a"
                           )}
                         </td>
                         <td className={style.tableActionbtn}>

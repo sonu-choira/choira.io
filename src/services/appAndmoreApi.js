@@ -23,7 +23,7 @@ class Appapi{
         params: {
             limit: limit,
             serviceType: Type,
-            active: active,
+            // active: active,
             page:pageCount,
         }
     });
@@ -169,8 +169,35 @@ class Appapi{
         console.log("res ===>", response.data)
         return response.data;
        };
+       updateStudioStatus = async (studioId) => {
+        const response = await api.patch(`/studios/studioId/active`,{
+         
+            studioId: studioId,
+         
+        }
+        
+       
+        );
+        const {status} = response.data
+        console.log("postdata ===>", response.data)
+        return response.data;
+     
+       };
 
-
+       updateServiceStatus = async (studioId,isActive) => {
+        const response = await api.put(`/services/update/${studioId}`,{
+         
+           isActive,
+         
+        }
+        
+       
+        );
+        const {status} = response.data
+        console.log("postdata ===>", response.data)
+        return response.data;
+     
+       };
 
 
 }

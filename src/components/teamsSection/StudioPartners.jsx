@@ -28,6 +28,7 @@ import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../services/appAndmoreApi";
+import moment from "moment";
 
 let PageSize = 10;
 
@@ -414,7 +415,12 @@ function StudioPartners({
                       <td>{products.firstName}</td>
                       <td>{products.email}</td>
                       <td>{products.studioName}</td>
-                      <td>{products.creationTimeStamp}</td>
+                      <td>
+                        {moment(products.creationTimeStamp).format(
+                          // "DD/MM/YYYY hh:mm:ss a"
+                          "Do MMM  YY, hh:mm a "
+                        )}
+                      </td>
                       <td className={style.tableActionbtn}>
                         <div
                           style={{

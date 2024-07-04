@@ -342,7 +342,7 @@ function UserServiceBooking({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "20%" }}>
+                <th style={{ width: "10%" }}>
                   <div className={style.headingContainer}>
                     Price
                     <div
@@ -423,7 +423,7 @@ function UserServiceBooking({
                       <td>{products?.package?.name}</td>
                       <td>
                         {moment(products.bookingDate).format(
-                          "DD/MM/YYYY hh:mm:ss a"
+                          "Do MMM  YY, hh:mm a"
                         )}
                       </td>
                       <td>{products.totalPrice}</td>

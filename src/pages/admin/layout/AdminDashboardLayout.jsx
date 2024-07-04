@@ -46,8 +46,14 @@ function AdminDashboardLayout() {
         <WebDashboard2 tabCount={tabCount} setTabCount={setTabCount} />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
-            <div>
-              <input type="text" placeholder="Search" />
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="Search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />

@@ -1,12 +1,24 @@
 import React from "react";
 import "../layout/layout.css";
+import LoaderUpdating from "./LoaderUpdating";
 
-function Switch({ status }) {
+function Switch({ status, onClick, isloading }) {
   return (
     <>
       <label className="switch">
-        <input type="checkbox" checked={status} readOnly />
-        <span className="slider"></span>
+        {isloading ? (
+          <LoaderUpdating />
+        ) : (
+          <>
+            <input
+              type="checkbox"
+              checked={status}
+              readOnly
+              onClick={onClick}
+            />
+            <span className="slider"></span>
+          </>
+        )}
       </label>
     </>
   );

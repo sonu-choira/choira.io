@@ -433,8 +433,8 @@ function AddNewRoom({
                 format={format}
                 onChange={handelGeneralTime}
                 value={[
-                  dayjs(generalTime.startTime, format),
-                  dayjs(generalTime.endTime, format),
+                  dayjs(generalTime.startTime || "00:00", format),
+                  dayjs(generalTime.endTime || "00:00", format),
                 ]}
                 style={{ height: "100%", outline: "none" }}
               />
@@ -552,8 +552,8 @@ function AddNewRoom({
                       bt.startTime === ""
                         ? [dayjs("00:00", "HH:mm"), dayjs("00:00", "HH:mm")]
                         : [
-                            dayjs(bt.startTime, "HH:mm"),
-                            dayjs(bt.endTime, "HH:mm"),
+                            dayjs(bt.startTime || "00:00", "HH:mm"),
+                            dayjs(bt.endTime || "00:00", "HH:mm"),
                           ]
                     }
                     style={{
