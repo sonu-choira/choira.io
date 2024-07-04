@@ -168,7 +168,9 @@ function ASMixandMaster({
                         <small> {product.state}</small>
                       </td>
                       <td>
-                        {moment(products.bookingDate).format("DD/MM/YYYY ")}
+                        {moment(products.bookingDate).format(
+                          "Do MMM  YY, hh:mm a "
+                        )}
                       </td>
 
                       <td className={style.tableActionbtn}>

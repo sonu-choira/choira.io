@@ -309,7 +309,7 @@ function ShowAllUser() {
                         </div>
                       </div>
                     </th>
-                    <th style={{ width: "10%" }}>
+                    <th style={{ width: "15%" }}>
                       <div className={style.headingContainer}>
                         Created on
                         <div
@@ -394,9 +394,9 @@ function ShowAllUser() {
                           {product?.email.substring(0, 30)}
                         </td>
                         <td>
-                          {moment(products.creationTimeStamp).format(
-                            "DD/MM/YYYY "
-                            // "DD/MM/YYYY hh:mm:ss a"
+                          {moment(product.creationTimeStamp).format(
+                            // "DD/MM/YYYY "
+                            " Do MMM  YY, hh:mm a"
                           )}
                         </td>
                         <td style={{ width: "10%" }}>

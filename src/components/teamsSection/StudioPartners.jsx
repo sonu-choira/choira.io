@@ -332,7 +332,7 @@ function StudioPartners({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "10%" }}>
+                <th style={{ width: "15%" }}>
                   <div className={style.headingContainer}>
                     Date
                     <div
@@ -432,7 +432,7 @@ function StudioPartners({
                       <td>
                         {moment(products.creationTimeStamp).format(
                           // "DD/MM/YYYY hh:mm:ss a"
-                          "DD/MM/YYYY "
+                          "Do MMM  YY, hh:mm a "
                         )}
                       </td>
                       <td className={style.tableActionbtn}>

@@ -428,7 +428,7 @@ function UserBookingDetails({
                       <td>{products?.no_of_hours} Hour</td>
                       <td>
                         {moment(products.bookingDate).format(
-                          "DD/MM/YYYY hh:mm:ss a"
+                          "Do MMM  YY, hh:mm a"
                         )}
                       </td>
                       <td>

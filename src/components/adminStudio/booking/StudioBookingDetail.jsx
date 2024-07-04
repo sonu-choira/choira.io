@@ -89,11 +89,11 @@ function StudioBookingDetail({
             <thead className={style.studiotabelHead}>
               <tr>
                 <th>User Name</th>
-                <th>Mobile No.</th>
+                <th style={{ width: "10%" }}>Mobile No.</th>
 
-                <th>studio Name</th>
-                <th>No. of hours</th>
-                <th>Date</th>
+                <th style={{ width: "10%" }}>studio Name</th>
+                <th style={{ width: "8%" }}>No. of hours</th>
+                <th style={{ width: "15%" }}>Date</th>
                 <th style={{ width: "10%" }}>Total Price </th>
                 <th style={{ width: "10%" }}>Project Status</th>
               </tr>
@@ -118,7 +118,9 @@ function StudioBookingDetail({
                       <td>{products.planId}</td>
                       <td>
                         {" "}
-                        {moment(products.bookingDate).format("DD/MM/YYYY ")}
+                        {moment(products.bookingDate).format(
+                          "Do MMM  YY, hh:mm a "
+                        )}
                       </td>
                       <td>₹{products.totalPrice}</td>
                       <td className={style.tableActionbtn}>

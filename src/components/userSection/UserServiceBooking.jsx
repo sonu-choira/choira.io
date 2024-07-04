@@ -423,7 +423,7 @@ function UserServiceBooking({
                       <td>{products?.package?.name}</td>
                       <td>
                         {moment(products.bookingDate).format(
-                          "DD/MM/YYYY hh:mm:ss a"
+                          "Do MMM  YY, hh:mm a"
                         )}
                       </td>
                       <td>{products.totalPrice}</td>
