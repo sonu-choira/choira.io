@@ -20,12 +20,12 @@ class AuthService {
         }
     };
 
-    login = async (phoneNumber='9876543210', userType='NUMBER', role="user") => {
+    login = async (phoneNumber='9876543210', userType='NUMBER') => {
 
-        const response = await axios.post('/users/login-otp', {
+        const response = await axios.post('/admins/login', {
             phoneNumber,
             userType,
-            role
+            
         });
 
         const userData = response.data;
@@ -43,6 +43,21 @@ class AuthService {
     console.log("res ===>", status)
     return status;
     };
+
+    verifyOtp = async (phoneNumber, otp,role = "admin") => {
+        const response = await axios.get('/users/verify-otp', {
+           params: {
+               phoneNumber,
+               otp,
+               role,
+           }
+        }).then((res) => {
+            console.log("otp res ===>", res)
+            return res.data;
+        });
+        return response;
+    };
+    
 
 }
 

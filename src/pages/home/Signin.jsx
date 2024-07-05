@@ -29,6 +29,7 @@ import { loginUrl, getTokenByUrl } from "../../spotify";
 
 import { httpUrl, nodeUrl } from "../../restservice";
 import { Alert } from "antd";
+import { errorAlert, sucessAlret } from "../admin/layout/Alert";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -409,35 +410,38 @@ function Signin() {
   };
 
   // api integration ----------------------------------------
-  const [apiOtp, setApiOtp] = useState();
-  const checkLoginData = () => {
-    const role = mobileNumber === "9898989898" ? "admin" : "user";
-    AuthService.login(countryCode + mobileNumber, "NUMBER", role).then(
-      (response) => {
-        console.log("res------", response);
-        if (response.status) {
-          TokenService.setUser(response.user.role);
-          TokenService.setData("token", response.token);
-        } else {
-          console.log("Not get Token");
-        }
 
-        if (response.user.role === "admin") {
-          console.log(response.newUser);
-          navigate("/adminDashboard/Apps&More/studio");
-        } else if (response.newUser === true) {
-          console.log(response.newUser);
-          localStorage.removeItem("token");
-          setApiOtp(response.otp);
-          setSign(2);
-        }
+  const checkLoginData = () => {
+    // const role = mobileNumber === "9898989898" ? "admin" : "user";
+    AuthService.login(countryCode + mobileNumber, "NUMBER").then((response) => {
+      console.log("res------", response);
+      if (response.status) {
+        // TokenService.setUser(response.user.role);
+        TokenService.setData("token", response.token);
+        setSign(2);
+      } else {
+        console.log("Not get Token");
       }
-    );
+
+      // if (response.user.role === "admin") {
+      //   console.log(response.newUser);
+      //   setSign(2);
+      //   navigate("/adminDashboard/Apps&More/studio");
+      // } else if (response.newUser === true) {
+      //   console.log(response.newUser);
+      //   localStorage.removeItem("token");
+      //   setApiOtp(response.otp);
+      //   setSign(2);
+      // }
+    });
   };
 
   const handleMobileNumberChange = (e) => {
     setMobileNumber(e.target.value);
     // console.log(mobileNumber);
+  };
+  const gotoBooking = () => {
+    navigate("/adminDashboard");
   };
 
   const handleContinueButtonClick = (e) => {
@@ -459,8 +463,24 @@ function Signin() {
     setCountryCode(code);
   };
   let [checkOtp, setCheckOtp] = useState(true);
+  const [enteredOTP, setEnteredOTP] = useState("");
   const check_otp_btn = () => {
-    setCheckOtp(false);
+    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP).then(
+      (response) => {
+        console.log("res------", response);
+        if (response.status) {
+          TokenService.setData("token", response.token);
+          sucessAlret("OTP is Correct!", "Welcome back 😊");
+
+          gotoBooking();
+          setCheckOtp(false);
+          localStorage.setItem("isSignin", "true");
+        } else {
+          errorAlert("OTP is Incorrect!", "Please try again 😕");
+          console.log("Not get Token");
+        }
+      }
+    );
   };
   const gotoHome = () => {
     navigate("/home");
@@ -529,7 +549,10 @@ function Signin() {
                         countryCode={countryCode}
                         checkOtp={checkOtp}
                         setCheckOtp={setCheckOtp}
-                        apiOtp={apiOtp}
+                        // apiOtp={apiOtp}
+                        checkLoginData={checkLoginData}
+                        enteredOTP={enteredOTP}
+                        setEnteredOTP={setEnteredOTP}
                       />
                     ) : (
                       <SignUpDetails />

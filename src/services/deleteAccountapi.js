@@ -17,7 +17,7 @@ class deleteAccount{
 
   checkOtp = async (phone,otp) => {
 
-  const response = await api.get(`/users/verify_otp`, {
+  const response = await api.get(`/users/verify-otp`, {
     params: {
         phoneNumber:phone,
         otp,
