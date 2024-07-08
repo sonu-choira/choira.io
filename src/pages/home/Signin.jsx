@@ -419,8 +419,10 @@ function Signin() {
         // TokenService.setUser(response.user.role);
         TokenService.setData("token", response.token);
         setSign(2);
+        sucessAlret(response.message);
       } else {
         console.log("Not get Token");
+        errorAlert(response.message);
       }
 
       // if (response.user.role === "admin") {
