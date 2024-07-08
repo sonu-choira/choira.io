@@ -457,7 +457,7 @@ input[type="number"] {
   display: flex;
   align-items: center;
   /* justify-content: space-evenly; */
-  padding-left: 5%;
+  padding-left: 0.5%;
   > div {
     display: flex;
     align-items: center;
@@ -466,12 +466,12 @@ input[type="number"] {
   }
   > div:first-child {
     width: 20%;
-    border: 2px solid #f3f6f9;
+    border: 2px solid #d5d8dd;
     border-radius: 10px;
   }
   > div:nth-child(2) {
     width: 72%;
-    border: 2px solid #f3f6f9;
+    border: 2px solid #d5d8dd;
     /* border: 2px solid red; */
     border-radius: 10px;
     margin-left: 5%;

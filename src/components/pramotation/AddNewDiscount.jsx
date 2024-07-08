@@ -52,7 +52,7 @@ function AddNewDiscount({
         })
         .catch((err) => {
           console.log(err);
-          errorAlert("Error in creating discount");
+          errorAlert(err.message || "Error in creating discount");
         });
     }
   };

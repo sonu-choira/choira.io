@@ -2,10 +2,10 @@ import React from "react";
 import "../layout/layout.css";
 import LoaderUpdating from "./LoaderUpdating";
 
-function Switch({ status, onClick, isloading }) {
+function Switch({ status, onClick, isloading, switchDisabled }) {
   return (
     <>
-      <label className="switch">
+      <label className={switchDisabled ? "switch switchDisabled" : "switch"}>
         {isloading ? (
           <LoaderUpdating />
         ) : (
@@ -15,8 +15,12 @@ function Switch({ status, onClick, isloading }) {
               checked={status}
               readOnly
               onClick={onClick}
+              disabled={switchDisabled}
+              className={switchDisabled ? " switchDisabled" : ""}
             />
-            <span className="slider"></span>
+            <span
+              className={switchDisabled ? "slider switchDisabled" : "slider"}
+            ></span>
           </>
         )}
       </label>

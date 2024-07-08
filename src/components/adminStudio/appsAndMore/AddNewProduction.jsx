@@ -254,6 +254,7 @@ function AddNewProduction({ setSelectTab }) {
                     showConfirmButton: false,
                     timer: 1800,
                   });
+                  navigate("/adminDashboard/Apps&More/studio");
                 }
                 console.log(
                   `====================> data create huaa hai  ${bookingPageCount} `,
@@ -296,6 +297,7 @@ function AddNewProduction({ setSelectTab }) {
                     showConfirmButton: false,
                     timer: 1800,
                   });
+                  navigate("/adminDashboard/Apps&More/studio");
                 }
                 console.log(
                   `====================> data create huaa hai  ${bookingPageCount} `,
@@ -486,8 +488,14 @@ function AddNewProduction({ setSelectTab }) {
         />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
-            <div>
-              <input type="text" placeholder="search" />
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="Search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />
@@ -683,6 +691,7 @@ function AddNewProduction({ setSelectTab }) {
               <StudioFooter
                 backOnclick={gotoadminpage}
                 saveOnclick={showMode ? "" : handelSavebtn}
+                saveDisabled={showMode}
               />
             </>
           )}

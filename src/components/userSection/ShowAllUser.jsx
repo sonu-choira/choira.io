@@ -145,9 +145,8 @@ function ShowAllUser() {
   };
   useEffect(() => {
     console.log("shortBySrNo", shortBySrNo);
-    if (shortBySrNo) {
-      setProducts((prev) => [...prev].reverse());
-    }
+
+    setProducts((prev) => [...prev].reverse());
   }, [shortBySrNo]);
 
   const handleSortByUser = () => {
@@ -365,7 +364,9 @@ function ShowAllUser() {
                     products.map((product, index) => (
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
-                          {index + 1 + (pageCount - 1) * 10}
+                          {!shortBySrNo
+                            ? index + 1 + (pageCount - 1) * 10
+                            : pageCount * 10 - index}
                         </td>
                         <td style={{ display: "flex", alignItems: "center" }}>
                           <div className={style.studioImage}>

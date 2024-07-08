@@ -409,7 +409,7 @@ function AddNewRoom({
                 onChange={handleDiscountChange}
               />
             </div>
-            <div className={style.addNewStudioinputBox}>
+            <div className={style.customInput}>
               <label htmlFor="Dates">Booking Days </label>
               <Select
                 id="Dates"
@@ -525,7 +525,7 @@ function AddNewRoom({
                 className={style.addTeamDetailbtn}
                 onClick={handleAddDetails}
               >
-                <MdOutlineAddBox /> &nbsp;<div>Add Booking Time</div>
+                <MdOutlineAddBox /> &nbsp;<div>Add Room Details</div>
               </span>
             )}
 
