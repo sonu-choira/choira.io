@@ -23,6 +23,7 @@ import AddNewServices2 from "./AddNewServices2";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import Swal from "sweetalert2";
 import MultipleSelect from "../../../pages/admin/layout/MultipleSelect";
+import { errorAlert } from "../../../pages/admin/layout/Alert";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
@@ -246,7 +247,7 @@ function AddNewProduction({ setSelectTab }) {
             appAndmoreApi
               .updateService(serviceId, updatedData)
               .then((response) => {
-                if (response) {
+                if (response.status) {
                   Swal.fire({
                     title: "Service Updated!",
                     text: "Your Data has been saved.",
@@ -255,6 +256,8 @@ function AddNewProduction({ setSelectTab }) {
                     timer: 1800,
                   });
                   navigate("/adminDashboard/Apps&More/studio");
+                } else {
+                  errorAlert(response.message);
                 }
                 console.log(
                   `====================> data create huaa hai  ${bookingPageCount} `,
@@ -289,7 +292,7 @@ function AddNewProduction({ setSelectTab }) {
             appAndmoreApi
               .createService(updatedData)
               .then((response) => {
-                if (response) {
+                if (response.status) {
                   Swal.fire({
                     title: "Service Created!",
                     text: "Your Data has been saved.",
@@ -298,6 +301,8 @@ function AddNewProduction({ setSelectTab }) {
                     timer: 1800,
                   });
                   navigate("/adminDashboard/Apps&More/studio");
+                } else {
+                  errorAlert(response.message);
                 }
                 console.log(
                   `====================> data create huaa hai  ${bookingPageCount} `,

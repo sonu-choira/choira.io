@@ -18,6 +18,7 @@ function AddNewDiscount({
   editMode,
   submitData,
   setSubmitData,
+  setShowTable,
 }) {
   const option = {
     "New User Discount": 0,
@@ -33,21 +34,29 @@ function AddNewDiscount({
         .updateDiscount(editData._id, sendDataToApi)
         .then((res) => {
           console.log(res);
-          sucessAlret("Discount Updated Successfully");
+          if (res.status) {
+            sucessAlret("Discount Updated Successfully");
+
+            setShowTable(true);
+          } else {
+            errorAlert(res.message || "Error in updating discount");
+          }
         })
         .catch((err) => {
           console.log(err);
           errorAlert("Error in updating discount");
+          setShowTable(true);
         });
     } else {
       promotionApi
         .createDiscount(sendDataToApi)
         .then((res) => {
           console.log(res);
-          if (res.status == true) {
+          if (res.status) {
             sucessAlret("Discount Created Successfully");
+            setShowTable(true);
           } else {
-            errorAlert(res.message);
+            errorAlert(res.message || "Error in creating discount");
           }
         })
         .catch((err) => {
@@ -170,16 +179,17 @@ function AddNewDiscount({
   return (
     <form className={style.addNewDiscountPage} onSubmit={handleSubmit}>
       <div>
-        <CustomInput
-          type="text"
-          placeholder="Enter Discount Name"
-          label="Discount Name"
-          name="discountName"
-          value={values.discountName}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={errors.discountName}
-          touched={touched.discountName}
+        <CustomSelect
+          label={"Discount Type"}
+          id={"discountType"}
+          htmlFor={"discountType"}
+          options={option}
+          defaultOption={"Select Discount Type"}
+          value={values.discountType}
+          disabled={editMode.current}
+          onChange={(e) => setFieldValue("discountType", e.target.value)}
+          error={errors.discountType}
+          touched={touched.discountType}
         />
         <CustomInput
           type="text"
@@ -240,18 +250,18 @@ function AddNewDiscount({
         )}
       </div>
       <div>
-        <CustomSelect
-          label={"Discount Type"}
-          id={"discountType"}
-          htmlFor={"discountType"}
-          options={option}
-          defaultOption={"Select Discount Type"}
-          value={values.discountType}
-          disabled={editMode.current}
-          onChange={(e) => setFieldValue("discountType", e.target.value)}
-          error={errors.discountType}
-          touched={touched.discountType}
+        <CustomInput
+          type="text"
+          placeholder="Enter Discount Name"
+          label="Discount Name"
+          name="discountName"
+          value={values.discountName}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.discountName}
+          touched={touched.discountName}
         />
+
         <CustomInput
           type="text"
           placeholder="Enter Max. Cap Amount"
