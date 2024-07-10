@@ -260,7 +260,7 @@ function AddNewStudio({ setSelectTab }) {
         })),
         roomsDetails: data.roomsDetails.map((room) => ({
           ...room,
-          area: room.area.toString(),
+          area: room?.area?.toString(),
           pricePerHour: parseInt(room.pricePerHour, 10),
 
           discountPercentage: parseInt(room.discountPercentage, 10),
@@ -317,13 +317,18 @@ function AddNewStudio({ setSelectTab }) {
               .then((response) => {
                 console.log("Studio updated:", response);
                 if (response) {
-                  Swal.fire({
-                    title: "Studio Updated!",
-                    text: "Your data has been saved.",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1800,
-                  });
+                  if (response.status) {
+                    Swal.fire({
+                      title: "Studio Updated!",
+                      text: "Your data has been saved.",
+                      icon: "success",
+                      showConfirmButton: false,
+                      timer: 1800,
+                    });
+                    navigate("/adminDashboard/Apps&More/studio");
+                  } else {
+                    errorAlert(response.message);
+                  }
                 }
               })
               .catch((error) => {
@@ -350,7 +355,7 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Create it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            alert("Studio created");
+            // alert("Studio created");
             const correctedRealData = correctDataTypes(updatedStudioDetails);
             if (
               correctedRealData.maxGuests === "" ||
@@ -369,13 +374,18 @@ function AddNewStudio({ setSelectTab }) {
               .then((response) => {
                 console.log("Studio created:", response);
                 if (response) {
-                  Swal.fire({
-                    title: "Studio Created!",
-                    text: "Your data has been saved.",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1800,
-                  });
+                  if (response.status) {
+                    Swal.fire({
+                      title: "Studio Created!",
+                      text: "Your data has been saved.",
+                      icon: "success",
+                      showConfirmButton: false,
+                      timer: 1800,
+                    });
+                    navigate("/adminDashboard/Apps&More/studio");
+                  } else {
+                    errorAlert(response.message);
+                  }
                 }
               })
               .catch((error) => {
@@ -405,8 +415,14 @@ function AddNewStudio({ setSelectTab }) {
         />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
-            <div>
-              <input required type="text" placeholder="search" />
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="Search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />
@@ -765,6 +781,7 @@ function AddNewStudio({ setSelectTab }) {
                 backOnclick={gotoadminpage}
                 saveType={"submit"}
                 saveOnclick={showMode ? "" : handleSubmitButtonClick}
+                saveDisabled={showMode}
               />
             </>
           )}

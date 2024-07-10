@@ -21,6 +21,9 @@ import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import moment from "moment";
+import appAndmoreApi from "../../../services/appAndmoreApi";
+import { errorAlert } from "../../../pages/admin/layout/Alert";
 
 let PageSize = 10;
 
@@ -36,6 +39,7 @@ function ASMusicProduction({
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+  let loading_timeout = null;
 
   const gotoEdit = (id) => {
     const isEditMode = true;
@@ -75,11 +79,40 @@ function ASMusicProduction({
   };
 
   const [activityStatus, setActivityStatus] = useState({});
-  const handleSwitchChange = (studioId) => {
-    setActivityStatus((prevStatus) => ({
-      ...prevStatus,
-      [studioId]: !prevStatus[studioId], // Toggle the switch state
-    }));
+  const [showloader, setShowloader] = useState(false);
+  const [pid, setPid] = useState(0);
+  const handleSwitchChange = (studioId, isActive) => {
+    isActive == 1 ? (isActive = 0) : (isActive = 1);
+    setShowloader(true);
+    appAndmoreApi
+      .updateServiceStatus(studioId, isActive)
+
+      .then((response) => {
+        console.log(
+          "status response=======>",
+          response.updatedService.isActive
+        );
+        setProducts((prevState) => {
+          return prevState.map((product) => {
+            if (product._id === studioId) {
+              return {
+                ...product,
+                isActive: response.updatedService.isActive,
+              };
+            }
+            return product;
+          });
+        });
+
+        loading_timeout = setTimeout(() => {
+          setShowloader(false);
+        }, 700);
+      })
+      .catch((error) => {
+        console.log("error=======>", error);
+        errorAlert(error.message || "Something went wrong");
+        setShowloader(false);
+      });
   };
   // const currentTableData = useMemo(() => {
   //   const firstPageIndex = (currentPage - 1) * PageSize;
@@ -96,6 +129,11 @@ function ASMusicProduction({
     }));
   };
   console.log("products...", products);
+  useEffect(() => {
+    return () => {
+      clearTimeout(loading_timeout);
+    };
+  }, []);
 
   return (
     <>
@@ -153,27 +191,27 @@ function ASMusicProduction({
                         <br />
                         <small> {products.state}</small>
                       </td>
-                      <td>{products.creationTimeStamp}</td>
+                      <td>
+                        {" "}
+                        {moment(products.creationTimeStamp).format(
+                          // "DD/MM/YYYY hh:mm:ss a"
+                          "Do MMM  YY, hh:mm a "
+                        )}
+                      </td>
 
                       <td className={style.tableActionbtn}>
                         <div>
-                          <label className="switch">
-                            <input
-                              type="checkbox"
-                              checked={
-                                products.isActive === 1
-                                // ? activityStatus[products._id]
-                                // : false
-                              }
-                              onChange={() =>
-                                handleSwitchChange(
-                                  products._id,
-                                  products.isActive
-                                )
-                              }
-                            />
-                            <span className="slider"></span>
-                          </label>
+                          <Switch
+                            isloading={pid === products._id && showloader}
+                            status={products.isActive}
+                            onClick={() => {
+                              setPid(products._id);
+                              handleSwitchChange(
+                                products._id,
+                                products.isActive
+                              );
+                            }}
+                          />
                         </div>
                         <div>
                           <GrShare

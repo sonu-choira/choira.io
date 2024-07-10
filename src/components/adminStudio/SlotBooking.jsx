@@ -232,7 +232,7 @@ function SlotBooking({ setSelectTab }) {
           sucessAlret("Booking done");
           navigate("/adminDashboard/Bookings/studio");
         } else {
-          errorAlert("Booking failed");
+          errorAlert(res.message || "Booking failed");
           setshowLoader(false);
         }
       })

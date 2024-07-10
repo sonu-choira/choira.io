@@ -28,10 +28,11 @@ import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../services/appAndmoreApi";
+import moment from "moment";
 
 let PageSize = 10;
 
-function StudioPatners({
+function StudioPartners({
   products,
   setProducts,
   setPageCount,
@@ -61,20 +62,20 @@ function StudioPatners({
     });
   };
   const [currentPage, setCurrentPage] = useState(1);
-  const gotoShowStudioDetaisl = (id) => {
-    const isEditMode = true;
-    const selectedProduct = products.find((product) => product._id === id);
-    console.log("navigated=======>", selectedProduct);
+  // const gotoShowStudioDetaisl = (id) => {
+  //   const isEditMode = true;
+  //   const selectedProduct = products.find((product) => product._id === id);
+  //   console.log("navigated=======>", selectedProduct);
 
-    navigate(`/studio/edit?id=${id}`, {
-      state: {
-        productData: selectedProduct,
-        navCount: 3,
-        isEditMode: isEditMode,
-        showMode: true,
-      },
-    });
-  };
+  //   navigate(`/studio/edit?id=${id}`, {
+  //     state: {
+  //       productData: selectedProduct,
+  //       navCount: 3,
+  //       isEditMode: isEditMode,
+  //       showMode: true,
+  //     },
+  //   });
+  // };
 
   const [activityStatus, setActivityStatus] = useState({});
   const handleSwitchChange = (studioId, status) => {
@@ -414,7 +415,12 @@ function StudioPatners({
                       <td>{products.firstName}</td>
                       <td>{products.email}</td>
                       <td>{products.studioName}</td>
-                      <td>{products.creationTimeStamp}</td>
+                      <td>
+                        {moment(products.creationTimeStamp).format(
+                          // "DD/MM/YYYY hh:mm:ss a"
+                          "Do MMM  YY, hh:mm a "
+                        )}
+                      </td>
                       <td className={style.tableActionbtn}>
                         <div
                           style={{
@@ -424,7 +430,7 @@ function StudioPatners({
                         >
                           <GrShare
                             style={{ cursor: "pointer" }}
-                            onClick={() => gotoShowStudioDetaisl(products._id)}
+                            // onClick={() => gotoShowStudioDetaisl(products._id)}
                           />
 
                           <RiDeleteBin5Fill
@@ -452,4 +458,4 @@ function StudioPatners({
   );
 }
 
-export default StudioPatners;
+export default StudioPartners;

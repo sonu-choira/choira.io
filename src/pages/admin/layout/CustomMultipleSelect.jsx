@@ -3,18 +3,17 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Divider, Input, Select, Space } from "antd";
 import style from "../studios/studio.module.css";
 
-const studioamenitiesList = [
-  "Wifi",
-  "AC",
-  "DJ",
-  "Piano",
-  "Drum",
-  "Car Parking",
-  "Banjo",
-];
+function CustomMultipleSelect({
+  selectedItems = [],
+  setSelectedItems = () => {},
+  defaultList = [],
+  id,
+  htmlFor,
+  label,
 
-function MultipleSelect({ selectedItems = [], setSelectedItems = () => {} }) {
-  const [items, setItems] = useState(studioamenitiesList);
+  placeholder,
+}) {
+  const [items, setItems] = useState(defaultList);
   const [name, setName] = useState("");
   const inputRef = useRef(null);
 
@@ -37,13 +36,13 @@ function MultipleSelect({ selectedItems = [], setSelectedItems = () => {} }) {
 
   return (
     <div className={style.customInput}>
-      <label htmlFor="Amenities">Amenities</label>
+      <label htmlFor={htmlFor || "Select"}>{label || "Select"}</label>
       <Select
         required
-        id="Amenities"
+        id={id || "Select"}
         mode="multiple"
         className=""
-        placeholder="Select one or more Amenities"
+        placeholder={placeholder || "Select one or more options"}
         value={selectedItems}
         onChange={setSelectedItems}
         options={filteredAmenities.map((item, index) => ({
@@ -89,4 +88,4 @@ function MultipleSelect({ selectedItems = [], setSelectedItems = () => {} }) {
   );
 }
 
-export default MultipleSelect;
+export default CustomMultipleSelect;

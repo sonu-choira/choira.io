@@ -6,7 +6,6 @@ import t1 from "../../../assets/img/adminOverview/t1.png";
 import t2 from "../../../assets/img/adminOverview/t2.png";
 import t3 from "../../../assets/img/adminOverview/t3.png";
 import t4 from "../../../assets/img/adminOverview/t4.png";
-import MyChart from "../../../components/charts/MyChart";
 import DoughnutChart from "../../../components/charts/DoughnutChart";
 import LineGraph from "../../../components/charts/LineGraph";
 import BarGraph from "../../../components/charts/BarGraph";
@@ -14,6 +13,7 @@ import AreaGraph from "../../../components/charts/AreaGraph";
 import SimpleLineChart from "../../../components/charts/SimpleLineChart";
 import Swal from "sweetalert2";
 import { useLocation } from "react-router-dom";
+import ThreeWaveChart from "../../../components/charts/ThreeWaveChart";
 
 function Overview() {
   const data = [
@@ -82,7 +82,7 @@ function Overview() {
           ))}
         </div>
 
-        <MyChart />
+        <ThreeWaveChart />
         <div className={style.overviewPage2}>
           <div>
             <DoughnutChart />

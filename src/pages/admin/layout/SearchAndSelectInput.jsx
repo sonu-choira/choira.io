@@ -2,7 +2,12 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Select, Spin } from "antd";
 import debounce from "lodash/debounce";
 
-function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
+function DebounceSelect({
+  fetchOptions,
+
+  debounceTimeout = 800,
+  ...props
+}) {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState([]);
   const fetchRef = useRef(0);
@@ -41,7 +46,14 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
   );
 }
 
-function SearchSelectInput({ fetchOptions, onChange, defaultValue, ...props }) {
+function SearchSelectInput({
+  fetchOptions,
+  onChange,
+  mode,
+  defaultValue,
+  name,
+  ...props
+}) {
   const [value, setValue] = useState(defaultValue || []);
 
   useEffect(() => {
@@ -50,7 +62,8 @@ function SearchSelectInput({ fetchOptions, onChange, defaultValue, ...props }) {
 
   return (
     <DebounceSelect
-      mode="single"
+      mode={mode || "single"}
+      name={name}
       value={value}
       onChange={(newValue) => {
         setValue(newValue);

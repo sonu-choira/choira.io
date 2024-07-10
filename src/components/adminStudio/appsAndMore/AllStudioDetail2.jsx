@@ -28,6 +28,8 @@ import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter
 import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
 import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../../services/appAndmoreApi";
+import LoaderUpdating from "../../../pages/admin/layout/LoaderUpdating";
+import { errorAlert } from "../../../pages/admin/layout/Alert";
 
 let PageSize = 10;
 
@@ -43,6 +45,7 @@ function AllStudioDetail2({
   setfilterNav,
   sendFilterDataToapi,
 }) {
+  let loading_timeout = null;
   const navigate = useNavigate();
   const gotoEdit = (id) => {
     const isEditMode = true;
@@ -73,14 +76,39 @@ function AllStudioDetail2({
     });
   };
 
-  const [activityStatus, setActivityStatus] = useState({});
-  const handleSwitchChange = (studioId, status) => {
-    console.log(status);
-    setActivityStatus((prevStatus) => ({
-      ...prevStatus,
-      [studioId]: !prevStatus[studioId], // Toggle the switch state
-    }));
+  // const [activityStatus, setActivityStatus] = useState({});
+  const [showloader, setShowloader] = useState(false);
+  const [pid, setPid] = useState(0);
+
+  const handleSwitchChange = (studioId) => {
+    setShowloader(true);
+    appAndmoreApi
+      .updateStudioStatus(studioId)
+      .then((response) => {
+        console.log("response=======>", response.studio);
+        setProducts((prevState) => {
+          return prevState.map((product) => {
+            if (product._id === studioId) {
+              return {
+                ...product,
+                isActive: response.studio.isActive,
+              };
+            }
+            return product;
+          });
+        });
+
+        loading_timeout = setTimeout(() => {
+          setShowloader(false);
+        }, 700);
+      })
+      .catch((error) => {
+        console.log("error=======>", error);
+        errorAlert(error.message || "Something went wrong");
+        setShowloader(false);
+      });
   };
+
   const [showpricefilter, setshowpricefilter] = useState(false);
   const handelpriceFilter = () => {
     setshowpricefilter((prevState) => {
@@ -202,6 +230,12 @@ function AllStudioDetail2({
       setProducts([]);
     };
   }, [shortby]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(loading_timeout);
+    };
+  }, []);
 
   return (
     <>
@@ -399,8 +433,8 @@ function AllStudioDetail2({
                         </div>
                         &nbsp;&nbsp;{products.fullName}
                       </td>
-                      <td>
-                        ₹{products.pricePerHour}
+                      <td style={{ padding: "0px 8rem 0px 0px" }}>
+                        ₹{products?.roomsDetails?.[0]?.pricePerHour || "N/A"}
                         <br />
                         <small>per hour</small>
                       </td>
@@ -412,23 +446,14 @@ function AllStudioDetail2({
                       <td>{products.totalRooms}</td>
                       <td className={style.tableActionbtn}>
                         <div>
-                          <label className="switch">
-                            <input
-                              type="checkbox"
-                              checked={
-                                products.isActive === 1
-                                // ? activityStatus[products._id]
-                                // : false
-                              }
-                              onChange={() =>
-                                handleSwitchChange(
-                                  products._id,
-                                  products.isActive
-                                )
-                              }
-                            />
-                            <span className="slider"></span>
-                          </label>
+                          <Switch
+                            isloading={pid === products._id && showloader}
+                            status={products.isActive}
+                            onClick={() => {
+                              setPid(products._id);
+                              handleSwitchChange(products._id);
+                            }}
+                          />
                         </div>
                         <div>
                           <GrShare

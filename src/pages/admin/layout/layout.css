@@ -10,6 +10,9 @@
   justify-content: center;
   outline: none;
   border: none;
+  &:hover {
+    background-color: #fcbc0d;
+  }
 }
 .btndisabled {
   width: fit-content;
@@ -24,6 +27,11 @@
   outline: none;
   border: none;
   cursor: not-allowed;
+}
+.switchDisabled {
+  cursor: not-allowed !important;
+
+  /* background-color: #adb5bd4f; */
 }
 
 /* The switch - the box around the slider */

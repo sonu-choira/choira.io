@@ -9,6 +9,9 @@ import timeSlotApi from "../../services/timeSlotApi";
 import style from "../../pages/admin/studios/studio.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
+import * as Yup from "yup";
+import CustomInput from "../../pages/admin/layout/CustomInput";
+import { armSchema } from "../../schemas"; // Adjust the path
 
 function AddNewArm({ setSelectTab }) {
   const timeSlotApiData = useRef({
@@ -18,7 +21,16 @@ function AddNewArm({ setSelectTab }) {
     permission: [],
     password: "",
   });
-  const { values, errors, handleBlur, handleChange, handleSubmit } = useFormik({
+
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+  } = useFormik({
     initialValues: {
       userName: "",
       mobile: "",
@@ -26,8 +38,10 @@ function AddNewArm({ setSelectTab }) {
       permission: [],
       password: "",
     },
+    validationSchema: armSchema,
     onSubmit: (values) => {
       console.log(values);
+      alert("form submitted");
     },
   });
 
@@ -65,17 +79,20 @@ function AddNewArm({ setSelectTab }) {
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
-    setSelectedData((prev) =>
-      checked ? [...prev, name] : prev.filter((item) => item !== name)
+    setFieldValue(
+      "permission",
+      checked
+        ? [...values.permission, name]
+        : values.permission.filter((item) => item !== name)
     );
   };
 
   useEffect(() => {
-    timeSlotApiData.current.permission = selectedData;
-  }, [selectedData]);
+    timeSlotApiData.current.permission = values.permission;
+  }, [values.permission]);
 
   const backOnclick = () => {
-    navigate("/adminDashboard/Teams/StudioPatners");
+    navigate("/adminDashboard/Teams/StudioPartners");
   };
 
   const handelStudioid = (e) => {
@@ -135,45 +152,34 @@ function AddNewArm({ setSelectTab }) {
           </div>
           <div className={style.addNewStudioTitle}>Add New ARM</div>
 
-          <div
-            className={style.addNewStudioPage}
-            style={{ overflow: "hidden" }}
-          >
-            <div style={{ height: "80%" }}>
+          <div className={style.addNewStudioPage}>
+            <div style={{ height: "85%" }}>
               <div>
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="UserName">User Full Name</label>
-                  <input
-                    type="text"
-                    id="UserName"
-                    name="userName"
-                    placeholder="Enter Fullname Name"
-                    value={values.userName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-
-                    // onChange={(e) => {
-                    //   timeSlotApiData.current.userName = e.target.value;
-                    // }}
-                  />
-                </div>
-
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Email">Email</label>
-                  <input
-                    type="email"
-                    id="Email"
-                    name="email"
-                    placeholder="Enter Email id"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    // onChange={(e) => {
-                    //   timeSlotApiData.current.email = e.target.value;
-                    // }}
-                  />
-                </div>
-
+                <CustomInput
+                  htmlFor="UserName"
+                  id="UserName"
+                  name="userName"
+                  placeholder="Enter Fullname Name"
+                  value={values.userName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  label={"User Full Name"}
+                  error={errors.userName}
+                  touched={touched.userName}
+                />
+                <CustomInput
+                  type="email"
+                  id="Email"
+                  name="email"
+                  placeholder="Enter Email id"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  htmlFor="Email"
+                  label={"Email"}
+                  error={errors.email}
+                  touched={touched.email}
+                />
                 <label htmlFor="" className={style.label}>
                   Permission
                 </label>
@@ -188,61 +194,48 @@ function AddNewArm({ setSelectTab }) {
                         name={item}
                         id={item}
                         value={values.item}
-                        onChange={handleChange}
+                        checked={values.permission.includes(item)}
+                        onChange={handleCheckboxChange}
                         onBlur={handleBlur}
-                        // onChange={handleCheckboxChange}
                       />
                       <label htmlFor={item}>{item}</label>
                     </div>
                   ))}
                 </div>
+                {errors.permission && touched.permission ? (
+                  <p className={style.error}>{errors.permission}</p>
+                ) : null}
               </div>
               <div>
-                <div className={style.addNewStudioinputBox}>
-                  <label htmlFor="Mobilenumber">Mobile number</label>
-                  <input
-                    type="number"
-                    id="Mobilenumber"
-                    name="mobile"
-                    placeholder="Enter Mobile number"
-                    value={values.mobile}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    // onChange={(e) => {
-                    //   timeSlotApiData.current.mobile = e.target.value;
-                    // }}
-                  />
-                </div>
-
-                <div
-                  className={style.addNewStudioinputBox}
-                  style={{ cursor: "pointer" }}
-                >
-                  <label htmlFor="password">Enter Password</label>
-                  <input
-                    style={{ cursor: "pointer" }}
-                    type="text"
-                    id="password"
-                    name="password"
-                    placeholder="Enter Password"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    // onChange={(e) => {
-                    //   timeSlotApiData.current.password = e.target.value;
-                    // }}
-                  />
-                </div>
+                <CustomInput
+                  type="text"
+                  id="Mobilenumber"
+                  name="mobile"
+                  placeholder="Enter Mobile number"
+                  value={values.mobile}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  label={"Mobile Number"}
+                  error={errors.mobile}
+                  touched={touched.mobile}
+                />
+                <CustomInput
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Enter Password"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  htmlFor="password"
+                  label={" Password"}
+                  error={errors.password}
+                  touched={touched.password}
+                />
               </div>
             </div>
           </div>
-          <StudioFooter
-            backOnclick={backOnclick}
-            // saveOnclick={(event) => {
-            //   sendTimeSlotDataToApi(event);
-            // }}
-            saveType={"submit"}
-          />
+          <StudioFooter backOnclick={backOnclick} saveType={"submit"} />
         </form>
       </div>
     </>

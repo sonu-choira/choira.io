@@ -18,6 +18,7 @@ import bookingPageApi from "../../../services/bookingPageApi";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
+import moment from "moment";
 let PageSize = 10;
 
 function StudioBookingDetail({
@@ -87,12 +88,12 @@ function StudioBookingDetail({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th>User Name</th>
-                <th>Mobile No.</th>
+                <th style={{ width: "10%" }}>User Name</th>
+                <th style={{ width: "10%" }}>Mobile No.</th>
 
-                <th>studio Name</th>
-                <th>No. of hours</th>
-                <th>Date</th>
+                <th style={{ width: "10%" }}>studio Name</th>
+                <th style={{ width: "10%" }}>No. of hours</th>
+                <th style={{ width: "15%" }}>Date</th>
                 <th style={{ width: "10%" }}>Total Price </th>
                 <th style={{ width: "10%" }}>Project Status</th>
               </tr>
@@ -111,7 +112,13 @@ function StudioBookingDetail({
 
                       <td>{products.studioName}</td>
                       <td>{products.planId}</td>
-                      <td>{products.bookingDate}</td>
+                      {/* <td>{products.bookingDate}</td> */}
+                      <td>
+                        {moment(products.bookingDate).format(
+                          // "DD/MM/YYYY hh:mm:ss a"
+                          "Do MMM  YY, hh:mm a "
+                        )}
+                      </td>
                       <td>₹{products.totalPrice}</td>
                       <td className={style.tableActionbtn}>
                         {/* <div>

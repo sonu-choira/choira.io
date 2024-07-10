@@ -30,6 +30,10 @@ input[type="number"] {
   cursor: not-allowed;
   background-color: #adb5bd4f;
 }
+.error {
+  font-size: 12px;
+  color: red;
+}
 .wrapper {
   width: 100vw;
   height: 100vh;
@@ -453,7 +457,7 @@ input[type="number"] {
   display: flex;
   align-items: center;
   /* justify-content: space-evenly; */
-  padding-left: 5%;
+  padding-left: 0.5%;
   > div {
     display: flex;
     align-items: center;
@@ -462,12 +466,12 @@ input[type="number"] {
   }
   > div:first-child {
     width: 20%;
-    border: 2px solid #f3f6f9;
+    border: 2px solid #d5d8dd;
     border-radius: 10px;
   }
   > div:nth-child(2) {
     width: 72%;
-    border: 2px solid #f3f6f9;
+    border: 2px solid #d5d8dd;
     /* border: 2px solid red; */
     border-radius: 10px;
     margin-left: 5%;
@@ -520,9 +524,16 @@ input[type="number"] {
   table-layout: auto;
   width: 100%;
   border-collapse: collapse;
+  /* table-layout: fixed; */
   /* height: 100%; */
 
   /* border: 2px solid red; */
+}
+table {
+  table-layout: auto;
+  width: 100%;
+  border-collapse: collapse;
+  /* border: 2px solid green; */
 }
 .studiotabelHead {
   width: 100%;
@@ -983,6 +994,7 @@ td {
 .addNewStudioinputBox {
   width: 100%;
   min-height: 9vh;
+  /* max-height: 9vh; */
   max-height: 9vh !important;
   /* border: 2px solid green; */
   display: flex;
@@ -997,7 +1009,8 @@ td {
 .addNewStudioinputBox input,
 .addNewStudioinputBox select {
   border-radius: 10px;
-  height: 100%;
+  height: 6vh;
+  /* height: 50%; */
   width: 100%;
   outline: none;
   border: 2px solid #dddddd;
@@ -1011,8 +1024,44 @@ td {
 .addNewStudioinputBox select {
   padding: 1.8%;
   margin-top: 0%;
-  height: 80%;
+  height: 100%;
 }
+
+.customInput {
+  width: 100%;
+  min-height: 10vh;
+  /* max-height: 9vh; */
+  max-height: fit-content;
+  /* border: 2px solid green; */
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  > div {
+    height: 100%;
+  }
+}
+.customInput input,
+.customInput select {
+  border-radius: 10px;
+  height: 5vh;
+  /* height: 50%; */
+  width: 100%;
+  outline: none;
+  border: 2px solid #dddddd;
+  padding-left: 5%;
+  color: black;
+}
+.customInput > label {
+  font-size: 1vmax;
+  font-weight: 600;
+}
+/* .customInput select {
+  padding: 1.8%;
+  margin-top: 0%;
+  height: 50%;
+} */
 .addPriceAndCountryInput {
   width: 98.9%;
   border: 2px solid transparent;
@@ -1490,6 +1539,7 @@ td {
     cursor: pointer;
   }
 }
+
 .profilesection {
   width: 80%;
   height: 100%;
@@ -1588,7 +1638,7 @@ td {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid black;
+  /* border: 2px solid black; */
   border-radius: 5px;
   font-size: 0.7vmax;
   font-weight: 600;
@@ -1769,6 +1819,333 @@ td {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
+/* -------------promotionSection start------------- */
+.PromotionSidebar {
+  width: 20%;
+  height: 100%;
+  border: 2px solid #d8dadf;
+  > div {
+    width: 100%;
+    height: 10%;
+    border: 2px solid #d8dadf;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10%;
+    gap: 5%;
+    font-size: 1vmax;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    user-select: none;
+    > div {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 100%;
+      gap: 3%;
+      user-select: none;
+    }
+  }
+  small {
+    font-size: 0.7vmax;
+    font-weight: 500;
+    color: #32363e;
+    user-select: none;
+  }
+}
+
+.bannerPage {
+  width: 100%;
+  /* height: 85vh;
+   border*/
+  height: 100%;
+  /* border: 2px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  overflow-y: auto;
+  user-select: none;
+  padding-right: 2%;
+  > div {
+    width: 100%;
+    /* min-height: 40vh; */
+    max-height: fit-content !important;
+    /* border: 2px solid #e2e2e2; */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    border-radius: 10px;
+  }
+  span {
+    font-size: 1vmax;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 5vh;
+    > div:first-child {
+      width: 20%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      /* border: 2px solid red; */
+      gap: 10%;
+    }
+    /* border: 2px solid yellow; */
+  }
+}
+
+.bannerMain {
+  width: 100%;
+  /* border: 2px solid black; */
+  min-height: fit-content;
+  max-height: fit-content;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+  padding-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 2%;
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* border: 2px solid red; */
+  }
+}
+.bannerMainContent {
+  width: 90%;
+  min-height: 10vh;
+  border: 2px solid #e2e2e2;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 15px;
+  background-color: white;
+
+  > div:first-child {
+    width: 6%;
+    height: 70%;
+    /* border: 2px solid red; */
+    border-radius: 10px;
+    overflow: hidden;
+    > img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  > div:nth-child(2) {
+    width: 80%;
+    height: 60%;
+    /* border: 2px solid #e2e2e2; */
+    border: 2px solid green;
+    border-radius: 10px;
+    font-size: 0.9vmax;
+    > input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      border-radius: 10px;
+    }
+  }
+  > div:nth-child(3) {
+    font-size: 1vmax;
+    cursor: grab;
+  }
+  > label {
+    width: 6%;
+    height: 70%;
+    /* border: 2px solid red; */
+    border-radius: 10px;
+    overflow: hidden;
+    > img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+.uploadBannerDataDiv {
+  width: 95%;
+  height: 10vh;
+  border: 2px solid pink;
+  border-radius: 10px;
+}
+.DiscountPage {
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  > div:first-child {
+    width: 100%;
+    height: 6vh;
+    /* border: 2px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 5%;
+    font-size: 1vmax;
+    font-weight: 600;
+  }
+  > div:nth-child(2) {
+    margin-top: 2%;
+    width: 95%;
+    height: fit-content;
+    border: 2px solid #dddddd;
+    border-radius: 15px;
+    padding-top: 2%;
+    padding-bottom: 2%;
+  }
+}
+
+.AddNewBannerPage {
+  width: 100%;
+  min-height: 100%;
+  max-height: fit-content;
+  /* border: 2px solid red; */
+  /* overflow-y: auto; */
+  > div:nth-child(1) {
+    width: 100%;
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 1vmax;
+    font-weight: 600;
+  }
+}
+.AddNewBannerMain {
+  width: 100%;
+  min-height: 30vh;
+  border: 2px solid #dddddd;
+  border-radius: 15px;
+  max-height: fit-content;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: 1vmax;
+  font-weight: 600;
+  padding: 20px 0 20px 0;
+
+  > div {
+    width: 45%;
+    height: 10%;
+    /* border: 2px solid green; */
+  }
+  > div:nth-child(1) {
+    width: fit-content;
+  }
+}
+.AddBannerImage {
+  width: 15vw;
+  height: 18vh;
+  /* border: 2px dashed #f0f0f0; */
+  border-radius: 10px;
+  margin-top: 10px;
+  background-color: white !important;
+  > div {
+    width: 100%;
+    height: 100%;
+    /* border: 2px solid green; */
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 1vmax;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    > img {
+      object-fit: contain;
+      width: 30%;
+      height: 30%;
+    }
+    span {
+      color: #ffc701;
+    }
+  }
+}
+/* --------------------DiscountPage ------------------------- */
+.addNewDiscountPage {
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  > div {
+    width: 45%;
+    height: 100%;
+    /* border: 2px solid green; */
+  }
+}
+/* -------------------IntegrationPage-------------------------- */
+.IntegrationPage {
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  > div:first-child {
+    width: 100%;
+    height: 6vh;
+    /* border: 2px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 5%;
+    font-size: 1vmax;
+    font-weight: 600;
+    /* border: 2px solid red; */
+    margin-bottom: 2%;
+  }
+  > div:nth-child(2) {
+    width: 100%;
+    height: 94%;
+    /* border: 2px solid #dddddd; */
+    border-radius: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+}
+.integrationMain {
+  width: 100%;
+  height: 9vh;
+  /* border: 2px solid red; */
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2% 0 2%;
+  background-color: #f0f0f0;
+  margin-bottom: 15px;
+  > span {
+    font-size: 1vmax;
+    font-weight: 600;
+  }
+}
 @media only screen and (min-width: 1024px) and (max-width: 1903px) {
   .addNewStudioPage .addNewStudioinputBox {
     height: 10%;

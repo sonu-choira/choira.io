@@ -6,19 +6,19 @@ class userApi{
   
  getAllUser = async (pageCount,userAllFilterData) => {
   let { searchUser, status, sortfield,startDate,endDate } = userAllFilterData;
-  if (searchUser == "") {
+  if (searchUser === "") {
     searchUser = undefined;
   } 
-   if (status == "") {
+   if (status === "") {
     status = undefined;
   } 
-   if (sortfield == "") {
+   if (sortfield === "") {
     sortfield = undefined;
   }
-   if (startDate == "") {
+   if (startDate === "") {
     startDate = undefined;
   }
-   if (endDate == "") {
+   if (endDate === "") {
     endDate = undefined;
   }
 

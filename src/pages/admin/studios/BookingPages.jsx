@@ -8,26 +8,27 @@ import MusicProduction from "../../../components/adminStudio/booking/MusicProduc
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 import bookingPageApi from "../../../services/bookingPageApi";
 
 function BookingPages() {
-  const [bookingPageCount, setBookingPageCount] = useState("c1");
+  const [bookingPageCount, setBookingPageCount] = useState("c0");
   const [products, setProducts] = useState([]);
-  let { page: paramData } = useParams();
+  // let { page: paramData } = useParams();
 
   // setBookingPageCount("c2");
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    if (paramData == "studio") {
+    if (pathname.includes("/Bookings/studio")) {
       setBookingPageCount("c1");
-    } else if (paramData == "musicproduction") {
+    } else if (pathname.includes("/Bookings/musicproduction")) {
       setBookingPageCount("c2");
-    } else if (paramData == "mixmaster") {
+    } else if (pathname.includes("/Bookings/mixmaster")) {
       setBookingPageCount("c3");
     }
-  }, [paramData]);
+  }, [pathname,bookingPageCount]);
 
   const navigate = useNavigate();
   const gotoSignin = () => {

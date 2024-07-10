@@ -15,7 +15,7 @@ import BookingActionBar from "../adminStudio/booking/BookingActionBar";
 import TeamsActionBar from "./TeamActionBar";
 import AllStudioDetail from "../adminStudio/AllStudioDetail";
 import AllStudioDetail2 from "../adminStudio/appsAndMore/AllStudioDetail2";
-import StudioPatners from "./StudioPatners";
+import StudioPartners from "./StudioPartners";
 import teamsApi from "../../services/teamsApi";
 import Subadmin from "./Subadmin";
 
@@ -33,7 +33,7 @@ function AllteamDetails() {
   useEffect(() => {
     if (currentPage == "Arm") {
       setTeamsPageCount("t1");
-    } else if (currentPage == "StudioPatners") {
+    } else if (currentPage == "StudioPartners") {
       setTeamsPageCount("t2");
     } else if (currentPage == "Artist") {
       setTeamsPageCount("t3");
@@ -187,8 +187,8 @@ function AllteamDetails() {
             shortby={shortby}
           />
         ) : // <AllStudioDetail />
-        currentNav == "Teams" && currentPage == "StudioPatners" ? (
-          <StudioPatners
+        currentNav == "Teams" && currentPage == "StudioPartners" ? (
+          <StudioPartners
             sendFilterDataToapi={sendFilterDataToapi}
             products={products}
             setProducts={setProducts}

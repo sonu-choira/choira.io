@@ -409,7 +409,7 @@ function AddNewRoom({
                 onChange={handleDiscountChange}
               />
             </div>
-            <div className={style.addNewStudioinputBox}>
+            <div className={style.customInput}>
               <label htmlFor="Dates">Booking Days </label>
               <Select
                 id="Dates"
@@ -433,8 +433,8 @@ function AddNewRoom({
                 format={format}
                 onChange={handelGeneralTime}
                 value={[
-                  dayjs(generalTime.startTime, format),
-                  dayjs(generalTime.endTime, format),
+                  dayjs(generalTime.startTime || "00:00", format),
+                  dayjs(generalTime.endTime || "00:00", format),
                 ]}
                 style={{ height: "100%", outline: "none" }}
               />
@@ -525,7 +525,7 @@ function AddNewRoom({
                 className={style.addTeamDetailbtn}
                 onClick={handleAddDetails}
               >
-                <MdOutlineAddBox /> &nbsp;<div>Add Booking Time</div>
+                <MdOutlineAddBox /> &nbsp;<div>Add Room Details</div>
               </span>
             )}
 
@@ -552,8 +552,8 @@ function AddNewRoom({
                       bt.startTime === ""
                         ? [dayjs("00:00", "HH:mm"), dayjs("00:00", "HH:mm")]
                         : [
-                            dayjs(bt.startTime, "HH:mm"),
-                            dayjs(bt.endTime, "HH:mm"),
+                            dayjs(bt.startTime || "00:00", "HH:mm"),
+                            dayjs(bt.endTime || "00:00", "HH:mm"),
                           ]
                     }
                     style={{

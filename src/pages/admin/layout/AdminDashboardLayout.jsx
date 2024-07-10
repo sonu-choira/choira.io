@@ -22,6 +22,7 @@ import AddNewRoom from "../../../components/adminStudio/AddNewRoom";
 import AllteamDetails from "../../../components/teamsSection/AllteamDetails";
 import ShowAllUser from "../../../components/userSection/ShowAllUser";
 import Overview from "../adminDashboardOverview/Overview";
+import Promotions from "../../../components/pramotation/Promotions";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -45,8 +46,14 @@ function AdminDashboardLayout() {
         <WebDashboard2 tabCount={tabCount} setTabCount={setTabCount} />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
-            <div>
-              <input type="text" placeholder="Search" />
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="Search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />
@@ -70,7 +77,7 @@ function AdminDashboardLayout() {
           ) : tabCount === 5 ? (
             <BookingPages />
           ) : tabCount === 6 ? (
-            ""
+            <Promotions />
           ) : (
             ""
           )}

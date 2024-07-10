@@ -36,7 +36,7 @@ class imgapi {
       return response.data;
     } catch (error) {
       console.error("Error uploading multiple images:", error.toJSON().message);
-      if(error.toJSON().message == "Network Error"){
+      if(error.toJSON().message === "Network Error"){
         // alert("Check your internet connection or Image size")
         Swal.fire({
           icon: "error",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import StudioPatners from "../teamsSection/StudioPatners";
+import StudioPartners from "../teamsSection/StudioPartners";
 import TeamsActionBar from "../teamsSection/TeamActionBar";
 import style from "../../pages/admin/studios/studio.module.css";
 import Button from "../../pages/admin/layout/Button";
@@ -145,9 +145,8 @@ function ShowAllUser() {
   };
   useEffect(() => {
     console.log("shortBySrNo", shortBySrNo);
-    if (shortBySrNo) {
-      setProducts((prev) => [...prev].reverse());
-    }
+
+    setProducts((prev) => [...prev].reverse());
   }, [shortBySrNo]);
 
   const handleSortByUser = () => {
@@ -246,7 +245,7 @@ function ShowAllUser() {
                   <tr>
                     <th style={{ width: "8%" }}>
                       <div className={style.headingContainer}>
-                        S.No.
+                        Sr.No.
                         <div
                           className={style.filterBox}
                           onClick={handleSortBySrNo}
@@ -307,7 +306,7 @@ function ShowAllUser() {
                         </div>
                       </div>
                     </th>
-                    <th style={{ width: "10%" }}>
+                    <th style={{ width: "15%" }}>
                       <div className={style.headingContainer}>
                         Created on
                         <div
@@ -365,7 +364,9 @@ function ShowAllUser() {
                     products.map((product, index) => (
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
-                          {index + 1 + (pageCount - 1) * 10}
+                          {!shortBySrNo
+                            ? index + 1 + (pageCount - 1) * 10
+                            : pageCount * 10 - index}
                         </td>
                         <td style={{ display: "flex", alignItems: "center" }}>
                           <div className={style.studioImage}>
@@ -380,8 +381,8 @@ function ShowAllUser() {
                         <td>{product.phone}</td>
                         <td>{product.email}</td>
                         <td>
-                          {moment(products.creationTimeStamp).format(
-                            "DD/MM/YYYY hh:mm:ss a"
+                          {moment(product.creationTimeStamp).format(
+                            "Do MMM  YY, hh:mm a"
                           )}
                         </td>
                         <td className={style.tableActionbtn}>
