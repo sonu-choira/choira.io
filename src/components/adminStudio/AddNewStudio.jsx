@@ -30,6 +30,7 @@ import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 import { errorAlert } from "../../pages/admin/layout/Alert";
 import { useFormik } from "formik";
 import CustomInput from "../../pages/admin/layout/CustomInput";
+import { set } from "react-ga";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -50,7 +51,7 @@ function AddNewStudio({ setSelectTab }) {
   };
 
   const data = useLocation();
-  console.log("the data id  ================== >", data?.state?.productData);
+  // console.log("the data id  ================== >", data?.state?.productData);
 
   const userStudioid = data?.state?.productData?._id;
   // alert(data.state.navCount);
@@ -165,7 +166,9 @@ function AddNewStudio({ setSelectTab }) {
     setFieldValue,
     setValues,
   } = useFormik({
-    initialValues: initialStudioData,
+    initialValues: data?.state?.productData
+      ? data?.state?.productData
+      : initialStudioData,
     onSubmit: (values) => {
       console.log(values);
 
@@ -174,30 +177,33 @@ function AddNewStudio({ setSelectTab }) {
   });
 
   useEffect(() => {
-    setStudioDetails((prevData) => ({
-      ...prevData,
-      totalRooms: rooms.length,
-    }));
+    // setStudioDetails((prevData) => ({
+    //   ...prevData,
+    //   totalRooms: rooms.length,
+    // }));
+    setFieldValue("totalRooms", rooms.length);
     // console.log(rooms.length);
-  }, [rooms.length]);
+  }, [rooms.length, setFieldValue]);
+
+  // useEffect(() => {
+  //   console.log("studioDetails change huaa hai ", studioDetails);
+  // }, [studioDetails]);
 
   useEffect(() => {
-    console.log("studioDetails change huaa hai ", studioDetails);
-  }, [studioDetails]);
+    // setStudioDetails((prevData) => ({
+    //   ...prevData, // Copy previous data
+    //   studioPhotos: images, // Update only the studioPhotos property
+    // }));
+    setFieldValue("studioPhotos", images);
+  }, [images, setFieldValue]);
 
   useEffect(() => {
-    setStudioDetails((prevData) => ({
-      ...prevData, // Copy previous data
-      studioPhotos: images, // Update only the studioPhotos property
-    }));
-  }, [images]);
-
-  useEffect(() => {
-    setStudioDetails((prevdata) => {
-      prevdata.teamDetails = teamDetails;
-      return prevdata;
-    });
-  }, [teamDetails.length]);
+    // setStudioDetails((prevdata) => {
+    //   prevdata.teamDetails = teamDetails;
+    //   return prevdata;
+    // });
+    setFieldValue("teamDetails", teamDetails);
+  }, [teamDetails.length, setFieldValue]);
 
   // useEffect(() => {
   //   setStudioDetails((prevdata) => {
@@ -207,23 +213,31 @@ function AddNewStudio({ setSelectTab }) {
   // }, [rooms?.length]);
 
   useEffect(() => {
-    setStudioDetails((prevdata) => {
-      return {
-        ...prevdata,
-        roomsDetails: rooms,
-      };
-    });
-  }, [rooms]);
+    // setStudioDetails((prevdata) => {
+    //   return {
+    //     ...prevdata,
+    //     roomsDetails: rooms,
+    //   };
+    // });
+    setFieldValue("roomsDetails", rooms);
+  }, [rooms, setFieldValue]);
 
   useEffect(() => {
-    setStudioDetails((prevdata) => {
-      prevdata.amenities = selectedStudioAmenities.map((name, index) => ({
+    // setStudioDetails((prevdata) => {
+    //   prevdata.amenities = selectedStudioAmenities.map((name, index) => ({
+    //     id: index,
+    //     name,
+    //   }));
+    //   return prevdata;
+    // });
+    setFieldValue(
+      "amenities",
+      selectedStudioAmenities.map((name, index) => ({
         id: index,
         name,
-      }));
-      return prevdata;
-    });
-  }, [selectedStudioAmenities.length]);
+      }))
+    );
+  }, [selectedStudioAmenities.length, setFieldValue]);
 
   // useEffect(() => {
   //   console.log("saveAddData change huaa hai ", saveAddData);
@@ -242,9 +256,8 @@ function AddNewStudio({ setSelectTab }) {
     console.log("room updated ", rooms);
   }, [rooms]);
   useEffect(() => {
-    if (studioDetails?.studioPhotos?.length)
-      setImages(studioDetails.studioPhotos);
-  }, [studioDetails?.studioPhotos?.length]);
+    if (values?.studioPhotos?.length) setImages(values.studioPhotos);
+  }, [values?.studioPhotos?.length]);
 
   const studioamenitiesList = [
     "Wifi",
@@ -261,14 +274,14 @@ function AddNewStudio({ setSelectTab }) {
 
   useEffect(() => {
     setSelectedStudioAmenities(
-      studioDetails?.amenities?.map((item) => item?.name || item) || []
+      values?.amenities?.map((item) => item?.name || item) || []
     );
-  }, [studioDetails?.amenities]);
+  }, [values?.amenities]);
 
   const handleSubmitButtonClick = () => {
     let hasError = false;
 
-    studioDetails.studioPhotos.forEach((element, index) => {
+    values.studioPhotos.forEach((element, index) => {
       if (typeof element === "object") {
         Swal.fire({
           icon: "error",
@@ -281,7 +294,7 @@ function AddNewStudio({ setSelectTab }) {
       }
     });
 
-    studioDetails.roomsDetails.forEach((room, roomIndex) => {
+    values.roomsDetails.forEach((room, roomIndex) => {
       room.roomPhotos.forEach((element, photoIndex) => {
         if (typeof element === "object") {
           Swal.fire({
@@ -321,8 +334,8 @@ function AddNewStudio({ setSelectTab }) {
 
     if (!hasError) {
       const updatedStudioDetails = {
-        ...studioDetails,
-        roomsDetails: studioDetails.roomsDetails.map((room) => {
+        ...values,
+        roomsDetails: values.roomsDetails.map((room) => {
           const isArrayOfStrings =
             Array.isArray(room.bookingDays) &&
             room.bookingDays.every((day) => typeof day === "string");
@@ -445,6 +458,9 @@ function AddNewStudio({ setSelectTab }) {
       }
     }
   };
+  useEffect(() => {
+    console.log("studioDetails==============---------====>", values);
+  }, [values]);
 
   return (
     <>
@@ -495,7 +511,7 @@ function AddNewStudio({ setSelectTab }) {
                   ? "Edit Studio"
                   : "Add new studio"}
               </div>
-              <form className={style.addNewStudioPage}>
+              <form className={style.addNewStudioPage} onSubmit={handleSubmit}>
                 <div
                   style={{
                     position: showMode ? "relative" : "",
@@ -511,14 +527,16 @@ function AddNewStudio({ setSelectTab }) {
                       type="text"
                       id="studioName"
                       placeholder="Enter Studio Area"
-                      name="studioName"
-                      value={studioDetails?.fullName}
-                      onChange={(e) =>
-                        setStudioDetails({
-                          ...studioDetails,
-                          fullName: e.target.value,
-                        })
-                      }
+                      name="fullName"
+                      value={values.fullName}
+                      // onChange={(e) =>
+                      //   setStudioDetails({
+                      //     ...studioDetails,
+                      //     fullName: e.target.value,
+                      //   })
+                      // }
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
 
                     <CustomInput
@@ -528,13 +546,15 @@ function AddNewStudio({ setSelectTab }) {
                       id="area"
                       placeholder="Enter Approx. Area"
                       name="area"
-                      value={studioDetails?.area}
-                      onChange={(e) =>
-                        setStudioDetails({
-                          ...studioDetails,
-                          area: e.target.value,
-                        })
-                      }
+                      value={values?.area}
+                      // onChange={(e) =>
+                      //   setStudioDetails({
+                      //     ...studioDetails,
+                      //     area: e.target.value,
+                      //   })
+                      // }
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
 
                     <CustomInput
@@ -544,13 +564,15 @@ function AddNewStudio({ setSelectTab }) {
                       id="pincode"
                       placeholder="Enter Pincode"
                       name="pincode"
-                      value={studioDetails?.pincode}
-                      onChange={(e) =>
-                        setStudioDetails({
-                          ...studioDetails,
-                          pincode: e.target.value,
-                        })
-                      }
+                      value={values?.pincode}
+                      // onChange={(e) =>
+                      //   setStudioDetails({
+                      //     ...studioDetails,
+                      //     pincode: e.target.value,
+                      //   })
+                      // }
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
 
                     <CustomInput
@@ -560,14 +582,16 @@ function AddNewStudio({ setSelectTab }) {
                       list="city"
                       id="addcity"
                       placeholder="Select city Name"
-                      name="addcity"
-                      value={studioDetails?.city}
-                      onChange={(e) =>
-                        setStudioDetails({
-                          ...studioDetails,
-                          city: e.target.value,
-                        })
-                      }
+                      name="city"
+                      value={values?.city}
+                      // onChange={(e) =>
+                      //   setStudioDetails({
+                      //     ...studioDetails,
+                      //     city: e.target.value,
+                      //   })
+                      // }
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
                     <datalist id="city">
                       <option value="Mumbai">Mumbai</option>
@@ -587,13 +611,15 @@ function AddNewStudio({ setSelectTab }) {
                       id="mapLink"
                       placeholder="Enter Studio MapLink"
                       name="mapLink"
-                      value={studioDetails?.mapLink}
-                      onChange={(e) =>
-                        setStudioDetails({
-                          ...studioDetails,
-                          mapLink: e.target.value,
-                        })
-                      }
+                      value={values?.mapLink}
+                      // onChange={(e) =>
+                      //   setStudioDetails({
+                      //     ...studioDetails,
+                      //     mapLink: e.target.value,
+                      //   })
+                      // }
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
                   </div>
 
@@ -612,13 +638,16 @@ function AddNewStudio({ setSelectTab }) {
                       <select
                         required
                         id="guest"
-                        value={studioDetails?.maxGuests}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            maxGuests: e.target.value,
-                          })
-                        }
+                        name="maxGuests"
+                        value={values?.maxGuests}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        // onChange={(e) =>
+                        //   setStudioDetails({
+                        //     ...studioDetails,
+                        //     maxGuests: e.target.value,
+                        //   })
+                        // }
                       >
                         <option value={""}>Select Maximum Guest allowed</option>
                         <option value={"1"}>1</option>
@@ -642,13 +671,15 @@ function AddNewStudio({ setSelectTab }) {
                       id="state"
                       placeholder="Select state Name"
                       name="state"
-                      value={studioDetails?.state}
-                      onChange={(e) =>
-                        setStudioDetails({
-                          ...studioDetails,
-                          state: e.target.value,
-                        })
-                      }
+                      value={values?.state}
+                      // onChange={(e) =>
+                      //   setStudioDetails({
+                      //     ...studioDetails,
+                      //     state: e.target.value,
+                      //   })
+                      // }
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
                     <datalist id="state">
                       <option value="Mumbai">Mumbai</option>
@@ -660,13 +691,15 @@ function AddNewStudio({ setSelectTab }) {
                       <label htmlFor="country">Select Country</label>
                       <select
                         id="country"
-                        value={studioDetails?.country}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            country: e.target.value,
-                          })
-                        }
+                        value={values?.country}
+                        // onChange={(e) =>
+                        //   setStudioDetails({
+                        //     ...studioDetails,
+                        //     country: e.target.value,
+                        //   })
+                        // }
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       >
                         <option value="" disabled>
                           Select Country
@@ -684,13 +717,15 @@ function AddNewStudio({ setSelectTab }) {
                       id="address"
                       placeholder="Enter Studio Area"
                       name="address"
-                      value={studioDetails?.address}
-                      onChange={(e) =>
-                        setStudioDetails({
-                          ...studioDetails,
-                          address: e.target.value,
-                        })
-                      }
+                      value={values?.address}
+                      // onChange={(e) =>
+                      //   setStudioDetails({
+                      //     ...studioDetails,
+                      //     address: e.target.value,
+                      //   })
+                      // }
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
                   </div>
                 </div>
@@ -710,16 +745,19 @@ function AddNewStudio({ setSelectTab }) {
                         type="text"
                         id="aboutStudio"
                         placeholder="Enter Studio Details"
-                        value={studioDetails?.aboutUs?.aboutUs}
-                        onChange={(e) =>
-                          setStudioDetails({
-                            ...studioDetails,
-                            aboutUs: {
-                              ...studioDetails?.aboutUs,
-                              aboutUs: e.target.value,
-                            },
-                          })
-                        }
+                        name="aboutUs"
+                        value={values?.aboutUs?.aboutUs}
+                        // onChange={(e) =>
+                        //   setStudioDetails({
+                        //     ...studioDetails,
+                        //     aboutUs: {
+                        //       ...studioDetails?.aboutUs,
+                        //       aboutUs: e.target.value,
+                        //     },
+                        //   })
+                        // }
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       />
                     </div>
 

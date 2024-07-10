@@ -4,6 +4,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import upload from "../../assets/img/upload.png";
 import style from "../../pages/admin/studios/studio.module.css";
 import cross from "../../assets/cross.svg";
+import { useFormik } from "formik";
 
 import {
   FaCheckDouble,
@@ -33,6 +34,28 @@ function AddNewRoom({
   showMode,
 }) {
   const currentRoomsData = rooms[indexofrooms] || "";
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+    setValues,
+  } = useFormik({
+    initialValues: currentRoomsData,
+    onSubmit: (values) => {
+      console.log(values);
+
+      // Handle form submission here
+    },
+  });
+  useEffect(() => {
+    console.log("rome value chnage ", values);
+    // setrooms((prev=>[...prev, values[indexofrooms]]));
+  }, [values]);
+
   const format = "HH:mm";
   const customStyles = {
     height: "90%",
@@ -40,20 +63,20 @@ function AddNewRoom({
   };
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
-    currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
+    values?.bookingDays?.map((item) => item?.name || item) || []
   );
   const [time, setTime] = useState([]);
   const [generalTime, setGeneralTime] = useState({
-    startTime: currentRoomsData?.generalTime?.startTime || "00:00",
-    endTime: currentRoomsData?.generalTime?.endTime || "00:00",
+    startTime: values?.generalTime?.startTime || "00:00",
+    endTime: values?.generalTime?.endTime || "00:00",
   });
   const handleAddDetails = () => {
     setDetails((prevDetails) => [...prevDetails, ""]); // Add an empty string to the details array
   };
 
   const [bookingTimes, setBookingTimes] = useState(
-    currentRoomsData?.availabilities
-      ? [...currentRoomsData.availabilities]
+    values?.availabilities
+      ? [...values.availabilities]
       : [{ startTime: "00:00", endTime: "00:00" }]
   );
 
@@ -61,70 +84,71 @@ function AddNewRoom({
   // let genreralEndTime;
 
   const [details, setDetails] = useState(
-    currentRoomsData.details ? currentRoomsData.details : [[]]
+    values.details ? values.details : [[]]
   );
 
   const inputRef = useRef(null);
-  const [images, setImages] = useState(
-    currentRoomsData ? currentRoomsData.roomPhotos : []
-  );
+  const [images, setImages] = useState(values ? values.roomPhotos : []);
 
   useEffect(() => {
-    let dis = currentRoomsData.discountPercentage;
-    let price = currentRoomsData.basePrice;
+    let dis = values.discountPercentage;
+    let price = values.basePrice;
 
     let cal = (price, dis) => {
       let discountedAmount = (price * dis) / 100;
       let calculatedBasePrice = price - discountedAmount; // Renamed to avoid conflict
       return calculatedBasePrice;
     };
-    currentRoomsData.pricePerHour = cal(price, dis);
+    values.pricePerHour = cal(price, dis);
 
     // Update basePrice in state or do something with it here
-  }, [currentRoomsData.basePrice, currentRoomsData.discountPercentage]);
+  }, [values.basePrice, values.discountPercentage]);
 
   useEffect(() => {
-    setrooms((prevRooms) => {
-      return prevRooms.map((room, idx) => {
-        if (idx === indexofrooms) {
-          return {
-            ...room, // Copy the previous room data
-            roomPhotos: images, // Update roomPhotos with the new images
-          };
-        } else {
-          return room;
-        }
-      });
-    });
-  }, [images]);
+    // setrooms((prevRooms) => {
+    //   return prevRooms.map((room, idx) => {
+    //     if (idx === indexofrooms) {
+    //       return {
+    //         ...room, // Copy the previous room data
+    //         roomPhotos: images, // Update roomPhotos with the new images
+    //       };
+    //     } else {
+    //       return room;
+    //     }
+    //   });
+    // });
+    setFieldValue("roomPhotos", images);
+  }, [images, setFieldValue]);
 
   useEffect(() => {
-    setrooms((prevRooms) => {
-      return prevRooms.map((room, idx) => {
-        if (idx === indexofrooms) {
-          return {
-            ...room, // Copy the previous room data
-            roomId: indexofrooms + 1,
-          };
-        } else {
-          return room;
-        }
-      });
-    });
+    // setrooms((prevRooms) => {
+    //   return prevRooms.map((room, idx) => {
+    //     if (idx === indexofrooms) {
+    //       return {
+    //         ...room, // Copy the previous room data
+    //         roomId: indexofrooms + 1,
+    //       };
+    //     } else {
+    //       return room;
+    //     }
+    //   });
+    // });
+    setFieldValue("roomId", indexofrooms + 1);
   }, []);
 
   useEffect(() => {
     console.log("images", images);
-  }, [images]);
+  }, [images, setFieldValue]);
   useEffect(() => {
-    setrooms((prerooms) => {
-      prerooms.map((rm, idex) => {
-        if (idex === indexofrooms) {
-          rm.amenities = selectedAmenities;
-        }
-      });
-      return prerooms;
-    });
+    // setrooms((prerooms) => {
+    //   prerooms.map((rm, idex) => {
+    //     if (idex === indexofrooms) {
+    //       rm.amenities = selectedAmenities;
+    //     }
+    //   });
+    //   return prerooms;
+    // });
+    setFieldValue("amenities", selectedAmenities);
   }, [selectedAmenities.length]);
 
   // useEffect(() => {
@@ -144,29 +168,20 @@ function AddNewRoom({
   }, [rooms]);
 
   useEffect(() => {
-    setrooms((prerooms) => {
-      return prerooms.map((rm, idex) => {
-        if (idex === indexofrooms) {
-          return { ...rm, availabilities: bookingTimes };
-        }
-        return rm;
-      });
-    });
-  }, [bookingTimes]);
+    // setrooms((prerooms) => {
+    //   return prerooms.map((rm, idex) => {
+    //     if (idex === indexofrooms) {
+    //       return { ...rm, availabilities: bookingTimes };
+    //     }
+    //     return rm;
+    //   });
+    // });
+    setFieldValue("availabilities", bookingTimes);
+  }, [bookingTimes, setFieldValue]);
 
   useEffect(() => {
-    setrooms((prerooms) => {
-      return prerooms.map((room) => {
-        return {
-          ...room,
-          generalTime: {
-            startTime: generalTime.startTime,
-            endTime: generalTime.endTime,
-          },
-        };
-      });
-    });
-  }, [generalTime]);
+    setFieldValue("generalTime", generalTime);
+  }, [generalTime, setFieldValue]);
 
   const handelGeneralTime = (_, timeString) => {
     setGeneralTime({
@@ -261,10 +276,8 @@ function AddNewRoom({
   );
 
   useEffect(() => {
-    setSelectedAmenities(
-      currentRoomsData?.amenities?.map((item) => item) || []
-    );
-  }, [currentRoomsData?.amenities]);
+    setSelectedAmenities(values?.amenities?.map((item) => item) || []);
+  }, [values?.amenities]);
 
   // useEffect(() => {
   //   setSelectedDate(
@@ -274,7 +287,7 @@ function AddNewRoom({
 
   useEffect(() => {
     console.log("selectedDate updated:", selectedDate);
-    currentRoomsData.bookingDays = selectedDate;
+    values.bookingDays = selectedDate;
   }, [selectedDate.length]);
 
   useEffect(() => {
@@ -283,53 +296,57 @@ function AddNewRoom({
 
   const handleRoomNameChange = (event) => {
     const { value } = event.target;
-    setrooms((prevRooms) => {
-      const updatedRooms = [...prevRooms];
-      updatedRooms[indexofrooms] = {
-        ...currentRoomsData,
-        roomName: value,
-      };
-      return updatedRooms;
-    });
+    setFieldValue("roomName", value);
+    // setrooms((prevRooms) => {
+    //   const updatedRooms = [...prevRooms];
+    //   updatedRooms[indexofrooms] = {
+    //     ...currentRoomsData,
+    //     roomName: value,
+    //   };
+    //   return updatedRooms;
+    // });
   };
 
   const handleRoomAreaChange = (event) => {
     const { value } = event.target;
-    setrooms((prevRooms) => {
-      const updatedRooms = [...prevRooms];
-      updatedRooms[indexofrooms] = {
-        ...currentRoomsData,
-        area: value,
-      };
-      return updatedRooms;
-    });
+    // setrooms((prevRooms) => {
+    //   const updatedRooms = [...prevRooms];
+    //   updatedRooms[indexofrooms] = {
+    //     ...currentRoomsData,
+    //     area: value,
+    //   };
+    //   return updatedRooms;
+    // });
+    setFieldValue("area", value);
   };
   const handleBasePriceChange = (event) => {
     const { value } = event.target;
-    setrooms((prevRooms) => {
-      const updatedRooms = [...prevRooms];
-      updatedRooms[indexofrooms] = {
-        ...updatedRooms[indexofrooms],
-        basePrice: parseFloat(value),
-      };
-      console.log(
-        "updatedRooms--------------------------------------",
-        updatedRooms
-      );
-      return updatedRooms;
-    });
+    // setrooms((prevRooms) => {
+    //   const updatedRooms = [...prevRooms];
+    //   updatedRooms[indexofrooms] = {
+    //     ...updatedRooms[indexofrooms],
+    //     basePrice: parseFloat(value),
+    //   };
+    //   console.log(
+    //     "updatedRooms--------------------------------------",
+    //     updatedRooms
+    //   );
+    //   return updatedRooms;
+    // });
+    setFieldValue("basePrice", parseFloat(value));
   };
 
   const handleDiscountChange = (event) => {
     const { value } = event.target;
-    setrooms((prevRooms) => {
-      const updatedRooms = [...prevRooms];
-      updatedRooms[indexofrooms] = {
-        ...currentRoomsData,
-        discountPercentage: parseFloat(value),
-      };
-      return updatedRooms;
-    });
+    // setrooms((prevRooms) => {
+    //   const updatedRooms = [...prevRooms];
+    //   updatedRooms[indexofrooms] = {
+    //     ...currentRoomsData,
+    //     discountPercentage: parseFloat(value),
+    //   };
+    //   return updatedRooms;
+    // });
+    setFieldValue("discountPercentage", parseFloat(value));
   };
   const handleRoomDetailsChange = (e, index) => {
     const updatedDetails = [...details];
@@ -345,7 +362,8 @@ function AddNewRoom({
   // }, [details]);
 
   useEffect(() => {
-    currentRoomsData.details = details;
+    // currentRoomsData.details = details;
+    setFieldValue("details", details);
   }, [details]);
 
   const handleCancelDetails = (index) => {
@@ -357,7 +375,7 @@ function AddNewRoom({
   return (
     <>
       <div className={style.addNewStudioTitle}>Add new room</div>
-      <div className={style.addNewRoomPage}>
+      <form className={style.addNewRoomPage} onSubmit={handleSubmit}>
         <div
           style={{ position: showMode ? "relative" : "", overflow: "hidden" }}
         >
@@ -370,8 +388,9 @@ function AddNewRoom({
               type="text"
               id="RoomName"
               placeholder="Enter Room Name"
-              value={currentRoomsData?.roomName}
+              value={values?.roomName}
               onChange={handleRoomNameChange}
+              onBlur={handleBlur}
             />
 
             <CustomInput
@@ -380,7 +399,7 @@ function AddNewRoom({
               type="number"
               id="RoomArea"
               placeholder="Enter Approx. Area"
-              value={currentRoomsData?.area}
+              value={values?.area}
               onChange={handleRoomAreaChange}
             />
 
@@ -390,7 +409,7 @@ function AddNewRoom({
               type="number"
               id="price"
               placeholder="Enter Price Per Hour"
-              value={currentRoomsData?.basePrice}
+              value={values?.basePrice}
               onChange={handleBasePriceChange}
             />
 
@@ -400,7 +419,7 @@ function AddNewRoom({
               type="number"
               id="Discount"
               placeholder="Enter Discount"
-              value={currentRoomsData?.discountPercentage}
+              value={values?.discountPercentage}
               min={0}
               max={100}
               onChange={handleDiscountChange}
@@ -412,7 +431,7 @@ function AddNewRoom({
               type="number"
               id="pricePerHour"
               placeholder="Enter Price Per Hour"
-              value={currentRoomsData?.pricePerHour}
+              value={values?.pricePerHour}
               readOnly
               disabled
             />
@@ -567,7 +586,7 @@ function AddNewRoom({
             </span>
           </div>
         </div>
-      </div>
+      </form>
 
       <StudioFooter
         backOnclick={() => {

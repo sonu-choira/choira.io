@@ -150,9 +150,9 @@ function DateAndSearchFilter({
 
   const handleChange = (event) => {
     if (userFiler) {
-      setUserFilterText(event.target.value.trim());
+      setUserFilterText(event.target.value);
     } else {
-      setSearchQuery(event.target.value.trim());
+      setSearchQuery(event.target.value);
     }
   };
 
