@@ -21,6 +21,7 @@ import { TimePicker } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
+import { errorAlert, confirmAlret } from "../../pages/admin/layout/Alert";
 
 function AddNewRoom({
   setshowRoomsDetails,
@@ -31,7 +32,25 @@ function AddNewRoom({
   setIndexofrooms,
   showMode,
 }) {
-  const currentRoomsData = rooms[indexofrooms] || "";
+  let currentRoomsData = rooms[indexofrooms] || "";
+  let defaultData = {
+    roomName: "",
+
+    pricePerHour: "",
+    discount: "",
+    bookingDays: [],
+
+    generalTime: {
+      startTime: "",
+      endTime: "",
+    },
+    bookingStartTime: [],
+    bookingEndTime: [],
+    roomPhotos: [],
+    amenities: [],
+    roomDetails: "",
+  };
+
   const format = "HH:mm";
   const customStyles = {
     height: "90%",
@@ -353,10 +372,22 @@ function AddNewRoom({
     setDetails(teampDetail);
   };
 
+  const handleDataUpdate = () => {
+    delete currentRoomsData.bookingStartTime;
+    delete currentRoomsData.bookingEndTime;
+    for (const key of Object.keys(currentRoomsData)) {
+      if (`${currentRoomsData[key]}`.length <= 0) {
+        return errorAlert(`${key} field is empty`);
+      }
+    }
+
+    setshowRoomsDetails(false);
+  };
+
   return (
     <>
       <div className={style.addNewStudioTitle}>Add new room</div>
-      <div className={style.addNewRoomPage}>
+      <form className={style.addNewRoomPage}>
         <div
           style={{
             position: showMode ? "relative" : "",
@@ -577,18 +608,32 @@ function AddNewRoom({
               className={style.addTeamDetailbtn}
               onClick={handleAddBookingTime}
             >
-              <MdOutlineAddBox /> &nbsp;<div>Add Booking Time</div>
+              <MdOutlineAddBox /> &nbsp;<div>Add Booking Time </div>
             </span>
           </div>
         </div>
-      </div>
+      </form>
       <StudioFooter
         backOnclick={() => {
-          setshowRoomsDetails(false);
+          // handleDataUpdate();
+          // errorAlert("hii");
+          confirmAlret("Room data will be lost ", "").then((result) => {
+            if (result.isConfirmed) {
+              console.log("default data is =====>", defaultData);
+              console.log("room data is =====>", rooms);
+              setshowRoomsDetails(false);
+              setrooms((prevRooms) => {
+                const newRooms = [...prevRooms];
+                newRooms[indexofrooms] = defaultData; // Reset to defaultData
+                return newRooms;
+              });
+            }
+          });
         }}
         saveOnclick={() => {
-          setshowRoomsDetails(false);
+          handleDataUpdate();
         }}
+        backType={"reset"}
       />
     </>
   );

@@ -51,7 +51,7 @@ const OptVerify = ({
 
   useEffect(() => {
     // Set focus to the next input when enteredOTP changes
-    if (enteredOTP.length < inputRefs.current.length) {
+    if (enteredOTP?.length < inputRefs.current.length) {
       inputRefs.current[enteredOTP.length].focus();
     }
   }, [enteredOTP]);
@@ -232,7 +232,7 @@ const OptVerify = ({
               type="text"
               maxLength="1"
               pattern="\d*"
-              value={enteredOTP[index] || ""}
+              value={enteredOTP?.[index] || ""}
               onChange={(e) => handleOTPChange(index, e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Backspace") {

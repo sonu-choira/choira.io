@@ -215,6 +215,7 @@ function DeleteAccount() {
                         setdisableBtn={setdisableBtn}
                         deletePage={deletePage}
                         setEnteredOTP={setEnteredOTP}
+                        enteredOTP={enteredOTP}
                       />
                     ) : (
                       <DeleteAccountEmailVerify

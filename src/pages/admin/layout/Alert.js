@@ -23,3 +23,15 @@ export const sucessAlret = (msg, text, showConfirmButton,timer) => {
 
   });
 };
+
+export const confirmAlret = (text, title, confirmButtonText) => {
+  return Swal.fire({
+    text: text || "You won't be able to revert this!",
+    title: title || "Are you sure?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: confirmButtonText || "Yes, do it!"
+  });
+}
