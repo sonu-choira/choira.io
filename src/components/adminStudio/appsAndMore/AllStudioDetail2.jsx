@@ -172,7 +172,7 @@ function AllStudioDetail2({
   const status = ["active", "inactive"];
 
   const [selectedCity, setSelectedCity] = useState([]);
-  const [shortby, setShortby] = useState("creationTimeStamp:asc");
+  const [shortby, setShortby] = useState("creationTimeStamp:desc");
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
   // var selectedDate = "";
@@ -265,7 +265,7 @@ function AllStudioDetail2({
                       onClick={handelShortbyClick}
                       style={{
                         backgroundColor:
-                          shortby !== "creationTimeStamp:asc"
+                          shortby !== "creationTimeStamp:desc"
                             ? "#ffc70133"
                             : "",
                       }}

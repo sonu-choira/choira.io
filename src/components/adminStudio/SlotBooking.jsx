@@ -238,7 +238,7 @@ function SlotBooking({ setSelectTab }) {
       })
       .catch((err) => {
         console.log(err);
-        errorAlert("Booking failed");
+        errorAlert(err || "Booking failed");
 
         setshowLoader(false);
       });
