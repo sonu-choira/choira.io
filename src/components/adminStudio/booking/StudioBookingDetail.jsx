@@ -111,8 +111,8 @@ function StudioBookingDetail({
                       </td>
 
                       <td>{products.studioName}</td>
-                      <td>{products.planId}</td>
-                      {/* <td>{products.bookingDate}</td> */}
+                      {/* <td>{products.planId}</td> */}
+                      <td>{ moment.duration(moment(products.bookingTime.endTime, 'HH:mm').diff(moment(products.bookingTime.startTime, 'HH:mm'))).asHours()}</td>
                       <td>
                         {moment(products.bookingDate).format(
                           // "DD/MM/YYYY hh:mm:ss a"
