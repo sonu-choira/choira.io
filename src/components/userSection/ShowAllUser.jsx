@@ -19,6 +19,7 @@ import UserProfile from "./UserProfile";
 import Alert from "antd/es/alert/Alert";
 import { errorAlert } from "../../pages/admin/layout/Alert";
 import moment from "moment";
+import axios from 'axios';
 
 let userAllFilterData = {
   sortfield: "",
@@ -53,6 +54,9 @@ function ShowAllUser() {
   useEffect(() => {
     console.log(" -----");
     setProducts([]);
+
+    const source = axios.CancelToken.source();
+
 
     // checking if filter has any data
 
@@ -98,7 +102,7 @@ function ShowAllUser() {
         userAllFilterData.sortfield = dataTosend;
       }
       userApi
-        .getAllUser(pageCount, userAllFilterData)
+        .getAllUser(pageCount, userAllFilterData,{ cancelToken: source.token })
         .then((response) => {
           console.log(`====================> response `, response);
           console.log("response.data.users", response.users);
@@ -110,13 +114,16 @@ function ShowAllUser() {
           }
         })
         .catch((error) => {
-          console.error("Error fetching studios:", error);
+          // console.error("Error fetching studios:", error);
         });
     }
 
     // const type =  ;
 
     console.log("inside useEffect");
+    return (()=>{
+      source.cancel('Operation canceled by the user.');
+    })
   }, [pageCount, shortByUser, shortByEmail]);
 
   const [selectedCity, setSelectedCity] = useState([]);

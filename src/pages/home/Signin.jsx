@@ -466,8 +466,11 @@ function Signin() {
   };
   let [checkOtp, setCheckOtp] = useState(true);
   const [enteredOTP, setEnteredOTP] = useState("");
+
+  const source = axios.CancelToken.source();
+
   const check_otp_btn = () => {
-    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP).then(
+    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP,"admin",{ cancelToken: source.token }).then(
       (response) => {
         console.log("res------", response);
         if (response.status) {
@@ -484,6 +487,13 @@ function Signin() {
       }
     );
   };
+
+  useEffect(() => {
+    return () => {
+      source.cancel('Operation canceled by the user.');
+    }
+  }, [source])
+  
   const gotoHome = () => {
     navigate("/home");
   };

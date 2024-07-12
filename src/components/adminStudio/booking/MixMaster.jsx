@@ -67,7 +67,7 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
               ) : (
                 currentTableData.map((products) => {
                   return (
-                    <tr>
+                    <tr key={products.userPhone}>
                       <td style={{ textAlign: "center" }}>#{products._id}</td>
                       <td>{products.userFullName}</td>
 
