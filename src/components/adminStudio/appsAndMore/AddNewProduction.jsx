@@ -151,6 +151,7 @@ function AddNewProduction({ setSelectTab }) {
     delete checkData.startingPrice;
     delete checkData.portfolio;
     delete checkData.userReviews;
+    delete checkData.servicePhotos;
 
     for (const key of Object.keys(checkData)) {
       const value = checkData[key];
