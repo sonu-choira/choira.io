@@ -51,6 +51,8 @@ function MusicProduction({
               type="text"
               placeholder="Search"
               className={style.puredisabled}
+              disabled
+              readOnly
             />
           </div>
         </div>

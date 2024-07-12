@@ -45,6 +45,8 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
               type="text"
               placeholder="Search"
               className={style.puredisabled}
+              disabled
+              readOnly
             />
           </div>
         </div>

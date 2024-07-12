@@ -64,9 +64,15 @@ function StudioBookingDetail({
     setProducts(products);
   }, [products]);
 
-  const getNoOfhours = (bookingTime)=>{
-    return moment.duration(moment(bookingTime?.endTime, 'HH:mm').diff(moment(bookingTime?.startTime, 'HH:mm'))).asHours();
-  }
+  const getNoOfhours = (bookingTime) => {
+    return moment
+      .duration(
+        moment(bookingTime?.endTime, "HH:mm").diff(
+          moment(bookingTime?.startTime, "HH:mm")
+        )
+      )
+      .asHours();
+  };
 
   return (
     <>
@@ -85,6 +91,8 @@ function StudioBookingDetail({
               type="text"
               placeholder="Search"
               className={style.puredisabled}
+              disabled
+              readOnly
             />
           </div>
         </div>
@@ -116,7 +124,7 @@ function StudioBookingDetail({
 
                       <td>{products.studioName}</td>
                       {/* <td>{products.planId}</td> */}
-                      <td>{ getNoOfhours(products.bookingTime)}</td>
+                      <td>{getNoOfhours(products.bookingTime)}</td>
                       <td>
                         {moment(products.bookingDate).format(
                           // "DD/MM/YYYY hh:mm:ss a"

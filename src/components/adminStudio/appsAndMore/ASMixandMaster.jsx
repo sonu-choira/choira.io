@@ -198,7 +198,7 @@ function ASMixandMaster({
                         </div>
                         &nbsp;&nbsp;{product.fullName}
                       </td>
-                      <td>Starting from ₹{product.price}</td>
+                      <td>Starting from ₹{product.pricing?.["IN"]?.price}</td>
                       <td>
                         {product.totalPlans}
                         <br />

@@ -279,6 +279,36 @@ function AddNewStudio({ setSelectTab }) {
       };
 
       if (isEditMode) {
+        const correctedRealData = correctDataTypes(updatedStudioDetails);
+        const checkData = { ...correctedRealData };
+        delete checkData.availabilities;
+        delete checkData.clientPhotos;
+        delete checkData.creationTimeStamp;
+        delete checkData.featuredReviews;
+        delete checkData.isActive;
+        delete checkData.latitude;
+        delete checkData.location;
+        delete checkData.longitude;
+        delete checkData.overallAvgRating;
+        delete checkData._id;
+        delete checkData.pricePerHour;
+        delete checkData.reviews;
+
+        for (const key of Object.keys(checkData)) {
+          const value = checkData[key];
+
+          if (
+            (typeof value === "string" && value.length <= 0) ||
+            value == "" ||
+            (Array.isArray(value) && value.length === 0) ||
+            (typeof value === "object" &&
+              !Array.isArray(value) &&
+              value !== null &&
+              Object.keys(value).length === 0)
+          ) {
+            return errorAlert(`${key} field is empty`);
+          }
+        }
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -289,19 +319,6 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Update it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            const correctedRealData = correctDataTypes(updatedStudioDetails);
-            if (
-              correctedRealData.maxGuests === "" ||
-              correctedRealData.maxGuests === null
-            ) {
-              errorAlert("Please enter max guests");
-              console.log(
-                "correctedRealData.maxGuests",
-                correctedRealData.maxGuests
-              );
-              return;
-            }
-
             console.log("studioDetails", correctedRealData);
             appAndmoreApi
               .updateStudio(userStudioid, correctedRealData)

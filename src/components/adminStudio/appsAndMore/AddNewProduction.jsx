@@ -146,6 +146,31 @@ function AddNewProduction({ setSelectTab }) {
     // addOns: [],
   });
 
+  const handelValidateData = (updatedData) => {
+    const checkData = { ...updatedData };
+    delete checkData.startingPrice;
+    delete checkData.portfolio;
+    delete checkData.userReviews;
+
+    for (const key of Object.keys(checkData)) {
+      const value = checkData[key];
+
+      if (
+        (typeof value === "string" && value.length <= 0) ||
+        value == "" ||
+        (Array.isArray(value) && value.length === 0) ||
+        (typeof value === "object" &&
+          !Array.isArray(value) &&
+          value !== null &&
+          Object.keys(value).length === 0)
+      ) {
+        errorAlert(`${key} field is empty`);
+        return false; // Indicating validation failure
+      }
+    }
+    return true; // Indicating validation success
+  };
+
   const [sendataToApi, setsendataToApi] = useState({
     serviceName: "",
     startingPrice: "",
@@ -233,6 +258,27 @@ function AddNewProduction({ setSelectTab }) {
 
     if (!hasError) {
       if (isEditMode) {
+        // const checkData = { ...updatedData };
+        // delete checkData.startingPrice;
+        // delete checkData.portfolio;
+        // delete checkData.userReviews;
+        // for (const key of Object.keys(checkData)) {
+        //   const value = checkData[key];
+
+        //   if (
+        //     (typeof value === "string" && value.length <= 0) ||
+        //     value == "" ||
+        //     (Array.isArray(value) && value.length === 0) ||
+        //     (typeof value === "object" &&
+        //       !Array.isArray(value) &&
+        //       value !== null &&
+        //       Object.keys(value).length === 0)
+        //   ) {
+        //     return errorAlert(`${key} field is empty`);
+        //   }
+        // }
+        const isValid = handelValidateData(updatedData);
+        if (!isValid) return; // Stop execution if validat
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -244,6 +290,7 @@ function AddNewProduction({ setSelectTab }) {
         }).then((result) => {
           if (result.isConfirmed) {
             console.log("updatedData", updatedData);
+
             appAndmoreApi
               .updateService(serviceId, updatedData)
               .then((response) => {
@@ -279,6 +326,28 @@ function AddNewProduction({ setSelectTab }) {
           }
         });
       } else {
+        // const checkData = { ...updatedData };
+        // delete checkData.startingPrice;
+        // delete checkData.portfolio;
+        // delete checkData.userReviews;
+
+        // for (const key of Object.keys(checkData)) {
+        //   const value = checkData[key];
+
+        //   if (
+        //     (typeof value === "string" && value.length <= 0) ||
+        //     value == "" ||
+        //     (Array.isArray(value) && value.length === 0) ||
+        //     (typeof value === "object" &&
+        //       !Array.isArray(value) &&
+        //       value !== null &&
+        //       Object.keys(value).length === 0)
+        //   ) {
+        //     return errorAlert(`${key} field is empty`);
+        //   }
+        // }
+        const isValid = handelValidateData(updatedData);
+        if (!isValid) return; // Stop execution if validat
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",

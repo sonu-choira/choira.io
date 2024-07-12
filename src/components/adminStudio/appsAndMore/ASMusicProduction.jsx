@@ -185,7 +185,7 @@ function ASMusicProduction({
                         </div>
                         &nbsp;&nbsp;{products.fullName}
                       </td>
-                      <td>Starting from ₹{products.price}</td>
+                      <td>Starting from ₹{products.pricing?.["IN"]?.price}</td>
                       <td>
                         {products?.packages?.length}
                         <br />
