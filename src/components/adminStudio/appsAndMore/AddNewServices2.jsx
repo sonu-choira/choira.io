@@ -18,6 +18,7 @@ import cross from "../../../assets/cross.svg";
 import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
 import { MdCancel } from "react-icons/md";
 import MultipleSelect from "../../../pages/admin/layout/MultipleSelect";
+import { confirmAlret, errorAlert } from "../../../pages/admin/layout/Alert";
 
 function AddNewServices2({
   setShowServices,
@@ -50,6 +51,13 @@ function AddNewServices2({
       ? currentServiceData?.amenites?.map((item) => item?.name || item) || []
       : []
   );
+  let defaultData = {
+    photo_url: [],
+    name: "",
+    about: "",
+    amenities: [],
+    price: "",
+  };
 
   // useEffect(() => {
   //   if (isEditMode) {
@@ -58,6 +66,91 @@ function AddNewServices2({
   //     );
   //   }
   // }, [isEditMode]);
+
+  const handleValidateData = (updatedData) => {
+    const checkData = { ...updatedData };
+    delete checkData.amenities;
+
+    // Function to recursively validate nested objects
+    const validateNestedObject = (obj, parentKey = "") => {
+      for (const key of Object.keys(obj)) {
+        const value = obj[key];
+        const fullKey = parentKey ? `${parentKey}.${key}` : key;
+
+        console.log(`Checking key: ${fullKey}, value:`, value);
+
+        if (key === "price") {
+          if (typeof value !== "number" || value < 0) {
+            errorAlert(`${fullKey} field is empty or invalid`);
+            return false; // Indicating validation failure
+          }
+        } else {
+          // Validate other fields like service name, amenities, etc.
+          if (
+            (typeof value === "string" && value.trim().length === 0) || // String field validation
+            (Array.isArray(value) && value.length === 0) || // Array field validation
+            (typeof value === "object" &&
+              value !== null &&
+              !Array.isArray(value) &&
+              Object.keys(value).length === 0) // Object field validation
+          ) {
+            errorAlert(`${fullKey} field is empty`);
+            return false; // Indicating validation failure
+          }
+        }
+
+        // Recursively validate nested objects
+        if (
+          typeof value === "object" &&
+          value !== null &&
+          !Array.isArray(value)
+        ) {
+          const isValid = validateNestedObject(value, fullKey);
+          if (!isValid) return false;
+        }
+      }
+      return true;
+    };
+
+    // Validate the main object
+    const isMainValid = validateNestedObject(checkData);
+    if (!isMainValid) return false;
+
+    // Check pricing object
+    const pricing = checkData.pricing;
+    if (pricing) {
+      let hasValidPrice = false;
+
+      // Check each country's price
+      for (const country of Object.keys(pricing)) {
+        const price = pricing[country].price;
+        if (typeof price !== "number" || price < 0) {
+          console.log(`Invalid price for ${country}`);
+          errorAlert(`Invalid price for ${country}`);
+          return false;
+        }
+
+        if (price > 0) {
+          hasValidPrice = true; // At least one country has a valid price
+        }
+      }
+
+      // Show error alert only if all countries have price 0
+      if (!hasValidPrice) {
+        errorAlert("At least one country price should be greater than 0");
+        return false;
+      }
+    } else {
+      // If pricing object is missing or empty, show error
+
+      errorAlert("Pricing data is required");
+      return false;
+    }
+
+    // If we reach here, validation is successful
+    console.log("Validation passed");
+    return true;
+  };
 
   useEffect(() => {
     if (isEditMode) {
@@ -539,9 +632,25 @@ function AddNewServices2({
       </div>
       <StudioFooter
         backOnclick={() => {
-          setShowServices(false);
+          confirmAlret("Service data will be lost ", "").then((result) => {
+            if (result.isConfirmed) {
+              console.log("default data is =====>", defaultData);
+
+              setShowServices(false);
+
+              setService((prevService) => {
+                const newService = [...prevService];
+                newService[indexofServices] = defaultData; // Reset to defaultData
+                return newService;
+              });
+            }
+          });
         }}
         saveOnclick={() => {
+          const isValid = handleValidateData(currentServiceData);
+          if (!isValid) {
+            return;
+          }
           setShowServices(false);
         }}
       />
