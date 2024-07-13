@@ -118,6 +118,8 @@ function AddmultipleServises({
                   placeholder="Enter Services Name"
                   value={team.name}
                   onChange={(event) => handleInputChange(event, index, "name")}
+                  readOnly
+                  disabled
                 />
 
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -138,6 +140,8 @@ function AddmultipleServises({
                     onChange={(event) =>
                       handleInputChange(event, index, "price")
                     }
+                    readOnly
+                    disabled
                   />
                 </div>
                 <div className={style.editpencil}>
@@ -199,6 +203,8 @@ function AddmultipleServises({
                   placeholder="Name"
                   value={team.name}
                   onChange={(event) => handleInputChange(event, index, "name")}
+                  readOnly
+                  disabled
                 />
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <small
@@ -218,6 +224,8 @@ function AddmultipleServises({
                     onChange={(event) =>
                       handleInputChange(event, index, "price")
                     }
+                    readOnly
+                    disabled
                   />
                 </div>
                 <div className={style.editpencil}>
