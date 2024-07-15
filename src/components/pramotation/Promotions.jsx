@@ -162,6 +162,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
       title: "Integrations",
       description: "Boost functionality with seamless integrations!",
       navigate: "/adminDashboard/Promotions/Integrations",
+      disable: true,
     },
     {
       id: 4,
@@ -231,7 +232,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
                   setSubmitData={setSubmitData}
                 />
               ) : sidebarPageCount == 3 ? (
-                <Integration />
+                ""
               ) : sidebarPageCount == 4 ? (
                 ""
               ) : (

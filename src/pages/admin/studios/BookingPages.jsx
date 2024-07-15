@@ -28,7 +28,9 @@ function BookingPages() {
     } else if (pathname.includes("/Bookings/mixmaster")) {
       setBookingPageCount("c3");
     }
-  }, [pathname, bookingPageCount]);
+
+  }, [pathname,bookingPageCount]);
+
 
   const navigate = useNavigate();
   const gotoSignin = () => {
@@ -105,7 +107,7 @@ function BookingPages() {
     } else if (bookingPageCount === "c1") {
       const limit = 1000;
       const active = 1;
-      const bookingType = 1;
+      const bookingType = -1;
       const category = bookingPageCount;
       // const type = bookingPageCount;
       bookingPageApi

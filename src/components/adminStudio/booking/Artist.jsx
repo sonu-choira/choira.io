@@ -18,6 +18,9 @@ function Artist() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
 
+  // const controller = new AbortController()
+  // const {signal} = controller
+
   const fetchProducts = async () => {
     try {
       const res = await fetch("https://dummyjson.com/products?limit=100");
@@ -31,7 +34,7 @@ function Artist() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    // fetchProducts();
   }, []);
 
   useEffect(() => {

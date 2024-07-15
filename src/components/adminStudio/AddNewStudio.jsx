@@ -27,10 +27,14 @@ import Button from "../../pages/admin/layout/Button";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import Swal from "sweetalert2";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
-import { errorAlert } from "../../pages/admin/layout/Alert";
+
+
 import { useFormik } from "formik";
 import CustomInput from "../../pages/admin/layout/CustomInput";
 import { set } from "react-ga";
+
+import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -283,13 +287,8 @@ function AddNewStudio({ setSelectTab }) {
 
     values.studioPhotos.forEach((element, index) => {
       if (typeof element === "object") {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Please upload STUDIO images first!",
-          showConfirmButton: false,
-          timer: 1800,
-        });
+        errorAlert("Please upload STUDIO images first!");
+
         hasError = true;
       }
     });
@@ -297,13 +296,9 @@ function AddNewStudio({ setSelectTab }) {
     values.roomsDetails.forEach((room, roomIndex) => {
       room.roomPhotos.forEach((element, photoIndex) => {
         if (typeof element === "object") {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: `Please upload images for room  ${room.roomName.toUpperCase()} first!`,
-            showConfirmButton: false,
-            timer: 2000,
-          });
+          errorAlert(
+            `Please upload images for room  ${room.roomName.toUpperCase()} first!`
+          );
           hasError = true;
         }
       });
@@ -323,7 +318,7 @@ function AddNewStudio({ setSelectTab }) {
         })),
         roomsDetails: data.roomsDetails.map((room) => ({
           ...room,
-          area: room.area.toString(),
+          area: room?.area?.toString(),
           pricePerHour: parseInt(room.pricePerHour, 10),
           basePrice: parseInt(room.basePrice, 10),
 
@@ -352,6 +347,36 @@ function AddNewStudio({ setSelectTab }) {
       };
 
       if (isEditMode) {
+        const correctedRealData = correctDataTypes(updatedStudioDetails);
+        const checkData = { ...correctedRealData };
+        delete checkData.availabilities;
+        delete checkData.clientPhotos;
+        delete checkData.creationTimeStamp;
+        delete checkData.featuredReviews;
+        delete checkData.isActive;
+        delete checkData.latitude;
+        delete checkData.location;
+        delete checkData.longitude;
+        delete checkData.overallAvgRating;
+        delete checkData._id;
+        delete checkData.pricePerHour;
+        delete checkData.reviews;
+
+        for (const key of Object.keys(checkData)) {
+          const value = checkData[key];
+
+          if (
+            (typeof value === "string" && value.length <= 0) ||
+            value == "" ||
+            (Array.isArray(value) && value.length === 0) ||
+            (typeof value === "object" &&
+              !Array.isArray(value) &&
+              value !== null &&
+              Object.keys(value).length === 0)
+          ) {
+            return errorAlert(`${key} field is empty`);
+          }
+        }
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -362,32 +387,19 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Update it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            const correctedRealData = correctDataTypes(updatedStudioDetails);
-            if (
-              correctedRealData.maxGuests === "" ||
-              correctedRealData.maxGuests === null
-            ) {
-              errorAlert("Please enter max guests");
-              console.log(
-                "correctedRealData.maxGuests",
-                correctedRealData.maxGuests
-              );
-              return;
-            }
-
             console.log("studioDetails", correctedRealData);
             appAndmoreApi
               .updateStudio(userStudioid, correctedRealData)
               .then((response) => {
                 console.log("Studio updated:", response);
                 if (response) {
-                  Swal.fire({
-                    title: "Studio Updated!",
-                    text: "Your data has been saved.",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1800,
-                  });
+                  if (response.status) {
+                    sucessAlret("Studio Updated!", "Your data has been saved.");
+
+                    navigate("/adminDashboard/Apps&More/studio");
+                  } else {
+                    errorAlert(response.message);
+                  }
                 }
               })
               .catch((error) => {
@@ -404,6 +416,36 @@ function AddNewStudio({ setSelectTab }) {
           }
         });
       } else {
+        const correctedRealData = correctDataTypes(updatedStudioDetails);
+        const checkData = { ...correctedRealData };
+        delete checkData.availabilities;
+        delete checkData.clientPhotos;
+        delete checkData.creationTimeStamp;
+        delete checkData.featuredReviews;
+        delete checkData.isActive;
+        delete checkData.latitude;
+        delete checkData.location;
+        delete checkData.longitude;
+        delete checkData.overallAvgRating;
+        delete checkData._id;
+        delete checkData.pricePerHour;
+        delete checkData.reviews;
+
+        for (const key of Object.keys(checkData)) {
+          const value = checkData[key];
+
+          if (
+            (typeof value === "string" && value.length <= 0) ||
+            value == "" ||
+            (Array.isArray(value) && value.length === 0) ||
+            (typeof value === "object" &&
+              !Array.isArray(value) &&
+              value !== null &&
+              Object.keys(value).length === 0)
+          ) {
+            return errorAlert(`${key} field is empty`);
+          }
+        }
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -414,32 +456,25 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Create it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            alert("Studio created");
-            const correctedRealData = correctDataTypes(updatedStudioDetails);
-            if (
-              correctedRealData.maxGuests === "" ||
-              correctedRealData.maxGuests === null
-            ) {
-              errorAlert("Please enter max guests");
-              console.log(
-                "correctedRealData.maxGuests",
-                correctedRealData.maxGuests
-              );
-              return;
-            }
+            // alert("Studio created");
 
             appAndmoreApi
               .createStudio(correctedRealData)
               .then((response) => {
                 console.log("Studio created:", response);
                 if (response) {
-                  Swal.fire({
-                    title: "Studio Created!",
-                    text: "Your data has been saved.",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1800,
-                  });
+                  if (response.status) {
+                    Swal.fire({
+                      title: "Studio Created!",
+                      text: "Your data has been saved.",
+                      icon: "success",
+                      showConfirmButton: false,
+                      timer: 1800,
+                    });
+                    navigate("/adminDashboard/Apps&More/studio");
+                  } else {
+                    errorAlert(response.message);
+                  }
                 }
               })
               .catch((error) => {
@@ -472,8 +507,14 @@ function AddNewStudio({ setSelectTab }) {
         />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
-            <div>
-              <input required type="text" placeholder="search" />
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="Search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />
@@ -794,6 +835,7 @@ function AddNewStudio({ setSelectTab }) {
                 backOnclick={gotoadminpage}
                 saveType={"submit"}
                 saveOnclick={showMode ? "" : handleSubmitButtonClick}
+                saveDisabled={showMode}
               />
             </>
           )}

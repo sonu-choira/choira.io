@@ -19,6 +19,7 @@ function AddNewDiscount({
   editMode,
   submitData,
   setSubmitData,
+  setShowTable,
 }) {
   const option = {
     "New User Discount": 0,
@@ -34,30 +35,36 @@ function AddNewDiscount({
         .updateDiscount(editData._id, sendDataToApi)
         .then((res) => {
           console.log(res);
-          if (res.status == true) {
+
+          if (res.status) {
             sucessAlret("Discount Updated Successfully");
+
+            setShowTable(true);
           } else {
-            errorAlert(res.message);
+            errorAlert(res.message || "Error in updating discount");
+
           }
         })
         .catch((err) => {
           console.log(err);
           errorAlert("Error in updating discount");
+          setShowTable(true);
         });
     } else {
       promotionApi
         .createDiscount(sendDataToApi)
         .then((res) => {
           console.log(res);
-          if (res.status == true) {
+          if (res.status) {
             sucessAlret("Discount Created Successfully");
+            setShowTable(true);
           } else {
-            errorAlert(res.message);
+            errorAlert(res.message || "Error in creating discount");
           }
         })
         .catch((err) => {
           console.log(err);
-          errorAlert("Error in creating discount");
+          errorAlert(err.message || "Error in creating discount");
         });
     }
   };

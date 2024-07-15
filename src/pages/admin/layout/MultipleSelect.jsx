@@ -36,7 +36,7 @@ function MultipleSelect({ selectedItems = [], setSelectedItems = () => {} }) {
   };
 
   return (
-    <div className={style.addNewStudioinputBox}>
+    <div className={style.customInput}>
       <label htmlFor="Amenities">Amenities</label>
       <Select
         required

@@ -131,6 +131,8 @@ function AddMultipleRooms({
                   type="text"
                   placeholder="Enter Rooms Name"
                   value={team.roomName}
+                  readOnly
+                  disabled
                   onChange={(event) =>
                     handleInputChange(event, index, "roomName")
                   }
@@ -150,7 +152,11 @@ function AddMultipleRooms({
                     style={{ paddingLeft: "55%" }}
                     type="text"
                     placeholder=""
-                    value={team.basePrice}
+
+                    value={team.pricePerHour}
+                    readOnly
+                    disabled
+
                     onChange={(event) =>
                       handleInputChange(event, index, "basePrice")
                     }
@@ -215,6 +221,8 @@ function AddMultipleRooms({
                   type="text"
                   placeholder="RoomName"
                   value={team.roomName}
+                  readOnly
+                  disabled
                   onChange={(event) =>
                     handleInputChange(event, index, "roomName")
                   }
@@ -233,7 +241,11 @@ function AddMultipleRooms({
                     style={{ paddingLeft: "55%" }}
                     type="text"
                     placeholder=""
-                    value={team.basePrice}
+
+                    readOnly
+                    disabled
+                    value={team.pricePerHour}
+
                     onChange={(event) =>
                       handleInputChange(event, index, "basePrice")
                     }

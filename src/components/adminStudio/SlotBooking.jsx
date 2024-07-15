@@ -232,13 +232,13 @@ function SlotBooking({ setSelectTab }) {
           sucessAlret("Booking done");
           navigate("/adminDashboard/Bookings/studio");
         } else {
-          errorAlert("Booking failed");
+          errorAlert(res.message || "Booking failed");
           setshowLoader(false);
         }
       })
       .catch((err) => {
         console.log(err);
-        errorAlert("Booking failed");
+        errorAlert(err || "Booking failed");
 
         setshowLoader(false);
       });
@@ -330,8 +330,14 @@ function SlotBooking({ setSelectTab }) {
         />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
-            <div>
-              <input type="text" placeholder="search" />
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />

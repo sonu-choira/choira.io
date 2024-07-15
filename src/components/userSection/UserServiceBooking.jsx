@@ -342,7 +342,7 @@ function UserServiceBooking({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "20%" }}>
+                <th style={{ width: "10%" }}>
                   <div className={style.headingContainer}>
                     Price
                     <div

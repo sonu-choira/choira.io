@@ -20,7 +20,11 @@ import UserProfile from "./UserProfile";
 import Alert from "antd/es/alert/Alert";
 import { errorAlert } from "../../pages/admin/layout/Alert";
 import moment from "moment";
+
 import Switch from "../../pages/admin/layout/Switch";
+
+import axios from 'axios';
+
 
 let userAllFilterData = {
   sortfield: "",
@@ -55,6 +59,9 @@ function ShowAllUser() {
   useEffect(() => {
     console.log(" -----");
     setProducts([]);
+
+    const source = axios.CancelToken.source();
+
 
     // checking if filter has any data
 
@@ -100,7 +107,7 @@ function ShowAllUser() {
         userAllFilterData.sortfield = dataTosend;
       }
       userApi
-        .getAllUser(pageCount, userAllFilterData)
+        .getAllUser(pageCount, userAllFilterData,{ cancelToken: source.token })
         .then((response) => {
           console.log(`====================> response `, response);
           console.log("response.data.users", response.users);
@@ -112,13 +119,16 @@ function ShowAllUser() {
           }
         })
         .catch((error) => {
-          console.error("Error fetching studios:", error);
+          // console.error("Error fetching studios:", error);
         });
     }
 
     // const type =  ;
 
     console.log("inside useEffect");
+    return (()=>{
+      source.cancel('Operation canceled by the user.');
+    })
   }, [pageCount, shortByUser, shortByEmail]);
 
   const [selectedCity, setSelectedCity] = useState([]);
@@ -147,9 +157,8 @@ function ShowAllUser() {
   };
   useEffect(() => {
     console.log("shortBySrNo", shortBySrNo);
-    if (shortBySrNo) {
-      setProducts((prev) => [...prev].reverse());
-    }
+
+    setProducts((prev) => [...prev].reverse());
   }, [shortBySrNo]);
 
   const handleSortByUser = () => {
@@ -248,7 +257,7 @@ function ShowAllUser() {
                   <tr>
                     <th style={{ width: "8%" }}>
                       <div className={style.headingContainer}>
-                        S.No.
+                        Sr.No.
                         <div
                           className={style.filterBox}
                           onClick={handleSortBySrNo}
@@ -368,7 +377,11 @@ function ShowAllUser() {
                     products.map((product, index) => (
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
-                          {index + 1 + (pageCount - 1) * 5}
+
+                          {!shortBySrNo
+                            ? index + 1 + (pageCount - 1) * 10
+                            : pageCount * 10 - index}
+
                         </td>
                         <td
                           title={product.fullName}
@@ -395,8 +408,9 @@ function ShowAllUser() {
                         </td>
                         <td>
                           {moment(product.creationTimeStamp).format(
-                            // "DD/MM/YYYY "
-                            " Do MMM  YY, hh:mm a"
+
+                            "Do MMM  YY, hh:mm a"
+
                           )}
                         </td>
                         <td style={{ width: "10%" }}>

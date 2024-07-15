@@ -63,20 +63,20 @@ function StudioPartners({
     });
   };
   const [currentPage, setCurrentPage] = useState(1);
-  const gotoShowStudioDetaisl = (id) => {
-    const isEditMode = true;
-    const selectedProduct = products.find((product) => product._id === id);
-    console.log("navigated=======>", selectedProduct);
+  // const gotoShowStudioDetaisl = (id) => {
+  //   const isEditMode = true;
+  //   const selectedProduct = products.find((product) => product._id === id);
+  //   console.log("navigated=======>", selectedProduct);
 
-    navigate(`/studio/edit?id=${id}`, {
-      state: {
-        productData: selectedProduct,
-        navCount: 3,
-        isEditMode: isEditMode,
-        showMode: true,
-      },
-    });
-  };
+  //   navigate(`/studio/edit?id=${id}`, {
+  //     state: {
+  //       productData: selectedProduct,
+  //       navCount: 3,
+  //       isEditMode: isEditMode,
+  //       showMode: true,
+  //     },
+  //   });
+  // };
 
   const [activityStatus, setActivityStatus] = useState({});
   const handleSwitchChange = (studioId, status) => {

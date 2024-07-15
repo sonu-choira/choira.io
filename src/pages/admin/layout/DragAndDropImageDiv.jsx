@@ -14,6 +14,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
 
   const uploadimagetoDataBase = (e) => {
     e.preventDefault();
+
     console.log("Data being sent:", images);
     if (images?.length <= 0) {
       Swal.fire({
@@ -42,6 +43,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
                 }
               } catch (error) {
                 console.error("Error in loop:", error);
+                setshowloader(false);
               }
             }
             console.log("check2");
@@ -57,10 +59,13 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
               showConfirmButton: false,
               timer: 1800,
             });
+          } else {
+            setshowloader(false);
           }
         })
         .catch((error) => {
           console.error("Error uploading image:", error);
+          setshowloader(false);
         });
     }
   };
@@ -83,6 +88,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
           text: "Each file should be less than 1MB",
           showConfirmButton: true,
         });
+        setshowloader(false);
       } else {
         newImages.push(image);
       }

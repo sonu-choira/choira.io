@@ -4,7 +4,9 @@ import api from "./api"
 
 class userApi{
   
- getAllUser = async (pageCount,userAllFilterData) => {
+ getAllUser = async (pageCount,userAllFilterData,options) => {
+  const { cancelToken } = options;
+
   let { searchUser, status, sortfield,startDate,endDate } = userAllFilterData;
   if (searchUser === "") {
     searchUser = undefined;
@@ -22,19 +24,22 @@ class userApi{
     endDate = undefined;
   }
 
-  const response = await api.get(`/users`, {
+  const response = await api.get('/users', {
     params: {
-      limit: 5,
-      page :pageCount,
+
+      limit: 10,
+      page: pageCount,
+
       sortfield,
-      sortDirection: "desc",
+      sortDirection: 'desc',
       status,
       searchUser,
       startDate,
       endDate,
-      
-    }
+    },
+    cancelToken,
   });
+  
   console.log("res ===>", response.data)
   return response.data;
  };

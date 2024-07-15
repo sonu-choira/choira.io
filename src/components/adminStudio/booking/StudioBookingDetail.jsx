@@ -64,6 +64,16 @@ function StudioBookingDetail({
     setProducts(products);
   }, [products]);
 
+  const getNoOfhours = (bookingTime) => {
+    return moment
+      .duration(
+        moment(bookingTime?.endTime, "HH:mm").diff(
+          moment(bookingTime?.startTime, "HH:mm")
+        )
+      )
+      .asHours();
+  };
+
   return (
     <>
       <div className={style.studioTabelDiv}>
@@ -81,6 +91,8 @@ function StudioBookingDetail({
               type="text"
               placeholder="Search"
               className={style.puredisabled}
+              disabled
+              readOnly
             />
           </div>
         </div>
@@ -88,11 +100,14 @@ function StudioBookingDetail({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
+
                 <th>User Name</th>
                 <th style={{ width: "10%" }}>Mobile No.</th>
 
                 <th style={{ width: "10%" }}>studio Name</th>
                 <th style={{ width: "8%" }}>No. of hours</th>
+
+               
                 <th style={{ width: "15%" }}>Date</th>
                 <th style={{ width: "10%" }}>Total Price </th>
                 <th style={{ width: "10%" }}>Project Status</th>
@@ -119,6 +134,8 @@ function StudioBookingDetail({
                       <td>
                         {" "}
                         {moment(products.bookingDate).format(
+
+                      
                           "Do MMM  YY, hh:mm a "
                         )}
                       </td>

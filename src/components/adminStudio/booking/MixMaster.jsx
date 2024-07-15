@@ -45,6 +45,8 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
               type="text"
               placeholder="Search"
               className={style.puredisabled}
+              disabled
+              readOnly
             />
           </div>
         </div>
@@ -67,13 +69,11 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
               ) : (
                 currentTableData.map((products) => {
                   return (
-                    <tr>
-                      <td style={{ textAlign: "center" }} title={products._id}>
-                        #{products._id.slice(-5)}
-                      </td>
-                      <td title={products.userFullName}>
-                        {products?.userFullName?.substring(0, 20)}
-                      </td>
+
+                    <tr key={products.userPhone}>
+                      <td style={{ textAlign: "center" }}>#{products._id}</td>
+                      <td>{products.userFullName}</td>
+
 
                       <td>{products.userPhone}</td>
                       <td title={products.serviceFullName}>

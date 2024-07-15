@@ -28,6 +28,11 @@
   border: none;
   cursor: not-allowed;
 }
+.switchDisabled {
+  cursor: not-allowed !important;
+
+  /* background-color: #adb5bd4f; */
+}
 
 /* The switch - the box around the slider */
 .switch {

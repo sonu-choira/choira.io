@@ -24,7 +24,8 @@ function UserAcount({ userAllDetails }) {
                 />
               </div>
               <div className={style.switchDiv}>
-                Active Status <Switch status={userAllDetails.status} />
+                Active Status{" "}
+                <Switch status={userAllDetails.status} switchDisabled={true} />
               </div>
             </div>
           </div>

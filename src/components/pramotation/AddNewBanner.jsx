@@ -71,7 +71,7 @@ function AddNewBanner({
         banner_redirect: values.banner_redirect,
         id: values.id,
         redirectURL: "",
-        photoURL: "",
+        photoURL: values.photoURL,
         name: "",
         type: pageType,
         bannerType: "",
@@ -86,7 +86,7 @@ function AddNewBanner({
       const resetValues = {
         banner_redirect: values.banner_redirect,
         redirectURL: "",
-        photoURL: "",
+        photoURL: values.photoURL,
         name: "",
         type: pageType,
         bannerType: "",
@@ -122,7 +122,11 @@ function AddNewBanner({
         .updateBanner(sendDataToApi)
         .then((res) => {
           console.log(res);
-          sucessAlret("Banner Updated Successfully");
+          if (res.status) {
+            sucessAlret("Banner Updated Successfully");
+          } else {
+            errorAlert(res.message || "Error in updating banner");
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -137,7 +141,7 @@ function AddNewBanner({
           if (res.status == true) {
             sucessAlret("Banner Created Successfully");
           } else {
-            errorAlert(res.message);
+            errorAlert(res.message || "Error in creating banner");
           }
         })
         .catch((err) => {

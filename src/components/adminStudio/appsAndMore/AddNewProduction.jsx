@@ -23,6 +23,7 @@ import AddNewServices2 from "./AddNewServices2";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import Swal from "sweetalert2";
 import MultipleSelect from "../../../pages/admin/layout/MultipleSelect";
+import { errorAlert } from "../../../pages/admin/layout/Alert";
 
 function AddNewProduction({ setSelectTab }) {
   const data = useLocation();
@@ -145,6 +146,32 @@ function AddNewProduction({ setSelectTab }) {
     // addOns: [],
   });
 
+  const handelValidateData = (updatedData) => {
+    const checkData = { ...updatedData };
+    delete checkData.startingPrice;
+    delete checkData.portfolio;
+    delete checkData.userReviews;
+    delete checkData.servicePhotos;
+
+    for (const key of Object.keys(checkData)) {
+      const value = checkData[key];
+
+      if (
+        (typeof value === "string" && value.length <= 0) ||
+        value == "" ||
+        (Array.isArray(value) && value.length === 0) ||
+        (typeof value === "object" &&
+          !Array.isArray(value) &&
+          value !== null &&
+          Object.keys(value).length === 0)
+      ) {
+        errorAlert(`${key} field is empty`);
+        return false; // Indicating validation failure
+      }
+    }
+    return true; // Indicating validation success
+  };
+
   const [sendataToApi, setsendataToApi] = useState({
     serviceName: "",
     startingPrice: "",
@@ -232,6 +259,27 @@ function AddNewProduction({ setSelectTab }) {
 
     if (!hasError) {
       if (isEditMode) {
+        // const checkData = { ...updatedData };
+        // delete checkData.startingPrice;
+        // delete checkData.portfolio;
+        // delete checkData.userReviews;
+        // for (const key of Object.keys(checkData)) {
+        //   const value = checkData[key];
+
+        //   if (
+        //     (typeof value === "string" && value.length <= 0) ||
+        //     value == "" ||
+        //     (Array.isArray(value) && value.length === 0) ||
+        //     (typeof value === "object" &&
+        //       !Array.isArray(value) &&
+        //       value !== null &&
+        //       Object.keys(value).length === 0)
+        //   ) {
+        //     return errorAlert(`${key} field is empty`);
+        //   }
+        // }
+        const isValid = handelValidateData(updatedData);
+        if (!isValid) return; // Stop execution if validat
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -243,10 +291,11 @@ function AddNewProduction({ setSelectTab }) {
         }).then((result) => {
           if (result.isConfirmed) {
             console.log("updatedData", updatedData);
+
             appAndmoreApi
               .updateService(serviceId, updatedData)
               .then((response) => {
-                if (response) {
+                if (response.status) {
                   Swal.fire({
                     title: "Service Updated!",
                     text: "Your Data has been saved.",
@@ -254,6 +303,9 @@ function AddNewProduction({ setSelectTab }) {
                     showConfirmButton: false,
                     timer: 1800,
                   });
+                  navigate("/adminDashboard/Apps&More/studio");
+                } else {
+                  errorAlert(response.message);
                 }
                 console.log(
                   `====================> data create huaa hai  ${bookingPageCount} `,
@@ -275,6 +327,28 @@ function AddNewProduction({ setSelectTab }) {
           }
         });
       } else {
+        // const checkData = { ...updatedData };
+        // delete checkData.startingPrice;
+        // delete checkData.portfolio;
+        // delete checkData.userReviews;
+
+        // for (const key of Object.keys(checkData)) {
+        //   const value = checkData[key];
+
+        //   if (
+        //     (typeof value === "string" && value.length <= 0) ||
+        //     value == "" ||
+        //     (Array.isArray(value) && value.length === 0) ||
+        //     (typeof value === "object" &&
+        //       !Array.isArray(value) &&
+        //       value !== null &&
+        //       Object.keys(value).length === 0)
+        //   ) {
+        //     return errorAlert(`${key} field is empty`);
+        //   }
+        // }
+        const isValid = handelValidateData(updatedData);
+        if (!isValid) return; // Stop execution if validat
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -288,7 +362,7 @@ function AddNewProduction({ setSelectTab }) {
             appAndmoreApi
               .createService(updatedData)
               .then((response) => {
-                if (response) {
+                if (response.status) {
                   Swal.fire({
                     title: "Service Created!",
                     text: "Your Data has been saved.",
@@ -296,6 +370,9 @@ function AddNewProduction({ setSelectTab }) {
                     showConfirmButton: false,
                     timer: 1800,
                   });
+                  navigate("/adminDashboard/Apps&More/studio");
+                } else {
+                  errorAlert(response.message);
                 }
                 console.log(
                   `====================> data create huaa hai  ${bookingPageCount} `,
@@ -486,8 +563,14 @@ function AddNewProduction({ setSelectTab }) {
         />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
-            <div>
-              <input type="text" placeholder="search" />
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="Search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />
@@ -683,6 +766,7 @@ function AddNewProduction({ setSelectTab }) {
               <StudioFooter
                 backOnclick={gotoadminpage}
                 saveOnclick={showMode ? "" : handelSavebtn}
+                saveDisabled={showMode}
               />
             </>
           )}

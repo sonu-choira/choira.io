@@ -93,8 +93,14 @@ function AddNewStudioPartners({ setSelectTab }) {
         />
         <form className={style.studioMainScreen} onSubmit={handleSubmit}>
           <div className={style.studioHeader}>
-            <div>
-              <input type="text" placeholder="search" />
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="Search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />

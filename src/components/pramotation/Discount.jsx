@@ -57,6 +57,7 @@ function Discount({
               editMode={editMode}
               submitData={submitData}
               setSubmitData={setSubmitData}
+              setShowTable={setShowTable}
             />
           )}
         </div>

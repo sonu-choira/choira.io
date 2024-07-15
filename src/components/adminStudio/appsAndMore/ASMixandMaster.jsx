@@ -23,6 +23,10 @@ import { BiSearchAlt } from "react-icons/bi";
 import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import moment from "moment";
 
+import { errorAlert } from "../../../pages/admin/layout/Alert";
+import appAndmoreApi from "../../../services/appAndmoreApi";
+
+
 let PageSize = 10;
 
 function ASMixandMaster({
@@ -35,6 +39,7 @@ function ASMixandMaster({
   setTotalPage,
   sendFilterDataToapi,
 }) {
+  let loading_timeout = null;
   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
     sendFilterDataToapi = {};
@@ -74,11 +79,40 @@ function ASMixandMaster({
     });
   };
   const [activityStatus, setActivityStatus] = useState({});
-  const handleSwitchChange = (studioId) => {
-    setActivityStatus((prevStatus) => ({
-      ...prevStatus,
-      [studioId]: !prevStatus[studioId], // Toggle the switch state
-    }));
+  const [showloader, setShowloader] = useState(false);
+  const [pid, setPid] = useState(0);
+  const handleSwitchChange = (studioId, isActive) => {
+    isActive == 1 ? (isActive = 0) : (isActive = 1);
+    setShowloader(true);
+    appAndmoreApi
+      .updateServiceStatus(studioId, isActive)
+
+      .then((response) => {
+        console.log(
+          "status response=======>",
+          response.updatedService.isActive
+        );
+        setProducts((prevState) => {
+          return prevState.map((product) => {
+            if (product._id === studioId) {
+              return {
+                ...product,
+                isActive: response.updatedService.isActive,
+              };
+            }
+            return product;
+          });
+        });
+
+        loading_timeout = setTimeout(() => {
+          setShowloader(false);
+        }, 700);
+      })
+      .catch((error) => {
+        console.log("error=======>", error);
+        errorAlert(error.message || "Something went wrong");
+        setShowloader(false);
+      });
   };
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -109,6 +143,12 @@ function ASMixandMaster({
         return "";
     }
   };
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(loading_timeout);
+    };
+  }, []);
 
   return (
     <>
@@ -161,33 +201,31 @@ function ASMixandMaster({
                         </div>
                         &nbsp;&nbsp;{product?.fullName?.substring(0, 20)}...
                       </td>
-                      <td>Starting from ₹{product.price}</td>
+                      <td>Starting from ₹{product.pricing?.["IN"]?.price}</td>
                       <td>
                         {product.totalPlans}
                         <br />
                         <small> {product.state}</small>
                       </td>
                       <td>
-                        {moment(products.bookingDate).format(
+
+                        {moment(product.creationTimeStamp).format(
+                          // "DD/MM/YYYY hh:mm:ss a"
+
                           "Do MMM  YY, hh:mm a "
                         )}
                       </td>
 
                       <td className={style.tableActionbtn}>
                         <div>
-                          <label className="switch">
-                            <input
-                              type="checkbox"
-                              checked={product.isActive === 1}
-                              onChange={() =>
-                                handleSwitchChange(
-                                  product._id,
-                                  product.isActive
-                                )
-                              }
-                            />
-                            <span className="slider"></span>
-                          </label>
+                          <Switch
+                            isloading={pid === product._id && showloader}
+                            status={product.isActive}
+                            onClick={() => {
+                              setPid(product._id);
+                              handleSwitchChange(product._id, product.isActive);
+                            }}
+                          />
                         </div>
                         <div>
                           <GrShare

@@ -18,13 +18,17 @@ const OptVerify = ({
   deletecheckOtp,
   setDeleteCheckOtp,
   setDeleteAccount,
-  apiOtp,
+  // apiOtp,
+  checkLoginData,
+  deletePage,
   sendPhoneNumber,
   setdisableBtn,
+  enteredOTP,
+  setEnteredOTP,
 }) => {
   const [seconds, setSeconds] = useState(30);
   const [generatedOTP, setGeneratedOTP] = useState("");
-  const [enteredOTP, setEnteredOTP] = useState("");
+
   const inputRefs = useRef([]);
   const navigate = useNavigate();
   const gotoBooking = () => {
@@ -47,7 +51,7 @@ const OptVerify = ({
 
   useEffect(() => {
     // Set focus to the next input when enteredOTP changes
-    if (enteredOTP.length < inputRefs.current.length) {
+    if (enteredOTP?.length < inputRefs.current.length) {
       inputRefs.current[enteredOTP.length].focus();
     }
   }, [enteredOTP]);
@@ -65,7 +69,10 @@ const OptVerify = ({
   const restartTimer = () => {
     // Reset the timer to its initial value and generate a new OTP
     setSeconds(30);
-    sendPhoneNumber();
+    checkLoginData();
+    if (deletePage) {
+      sendPhoneNumber();
+    }
     // generateOTP();
   };
 
@@ -88,39 +95,41 @@ const OptVerify = ({
     }
   };
   // this is for signin page
-  useEffect(() => {
-    if (checkOtp === false) {
-      // if (enteredOTP === generatedOTP) {
-      if (enteredOTP === apiOtp) {
-        console.log("OTP is correct. Redirect or perform another action.");
-        Swal.fire({
-          title: "OTP is Correct!",
-          text: "Welcome back 😊 ",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+  // useEffect(() => {
+  //   if (checkOtp === false) {
+  //     // if (enteredOTP === generatedOTP) {
+  //     if (enteredOTP === apiOtp) {
+  //       console.log("OTP is correct. Redirect or perform another action.");
+  //       Swal.fire({
+  //         title: "OTP is Correct!",
+  //         text: "Welcome back 😊 ",
+  //         icon: "success",
+  //         showConfirmButton: false,
+  //         timer: 1500,
+  //       });
 
-        gotoBooking();
-        setCheckOtp(false);
-        localStorage.setItem("isSignin", "true");
-      } else {
-        console.log("Incorrect OTP. Please try again.");
-        alert("Incorrect OTP. Please try again.");
-        <Alert
-          message="Incorrect OTP. Please try again. "
-          type="error"
-          showIcon
-          closable
-        />;
-        setCheckOtp(true);
-      }
-    }
-  }, [checkOtp]);
+  //       gotoBooking();
+  //       setCheckOtp(false);
+  //       localStorage.setItem("isSignin", "true");
+  //     } else {
+  //       console.log("Incorrect OTP. Please try again.");
+  //       alert("Incorrect OTP. Please try again.");
+  //       <Alert
+  //         message="Incorrect OTP. Please try again. "
+  //         type="error"
+  //         showIcon
+  //         closable
+  //       />;
+  //       setCheckOtp(true);
+  //     }
+  //   }
+  // }, [checkOtp]);
   // this is for DeleteAccount page
   useEffect(() => {
-    if (!deletecheckOtp) {
-      setdisableBtn(true);
+    if (!deletecheckOtp && deletePage) {
+      if (deletePage) {
+        setdisableBtn(true);
+      }
       deleteAccountapi
         .checkOtp(countryCode + mobileNumber, enteredOTP)
         .then((res) => {
@@ -134,8 +143,13 @@ const OptVerify = ({
               timer: 2000,
             });
             setDeleteAccount(3);
-            setDeleteCheckOtp(false); // Change to true since OTP is correct
-            setdisableBtn(false);
+            if (deletePage) {
+              setDeleteCheckOtp(false);
+            }
+            if (deletePage) {
+              setdisableBtn(false);
+            }
+            // Change to true since OTP is correct
           } else {
             Swal.fire({
               icon: "error",
@@ -145,8 +159,13 @@ const OptVerify = ({
               timer: 2000,
             });
             // alert("Please enter a valid OTP.");
-            setDeleteCheckOtp(true); // Change to false since OTP is incorrect
-            setdisableBtn(false);
+            if (deletePage) {
+              setDeleteCheckOtp(true);
+            }
+            // Change to false since OTP is incorrect
+            if (deletePage) {
+              setdisableBtn(false);
+            }
           }
         })
         .catch((err) => {
@@ -158,8 +177,13 @@ const OptVerify = ({
             showConfirmButton: false,
             timer: 2000,
           });
-          setDeleteCheckOtp(true); // Set to false if there's an error
-          setdisableBtn(false);
+          if (deletePage) {
+            setDeleteCheckOtp(true);
+          }
+          // Set to false if there's an error
+          if (deletePage) {
+            setdisableBtn(false);
+          }
         });
     }
   }, [deletecheckOtp]);
@@ -208,7 +232,7 @@ const OptVerify = ({
               type="text"
               maxLength="1"
               pattern="\d*"
-              value={enteredOTP[index] || ""}
+              value={enteredOTP?.[index] || ""}
               onChange={(e) => handleOTPChange(index, e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Backspace") {

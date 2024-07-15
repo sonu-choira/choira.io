@@ -27,6 +27,7 @@ function DeleteAccount() {
   const gotoSignup = () => {
     navigates("/signup");
   };
+  let deletePage = true;
 
   const [deletepopup, setDeletepopup] = useState(false);
   const signin = true;
@@ -41,7 +42,7 @@ function DeleteAccount() {
   const handleMobileNumberChange = (e) => {
     setMobileNumber(e.target.value);
   };
-
+  const [enteredOTP, setEnteredOTP] = useState("");
   const sendPhoneNumber = () => {
     setdisableBtn(true);
     deleteAccountapi
@@ -212,6 +213,9 @@ function DeleteAccount() {
                         setDeleteAccount={setDeleteAccount}
                         sendPhoneNumber={sendPhoneNumber}
                         setdisableBtn={setdisableBtn}
+                        deletePage={deletePage}
+                        setEnteredOTP={setEnteredOTP}
+                        enteredOTP={enteredOTP}
                       />
                     ) : (
                       <DeleteAccountEmailVerify
