@@ -330,8 +330,14 @@ function SlotBooking({ setSelectTab }) {
         />
         <div className={style.studioMainScreen}>
           <div className={style.studioHeader}>
-            <div>
-              <input type="text" placeholder="search" />
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />
