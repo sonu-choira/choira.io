@@ -421,7 +421,7 @@ function UserBookingDetails({
                     <tr key={products?._id} className={style.customUserTd}>
                       <td>
                         <span title={products._id}>
-                          {products._id.substring(0, 6)}
+                          {products._id?.substring(0, 6)}
                         </span>
                       </td>
                       <td>{products?.studioName}</td>

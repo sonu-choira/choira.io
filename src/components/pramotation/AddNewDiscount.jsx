@@ -11,6 +11,7 @@ import SearchSelectInput from "../../pages/admin/layout/SearchAndSelectInput";
 import { DiscountSchema } from "../../schemas";
 import promotionApi from "../../services/promotionApi";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+import dayjs from "dayjs";
 
 function AddNewDiscount({
   editData,
@@ -34,12 +35,14 @@ function AddNewDiscount({
         .updateDiscount(editData._id, sendDataToApi)
         .then((res) => {
           console.log(res);
+
           if (res.status) {
             sucessAlret("Discount Updated Successfully");
 
             setShowTable(true);
           } else {
             errorAlert(res.message || "Error in updating discount");
+
           }
         })
         .catch((err) => {
@@ -238,7 +241,11 @@ function AddNewDiscount({
             id={"discountDate"}
             htmlFor={"discountDate"}
             name={"discountDate"}
-            value={values.discountDate}
+            value={[
+              dayjs(values?.startDate?.substring(0, 10), "YYYY/MM/DD"),
+              dayjs(values?.endDate?.substring(0, 10), "YYYY/MM/DD"),
+            ]}
+            // value={values.discountDate}
             onChange={handleDateChange}
           />
         )}

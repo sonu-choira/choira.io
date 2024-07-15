@@ -417,6 +417,7 @@ function AllStudioDetail2({
                           alignItems: "center",
                           height: "100%",
                         }}
+                        title={products.fullName}
                       >
                         <div className={style.studioImage}>
                           {products.studioPhotos ? (
@@ -431,15 +432,15 @@ function AllStudioDetail2({
                             <img src={imageNotFound} alt="" />
                           )}
                         </div>
-                        &nbsp;&nbsp;{products.fullName}
+                        &nbsp;&nbsp;{products.fullName.substring(0, 20)}...
                       </td>
                       <td style={{ padding: "0px 8rem 0px 0px" }}>
                         ₹{products?.roomsDetails?.[0]?.pricePerHour || "N/A"}
                         <br />
                         <small>per hour</small>
                       </td>
-                      <td>
-                        {products.address}
+                      <td title={products.address}>
+                        {products?.address?.substring(0, 30)}...
                         <br />
                         <small> {products.state}</small>
                       </td>

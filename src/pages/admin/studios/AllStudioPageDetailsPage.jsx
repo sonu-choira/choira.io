@@ -61,7 +61,7 @@ function AllStudioPageDetailsPage() {
 
   // let { page: paramData } = useParams();
   // console.log("paramData", paramData);
-  // const location = useLocation();
+
   const { pathname } = useLocation();
 
   useEffect(() => {

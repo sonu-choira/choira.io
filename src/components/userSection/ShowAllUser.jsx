@@ -14,12 +14,17 @@ import { GrShare } from "react-icons/gr";
 import userApi from "../../services/userApi";
 import imageNotFound from "../../assets/imagesNotFound.png";
 import { FaRegEye } from "react-icons/fa";
+import userNotFound from "../../assets/img/userNotFound.jpg";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import UserProfile from "./UserProfile";
 import Alert from "antd/es/alert/Alert";
 import { errorAlert } from "../../pages/admin/layout/Alert";
 import moment from "moment";
+
+import Switch from "../../pages/admin/layout/Switch";
+
 import axios from 'axios';
+
 
 let userAllFilterData = {
   sortfield: "",
@@ -362,6 +367,7 @@ function ShowAllUser() {
                         </div>
                       </div>
                     </th>
+                    <th style={{ width: "10%" }}>{""}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -371,26 +377,44 @@ function ShowAllUser() {
                     products.map((product, index) => (
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
+
                           {!shortBySrNo
                             ? index + 1 + (pageCount - 1) * 10
                             : pageCount * 10 - index}
+
                         </td>
-                        <td style={{ display: "flex", alignItems: "center" }}>
-                          <div className={style.studioImage}>
+                        <td
+                          title={product.fullName}
+                          style={{ display: "flex", alignItems: "center" }}
+                        >
+                          <div
+                            className={
+                              product.profileUrl === ""
+                                ? `${style.studioImageNotFound}`
+                                : `${style.studioImage} `
+                            }
+                          >
                             <img
-                              src={product.profileUrl || imageNotFound}
+                              src={product.profileUrl || userNotFound}
                               alt=""
-                              onError={(e) => (e.target.src = imageNotFound)}
+                              onError={(e) => (e.target.src = userNotFound)}
                             />
                           </div>
-                          &nbsp;&nbsp;{product.fullName}
+                          &nbsp;&nbsp;{product?.fullName?.substring(0, 30)}
                         </td>
                         <td>{product.phone}</td>
-                        <td>{product.email}</td>
+                        <td title={product.email}>
+                          {product?.email.substring(0, 30)}
+                        </td>
                         <td>
                           {moment(product.creationTimeStamp).format(
+
                             "Do MMM  YY, hh:mm a"
+
                           )}
+                        </td>
+                        <td style={{ width: "10%" }}>
+                          <Switch status={product.status} />
                         </td>
                         <td className={style.tableActionbtn}>
                           <div

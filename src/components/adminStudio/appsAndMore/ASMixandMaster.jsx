@@ -22,8 +22,10 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import moment from "moment";
+
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 import appAndmoreApi from "../../../services/appAndmoreApi";
+
 
 let PageSize = 10;
 
@@ -182,6 +184,7 @@ function ASMixandMaster({
                           alignItems: "center",
                           height: "100%",
                         }}
+                        title={product.fullName}
                       >
                         <div className={style.studioImage} style={{}}>
                           {product.servicePhotos ? (
@@ -196,7 +199,7 @@ function ASMixandMaster({
                             <img src={imageNotFound} alt="" />
                           )}
                         </div>
-                        &nbsp;&nbsp;{product.fullName}
+                        &nbsp;&nbsp;{product?.fullName?.substring(0, 20)}...
                       </td>
                       <td>Starting from ₹{product.pricing?.["IN"]?.price}</td>
                       <td>
@@ -205,8 +208,10 @@ function ASMixandMaster({
                         <small> {product.state}</small>
                       </td>
                       <td>
+
                         {moment(product.creationTimeStamp).format(
                           // "DD/MM/YYYY hh:mm:ss a"
+
                           "Do MMM  YY, hh:mm a "
                         )}
                       </td>

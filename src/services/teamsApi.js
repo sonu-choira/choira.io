@@ -9,7 +9,7 @@ class teamApi{
 
   const response = await api.get(`/owner`, {
     params: {
-      limit: 10,
+      limit: 5,
       page :pageCount,
       sortDirection: shortby,
       sortField :"creationTimeStamp"

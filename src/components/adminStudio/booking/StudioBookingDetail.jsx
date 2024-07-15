@@ -100,11 +100,14 @@ function StudioBookingDetail({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th style={{ width: "10%" }}>User Name</th>
+
+                <th>User Name</th>
                 <th style={{ width: "10%" }}>Mobile No.</th>
 
                 <th style={{ width: "10%" }}>studio Name</th>
-                <th style={{ width: "10%" }}>No. of hours</th>
+                <th style={{ width: "8%" }}>No. of hours</th>
+
+               
                 <th style={{ width: "15%" }}>Date</th>
                 <th style={{ width: "10%" }}>Total Price </th>
                 <th style={{ width: "10%" }}>Project Status</th>
@@ -117,17 +120,22 @@ function StudioBookingDetail({
                 currentTableData.map((products, i) => {
                   return (
                     <tr key={i}>
-                      <td>{products.userName}</td>
+                      <td title={products.userName}>
+                        {products?.userName?.substring(0, 20)}
+                      </td>
                       <td style={{ textAlign: "center" }}>
                         {products.userPhone}
                       </td>
 
-                      <td>{products.studioName}</td>
-                      {/* <td>{products.planId}</td> */}
-                      <td>{getNoOfhours(products.bookingTime)}</td>
+                      <td title={products.studioName}>
+                        {products?.studioName?.substring(0, 20)}
+                      </td>
+                      <td>{products.planId}</td>
                       <td>
+                        {" "}
                         {moment(products.bookingDate).format(
-                          // "DD/MM/YYYY hh:mm:ss a"
+
+                      
                           "Do MMM  YY, hh:mm a "
                         )}
                       </td>
