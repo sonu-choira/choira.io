@@ -372,8 +372,9 @@ function ShowAllUser() {
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
                           {!shortBySrNo
-                            ? index + 1 + (pageCount - 1) * 10
-                            : pageCount * 10 - index}
+                            ? (55 - (pageCount * 10)+10) - index
+                            : index + 1 + (pageCount - 1) * 10
+                            }
                         </td>
                         <td style={{ display: "flex", alignItems: "center" }}>
                           <div className={style.studioImage}>
