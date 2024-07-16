@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import style from "../../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
+import { GoEye } from "react-icons/go";
 import { MdEdit } from "react-icons/md";
-import { RiDeleteBin5Fill } from "react-icons/ri";
+import { RiDeleteBin5Fill, RiExpandUpDownLine } from "react-icons/ri";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
@@ -19,13 +20,21 @@ import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import moment from "moment";
+import { CiFilter } from "react-icons/ci";
+import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
+import CheckBoxFilterComponent from "../../../pages/admin/layout/filterComponent/CheckBoxFilterComponent";
+import appAndmoreApi from "../../../services/appAndmoreApi";
+import userApi from "../../../services/userApi";
 let PageSize = 10;
+let sendFilterDataToapi = {};
+let userFiler = false;
 
 function StudioBookingDetail({
   products,
   setProducts,
   handleChange,
   getStatusColor,
+  bookingPageCount,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -73,6 +82,91 @@ function StudioBookingDetail({
       )
       .asHours();
   };
+  const closeAllFilter = () => {
+    setShowstatusFilter(false);
+  };
+  const headers = [
+    { title: "Id", width: "5%", icon: <RiExpandUpDownLine /> },
+    { title: "User Name", width: "10%", icon: <RiExpandUpDownLine /> },
+    { title: "Studio Name", width: "10%", icon: <RiExpandUpDownLine /> },
+    { title: "Hours", width: "5%", icon: <CiFilter /> },
+    { title: "Creation Date", width: "10%", icon: <CiFilter /> },
+    { title: "Booking Date", width: "10%", icon: <CiFilter /> },
+    { title: "Time Slot", width: "10%", icon: <CiFilter /> },
+    { title: "Amount", width: "10%", icon: <CiFilter /> },
+    { title: "Project Status", width: "10%", icon: <CiFilter /> },
+    { title: "", width: "10%", icon: "" },
+  ];
+  const [totalPage, setTotalPage] = useState(0);
+  const getDynamicStyle = (shortby, criteria) => ({
+    backgroundColor: shortby !== criteria ? "#ffc70133" : "",
+  });
+  const status = ["active", "cancelled", "completed"];
+  const [showstatusFilter, setShowstatusFilter] = useState(false);
+  const [selectedData, setSelectedData] = useState([]);
+  const [pageCount, setPageCount] = useState(1);
+  const [userAllFilterData, setUserAllFilterData] = useState({});
+
+  const handleFilterApply = (selectedData) => {
+    if (selectedData.length > 0) {
+      setProducts([]);
+      const apiCall = userFiler
+        ? userApi.getAllUser(pageCount, userAllFilterData)
+        : appAndmoreApi.filterData(sendFilterDataToapi);
+
+      apiCall
+        .then((response) => {
+          console.log("filter applied:", response);
+          if (userFiler) {
+            setProducts(response.users);
+          } else {
+            setProducts(response.studios);
+          }
+          setTotalPage(response.paginate.totalPages);
+        })
+        .catch((error) => {
+          console.error("Error applying filter:", error);
+        });
+
+      closeAllFilter();
+    } else {
+      closeAllFilter();
+      setProducts([]);
+      fetchAllData();
+    }
+  };
+
+  const fetchAllData = () => {
+    const apiCall =
+      bookingPageCount === "c2" || bookingPageCount === "c3"
+        ? appAndmoreApi.getServices("10", bookingPageCount, 1)
+        : appAndmoreApi.getStudios(64, 1);
+
+    apiCall
+      .then((response) => {
+        if (response.status) {
+          setProducts(
+            response.services ? response.services.results : response.studios
+          );
+          setTotalPage(response.paginate.totalPages);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+  const handleResetFilter = () => {
+    setSelectedData([]);
+    setProducts([]);
+    if (Object.values(sendFilterDataToapi).every((value) => value === "")) {
+      closeAllFilter();
+      fetchAllData();
+    } else {
+      fetchAllData();
+      closeAllFilter();
+    }
+  };
 
   return (
     <>
@@ -100,17 +194,42 @@ function StudioBookingDetail({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-
-                <th>User Name</th>
-                <th style={{ width: "10%" }}>Mobile No.</th>
-
-                <th style={{ width: "10%" }}>studio Name</th>
-                <th style={{ width: "8%" }}>No. of hours</th>
-
-               
-                <th style={{ width: "15%" }}>Date</th>
-                <th style={{ width: "10%" }}>Total Price </th>
-                <th style={{ width: "10%" }}>Project Status</th>
+                {headers.map((header, index) => (
+                  <th key={index} style={{ width: header.width }}>
+                    <div className={style.headingContainer}>
+                      {header.title}
+                      <div
+                        className={header.icon !== "" ? style.filterBox : ""}
+                        // style={getDynamicStyle(shortby, "creationTimeStamp:desc")}
+                        onClick={() => {
+                          if (index == 8) {
+                            setShowstatusFilter(!showstatusFilter);
+                          }
+                        }}
+                        // onClick={handelShortbyClick}
+                      >
+                        <span>{header.icon}</span>
+                        {index == 8 &&
+                          (showstatusFilter ? (
+                            <CheckBoxFilterComponent
+                              data={status}
+                              // cusstyle={{ left: "-355%" }}
+                              disabledsearch={true}
+                              selectedData={selectedStatus}
+                              setSelectedData={setSelectedStatus}
+                              onFilterApply={handleFilterApply}
+                              onResetFilter={handleResetFilter}
+                              closeAllFilter={() =>
+                                console.log("closeAllFilter triggered")
+                              }
+                            />
+                          ) : (
+                            ""
+                          ))}
+                      </div>
+                    </div>
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -120,51 +239,60 @@ function StudioBookingDetail({
                 currentTableData.map((products, i) => {
                   return (
                     <tr key={i}>
-                      <td title={products.userName}>
-                        {products?.userName?.substring(0, 20)}
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        {products.userPhone}
-                      </td>
-
-                      <td title={products.studioName}>
-                        {products?.studioName?.substring(0, 20)}
-                      </td>
-                      <td>{products.planId}</td>
+                      <td title={products._id}>#{products._id.slice(-4)}</td>
+                      <td>{products.userName}</td>
                       <td>
-                        {" "}
-                        {moment(products.bookingDate).format(
-
-                      
+                        {products.studioName}
+                        <br />
+                        <small>Room name</small>
+                      </td>
+                      <td>{getNoOfhours(products.bookingTime)}</td>
+                      <td
+                        style={{ textAlign: "center" }}
+                        title={moment(products.creationTimeStamp).format(
                           "Do MMM  YY, hh:mm a "
                         )}
+                      >
+                        {moment(products.creationTimeStamp).format(
+                          "Do MMM  YY"
+                        )}
                       </td>
-                      <td>₹{products.totalPrice}</td>
-                      <td className={style.tableActionbtn}>
-                        {/* <div>
-                        <select
-                          value={
-                            selectedStatus[products._id] ||
-                            products.bookingStatus
-                          }
-                          onChange={(e) => handleChange(products._id, e)}
+                      <td
+                        style={{ textAlign: "center" }}
+                        title={moment(products.bookingDate).format(
+                          "Do MMM  YY, hh:mm a "
+                        )}
+                      >
+                        {moment(products.bookingDate).format("Do MMM  YY")}
+                      </td>
+
+                      {/* <td>{products.planId}</td> */}
+                      <td>
+                        {`${products?.bookingTime?.startTime} - ${products?.bookingTime?.endTime}`}
+                      </td>
+                      <td>₹{products?.totalPrice}</td>
+                      <td>
+                        <div
+                          className={style.userProjectStatus}
                           style={{
-                            backgroundColor: getStatusColor(
-                              products.bookingStatus
-                            ),
+                            backgroundColor:
+                              parseInt(products.bookingStatus) === 0
+                                ? "#FFF3CA"
+                                : parseInt(products.bookingStatus) == 1
+                                ? "#DDFFF3"
+                                : "#FFDDDD",
                           }}
                         >
-                          <option value="" disabled>
-                            Select Status
-                          </option>
-                          <option value={0}>Active</option>
-                          
-                          <option value={1}>Complete</option>
-                          <option value={2}>Cancelled</option>
-                        </select>
-                      </div> */}
+                          {parseInt(products.bookingStatus) === 0
+                            ? "Pending"
+                            : parseInt(products.bookingStatus) == 1
+                            ? "Complete"
+                            : "Cancelled"}
+                        </div>
+                      </td>
+                      <td className={style.tableActionbtn}>
                         <div>
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               // gotoShowDetails(products._id);

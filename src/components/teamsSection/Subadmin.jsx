@@ -28,6 +28,7 @@ import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../services/appAndmoreApi";
+import { GoEye } from "react-icons/go";
 
 let PageSize = 10;
 
@@ -388,7 +389,7 @@ function Subadmin({
                             justifyContent: "space-around",
                           }}
                         >
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => gotoShowStudioDetaisl(products._id)}
                           />

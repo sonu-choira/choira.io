@@ -30,6 +30,7 @@ import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/Dat
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import LoaderUpdating from "../../../pages/admin/layout/LoaderUpdating";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
+import { GoEye } from "react-icons/go";
 
 let PageSize = 10;
 
@@ -457,7 +458,7 @@ function AllStudioDetail2({
                           />
                         </div>
                         <div>
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => gotoShowStudioDetaisl(products._id)}
                           />

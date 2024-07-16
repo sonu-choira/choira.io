@@ -30,6 +30,7 @@ import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFil
 import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import moment from "moment";
+import { GoEye } from "react-icons/go";
 
 let PageSize = 10;
 
@@ -442,7 +443,7 @@ function StudioPartners({
                             justifyContent: "space-around",
                           }}
                         >
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             // onClick={() => gotoShowStudioDetaisl(products._id)}
                           />

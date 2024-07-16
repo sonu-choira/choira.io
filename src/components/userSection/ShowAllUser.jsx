@@ -23,8 +23,7 @@ import moment from "moment";
 
 import Switch from "../../pages/admin/layout/Switch";
 
-import axios from 'axios';
-
+import axios from "axios";
 
 let userAllFilterData = {
   sortfield: "",
@@ -35,12 +34,16 @@ let userAllFilterData = {
 };
 function ShowAllUser() {
   const [products, setProducts] = useState([]);
+  const [totalResult, setTotalResult] = useState();
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
   const [shortby, setShortby] = useState(false);
   const status = ["active", "inactive"];
 
+  useEffect(() => {
+    console.log(totalResult, "totalResult");
+  }, [totalResult]);
   const [shortBySrNo, setShortBySrNo] = useState(false);
   const [shortByUser, setShortByUser] = useState(false);
   const [shortByEmail, setShortByEmail] = useState(false);
@@ -61,7 +64,6 @@ function ShowAllUser() {
     setProducts([]);
 
     const source = axios.CancelToken.source();
-
 
     // checking if filter has any data
 
@@ -86,6 +88,7 @@ function ShowAllUser() {
           if (response.users) {
             setProducts(response.users);
             setTotalPage(response.paginate.totalPages);
+            setTotalResult(response.paginate.totalResults);
 
             // setPageCount(response.paginate.page);
           }
@@ -102,18 +105,19 @@ function ShowAllUser() {
       } else if (shortByEmail) {
         dataTosend = "email";
         userAllFilterData.sortfield = dataTosend;
-      } else {
-        dataTosend = "";
+      } else if (shortBySrNo) {
+        dataTosend = "ddddd";
         userAllFilterData.sortfield = dataTosend;
       }
       userApi
-        .getAllUser(pageCount, userAllFilterData,{ cancelToken: source.token })
+        .getAllUser(pageCount, userAllFilterData, { cancelToken: source.token })
         .then((response) => {
           console.log(`====================> response `, response);
           console.log("response.data.users", response.users);
           if (response.users) {
             setProducts(response.users);
             setTotalPage(response.paginate.totalPages);
+            setTotalResult(response.paginate.totalResults);
 
             // setPageCount(response.paginate.page);
           }
@@ -126,10 +130,10 @@ function ShowAllUser() {
     // const type =  ;
 
     console.log("inside useEffect");
-    return (()=>{
-      source.cancel('Operation canceled by the user.');
-    })
-  }, [pageCount, shortByUser, shortByEmail]);
+    return () => {
+      source.cancel("Operation canceled by the user.");
+    };
+  }, [pageCount, shortByUser, shortByEmail, shortBySrNo]);
 
   const [selectedCity, setSelectedCity] = useState([]);
 
@@ -158,10 +162,15 @@ function ShowAllUser() {
   useEffect(() => {
     console.log("shortBySrNo", shortBySrNo);
 
-    setProducts((prev) => [...prev].reverse());
+    // setProducts((prev) => [...prev].reverse());
   }, [shortBySrNo]);
 
   const handleSortByUser = () => {
+    setShortBySrNo(false);
+    setShortByUser(!shortByUser);
+    setShortByEmail(false);
+  };
+  const handelShortBySrno = () => {
     setShortBySrNo(false);
     setShortByUser(!shortByUser);
     setShortByEmail(false);
@@ -377,11 +386,9 @@ function ShowAllUser() {
                     products.map((product, index) => (
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
-
                           {!shortBySrNo
-                            ? index + 1 + (pageCount - 1) * 10
-                            : pageCount * 10 - index}
-
+                            ? totalResult - pageCount * 10 + 10 - index
+                            : index + 1 + (pageCount - 1) * 10}
                         </td>
                         <td
                           title={product.fullName}
@@ -408,9 +415,7 @@ function ShowAllUser() {
                         </td>
                         <td>
                           {moment(product.creationTimeStamp).format(
-
                             "Do MMM  YY, hh:mm a"
-
                           )}
                         </td>
                         <td style={{ width: "10%" }}>

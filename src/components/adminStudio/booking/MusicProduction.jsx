@@ -16,6 +16,7 @@ import axios from "axios";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
+import { GoEye } from "react-icons/go";
 let PageSize = 10;
 
 function MusicProduction({
@@ -112,7 +113,7 @@ function MusicProduction({
                           </select>
                         </div>
                         <div style={{ width: "25%" }}>
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               // gotoShowDetails(products._id);

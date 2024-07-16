@@ -25,7 +25,7 @@ import moment from "moment";
 
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
-
+import { GoEye } from "react-icons/go";
 
 let PageSize = 10;
 
@@ -195,7 +195,6 @@ function ASMusicProduction({
                         <small> {products.state}</small>
                       </td>
                       <td>
-
                         {" "}
                         {moment(products.creationTimeStamp).format(
                           // "DD/MM/YYYY hh:mm:ss a"
@@ -219,7 +218,7 @@ function ASMusicProduction({
                           />
                         </div>
                         <div>
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               gotoShowMusicProduction(products._id);

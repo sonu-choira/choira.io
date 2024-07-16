@@ -12,6 +12,7 @@ import Button from "../../../pages/admin/layout/Button";
 import Switch from "../../../pages/admin/layout/Switch";
 import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
+import { GoEye } from "react-icons/go";
 let PageSize = 10;
 
 function Artist() {
@@ -120,7 +121,7 @@ function Artist() {
                         </select>
                       </div>
                       <div style={{ width: "25%" }}>
-                        <GrShare style={{ cursor: "pointer" }} />
+                        <GoEye style={{ cursor: "pointer" }} />
 
                         <RiDeleteBin5Fill
                           style={{ color: "red", cursor: "pointer" }}

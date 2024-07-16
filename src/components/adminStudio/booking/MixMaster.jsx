@@ -15,6 +15,7 @@ import { LuFilePlus } from "react-icons/lu";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
+import { GoEye } from "react-icons/go";
 let PageSize = 10;
 
 function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
@@ -69,11 +70,9 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
               ) : (
                 currentTableData.map((products) => {
                   return (
-
                     <tr key={products.userPhone}>
                       <td style={{ textAlign: "center" }}>#{products._id}</td>
                       <td>{products.userFullName}</td>
-
 
                       <td>{products.userPhone}</td>
                       <td title={products.serviceFullName}>
@@ -106,7 +105,7 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
                           </select>
                         </div>
                         <div style={{ width: "25%" }}>
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               // gotoShowDetails(products._id);

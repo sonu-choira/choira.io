@@ -25,7 +25,7 @@ import moment from "moment";
 
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 import appAndmoreApi from "../../../services/appAndmoreApi";
-
+import { GoEye } from "react-icons/go";
 
 let PageSize = 10;
 
@@ -208,7 +208,6 @@ function ASMixandMaster({
                         <small> {product.state}</small>
                       </td>
                       <td>
-
                         {moment(product.creationTimeStamp).format(
                           // "DD/MM/YYYY hh:mm:ss a"
 
@@ -228,7 +227,7 @@ function ASMixandMaster({
                           />
                         </div>
                         <div>
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               gotoShowMixAndMaster(product._id);

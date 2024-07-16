@@ -28,9 +28,7 @@ function BookingPages() {
     } else if (pathname.includes("/Bookings/mixmaster")) {
       setBookingPageCount("c3");
     }
-
-  }, [pathname,bookingPageCount]);
-
+  }, [pathname, bookingPageCount]);
 
   const navigate = useNavigate();
   const gotoSignin = () => {
@@ -137,6 +135,8 @@ function BookingPages() {
             setProducts={setProducts}
             handleChange={handleChange}
             getStatusColor={getStatusColor}
+            // setTotalPage={setTotalPage}
+            bookingPageCount={bookingPageCount}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (

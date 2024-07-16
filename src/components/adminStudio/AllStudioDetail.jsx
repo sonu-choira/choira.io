@@ -14,6 +14,7 @@ import Pagination from "../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
 import imageNotFound from "../../assets/imagesNotFound.png";
 import axios from "axios";
+import { GoEye } from "react-icons/go";
 let PageSize = 10;
 
 function AllStudioDetail() {
@@ -117,7 +118,7 @@ function AllStudioDetail() {
                         </label>
                       </div>
                       <div>
-                        <GrShare style={{ cursor: "pointer" }} />
+                        <GoEye style={{ cursor: "pointer" }} />
                         <MdEdit
                           style={{ color: "#ffc701", cursor: "pointer" }}
                         />
