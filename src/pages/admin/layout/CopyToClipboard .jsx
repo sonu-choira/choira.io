@@ -1,48 +1,50 @@
-import React, { useRef, useState, useEffect } from "react";
-import ClipboardJS from "clipboard";
+import React, { useRef, useState } from "react";
 
-const CopyToClipboard = ({ textToCopy, textLength = 15 }) => {
+const CopyToClipboard = ({
+  textToCopy,
+  textLength = 15,
+  showTitle = true,
+  customStyle,
+}) => {
   const textRef = useRef(null);
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
+  const handleCopy = () => {
     if (textRef.current) {
-      const clipboard = new ClipboardJS(textRef.current, {
-        text: () => textToCopy,
-      });
-
-      clipboard.on("success", (e) => {
+      const textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
         setCopied(true);
         setTimeout(() => {
           setCopied(false);
         }, 1000);
-        e.clearSelection();
-      });
-
-      clipboard.on("error", (e) => {
-        console.error("Error in copying:", e.action);
-      });
-
-      // Cleanup the Clipboard.js instance on component unmount
-      return () => {
-        clipboard.destroy();
-      };
-    }
-  }, [textToCopy]);
-
-  const handleCopy = () => {
-    if (textRef.current) {
-      textRef.current.click();
+      } catch (err) {
+        console.error("Error in copying:", err);
+      }
+      document.body.removeChild(textArea);
     }
   };
 
-  const displayText =
-    String(textToCopy).length > textLength
+  const displayText = textLength
+    ? String(textToCopy).length > textLength
       ? String(textToCopy).slice(0, textLength) + "..."
-      : textToCopy;
+      : textToCopy
+    : textToCopy;
 
   return (
-    <span ref={textRef} style={{ cursor: "pointer" }} onClick={handleCopy}>
+    <span
+      title={showTitle ? textToCopy : ""}
+      ref={textRef}
+      style={{
+        cursor: "pointer",
+        color: copied ? "green" : "inherit",
+        ...customStyle,
+      }}
+      onClick={handleCopy}
+    >
       {copied ? "Copied!" : displayText}
     </span>
   );
