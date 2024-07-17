@@ -7,6 +7,7 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 import { GrShare } from "react-icons/gr";
 import { FaPencilAlt, FaRegEye } from "react-icons/fa";
 import promotionApi from "../../services/promotionApi";
+import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 
 function DiscountTable({ editData, setEditData }) {
   const [products, setProducts] = useState("");
@@ -87,7 +88,13 @@ function DiscountTable({ editData, setEditData }) {
                 products.map((discount, i) => (
                   <tr key={i}>
                     <td> {i + 1}</td>
-                    <td>{discount.discountName}</td>
+                    {/* <td title={discount.discountName}>
+                      <CopyToClipboard textToCopy={discount?.discountName} />
+                    </td> */}
+                    <td title={discount.discountName}>
+                      {/* <CopyToClipboard textToCopy={discount?.discountName} /> */}
+                      {discount.discountName}
+                    </td>
                     <td>{discount.discountType}</td>
                     <td>{discount.discountPercentage}</td>
                     <td>{discount.maxCapAmount}</td>

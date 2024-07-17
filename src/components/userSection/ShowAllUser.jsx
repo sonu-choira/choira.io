@@ -24,6 +24,7 @@ import moment from "moment";
 import Switch from "../../pages/admin/layout/Switch";
 
 import axios from "axios";
+import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 
 let userAllFilterData = {
   sortfield: "",
@@ -407,11 +408,14 @@ function ShowAllUser() {
                               onError={(e) => (e.target.src = userNotFound)}
                             />
                           </div>
-                          &nbsp;&nbsp;{product?.fullName?.substring(0, 30)}
+                          &nbsp;&nbsp;
+                          <CopyToClipboard textToCopy={product?.fullName} />
                         </td>
-                        <td>{product.phone}</td>
+                        <td title={product?.phone}>
+                          <CopyToClipboard textToCopy={product?.phone} />
+                        </td>
                         <td title={product.email}>
-                          {product?.email.substring(0, 30)}
+                          <CopyToClipboard textToCopy={product?.email} />
                         </td>
                         <td>
                           {moment(product.creationTimeStamp).format(

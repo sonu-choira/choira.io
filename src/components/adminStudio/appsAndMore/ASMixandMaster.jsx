@@ -26,6 +26,7 @@ import moment from "moment";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import { GoEye } from "react-icons/go";
+import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 
 let PageSize = 10;
 
@@ -199,7 +200,8 @@ function ASMixandMaster({
                             <img src={imageNotFound} alt="" />
                           )}
                         </div>
-                        &nbsp;&nbsp;{product?.fullName?.substring(0, 20)}...
+                        &nbsp;&nbsp;
+                        <CopyToClipboard textToCopy={products?.fullName} />
                       </td>
                       <td>Starting from ₹{product.pricing?.["IN"]?.price}</td>
                       <td>

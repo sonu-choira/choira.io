@@ -275,7 +275,7 @@ input[type="number"] {
     user-select: none;
 
     &:hover {
-      background-color: #ffc701;
+      background-color: #ffc801ab;
     }
   }
   > div:last-child {

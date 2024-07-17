@@ -34,6 +34,7 @@ import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFil
 import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import moment from "moment";
+import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 
 let PageSize = 10;
 
@@ -421,10 +422,12 @@ function UserBookingDetails({
                     <tr key={products?._id} className={style.customUserTd}>
                       <td>
                         <span title={products._id}>
-                          {products._id?.substring(0, 6)}
+                          #{products._id?.substring(0, 6)}
                         </span>
                       </td>
-                      <td>{products?.studioName}</td>
+                      <td title={products?.studioName}>
+                        <CopyToClipboard textToCopy={products?.studioName} />
+                      </td>
                       <td>{products?.no_of_hours} Hour</td>
                       <td>
                         {moment(products.bookingDate).format(

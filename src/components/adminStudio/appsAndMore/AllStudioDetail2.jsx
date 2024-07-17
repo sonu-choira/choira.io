@@ -31,6 +31,7 @@ import appAndmoreApi from "../../../services/appAndmoreApi";
 import LoaderUpdating from "../../../pages/admin/layout/LoaderUpdating";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 import { GoEye } from "react-icons/go";
+import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 
 let PageSize = 10;
 
@@ -66,7 +67,7 @@ function AllStudioDetail2({
     const isEditMode = true;
     const selectedProduct = products.find((product) => product._id === id);
     console.log("navigated=======>", selectedProduct);
-
+    // alert(selectedProduct);
     navigate(`/studio/edit?id=${id}`, {
       state: {
         productData: selectedProduct,
@@ -433,7 +434,8 @@ function AllStudioDetail2({
                             <img src={imageNotFound} alt="" />
                           )}
                         </div>
-                        &nbsp;&nbsp;{products.fullName.substring(0, 20)}...
+                        &nbsp;&nbsp;
+                        <CopyToClipboard textToCopy={products.fullName} />
                       </td>
                       <td style={{ padding: "0px 8rem 0px 0px" }}>
                         ₹{products?.roomsDetails?.[0]?.pricePerHour || "N/A"}
@@ -441,9 +443,14 @@ function AllStudioDetail2({
                         <small>per hour</small>
                       </td>
                       <td title={products.address}>
-                        {products?.address?.substring(0, 30)}...
+                        <CopyToClipboard
+                          textToCopy={products.address}
+                          textLength={30}
+                        />
                         <br />
-                        <small> {products.state}</small>
+                        <small title={products.state}>
+                          <CopyToClipboard textToCopy={products.state} />
+                        </small>
                       </td>
                       <td>{products.totalRooms}</td>
                       <td className={style.tableActionbtn}>
@@ -460,7 +467,9 @@ function AllStudioDetail2({
                         <div>
                           <GoEye
                             style={{ cursor: "pointer" }}
-                            onClick={() => gotoShowStudioDetaisl(products._id)}
+                            onClick={() => {
+                              gotoShowStudioDetaisl(products._id);
+                            }}
                           />
                           <MdEdit
                             style={{ color: "#ffc701", cursor: "pointer" }}

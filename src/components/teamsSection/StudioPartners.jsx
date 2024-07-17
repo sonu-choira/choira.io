@@ -31,6 +31,7 @@ import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAn
 import appAndmoreApi from "../../services/appAndmoreApi";
 import moment from "moment";
 import { GoEye } from "react-icons/go";
+import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 
 let PageSize = 10;
 
@@ -422,13 +423,16 @@ function StudioPartners({
                             onError={(e) => (e.target.src = userNotFound)}
                           />
                         </div>
-                        &nbsp;&nbsp;{products?.firstName?.substring(0, 30)}
+                        &nbsp;&nbsp;
+                        <CopyToClipboard textToCopy={products.firstName} />
                       </td>
                       {/* <td>{products.firstName}</td> */}
                       <td title={products.email}>
-                        {products?.email?.substring(0, 15)}...
+                        <CopyToClipboard textToCopy={products.email} />
                       </td>
-                      <td>{products.studioName}</td>
+                      <td title={products.studioName}>
+                        <CopyToClipboard textToCopy={products.studioName} />
+                      </td>
 
                       <td>
                         {moment(products.creationTimeStamp).format(

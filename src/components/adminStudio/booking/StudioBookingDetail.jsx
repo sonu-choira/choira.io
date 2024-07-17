@@ -25,6 +25,8 @@ import CheckboxFilter from "../../../pages/admin/layout/filterComponent/Checkbox
 import CheckBoxFilterComponent from "../../../pages/admin/layout/filterComponent/CheckBoxFilterComponent";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import userApi from "../../../services/userApi";
+import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 let PageSize = 10;
 let sendFilterDataToapi = {};
 let userFiler = false;
@@ -35,6 +37,10 @@ function StudioBookingDetail({
   handleChange,
   getStatusColor,
   bookingPageCount,
+  totalPage,
+  pageCount,
+  setPageCount,
+  setTotalPage,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -61,11 +67,11 @@ function StudioBookingDetail({
       },
     });
   };
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return products.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, products]);
+  // const currentTableData = useMemo(() => {
+  //   const firstPageIndex = (currentPage - 1) * PageSize;
+  //   const lastPageIndex = firstPageIndex + PageSize;
+  //   return products.slice(firstPageIndex, lastPageIndex);
+  // }, [currentPage, products]);
 
   const [selectedStatus, setSelectedStatus] = useState([]);
 
@@ -73,15 +79,15 @@ function StudioBookingDetail({
     setProducts(products);
   }, [products]);
 
-  const getNoOfhours = (bookingTime) => {
-    return moment
-      .duration(
-        moment(bookingTime?.endTime, "HH:mm").diff(
-          moment(bookingTime?.startTime, "HH:mm")
-        )
-      )
-      .asHours();
-  };
+  // const getNoOfhours = (bookingTime) => {
+  //   return moment
+  //     .duration(
+  //       moment(bookingTime?.endTime, "HH:mm").diff(
+  //         moment(bookingTime?.startTime, "HH:mm")
+  //       )
+  //     )
+  //     .asHours();
+  // };
   const closeAllFilter = () => {
     setShowstatusFilter(false);
   };
@@ -97,14 +103,12 @@ function StudioBookingDetail({
     { title: "Project Status", width: "10%", icon: <CiFilter /> },
     { title: "", width: "10%", icon: "" },
   ];
-  const [totalPage, setTotalPage] = useState(0);
   const getDynamicStyle = (shortby, criteria) => ({
     backgroundColor: shortby !== criteria ? "#ffc70133" : "",
   });
   const status = ["active", "cancelled", "completed"];
   const [showstatusFilter, setShowstatusFilter] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
-  const [pageCount, setPageCount] = useState(1);
   const [userAllFilterData, setUserAllFilterData] = useState({});
 
   const handleFilterApply = (selectedData) => {
@@ -236,17 +240,22 @@ function StudioBookingDetail({
               {products.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
-                currentTableData.map((products, i) => {
+                products.map((products, i) => {
                   return (
                     <tr key={i}>
                       <td title={products._id}>#{products._id.slice(-4)}</td>
-                      <td>{products.userName}</td>
                       <td>
-                        {products.studioName}
-                        <br />
-                        <small>Room name</small>
+                        <CopyToClipboard textToCopy={products.userName} />
                       </td>
-                      <td>{getNoOfhours(products.bookingTime)}</td>
+                      <td title={products.studioName}>
+                        <CopyToClipboard textToCopy={products.studioName} />
+
+                        <br />
+                        <small title={products.studioName}>
+                          <CopyToClipboard textToCopy={products.roomName} />
+                        </small>
+                      </td>
+                      <td>{products.noOfHours}</td>
                       <td
                         style={{ textAlign: "center" }}
                         title={moment(products.creationTimeStamp).format(
@@ -313,12 +322,11 @@ function StudioBookingDetail({
         </div>
       </div>
       <div className={style.tabelpaginationDiv}>
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={products.length}
-          pageSize={PageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+        <PaginationNav
+          pageCount={pageCount}
+          totalPage={totalPage}
+          setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>

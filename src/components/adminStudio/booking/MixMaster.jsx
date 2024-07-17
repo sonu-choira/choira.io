@@ -16,16 +16,28 @@ import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import { GoEye } from "react-icons/go";
+import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 let PageSize = 10;
 
-function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
+function MixMaster({
+  products,
+  setProducts,
+  handleChange,
+  getStatusColor,
+  bookingPageCount,
+  totalPage,
+  pageCount,
+  setPageCount,
+  setTotalPage,
+}) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return products.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, products]);
+  // const currentTableData = useMemo(() => {
+  //   const firstPageIndex = (currentPage - 1) * PageSize;
+  //   const lastPageIndex = firstPageIndex + PageSize;
+  //   return products.slice(firstPageIndex, lastPageIndex);
+  // }, [currentPage, products]);
 
   const [selectedStatus, setSelectedStatus] = useState({});
 
@@ -68,15 +80,23 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
               {products.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
-                currentTableData.map((products) => {
+                products.map((products) => {
                   return (
                     <tr key={products.userPhone}>
-                      <td style={{ textAlign: "center" }}>#{products._id}</td>
-                      <td>{products.userFullName}</td>
+                      <td style={{ textAlign: "center" }}>
+                        #{products._id.slice(-5)}
+                      </td>
+                      <td title={products.userFullName}>
+                        <CopyToClipboard textToCopy={products?.userFullName} />
+                      </td>
 
-                      <td>{products.userPhone}</td>
+                      <td title={products.userPhone}>
+                        <CopyToClipboard textToCopy={products?.userPhone} />
+                      </td>
                       <td title={products.serviceFullName}>
-                        {products.serviceFullName?.substring(0, 20)}...
+                        <CopyToClipboard
+                          textToCopy={products?.serviceFullName}
+                        />
                       </td>
                       <td style={{ textAlign: "start" }}>
                         Starting price from ₹{products.totalPrice} <br />
@@ -126,12 +146,11 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
         </div>
       </div>
       <div className={style.tabelpaginationDiv}>
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={products.length}
-          pageSize={PageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+        <PaginationNav
+          pageCount={pageCount}
+          totalPage={totalPage}
+          setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>

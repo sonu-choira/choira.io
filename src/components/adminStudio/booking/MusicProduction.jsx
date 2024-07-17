@@ -17,6 +17,8 @@ import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import { GoEye } from "react-icons/go";
+import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 let PageSize = 10;
 
 function MusicProduction({
@@ -24,14 +26,19 @@ function MusicProduction({
   setProducts,
   handleChange,
   getStatusColor,
+  bookingPageCount,
+  totalPage,
+  pageCount,
+  setPageCount,
+  setTotalPage,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return products.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, products]);
+  // const currentTableData = useMemo(() => {
+  //   const firstPageIndex = (currentPage - 1) * PageSize;
+  //   const lastPageIndex = firstPageIndex + PageSize;
+  //   return products.slice(firstPageIndex, lastPageIndex);
+  // }, [currentPage, products]);
 
   const [selectedStatus, setSelectedStatus] = useState({});
 
@@ -74,19 +81,23 @@ function MusicProduction({
               {products.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
-                currentTableData.map((products, i) => {
+                products.map((products, i) => {
                   return (
                     <tr key={i}>
                       <td title={products._id} style={{ textAlign: "center" }}>
                         #{products._id.slice(-5)}
                       </td>
                       <td title={products.userFullName}>
-                        {products.userFullName?.substring(0, 20)}
+                        <CopyToClipboard textToCopy={products?.userFullName} />
                       </td>
 
-                      <td>{products.userPhone}</td>
+                      <td title={products.userPhone}>
+                        <CopyToClipboard textToCopy={products?.userPhone} />
+                      </td>
                       <td title={products.serviceFullName}>
-                        {products.serviceFullName?.substring(0, 20)}...
+                        <CopyToClipboard
+                          textToCopy={products?.serviceFullName}
+                        />
                       </td>
                       <td>₹{products.totalPrice}</td>
                       <td className={style.tableActionbtn}>
@@ -134,12 +145,11 @@ function MusicProduction({
         </div>
       </div>
       <div className={style.tabelpaginationDiv}>
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={products.length}
-          pageSize={PageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+        <PaginationNav
+          pageCount={pageCount}
+          totalPage={totalPage}
+          setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>

@@ -15,6 +15,8 @@ import bookingPageApi from "../../../services/bookingPageApi";
 function BookingPages() {
   const [bookingPageCount, setBookingPageCount] = useState("c0");
   const [products, setProducts] = useState([]);
+  const [totalPage, setTotalPage] = useState();
+  const [pageCount, setPageCount] = useState(1);
   // let { page: paramData } = useParams();
 
   // setBookingPageCount("c2");
@@ -89,7 +91,7 @@ function BookingPages() {
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
       bookingPageApi
-        .musicProduction("100", idToUse, 1)
+        .musicProduction(5, idToUse, 1, pageCount)
         .then((response) => {
           console.log(
             `====================> response ${bookingPageCount} `,
@@ -97,23 +99,25 @@ function BookingPages() {
           );
           if (response.data) {
             setProducts(response.data);
+            setTotalPage(response.paginate.totalPages);
           }
         })
         .catch((error) => {
           console.error("Error fetching studios:", error);
         });
     } else if (bookingPageCount === "c1") {
-      const limit = 1000;
-      const active = 1;
+      const limit = 6;
+      const active = "";
       const bookingType = -1;
       const category = bookingPageCount;
       // const type = bookingPageCount;
       bookingPageApi
-        .getBookings(limit, active, bookingType, category)
+        .getBookings(limit, active, bookingType, category, pageCount)
         .then((response) => {
           console.log("====================> response C1", response);
           if (response.data) {
             setProducts(response.data);
+            setTotalPage(response.paginate.totalPages);
             console.log("pagekaDetail", response);
           }
         })
@@ -121,7 +125,7 @@ function BookingPages() {
           console.error("Error fetching studios:", error);
         });
     }
-  }, [bookingPageCount]);
+  }, [bookingPageCount, pageCount]);
   return (
     <>
       <div className={style.allStudioDetailsPage}>
@@ -137,6 +141,10 @@ function BookingPages() {
             getStatusColor={getStatusColor}
             // setTotalPage={setTotalPage}
             bookingPageCount={bookingPageCount}
+            setPageCount={setPageCount}
+            setTotalPage={setTotalPage}
+            pageCount={pageCount}
+            totalPage={totalPage}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
@@ -145,6 +153,11 @@ function BookingPages() {
             setProducts={setProducts}
             handleChange={handleChange}
             getStatusColor={getStatusColor}
+            bookingPageCount={bookingPageCount}
+            setPageCount={setPageCount}
+            setTotalPage={setTotalPage}
+            pageCount={pageCount}
+            totalPage={totalPage}
           />
         ) : bookingPageCount === "c3" ? (
           <MixMaster
@@ -152,6 +165,11 @@ function BookingPages() {
             setProducts={setProducts}
             handleChange={handleChange}
             getStatusColor={getStatusColor}
+            bookingPageCount={bookingPageCount}
+            setPageCount={setPageCount}
+            setTotalPage={setTotalPage}
+            pageCount={pageCount}
+            totalPage={totalPage}
           />
         ) : (
           <Artist />

@@ -34,6 +34,7 @@ import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../services/appAndmoreApi";
+import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 
 let PageSize = 10;
 
@@ -419,8 +420,14 @@ function UserServiceBooking({
                           {products._id.substring(0, 6)}
                         </span>
                       </td>
-                      <td>{products.serviceFullName}</td>
-                      <td>{products?.package?.name}</td>
+                      <td title={products?.serviceFullName}>
+                        <CopyToClipboard
+                          textToCopy={products?.serviceFullName}
+                        />
+                      </td>
+                      <td title={products?.package?.name}>
+                        <CopyToClipboard textToCopy={products?.package?.name} />
+                      </td>
                       <td>
                         {moment(products.bookingDate).format(
                           "Do MMM  YY, hh:mm a"

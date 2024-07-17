@@ -26,6 +26,7 @@ import moment from "moment";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 import { GoEye } from "react-icons/go";
+import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 
 let PageSize = 10;
 
@@ -186,7 +187,8 @@ function ASMusicProduction({
                             <img src={imageNotFound} alt="" />
                           )}
                         </div>
-                        &nbsp;&nbsp;{products?.fullName?.substring(0, 20)}...
+                        &nbsp;&nbsp;
+                        <CopyToClipboard textToCopy={products?.fullName} />
                       </td>
                       <td>Starting from ₹{products.pricing?.["IN"]?.price}</td>
                       <td>
