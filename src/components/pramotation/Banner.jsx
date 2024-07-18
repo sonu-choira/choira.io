@@ -13,7 +13,7 @@ import { RxDotFilled } from "react-icons/rx";
 import { BiSolidPencil } from "react-icons/bi";
 import { Skeleton } from "antd";
 
-function Banner({ setProducts, products }) {
+function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
   const [mainBannerData, setMainBannerData] = useState([]);
   const [exclusiveBannerData, setExclusiveBannerData] = useState([]);
   const [newMainBannerUrl, setNewMainBannerUrl] = useState("");
@@ -39,6 +39,18 @@ function Banner({ setProducts, products }) {
       setMainBannerData(products.filter((type) => type.type === "AdBanner"));
     }
   }, [products]);
+
+  useEffect(() => {
+    if (mainBannerData && mainBannerData.length > 0) {
+      const sortedData = mainBannerData.sort((a, b) => a.stage - b.stage);
+      setMainBannerData([...sortedData]);
+    }
+    if (exclusiveBannerData && exclusiveBannerData.length > 0) {
+      const sortedData = exclusiveBannerData.sort((a, b) => a.stage - b.stage);
+      setExclusiveBannerData([...sortedData]);
+    }
+  }, [mainBannerData.length, exclusiveBannerData.length]);
+
   // Define state for URL validity
 
   const isValidUrl = (url) => {
@@ -156,7 +168,7 @@ function Banner({ setProducts, products }) {
       errorAlert(errorMessage);
     }
   };
-  const [showAddPage, setShowAddPage] = useState(false);
+
   const [pageType, setPageType] = useState("");
   let editMode = useRef(false);
   const [editData, setEditData] = useState("");
@@ -203,8 +215,12 @@ function Banner({ setProducts, products }) {
                   name={"Add"}
                   style={{ height: "90%", gap: "5px" }}
                   onClick={() => {
-                    setShowAddPage(true);
-                    setPageType("AdBanner");
+                    if (mainBannerData.length < 4) {
+                      setShowAddPage(true);
+                      setPageType("AdBanner");
+                    } else {
+                      errorAlert("You can only add four main banner");
+                    }
                   }}
                 />
               </div>
@@ -341,8 +357,12 @@ function Banner({ setProducts, products }) {
                   name={"Add"}
                   style={{ height: "90%", gap: "5px" }}
                   onClick={() => {
-                    setShowAddPage(true);
-                    setPageType("ExcBanner");
+                    if (exclusiveBannerData.length < 4) {
+                      setShowAddPage(true);
+                      setPageType("ExcBanner");
+                    } else {
+                      errorAlert("You can only add up to 4 banners");
+                    }
                   }}
                 />
               </div>

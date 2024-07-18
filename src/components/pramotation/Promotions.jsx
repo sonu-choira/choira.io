@@ -22,6 +22,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
   const [totalPage, setTotalPage] = useState();
 
   const [pageCount, setPageCount] = useState(1);
+  const [showAddPage, setShowAddPage] = useState(false);
   const [shortby, setShortby] = useState("asc");
   const [sidebarPageCount, setSidebarPageCount] = useState(1);
   const { pathname } = useLocation();
@@ -93,24 +94,25 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
 
       // const limit = 10;
       // const active = 1;
-
-      promotionApi
-        .getAllBanner()
-        .then((response) => {
-          console.log(
-            `====================> response from promotion ${response}`,
-            response.banners
-          );
-          setProducts(response.banners);
-          // if (response) {
-          //   setProducts(response.data.allStudioBooking);
-          //   console.log("lkasdnflkjsdnf", response.status);
-          //   setTotalPage(response.data.paginate.totalPages);
-          // }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
+      if (!showAddPage) {
+        promotionApi
+          .getAllBanner()
+          .then((response) => {
+            console.log(
+              `====================> response from promotion ${response}`,
+              response.banners
+            );
+            setProducts(response.banners);
+            // if (response) {
+            //   setProducts(response.data.allStudioBooking);
+            //   console.log("lkasdnflkjsdnf", response.status);
+            //   setTotalPage(response.data.paginate.totalPages);
+            // }
+          })
+          .catch((error) => {
+            console.error("Error fetching studios:", error);
+          });
+      }
     } else if (sidebarPageCount === 3) {
       const limit = 10;
       const active = 1;
@@ -139,7 +141,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
       // }
     }
     console.log(sidebarPageCount, "inside useEffect");
-  }, [pageCount, sidebarPageCount]);
+  }, [pageCount, sidebarPageCount, showAddPage]);
 
   const sidebarOptions = [
     {
@@ -221,7 +223,12 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
               {sidebarPageCount == 1 ? (
                 // <UserAcount userAllDetails={userAllDetails} />
 
-                <Banner setProducts={setProducts} products={products} />
+                <Banner
+                  setProducts={setProducts}
+                  products={products}
+                  showAddPage={showAddPage}
+                  setShowAddPage={setShowAddPage}
+                />
               ) : sidebarPageCount == 2 ? (
                 <Discount
                   setShowFooter={setShowFooter}

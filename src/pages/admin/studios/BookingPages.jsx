@@ -11,7 +11,14 @@ import BookingActionBar from "../../../components/adminStudio/booking/BookingAct
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 import bookingPageApi from "../../../services/bookingPageApi";
-
+let sendFilterDataToapi = {
+  limit: 6,
+  bookingType: 1,
+  category: "",
+  startDate: "",
+  endDate: "",
+};
+// let hasFilter = false;
 function BookingPages() {
   const [bookingPageCount, setBookingPageCount] = useState("c0");
   const [products, setProducts] = useState([]);
@@ -90,8 +97,15 @@ function BookingPages() {
       // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
+      let data = {
+        limit: 5,
+
+        category: idToUse,
+        pageCount: pageCount,
+      };
+
       bookingPageApi
-        .musicProduction(5, idToUse, 1, pageCount)
+        .musicProduction(data)
         .then((response) => {
           console.log(
             `====================> response ${bookingPageCount} `,
@@ -106,13 +120,27 @@ function BookingPages() {
           console.error("Error fetching studios:", error);
         });
     } else if (bookingPageCount === "c1") {
+      // for (const key in sendFilterDataToapi) {
+      //   if (sendFilterDataToapi[key]) {
+      //     hasFilter = true;
+      //     break;
+      //   }
+
       const limit = 6;
-      const active = "";
-      const bookingType = -1;
+      // const active = "";
+      const bookingType = 1;
       const category = bookingPageCount;
+      // let data = {
+      //   limit: 6,
+      //   bookingType: -1,
+      //   category: bookingPageCount,
+      //   pageCount: pageCount,
+      // };
+      sendFilterDataToapi.category = bookingPageCount;
+      sendFilterDataToapi.pageCount = pageCount;
       // const type = bookingPageCount;
       bookingPageApi
-        .getBookings(limit, active, bookingType, category, pageCount)
+        .getBookings(sendFilterDataToapi)
         .then((response) => {
           console.log("====================> response C1", response);
           if (response.data) {
@@ -145,6 +173,7 @@ function BookingPages() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             totalPage={totalPage}
+            sendFilterDataToapi={sendFilterDataToapi}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (

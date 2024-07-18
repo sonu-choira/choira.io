@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import imageUploadapi from "../../services/imageUploadapi";
 import promotionApi from "../../services/promotionApi";
 import { send } from "react-ga";
+import { useNavigate } from "react-router-dom";
 
 function AddNewBanner({
   setShowAddPage,
@@ -64,7 +65,7 @@ function AddNewBanner({
       hitapi(sendDataToApi);
     },
   });
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (editMode.current) {
       const resetValues = {
@@ -371,6 +372,7 @@ function AddNewBanner({
         <StudioFooter
           backOnclick={() => {
             setShowAddPage(false);
+            navigate("/adminDashboard/Promotions/Banner");
             editMode.current = false;
           }}
           saveDisabled={false}

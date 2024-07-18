@@ -27,9 +27,12 @@ import appAndmoreApi from "../../../services/appAndmoreApi";
 import userApi from "../../../services/userApi";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
+import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import DateAndSearchFilterComponent from "../../../pages/admin/layout/filterComponent/DateAndSearchFilterComponent";
 let PageSize = 10;
-let sendFilterDataToapi = {};
-let userFiler = false;
+
+let userFiler = true;
+let setUserFilterText = {};
 
 function StudioBookingDetail({
   products,
@@ -41,9 +44,11 @@ function StudioBookingDetail({
   pageCount,
   setPageCount,
   setTotalPage,
+  sendFilterDataToapi,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+  const [userFilterText, setUserFilterText] = useState("");
   // const gotoShowDetails = (id) => {
   //   const selectedProduct = products.find((product) => product._id === id);
   //   console.log("navigated=======>", selectedProduct);
@@ -172,28 +177,34 @@ function StudioBookingDetail({
     }
   };
 
+  let handleDateFilter = (sendFilterDataToapi) => {
+    setProducts([]);
+    sendFilterDataToapi.pageCount = pageCount;
+
+    bookingPageApi.getBookings(sendFilterDataToapi).then((response) => {
+      console.log("date filter response:", response);
+      if (response.status) {
+        setProducts(response.data);
+        setTotalPage(response?.paginate?.totalPages);
+      }
+    });
+  };
+
   return (
     <>
       <div className={style.studioTabelDiv}>
-        <div className={style.searchDiv}>
-          <div className={style.puredisabled}>
-            <p>Search by Date </p>
-            <label htmlFor="selectDate">
-              <IoCalendarOutline />
-            </label>
-            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
-          </div>
-          <div className={style.puredisabled}>
-            <BiSearchAlt /> <br />
-            <input
-              type="text"
-              placeholder="Search"
-              className={style.puredisabled}
-              disabled
-              readOnly
-            />
-          </div>
-        </div>
+        <DateAndSearchFilterComponent
+          setProducts={setProducts}
+          setTotalPage={setTotalPage}
+          pageCount={pageCount}
+          setPageCount={setPageCount}
+          userFiler={userFiler}
+          setUserFilterText={setUserFilterText}
+          userFilterText={userFilterText}
+          userAllFilterData={userAllFilterData}
+          handleDateFilter={handleDateFilter}
+          sendFilterDataToapi={sendFilterDataToapi}
+        />
         <div>
           <table>
             <thead className={style.studiotabelHead}>
@@ -237,10 +248,10 @@ function StudioBookingDetail({
               </tr>
             </thead>
             <tbody>
-              {products.length === 0 ? (
+              {products?.length === 0 ? (
                 <ChoiraLoder2 />
               ) : (
-                products.map((products, i) => {
+                products?.map((products, i) => {
                   return (
                     <tr key={i}>
                       <td title={products._id}>#{products._id.slice(-4)}</td>

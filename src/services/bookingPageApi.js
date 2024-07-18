@@ -2,16 +2,18 @@
 import api from "./api"
 
  class bookingApi {
-  getBookings = async (limit, active,bookingType,category,pageCount) => {
+  getBookings = async ({limit, active,bookingType,pageCount,startDate,endDate}) => {
   
+
 
     const response = await api.get(`/bookings`, {
       params: {
         limit: limit,
         active: active,
         bookingType: bookingType,
-        category: category,
         page:pageCount,
+        startDate,
+        endDate,
       }
     });
     const {status} = response.data
@@ -19,12 +21,14 @@ import api from "./api"
     return response.data;
    };
 
-   musicProduction = async (limit, Type, active,pageCount) => {
+   musicProduction = async ({limit, bookingType, category,pageCount}) => {
     const response = await api.get(`/bookings/services`,{ 
         params: {
             limit: limit,
-            bookingType: Type,
+            bookingType: category,
             page:pageCount,
+           
+            
             // active: active
         }
     });
