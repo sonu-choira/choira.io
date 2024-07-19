@@ -29,6 +29,8 @@ import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import DateAndSearchFilterComponent from "../../../pages/admin/layout/filterComponent/DateAndSearchFilterComponent";
+import { clearEmptyField } from "../../../utils/helperFunction";
+import { errorAlert } from "../../../pages/admin/layout/Alert";
 let PageSize = 10;
 
 let userFiler = true;
@@ -111,39 +113,44 @@ function StudioBookingDetail({
   const getDynamicStyle = (shortby, criteria) => ({
     backgroundColor: shortby !== criteria ? "#ffc70133" : "",
   });
-  const status = ["active", "cancelled", "completed"];
+  const status = {
+    active: 0,
+    completed: 1,
+    cancelled: 2,
+  };
+  //  ["active", "cancelled", "completed"];
   const [showstatusFilter, setShowstatusFilter] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
   const [userAllFilterData, setUserAllFilterData] = useState({});
 
-  const handleFilterApply = (selectedData) => {
-    if (selectedData.length > 0) {
-      setProducts([]);
-      const apiCall = userFiler
-        ? userApi.getAllUser(pageCount, userAllFilterData)
-        : appAndmoreApi.filterData(sendFilterDataToapi);
+  // const handleFilterApply = (selectedData) => {
+  //   if (selectedData.length > 0) {
+  //     setProducts([]);
+  //     const apiCall = userFiler
+  //       ? userApi.getAllUser(pageCount, userAllFilterData)
+  //       : appAndmoreApi.filterData(sendFilterDataToapi);
 
-      apiCall
-        .then((response) => {
-          console.log("filter applied:", response);
-          if (userFiler) {
-            setProducts(response.users);
-          } else {
-            setProducts(response.studios);
-          }
-          setTotalPage(response.paginate.totalPages);
-        })
-        .catch((error) => {
-          console.error("Error applying filter:", error);
-        });
+  //     apiCall
+  //       .then((response) => {
+  //         console.log("filter applied:", response);
+  //         if (userFiler) {
+  //           setProducts(response.users);
+  //         } else {
+  //           setProducts(response.studios);
+  //         }
+  //         setTotalPage(response.paginate.totalPages);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error applying filter:", error);
+  //       });
 
-      closeAllFilter();
-    } else {
-      closeAllFilter();
-      setProducts([]);
-      fetchAllData();
-    }
-  };
+  //     closeAllFilter();
+  //   } else {
+  //     closeAllFilter();
+  //     setProducts([]);
+  //     fetchAllData();
+  //   }
+  // };
 
   const fetchAllData = () => {
     const apiCall =
@@ -167,6 +174,7 @@ function StudioBookingDetail({
 
   const handleResetFilter = () => {
     setSelectedData([]);
+
     setProducts([]);
     if (Object.values(sendFilterDataToapi).every((value) => value === "")) {
       closeAllFilter();
@@ -177,10 +185,18 @@ function StudioBookingDetail({
     }
   };
 
-  let handleDateFilter = (sendFilterDataToapi) => {
+  const handleFilterData = (sendFilterDataToapi) => {
     setProducts([]);
+    setPageCount(1);
+    // errorAlert(selectedData);
+    console.log("selectedData:::::::::::::------>", selectedData);
+    delete sendFilterDataToapi.bookingType;
+    if (selectedData) {
+      sendFilterDataToapi.bookingType = selectedData;
+    }
     sendFilterDataToapi.pageCount = pageCount;
 
+    clearEmptyField(sendFilterDataToapi);
     bookingPageApi.getBookings(sendFilterDataToapi).then((response) => {
       console.log("date filter response:", response);
       if (response.status) {
@@ -202,7 +218,7 @@ function StudioBookingDetail({
           setUserFilterText={setUserFilterText}
           userFilterText={userFilterText}
           userAllFilterData={userAllFilterData}
-          handleDateFilter={handleDateFilter}
+          handleFilterData={handleFilterData}
           sendFilterDataToapi={sendFilterDataToapi}
         />
         <div>
@@ -215,7 +231,14 @@ function StudioBookingDetail({
                       {header.title}
                       <div
                         className={header.icon !== "" ? style.filterBox : ""}
-                        // style={getDynamicStyle(shortby, "creationTimeStamp:desc")}
+                        style={
+                          index === 8
+                            ? getDynamicStyle(
+                                selectedData,
+                                selectedData.length > 0
+                              )
+                            : {}
+                        }
                         onClick={() => {
                           if (index == 8) {
                             setShowstatusFilter(!showstatusFilter);
@@ -230,10 +253,11 @@ function StudioBookingDetail({
                               data={status}
                               // cusstyle={{ left: "-355%" }}
                               disabledsearch={true}
-                              selectedData={selectedStatus}
-                              setSelectedData={setSelectedStatus}
-                              onFilterApply={handleFilterApply}
+                              selectedData={selectedData}
+                              setSelectedData={setSelectedData}
+                              onFilterApply={handleFilterData}
                               onResetFilter={handleResetFilter}
+                              sendFilterDataToapi={sendFilterDataToapi}
                               closeAllFilter={() =>
                                 console.log("closeAllFilter triggered")
                               }

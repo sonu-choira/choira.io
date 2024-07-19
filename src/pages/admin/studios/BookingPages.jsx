@@ -11,12 +11,15 @@ import BookingActionBar from "../../../components/adminStudio/booking/BookingAct
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 import bookingPageApi from "../../../services/bookingPageApi";
+import { clearEmptyField } from "../../../utils/helperFunction";
 let sendFilterDataToapi = {
   limit: 6,
-  bookingType: 1,
+  bookingType: "",
   category: "",
   startDate: "",
   endDate: "",
+  searchField: "",
+  pageCount: 1,
 };
 // let hasFilter = false;
 function BookingPages() {
@@ -138,7 +141,9 @@ function BookingPages() {
       // };
       sendFilterDataToapi.category = bookingPageCount;
       sendFilterDataToapi.pageCount = pageCount;
+
       // const type = bookingPageCount;
+      clearEmptyField(sendFilterDataToapi);
       bookingPageApi
         .getBookings(sendFilterDataToapi)
         .then((response) => {

@@ -12,6 +12,7 @@ const CheckBoxFilterComponent = ({
   onFilterApply,
   onResetFilter,
   closeAllFilter,
+  sendFilterDataToapi,
 }) => {
   useEffect(() => {
     console.log("selectedData", selectedData);
@@ -19,7 +20,7 @@ const CheckBoxFilterComponent = ({
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
-    setSelectedData(checked ? [name] : []);
+    setSelectedData(checked ? name : "");
   };
 
   useEffect(() => {
@@ -49,7 +50,40 @@ const CheckBoxFilterComponent = ({
           <input type="text" placeholder="Search here.." />
         </div>
       )}
-      {data.map((item, index) => (
+      {Array.isArray(data)
+        ? data.map((item, index) => (
+            <div
+              key={index}
+              className={style.fltercheckboxdiv}
+              onClick={handleCheckboxClick}
+            >
+              <input
+                type="checkbox"
+                name={item}
+                id={item}
+                checked={selectedData.includes(item)}
+                onChange={handleCheckboxChange}
+              />
+              <label htmlFor={item}>{item}</label>
+            </div>
+          ))
+        : Object.keys(data).map((key, index) => (
+            <div
+              key={key}
+              className={style.fltercheckboxdiv}
+              onClick={handleCheckboxClick}
+            >
+              <input
+                type="checkbox"
+                name={data[key]}
+                id={key}
+                checked={selectedData.includes(data[key])}
+                onChange={handleCheckboxChange}
+              />
+              <label htmlFor={key}>{key}</label>
+            </div>
+          ))}
+      {/* {data.map((item, index) => (
         <div
           key={index}
           className={style.fltercheckboxdiv}
@@ -64,7 +98,7 @@ const CheckBoxFilterComponent = ({
           />
           <label htmlFor={item}>{item}</label>
         </div>
-      ))}
+      ))} */}
       <div
         style={{ justifyContent: "space-around" }}
         className={style.topborder}
@@ -75,21 +109,24 @@ const CheckBoxFilterComponent = ({
         >
           reset
         </p>
-        <Button name={"ok"} onClick={() => onFilterApply(selectedData)} />
+        <Button
+          name={"ok"}
+          onClick={() => onFilterApply(sendFilterDataToapi)}
+        />
       </div>
     </div>
   );
 };
 
-CheckBoxFilterComponent.propTypes = {
-  data: PropTypes.array.isRequired,
-  cusstyle: PropTypes.object,
-  disabledsearch: PropTypes.bool,
-  selectedData: PropTypes.array.isRequired,
-  setSelectedData: PropTypes.func.isRequired,
-  onFilterApply: PropTypes.func.isRequired,
-  onResetFilter: PropTypes.func.isRequired,
-  closeAllFilter: PropTypes.func.isRequired,
-};
+// CheckBoxFilterComponent.propTypes = {
+//   data: PropTypes.array.isRequired,
+//   cusstyle: PropTypes.object,
+//   disabledsearch: PropTypes.bool,
+//   selectedData: PropTypes.array.isRequired,
+//   setSelectedData: PropTypes.func.isRequired,
+//   onFilterApply: PropTypes.func.isRequired,
+//   onResetFilter: PropTypes.func.isRequired,
+//   closeAllFilter: PropTypes.func.isRequired,
+// };
 
 export default CheckBoxFilterComponent;

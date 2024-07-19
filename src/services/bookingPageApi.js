@@ -2,7 +2,7 @@
 import api from "./api"
 
  class bookingApi {
-  getBookings = async ({limit, active,bookingType,pageCount,startDate,endDate}) => {
+  getBookings = async ({limit, active,bookingType,pageCount,startDate,endDate,searchField}) => {
   
 
 
@@ -14,6 +14,8 @@ import api from "./api"
         page:pageCount,
         startDate,
         endDate,
+        searchField,
+
       }
     });
     const {status} = response.data
@@ -27,6 +29,7 @@ import api from "./api"
             limit: limit,
             bookingType: category,
             page:pageCount,
+            
            
             
             // active: active

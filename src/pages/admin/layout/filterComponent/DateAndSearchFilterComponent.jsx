@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TbFilterCancel } from "react-icons/tb";
 import { BiSearchAlt } from "react-icons/bi";
 import { DatePicker } from "antd";
@@ -9,22 +9,14 @@ import style from "../../../../pages/admin/studios/studio.module.css";
 const { RangePicker } = DatePicker;
 
 function DateAndSearchFilterComponent({
-  setTotalPage,
-  filterNav,
-  setfilterNav,
   sendFilterDataToapi,
-  setProducts,
   userFiler,
-  userFilterText,
-  setUserFilterText,
   userAllFilterData,
   csstyle,
   dateDisable,
   searchDisable,
   handleFilterData,
-  handleUserFilterData,
   handleClearFilter,
-  handleDateFilter,
 }) {
   const rangePresets = [
     { label: "Last 7 Days", value: [dayjs().add(-7, "d"), dayjs()] },
@@ -44,53 +36,42 @@ function DateAndSearchFilterComponent({
     if (dates) {
       sendFilterDataToapi.startDate = dateStrings[0];
       sendFilterDataToapi.endDate = dateStrings[1];
-      handleDateFilter(sendFilterDataToapi);
     } else {
-      userAllFilterData.startDate = undefined;
-      userAllFilterData.endDate = undefined;
-      handleDateFilter(userAllFilterData);
+      sendFilterDataToapi.startDate = undefined;
+      sendFilterDataToapi.endDate = undefined;
     }
+    handleFilterData(sendFilterDataToapi);
   };
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    if (searchQuery) {
-      sendFilterDataToapi.searchText = searchQuery;
-      handleFilterData(sendFilterDataToapi);
-    }
-  }, [searchQuery, sendFilterDataToapi, handleFilterData]);
-
   const handleChange = (event) => {
-    if (userFiler) {
-      setUserFilterText(event.target.value);
-    } else {
-      setSearchQuery(event.target.value);
-    }
+    setSearchQuery(event.target.value);
   };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      if (userFiler) {
-        handleUserFilterData(userAllFilterData);
-      } else {
-        handleFilterData(sendFilterDataToapi);
-      }
+      sendFilterDataToapi.searchField = searchQuery;
+      handleFilterData(sendFilterDataToapi);
     }
   };
 
-  const filterData = sendFilterDataToapi ? { ...sendFilterDataToapi } : {};
-  const filterData2 = userAllFilterData ? { ...userAllFilterData } : {};
+  let filterData = sendFilterDataToapi ? { ...sendFilterDataToapi } : {};
 
-  ["sortBy", "page", "serviceType"].forEach((key) => delete filterData[key]);
+  [
+    "sortBy",
+    "page",
+    "serviceType",
+    "limit",
+    "pageCount",
+    "category",
+    "bookingType",
+  ].forEach((key) => delete filterData[key]);
 
   const hasFilter =
     Object.values(filterData).some(
       (value) => value !== "" && value !== undefined
-    ) ||
-    Object.values(filterData2).some(
-      (value) => value !== "" && value !== undefined
-    );
+    ) || false;
 
   return (
     <div className={style.searchDiv} style={csstyle}>
@@ -115,7 +96,7 @@ function DateAndSearchFilterComponent({
         <input
           type="text"
           placeholder="Search"
-          value={userFiler ? userFilterText : searchQuery}
+          value={searchQuery}
           onChange={handleChange}
           onKeyPress={handleKeyPress}
           disabled={searchDisable}
