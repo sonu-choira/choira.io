@@ -16,7 +16,6 @@ function DateAndSearchFilterComponent({
   dateDisable,
   searchDisable,
   handleFilterData,
-  handleClearFilter,
 }) {
   const rangePresets = [
     { label: "Last 7 Days", value: [dayjs().add(-7, "d"), dayjs()] },
@@ -58,16 +57,12 @@ function DateAndSearchFilterComponent({
 
   let filterData = sendFilterDataToapi ? { ...sendFilterDataToapi } : {};
 
-  [
-    "sortBy",
-    "page",
-    "serviceType",
-    "limit",
-    "pageCount",
-    "category",
-    "bookingType",
-  ].forEach((key) => delete filterData[key]);
-
+  ["sortBy", "page", "serviceType", "limit", "pageCount", "category"].forEach(
+    (key) => delete filterData[key]
+  );
+  const handleClearFilter = () => {
+    window.location.reload();
+  };
   const hasFilter =
     Object.values(filterData).some(
       (value) => value !== "" && value !== undefined

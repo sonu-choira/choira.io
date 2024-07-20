@@ -120,69 +120,20 @@ function StudioBookingDetail({
   };
   //  ["active", "cancelled", "completed"];
   const [showstatusFilter, setShowstatusFilter] = useState(false);
-  const [selectedData, setSelectedData] = useState([]);
+  const [selectedData, setSelectedData] = useState("");
   const [userAllFilterData, setUserAllFilterData] = useState({});
 
-  // const handleFilterApply = (selectedData) => {
-  //   if (selectedData.length > 0) {
-  //     setProducts([]);
-  //     const apiCall = userFiler
-  //       ? userApi.getAllUser(pageCount, userAllFilterData)
-  //       : appAndmoreApi.filterData(sendFilterDataToapi);
-
-  //     apiCall
-  //       .then((response) => {
-  //         console.log("filter applied:", response);
-  //         if (userFiler) {
-  //           setProducts(response.users);
-  //         } else {
-  //           setProducts(response.studios);
-  //         }
-  //         setTotalPage(response.paginate.totalPages);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error applying filter:", error);
-  //       });
-
-  //     closeAllFilter();
-  //   } else {
-  //     closeAllFilter();
-  //     setProducts([]);
-  //     fetchAllData();
-  //   }
-  // };
-
-  const fetchAllData = () => {
-    const apiCall =
-      bookingPageCount === "c2" || bookingPageCount === "c3"
-        ? appAndmoreApi.getServices("10", bookingPageCount, 1)
-        : appAndmoreApi.getStudios(64, 1);
-
-    apiCall
-      .then((response) => {
-        if (response.status) {
-          setProducts(
-            response.services ? response.services.results : response.studios
-          );
-          setTotalPage(response.paginate.totalPages);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
+  useEffect(() => {
+    if (selectedData === "") {
+      delete sendFilterDataToapi.bookingType;
+      console.log("sendFilterDataToapi after reset:", sendFilterDataToapi);
+      handleFilterData(sendFilterDataToapi);
+    }
+  }, [selectedData]);
 
   const handleResetFilter = () => {
-    setSelectedData([]);
-
-    setProducts([]);
-    if (Object.values(sendFilterDataToapi).every((value) => value === "")) {
-      closeAllFilter();
-      fetchAllData();
-    } else {
-      fetchAllData();
-      closeAllFilter();
-    }
+    setSelectedData("");
+    console.log("selectedData before reset:", selectedData);
   };
 
   const handleFilterData = (sendFilterDataToapi) => {
@@ -232,7 +183,7 @@ function StudioBookingDetail({
                       <div
                         className={header.icon !== "" ? style.filterBox : ""}
                         style={
-                          index === 8
+                          index === 8 && selectedData.length > 0
                             ? getDynamicStyle(
                                 selectedData,
                                 selectedData.length > 0
