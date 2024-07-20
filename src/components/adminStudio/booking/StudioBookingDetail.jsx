@@ -99,14 +99,14 @@ function StudioBookingDetail({
     setShowstatusFilter(false);
   };
   const headers = [
-    { title: "Id", width: "5%", icon: <RiExpandUpDownLine /> },
-    { title: "User Name", width: "10%", icon: <RiExpandUpDownLine /> },
-    { title: "Studio Name", width: "10%", icon: <RiExpandUpDownLine /> },
-    { title: "Hours", width: "5%", icon: <CiFilter /> },
-    { title: "Creation Date", width: "10%", icon: <CiFilter /> },
-    { title: "Booking Date", width: "10%", icon: <CiFilter /> },
-    { title: "Time Slot", width: "10%", icon: <CiFilter /> },
-    { title: "Amount", width: "10%", icon: <CiFilter /> },
+    { title: "Id", width: "5%" },
+    { title: "User Name", width: "10%" },
+    { title: "Studio Name", width: "10%" },
+    { title: "Hours", width: "5%" },
+    { title: "Creation Date", width: "10%" },
+    { title: "Booking Date", width: "10%" },
+    { title: "Time Slot", width: "10%" },
+    { title: "Amount", width: "10%" },
     { title: "Project Status", width: "10%", icon: <CiFilter /> },
     { title: "", width: "10%", icon: "" },
   ];
