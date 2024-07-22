@@ -144,8 +144,8 @@ h3 {
 .swiper-slide {
   display: flex;
   flex-direction: column;
-  justify-content: end;
-  align-items: end;
+  justify-content: flex-end;
+  align-items: flex-end;
   position: relative;
 }
 .swiper-button-next img {
@@ -216,7 +216,7 @@ h3 {
 }
 .content-div1 {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 4%;
   padding-bottom: 2%;
 }
@@ -262,7 +262,7 @@ h3 {
   display: flex;
   align-items: flex-end;
   /* border: 2px solid red; */
-  justify-content: end;
+  justify-content: flex-end;
 }
 .content > div:first-child > h3 {
   padding-bottom: 2%;

@@ -31,7 +31,7 @@ body {
   background-image: url(../../assets/img/dashboard_img/sidebar.jpeg);
   display: flex;
   justify-content: center;
-  align-items: end;
+  align-items: flex-end;
 }
 .dashboard {
   width: 88%;
@@ -45,7 +45,7 @@ body {
   width: 72%;
   height: 98%;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   flex-direction: column;
   gap: 5%;
 }
@@ -82,7 +82,7 @@ body {
 } */
 .community > div {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   gap: 10%;
   color: white;
@@ -178,7 +178,7 @@ body {
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 3%;
 }
 .produce-section-main2 > div:first-child {
@@ -207,7 +207,7 @@ body {
 }
 .produce-section-tabs > div > div {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   gap: 2%;
   font-size: 1.5vmax;
   width: 43%;
@@ -357,7 +357,7 @@ body {
 
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .choira-test-demoFile-main > div {
@@ -906,7 +906,7 @@ body {
   align-items: center;
 }
 .choira_edit_profile > div > div:nth-child(1) > div:nth-child(2) {
-  justify-content: end;
+  justify-content: flex-end;
 }
 .choira_edit_profile > div > div:nth-child(2) {
   height: 25%;
@@ -1363,7 +1363,7 @@ body {
   width: fit-content;
   max-width: 50%;
   align-self: flex-start;
-  align-items: start;
+  align-items: flex-start;
   background-color: #fff4cc;
 }
 
@@ -1725,7 +1725,7 @@ body {
 
     /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     font-size: 1.8vmax;
@@ -1759,7 +1759,7 @@ body {
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     gap: 5%;
     font-size: 2.5vmax;
     font-weight: 600;
