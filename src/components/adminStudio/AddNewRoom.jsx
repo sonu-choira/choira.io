@@ -94,7 +94,7 @@ function AddNewRoom({
     let cal = (price, dis) => {
       let discountedAmount = (price * dis) / 100;
       let calculatedBasePrice = price + discountedAmount; // Renamed to avoid conflict
-      return calculatedBasePrice;
+      return parseInt(calculatedBasePrice);
     };
     currentRoomsData.basePrice = cal(price, dis);
 
@@ -328,7 +328,7 @@ function AddNewRoom({
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
         ...updatedRooms[indexofrooms],
-        pricePerHour: parseFloat(value),
+        pricePerHour: parseInt(value),
       };
       console.log(
         "updatedRooms--------------------------------------",
@@ -344,7 +344,7 @@ function AddNewRoom({
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
         ...currentRoomsData,
-        discountPercentage: parseFloat(value),
+        discountPercentage: parseInt(value),
       };
       return updatedRooms;
     });

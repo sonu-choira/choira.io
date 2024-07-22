@@ -497,7 +497,7 @@ function AddNewStudio({ setSelectTab }) {
                         required
                         type="text"
                         id="studioName"
-                        placeholder="Enter Studio Area"
+                        placeholder="Enter Studio Name"
                         name="studioName"
                         value={studioDetails?.fullName}
                         onChange={(e) =>
