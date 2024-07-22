@@ -71,7 +71,7 @@ function AllStudioDetail2({
     navigate(`/studio/edit?id=${id}`, {
       state: {
         productData: selectedProduct,
-        navCount: 3,
+        navCount: 4,
         isEditMode: isEditMode,
         showMode: true,
       },

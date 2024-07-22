@@ -44,7 +44,7 @@ class Appapi{
  
 
    createStudio = async (studioData) => {
-      const response = await api.post(`studios/create`,
+      const response = await api.post(`studios/create`,studioData
         
         
       );
