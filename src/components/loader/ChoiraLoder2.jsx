@@ -17,7 +17,7 @@ function ChoiraLoder2() {
   return (
     <>
       {noDataFound ? (
-        <div className={style.parent}>
+        <span className={style.parent}>
           <div className={style.child2}>
             <img
               src={nodata}
@@ -25,13 +25,13 @@ function ChoiraLoder2() {
               alt="No Data Found"
             />
           </div>
-        </div>
+        </span>
       ) : (
-        <div className={style.parent}>
+        <span className={style.parent}>
           <div className={style.child}>
             <img src={Loader} alt="choira loading" />
           </div>
-        </div>
+        </span>
       )}
     </>
   );

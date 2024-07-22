@@ -375,6 +375,8 @@ function AddNewRoom({
   const handleDataUpdate = () => {
     delete currentRoomsData.bookingStartTime;
     delete currentRoomsData.bookingEndTime;
+    delete currentRoomsData.discount;
+    delete currentRoomsData.roomDetails;
     for (const key of Object.keys(currentRoomsData)) {
       if (`${currentRoomsData[key]}`.length <= 0) {
         return errorAlert(`${key} field is empty`);

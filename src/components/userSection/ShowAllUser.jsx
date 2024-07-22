@@ -116,7 +116,7 @@ function ShowAllUser() {
           console.log(`====================> response `, response);
           console.log("response.data.users", response.users);
           if (response.users) {
-            setProducts(response.users);
+            setProducts(response?.users);
             setTotalPage(response.paginate.totalPages);
             setTotalResult(response.paginate.totalResults);
 
@@ -382,13 +382,21 @@ function ShowAllUser() {
                 </thead>
                 <tbody>
                   {products.length === 0 ? (
-                    <ChoiraLoder2 />
+                    <tr>
+                      <td>
+                        <ChoiraLoder2 />
+                      </td>
+                    </tr>
                   ) : (
                     products.map((product, index) => (
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
                           {!shortBySrNo
-                            ? totalResult - pageCount * 10 + 10 - index
+                            ? isNaN(totalResult - pageCount * 10 + 10 - index)
+                              ? "N/A"
+                              : totalResult - pageCount * 10 + 10 - index
+                            : isNaN(index + 1 + (pageCount - 1) * 10)
+                            ? "N/A"
                             : index + 1 + (pageCount - 1) * 10}
                         </td>
                         <td

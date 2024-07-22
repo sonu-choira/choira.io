@@ -78,11 +78,15 @@ function MixMaster({
             </thead>
             <tbody>
               {products.length === 0 ? (
-                <ChoiraLoder2 />
+                <tr>
+                  <td>
+                    <ChoiraLoder2 />
+                  </td>
+                </tr>
               ) : (
                 products.map((products) => {
                   return (
-                    <tr key={products.userPhone}>
+                    <tr key={products._id}>
                       <td style={{ textAlign: "center" }}>
                         #{products._id.slice(-5)}
                       </td>

@@ -224,7 +224,11 @@ function StudioBookingDetail({
             </thead>
             <tbody>
               {products?.length === 0 ? (
-                <ChoiraLoder2 />
+                <tr>
+                  <td>
+                    <ChoiraLoder2 />
+                  </td>
+                </tr>
               ) : (
                 products?.map((products, i) => {
                   return (

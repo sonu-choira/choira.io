@@ -470,30 +470,30 @@ function Signin() {
   const source = axios.CancelToken.source();
 
   const check_otp_btn = () => {
-    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP,"admin",{ cancelToken: source.token }).then(
-      (response) => {
-        console.log("res------", response);
-        if (response.status) {
-          TokenService.setData("token", response.token);
-          sucessAlret("OTP is Correct!", "Welcome back 😊");
+    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, "admin", {
+      cancelToken: source.token,
+    }).then((response) => {
+      console.log("res------", response);
+      if (response.status) {
+        TokenService.setData("token", response.token);
+        sucessAlret("OTP is Correct!", "Welcome back 😊");
 
-          gotoBooking();
-          setCheckOtp(false);
-          localStorage.setItem("isSignin", "true");
-        } else {
-          errorAlert("OTP is Incorrect!", "Please try again 😕");
-          console.log("Not get Token");
-        }
+        gotoBooking();
+        setCheckOtp(false);
+        localStorage.setItem("isSignin", "true");
+      } else {
+        errorAlert("OTP is Incorrect!", "Please try again 😕");
+        console.log("Not get Token");
       }
-    );
+    });
   };
 
   useEffect(() => {
     return () => {
-      source.cancel('Operation canceled by the user.');
-    }
-  }, [source])
-  
+      source.cancel("Operation canceled by the user.");
+    };
+  }, [source]);
+
   const gotoHome = () => {
     navigate("/home");
   };
@@ -517,7 +517,7 @@ function Signin() {
       /> */}
 
       <div className={signStyle.wrapper}>
-        <form>
+        <form onSubmit={(event) => event.preventDefault()}>
           <div className={signStyle.main}>
             <div className={signStyle.singer}>
               <img src={singer} alt="Singer" />
@@ -624,7 +624,7 @@ function Signin() {
                       >
                         <div>
                           {sign === 2 && signin ? (
-                            <button type="button" onClick={check_otp_btn}>
+                            <button type="submit" onClick={check_otp_btn}>
                               submit
                             </button>
                           ) : (
