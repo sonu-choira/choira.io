@@ -388,8 +388,6 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Create it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            alert("okkkkk");
-
             appAndmoreApi
               .createStudio(correctedRealData)
               .then((response) => {
