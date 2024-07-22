@@ -388,8 +388,6 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Create it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            // alert("Studio created");
-
             appAndmoreApi
               .createStudio(correctedRealData)
               .then((response) => {
@@ -430,7 +428,7 @@ function AddNewStudio({ setSelectTab }) {
     <>
       <div className={style.wrapper}>
         <WebDashboard2
-          navCount={navCount}
+          navCount={4}
           tabCount={tabCount}
           setTabCount={setTabCount}
         />
