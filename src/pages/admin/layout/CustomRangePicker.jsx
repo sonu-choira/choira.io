@@ -7,10 +7,16 @@ function CustomRangePicker({ name, value, onChange, id, htmlFor, label }) {
   // const onChange = (date, dateString) => {
   //   console.log(date, dateString);
   // };
+
+  console.log(value);
+
+  if(value){
+
+  }
   return (
     <div className={style.customInput}>
       <label htmlFor={htmlFor}>{label}</label>
-      <RangePicker onChange={onChange} id={id} />
+      <RangePicker defaultValue={value} onChange={onChange} id={id} />
     </div>
   );
 }

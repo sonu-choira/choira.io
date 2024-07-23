@@ -252,7 +252,7 @@ function AddmultipleServises({
             className={style.addTeamDetailbtn}
             onClick={handleAddTeamDetail}
           >
-            <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
+            <MdOutlineAddBox /> &nbsp;<div>Add Service</div>
           </span>
         </div>
       )}

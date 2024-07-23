@@ -107,7 +107,7 @@ function StudioBookingDetail({
     { title: "Booking Date", width: "10%" },
     { title: "Time Slot", width: "10%" },
     { title: "Amount", width: "10%" },
-    { title: "Project Status", width: "10%", icon: <CiFilter /> },
+    { title: "Status", width: "10%", icon: <CiFilter /> },
     { title: "", width: "10%", icon: "" },
   ];
   const getDynamicStyle = (shortby, criteria) => ({
@@ -267,7 +267,7 @@ function StudioBookingDetail({
 
                       {/* <td>{products.planId}</td> */}
                       <td>
-                        {`${products?.bookingTime?.startTime} - ${products?.bookingTime?.endTime}`}
+                        {`${moment(products?.bookingTime?.startTime,["HH:mm"]).format("hh:mm a")} - ${moment(products?.bookingTime?.endTime,["HH:mm"]).format("hh:mm a")}`}
                       </td>
                       <td>₹{products?.totalPrice}</td>
                       <td>

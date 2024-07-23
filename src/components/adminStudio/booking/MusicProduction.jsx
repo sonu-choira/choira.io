@@ -19,6 +19,7 @@ import { BiSearchAlt } from "react-icons/bi";
 import { GoEye } from "react-icons/go";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
 import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
+// import moment from "moment";
 let PageSize = 10;
 
 function MusicProduction({
@@ -72,7 +73,8 @@ function MusicProduction({
                 <th>User Name</th>
 
                 <th> Mobile No.</th>
-                <th>Production Name</th>
+                {/* <th>Date</th> */}
+                <th>Production Name.</th>
                 <th>Amount</th>
                 <th>Project Status</th>
               </tr>
@@ -85,36 +87,41 @@ function MusicProduction({
                   </td>
                 </tr>
               ) : (
-                products.map((products, i) => {
+                products.map((prod, i) => {
                   return (
                     <tr key={i}>
-                      <td title={products._id} style={{ textAlign: "center" }}>
-                        #{products._id.slice(-5)}
+                      <td title={prod._id} style={{ textAlign: "center" }}>
+                        #{prod._id.slice(-5)}
                       </td>
-                      <td title={products.userFullName}>
-                        <CopyToClipboard textToCopy={products?.userFullName} />
+                      <td title={prod.userFullName}>
+                        <CopyToClipboard textToCopy={prod?.userFullName} />
                       </td>
 
-                      <td title={products.userPhone}>
-                        <CopyToClipboard textToCopy={products?.userPhone} />
+                      <td title={prod.userPhone}>
+                        <CopyToClipboard textToCopy={prod?.userPhone} />
                       </td>
-                      <td title={products.serviceFullName}>
+                      {/* <td>
+                        { moment(prod.bookingDate).format(
+                            "Do MMM  YY, hh:mm a "
+                          )}
+                      </td> */}
+                      <td title={prod.serviceFullName}>
                         <CopyToClipboard
-                          textToCopy={products?.serviceFullName}
+                          textToCopy={prod?.serviceFullName}
                         />
                       </td>
-                      <td>₹{products.totalPrice}</td>
+                      <td>₹{prod.totalPrice}</td>
                       <td className={style.tableActionbtn}>
                         <div>
                           <select
                             value={
-                              selectedStatus[products._id] ||
-                              products.bookingStatus
+                              selectedStatus[prod._id] ||
+                              prod.bookingStatus
                             }
-                            onChange={(e) => handleChange(products._id, e)}
+                            onChange={(e) => handleChange(prod._id, e)}
                             style={{
                               backgroundColor: getStatusColor(
-                                products.bookingStatus
+                                prod.bookingStatus
                               ),
                             }}
                           >
@@ -131,7 +138,7 @@ function MusicProduction({
                           <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => {
-                              // gotoShowDetails(products._id);
+                              // gotoShowDetails(prod._id);
                             }}
                           />
 

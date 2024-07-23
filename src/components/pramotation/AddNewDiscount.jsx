@@ -73,18 +73,18 @@ function AddNewDiscount({
     initialValues: editMode.current
       ? editData
       : {
-          discountName: "",
-          discountPercentage: "",
-          couponCode: "",
-          discountType: "",
-          discountDate: "",
-          specialUsers: [],
-          searchUser: "",
-          maxCapAmount: "",
-          description: "",
-          startDate: "",
-          endDate: "",
-        },
+        discountName: "",
+        discountPercentage: "",
+        couponCode: "",
+        discountType: "",
+        discountDate: "",
+        specialUsers: [],
+        searchUser: "",
+        maxCapAmount: "",
+        description: "",
+        startDate: "",
+        endDate: "",
+      },
     validationSchema: DiscountSchema,
     onSubmit: (values) => {
       console.log(values);
@@ -136,11 +136,13 @@ function AddNewDiscount({
   const handleDateChange = (date, dateString) => {
     setFieldValue("startDate", dateString[0]);
     setFieldValue("endDate", dateString[1]);
-    console.log(date, dateString);
+    console.log(dateString);
   };
 
   useEffect(() => {
     if (editMode.current) {
+
+      console.log(editData);
       setValues(editData);
     }
   }, [editData, editMode, setValues]);
@@ -177,6 +179,20 @@ function AddNewDiscount({
       console.error("Error fetching user list:", error);
       return [];
     }
+  }
+
+  const getCurrentdate = (day_count = 0) => {
+
+    // Get the current date
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()+day_count).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    if(day_count === 0)setFieldValue("startDate", formattedDate);
+    else setFieldValue("endDate", formattedDate);
+    return formattedDate
+
   }
 
   return (
@@ -242,8 +258,8 @@ function AddNewDiscount({
             htmlFor={"discountDate"}
             name={"discountDate"}
             value={[
-              dayjs(values?.startDate?.substring(0, 10), "YYYY/MM/DD"),
-              dayjs(values?.endDate?.substring(0, 10), "YYYY/MM/DD"),
+              dayjs(values?.startDate ? values?.startDate : getCurrentdate(), "YYYY-MM-DD"),
+              dayjs(values?.endDate ? values?.endDate : getCurrentdate(3), "YYYY-MM-DD"),
             ]}
             // value={values.discountDate}
             onChange={handleDateChange}

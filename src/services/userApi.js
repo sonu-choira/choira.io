@@ -4,9 +4,8 @@ import api from "./api"
 
 class userApi{
   
- getAllUser = async (pageCount,userAllFilterData,options) => {
+ getAllUser = async (pageCount,userAllFilterData,options={}) => {
   const { cancelToken } = options;
-
   let { searchUser, status, sortfield,startDate,endDate } = userAllFilterData;
   if (searchUser === "") {
     searchUser = undefined;

@@ -169,7 +169,7 @@ function ASMixandMaster({
 
                 <th>No. of services</th>
                 <th>Created on</th>
-                <th>Activity Status</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody className={style.tbody}>
@@ -205,7 +205,7 @@ function ASMixandMaster({
                           )}
                         </div>
                         &nbsp;&nbsp;
-                        <CopyToClipboard textToCopy={products?.fullName} />
+                        <CopyToClipboard  textToCopy={product?.fullName} />
                       </td>
                       <td>Starting from ₹{product.pricing?.["IN"]?.price}</td>
                       <td>
