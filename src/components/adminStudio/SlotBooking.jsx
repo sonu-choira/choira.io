@@ -392,7 +392,7 @@ function SlotBooking({ setSelectTab }) {
                         }}
                         value={timeSlotApiData.bookingType}
                       >
-                        <option value="" disabled selected>
+                        <option value="" disabled>
                           Select User type
                         </option>
                         <option value="registered">Registered</option>
@@ -490,7 +490,7 @@ function SlotBooking({ setSelectTab }) {
                         }}
                         value={selectedStudioid}
                       >
-                        <option value="" disabled selected>
+                        <option value="" disabled>
                           Select Studio
                         </option>
                         {allStudio?.map((studio) => (
