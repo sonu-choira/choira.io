@@ -1,3 +1,4 @@
+
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import './App.scss';
@@ -6,6 +7,12 @@ import "./assets/js/script.js"
 import {googleanayticsaction} from "./pages/google-anaylitics"
 import { useEffect } from "react";
 
+if (process.env.NODE_ENV === 'production') {
+  console.log = () => {};
+  console.info = () => {};
+  console.warn = () => {};
+  console.error = () => {};
+}
 function App() {
   console.log(process.env);
 

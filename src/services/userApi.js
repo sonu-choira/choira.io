@@ -6,7 +6,7 @@ class userApi{
   
  getAllUser = async (pageCount,userAllFilterData,options={}) => {
   const { cancelToken } = options;
-  let { searchUser, status, sortfield,startDate,endDate } = userAllFilterData;
+  let { searchUser, status, sortfield,startDate,endDate,sortDirection } = userAllFilterData;
   if (searchUser === "") {
     searchUser = undefined;
   } 
@@ -30,7 +30,7 @@ class userApi{
       page: pageCount,
 
       sortfield,
-      sortDirection: 'desc',
+      sortDirection,
       status,
       searchUser,
       startDate,

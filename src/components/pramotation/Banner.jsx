@@ -6,12 +6,15 @@ import Button from "../../pages/admin/layout/Button";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
 import { MdDragHandle } from "react-icons/md";
-import { errorAlert } from "../../pages/admin/layout/Alert";
+import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import AddNewBanner from "./AddNewBanner";
 import { set } from "react-ga";
 import { RxDotFilled } from "react-icons/rx";
 import { BiSolidPencil } from "react-icons/bi";
 import { Skeleton } from "antd";
+import { update } from "firebase/database";
+import promotionApi from "../../services/promotionApi";
+import { clearEmptyField } from "../../utils/helperFunction";
 
 function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
   const [mainBannerData, setMainBannerData] = useState([]);
@@ -124,14 +127,31 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
     }
   };
 
-  const handleDragStart = (event, index, type) => {
+  const handleDragStart = (event, index, type, id) => {
     event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("type", type);
+    event.dataTransfer.setData("id", id);
   };
-
-  const handleDrop = (event, index, type) => {
+  const handelUpdateBanner = (updatedData) => {
+    promotionApi
+      .updateBanner(updatedData)
+      .then((res) => {
+        console.log(res);
+        if (res.status) {
+          sucessAlret("Banner stage Updated Successfully");
+        } else {
+          errorAlert(res.message || "Error in updating banner stage");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        errorAlert("Error in updating banner");
+      });
+  };
+  const handleDrop = (event, index, type, id) => {
     const draggedIndex = event.dataTransfer.getData("index");
     const draggedType = event.dataTransfer.getData("type");
+    const draggedId = event.dataTransfer.getData("id");
 
     if (draggedType !== type) return;
 
@@ -143,6 +163,12 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
     }
     const [draggedItem] = updatedData.splice(draggedIndex, 1);
     updatedData.splice(index, 0, draggedItem);
+    updatedData[0].stage = index + 1;
+    clearEmptyField(updatedData[0]);
+    handelUpdateBanner(updatedData[0]);
+
+    console.log(updatedData, "updatedData");
+    console.log(draggedItem, "draggedItem");
 
     if (type === "main") {
       setMainBannerData(updatedData);
@@ -236,9 +262,11 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
                     key={index}
                     draggable
                     onDragStart={(event) =>
-                      handleDragStart(event, index, "main")
+                      handleDragStart(event, index, "main", data.id)
                     }
-                    onDrop={(event) => handleDrop(event, index, "main")}
+                    onDrop={(event) =>
+                      handleDrop(event, index, "main", data.id)
+                    }
                     onDragOver={(event) => event.preventDefault()}
                   >
                     <div>

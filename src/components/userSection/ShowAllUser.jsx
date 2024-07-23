@@ -60,6 +60,25 @@ function ShowAllUser() {
     });
   };
 
+  const handelFilterApi = (pageCount, userAllFilterData) => {
+    userApi
+      .getAllUser(pageCount, userAllFilterData)
+      .then((response) => {
+        console.log(`====================> response `, response);
+        console.log("response.data.users", response.users);
+        if (response.users) {
+          setProducts(response.users);
+          setTotalPage(response.paginate.totalPages);
+          setTotalResult(response.paginate.totalResults);
+
+          // setPageCount(response.paginate.page);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching studios:", error);
+      });
+  };
+
   useEffect(() => {
     console.log(" -----");
     setProducts([]);
@@ -81,22 +100,6 @@ function ShowAllUser() {
         status = undefined;
         userAllFilterData.status = status;
       }
-      userApi
-        .getAllUser(pageCount, userAllFilterData)
-        .then((response) => {
-          console.log(`====================> response `, response);
-          console.log("response.data.users", response.users);
-          if (response.users) {
-            setProducts(response.users);
-            setTotalPage(response.paginate.totalPages);
-            setTotalResult(response.paginate.totalResults);
-
-            // setPageCount(response.paginate.page);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
     } else {
       let dataTosend;
 
@@ -107,8 +110,9 @@ function ShowAllUser() {
         dataTosend = "email";
         userAllFilterData.sortfield = dataTosend;
       } else if (shortBySrNo) {
-        dataTosend = "ddddd";
-        userAllFilterData.sortfield = dataTosend;
+        userAllFilterData.sortDirection = "asc" ? "desc" : "asc";
+        handelFilterApi(pageCount, userAllFilterData);
+        // userAllFilterData.sortDirection = dataTosend;
       }
       userApi
         .getAllUser(pageCount, userAllFilterData, { cancelToken: source.token })
@@ -134,7 +138,7 @@ function ShowAllUser() {
     return () => {
       source.cancel("Operation canceled by the user.");
     };
-  }, [pageCount, shortByUser, shortByEmail, shortBySrNo]);
+  }, [pageCount, shortByUser, shortByEmail]);
 
   const [selectedCity, setSelectedCity] = useState([]);
 
@@ -161,7 +165,8 @@ function ShowAllUser() {
     setShortByEmail(false);
   };
   useEffect(() => {
-    console.log("shortBySrNo", shortBySrNo);
+    userAllFilterData.sortDirection = shortBySrNo ? "asc" : "desc";
+    handelFilterApi(pageCount, userAllFilterData);
 
     // setProducts((prev) => [...prev].reverse());
   }, [shortBySrNo]);
@@ -394,10 +399,10 @@ function ShowAllUser() {
                           {!shortBySrNo
                             ? isNaN(totalResult - pageCount * 10 + 10 - index)
                               ? "N/A"
-                              : totalResult - pageCount * 10 + 10 - index
+                              : index + 1 + (pageCount - 1) * 10
                             : isNaN(index + 1 + (pageCount - 1) * 10)
                             ? "N/A"
-                            : index + 1 + (pageCount - 1) * 10}
+                            : totalResult - pageCount * 10 + 10 - index}
                         </td>
                         <td
                           title={product.fullName}

@@ -632,19 +632,23 @@ function AddNewServices2({
       </div>
       <StudioFooter
         backOnclick={() => {
-          confirmAlret("Service data will be lost ", "").then((result) => {
-            if (result.isConfirmed) {
-              console.log("default data is =====>", defaultData);
+          if (showMode) {
+            setShowServices(false);
+          } else {
+            confirmAlret("Service data will be lost ", "").then((result) => {
+              if (result.isConfirmed) {
+                console.log("default data is =====>", defaultData);
 
-              setShowServices(false);
+                setShowServices(false);
 
-              setService((prevService) => {
-                const newService = [...prevService];
-                newService[indexofServices] = defaultData; // Reset to defaultData
-                return newService;
-              });
-            }
-          });
+                setService((prevService) => {
+                  const newService = [...prevService];
+                  newService[indexofServices] = defaultData; // Reset to defaultData
+                  return newService;
+                });
+              }
+            });
+          }
         }}
         saveOnclick={() => {
           const isValid = handleValidateData(currentServiceData);
@@ -653,6 +657,7 @@ function AddNewServices2({
           }
           setShowServices(false);
         }}
+        saveDisabled={showMode}
       />
     </>
   );

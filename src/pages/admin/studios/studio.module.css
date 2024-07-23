@@ -1865,21 +1865,21 @@ td {
     cursor: pointer;
     transition: 0.3s ease-in-out;
     user-select: none;
-    > div {
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      width: 100%;
-      gap: 3%;
-      user-select: none;
-    }
   }
-  small {
-    font-size: 0.7vmax;
-    font-weight: 500;
-    color: #32363e;
-    user-select: none;
-  }
+}
+.PromotionSidebar small {
+  font-size: 0.7vmax;
+  font-weight: 500;
+  color: #32363e;
+  user-select: none;
+}
+.PromotionSidebar > div > div {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 3%;
+  user-select: none;
 }
 
 .bannerPage {
@@ -1906,25 +1906,26 @@ td {
     flex-direction: column;
     border-radius: 10px;
   }
-  span {
-    font-size: 1vmax;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 5vh;
-    > div:first-child {
-      width: 20%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      /* border: 2px solid red; */
-      gap: 10%;
-    }
-    /* border: 2px solid yellow; */
+}
+
+.bannerPage span {
+  font-size: 1vmax;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 5vh;
+  > div:first-child {
+    width: 20%;
+    height: 100%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    /* border: 2px solid red; */
+    gap: 10%;
   }
+  /* border: 2px solid yellow; */
 }
 
 .bannerMain {

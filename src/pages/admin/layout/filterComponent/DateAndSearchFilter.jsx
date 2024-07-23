@@ -260,6 +260,9 @@ function DateAndSearchFilter({
   ["sortBy", "page", "serviceType"].forEach((key) => delete filterData[key]);
 
   // Check if there are any truthy values in filterData or filterData2
+  if (filterData2.sortDirection == "desc") {
+    delete filterData2.sortDirection;
+  }
   const hasFilter =
     Object.values(filterData).some(
       (value) => value !== "" && value !== undefined

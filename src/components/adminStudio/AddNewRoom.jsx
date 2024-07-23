@@ -617,25 +617,30 @@ function AddNewRoom({
       </form>
       <StudioFooter
         backOnclick={() => {
+          if (showMode) {
+            setshowRoomsDetails(false);
+          } else {
+            confirmAlret("Room data will be lost ", "").then((result) => {
+              if (result.isConfirmed) {
+                console.log("default data is =====>", defaultData);
+                console.log("room data is =====>", rooms);
+                setshowRoomsDetails(false);
+                setrooms((prevRooms) => {
+                  const newRooms = [...prevRooms];
+                  newRooms[indexofrooms] = defaultData; // Reset to defaultData
+                  return newRooms;
+                });
+              }
+            });
+          }
           // handleDataUpdate();
           // errorAlert("hii");
-          confirmAlret("Room data will be lost ", "").then((result) => {
-            if (result.isConfirmed) {
-              console.log("default data is =====>", defaultData);
-              console.log("room data is =====>", rooms);
-              setshowRoomsDetails(false);
-              setrooms((prevRooms) => {
-                const newRooms = [...prevRooms];
-                newRooms[indexofrooms] = defaultData; // Reset to defaultData
-                return newRooms;
-              });
-            }
-          });
         }}
         saveOnclick={() => {
           handleDataUpdate();
         }}
         backType={"reset"}
+        saveDisabled={showMode}
       />
     </>
   );
