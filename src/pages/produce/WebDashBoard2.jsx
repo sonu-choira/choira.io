@@ -135,7 +135,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
               onClick={editProfiletab}
             >
               <div>
-                <img src={adminData.Image || tanmay} alt="" />
+                <img src={adminData?.Image || tanmay} alt="" />
               </div>
               <div>
                 <h5>{adminData?.name || "Admin"}</h5> <br />

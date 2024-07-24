@@ -9,7 +9,7 @@ function ProfileEdit({ setEditProfile, editProfile }) {
   const [selectedImage, setSelectedImage] = useState(null);
   let data = localStorage.getItem("adminData");
   let adminData = JSON.parse(data);
-  console.log("admin Data is****************>> ", adminData);
+  // console.log("admin Data is****************>> ", adminData);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -89,7 +89,7 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                   />
                 ) : (
                   <img
-                    src={adminData.Image || tanmay}
+                    src={adminData?.Image || tanmay}
                     alt="Default"
                     height={"100%"}
                     style={{
@@ -162,7 +162,7 @@ function ProfileEdit({ setEditProfile, editProfile }) {
               <input
                 id="mobile"
                 type="text"
-                value={adminData.phoneNumber}
+                value={adminData?.phoneNumber}
                 placeholder="Tanmay"
                 disabled
                 readOnly
@@ -176,7 +176,7 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                 id="email"
                 type="email"
                 placeholder="Tanmay"
-                value={adminData.emailId}
+                value={adminData?.emailId}
                 disabled
                 readOnly
               />
