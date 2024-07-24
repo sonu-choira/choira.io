@@ -1916,20 +1916,20 @@ td {
   justify-content: space-between;
   width: 100%;
   height: 5vh;
-  > div:first-child {
-    width: 20%;
-    height: 100%;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    /* border: 2px solid red; */
-    gap: 10%;
-  }
   /* border: 2px solid yellow; */
+}
+.bannerBtnDiv {
+  width: 20%;
+  height: 100%;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  /* border: 2px solid green; */
+  gap: 10%;
 }
 
 .bannerMain {
-  width: 100%;
+  width: 100% !important;
   /* border: 2px solid black; */
   min-height: fit-content;
   max-height: fit-content;
@@ -1950,7 +1950,7 @@ td {
   }
 }
 .bannerMainContent {
-  width: 90%;
+  width: 90% !important;
   min-height: 10vh;
   border: 2px solid #e2e2e2;
   display: flex;
@@ -1975,7 +1975,7 @@ td {
     width: 80%;
     height: 60%;
     /* border: 2px solid #e2e2e2; */
-    border: 2px solid green;
+    /* border: 2px solid green; */
     border-radius: 10px;
     font-size: 0.9vmax;
     > input {

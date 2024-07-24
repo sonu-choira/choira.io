@@ -71,7 +71,8 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     setTabCount(3);
     navigate("/adminDashboard/Teams/StudioPartners");
   };
-
+  let data = localStorage.getItem("adminData");
+  let adminData = JSON.parse(data);
   return (
     <>
       <ProfileEdit editProfile={editProfile} setEditProfile={setEditProfile} />
@@ -134,11 +135,11 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
               onClick={editProfiletab}
             >
               <div>
-                <img src={tanmay} alt="" />
+                <img src={adminData.Image || tanmay} alt="" />
               </div>
               <div>
-                <h5>Tanmay</h5> <br />
-                <h6>Music Producer</h6>
+                <h5>{adminData?.name || "Admin"}</h5> <br />
+                {/* <h6>{adminData?.role || "admin"}</h6> */}
               </div>
             </div>
           </div>

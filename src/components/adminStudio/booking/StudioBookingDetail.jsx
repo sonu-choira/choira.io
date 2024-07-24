@@ -114,9 +114,9 @@ function StudioBookingDetail({
     backgroundColor: shortby !== criteria ? "#ffc70133" : "",
   });
   const status = {
-    active: 0,
-    completed: 1,
-    cancelled: 2,
+    Pending: 0,
+    Completed: 1,
+    Cancelled: 2,
   };
   //  ["active", "cancelled", "completed"];
   const [showstatusFilter, setShowstatusFilter] = useState(false);
@@ -267,7 +267,12 @@ function StudioBookingDetail({
 
                       {/* <td>{products.planId}</td> */}
                       <td>
-                        {`${moment(products?.bookingTime?.startTime,["HH:mm"]).format("hh:mm a")} - ${moment(products?.bookingTime?.endTime,["HH:mm"]).format("hh:mm a")}`}
+                        {`${moment(products?.bookingTime?.startTime, [
+                          "HH:mm",
+                        ]).format("hh:mm a")} - ${moment(
+                          products?.bookingTime?.endTime,
+                          ["HH:mm"]
+                        ).format("hh:mm a")}`}
                       </td>
                       <td>₹{products?.totalPrice}</td>
                       <td>

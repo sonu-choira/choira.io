@@ -217,7 +217,7 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
           <div>
             <span>
               Main Banner:
-              <div>
+              <div className={style.bannerBtnDiv}>
                 {mainBannerEdit ? (
                   <Button
                     name={"Save"}
@@ -361,7 +361,7 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
           <div>
             <span>
               Exclusive Banner:
-              <div>
+              <div className={style.bannerBtnDiv}>
                 {exclusiveBannerEdit ? (
                   <Button
                     name={"Save"}

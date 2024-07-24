@@ -415,6 +415,8 @@ function Signin() {
     // const role = mobileNumber === "9898989898" ? "admin" : "user";
     AuthService.login(countryCode + mobileNumber, "NUMBER").then((response) => {
       console.log("res------", response);
+      console.log("res------", response.user);
+      localStorage.setItem("adminData", JSON.stringify(response.user));
       if (response.status) {
         // TokenService.setUser(response.user.role);
         TokenService.setData("token", response.token);
