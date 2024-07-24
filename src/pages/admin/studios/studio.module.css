@@ -1996,7 +1996,8 @@ td {
 
 .bannerMainContentImg {
   width: 6%;
-  height: 70%;
+  min-height: 70% !important;
+  max-height: 70% !important;
   /* border: 2px solid red; */
   border-radius: 10px;
   overflow: hidden;
