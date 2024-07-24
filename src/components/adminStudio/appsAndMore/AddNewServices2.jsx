@@ -200,7 +200,7 @@ function AddNewServices2({
                 ...updatedService[indexofServices].pricing[
                   Object.keys(updatedService[indexofServices].pricing)[0]
                 ], // Copy the existing pricing for the first region
-                discountPercentage: parseFloat(event.target.value), // Update the 'discountPercentage' property
+                discountPercentage: parseInt(event.target.value), // Update the 'discountPercentage' property
               },
             }),
           },
@@ -439,7 +439,7 @@ function AddNewServices2({
           if (index === indexofServices) {
             console.log("---------------------checking222");
 
-            const updatedINPrice = parseFloat(countryWithPriceobj["IN"]) || 0;
+            const updatedINPrice = parseInt(countryWithPriceobj["IN"]) || 0;
 
             return {
               ...item,
@@ -448,8 +448,8 @@ function AddNewServices2({
                 ...(item.pricing || {}), // Ensure pricing object is defined
                 USA: {
                   ...(item.pricing?.USA || {}), // Ensure USA object is defined
-                  basePrice: parseFloat(countryWithPriceobj["USA"]) || 0,
-                  price: parseFloat(countryWithPriceobj["USA"]) || 0,
+                  basePrice: parseInt(countryWithPriceobj["USA"]) || 0,
+                  price: parseInt(countryWithPriceobj["USA"]) || 0,
                 },
                 IN: {
                   ...(item.pricing?.IN || {}), // Ensure IN object is defined
@@ -458,8 +458,8 @@ function AddNewServices2({
                 },
                 JP: {
                   ...(item.pricing?.JP || {}), // Ensure JP object is defined
-                  basePrice: parseFloat(countryWithPriceobj["JP"]) || 0,
-                  price: parseFloat(countryWithPriceobj["JP"]) || 0,
+                  basePrice: parseInt(countryWithPriceobj["JP"]) || 0,
+                  price: parseInt(countryWithPriceobj["JP"]) || 0,
                 },
               },
             };
@@ -473,7 +473,7 @@ function AddNewServices2({
 
   return (
     <>
-      <div className={style.addNewStudioTitle}>Add New Services</div>
+      <div className={style.addNewStudioTitle}>Add New Services.</div>
       <div className={style.addNewStudioPage}>
         <div style={{ height: "90%" }}>
           <div
