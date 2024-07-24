@@ -1994,10 +1994,9 @@ td {
   }
 }
 
-.bannerMainContentImg {
+.bannerMainContent > div:first-child {
   width: 6%;
-  min-height: 70% !important;
-  max-height: 70% !important;
+  height: 70%;
   /* border: 2px solid red; */
   border-radius: 10px;
   overflow: hidden;

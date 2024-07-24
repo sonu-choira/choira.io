@@ -77,7 +77,7 @@ export const bannerSchema = Yup.object().shape({
 
   forr: Yup.string().when("banner_redirect", (banner_redirect, schema) => {
     if (banner_redirect[0] === "in-app") {
-      return schema.required("Specify destination is required");
+      return schema.required("Particular Studio   is required");
     } else {
       return Yup.string().nullable();
     }

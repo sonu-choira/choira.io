@@ -269,7 +269,7 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
                     }
                     onDragOver={(event) => event.preventDefault()}
                   >
-                    <div className={style.bannerMainContentImg}>
+                    <div>
                       <img src={data.photoURL} alt="" />
                     </div>
                     <div
@@ -442,7 +442,7 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
                         />
                       </label>
                     ) : (
-                      <div className={style.bannerMainContentImg}>
+                      <div>
                         <img src={data.photoURL} alt="" />
                       </div>
                     )}
