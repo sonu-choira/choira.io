@@ -134,8 +134,9 @@ body {
   height: 25%;
   /* border: 2px solid pink; */
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   color: white;
+  gap: 8%;
   /* gap: 10%; */
   align-items: center;
   div:nth-child(2) {
