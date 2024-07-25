@@ -206,7 +206,14 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
                   sidebarPageCount === option.id ? style.leftBorder : ""
                 }
               >
-                <div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    gap: "10px",
+                  }}
+                >
                   {option.icon} {option.title}
                 </div>
                 {sidebarPageCount === option.id && (
