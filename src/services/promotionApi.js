@@ -41,6 +41,15 @@ class promotionApi {
     console.log("Banner create  ===>", response.data)
     return response.data;
   }
+   deleteBanner = async (id) => {
+    const response = await api.delete("/settings/deleteBanner", {
+      params: {
+        id,
+      }
+    });
+    console.log("Banner Deleted  ===>", response.data)
+    return response.data;
+  }
   
 }
 

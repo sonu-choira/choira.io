@@ -163,12 +163,13 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
     }
     const [draggedItem] = updatedData.splice(draggedIndex, 1);
     updatedData.splice(index, 0, draggedItem);
-    updatedData[0].stage = index + 1;
-    clearEmptyField(updatedData[0]);
-    handelUpdateBanner(updatedData[0]);
-
-    console.log(updatedData, "updatedData");
     console.log(draggedItem, "draggedItem");
+    draggedItem.stage = index + 1;
+    clearEmptyField(draggedItem);
+    handelUpdateBanner(draggedItem);
+
+    // console.log(updatedData, "updatedData");
+    // console.log(draggedItem, "draggedItem");
 
     if (type === "main") {
       setMainBannerData(updatedData);
@@ -201,6 +202,23 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
   const gotoEditPage = (id) => {
     console.log(id);
     setEditData(products.filter((item) => item.id === id)[0]);
+  };
+
+  const handelDeleteBanner = (id) => {
+    promotionApi
+      .deleteBanner(id)
+      .then((res) => {
+        console.log(res);
+        if (res.status) {
+          sucessAlret("Banner stage Deleted Successfully");
+        } else {
+          errorAlert(res.message || "Error in deleting banner stage");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        errorAlert("Error in deleting banner");
+      });
   };
 
   return (
@@ -337,11 +355,7 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
                           &nbsp;&nbsp;&nbsp;
                           <RxCross2
                             style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              const newData = [...mainBannerData];
-                              newData.splice(index, 1);
-                              setMainBannerData(newData);
-                            }}
+                            onClick={() => handelDeleteBanner(data.id)}
                           />
                         </>
                       ) : (
@@ -515,11 +529,7 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
                           &nbsp;&nbsp;&nbsp;
                           <RxCross2
                             style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              const newData = [...exclusiveBannerData];
-                              newData.splice(index, 1);
-                              setExclusiveBannerData(newData);
-                            }}
+                            onClick={() => handelDeleteBanner(data.id)}
                           />
                         </>
                       ) : (
