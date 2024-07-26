@@ -92,7 +92,7 @@ function AddNewStudioPartners({ setSelectTab }) {
           setTabCount={setTabCount}
         />
         <form className={style.studioMainScreen} onSubmit={handleSubmit}>
-          <div className={style.studioHeader}>
+          {/* <div className={style.studioHeader}>
             <div className={style.puredisabled}>
               <input
                 type="text"
@@ -114,7 +114,7 @@ function AddNewStudioPartners({ setSelectTab }) {
             <div>
               <MdOutlineSettings />
             </div>
-          </div>
+          </div> */}
           <div className={style.addNewStudioTitle}>Add Studio Partner</div>
 
           <form className={style.addNewStudioPage}>

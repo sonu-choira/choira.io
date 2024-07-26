@@ -118,7 +118,7 @@ function AllteamDetails() {
           console.error("Error fetching studios:", error);
         });
     } else if (teamsPageCount === "t1") {
-      const limit = 5;
+      const limit = 8;
       const active = 1;
       // const type = teamsPageCount;
       if (hasFilter) {

@@ -562,7 +562,7 @@ function AddNewProduction({ setSelectTab }) {
           setTabCount={setTabCount}
         />
         <div className={style.studioMainScreen}>
-          <div className={style.studioHeader}>
+          {/* <div className={style.studioHeader}>
             <div className={style.puredisabled}>
               <input
                 type="text"
@@ -584,7 +584,7 @@ function AddNewProduction({ setSelectTab }) {
             <div>
               <MdOutlineSettings />
             </div>
-          </div>
+          </div> */}
           {showServices ? (
             <AddNewServices2
               setShowServices={setShowServices}
@@ -597,10 +597,7 @@ function AddNewProduction({ setSelectTab }) {
             />
           ) : (
             <>
-              <div
-                className={style.addNewStudioTitle}
-                style={{ marginTop: "-2%" }}
-              >
+              <div className={style.addNewStudioTitle}>
                 {isEditMode && showMode && bookingPageCount === "c2"
                   ? "Production Details"
                   : isEditMode && showMode && bookingPageCount === "c3"

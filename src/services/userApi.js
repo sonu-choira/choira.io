@@ -26,7 +26,7 @@ class userApi{
   const response = await api.get('/users', {
     params: {
 
-      limit: 5,
+      limit: 7,
       page: pageCount,
 
       sortfield,

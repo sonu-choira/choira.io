@@ -12,6 +12,8 @@ import { FaRegUser } from "react-icons/fa";
 import { useLocale } from "antd/es/locale";
 import { LuHome } from "react-icons/lu";
 import { TbSpeakerphone } from "react-icons/tb";
+import { PiChartBarLight } from "react-icons/pi";
+import { CiCalendar } from "react-icons/ci";
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
 
@@ -108,14 +110,14 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 className={tabCount === 4 ? style.tabActive : style.padding}
                 onClick={gotoAllStudioDetailPage}
               >
-                <img src={produce} alt="" />
+                <PiChartBarLight style={{ fontSize: "1.3vmax" }} />
                 App & More
               </div>
               <div
                 className={tabCount === 5 ? style.tabActive : style.padding}
                 onClick={gotoBookings}
               >
-                <img src={produce} alt="" />
+                <CiCalendar style={{ fontSize: "1.3vmax" }} />
                 Bookings
               </div>
               <div

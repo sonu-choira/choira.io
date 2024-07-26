@@ -433,7 +433,7 @@ function AddNewStudio({ setSelectTab }) {
           setTabCount={setTabCount}
         />
         <div className={style.studioMainScreen}>
-          <div className={style.studioHeader}>
+          {/* <div className={style.studioHeader}>
             <div className={style.puredisabled}>
               <input
                 type="text"
@@ -455,7 +455,7 @@ function AddNewStudio({ setSelectTab }) {
             <div>
               <MdOutlineSettings />
             </div>
-          </div>
+          </div> */}
 
           {showRoomsDetails ? (
             <AddNewRoom
@@ -469,10 +469,7 @@ function AddNewStudio({ setSelectTab }) {
             />
           ) : (
             <>
-              <div
-                className={style.addNewStudioTitle}
-                style={{ marginTop: "-2%" }}
-              >
+              <div className={style.addNewStudioTitle}>
                 {isEditMode && showMode
                   ? "Studio details"
                   : isEditMode

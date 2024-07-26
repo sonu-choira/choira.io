@@ -9,7 +9,7 @@ class Appapi{
 
   const response = await api.get(`/studios-all`, {
     params: {
-      limit: 4,
+      limit: 8,
       page :pageCount,
       // active: active
     }
@@ -21,7 +21,7 @@ class Appapi{
  getServices = async (limit, Type, active ,pageCount) => {
     const response = await api.get(`/services`,{ 
         params: {
-            limit: 4,
+            limit: 8,
             serviceType: Type,
             // active: active,
             page:pageCount,
@@ -87,7 +87,7 @@ class Appapi{
         filteredObject[key] = allfilterData[key];
       }
     }
-      filteredObject.limit = 4;
+      filteredObject.limit = 5;
       const response = await api.get(`/studios-all`,{ 
           params: filteredObject
       });
@@ -103,7 +103,7 @@ class Appapi{
           filteredObject[key] = allserviceFiltrer[key];
         }
       }
-        filteredObject.limit = 4;
+        filteredObject.limit = 5;
       const response = await api.get(`/services`,{ 
           params: filteredObject
       });

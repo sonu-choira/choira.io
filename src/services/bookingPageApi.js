@@ -8,7 +8,7 @@ import api from "./api"
 
     const response = await api.get(`/bookings`, {
       params: {
-        limit: limit,
+        limit: 8,
         active: active,
         bookingType: bookingType,
         page:pageCount,
@@ -26,7 +26,7 @@ import api from "./api"
    musicProduction = async ({limit, bookingType, category,pageCount}) => {
     const response = await api.get(`/bookings/services`,{ 
         params: {
-            limit: limit,
+            limit: 8,
             bookingType: category,
             page:pageCount,
             

@@ -329,7 +329,7 @@ function SlotBooking({ setSelectTab }) {
           setTabCount={setTabCount}
         />
         <div className={style.studioMainScreen}>
-          <div className={style.studioHeader}>
+          {/* <div className={style.studioHeader}>
             <div className={style.puredisabled}>
               <input
                 type="text"
@@ -351,7 +351,7 @@ function SlotBooking({ setSelectTab }) {
             <div>
               <MdOutlineSettings />
             </div>
-          </div>
+          </div> */}
           <div className={style.addNewStudioTitle}>Slot Booking</div>
 
           {showAllSlots ? (

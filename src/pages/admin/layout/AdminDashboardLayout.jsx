@@ -45,7 +45,7 @@ function AdminDashboardLayout() {
       <div className={style.wrapper}>
         <WebDashboard2 tabCount={tabCount} setTabCount={setTabCount} />
         <div className={style.studioMainScreen}>
-          <div className={style.studioHeader}>
+          {/* <div className={style.studioHeader}>
             <div className={style.puredisabled}>
               <input
                 type="text"
@@ -67,7 +67,7 @@ function AdminDashboardLayout() {
             <div>
               <MdOutlineSettings />
             </div>
-          </div>
+          </div> */}
           {tabCount === 1 && <Overview />}
           {tabCount === 2 && <ShowAllUser />}
           {tabCount === 3 && <AllteamDetails />}

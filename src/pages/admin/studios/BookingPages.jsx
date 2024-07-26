@@ -13,7 +13,7 @@ import WebDashboard2 from "../../produce/WebDashBoard2";
 import bookingPageApi from "../../../services/bookingPageApi";
 import { clearEmptyField } from "../../../utils/helperFunction";
 let sendFilterDataToapi = {
-  limit: 6,
+  limit: 8,
   bookingType: "",
   category: "",
   startDate: "",
@@ -101,7 +101,7 @@ function BookingPages() {
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
       let data = {
-        limit: 5,
+        limit: 8,
 
         category: idToUse,
         pageCount: pageCount,
@@ -129,7 +129,7 @@ function BookingPages() {
       //     break;
       //   }
 
-      const limit = 6;
+      const limit = 8;
       // const active = "";
       const bookingType = 1;
       const category = bookingPageCount;
