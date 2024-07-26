@@ -72,6 +72,20 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
 
     // console.log(updateddata);
   };
+  const handleBanner = () => {
+    promotionApi
+      .getAllBanner()
+      .then((response) => {
+        console.log(
+          `====================> response from promotion ${response}`,
+          response.banners
+        );
+        setProducts(response.banners);
+      })
+      .catch((error) => {
+        console.error("Error fetching studios:", error);
+      });
+  };
 
   // {-------  this code is end of  update color of selected  action ---------}
 
@@ -95,23 +109,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
       // const limit = 10;
       // const active = 1;
       if (!showAddPage) {
-        promotionApi
-          .getAllBanner()
-          .then((response) => {
-            console.log(
-              `====================> response from promotion ${response}`,
-              response.banners
-            );
-            setProducts(response.banners);
-            // if (response) {
-            //   setProducts(response.data.allStudioBooking);
-            //   console.log("lkasdnflkjsdnf", response.status);
-            //   setTotalPage(response.data.paginate.totalPages);
-            // }
-          })
-          .catch((error) => {
-            console.error("Error fetching studios:", error);
-          });
+        handleBanner();
       }
     } else if (sidebarPageCount === 3) {
       const limit = 10;
@@ -235,6 +233,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
                   products={products}
                   showAddPage={showAddPage}
                   setShowAddPage={setShowAddPage}
+                  handleBanner={handleBanner}
                 />
               ) : sidebarPageCount == 2 ? (
                 <Discount

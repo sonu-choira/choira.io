@@ -6,7 +6,11 @@ import Button from "../../pages/admin/layout/Button";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
 import { MdDragHandle } from "react-icons/md";
-import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+import {
+  confirmAlret,
+  errorAlert,
+  sucessAlret,
+} from "../../pages/admin/layout/Alert";
 import AddNewBanner from "./AddNewBanner";
 import { set } from "react-ga";
 import { RxDotFilled } from "react-icons/rx";
@@ -16,7 +20,13 @@ import { update } from "firebase/database";
 import promotionApi from "../../services/promotionApi";
 import { clearEmptyField } from "../../utils/helperFunction";
 
-function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
+function Banner({
+  setProducts,
+  products,
+  showAddPage,
+  setShowAddPage,
+  handleBanner,
+}) {
   const [mainBannerData, setMainBannerData] = useState([]);
   const [exclusiveBannerData, setExclusiveBannerData] = useState([]);
   const [newMainBannerUrl, setNewMainBannerUrl] = useState("");
@@ -139,6 +149,7 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
         console.log(res);
         if (res.status) {
           sucessAlret("Banner stage Updated Successfully");
+          handleBanner();
         } else {
           errorAlert(res.message || "Error in updating banner stage");
         }
@@ -205,20 +216,28 @@ function Banner({ setProducts, products, showAddPage, setShowAddPage }) {
   };
 
   const handelDeleteBanner = (id) => {
-    promotionApi
-      .deleteBanner(id)
-      .then((res) => {
-        console.log(res);
-        if (res.status) {
-          sucessAlret("Banner stage Deleted Successfully");
-        } else {
-          errorAlert(res.message || "Error in deleting banner stage");
+    confirmAlret("Are you sure you want to delete this banner?").then(
+      (result) => {
+        if (result.isConfirmed) {
+          promotionApi
+            .deleteBanner(id)
+            .then((res) => {
+              console.log(res);
+
+              if (res.status) {
+                sucessAlret("Banner stage Deleted Successfully");
+                handleBanner();
+              } else {
+                errorAlert(res.message || "Error in deleting banner stage");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              errorAlert("Error in deleting banner");
+            });
         }
-      })
-      .catch((err) => {
-        console.log(err);
-        errorAlert("Error in deleting banner");
-      });
+      }
+    );
   };
 
   return (
