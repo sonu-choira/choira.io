@@ -94,7 +94,11 @@ function AddNewStudio({ setSelectTab }) {
   }, [teamDetails]);
 
   const [studioDetails, setStudioDetails] = useState({
-    aboutUs: {},
+    aboutUs: {
+      aboutUs: "",
+      services: "",
+      infrastructure: "",
+    },
     address: "",
     amenities: [],
     area: 0,
@@ -122,6 +126,61 @@ function AddNewStudio({ setSelectTab }) {
     totalRooms: 0,
     _id: "",
   });
+
+  const checkEmptyFields = (checkData) => {
+    let hasError = false;
+    const errorFields = [];
+
+    const errorAlert = (message) => {
+      // Placeholder for your error alert function
+      console.error(message); // Replace with your actual alert function
+    };
+
+    const isEmpty = (value) => {
+      return (
+        value === null ||
+        value === "" ||
+        (Array.isArray(value) && value.length === 0) ||
+        (typeof value === "object" &&
+          !Array.isArray(value) &&
+          value !== null &&
+          Object.keys(value).length === 0)
+      );
+    };
+
+    const check = (data) => {
+      for (const key of Object.keys(data)) {
+        const value = data[key];
+
+        if (isEmpty(value)) {
+          errorAlert(`${key} field is empty`);
+          hasError = true; // Set hasError to true if an empty field is found
+          errorFields.push(key); // Collect the field name with error
+          return; // Exit on first empty field
+        }
+
+        if (
+          typeof value === "object" &&
+          !Array.isArray(value) &&
+          value !== null
+        ) {
+          if (check(value)) hasError = true; // Recursively check nested objects
+        }
+
+        if (Array.isArray(value)) {
+          for (const item of value) {
+            if (typeof item === "object" && item !== null) {
+              if (check(item)) hasError = true; // Recursively check items in arrays
+            }
+          }
+        }
+      }
+      return hasError;
+    };
+
+    check(checkData);
+    return { hasError, errorFields };
+  };
 
   useEffect(() => {
     setStudioDetails((prevData) => ({
@@ -280,6 +339,8 @@ function AddNewStudio({ setSelectTab }) {
 
       if (isEditMode) {
         const correctedRealData = correctDataTypes(updatedStudioDetails);
+        console.log("correctedRealData----->", correctedRealData);
+
         const checkData = { ...correctedRealData };
         delete checkData.availabilities;
         delete checkData.clientPhotos;
@@ -294,21 +355,29 @@ function AddNewStudio({ setSelectTab }) {
         delete checkData.pricePerHour;
         delete checkData.reviews;
 
-        for (const key of Object.keys(checkData)) {
-          const value = checkData[key];
+        // for (const key of Object.keys(checkData)) {
+        //   const value = checkData[key];
+        //   alert("hii");
 
-          if (
-            (typeof value === "string" && value.length <= 0) ||
-            value == "" ||
-            (Array.isArray(value) && value.length === 0) ||
-            (typeof value === "object" &&
-              !Array.isArray(value) &&
-              value !== null &&
-              Object.keys(value).length === 0)
-          ) {
-            return errorAlert(`${key} field is empty`);
-          }
-        }
+        //   if (
+        //     value === null ||
+        //     value === "" ||
+        //     (Array.isArray(value) && value.length === 0) || //
+        //     (typeof value === "object" &&
+        //       !Array.isArray(value) &&
+        //       value !== null &&
+        //       Object.keys(value).length === 0)
+        //   ) {
+        //     return errorAlert(`${key} field is empty`);
+        //   }
+        // }
+
+        const result = checkEmptyFields(checkData);
+        let hasError = result.hasError;
+        console.log(`Has error: ${result.hasError}`);
+
+        if (hasError == true)
+          return errorAlert(`Empty fields: ${result.errorFields.join(", ")}`);
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -349,6 +418,7 @@ function AddNewStudio({ setSelectTab }) {
         });
       } else {
         const correctedRealData = correctDataTypes(updatedStudioDetails);
+        console.log("correctedRealData----->", correctedRealData);
         const checkData = { ...correctedRealData };
         delete checkData.availabilities;
         delete checkData.clientPhotos;
@@ -363,21 +433,12 @@ function AddNewStudio({ setSelectTab }) {
         delete checkData.pricePerHour;
         delete checkData.reviews;
 
-        for (const key of Object.keys(checkData)) {
-          const value = checkData[key];
+        const result = checkEmptyFields(checkData);
+        let hasError = result.hasError;
+        console.log(`Has error: ${result.hasError}`);
 
-          if (
-            (typeof value === "string" && value.length <= 0) ||
-            value == "" ||
-            (Array.isArray(value) && value.length === 0) ||
-            (typeof value === "object" &&
-              !Array.isArray(value) &&
-              value !== null &&
-              Object.keys(value).length === 0)
-          ) {
-            return errorAlert(`${key} field is empty`);
-          }
-        }
+        if (hasError == true)
+          return errorAlert(`Empty fields: ${result.errorFields.join(", ")}`);
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",

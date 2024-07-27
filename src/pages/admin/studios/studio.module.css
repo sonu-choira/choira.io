@@ -368,7 +368,7 @@ input[type="number"] {
 
 .bookingStudiobtn {
   width: 95%;
-  height: 10%;
+  min-height: 10%;
   /* border: 2px solid green; */
   display: flex;
   align-items: center;
@@ -457,7 +457,7 @@ input[type="number"] {
 }
 .studioTabelDiv {
   width: 95%;
-  height: 90%;
+  height: 82%;
   display: flex;
   align-items: center;
   justify-content: center;
