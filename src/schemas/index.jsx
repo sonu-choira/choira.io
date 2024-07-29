@@ -108,7 +108,7 @@ export const DiscountSchema = Yup.object().shape({
     .required("Max Cap Amount is required")
     .min(0, "Amount must be at least 0"),
   description: Yup.string().required("Description is required"),
-  specialUsers: Yup.array()
+  usersList: Yup.array()
     .of(Yup.string())
     .when("discountType", (discountType, schema) => {
       // console.log("discountType=========>", discountType);

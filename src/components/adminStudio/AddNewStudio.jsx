@@ -133,7 +133,7 @@ function AddNewStudio({ setSelectTab }) {
 
     const errorAlert = (message) => {
       // Placeholder for your error alert function
-      console.error(message); // Replace with your actual alert function
+      console.error(message);
     };
 
     const isEmpty = (value) => {

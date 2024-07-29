@@ -15,6 +15,7 @@ import imageUploadapi from "../../services/imageUploadapi";
 import promotionApi from "../../services/promotionApi";
 import { send } from "react-ga";
 import { useNavigate } from "react-router-dom";
+import MixMaster from "../adminStudio/booking/MixMaster";
 
 function AddNewBanner({
   setShowAddPage,
@@ -315,20 +316,6 @@ function AddNewBanner({
               )}
               {values.banner_redirect === "in-app" && (
                 <>
-                  {/* <CustomSelect
-                    label={"Banner Type"}
-                    name={"bannerType"}
-                    id={"bannerType"}
-                    htmlFor={"bannerType"}
-                    defaultOption={"select banner type"}
-                    options={["studio", "mix-master", "music-production"]}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.bannerType}
-                    error={errors.bannerType}
-                    touched={touched.bannerType}
-                  /> */}
-
                   <CustomSelect
                     label={"Specify"}
                     name={"forr"}
@@ -363,6 +350,26 @@ function AddNewBanner({
                         <div className={style.error}>{errors.entity_id}</div>
                       )}
                     </div>
+                  )}
+
+                  {values.forr === "list" && (
+                    <CustomSelect
+                      label={"Select List"}
+                      name={"entity_id"}
+                      id={"entity_id"}
+                      htmlFor={"entity_id"}
+                      defaultOption={"select List"}
+                      options={{
+                        Studio: "c1",
+                        MusicProduction: "c2",
+                        MixMaster: "c3",
+                      }}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.entity_id}
+                      error={errors.entity_id}
+                      touched={touched.entity_id}
+                    />
                   )}
                 </>
               )}

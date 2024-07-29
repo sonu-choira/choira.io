@@ -19,6 +19,7 @@ import { Skeleton } from "antd";
 import { update } from "firebase/database";
 import promotionApi from "../../services/promotionApi";
 import { clearEmptyField } from "../../utils/helperFunction";
+import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 
 function Banner({
   setProducts,
@@ -318,28 +319,44 @@ function Banner({
                       {data.banner_redirect && (
                         <span title={data.banner_redirect}>
                           <RxDotFilled />
-                          &nbsp; {data?.banner_redirect?.substring(0, 20)}
+                          &nbsp;
+                          <CopyToClipboard
+                            textToCopy={data?.banner_redirect}
+                            textLength={20}
+                          />
                         </span>
                       )}
 
                       {data.for && (
                         <span title={data.for}>
                           <RxDotFilled />
-                          &nbsp; {data?.for?.substring(0, 20)}
+                          &nbsp;{" "}
+                          <CopyToClipboard
+                            textToCopy={data?.for}
+                            textLength={20}
+                          />
                         </span>
                       )}
 
                       {data.name && (
                         <span title={data.name}>
                           <RxDotFilled />
-                          &nbsp; {data.name?.substring(0, 20)}
+                          &nbsp;{" "}
+                          <CopyToClipboard
+                            textToCopy={data?.name}
+                            textLength={20}
+                          />
                         </span>
                       )}
 
                       {data.redirectURL && (
                         <span title={data.redirectURL}>
                           <RxDotFilled />
-                          &nbsp; {data?.redirectURL?.substring(0, 20)}
+                          &nbsp;
+                          <CopyToClipboard
+                            textToCopy={data?.redirectURL}
+                            textLength={20}
+                          />
                         </span>
                       )}
 
@@ -361,7 +378,8 @@ function Banner({
                     <div>
                       {mainBannerEdit ? (
                         <>
-                          <BiSolidPencil
+                          <BiSol
+                            idPencil
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               setShowAddPage(true);
@@ -492,28 +510,44 @@ function Banner({
                       {data.banner_redirect && (
                         <span title={data.banner_redirect}>
                           <RxDotFilled />
-                          &nbsp; {data?.banner_redirect?.substring(0, 20)}
+                          &nbsp;{" "}
+                          <CopyToClipboard
+                            textToCopy={data?.banner_redirect}
+                            textLength={20}
+                          />
                         </span>
                       )}
 
                       {data.for && (
                         <span title={data.for}>
                           <RxDotFilled />
-                          &nbsp; {data?.for?.substring(0, 20)}
+                          &nbsp;{" "}
+                          <CopyToClipboard
+                            textToCopy={data?.for}
+                            textLength={20}
+                          />
                         </span>
                       )}
 
                       {data.name && (
                         <span title={data.name}>
                           <RxDotFilled />
-                          &nbsp; {data.name.substring(0, 20)}
+                          &nbsp;{" "}
+                          <CopyToClipboard
+                            textToCopy={data?.name}
+                            textLength={20}
+                          />
                         </span>
                       )}
 
                       {data.redirectURL && (
                         <span title={data.redirectURL}>
                           <RxDotFilled />
-                          &nbsp; {data.redirectURL.substring(0, 20)}
+                          &nbsp;{" "}
+                          <CopyToClipboard
+                            textToCopy={data?.redirectURL}
+                            textLength={20}
+                          />
                         </span>
                       )}
 

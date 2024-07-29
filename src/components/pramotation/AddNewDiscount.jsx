@@ -42,7 +42,6 @@ function AddNewDiscount({
             setShowTable(true);
           } else {
             errorAlert(res.message || "Error in updating discount");
-
           }
         })
         .catch((err) => {
@@ -73,18 +72,18 @@ function AddNewDiscount({
     initialValues: editMode.current
       ? editData
       : {
-        discountName: "",
-        discountPercentage: "",
-        couponCode: "",
-        discountType: "",
-        discountDate: "",
-        specialUsers: [],
-        searchUser: "",
-        maxCapAmount: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-      },
+          discountName: "",
+          discountPercentage: "",
+          couponCode: "",
+          discountType: "",
+          discountDate: "",
+          usersList: [],
+          searchUser: "",
+          maxCapAmount: "",
+          description: "",
+          startDate: "",
+          endDate: "",
+        },
     validationSchema: DiscountSchema,
     onSubmit: (values) => {
       console.log(values);
@@ -122,7 +121,7 @@ function AddNewDiscount({
         couponCode: "",
         discountType: values.discountType,
         discountDate: "",
-        specialUsers: [],
+        usersList: [],
         searchUser: "",
         maxCapAmount: "",
         description: "",
@@ -141,7 +140,6 @@ function AddNewDiscount({
 
   useEffect(() => {
     if (editMode.current) {
-
       console.log(editData);
       setValues(editData);
     }
@@ -156,7 +154,7 @@ function AddNewDiscount({
 
   const handleUserChange = (newValue) => {
     setFieldValue(
-      "specialUsers",
+      "usersList",
       newValue.map((user) => user.value)
     );
     setFieldValue(
@@ -182,18 +180,16 @@ function AddNewDiscount({
   }
 
   const getCurrentdate = (day_count = 0) => {
-
     // Get the current date
     const date = new Date();
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()+day_count).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate() + day_count).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
-    if(day_count === 0)setFieldValue("startDate", formattedDate);
+    if (day_count === 0) setFieldValue("startDate", formattedDate);
     else setFieldValue("endDate", formattedDate);
-    return formattedDate
-
-  }
+    return formattedDate;
+  };
 
   return (
     <form className={style.addNewDiscountPage} onSubmit={handleSubmit}>
@@ -239,15 +235,15 @@ function AddNewDiscount({
               placeholder="Select users"
               fetchOptions={fetchUserList}
               onChange={handleUserChange}
-              name="specialUsers"
+              name="usersList"
               mode="multiple"
               defaultValue={values.searchUser}
               style={{
                 width: "100%",
               }}
             />
-            {errors.specialUsers && touched.specialUsers && (
-              <p className={style.error}>{errors.specialUsers}</p>
+            {errors.usersList && touched.usersList && (
+              <p className={style.error}>{errors.usersList}</p>
             )}
           </div>
         )}
@@ -258,8 +254,14 @@ function AddNewDiscount({
             htmlFor={"discountDate"}
             name={"discountDate"}
             value={[
-              dayjs(values?.startDate ? values?.startDate : getCurrentdate(), "YYYY-MM-DD"),
-              dayjs(values?.endDate ? values?.endDate : getCurrentdate(3), "YYYY-MM-DD"),
+              dayjs(
+                values?.startDate ? values?.startDate : getCurrentdate(),
+                "YYYY-MM-DD"
+              ),
+              dayjs(
+                values?.endDate ? values?.endDate : getCurrentdate(3),
+                "YYYY-MM-DD"
+              ),
             ]}
             // value={values.discountDate}
             onChange={handleDateChange}
