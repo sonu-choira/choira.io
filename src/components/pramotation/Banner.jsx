@@ -378,8 +378,7 @@ function Banner({
                     <div>
                       {mainBannerEdit ? (
                         <>
-                          <BiSol
-                            idPencil
+                          <BiSolidPencil
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               setShowAddPage(true);
