@@ -40,43 +40,47 @@ function Banner({
 
   const [isMainBannerValidUrl, setIsMainBannerValidUrl] = useState(true); // Define state for URL validity
   const [isExclusiveValidUrl, setIsExclusiveValidUrl] = useState(true);
+
+  const [reorder, setReorder] = useState(false);
   useEffect(() => {
     if (products) {
-      console.log(
-        "products.filter((type) => type.type === 'ExcBanner')",
-        products.filter((type) => type.type === "ExcBanner")
-      );
-      console.log(products, "products");
-      setExclusiveBannerData(
-        products.filter((type) => type.type === "ExcBanner")
-      );
-      setMainBannerData(products.filter((type) => type.type === "AdBanner"));
+      //
+      const exbanners = products.filter((type) => type.type === "ExcBanner");
+      const exsortedData = exbanners.sort((a, b) => a.stage - b.stage);
+      setExclusiveBannerData(exsortedData);
+
+      //
+      const mainbanners = products.filter((prod) => prod.type === "AdBanner");
+      const sortedData = mainbanners.sort((a, b) => a.stage - b.stage);
+      setMainBannerData(sortedData)
+      setReorder(true)
     }
   }, [products]);
-
-  useEffect(() => {
-    if (mainBannerData && mainBannerData.length > 0) {
-      const sortedData = mainBannerData.sort((a, b) => a.stage - b.stage);
-      setMainBannerData([...sortedData]);
-    }
-    if (exclusiveBannerData && exclusiveBannerData.length > 0) {
-      const sortedData = exclusiveBannerData.sort((a, b) => a.stage - b.stage);
-      setExclusiveBannerData([...sortedData]);
-    }
-  }, [mainBannerData.length, exclusiveBannerData.length]);
+  
+  // useEffect(() => {
+  //   console.log("==============<>");
+  //   if (mainBannerData && mainBannerData.length > 0) {
+  //     const sortedData = mainBannerData.sort((a, b) => a.stage - b.stage);
+  //       setMainBannerData([...sortedData]);
+  //   }
+  //   if (exclusiveBannerData && exclusiveBannerData.length > 0) {
+  //     const sortedData = exclusiveBannerData.sort((a, b) => a.stage - b.stage);
+  //     setExclusiveBannerData([...sortedData]);
+  //   }
+  // }, [reorder]);
 
   // Define state for URL validity
 
   const isValidUrl = (url) => {
     const urlPattern = new RegExp(
       "^(https?:\\/\\/)?" + // validate the scheme
-        "((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|" + // domain name
-        "localhost|" + // localhost
-        "\\d{1,3}\\.(\\d{1,3}\\.){2}\\d{1,3}|" + // OR ipv4
-        "\\[([a-fA-F\\d:]+)\\])" + // OR ipv6
-        "(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*" + // port and path
-        "(\\?[;&a-zA-Z\\d%_.~+=-]*)?" + // query string
-        "(\\#[-a-zA-Z\\d_]*)?$", // fragment locator
+      "((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|" + // domain name
+      "localhost|" + // localhost
+      "\\d{1,3}\\.(\\d{1,3}\\.){2}\\d{1,3}|" + // OR ipv4
+      "\\[([a-fA-F\\d:]+)\\])" + // OR ipv6
+      "(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*" + // port and path
+      "(\\?[;&a-zA-Z\\d%_.~+=-]*)?" + // query string
+      "(\\#[-a-zA-Z\\d_]*)?$", // fragment locator
       "i"
     );
     return urlPattern.test(url);
@@ -151,6 +155,7 @@ function Banner({
         if (res.status) {
           sucessAlret("Banner stage Updated Successfully");
           handleBanner();
+          setReorder(true)
         } else {
           errorAlert(res.message || "Error in updating banner stage");
         }
@@ -318,7 +323,7 @@ function Banner({
                     >
                       {data.banner_redirect && (
                         <span title={data.banner_redirect}>
-                          <RxDotFilled />
+                          <RxDotFilled />{data.stage}
                           &nbsp;
                           <CopyToClipboard
                             textToCopy={data?.banner_redirect}
@@ -378,7 +383,7 @@ function Banner({
                     <div>
                       {mainBannerEdit ? (
                         <>
-                          <BiSol
+                          <BiSolidPencil
                             idPencil
                             style={{ cursor: "pointer" }}
                             onClick={() => {
