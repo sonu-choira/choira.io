@@ -94,6 +94,7 @@ function MixMaster({
                         <CopyToClipboard textToCopy={products?.userFullName} />
                       </td>
 
+
                       <td title={products.userPhone}>
                         <CopyToClipboard textToCopy={products?.userPhone} />
                       </td>
@@ -102,6 +103,7 @@ function MixMaster({
                           textToCopy={products?.serviceFullName}
                         />
                       </td>
+
                       <td style={{ textAlign: "start" }}>
                         Starting price from ₹{products.totalPrice} <br />
                       </td>
@@ -135,6 +137,7 @@ function MixMaster({
                               // gotoShowDetails(products._id);
                             }}
                           />
+
 
                           <RiDeleteBin5Fill
                             style={{ color: "red", cursor: "pointer" }}
