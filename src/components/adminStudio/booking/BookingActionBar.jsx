@@ -16,7 +16,7 @@ function BookingActionBar({
   downloadAllData,
 }) {
   console.log(bookingPageCount);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const router = useNavigateRouter();
 
   let { navOption: pageData, page: type } = useParams();
