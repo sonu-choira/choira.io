@@ -384,7 +384,7 @@ function Banner({
                     <div>
                       {mainBannerEdit ? (
                         <>
-                          <BiSol
+                          <BiSolidPencil
                             idPencil
                             style={{ cursor: "pointer" }}
                             onClick={() => {
