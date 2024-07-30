@@ -19,6 +19,7 @@ import AddNewProduction from "../../../components/adminStudio/appsAndMore/AddNew
 import AddNewServices from "../../../components/adminStudio/appsAndMore/AddNewServices";
 import { useNavigate } from "react-router-dom";
 import AddNewRoom from "../../../components/adminStudio/AddNewRoom";
+import AllteamDetails from "../../../components/teamsSection/AllteamDetails";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ function AdminDashboardLayout() {
             </div>
           </div>
           {tabCount === 1 && ""}
-          {tabCount === 2 && ""}
+          {tabCount === 2 && <AllteamDetails />}
 
           {tabCount === 3 ? (
             <AllStudioPageDetailsPage />

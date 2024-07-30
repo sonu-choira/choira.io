@@ -7,6 +7,7 @@ import { FaDownload } from "react-icons/fa";
 import { MdNoteAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import appAndmoreApi from "../../../services/appAndmoreApi";
+import { useNavigateRouter } from "../../../navigateRoute";
 
 function BookingActionBar({
   setBookingPageCount,
@@ -15,7 +16,8 @@ function BookingActionBar({
   downloadAllData,
 }) {
   console.log(bookingPageCount);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const router = useNavigateRouter();
 
   let { navOption: pageData, page: type } = useParams();
   console.log("page ka data ", useParams());
@@ -59,37 +61,39 @@ function BookingActionBar({
 
   const gotoAddNew = (bookingPageCount) => {
     if (bookingPageCount === "c1") {
-      // navigate("/studio/add");
+      navigate("/studio/add", {
+        state: { navCount: 3, bookingPageCount: bookingPageCount },
+      });
     } else {
-      // navigate("/service/musicProduction/add", {
-      //   state: { navCount: 3, bookingPageCount: bookingPageCount },
-      // });
+      navigate("/service/musicProduction/add", {
+        state: { navCount: 3, bookingPageCount: bookingPageCount },
+      });
     }
   };
   const gotoSlotBooking = () => {
-    // navigate("/service/AddSlotBooking", {
-    //   state: { navCount: 4 },
-    // });
+    navigate("/service/AddSlotBooking", {
+      state: { navCount: 4 },
+    });
   };
   const gotoMusicProduction = () => {
     if (pageData == "Apps&More") {
-      navigate("/adminDashboard/Apps&More/musicproduction");
+      router.push("/adminDashboard/Apps&More/musicproduction");
     } else {
-      navigate("/adminDashboard/Bookings/musicproduction");
+      router.push("/adminDashboard/Bookings/musicproduction");
     }
   };
   const gotoStudio = () => {
     if (pageData == "Apps&More") {
-      navigate("/adminDashboard/Apps&More/studio");
+      router.push("/adminDashboard/Apps&More/studio");
     } else {
-      navigate("/adminDashboard/Bookings/studio");
+      router.push("/adminDashboard/Bookings/studio");
     }
   };
   const gotoMixMaster = () => {
     if (pageData == "Apps&More") {
-      navigate("/adminDashboard/Apps&More/mixmaster");
+      router.push("/adminDashboard/Apps&More/mixmaster");
     } else {
-      navigate("/adminDashboard/Bookings/mixmaster");
+      router.push("/adminDashboard/Bookings/mixmaster");
     }
   };
   return (
@@ -120,16 +124,7 @@ function BookingActionBar({
             >
               Music Production
             </div>
-            {/* <div
-              style={{
-                backgroundColor: bookingPageCount === "c3" ? "#ffc701" : "",
-              }}
-              onClick={() => {
-                setBookingPageCount("c3");
-              }}
-            >
-              Artist
-            </div> */}
+
             <div
               style={{
                 borderRight: "none",
@@ -224,16 +219,6 @@ function BookingActionBar({
           ) : (
             ""
           )}
-
-          {/* {pagetype !== "apps"
-            ? ""
-            : (bookingPageCount === "c2" || bookingPageCount === "c3") && (
-                <Button
-                  name={"Add New"}
-                  icon={<MdNoteAdd />}
-                  style={{ height: "50%", width: "15%", gap: "5%" }}
-                />
-              )} */}
         </div>
       </div>
     </>
