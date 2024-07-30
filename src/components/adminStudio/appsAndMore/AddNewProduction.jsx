@@ -536,6 +536,7 @@ function AddNewProduction({ setSelectTab }) {
                         id="ProductionName"
                         name="ProductionName"
                         value={serviceData.fullName}
+
                         placeholder="Enter Production Name"
                         onChange={(event) =>
                           handleStudioDetailsChange(event, "fullName")
@@ -588,6 +589,7 @@ function AddNewProduction({ setSelectTab }) {
                         setShowServices={setShowServices}
                         service={service}
                         setService={setService}
+
                       />
                     </div>
                   </div>

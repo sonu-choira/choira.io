@@ -61,17 +61,17 @@ function BookingActionBar({
 
   const gotoAddNew = (bookingPageCount) => {
     if (bookingPageCount === "c1") {
-      router.push("/studio/add", {
+      navigate("/studio/add", {
         state: { navCount: 3, bookingPageCount: bookingPageCount },
       });
     } else {
-      router.push("/service/musicProduction/add", {
+      navigate("/service/musicProduction/add", {
         state: { navCount: 3, bookingPageCount: bookingPageCount },
       });
     }
   };
   const gotoSlotBooking = () => {
-    router.push("/service/AddSlotBooking", {
+    navigate("/service/AddSlotBooking", {
       state: { navCount: 4 },
     });
   };
@@ -186,7 +186,12 @@ function BookingActionBar({
             <Button
               name={"Slot Booking"}
               icon={<LuFilePlus />}
-              style={{ height: "50%", width: "20%", gap: "5%" }}
+              style={{
+                height: "50%",
+                width: "20%",
+                gap: "5%",
+                backgroundColor: "#ADB5BD",
+              }}
               onClick={gotoSlotBooking}
             />
           ) : (
@@ -204,7 +209,12 @@ function BookingActionBar({
                 gotoAddNew(bookingPageCount);
               }}
               icon={<MdNoteAdd />}
-              style={{ height: "50%", width: "15%", gap: "5%" }}
+              style={{
+                height: "50%",
+                width: "15%",
+                gap: "5%",
+                backgroundColor: "#ADB5BD",
+              }}
             />
           ) : (
             ""

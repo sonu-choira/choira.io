@@ -67,6 +67,7 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
                       <td style={{ textAlign: "center" }}>#{products._id}</td>
                       <td>{products.userFullName}</td>
 
+
                       <td>{products.userPhone}</td>
                       <td>{products.serviceFullName}</td>
                       <td style={{ textAlign: "start" }}>
@@ -102,6 +103,7 @@ function MixMaster({ products, setProducts, handleChange, getStatusColor }) {
                               // gotoShowDetails(products._id);
                             }}
                           />
+
 
                           <RiDeleteBin5Fill
                             style={{ color: "red", cursor: "pointer" }}
