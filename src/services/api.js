@@ -11,6 +11,9 @@ const instance = axios.create({
     // "User-Agent":"postman"
     // "Access-Control-Allow-Origin" : "*"
   },
+//   params: {
+// source: "website",
+//   }
 });
 // console.log("INSTAN", instance)
 instance.interceptors.request.use(
@@ -26,6 +29,7 @@ instance.interceptors.request.use(
     return config;
   },
   (error) => {
+    alert("error")
     return Promise.reject(error);
   }
 );

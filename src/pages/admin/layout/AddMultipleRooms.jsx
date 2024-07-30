@@ -38,12 +38,15 @@ function AddMultipleRooms({
   const handleAddTeamDetail = () => {
     const newTeam = {
       roomName: "",
-      roomArea: "",
+
       pricePerHour: "",
       discount: "",
       bookingDays: [],
-      generalStartTime: "",
-      generalEndTime: "",
+
+      generalTime: {
+        startTime: "",
+        endTime: "",
+      },
       bookingStartTime: [],
       bookingEndTime: [],
       roomPhotos: [],
@@ -128,6 +131,8 @@ function AddMultipleRooms({
                   type="text"
                   placeholder="Enter Rooms Name"
                   value={team.roomName}
+                  readOnly
+                  disabled
                   onChange={(event) =>
                     handleInputChange(event, index, "roomName")
                   }
@@ -141,15 +146,19 @@ function AddMultipleRooms({
                       fontSize: "1vmax",
                     }}
                   >
-                    pricePerHour ₹
+                    BasePrice ₹
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
                     type="text"
                     placeholder=""
+
                     value={team.pricePerHour}
+                    readOnly
+                    disabled
+
                     onChange={(event) =>
-                      handleInputChange(event, index, "pricePerHour")
+                      handleInputChange(event, index, "basePrice")
                     }
                   />
                 </div>
@@ -210,8 +219,10 @@ function AddMultipleRooms({
               <div>
                 <input
                   type="text"
-                  placeholder="roomName"
+                  placeholder="RoomName"
                   value={team.roomName}
+                  readOnly
+                  disabled
                   onChange={(event) =>
                     handleInputChange(event, index, "roomName")
                   }
@@ -224,15 +235,19 @@ function AddMultipleRooms({
                       fontSize: "1vmax",
                     }}
                   >
-                    pricePerHour ₹
+                    Base Price ₹
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
                     type="text"
                     placeholder=""
+
+                    readOnly
+                    disabled
                     value={team.pricePerHour}
+
                     onChange={(event) =>
-                      handleInputChange(event, index, "pricePerHour")
+                      handleInputChange(event, index, "basePrice")
                     }
                   />
                 </div>

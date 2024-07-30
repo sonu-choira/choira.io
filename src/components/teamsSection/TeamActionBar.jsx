@@ -24,15 +24,19 @@ function TeamsActionBar({
   console.log("page ka data ", useParams());
 
   const gotoAddNew = (teamsPageCount) => {
-    if (teamsPageCount === "t1") {
-      router.push("/studio/add", {
-        state: { navCount: 3, teamsPageCount: teamsPageCount },
-      });
-    } else {
-      router.push("/service/musicProduction/add", {
-        state: { navCount: 3, teamsPageCount: teamsPageCount },
-      });
+    if (teamsPageCount === "t2") {
+      router.push("/adminDashboard/Teams/AddStudioPatner");
+    } else if (teamsPageCount === "t1") {
+      router.push("/adminDashboard/Teams/AddNewArm");
     }
+    //  else {
+    //   router.push("/adminDashboard/Teams/AddStudioPatner");
+    // }
+    // else {
+    //   router.push("/service/musicProduction/add", {
+    //     state: { navCount: 3, teamsPageCount: teamsPageCount },
+    //   });
+    // }
   };
   const gotoSlotBooking = () => {
     router.push("/service/AddSlotBooking", {
@@ -40,9 +44,9 @@ function TeamsActionBar({
     });
   };
 
-  const gotoStudioPatners = () => {
+  const gotoStudioPartners = () => {
     if (pageData == "Teams") {
-      router.push("/adminDashboard/Teams/StudioPatners");
+      router.push("/adminDashboard/Teams/StudioPartners");
     } else {
       router.push("/adminDashboard/Bookings/musicproduction");
     }
@@ -77,10 +81,12 @@ function TeamsActionBar({
               style={{
                 borderLeft: "none",
                 backgroundColor: teamsPageCount === "t1" ? "#ffc701" : "",
+                backgroundColor: "#ADB5BD",
+                cursor: "not-allowed",
               }}
               onClick={() => {
-                setTeamsPageCount("t1");
-                gotoARM();
+                // setTeamsPageCount("t1");
+                // gotoARM();
               }}
             >
               ARM
@@ -91,7 +97,7 @@ function TeamsActionBar({
               }}
               onClick={() => {
                 setTeamsPageCount("t2");
-                gotoStudioPatners();
+                gotoStudioPartners();
               }}
             >
               Studio Patners
@@ -99,11 +105,13 @@ function TeamsActionBar({
 
             <div
               style={{
-                backgroundColor: teamsPageCount === "t3" ? "#ffc701" : "",
+                // backgroundColor: teamsPageCount === "t3" ? "#ffc701" : "",
+                backgroundColor: "#ADB5BD",
+                cursor: "not-allowed",
               }}
               onClick={() => {
-                setTeamsPageCount("t3");
-                gotoArtist();
+                // setTeamsPageCount("t3");
+                // gotoArtist();
               }}
             >
               Artist
@@ -111,11 +119,13 @@ function TeamsActionBar({
             <div
               style={{
                 borderRight: "none",
-                backgroundColor: teamsPageCount === "t4" ? "#ffc701" : "",
+                // backgroundColor: teamsPageCount === "t4" ? "#ffc701" : "",
+                backgroundColor: "#ADB5BD",
+                cursor: "not-allowed",
               }}
               onClick={() => {
-                setTeamsPageCount("t4");
-                gotoMusicProducer();
+                // setTeamsPageCount("t4");
+                // gotoMusicProducer();
               }}
             >
               Music Producers
@@ -125,6 +135,7 @@ function TeamsActionBar({
         <div style={{ justifyContent: teamsPageCount === "t1" ? "" : "end" }}>
           <Button
             name={"Filter"}
+            disabled={true}
             icon={<FaFilter />}
             style={{
               height: "50%",
@@ -132,10 +143,12 @@ function TeamsActionBar({
               gap: "5%",
               backgroundColor: "#ADB5BD",
             }}
+
             // onClick={router.back}
           />
           <Button
             name={"Share"}
+            disabled={true}
             icon={<FaShare />}
             style={{
               height: "50%",
@@ -147,11 +160,13 @@ function TeamsActionBar({
           />
           <Button
             name={"Download"}
+            disabled={true}
             icon={<FaDownload />}
             style={{
               height: "50%",
               width: "15%",
               gap: "5%",
+              backgroundColor: "#ADB5BD",
             }}
             // onClick={
             //   pagetype == "apps" ? downloadAllData : downloadBookingsData
@@ -161,7 +176,12 @@ function TeamsActionBar({
             <Button
               name={"Slot Booking"}
               icon={<LuFilePlus />}
-              style={{ height: "50%", width: "20%", gap: "5%" }}
+              style={{
+                height: "50%",
+                width: "20%",
+                gap: "5%",
+                backgroundColor: "#ADB5BD",
+              }}
               onClick={gotoSlotBooking}
             />
           ) : (
@@ -179,7 +199,12 @@ function TeamsActionBar({
                 gotoAddNew(teamsPageCount);
               }}
               icon={<MdNoteAdd />}
-              style={{ height: "50%", width: "18%", gap: "5%" }}
+              style={{
+                height: "50%",
+                width: "18%",
+                gap: "5%",
+                // backgroundColor: "#ADB5BD",
+              }}
             />
           ) : (
             ""

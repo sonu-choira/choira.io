@@ -16,6 +16,10 @@ import axios from "axios";
 import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
+import { GoEye } from "react-icons/go";
+import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
+// import moment from "moment";
 let PageSize = 10;
 
 function MusicProduction({
@@ -23,14 +27,19 @@ function MusicProduction({
   setProducts,
   handleChange,
   getStatusColor,
+  bookingPageCount,
+  totalPage,
+  pageCount,
+  setPageCount,
+  setTotalPage,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return products.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, products]);
+  // const currentTableData = useMemo(() => {
+  //   const firstPageIndex = (currentPage - 1) * PageSize;
+  //   const lastPageIndex = firstPageIndex + PageSize;
+  //   return products.slice(firstPageIndex, lastPageIndex);
+  // }, [currentPage, products]);
 
   const [selectedStatus, setSelectedStatus] = useState({});
 
@@ -38,16 +47,22 @@ function MusicProduction({
     <>
       <div className={style.studioTabelDiv}>
         <div className={style.searchDiv}>
-          <div>
+          <div className={style.puredisabled}>
             <p>Search by Date </p>
             <label htmlFor="selectDate">
               <IoCalendarOutline />
             </label>
             {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
           </div>
-          <div>
+          <div className={style.puredisabled}>
             <BiSearchAlt /> <br />
-            <input type="text" placeholder="Search" />
+            <input
+              type="text"
+              placeholder="Search"
+              className={style.puredisabled}
+              disabled
+              readOnly
+            />
           </div>
         </div>
         <div>
@@ -58,36 +73,57 @@ function MusicProduction({
                 <th>User Name</th>
 
                 <th> Mobile No.</th>
-                <th>Production Name</th>
+                {/* <th>Date</th> */}
+                <th>Production Name.</th>
                 <th>Amount</th>
                 <th>Project Status</th>
               </tr>
             </thead>
             <tbody>
               {products.length === 0 ? (
-                <ChoiraLoder2 />
+                <tr>
+                  <td>
+                    <ChoiraLoder2 />
+                  </td>
+                </tr>
               ) : (
-                currentTableData.map((products, i) => {
+                products.map((prod, i) => {
                   return (
                     <tr key={i}>
-                      <td style={{ textAlign: "center" }}>#{products._id}</td>
-                      <td>{products.userFullName}</td>
+                      <td title={prod._id} style={{ textAlign: "center" }}>
+                        #{prod._id.slice(-5)}
+                      </td>
+                      <td title={prod.userFullName}>
+                        <CopyToClipboard textToCopy={prod?.userFullName} />
+                      </td>
 
 
-                      <td>{products.userPhone}</td>
-                      <td>{products.serviceFullName}</td>
-                      <td>₹{products.totalPrice}</td>
+                      <td title={prod.userPhone}>
+                        <CopyToClipboard textToCopy={prod?.userPhone} />
+                      </td>
+                      {/* <td>
+                        { moment(prod.bookingDate).format(
+                            "Do MMM  YY, hh:mm a "
+                          )}
+                      </td> */}
+                      <td title={prod.serviceFullName}>
+                        <CopyToClipboard
+                          textToCopy={prod?.serviceFullName}
+                        />
+                      </td>
+                      <td>₹{prod.totalPrice}</td>
+
                       <td className={style.tableActionbtn}>
                         <div>
                           <select
                             value={
-                              selectedStatus[products._id] ||
-                              products.bookingStatus
+                              selectedStatus[prod._id] ||
+                              prod.bookingStatus
                             }
-                            onChange={(e) => handleChange(products._id, e)}
+                            onChange={(e) => handleChange(prod._id, e)}
                             style={{
                               backgroundColor: getStatusColor(
-                                products.bookingStatus
+                                prod.bookingStatus
                               ),
                             }}
                           >
@@ -101,10 +137,10 @@ function MusicProduction({
                           </select>
                         </div>
                         <div style={{ width: "25%" }}>
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => {
-                              // gotoShowDetails(products._id);
+                              // gotoShowDetails(prod._id);
                             }}
                           />
 
@@ -123,12 +159,11 @@ function MusicProduction({
         </div>
       </div>
       <div className={style.tabelpaginationDiv}>
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={products.length}
-          pageSize={PageSize}
-          onPageChange={(page) => setCurrentPage(page)}
+        <PaginationNav
+          pageCount={pageCount}
+          totalPage={totalPage}
+          setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
         />
       </div>
     </>

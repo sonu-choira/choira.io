@@ -7,7 +7,12 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 import Button from "../../pages/admin/layout/Button";
 
 import { IoIosArrowBack } from "react-icons/io";
-import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
+import {
+  FaFilter,
+  FaRegEye,
+  FaShare,
+  FaTableCellsLarge,
+} from "react-icons/fa6";
 
 // import Button from "../../pages/admin/layout/Button";
 import Switch from "../../pages/admin/layout/Switch";
@@ -28,10 +33,12 @@ import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
 import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
 import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
 import appAndmoreApi from "../../services/appAndmoreApi";
+import moment from "moment";
+import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 
 let PageSize = 10;
 
-function StudioPatners({
+function UserBookingDetails({
   products,
   setProducts,
   setPageCount,
@@ -204,7 +211,10 @@ function StudioPatners({
 
   return (
     <>
-      <div className={style.studioTabelDiv}>
+      <div
+        className={style.studioTabelDiv}
+        style={{ height: "90%", width: "100%" }}
+      >
         <DateAndSearchFilter
           setProducts={setProducts}
           setTotalPage={setTotalPage}
@@ -222,9 +232,9 @@ function StudioPatners({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th style={{ width: "10%" }}>
+                <th style={{ width: "8%" }}>
                   <div className={style.headingContainer}>
-                    S.No.
+                    Booking Id
                     <div
                       className={style.filterBox}
                       onClick={handelShortbyClick}
@@ -238,7 +248,7 @@ function StudioPatners({
                 </th>
                 <th>
                   <div className={style.headingContainer}>
-                    Partner Name
+                    Studio Name
                     <div
                       className={style.filterBox}
                       style={{
@@ -268,9 +278,9 @@ function StudioPatners({
                   </div>
                 </th>
 
-                <th style={{ width: "20%" }}>
+                <th style={{ width: "12%" }}>
                   <div className={style.headingContainer}>
-                    Email
+                    No. of hours
                     <div
                       className={style.filterBox}
                       style={{
@@ -298,9 +308,9 @@ function StudioPatners({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "20%" }}>
+                <th style={{ width: "15%" }}>
                   <div className={style.headingContainer}>
-                    Studio Name
+                    Date
                     <div
                       className={style.filterBox}
                       style={{
@@ -328,9 +338,9 @@ function StudioPatners({
                     </div>
                   </div>
                 </th>
-                <th style={{ width: "20%" }}>
+                <th style={{ width: "10%" }}>
                   <div className={style.headingContainer}>
-                    Date
+                    Time Slot
                     <div
                       className={style.filterBox}
                       style={{
@@ -360,7 +370,7 @@ function StudioPatners({
                 </th>
                 <th style={{ width: "12%" }}>
                   <div className={style.headingContainer}>
-                    Activity Status
+                    Project Status
                     <div
                       className={style.filterBox}
                       style={{
@@ -390,6 +400,17 @@ function StudioPatners({
                     </div>
                   </div>
                 </th>
+                <th style={{ width: "10%" }}>
+                  <div className={style.headingContainer}>
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedStatus.length > 0 ? "#ffc70133" : "",
+                      }}
+                    ></div>
+                  </div>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -398,37 +419,46 @@ function StudioPatners({
               ) : (
                 products?.map((products, index) => {
                   return (
-                    <tr key={products._id}>
-                      <td
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          height: "100%",
-                        }}
-                      >
-                        {index + 1}
+                    <tr key={products?._id} className={style.customUserTd}>
+                      <td>
+                        <span title={products._id}>
+                          #{products._id?.substring(0, 6)}
+                        </span>
                       </td>
-                      <td>{products.firstName}</td>
-                      <td>{products.email}</td>
-                      <td>{products.studioName}</td>
-                      <td>{products.creationTimeStamp}</td>
+                      <td title={products?.studioName}>
+                        <CopyToClipboard textToCopy={products?.studioName} />
+                      </td>
+                      <td>{products?.no_of_hours} Hour</td>
+                      <td>
+                        {moment(products.bookingDate).format(
+                          "Do MMM  YY, hh:mm a"
+                        )}
+                      </td>
+                      <td>
+                        {products?.bookingTime?.startTime}-
+                        {products?.bookingTime?.endTime}
+                      </td>
                       <td className={style.tableActionbtn}>
                         <div
+                          className={style.userProjectStatus}
                           style={{
-                            display: "flex",
-                            justifyContent: "space-around",
+                            backgroundColor:
+                              parseInt(products.bookingStatus) === 0
+                                ? "#FFF3CA"
+                                : parseInt(products.bookingStatus) == 1
+                                ? "#DDFFF3"
+                                : "#FFDDDD",
                           }}
                         >
-                          <GrShare
-                            style={{ cursor: "pointer" }}
-                            onClick={() => gotoShowStudioDetaisl(products._id)}
-                          />
-
-                          <RiDeleteBin5Fill
-                            style={{ color: "red", cursor: "pointer" }}
-                          />
+                          {parseInt(products.bookingStatus) === 0
+                            ? "Pending"
+                            : parseInt(products.bookingStatus) == 1
+                            ? "Complete"
+                            : "Cancelled"}
                         </div>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <FaRegEye />
                       </td>
                     </tr>
                   );
@@ -450,4 +480,4 @@ function StudioPatners({
   );
 }
 
-export default StudioPatners;
+export default UserBookingDetails;

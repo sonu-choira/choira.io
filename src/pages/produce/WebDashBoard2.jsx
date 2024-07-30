@@ -6,68 +6,75 @@ import produce from "../../assets/img/dashboard_img/produce_selected.svg";
 import community from "../../assets/img/dashboard_img/community.svg";
 import tanmay from "../../assets/img/dashboard_img/tanmay.png";
 import ProfileEdit from "./ProfileEdit";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AiOutlineTeam } from "react-icons/ai";
-import { useNavigateRouter } from "../../navigateRoute";
-
+import { FaRegUser } from "react-icons/fa";
+import { useLocale } from "antd/es/locale";
+import { LuHome } from "react-icons/lu";
+import { TbSpeakerphone } from "react-icons/tb";
+import { PiChartBarLight } from "react-icons/pi";
+import { CiCalendar } from "react-icons/ci";
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
-  const router = useNavigateRouter();
+  const navigate = useNavigate();
 
-  let { navOption: pageData } = useParams();
+  let { pathname } = useLocation();
 
   useEffect(() => {
-    if (pageData == "Studios") {
+    if (pathname.includes("Overview")) {
       setTabCount(1);
-    } else if (pageData == "Teams") {
+    } else if (pathname.includes("User")) {
       setTabCount(2);
-    } else if (pageData == "Apps&More") {
+    } else if (pathname.includes("Teams")) {
       setTabCount(3);
-    } else if (pageData == "Bookings") {
+    } else if (pathname.includes("Apps&More")) {
       setTabCount(4);
+    } else if (pathname.includes("Bookings")) {
+      setTabCount(5);
+    } else if (pathname.includes("Promotions")) {
+      setTabCount(6);
     }
-  }, [pageData]);
+  }, [pathname, setTabCount]);
 
-  if (navCount) {
-    setTabCount(navCount);
-    // alert(navCount);
-  }
+  useEffect(() => {
+    if (navCount) {
+      setTabCount(navCount);
+    }
+  }, [navCount, setTabCount]);
 
   const [editProfile, setEditProfile] = useState(false);
   const editProfiletab = () => {
     setEditProfile(true);
   };
-  // const navigate = useNavigate();
+
   const gotoAllStudioDetailPage = () => {
-    // navigate("/allStudioPageDetailsPage");
-    if (navCount) {
-      router.push("/adminDashboard/Apps&More/studio");
-    } else {
-      setTabCount(3);
-      router.push("/adminDashboard/Apps&More/studio");
-    }
+    setTabCount(4);
+    navigate("/adminDashboard/Apps&More/studio");
   };
+
   const gotoBookings = () => {
-    if (navCount) {
-      router.push("/adminDashboard/Bookings/studio");
-    } else {
-      setTabCount(4);
-      router.push("/adminDashboard/Bookings/studio");
-    }
+    setTabCount(5);
+    navigate("/adminDashboard/Bookings/studio");
+  };
+  const gotoPromotions = () => {
+    setTabCount(6);
+    navigate("/adminDashboard/Promotions/Banner");
+  };
+
+  const gotoOverview = () => {
+    setTabCount(1);
+    navigate("/adminDashboard/Overview");
   };
   const gotoStudios = () => {
-    // router.push("/studios");
-    if (navCount) {
-      router.push("/adminDashboard/Studios");
-    } else {
-      setTabCount(1);
-      router.push("/adminDashboard/Studios");
-    }
+    setTabCount(2);
+    navigate("/adminDashboard/User");
   };
 
-  // useEffect(() => {
-  // if(tabCount)
-  // }, [tabCount])
-
+  const gotoTeams = () => {
+    setTabCount(3);
+    navigate("/adminDashboard/Teams/StudioPartners");
+  };
+  let data = localStorage.getItem("adminData");
+  let adminData = JSON.parse(data);
   return (
     <>
       <ProfileEdit editProfile={editProfile} setEditProfile={setEditProfile} />
@@ -80,38 +87,45 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
             <div className={style.community}>
               <div
                 className={tabCount === 1 ? style.tabActive : style.padding}
-                onClick={gotoStudios}
+                onClick={gotoOverview}
               >
-                <img src={community} alt="" />
-                Studios
+                <LuHome style={{ fontSize: "1vmax" }} />
+                DashBoard
               </div>
               <div
                 className={tabCount === 2 ? style.tabActive : style.padding}
-                onClick={() => {
-                  if (navCount) {
-                    router.push("/adminDashboard/Teams/Arm");
-                  } else {
-                    setTabCount(2);
-                    router.push("/adminDashboard/Teams/Arm");
-                  }
-                }}
+                onClick={gotoStudios}
+              >
+                <FaRegUser style={{ fontSize: "1vmax" }} />
+                User
+              </div>
+              <div
+                className={tabCount === 3 ? style.tabActive : style.padding}
+                onClick={gotoTeams}
               >
                 <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />
                 Teams
               </div>
               <div
-                className={tabCount === 3 ? style.tabActive : style.padding}
+                className={tabCount === 4 ? style.tabActive : style.padding}
                 onClick={gotoAllStudioDetailPage}
               >
-                <img src={produce} alt="" />
+                <PiChartBarLight style={{ fontSize: "1.3vmax" }} />
                 App & More
               </div>
               <div
-                className={tabCount === 4 ? style.tabActive : style.padding}
+                className={tabCount === 5 ? style.tabActive : style.padding}
                 onClick={gotoBookings}
               >
-                <img src={produce} alt="" />
+                <CiCalendar style={{ fontSize: "1.3vmax" }} />
                 Bookings
+              </div>
+              <div
+                className={tabCount === 6 ? style.tabActive : style.padding}
+                onClick={gotoPromotions}
+              >
+                <TbSpeakerphone style={{ fontSize: "1vmax" }} />
+                Promotions
               </div>
             </div>
           </div>
@@ -123,11 +137,11 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
               onClick={editProfiletab}
             >
               <div>
-                <img src={tanmay} alt="" />
+                <img src={adminData?.Image || tanmay} alt="" />
               </div>
               <div>
-                <h5>Tanmay</h5> <br />
-                <h6>Music Producer</h6>
+                <h5>{adminData?.name || "Admin"}</h5> <br />
+                {/* <h6>{adminData?.role || "admin"}</h6> */}
               </div>
             </div>
           </div>

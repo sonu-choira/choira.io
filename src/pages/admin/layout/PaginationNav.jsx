@@ -60,6 +60,7 @@ function PaginationNav({
   const goToCustomPage = () => {
     if (inputPage >= 1 && inputPage <= totalPage) {
       setPageCount(inputPage);
+      setInputPage("");
     }
   };
 

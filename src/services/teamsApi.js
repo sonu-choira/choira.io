@@ -9,7 +9,7 @@ class teamApi{
 
   const response = await api.get(`/owner`, {
     params: {
-      limit: 10,
+      limit: 7,
       page :pageCount,
       sortDirection: shortby,
       sortField :"creationTimeStamp"
@@ -19,6 +19,17 @@ class teamApi{
   console.log("res ===>", response.data)
   return response.data;
  };
+
+ getStudioPartner = async () => {
+  
+
+  const response = await api.get(`studios/unassignedstudios`, {
+  
+  });
+  console.log("res ===>", response.data)
+  return response.data;
+ };
+
 
 //  getServices = async (limit, Type, active ,pageCount) => {
 //     const response = await api.get(`/services`,{ 
@@ -35,7 +46,16 @@ class teamApi{
 //    };
 
  
+addStudioPartner = async (data) => {
+  // let {studioId,roomId,bookingDate,bookingHours} = slotData
+  
 
+  const response = await api.post(`/owners/create`, 
+    data
+  );
+  console.log("res ===>", response.data)
+  return response.data;
+ };
 
 
 }

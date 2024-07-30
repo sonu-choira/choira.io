@@ -17,6 +17,8 @@ import StudioFooter from "../StudioFooter";
 import cross from "../../../assets/cross.svg";
 import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
 import { MdCancel } from "react-icons/md";
+import MultipleSelect from "../../../pages/admin/layout/MultipleSelect";
+import { confirmAlret, errorAlert } from "../../../pages/admin/layout/Alert";
 
 function AddNewServices2({
   setShowServices,
@@ -44,7 +46,18 @@ function AddNewServices2({
   }, [currentServiceData]);
 
   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState(
+    currentServiceData?.amenites
+      ? currentServiceData?.amenites?.map((item) => item?.name || item) || []
+      : []
+  );
+  let defaultData = {
+    photo_url: [],
+    name: "",
+    about: "",
+    amenities: [],
+    price: "",
+  };
 
   // useEffect(() => {
   //   if (isEditMode) {
@@ -54,16 +67,101 @@ function AddNewServices2({
   //   }
   // }, [isEditMode]);
 
+  const handleValidateData = (updatedData) => {
+    const checkData = { ...updatedData };
+    delete checkData.amenities;
+
+    // Function to recursively validate nested objects
+    const validateNestedObject = (obj, parentKey = "") => {
+      for (const key of Object.keys(obj)) {
+        const value = obj[key];
+        const fullKey = parentKey ? `${parentKey}.${key}` : key;
+
+        console.log(`Checking key: ${fullKey}, value:`, value);
+
+        if (key === "price") {
+          if (typeof value !== "number" || value < 0) {
+            errorAlert(`${fullKey} field is empty or invalid`);
+            return false; // Indicating validation failure
+          }
+        } else {
+          // Validate other fields like service name, amenities, etc.
+          if (
+            (typeof value === "string" && value.trim().length === 0) || // String field validation
+            (Array.isArray(value) && value.length === 0) || // Array field validation
+            (typeof value === "object" &&
+              value !== null &&
+              !Array.isArray(value) &&
+              Object.keys(value).length === 0) // Object field validation
+          ) {
+            errorAlert(`${fullKey} field is empty`);
+            return false; // Indicating validation failure
+          }
+        }
+
+        // Recursively validate nested objects
+        if (
+          typeof value === "object" &&
+          value !== null &&
+          !Array.isArray(value)
+        ) {
+          const isValid = validateNestedObject(value, fullKey);
+          if (!isValid) return false;
+        }
+      }
+      return true;
+    };
+
+    // Validate the main object
+    const isMainValid = validateNestedObject(checkData);
+    if (!isMainValid) return false;
+
+    // Check pricing object
+    const pricing = checkData.pricing;
+    if (pricing) {
+      let hasValidPrice = false;
+
+      // Check each country's price
+      for (const country of Object.keys(pricing)) {
+        const price = pricing[country].price;
+        if (typeof price !== "number" || price < 0) {
+          console.log(`Invalid price for ${country}`);
+          errorAlert(`Invalid price for ${country}`);
+          return false;
+        }
+
+        if (price > 0) {
+          hasValidPrice = true; // At least one country has a valid price
+        }
+      }
+
+      // Show error alert only if all countries have price 0
+      if (!hasValidPrice) {
+        errorAlert("At least one country price should be greater than 0");
+        return false;
+      }
+    } else {
+      // If pricing object is missing or empty, show error
+
+      errorAlert("Pricing data is required");
+      return false;
+    }
+
+    // If we reach here, validation is successful
+    console.log("Validation passed");
+    return true;
+  };
+
   useEffect(() => {
     if (isEditMode) {
       const tempaminities = currentServiceData?.amenites;
       console.log("tempaminities:", tempaminities);
       if (tempaminities && tempaminities.length > 0) {
-        const slectedtempaminities = tempaminities.map(
+        const selectedtempaminities = tempaminities.map(
           (item) => item?.name || item
         );
-        console.log("selectedDateNames:", slectedtempaminities);
-        setSelectedItems(slectedtempaminities);
+        console.log("selectedDateNames:", selectedtempaminities);
+        setSelectedItems(selectedtempaminities);
       } else {
         setSelectedItems([]);
       }
@@ -80,11 +178,68 @@ function AddNewServices2({
       updatedService[indexofServices] = {
         ...updatedService[indexofServices], // Copy the existing object
         name: event.target.value, // Update the 'name' property
+        planId: service.length + 1,
       };
       return updatedService; // Return the updated array
     });
   };
 
+  const onDisCountChange = (event) => {
+    setService((prevService) => {
+      const updatedService = [...prevService]; // Copy the existing service array
+
+      // Check if currentServiceData exists and has the 'pricing' property
+      if (currentServiceData && currentServiceData.pricing) {
+        updatedService[indexofServices] = {
+          ...updatedService[indexofServices], // Copy the existing object
+          pricing: {
+            ...updatedService[indexofServices].pricing, // Copy the existing pricing object
+            // Check if the first region exists in 'pricing' object
+            ...(Object.keys(updatedService[indexofServices].pricing)[0] && {
+              [Object.keys(updatedService[indexofServices].pricing)[0]]: {
+                ...updatedService[indexofServices].pricing[
+                  Object.keys(updatedService[indexofServices].pricing)[0]
+                ], // Copy the existing pricing for the first region
+                discountPercentage: parseInt(event.target.value), // Update the 'discountPercentage' property
+              },
+            }),
+          },
+        };
+      }
+
+      return updatedService; // Return the updated array
+    });
+  };
+
+  useEffect(() => {
+    if (currentServiceData && currentServiceData.pricing) {
+      const firstRegion = Object.keys(currentServiceData.pricing)[0];
+      if (firstRegion) {
+        const dis = currentServiceData.pricing[firstRegion].discountPercentage;
+        const price1 = currentServiceData.pricing[firstRegion].price;
+        const price2 =
+          currentServiceData.pricing[Object.keys(currentServiceData.pricing)[1]]
+            .price;
+        const price3 =
+          currentServiceData.pricing[Object.keys(currentServiceData.pricing)[2]]
+            .price;
+
+        const cal = (price, dis) => {
+          const discountedAmount = (price * dis) / 100;
+          const basePrice = price + discountedAmount;
+          return basePrice;
+        };
+
+        currentServiceData.pricing[firstRegion].basePrice = cal(price1, dis);
+        currentServiceData.pricing[
+          Object.keys(currentServiceData.pricing)[1]
+        ].basePrice = cal(price2, dis);
+        currentServiceData.pricing[
+          Object.keys(currentServiceData.pricing)[2]
+        ].basePrice = cal(price3, dis);
+      }
+    }
+  }, [currentServiceData.pricing]);
   // useEffect(() => {
   //   if()
 
@@ -101,13 +256,19 @@ function AddNewServices2({
     });
   }, [images]);
   useEffect(() => {
-    setService((prerooms) => {
-      prerooms.map((rm, idex) => {
-        if (idex === indexofServices) {
-          rm.amenites = selectedItems;
+    setService((prevRooms) => {
+      return prevRooms.map((room, idx) => {
+        if (idx === indexofServices) {
+          return {
+            ...room,
+            amenites: selectedItems.map((item, index) => ({
+              id: index,
+              name: item,
+            })),
+          };
         }
+        return room;
       });
-      return prerooms;
     });
   }, [selectedItems.length]);
 
@@ -180,17 +341,36 @@ function AddNewServices2({
     { "USA($)": "" },
     { "Japan(¥)": "" },
   ]);
-  const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState([[]]);
-  // const [filteredCountryData, setFilteredCountryData] = useState([
-  //   { "India(₹)": "" },
-  //   { "USA($)": "" },
-  //   { "Japan(¥)": "" },
-  // ]);
+
+  let apiCountryPrice = currentServiceData?.pricing;
+  console.log("apiCountryPrice", apiCountryPrice);
+
+  // Function to handle country selection
+  const [selectedCountry, setSelectedCountry] = useState(
+    isEditMode && apiCountryPrice ? Object.keys(apiCountryPrice) : []
+  );
+
+  const [countryPrice, setCountryPrice] = useState(
+    isEditMode && apiCountryPrice
+      ? Object.values(apiCountryPrice).map((country) => country.price)
+      : []
+  );
+
+  const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState(
+    isEditMode && selectedCountry.length > 0
+      ? Array(selectedCountry.length).fill([])
+      : [[]]
+  );
+
+  useEffect(() => {
+    console.log("selectedCountry");
+    console.log(selectedCountry);
+  }, [selectedCountry]);
 
   const [filteredCountryData, setFilteredCountryData] = useState([
-    "India(₹)",
-    "USA($)",
-    "Japan(¥)",
+    "IN",
+    "USA",
+    "JP",
   ]);
 
   const [countryWithPrice2, setCountryWithPrice2] = useState([
@@ -207,14 +387,6 @@ function AddNewServices2({
   useEffect(() => {
     console.log(addMultiplePriceDiv);
   }, [addMultiplePriceDiv]);
-
-  // Function to handle country selection
-  const [selectedCountry, setSelectedCountry] = useState([]);
-  useEffect(() => {
-    console.log(selectedCountry);
-  }, [selectedCountry]);
-
-  const [countryPrice, setCountryPrice] = useState([]);
 
   const handleCountrySelect = (fnselectedCountry, index) => {
     console.log("------------");
@@ -260,38 +432,48 @@ function AddNewServices2({
 
   useEffect(() => {
     if (countryWithPriceobj && Object.keys(countryWithPriceobj).length > 0) {
+      console.log("---------------------checking");
+
       setService((prevService) => {
         return prevService.map((item, index) => {
           if (index === indexofServices) {
+            console.log("---------------------checking222");
+
+            const updatedINPrice = parseInt(countryWithPriceobj["IN"]) || 0;
+
             return {
               ...item,
+              price: updatedINPrice, // Update the price property to match IN.price
               pricing: {
                 ...(item.pricing || {}), // Ensure pricing object is defined
                 USA: {
                   ...(item.pricing?.USA || {}), // Ensure USA object is defined
-                  basePrice: countryWithPriceobj["USA($)"] || 0,
+                  basePrice: parseInt(countryWithPriceobj["USA"]) || 0,
+                  price: parseInt(countryWithPriceobj["USA"]) || 0,
                 },
                 IN: {
                   ...(item.pricing?.IN || {}), // Ensure IN object is defined
-                  basePrice: countryWithPriceobj["India(₹)"] || 0,
+                  basePrice: updatedINPrice,
+                  price: updatedINPrice, // Ensure IN price matches the basePrice
                 },
                 JP: {
                   ...(item.pricing?.JP || {}), // Ensure JP object is defined
-                  basePrice: countryWithPriceobj["Japan(¥)"] || 0,
+                  basePrice: parseInt(countryWithPriceobj["JP"]) || 0,
+                  price: parseInt(countryWithPriceobj["JP"]) || 0,
                 },
               },
             };
           } else {
-            return item;
+            return { ...item };
           }
         });
       });
     }
-  }, [countryPrice, selectedCountry]);
+  }, [countryWithPriceobj, indexofServices]);
 
   return (
     <>
-      <div className={style.addNewStudioTitle}>Add New Services</div>
+      <div className={style.addNewStudioTitle}>Add New Services.</div>
       <div className={style.addNewStudioPage}>
         <div style={{ height: "90%" }}>
           <div
@@ -326,7 +508,11 @@ function AddNewServices2({
                   >
                     {selectedCountry[index] ? (
                       <option value={selectedCountry[index]}>
-                        {selectedCountry[index]}
+                        {selectedCountry[index] == "IN"
+                          ? "India(₹)"
+                          : selectedCountry[index] == "USA"
+                          ? "USA($)"
+                          : "Japan(¥)"}
                       </option>
                     ) : (
                       <option value="" default>
@@ -347,9 +533,9 @@ function AddNewServices2({
                 </div>
                 {countryPrice.map((price, index) => {})}
 
-                <div>
+                <div key={index}>
                   <input
-                    type="text"
+                    type="number"
                     placeholder="Enter Price"
                     onChange={(event) => {
                       handelCountryPrice(event.target.value, index);
@@ -380,6 +566,28 @@ function AddNewServices2({
               </span>
             )}
 
+            <div className={style.addNewStudioinputBox}>
+              <label htmlFor="GlobalDiscountPercentage">
+                Global Discount Percentage
+              </label>
+              <input
+                type="number"
+                id="GlobalDiscountPercentage"
+                placeholder="Enter Global Discount Percentage"
+                name="globalDiscountPercentage"
+                value={
+                  currentServiceData &&
+                  currentServiceData.pricing &&
+                  Object.keys(currentServiceData.pricing).length > 0
+                    ? currentServiceData.pricing[
+                        Object.keys(currentServiceData.pricing)[0]
+                      ]?.discountPercentage ?? ""
+                    : ""
+                }
+                onChange={onDisCountChange}
+              />
+            </div>
+
             <div className={style.addNewStudioinputBox2}>
               <label htmlFor="serviceDetails">Service Details</label>
               <textarea
@@ -398,7 +606,7 @@ function AddNewServices2({
               setImages={setImages}
               isEditMode={isEditMode}
             />
-            <div className={style.addNewStudioinputBox}>
+            {/* <div className={style.addNewStudioinputBox}>
               <label htmlFor="Amenities">Amenities</label>
 
               <Select
@@ -413,14 +621,43 @@ function AddNewServices2({
                   label: item,
                 }))}
               />
-            </div>
+            </div> */}
+
+            <MultipleSelect
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
+            />
           </div>
         </div>
       </div>
       <StudioFooter
         backOnclick={() => {
+          if (showMode) {
+            setShowServices(false);
+          } else {
+            confirmAlret("Service data will be lost ", "").then((result) => {
+              if (result.isConfirmed) {
+                console.log("default data is =====>", defaultData);
+
+                setShowServices(false);
+
+                setService((prevService) => {
+                  const newService = [...prevService];
+                  newService[indexofServices] = defaultData; // Reset to defaultData
+                  return newService;
+                });
+              }
+            });
+          }
+        }}
+        saveOnclick={() => {
+          const isValid = handleValidateData(currentServiceData);
+          if (!isValid) {
+            return;
+          }
           setShowServices(false);
         }}
+        saveDisabled={showMode}
       />
     </>
   );

@@ -88,6 +88,7 @@ function PriceFilter({
         .catch((error) => {
           console.error("Error fetching studios:", error);
         });
+    } else {
     }
   };
 

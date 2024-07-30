@@ -20,6 +20,8 @@ import DragAndDropImageDiv from "../../pages/admin/layout/DragAndDropImageDiv";
 import { TimePicker } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
+import { errorAlert, confirmAlret } from "../../pages/admin/layout/Alert";
 
 function AddNewRoom({
   setshowRoomsDetails,
@@ -30,38 +32,42 @@ function AddNewRoom({
   setIndexofrooms,
   showMode,
 }) {
-  const currentRoomsData = rooms[indexofrooms] || "";
+  let currentRoomsData = rooms[indexofrooms] || "";
+  let defaultData = {
+    roomName: "",
+
+    pricePerHour: "",
+    discount: "",
+    bookingDays: [],
+
+    generalTime: {
+      startTime: "",
+      endTime: "",
+    },
+    bookingStartTime: [],
+    bookingEndTime: [],
+    roomPhotos: [],
+    amenities: [],
+    roomDetails: "",
+  };
+
   const format = "HH:mm";
   const customStyles = {
     height: "90%",
     overFlow: "scroll",
   };
   const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [selectedDate, setSelectedDate] = useState([]);
-  const [time, setTime] = useState([]);
-  const [generalTime, setGeneralTime] = useState(
-    currentRoomsData.generalEndTime && currentRoomsData.generalStartTime
-      ? {
-          generalStartTime: currentRoomsData.generalStartTime,
-          generalEndTime: currentRoomsData.generalEndTime,
-        }
-      : {
-          generalStartTime: "00:00",
-          generalEndTime: "00:00",
-        }
+  const [selectedDate, setSelectedDate] = useState(
+    currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
   );
+  const [time, setTime] = useState([]);
+  const [generalTime, setGeneralTime] = useState({
+    startTime: currentRoomsData?.generalTime?.startTime || "00:00",
+    endTime: currentRoomsData?.generalTime?.endTime || "00:00",
+  });
   const handleAddDetails = () => {
     setDetails((prevDetails) => [...prevDetails, ""]); // Add an empty string to the details array
   };
-  // const [generalTime, setGeneralTime] = useState({
-  //   generalEndTime: "",
-  //   generalStartTime: ""
-
-  // })
-  // const [bookingTimes, setBookingTimes] = useState([
-  //   { startTime: "00:00", endTime: "00:00" },
-
-  // ]);
 
   const [bookingTimes, setBookingTimes] = useState(
     currentRoomsData?.availabilities
@@ -80,6 +86,20 @@ function AddNewRoom({
   const [images, setImages] = useState(
     currentRoomsData ? currentRoomsData.roomPhotos : []
   );
+
+  useEffect(() => {
+    let dis = currentRoomsData.discountPercentage;
+    let price = currentRoomsData.pricePerHour;
+
+    let cal = (price, dis) => {
+      let discountedAmount = (price * dis) / 100;
+      let calculatedBasePrice = price + discountedAmount; // Renamed to avoid conflict
+      return parseInt(calculatedBasePrice);
+    };
+    currentRoomsData.basePrice = cal(price, dis);
+
+    // Update basePrice in state or do something with it here
+  }, [currentRoomsData.pricePerHour, currentRoomsData.discountPercentage]);
 
   useEffect(() => {
     setrooms((prevRooms) => {
@@ -157,27 +177,21 @@ function AddNewRoom({
       return prerooms.map((room) => {
         return {
           ...room,
-          generalStartTime: generalTime.generalStartTime,
-          generalEndTime: generalTime.generalEndTime,
+          generalTime: {
+            startTime: generalTime.startTime,
+            endTime: generalTime.endTime,
+          },
         };
       });
     });
   }, [generalTime]);
 
-  const handelGeneralTime = (time, timeString) => {
-    console.log(time, timeString);
-    console.log("time is ", time);
-    console.log("timeString is ", timeString);
+  const handelGeneralTime = (_, timeString) => {
     setGeneralTime({
-      generalStartTime: timeString[0],
-      generalEndTime: timeString[1],
+      startTime: timeString[0],
+      endTime: timeString[1],
     });
   };
-
-  useEffect(() => {
-    currentRoomsData.generalStartTime = generalTime.generalStartTime;
-    currentRoomsData.generalEndTime = generalTime.generalEndTime;
-  }, [generalTime]);
 
   useEffect(() => {
     // Ensure there's always at least one booking time range displayed
@@ -270,15 +284,16 @@ function AddNewRoom({
     );
   }, [currentRoomsData?.amenities]);
 
-  useEffect(() => {
-    setSelectedDate(
-      currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
-    );
-  }, [currentRoomsData?.bookingDays]);
+  // useEffect(() => {
+  //   setSelectedDate(
+  //     currentRoomsData?.bookingDays?.map((item) => item?.name || item) || []
+  //   );
+  // }, [currentRoomsData?.bookingDays]);
 
   useEffect(() => {
     console.log("selectedDate updated:", selectedDate);
-  }, [selectedDate]);
+    currentRoomsData.bookingDays = selectedDate;
+  }, [selectedDate.length]);
 
   useEffect(() => {
     console.log("room k details mila", rooms);
@@ -307,16 +322,18 @@ function AddNewRoom({
       return updatedRooms;
     });
   };
-
   const handlePricePerHourChange = (event) => {
     const { value } = event.target;
     setrooms((prevRooms) => {
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
         ...updatedRooms[indexofrooms],
-        pricePerHour: parseFloat(value),
-        basePrice: parseFloat(value), // Update basePrice as well
+        pricePerHour: parseInt(value),
       };
+      console.log(
+        "updatedRooms--------------------------------------",
+        updatedRooms
+      );
       return updatedRooms;
     });
   };
@@ -327,7 +344,7 @@ function AddNewRoom({
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
         ...currentRoomsData,
-        discountPercentage: parseFloat(value),
+        discountPercentage: parseInt(value),
       };
       return updatedRooms;
     });
@@ -355,10 +372,24 @@ function AddNewRoom({
     setDetails(teampDetail);
   };
 
+  const handleDataUpdate = () => {
+    delete currentRoomsData.bookingStartTime;
+    delete currentRoomsData.bookingEndTime;
+    delete currentRoomsData.discount;
+    delete currentRoomsData.roomDetails;
+    for (const key of Object.keys(currentRoomsData)) {
+      if (`${currentRoomsData[key]}`.length <= 0) {
+        return errorAlert(`${key} field is empty`);
+      }
+    }
+
+    setshowRoomsDetails(false);
+  };
+
   return (
     <>
       <div className={style.addNewStudioTitle}>Add new room</div>
-      <div className={style.addNewRoomPage}>
+      <form className={style.addNewRoomPage}>
         <div
           style={{
             position: showMode ? "relative" : "",
@@ -382,7 +413,7 @@ function AddNewRoom({
             <div className={style.addNewStudioinputBox}>
               <label htmlFor="RoomArea">Room Area</label>
               <input
-                type="text"
+                type="number"
                 id="RoomArea"
                 placeholder="Enter Approx. Area"
                 value={currentRoomsData?.area}
@@ -411,7 +442,7 @@ function AddNewRoom({
                 onChange={handleDiscountChange}
               />
             </div>
-            <div className={style.addNewStudioinputBox}>
+            <div className={style.customInput}>
               <label htmlFor="Dates">Booking Days </label>
               <Select
                 id="Dates"
@@ -420,9 +451,10 @@ function AddNewRoom({
                 value={selectedDate}
                 onChange={setSelectedDate}
                 // style={customStyles}
-                options={filteredDates?.map((item) => ({
+                options={filteredDates?.map((item, index) => ({
                   value: item,
                   label: item,
+                  key: index,
                 }))}
               />
             </div>
@@ -433,25 +465,10 @@ function AddNewRoom({
               <TimePicker.RangePicker
                 format={format}
                 onChange={handelGeneralTime}
-                // defaultValue={[
-                //   dayjs("1:30:00", "HH:mm:ss"),
-                //   dayjs("2:30:56", "HH:mm:ss"),
-                // ]}
-
-                value={
-                  currentRoomsData?.generalStartTime
-                    ? [
-                        dayjs(
-                          `${currentRoomsData.generalStartTime}`,
-                          `${format}`
-                        ),
-                        dayjs(
-                          `${currentRoomsData.generalEndTime}`,
-                          `${format}`
-                        ),
-                      ]
-                    : [dayjs("00:00", `${format}`), dayjs("00:00", `${format}`)]
-                }
+                value={[
+                  dayjs(generalTime.startTime || "00:00", format),
+                  dayjs(generalTime.endTime || "00:00", format),
+                ]}
                 style={{ height: "100%", outline: "none" }}
               />
             </div>
@@ -464,7 +481,7 @@ function AddNewRoom({
               setImages={setImages}
               isEditMode={isEditMode}
             />
-            <div className={style.addNewStudioinputBox}>
+            {/* <div className={style.addNewStudioinputBox}>
               <label htmlFor="roomAmenities">Amenities </label>
 
               <Select
@@ -479,7 +496,11 @@ function AddNewRoom({
                   label: item,
                 }))}
               />
-            </div>
+            </div> */}
+            <MultipleSelect
+              selectedItems={selectedAmenities}
+              setSelectedItems={setSelectedAmenities}
+            />
 
             {details.length === 0 ? (
               <div
@@ -537,7 +558,7 @@ function AddNewRoom({
                 className={style.addTeamDetailbtn}
                 onClick={handleAddDetails}
               >
-                <MdOutlineAddBox /> &nbsp;<div>Add Booking Time</div>
+                <MdOutlineAddBox /> &nbsp;<div>Add Room Details</div>
               </span>
             )}
 
@@ -564,8 +585,8 @@ function AddNewRoom({
                       bt.startTime === ""
                         ? [dayjs("00:00", "HH:mm"), dayjs("00:00", "HH:mm")]
                         : [
-                            dayjs(bt.startTime, "HH:mm"),
-                            dayjs(bt.endTime, "HH:mm"),
+                            dayjs(bt.startTime || "00:00", "HH:mm"),
+                            dayjs(bt.endTime || "00:00", "HH:mm"),
                           ]
                     }
                     style={{
@@ -589,15 +610,37 @@ function AddNewRoom({
               className={style.addTeamDetailbtn}
               onClick={handleAddBookingTime}
             >
-              <MdOutlineAddBox /> &nbsp;<div>Add Booking Time</div>
+              <MdOutlineAddBox /> &nbsp;<div>Add Booking Time </div>
             </span>
           </div>
         </div>
-      </div>
+      </form>
       <StudioFooter
         backOnclick={() => {
-          setshowRoomsDetails(false);
+          if (showMode) {
+            setshowRoomsDetails(false);
+          } else {
+            confirmAlret("Room data will be lost ", "").then((result) => {
+              if (result.isConfirmed) {
+                console.log("default data is =====>", defaultData);
+                console.log("room data is =====>", rooms);
+                setshowRoomsDetails(false);
+                setrooms((prevRooms) => {
+                  const newRooms = [...prevRooms];
+                  newRooms[indexofrooms] = defaultData; // Reset to defaultData
+                  return newRooms;
+                });
+              }
+            });
+          }
+          // handleDataUpdate();
+          // errorAlert("hii");
         }}
+        saveOnclick={() => {
+          handleDataUpdate();
+        }}
+        backType={"reset"}
+        saveDisabled={showMode}
       />
     </>
   );

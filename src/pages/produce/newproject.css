@@ -17,7 +17,7 @@ button {
   height: 10%;
   /* border: 2px solid blue; */
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   padding-left: 2%;
 }
@@ -81,7 +81,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
 
   color: white;
   color: white;
@@ -90,7 +90,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 10%;
 
   color: white;
@@ -109,7 +109,7 @@ p {
   /* border: 2px solid red; */
   width: 60%;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   flex-direction: column;
   align-items: center;
 }
@@ -446,8 +446,8 @@ p {
   color: white;
   display: flex;
   flex-direction: column;
-  align-items: start;
-  justify-content: start;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 .reference-link-div1 {
   width: 100%;
@@ -677,7 +677,7 @@ p {
   /* border: 2px solid yellow; */
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   flex-direction: column;
   gap: 10%;
   padding-top: 5%;
@@ -716,7 +716,7 @@ p {
   height: 70%;
   /* border: 2px solid yellow; */
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   text-align: center;
 }
 .almostDone-btn {
@@ -916,7 +916,7 @@ p {
   width: 80%;
   height: 15%;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: center;
 }
 .BookSession-title > div:first-child {
@@ -1164,7 +1164,7 @@ p {
     font-size: 1.6vmax;
   }
   .almostDone-div {
-    align-items: start;
+    align-items: flex-start;
   }
   .mob-awsome {
     /* border: 2px solid red; */

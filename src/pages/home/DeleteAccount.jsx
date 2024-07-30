@@ -16,6 +16,9 @@ import { IoClose } from "react-icons/io5";
 
 import { useNavigate } from "react-router";
 import DeleteAccountEmailVerify from "../../components/signin/DeleteAccountEmailVerify";
+import deleteAccountapi from "../../services/deleteAccountapi";
+import Swal from "sweetalert2";
+let userid;
 
 function DeleteAccount() {
   const navigate = useNavigate();
@@ -24,6 +27,7 @@ function DeleteAccount() {
   const gotoSignup = () => {
     navigates("/signup");
   };
+  let deletePage = true;
 
   const [deletepopup, setDeletepopup] = useState(false);
   const signin = true;
@@ -32,17 +36,51 @@ function DeleteAccount() {
 
   // State to manage the sign-in steps
   const [deleteAccount, setDeleteAccount] = useState(1);
+  const [disableBtn, setdisableBtn] = useState(false);
 
   // Function to handle mobile number input
   const handleMobileNumberChange = (e) => {
     setMobileNumber(e.target.value);
+  };
+  const [enteredOTP, setEnteredOTP] = useState("");
+  const sendPhoneNumber = () => {
+    setdisableBtn(true);
+    deleteAccountapi
+      .deleteAccount(countryCode + mobileNumber)
+      .then((res) => {
+        console.log("res", res);
+        if (res.status == true) {
+          Swal.fire({
+            icon: "success",
+            title: "OTP send to your mobile number Sucessfully",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          userid = res.userId;
+          console.log("userid", userid);
+          setDeleteAccount(2);
+          setdisableBtn(false);
+        } else {
+          setdisableBtn(false);
+
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: res.message,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
   const handleContinueButtonClick = () => {
     // Check if the mobile number is not empty and has exactly 10 digits
     const trimmedMobileNumber = mobileNumber.trim();
     if (trimmedMobileNumber !== "" && trimmedMobileNumber.length === 10) {
-      setDeleteAccount(2);
+      sendPhoneNumber();
+
       // Perform any other actions as needed
     } else {
       // Display an error message or take appropriate action
@@ -76,10 +114,24 @@ function DeleteAccount() {
   const handelSubmit = (e) => {
     e.preventDefault();
     if (deleteAccount === 3 && deleteAccountEmail !== undefined) {
-      popuptab();
+      deleteAccountapi
+        .permanentDeleteAcc(userid)
+        .then((res) => {
+          console.log("res", res);
+          if (res.status) {
+            popuptab();
+          } else {
+            alert("Please enter a valid 10-digit mobile number.");
+          }
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
     }
   };
+  // const filnaldeleteAccount = () => {
 
+  // };
   return (
     <>
       <div
@@ -159,6 +211,11 @@ function DeleteAccount() {
                         setDeleteCheckOtp={setDeleteCheckOtp}
                         setDeletepopup={setDeletepopup}
                         setDeleteAccount={setDeleteAccount}
+                        sendPhoneNumber={sendPhoneNumber}
+                        setdisableBtn={setdisableBtn}
+                        deletePage={deletePage}
+                        setEnteredOTP={setEnteredOTP}
+                        enteredOTP={enteredOTP}
                       />
                     ) : (
                       <DeleteAccountEmailVerify
@@ -213,15 +270,35 @@ function DeleteAccount() {
                       >
                         <div>
                           {deleteAccount === 2 && signin ? (
-                            <button type="submit" onClick={check_otp_btn}>
+                            <button
+                              type="submit"
+                              onClick={check_otp_btn}
+                              disabled={disableBtn}
+                              style={{
+                                backgroundColor: disableBtn ? "gray" : "",
+                              }}
+                            >
                               submit
                             </button>
                           ) : deleteAccount === 3 && signin ? (
-                            <button type="submit">submit</button>
-                          ) : (
                             <button
                               type="submit"
+                              disabled={disableBtn}
+                              style={{
+                                backgroundColor: disableBtn ? "gray" : "",
+                              }}
+                            >
+                              submit
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              // disabled={disableBtn ? true : false}
+                              disabled={disableBtn}
                               onClick={handleContinueButtonClick}
+                              style={{
+                                backgroundColor: disableBtn ? "gray" : "",
+                              }}
                             >
                               continue
                             </button>

@@ -34,7 +34,7 @@ input[type="number"] {
   /* border: 2px solid red; */
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   flex-direction: column;
   gap: 5%;
   /* overflow: hidden; */
@@ -108,8 +108,8 @@ input[type="number"] {
   height: 40%;
   /* border: 2px solid red; */
   display: flex;
-  align-items: start;
-  justify-content: start;
+  align-items: flex-start;
+  justify-content: flex-start;
   flex-direction: column;
 }
 .onboardStudio > div {
@@ -130,7 +130,7 @@ input[type="number"] {
   height: 15%;
   /* border: 2px solid green; */
   font-size: 1vmax;
-  align-items: start;
+  align-items: flex-start;
 
   font-weight: 600;
 }
@@ -143,7 +143,7 @@ input[type="number"] {
   font-weight: 600;
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 3%;
   margin-top: 2%;
 }
@@ -250,9 +250,12 @@ input[type="number"] {
 }
 .paginationgoto {
   width: 60%;
+  height: 100%;
   /* border: 2px solid pink; */
 }
 .paginationgoto > input {
+  height: 4vh;
+  padding-left: 3%;
   width: 40%;
   border: none;
   outline: none;
@@ -277,7 +280,7 @@ input[type="number"] {
   background-color: #f0f0f0;
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   flex-direction: column;
 }
 .allStudiobtndiv {
@@ -336,7 +339,7 @@ input[type="number"] {
   overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   border-radius: 15px;
   background-color: white;
 }
@@ -447,7 +450,7 @@ td {
   /* border: 2px solid red; */
   height: 6%;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   margin-top: 1%;
 }
 .tableActionbtn > div:nth-child(1) {
@@ -647,7 +650,7 @@ td {
 }
 .addNewStudioPage > div:nth-child(2) {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: center;
   /* border: 2px solid red; */
   min-height: 100%;

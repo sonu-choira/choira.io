@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 
-import singer from "../../assets/img/singer2.png";
+import singer from "../../assets/img/singer3.png";
 import signStyle from "../home/signinBackup.module.css";
 import logo from "../../assets/img/logo-choira.svg";
 import google from "../../assets/img/google.png";
@@ -29,6 +29,7 @@ import { loginUrl, getTokenByUrl } from "../../spotify";
 
 import { httpUrl, nodeUrl } from "../../restservice";
 import { Alert } from "antd";
+import { errorAlert, sucessAlret } from "../admin/layout/Alert";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -409,33 +410,42 @@ function Signin() {
   };
 
   // api integration ----------------------------------------
-  const [apiOtp, setApiOtp] = useState();
+
   const checkLoginData = () => {
-    const role = mobileNumber === "9898989898" ? "tester" : "user";
-    AuthService.login(mobileNumber, "NUMBER", role).then((response) => {
+    // const role = mobileNumber === "9898989898" ? "admin" : "user";
+    AuthService.login(countryCode + mobileNumber, "NUMBER").then((response) => {
       console.log("res------", response);
+      console.log("res------", response.user);
+      localStorage.setItem("adminData", JSON.stringify(response.user));
       if (response.status) {
-        TokenService.setUser(response.user.role);
+        // TokenService.setUser(response.user.role);
         TokenService.setData("token", response.token);
+        setSign(2);
+        sucessAlret(response.message);
       } else {
         console.log("Not get Token");
+        errorAlert(response.message);
       }
 
-      if (response.user.role === "admin") {
-        console.log(response.newUser);
-        navigate("/adminDashboard/Apps&More/studio");
-      } else if (response.newUser === true) {
-        console.log(response.newUser);
-        localStorage.removeItem("token");
-        setApiOtp(response.otp);
-        setSign(2);
-      }
+      // if (response.user.role === "admin") {
+      //   console.log(response.newUser);
+      //   setSign(2);
+      //   navigate("/adminDashboard/Apps&More/studio");
+      // } else if (response.newUser === true) {
+      //   console.log(response.newUser);
+      //   localStorage.removeItem("token");
+      //   setApiOtp(response.otp);
+      //   setSign(2);
+      // }
     });
   };
 
   const handleMobileNumberChange = (e) => {
     setMobileNumber(e.target.value);
     // console.log(mobileNumber);
+  };
+  const gotoBooking = () => {
+    navigate("/adminDashboard");
   };
 
   const handleContinueButtonClick = (e) => {
@@ -457,9 +467,35 @@ function Signin() {
     setCountryCode(code);
   };
   let [checkOtp, setCheckOtp] = useState(true);
+  const [enteredOTP, setEnteredOTP] = useState("");
+
+  const source = axios.CancelToken.source();
+
   const check_otp_btn = () => {
-    setCheckOtp(false);
+    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, "admin", {
+      cancelToken: source.token,
+    }).then((response) => {
+      console.log("res------", response);
+      if (response.status) {
+        TokenService.setData("token", response.token);
+        sucessAlret("OTP is Correct!", "Welcome back 😊");
+
+        gotoBooking();
+        setCheckOtp(false);
+        localStorage.setItem("isSignin", "true");
+      } else {
+        errorAlert("OTP is Incorrect!", "Please try again 😕");
+        console.log("Not get Token");
+      }
+    });
   };
+
+  useEffect(() => {
+    return () => {
+      source.cancel("Operation canceled by the user.");
+    };
+  }, [source]);
+
   const gotoHome = () => {
     navigate("/home");
   };
@@ -483,7 +519,7 @@ function Signin() {
       /> */}
 
       <div className={signStyle.wrapper}>
-        <form>
+        <form onSubmit={(event) => event.preventDefault()}>
           <div className={signStyle.main}>
             <div className={signStyle.singer}>
               <img src={singer} alt="Singer" />
@@ -527,7 +563,10 @@ function Signin() {
                         countryCode={countryCode}
                         checkOtp={checkOtp}
                         setCheckOtp={setCheckOtp}
-                        apiOtp={apiOtp}
+                        // apiOtp={apiOtp}
+                        checkLoginData={checkLoginData}
+                        enteredOTP={enteredOTP}
+                        setEnteredOTP={setEnteredOTP}
                       />
                     ) : (
                       <SignUpDetails />
@@ -587,7 +626,7 @@ function Signin() {
                       >
                         <div>
                           {sign === 2 && signin ? (
-                            <button type="button" onClick={check_otp_btn}>
+                            <button type="submit" onClick={check_otp_btn}>
                               submit
                             </button>
                           ) : (

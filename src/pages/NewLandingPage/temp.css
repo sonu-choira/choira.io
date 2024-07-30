@@ -92,7 +92,7 @@ span {
   /* border: 2px solid blue; */
   margin-left: 5%;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: flex-start;
 }
 .page1-main-content {
@@ -308,7 +308,7 @@ span {
   height: 7%;
   /* border: 2px solid yellow; */
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: center;
 }
 .landing-page-3-main button {
@@ -601,7 +601,7 @@ span {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: start;
+  align-items: flex-start;
 }
 .lp5-backed > div:nth-child(2) {
   height: 70%;
@@ -669,7 +669,7 @@ span {
   display: flex;
   flex-direction: column;
   width: 100%;
-  align-items: start;
+  align-items: flex-start;
 }
 .lp6-main > div > div:nth-child(1) > div:nth-child(3) {
   flex-direction: row;
@@ -754,8 +754,8 @@ span {
     top: 0;
     right: -200%;
     display: flex;
-    align-items: start;
-    justify-content: start;
+    align-items: flex-start;
+    justify-content: flex-start;
     flex-direction: column;
     transition: 1s ease;
   }
@@ -784,7 +784,7 @@ span {
     font-size: 3vmax;
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     padding-left: 5%;
     gap: 5%;
   }
@@ -1155,7 +1155,7 @@ span {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: end;
+    align-items: flex-end;
     background-image: url(../../assets/img/landingPageImg/mopfooter2.png);
     background-repeat: no-repeat;
     background-position: bottom left;
@@ -1236,7 +1236,7 @@ span {
   .mob-lp6-social {
     display: flex;
     gap: 3%;
-    align-items: end;
+    align-items: flex-end;
     padding-top: 2%;
   }
 }

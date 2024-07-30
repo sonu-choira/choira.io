@@ -62,7 +62,9 @@ function BookingActionBar({
   const gotoAddNew = (bookingPageCount) => {
     if (bookingPageCount === "c1") {
       navigate("/studio/add", {
-        state: { navCount: 3, bookingPageCount: bookingPageCount },
+
+        state: { navCount: 4, bookingPageCount: bookingPageCount },
+
       });
     } else {
       navigate("/service/musicProduction/add", {
@@ -71,7 +73,9 @@ function BookingActionBar({
     }
   };
   const gotoSlotBooking = () => {
-    navigate("/service/AddSlotBooking", {
+
+    router.push("/adminDashboard/Bookings/AddSlotBooking", {
+
       state: { navCount: 4 },
     });
   };
@@ -142,6 +146,7 @@ function BookingActionBar({
         <div style={{ justifyContent: bookingPageCount === "c1" ? "" : "end" }}>
           <Button
             name={"Card view"}
+            disabled={true}
             icon={<FaTableCellsLarge />}
             style={{
               height: "50%",
@@ -152,6 +157,7 @@ function BookingActionBar({
           />
           <Button
             name={"Filter"}
+            disabled={true}
             icon={<FaFilter />}
             style={{
               height: "50%",
@@ -162,6 +168,7 @@ function BookingActionBar({
           />
           <Button
             name={"Share"}
+            disabled={true}
             icon={<FaShare />}
             style={{
               height: "50%",

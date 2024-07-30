@@ -22,6 +22,7 @@ import ChoiraLoader from "./components/loader/ChoiraLoader";
 import AllStudioPageDetailsPage from "./pages/admin/studios/AllStudioPageDetailsPage.jsx";
 import AddNewStudio from "../src/components/adminStudio/AddNewStudio.jsx";
 import AddNewProduction from "../src/components/adminStudio/appsAndMore/AddNewProduction.jsx";
+import StudioPartners from "./components/teamsSection/StudioPartners.jsx";
 
 // import Signup from "./pages/home/Signup.jsx";
 
@@ -55,6 +56,13 @@ const EditProduction = lazy(()=> import("../src/components/adminStudio/appsAndMo
 const AddProduction = lazy(()=> import("../src/components/adminStudio/appsAndMore/AddNewProduction.jsx"))
 const ShowBookingsDetail = lazy(()=> import("../src/components/adminStudio/booking/ShowBookingDetails.jsx"))
 const SlotBooking = lazy(()=> import("../src/components/adminStudio/SlotBooking.jsx"))
+const ChooseTimeSlot = lazy(()=> import("../src/components/adminStudio/ChooseTimeSlot.jsx"))
+const AddNewStudioPartners = lazy(()=> import("../src/components/teamsSection/AddNewStudioPartners.jsx"))
+const AddNewArm = lazy(()=> import("../src/components/teamsSection/AddNewArm.jsx"))
+
+
+
+
           {/* admin page  ends ========================> */}
 
 
@@ -92,13 +100,18 @@ const Routing = () => {
           <Route path='/adminDashboard/:navOption/:page' element={<AdminDashboardLayout/>} />
           <Route path='/adminDashboard/:navOption' element={<AdminDashboardLayout/>} />
           <Route path='/adminDashboard' element={<AdminDashboardLayout/>} />
-          <Route exact path='/booking' element={<BookingPages/>} />
           <Route exact path='/studio/edit' element={<AddNewStudio/>} />
           <Route exact path='/studio/add' element={<AddNewStudio/>} />
           <Route exact path='/service/musicProduction/edit' element={<AddNewProduction/>} />
           <Route exact path='/service/musicProduction/add' element={<AddNewProduction/>} />
           <Route exact path='/service/showBookingDetails' element={<ShowBookingsDetail/>} />
-          <Route exact path='/service/AddSlotBooking' element={<SlotBooking/>} />
+          <Route exact path='/adminDashboard/Bookings/AddSlotBooking' element={<SlotBooking/>} />
+          <Route exact path='/adminDashboard/Teams/AddStudioPatner' element={<AddNewStudioPartners/>} />
+          <Route exact path='/adminDashboard/Teams/AddNewArm' element={<AddNewArm/>} />
+        
+
+
+          {/* <Route exact path='/service/AddSlotBooking' element={<ChooseTimeSlot/>} /> */}
           {/* admin page route ends ========================> */}
 
         </Routes>

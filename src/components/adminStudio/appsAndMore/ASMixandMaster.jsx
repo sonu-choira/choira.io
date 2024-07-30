@@ -21,6 +21,12 @@ import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import moment from "moment";
+
+import { errorAlert } from "../../../pages/admin/layout/Alert";
+import appAndmoreApi from "../../../services/appAndmoreApi";
+import { GoEye } from "react-icons/go";
+import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 
 let PageSize = 10;
 
@@ -34,6 +40,7 @@ function ASMixandMaster({
   setTotalPage,
   sendFilterDataToapi,
 }) {
+  let loading_timeout = null;
   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
     sendFilterDataToapi = {};
@@ -73,11 +80,40 @@ function ASMixandMaster({
     });
   };
   const [activityStatus, setActivityStatus] = useState({});
-  const handleSwitchChange = (studioId) => {
-    setActivityStatus((prevStatus) => ({
-      ...prevStatus,
-      [studioId]: !prevStatus[studioId], // Toggle the switch state
-    }));
+  const [showloader, setShowloader] = useState(false);
+  const [pid, setPid] = useState(0);
+  const handleSwitchChange = (studioId, isActive) => {
+    isActive == 1 ? (isActive = 0) : (isActive = 1);
+    setShowloader(true);
+    appAndmoreApi
+      .updateServiceStatus(studioId, isActive)
+
+      .then((response) => {
+        console.log(
+          "status response=======>",
+          response.updatedService.isActive
+        );
+        setProducts((prevState) => {
+          return prevState.map((product) => {
+            if (product._id === studioId) {
+              return {
+                ...product,
+                isActive: response.updatedService.isActive,
+              };
+            }
+            return product;
+          });
+        });
+
+        loading_timeout = setTimeout(() => {
+          setShowloader(false);
+        }, 700);
+      })
+      .catch((error) => {
+        console.log("error=======>", error);
+        errorAlert(error.message || "Something went wrong");
+        setShowloader(false);
+      });
   };
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -109,6 +145,12 @@ function ASMixandMaster({
     }
   };
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(loading_timeout);
+    };
+  }, []);
+
   return (
     <>
       <div className={style.studioTabelDiv}>
@@ -127,12 +169,16 @@ function ASMixandMaster({
 
                 <th>No. of services</th>
                 <th>Created on</th>
-                <th>Activity Status</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody className={style.tbody}>
               {products.length === 0 ? (
-                <ChoiraLoder2 />
+                <tr>
+                  <td>
+                    <ChoiraLoder2 />
+                  </td>
+                </tr>
               ) : (
                 products.map((product) => {
                   return (
@@ -143,6 +189,7 @@ function ASMixandMaster({
                           alignItems: "center",
                           height: "100%",
                         }}
+                        title={product.fullName}
                       >
                         <div className={style.studioImage} style={{}}>
                           {product.servicePhotos ? (
@@ -157,34 +204,36 @@ function ASMixandMaster({
                             <img src={imageNotFound} alt="" />
                           )}
                         </div>
-                        &nbsp;&nbsp;{product.fullName}
+                        &nbsp;&nbsp;
+                        <CopyToClipboard  textToCopy={product?.fullName} />
                       </td>
-                      <td>Starting from ₹{product.price}</td>
+                      <td>Starting from ₹{product.pricing?.["IN"]?.price}</td>
                       <td>
                         {product.totalPlans}
                         <br />
                         <small> {product.state}</small>
                       </td>
-                      <td>{product.creationTimeStamp}</td>
+                      <td>
+                        {moment(product.creationTimeStamp).format(
+                          // "DD/MM/YYYY hh:mm:ss a"
+
+                          "Do MMM  YY, hh:mm a "
+                        )}
+                      </td>
 
                       <td className={style.tableActionbtn}>
                         <div>
-                          <label className="switch">
-                            <input
-                              type="checkbox"
-                              checked={product.isActive === 1}
-                              onChange={() =>
-                                handleSwitchChange(
-                                  product._id,
-                                  product.isActive
-                                )
-                              }
-                            />
-                            <span className="slider"></span>
-                          </label>
+                          <Switch
+                            isloading={pid === product._id && showloader}
+                            status={product.isActive}
+                            onClick={() => {
+                              setPid(product._id);
+                              handleSwitchChange(product._id, product.isActive);
+                            }}
+                          />
                         </div>
                         <div>
-                          <GrShare
+                          <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               gotoShowMixAndMaster(product._id);

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import style from "../../../../pages/admin/studios/studio.module.css";
-import { DatePicker } from "antd";
+import { TbFilterCancel } from "react-icons/tb";
+import { width } from "@mui/system";
 import { BiSearchAlt } from "react-icons/bi";
 import appAndmoreApi from "../../../../services/appAndmoreApi";
 import Button from "../Button";
-import { width } from "@mui/system";
-import { TbFilterCancel } from "react-icons/tb";
+import style from "../../../../pages/admin/studios/studio.module.css";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
+import userApi from "../../../../services/userApi";
+const { RangePicker } = DatePicker;
 
 function DateAndSearchFilter({
-  setProducts,
   setTotalPage,
   bookingPageCount,
   filterNav,
@@ -21,7 +23,43 @@ function DateAndSearchFilter({
   setSelectedStatus,
   setPriceFilter,
   setShortby,
+  setProducts,
+  pageCount,
+  setPageCount,
+  userFiler,
+  userFilterText,
+  setUserFilterText,
+  userAllFilterData,
+  csstyle,
+  dateDisable,
+  searchDisable,
 }) {
+  const rangePresets = [
+    {
+      label: "Last 7 Days",
+      value: [dayjs().add(-7, "d"), dayjs()],
+    },
+    {
+      label: "Last 14 Days",
+      value: [dayjs().add(-14, "d"), dayjs()],
+    },
+    {
+      label: "Last 30 Days",
+      value: [dayjs().add(-30, "d"), dayjs()],
+    },
+    {
+      label: "Last 90 Days",
+      value: [dayjs().add(-90, "d"), dayjs()],
+    },
+    {
+      label: "Last 6 Month",
+      value: [dayjs().add(-180, "d"), dayjs()],
+    },
+    {
+      label: "Last year",
+      value: [dayjs().add(-365, "d"), dayjs()],
+    },
+  ];
   // console.log(sendFilterDataToapi, "details ke andr mila");
   const onChange = (date, dateString) => {
     console.log(dateString);
@@ -31,6 +69,24 @@ function DateAndSearchFilter({
       sendDataToApi();
     } else {
       hitallstudioApi();
+    }
+  };
+
+  const onRangeChange = (dates, dateStrings) => {
+    if (dates) {
+      console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+      if (userFiler) {
+        userAllFilterData.startDate = dateStrings[0];
+        userAllFilterData.endDate = dateStrings[1];
+        sendUserFilterDataToApi();
+      }
+    } else {
+      if (userFiler) {
+        userAllFilterData.startDate = undefined;
+        userAllFilterData.endDate = undefined;
+        sendUserFilterDataToApi();
+      }
+      console.log("Clear");
     }
   };
   // useEffect(() => {
@@ -45,22 +101,17 @@ function DateAndSearchFilter({
   useEffect(() => {
     // console.log(typeof sendFilterDataToapi);
     // let updatedfilterdata =
-
-    sendFilterDataToapi.searchText = searchQuery;
+    if (searchQuery) {
+      sendFilterDataToapi.searchText = searchQuery;
+    }
 
     // console.log(sendFilterDataToapi);
   }, [searchQuery]);
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      sendDataToApi();
-    }
-  };
-
   const sendDataToApi = () => {
     // Here you can send the data to your API
     console.log("Sending data to API:", searchQuery);
-    let searchText = searchQuery.trim();
+    let searchText = searchQuery?.trim();
     // Replace the above line with your actual API call
     // let limit = 10;
 
@@ -98,9 +149,44 @@ function DateAndSearchFilter({
   };
 
   const handleChange = (event) => {
-    setSearchQuery(event.target.value.trim());
+    if (userFiler) {
+      setUserFilterText(event.target.value);
+    } else {
+      setSearchQuery(event.target.value);
+    }
   };
 
+  const sendUserFilterDataToApi = () => {
+    setProducts([]);
+    setPageCount(1);
+    userAllFilterData.searchUser = userFilterText?.trim();
+
+    userApi
+      .getAllUser(pageCount, userAllFilterData)
+      .then((response) => {
+        console.log(`====================> response `, response);
+        console.log("response.data.users", response.users);
+        if (response.users) {
+          setProducts(response.users);
+          setTotalPage(response.paginate.totalPages);
+
+          // setPageCount(response.paginate.page);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching studios:", error);
+      });
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      if (userFiler) {
+        sendUserFilterDataToApi();
+      } else {
+        sendDataToApi();
+      }
+    }
+  };
   const hitallstudioApi = () => {
     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
       // Corrected the id assignments
@@ -144,64 +230,80 @@ function DateAndSearchFilter({
         .catch((error) => {
           console.error("Error fetching studios:", error);
         });
+    } else {
     }
   };
-  let filterData = { ...sendFilterDataToapi };
-  delete filterData.sortBy;
-  delete filterData.page;
-  delete filterData.serviceType;
-  let hasFilter = false;
-  for (const key in filterData) {
-    if (filterData[key]) {
-      hasFilter = true;
-      break;
-    }
-  }
-  const clearAllFilter = () => {
-    const keys = Object.keys(sendFilterDataToapi);
+  // let filterData = { ...sendFilterDataToapi };
+  // let filterData2 = { ...userAllFilterData };
+  // delete filterData.sortBy;
+  // delete filterData.page;
+  // delete filterData.serviceType;
+  // let hasFilter = false;
+  // for (const key in filterData) {
+  //   if (filterData[key]) {
+  //     hasFilter = true;
+  //     break;
+  //   }
+  // }
+  // for (const key in filterData2) {
+  //   if (filterData[key]) {
+  //     hasFilter = true;
 
-    keys.forEach((key) => {
-      sendFilterDataToapi[key] = "";
-    });
-    console.log(sendFilterDataToapi);
-    try {
-      if (bookingPageCount == "c1") {
-        // setSelectedCity([]);
-        // setShortby("creationTimeStamp:asc");
-        // setSelectedRoom([]);
-        // setSelectedStatus([]);
-        // setSearchQuery("");
-        // setPriceFilter({
-        //   minPrice: "",
-        //   maxPrice: "",
-        // });
-        // hitallstudioApi();
-        window.location.reload();
-      } else {
-        // setSearchQuery("");
-        // hitallstudioApi();
-        window.location.reload();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-    console.log(sendFilterDataToapi, "sendFilterDataToapi");
+  //     break;
+  //   }
+  // }
+
+  const filterData = sendFilterDataToapi ? { ...sendFilterDataToapi } : {};
+  const filterData2 = userAllFilterData ? { ...userAllFilterData } : {};
+
+  // Delete specified keys from filterData
+  ["sortBy", "page", "serviceType"].forEach((key) => delete filterData[key]);
+
+  // Check if there are any truthy values in filterData or filterData2
+  if (filterData2.sortDirection == "desc") {
+    delete filterData2.sortDirection;
+  }
+  const hasFilter =
+    Object.values(filterData).some(
+      (value) => value !== "" && value !== undefined
+    ) ||
+    Object.values(filterData2).some(
+      (value) => value !== "" && value !== undefined
+    );
+
+  const clearAllFilter = () => {
+    window.location.reload();
   };
   // console.log(sendFilterDataToapi);
   return (
     <>
-      <div className={style.searchDiv}>
+      <div className={style.searchDiv} style={csstyle}>
         <div>
-          <DatePicker onChange={onChange} className={style.antCustomcss} />
+          {userFiler ? (
+            <RangePicker
+              presets={rangePresets}
+              onChange={onRangeChange}
+              className={style.antCustomcss}
+              disabled={dateDisable}
+            />
+          ) : (
+            <DatePicker
+              onChange={onChange}
+              style={{ width: "100%", height: "100%" }}
+              disabled={dateDisable}
+            />
+          )}
         </div>
         <div>
           <BiSearchAlt /> <br />
           <input
             type="text"
             placeholder="Search"
-            value={searchQuery}
+            value={!userFiler ? searchQuery : userFilterText}
             onChange={handleChange}
             onKeyPress={handleKeyPress}
+            disabled={searchDisable}
+            className={searchDisable && style.disabled}
           />
         </div>
         {hasFilter ? (

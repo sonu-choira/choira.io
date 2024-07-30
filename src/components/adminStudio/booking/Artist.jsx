@@ -12,11 +12,15 @@ import Button from "../../../pages/admin/layout/Button";
 import Switch from "../../../pages/admin/layout/Switch";
 import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
+import { GoEye } from "react-icons/go";
 let PageSize = 10;
 
 function Artist() {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
+
+  // const controller = new AbortController()
+  // const {signal} = controller
 
   const fetchProducts = async () => {
     try {
@@ -31,7 +35,7 @@ function Artist() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    // fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -117,7 +121,7 @@ function Artist() {
                         </select>
                       </div>
                       <div style={{ width: "25%" }}>
-                        <GrShare style={{ cursor: "pointer" }} />
+                        <GoEye style={{ cursor: "pointer" }} />
 
                         <RiDeleteBin5Fill
                           style={{ color: "red", cursor: "pointer" }}

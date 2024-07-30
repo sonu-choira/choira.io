@@ -8,26 +8,39 @@ import MusicProduction from "../../../components/adminStudio/booking/MusicProduc
 import MixMaster from "../../../components/adminStudio/booking/MixMaster";
 import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 import bookingPageApi from "../../../services/bookingPageApi";
-
+import { clearEmptyField } from "../../../utils/helperFunction";
+let sendFilterDataToapi = {
+  limit: 8,
+  bookingType: "",
+  category: "",
+  startDate: "",
+  endDate: "",
+  searchField: "",
+  pageCount: 1,
+};
+// let hasFilter = false;
 function BookingPages() {
-  const [bookingPageCount, setBookingPageCount] = useState("c1");
+  const [bookingPageCount, setBookingPageCount] = useState("c0");
   const [products, setProducts] = useState([]);
-  let { page: paramData } = useParams();
+  const [totalPage, setTotalPage] = useState();
+  const [pageCount, setPageCount] = useState(1);
+  // let { page: paramData } = useParams();
 
   // setBookingPageCount("c2");
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    if (paramData == "studio") {
+    if (pathname.includes("/Bookings/studio")) {
       setBookingPageCount("c1");
-    } else if (paramData == "musicproduction") {
+    } else if (pathname.includes("/Bookings/musicproduction")) {
       setBookingPageCount("c2");
-    } else if (paramData == "mixmaster") {
+    } else if (pathname.includes("/Bookings/mixmaster")) {
       setBookingPageCount("c3");
     }
-  }, [paramData]);
+  }, [pathname, bookingPageCount]);
 
   const navigate = useNavigate();
   const gotoSignin = () => {
@@ -87,8 +100,15 @@ function BookingPages() {
       // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
+      let data = {
+        limit: 8,
+
+        category: idToUse,
+        pageCount: pageCount,
+      };
+
       bookingPageApi
-        .musicProduction("100", idToUse, 1)
+        .musicProduction(data)
         .then((response) => {
           console.log(
             `====================> response ${bookingPageCount} `,
@@ -96,23 +116,41 @@ function BookingPages() {
           );
           if (response.data) {
             setProducts(response.data);
+            setTotalPage(response.paginate.totalPages);
           }
         })
         .catch((error) => {
           console.error("Error fetching studios:", error);
         });
     } else if (bookingPageCount === "c1") {
-      const limit = 10;
-      const active = 1;
+      // for (const key in sendFilterDataToapi) {
+      //   if (sendFilterDataToapi[key]) {
+      //     hasFilter = true;
+      //     break;
+      //   }
+
+      const limit = 8;
+      // const active = "";
       const bookingType = 1;
       const category = bookingPageCount;
+      // let data = {
+      //   limit: 6,
+      //   bookingType: -1,
+      //   category: bookingPageCount,
+      //   pageCount: pageCount,
+      // };
+      sendFilterDataToapi.category = bookingPageCount;
+      sendFilterDataToapi.pageCount = pageCount;
+
       // const type = bookingPageCount;
+      clearEmptyField(sendFilterDataToapi);
       bookingPageApi
-        .getBookings(limit, active, bookingType, category)
+        .getBookings(sendFilterDataToapi)
         .then((response) => {
           console.log("====================> response C1", response);
           if (response.data) {
             setProducts(response.data);
+            setTotalPage(response.paginate.totalPages);
             console.log("pagekaDetail", response);
           }
         })
@@ -120,7 +158,7 @@ function BookingPages() {
           console.error("Error fetching studios:", error);
         });
     }
-  }, [bookingPageCount]);
+  }, [bookingPageCount, pageCount]);
   return (
     <>
       <div className={style.allStudioDetailsPage}>
@@ -134,6 +172,13 @@ function BookingPages() {
             setProducts={setProducts}
             handleChange={handleChange}
             getStatusColor={getStatusColor}
+            // setTotalPage={setTotalPage}
+            bookingPageCount={bookingPageCount}
+            setPageCount={setPageCount}
+            setTotalPage={setTotalPage}
+            pageCount={pageCount}
+            totalPage={totalPage}
+            sendFilterDataToapi={sendFilterDataToapi}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
@@ -142,6 +187,11 @@ function BookingPages() {
             setProducts={setProducts}
             handleChange={handleChange}
             getStatusColor={getStatusColor}
+            bookingPageCount={bookingPageCount}
+            setPageCount={setPageCount}
+            setTotalPage={setTotalPage}
+            pageCount={pageCount}
+            totalPage={totalPage}
           />
         ) : bookingPageCount === "c3" ? (
           <MixMaster
@@ -149,6 +199,11 @@ function BookingPages() {
             setProducts={setProducts}
             handleChange={handleChange}
             getStatusColor={getStatusColor}
+            bookingPageCount={bookingPageCount}
+            setPageCount={setPageCount}
+            setTotalPage={setTotalPage}
+            pageCount={pageCount}
+            totalPage={totalPage}
           />
         ) : (
           <Artist />

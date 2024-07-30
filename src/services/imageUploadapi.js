@@ -3,11 +3,12 @@ import api from "./api";
 
 import axios from 'axios';
 import FormData from 'form-data';
+import Swal from "sweetalert2";
 
 class imgapi {
   multipleImgUpload = async (imgfile) => {
     console.log("imgfile Mila hai", imgfile);
-
+    const response = {}
     try {
       const formData = new FormData();
       imgfile.forEach((file) => {
@@ -16,7 +17,11 @@ class imgapi {
 
       const config = {
         headers: {
-          'Content-Type': `multipart/form-data; boundary=${formData._boundary}` // Manually set the boundary
+          'Content-Type': `multipart/form-data; boundary=${formData._boundary}` ,
+          
+        
+
+         
         }
       };
 
@@ -27,10 +32,23 @@ class imgapi {
       );
 
       console.log("multiple image postdata ===>", response.data);
+      response.status = true
       return response.data;
     } catch (error) {
-      console.error("Error uploading multiple images:", error);
-      throw error;
+      console.error("Error uploading multiple images:", error.toJSON().message);
+      if(error.toJSON().message === "Network Error"){
+        // alert("Check your internet connection or Image size")
+        Swal.fire({
+          icon: "error",
+          title: "Network Error or Image size",
+          text: "Check your internet connection or Image size",
+          showConfirmButton: true,
+        });
+      }
+     
+      // throw error;
+       response.status = false
+       return response
     }
   };
 

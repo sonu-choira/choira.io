@@ -55,10 +55,16 @@ function AddmultipleServises({
 
   const handleInputChange = (event, index, field) => {
     const newTeams = [...service];
-    newTeams[index][field] = event.target.value;
+
+    // Check if the input type is number and convert the value
+    const value =
+      event.target.type === "number"
+        ? parseInt(event.target.value, 10)
+        : event.target.value;
+
+    newTeams[index][field] = value;
     setService(newTeams);
   };
-
   const handleCancelImage = (index) => {
     const newTeams = [...service];
     newTeams[index].photo_url = null;
@@ -112,6 +118,8 @@ function AddmultipleServises({
                   placeholder="Enter Services Name"
                   value={team.name}
                   onChange={(event) => handleInputChange(event, index, "name")}
+                  readOnly
+                  disabled
                 />
 
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -126,12 +134,14 @@ function AddmultipleServises({
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
-                    type="text"
+                    type="number"
                     placeholder=""
                     value={team.price}
                     onChange={(event) =>
                       handleInputChange(event, index, "price")
                     }
+                    readOnly
+                    disabled
                   />
                 </div>
                 <div className={style.editpencil}>
@@ -193,6 +203,8 @@ function AddmultipleServises({
                   placeholder="Name"
                   value={team.name}
                   onChange={(event) => handleInputChange(event, index, "name")}
+                  readOnly
+                  disabled
                 />
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <small
@@ -206,12 +218,14 @@ function AddmultipleServises({
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
-                    type="text"
+                    type="number"
                     placeholder=""
                     value={team.price}
                     onChange={(event) =>
                       handleInputChange(event, index, "price")
                     }
+                    readOnly
+                    disabled
                   />
                 </div>
                 <div className={style.editpencil}>
@@ -238,7 +252,7 @@ function AddmultipleServises({
             className={style.addTeamDetailbtn}
             onClick={handleAddTeamDetail}
           >
-            <MdOutlineAddBox /> &nbsp;<div>Add Person</div>
+            <MdOutlineAddBox /> &nbsp;<div>Add Service</div>
           </span>
         </div>
       )}

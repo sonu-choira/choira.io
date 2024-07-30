@@ -26,6 +26,8 @@ import AddNewRoom from "./AddNewRoom";
 import Button from "../../pages/admin/layout/Button";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import Swal from "sweetalert2";
+import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
+import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -69,13 +71,17 @@ function AddNewStudio({ setSelectTab }) {
       pricePerHour: "",
       discountPercentage: "",
       bookingDays: [],
-      generalStartTime: "",
-      generalEndTime: "",
+      generalTime: {
+        startTime: "",
+        endTime: "",
+      },
+      // generalStartTime: "",
+      // generalEndTime: "",
       availabilities: [],
       bookingStartTime: [],
       bookingEndTime: [],
       roomPhotos: [],
-      basePrice: "",
+      basePrice: 0,
 
       amenities: [],
       details: [],
@@ -88,12 +94,17 @@ function AddNewStudio({ setSelectTab }) {
   }, [teamDetails]);
 
   const [studioDetails, setStudioDetails] = useState({
-    aboutUs: {},
+    aboutUs: {
+      aboutUs: "",
+      services: "",
+      infrastructure: "",
+    },
     address: "",
     amenities: [],
-    area: "",
+    area: 0,
     availabilities: [],
     city: "",
+    country: "",
     clientPhotos: [],
     creationTimeStamp: "",
     featuredReviews: "",
@@ -106,7 +117,7 @@ function AddNewStudio({ setSelectTab }) {
     maxGuests: "",
     overallAvgRating: "",
     pincode: "",
-    pricePerHour: "",
+    pricePerHour: 0,
     reviews: {},
     roomsDetails: [],
     state: "",
@@ -116,34 +127,60 @@ function AddNewStudio({ setSelectTab }) {
     _id: "",
   });
 
-  // const [saveAddData, setsaveAddData] = useState({
-  //   aboutUs: {},
-  //   address: "",
-  //   amenities: [],
-  //   area: "",
-  //   availabilities: [],
-  //   city: "",
-  //   clientPhotos: [],
-  //   creationTimeStamp: "",
-  //   featuredReviews: "",
-  //   fullName: "",
-  //   isActive: "",
-  //   latitude: "",
-  //   location: { coordinates: [], type: "" },
-  //   longitude: "",
-  //   mapLink: "",
-  //   maxGuests: "",
-  //   overallAvgRating: "",
-  //   pincode: "",
-  //   pricePerHour: "",
-  //   reviews: {},
-  //   roomsDetails: [],
-  //   state: "",
-  //   studioPhotos: [],
-  //   teamDetails: [],
-  //   totalRooms: "",
-  //   _id: "",
-  // });
+  const checkEmptyFields = (checkData) => {
+    let hasError = false;
+    const errorFields = [];
+
+    const errorAlert = (message) => {
+      // Placeholder for your error alert function
+      console.error(message);
+    };
+
+    const isEmpty = (value) => {
+      return (
+        value === null ||
+        value === "" ||
+        (Array.isArray(value) && value.length === 0) ||
+        (typeof value === "object" &&
+          !Array.isArray(value) &&
+          value !== null &&
+          Object.keys(value).length === 0)
+      );
+    };
+
+    const check = (data) => {
+      for (const key of Object.keys(data)) {
+        const value = data[key];
+
+        if (isEmpty(value)) {
+          errorAlert(`${key} field is empty`);
+          hasError = true; // Set hasError to true if an empty field is found
+          errorFields.push(key); // Collect the field name with error
+          return; // Exit on first empty field
+        }
+
+        if (
+          typeof value === "object" &&
+          !Array.isArray(value) &&
+          value !== null
+        ) {
+          if (check(value)) hasError = true; // Recursively check nested objects
+        }
+
+        if (Array.isArray(value)) {
+          for (const item of value) {
+            if (typeof item === "object" && item !== null) {
+              if (check(item)) hasError = true; // Recursively check items in arrays
+            }
+          }
+        }
+      }
+      return hasError;
+    };
+
+    check(checkData);
+    return { hasError, errorFields };
+  };
 
   useEffect(() => {
     setStudioDetails((prevData) => ({
@@ -242,13 +279,8 @@ function AddNewStudio({ setSelectTab }) {
 
     studioDetails.studioPhotos.forEach((element, index) => {
       if (typeof element === "object") {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Please upload STUDIO images first!",
-          showConfirmButton: false,
-          timer: 1800,
-        });
+        errorAlert("Please upload STUDIO images first!");
+
         hasError = true;
       }
     });
@@ -256,31 +288,96 @@ function AddNewStudio({ setSelectTab }) {
     studioDetails.roomsDetails.forEach((room, roomIndex) => {
       room.roomPhotos.forEach((element, photoIndex) => {
         if (typeof element === "object") {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: `Please upload images for room  ${room.roomName.toUpperCase()} first!`,
-            showConfirmButton: false,
-            timer: 2000,
-          });
+          errorAlert(
+            `Please upload images for room  ${room.roomName.toUpperCase()} first!`
+          );
           hasError = true;
         }
       });
     });
 
+    const correctDataTypes = (data) => {
+      return {
+        ...data,
+        area: parseInt(data.area, 10),
+        maxGuests: data.maxGuests === "" ? null : data.maxGuests,
+        featuredReviews: Array.isArray(data.featuredReviews)
+          ? data.featuredReviews
+          : [],
+        amenities: data.amenities.map((amenity) => ({
+          ...amenity,
+          id: amenity.id.toString(),
+        })),
+        roomsDetails: data.roomsDetails.map((room) => ({
+          ...room,
+          area: room?.area?.toString(),
+          pricePerHour: parseInt(room.pricePerHour, 10),
+
+          discountPercentage: parseInt(room.discountPercentage, 10),
+        })),
+      };
+    };
+
     if (!hasError) {
       const updatedStudioDetails = {
         ...studioDetails,
-        roomsDetails: studioDetails.roomsDetails.map((room) => ({
-          ...room,
-          bookingDays: room.bookingDays.map((day, index) => ({
-            id: index,
-            name: day,
-          })),
-        })),
+        roomsDetails: studioDetails.roomsDetails.map((room) => {
+          const isArrayOfStrings =
+            Array.isArray(room.bookingDays) &&
+            room.bookingDays.every((day) => typeof day === "string");
+          return {
+            ...room,
+            bookingDays: isArrayOfStrings
+              ? room.bookingDays.map((day, index) => ({
+                  id: index,
+                  name: day,
+                }))
+              : room.bookingDays,
+          };
+        }),
       };
 
       if (isEditMode) {
+        const correctedRealData = correctDataTypes(updatedStudioDetails);
+        console.log("correctedRealData----->", correctedRealData);
+
+        const checkData = { ...correctedRealData };
+        delete checkData.availabilities;
+        delete checkData.clientPhotos;
+        delete checkData.creationTimeStamp;
+        delete checkData.featuredReviews;
+        delete checkData.isActive;
+        delete checkData.latitude;
+        delete checkData.location;
+        delete checkData.longitude;
+        delete checkData.overallAvgRating;
+        delete checkData._id;
+        delete checkData.pricePerHour;
+        delete checkData.reviews;
+
+        // for (const key of Object.keys(checkData)) {
+        //   const value = checkData[key];
+        //   alert("hii");
+
+        //   if (
+        //     value === null ||
+        //     value === "" ||
+        //     (Array.isArray(value) && value.length === 0) || //
+        //     (typeof value === "object" &&
+        //       !Array.isArray(value) &&
+        //       value !== null &&
+        //       Object.keys(value).length === 0)
+        //   ) {
+        //     return errorAlert(`${key} field is empty`);
+        //   }
+        // }
+
+        const result = checkEmptyFields(checkData);
+        let hasError = result.hasError;
+        console.log(`Has error: ${result.hasError}`);
+
+        if (hasError == true)
+          return errorAlert(`Empty fields: ${result.errorFields.join(", ")}`);
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -291,19 +388,19 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Update it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log("studioDetails", updatedStudioDetails);
+            console.log("studioDetails", correctedRealData);
             appAndmoreApi
-              .updateStudio(userStudioid, updatedStudioDetails)
+              .updateStudio(userStudioid, correctedRealData)
               .then((response) => {
                 console.log("Studio updated:", response);
                 if (response) {
-                  Swal.fire({
-                    title: "Studio Updated!",
-                    text: "Your data has been saved.",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1800,
-                  });
+                  if (response.status) {
+                    sucessAlret("Studio Updated!", "Your data has been saved.");
+
+                    navigate("/adminDashboard/Apps&More/studio");
+                  } else {
+                    errorAlert(response.message);
+                  }
                 }
               })
               .catch((error) => {
@@ -316,10 +413,32 @@ function AddNewStudio({ setSelectTab }) {
                   timer: 1800,
                 });
               });
-            console.log("studioDetails", updatedStudioDetails);
+            console.log("studioDetails", correctedRealData);
           }
         });
       } else {
+        const correctedRealData = correctDataTypes(updatedStudioDetails);
+        console.log("correctedRealData----->", correctedRealData);
+        const checkData = { ...correctedRealData };
+        delete checkData.availabilities;
+        delete checkData.clientPhotos;
+        delete checkData.creationTimeStamp;
+        delete checkData.featuredReviews;
+        delete checkData.isActive;
+        delete checkData.latitude;
+        delete checkData.location;
+        delete checkData.longitude;
+        delete checkData.overallAvgRating;
+        delete checkData._id;
+        delete checkData.pricePerHour;
+        delete checkData.reviews;
+
+        const result = checkEmptyFields(checkData);
+        let hasError = result.hasError;
+        console.log(`Has error: ${result.hasError}`);
+
+        if (hasError == true)
+          return errorAlert(`Empty fields: ${result.errorFields.join(", ")}`);
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -331,17 +450,22 @@ function AddNewStudio({ setSelectTab }) {
         }).then((result) => {
           if (result.isConfirmed) {
             appAndmoreApi
-              .createStudio(updatedStudioDetails)
+              .createStudio(correctedRealData)
               .then((response) => {
                 console.log("Studio created:", response);
                 if (response) {
-                  Swal.fire({
-                    title: "Studio Created!",
-                    text: "Your data has been saved.",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1800,
-                  });
+                  if (response.status) {
+                    Swal.fire({
+                      title: "Studio Created!",
+                      text: "Your data has been saved.",
+                      icon: "success",
+                      showConfirmButton: false,
+                      timer: 1800,
+                    });
+                    navigate("/adminDashboard/Apps&More/studio");
+                  } else {
+                    errorAlert(response.message);
+                  }
                 }
               })
               .catch((error) => {
@@ -354,7 +478,7 @@ function AddNewStudio({ setSelectTab }) {
                   timer: 1800,
                 });
               });
-            console.log("updatedStudioDetails", updatedStudioDetails);
+            console.log("correctedRealData", correctedRealData);
           }
         });
       }
@@ -365,14 +489,20 @@ function AddNewStudio({ setSelectTab }) {
     <>
       <div className={style.wrapper}>
         <WebDashboard2
-          navCount={navCount}
+          navCount={4}
           tabCount={tabCount}
           setTabCount={setTabCount}
         />
         <div className={style.studioMainScreen}>
-          <div className={style.studioHeader}>
-            <div>
-              <input required type="text" placeholder="search" />
+          {/* <div className={style.studioHeader}>
+            <div className={style.puredisabled}>
+              <input
+                type="text"
+                placeholder="Search"
+                readOnly
+                disabled
+                className={style.puredisabled}
+              />
             </div>
             <div>
               <IoSearch />
@@ -386,7 +516,7 @@ function AddNewStudio({ setSelectTab }) {
             <div>
               <MdOutlineSettings />
             </div>
-          </div>
+          </div> */}
 
           {showRoomsDetails ? (
             <AddNewRoom
@@ -400,10 +530,7 @@ function AddNewStudio({ setSelectTab }) {
             />
           ) : (
             <>
-              <div
-                className={style.addNewStudioTitle}
-                style={{ marginTop: "-2%" }}
-              >
+              <div className={style.addNewStudioTitle}>
                 {isEditMode && showMode
                   ? "Studio details"
                   : isEditMode
@@ -426,7 +553,7 @@ function AddNewStudio({ setSelectTab }) {
                         required
                         type="text"
                         id="studioName"
-                        placeholder="Enter Studio Area"
+                        placeholder="Enter Studio Name"
                         name="studioName"
                         value={studioDetails?.fullName}
                         onChange={(e) =>
@@ -442,7 +569,7 @@ function AddNewStudio({ setSelectTab }) {
                       <label htmlFor="area">Total Area</label>
                       <input
                         required
-                        type="text"
+                        type="number"
                         id="area"
                         placeholder="Enter Approx. Area"
                         name="area"
@@ -460,7 +587,7 @@ function AddNewStudio({ setSelectTab }) {
                       <label htmlFor="pincode">Studio Pincode</label>
                       <input
                         required
-                        type="text"
+                        type="number"
                         id="pincode"
                         name="pincode"
                         placeholder="Enter Pincode"
@@ -496,7 +623,7 @@ function AddNewStudio({ setSelectTab }) {
                         <option value="Bombay">Bombay</option>
                       </datalist>
                     </div>
-                    <div className={style.addNewStudioinputBox}>
+                    {/* <div className={style.addNewStudioinputBox}>
                       <label htmlFor="Amenities">Amenities </label>
 
                       <Select
@@ -513,7 +640,13 @@ function AddNewStudio({ setSelectTab }) {
                           label: item,
                         }))}
                       />
-                    </div>
+                    </div> */}
+
+                    <MultipleSelect
+                      selectedItems={selectedStudioAmenities}
+                      setSelectedItems={setSelectedStudioAmenities}
+                    />
+
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="studioName">Studio MapLink</label>
                       <input
@@ -556,12 +689,17 @@ function AddNewStudio({ setSelectTab }) {
                           })
                         }
                       >
-                        <option>Select Maximum Guest allowed</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
+                        <option value={""}>Select Maximum Guest allowed</option>
+                        <option value={"1"}>1</option>
+                        <option value={"2"}>2</option>
+                        <option value={"3"}>3</option>
+                        <option value={"4"}>4</option>
+                        <option value={"5"}>5</option>
+                        <option value={"6"}>6</option>
+                        <option value={"7"}>7</option>
+                        <option value={"8"}>8</option>
+                        <option value={"9"}>9</option>
+                        <option value={"10"}>10</option>
                       </select>
                     </div>
 
@@ -586,6 +724,27 @@ function AddNewStudio({ setSelectTab }) {
                         <option value="Delhi">Delhi</option>
                         <option value="Bombay">Bombay</option>
                       </datalist>
+                    </div>
+                    <div className={style.addNewStudioinputBox}>
+                      <label htmlFor="addstate">Select Country</label>
+                      <select
+                        name=""
+                        id=""
+                        value={studioDetails?.country}
+                        onChange={(e) =>
+                          setStudioDetails({
+                            ...studioDetails,
+                            country: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="" disabled>
+                          Select Country
+                        </option>
+                        <option value="IN">India</option>
+                        <option value="US">USA</option>
+                        <option value="JP">Japan</option>
+                      </select>
                     </div>
                     <div className={style.addNewStudioinputBox}>
                       <label htmlFor="address">Studio Address</label>
@@ -699,6 +858,7 @@ function AddNewStudio({ setSelectTab }) {
                 backOnclick={gotoadminpage}
                 saveType={"submit"}
                 saveOnclick={showMode ? "" : handleSubmitButtonClick}
+                saveDisabled={showMode}
               />
             </>
           )}
