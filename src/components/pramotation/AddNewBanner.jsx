@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import style from "../../pages/admin/studios/studio.module.css";
 import CustomSelect from "../../pages/admin/layout/CustomSelect";
 import CustomInput from "../../pages/admin/layout/CustomInput";
@@ -16,7 +16,7 @@ import promotionApi from "../../services/promotionApi";
 import { send } from "react-ga";
 import { useNavigate } from "react-router-dom";
 import MixMaster from "../adminStudio/booking/MixMaster";
-
+let studioName = "";
 function AddNewBanner({
   setShowAddPage,
   pageType,
@@ -66,6 +66,7 @@ function AddNewBanner({
       hitapi(sendDataToApi);
     },
   });
+
   const navigate = useNavigate();
   useEffect(() => {
     if (editMode.current) {
@@ -119,6 +120,7 @@ function AddNewBanner({
 
   const hitapi = (sendDataToApi) => {
     console.log("Api hit", sendDataToApi);
+    alert("apihiut");
     if (editMode.current) {
       promotionApi
         .updateBanner(sendDataToApi)
@@ -173,18 +175,19 @@ function AddNewBanner({
         });
     }
   };
-
-  const handelStudioChange = (newValue) => {
-    setFieldValue("entity_id", newValue.value);
-    setFieldValue("tempStudioName", newValue.label);
-  };
-
-  async function fetchUserList(username) {
-    let dataToSend = {
-      searchText: username,
-    };
+  const findStudioName = async (dataToSend, searchType) => {
+    let data = {};
+    if (searchType) {
+      data = {
+        [searchType]: dataToSend,
+      };
+    } else {
+      data = {
+        searchText: dataToSend,
+      };
+    }
     try {
-      const response = await appAndmoreApi.filterData(dataToSend);
+      const response = await appAndmoreApi.filterData(data);
       return response.studios.map((data) => ({
         label: `${data.fullName}`,
         value: data._id,
@@ -193,7 +196,39 @@ function AddNewBanner({
       console.error("Error fetching user list:", error);
       return []; // return empty array in case of error
     }
+  };
+
+  const handelStudioChange = (newValue) => {
+    setFieldValue("entity_id", newValue.value);
+    setFieldValue("tempStudioName", newValue.label);
+  };
+
+  async function fetchUserList(username) {
+    // let dataToSend = {
+    //   searchText: username,
+    // };
+    return findStudioName(username);
   }
+
+  useEffect(() => {
+    if (editMode.current) {
+      console.log(values?.entity_id);
+      if (values.forr === "page" || values.for === "page") {
+        findStudioName(values?.entity_id, "id")
+          .then((data) => {
+            console.log("-------------------------data", data[0].label);
+
+            if (data && data.length > 0) {
+              studioName = data[0].label;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+      }
+    }
+  }, [editMode.current]);
+  console.log("studioNamestudioName", studioName);
 
   return (
     <>
@@ -334,16 +369,14 @@ function AddNewBanner({
                     touched={touched.forr}
                   />
 
-                  {values.forr === "page" && (
+                  {(values.forr === "page" || values.for === "page") && (
                     <div className={style.customInput}>
                       <label htmlFor="UserName">Studio Name</label>
                       <SearchSelectInput
                         placeholder="Search Studio"
                         fetchOptions={fetchUserList}
                         onChange={handelStudioChange}
-                        defaultValue={
-                          values?.tempStudioName || values?.entity_id
-                        }
+                        defaultValue={values?.tempStudioName || studioName}
                         style={{ width: "100%", height: "100%" }}
                       />
                       {errors.entity_id && touched.entity_id && (

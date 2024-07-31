@@ -60,14 +60,16 @@ const ThreeWaveChart = ({
   studioColor = "#FFAA00",
   productionColor = "#00FF00",
   mixmasterColor = "#8884d8",
+  products,
 }) => {
+  console.log(products, "products?.transactionData?.data");
   return (
     <div className={style.transactionChart}>
       <ChartNav chartTitle={"Transaction "} />
 
       <ResponsiveContainer width="100%" height="80%">
         <AreaChart
-          data={data}
+          data={products?.transactionData?.data}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <defs>

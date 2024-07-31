@@ -30,7 +30,7 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-const DoughnutChart = () => {
+const DoughnutChart = ({ products }) => {
   const [hoveredSegment, setHoveredSegment] = useState(null);
   const total = data.reduce((acc, item) => acc + item.value, 0);
 
@@ -47,7 +47,7 @@ const DoughnutChart = () => {
     ? ((currentSegment.value / total) * 100).toFixed(0)
     : ((data[1].value / total) * 100).toFixed(0);
   const segmentName = currentSegment ? currentSegment.name : "Studio";
-
+  console.log("products.revenueData", products);
   return (
     <div className={style.donutChart}>
       <ChartNav chartTitle={"Earning Breakdown"} chartLogo={<FaChartPie />} />
@@ -64,7 +64,7 @@ const DoughnutChart = () => {
       >
         <PieChart width={400} height={400}>
           <Pie
-            data={data}
+            data={products.revenueData.data}
             cx="50%"
             cy="50%"
             innerRadius={120}
