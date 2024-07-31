@@ -223,12 +223,14 @@ function StudioBookingDetail({
               </tr>
             </thead>
             <tbody>
+
               {products?.length === 0 ? (
                 <tr>
                   <td>
                     <ChoiraLoder2 />
                   </td>
                 </tr>
+
               ) : (
                 products?.map((products, i) => {
                   return (
@@ -239,6 +241,7 @@ function StudioBookingDetail({
                       </td>
                       <td title={products.studioName}>
                         <CopyToClipboard textToCopy={products.studioName} />
+
 
                         <br />
                         <small title={products.studioName}>
@@ -278,6 +281,7 @@ function StudioBookingDetail({
                       <td>
                         <div
                           className={style.userProjectStatus}
+
                           style={{
                             backgroundColor:
                               parseInt(products.bookingStatus) === 0
@@ -287,6 +291,7 @@ function StudioBookingDetail({
                                 : "#FFDDDD",
                           }}
                         >
+
                           {parseInt(products.bookingStatus) === 0
                             ? "Pending"
                             : parseInt(products.bookingStatus) == 1
@@ -295,6 +300,7 @@ function StudioBookingDetail({
                         </div>
                       </td>
                       <td className={style.tableActionbtn}>
+
                         <div>
                           <GoEye
                             style={{ cursor: "pointer" }}
@@ -312,6 +318,7 @@ function StudioBookingDetail({
                   );
                 })
               )}
+
             </tbody>
           </table>
         </div>
