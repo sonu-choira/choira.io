@@ -5,7 +5,10 @@ import style from "../../pages/admin/studios/studio.module.css";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
 
-function ChartNav({ chartLogo, chartTitle }) {
+function ChartNav({ chartLogo, chartTitle, setFilterData = () => {} }) {
+  const handelSelect = (event) => {
+    setFilterData(event.target.value);
+  };
   return (
     <>
       <div className={style.chartNav}>
@@ -27,7 +30,10 @@ function ChartNav({ chartLogo, chartTitle }) {
             }}
           />
 
-          <select className={style.chartSelect}>
+          <select
+            className={style.chartSelect}
+            onChange={(event) => handelSelect(event)}
+          >
             <option value={"year"}>Year</option>
             <option value={"month"}>month</option>
             <option value={"week"}>week</option>

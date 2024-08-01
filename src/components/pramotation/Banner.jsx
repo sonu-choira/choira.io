@@ -215,7 +215,7 @@ function Banner({
 
   const [pageType, setPageType] = useState("");
   let editMode = useRef(false);
-  const [editData, setEditData] = useState("");
+  const [editData, setEditData] = useState({});
   const gotoEditPage = (id) => {
     console.log(id);
     setEditData(products.filter((item) => item.id === id)[0]);
@@ -254,6 +254,7 @@ function Banner({
           pageType={pageType}
           editMode={editMode}
           editData={editData}
+          setEditData={setEditData}
         />
       ) : (
         <div className={style.bannerPage}>
@@ -385,7 +386,6 @@ function Banner({
                       {mainBannerEdit ? (
                         <>
                           <BiSolidPencil
-                            idPencil
                             style={{ cursor: "pointer" }}
                             onClick={() => {
                               setShowAddPage(true);

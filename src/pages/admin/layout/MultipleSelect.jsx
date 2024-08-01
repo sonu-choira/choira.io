@@ -26,8 +26,9 @@ function MultipleSelect({ selectedItems = [], setSelectedItems = () => {} }) {
 
   const addItem = (e) => {
     e.preventDefault();
-    if (name && !items.includes(name)) {
-      setItems([...items, name]);
+    if (name.trim() && !items.includes(name.trim())) {
+      let newName = name.trim();
+      setItems([...items, newName]);
       setName("");
     }
     setTimeout(() => {

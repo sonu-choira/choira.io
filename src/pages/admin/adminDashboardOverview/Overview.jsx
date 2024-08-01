@@ -14,6 +14,7 @@ import SimpleLineChart from "../../../components/charts/SimpleLineChart";
 import Swal from "sweetalert2";
 import { useLocation } from "react-router-dom";
 import ThreeWaveChart from "../../../components/charts/ThreeWaveChart";
+import chartApi from "../../../services/chartApi";
 
 function Overview() {
   const data = [
@@ -44,6 +45,7 @@ function Overview() {
   ];
 
   const { pathname } = useLocation();
+  const [products, setProducts] = useState({});
 
   useEffect(() => {
     if (pathname.includes("Overview")) {
@@ -61,7 +63,20 @@ function Overview() {
         confirmButtonAriaLabel: "Ok",
       });
     }
+    chartApi
+      .getAllCharts()
+      .then((res) => {
+        console.log(res);
+        console.log(res.transactionData);
+        setProducts(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+  useEffect(() => {
+    console.log("{{{{{{{{{{{{{{{{{", products);
+  }, [products]);
   return (
     <>
       <div className={style.overviewPage1}>
@@ -82,10 +97,10 @@ function Overview() {
           ))}
         </div>
 
-        <ThreeWaveChart />
+        <ThreeWaveChart products={products} />
         <div className={style.overviewPage2}>
           <div>
-            <DoughnutChart />
+            <DoughnutChart products={products} />
           </div>
           <div>
             <LineGraph />

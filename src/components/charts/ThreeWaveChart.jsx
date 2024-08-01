@@ -18,20 +18,20 @@ import {
 } from "recharts";
 import ChartNav from "./ChartNav";
 
-const data = [
-  { name: "SEP", studio: 40, production: 80, mixmaster: 60 },
-  { name: "OCT", studio: 50, production: 90, mixmaster: 70 },
-  { name: "NOV", studio: 60, production: 100, mixmaster: 80 },
-  { name: "DEC", studio: 70, production: 110, mixmaster: 90 },
-  { name: "JAN", studio: 80, production: 120, mixmaster: 100 },
-  { name: "FEB", studio: 90, production: 130, mixmaster: 110 },
-  { name: "MAR", studio: 100, production: 120, mixmaster: 100 },
-  { name: "APR", studio: 110, production: 110, mixmaster: 90 },
-  { name: "MAY", studio: 120, production: 100, mixmaster: 80 },
-  { name: "JUN", studio: 110, production: 90, mixmaster: 70 },
-  { name: "JUL", studio: 100, production: 80, mixmaster: 60 },
-  { name: "AUG", studio: 90, production: 70, mixmaster: 50 },
-];
+// const data = [
+//   { name: "SEP", studio: 40, production: 80, mixmaster: 60 },
+//   { name: "OCT", studio: 50, production: 90, mixmaster: 70 },
+//   { name: "NOV", studio: 60, production: 100, mixmaster: 80 },
+//   { name: "DEC", studio: 70, production: 110, mixmaster: 90 },
+//   { name: "JAN", studio: 80, production: 120, mixmaster: 100 },
+//   { name: "FEB", studio: 90, production: 130, mixmaster: 110 },
+//   { name: "MAR", studio: 100, production: 120, mixmaster: 100 },
+//   { name: "APR", studio: 110, production: 110, mixmaster: 90 },
+//   { name: "MAY", studio: 120, production: 100, mixmaster: 80 },
+//   { name: "JUN", studio: 110, production: 90, mixmaster: 70 },
+//   { name: "JUL", studio: 100, production: 80, mixmaster: 60 },
+//   { name: "AUG", studio: 90, production: 70, mixmaster: 50 },
+// ];
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -60,14 +60,33 @@ const ThreeWaveChart = ({
   studioColor = "#FFAA00",
   productionColor = "#00FF00",
   mixmasterColor = "#8884d8",
+  products,
 }) => {
+  console.log(products, "products?.transactionData?.data");
+  const monthOrder = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC",
+  ];
+  const sortedData = products?.transactionData?.data.sort((a, b) => {
+    return monthOrder.indexOf(a.name) - monthOrder.indexOf(b.name);
+  });
   return (
     <div className={style.transactionChart}>
       <ChartNav chartTitle={"Transaction "} />
 
       <ResponsiveContainer width="100%" height="80%">
         <AreaChart
-          data={data}
+          data={sortedData}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <defs>
