@@ -12,13 +12,11 @@ function CustomSelect({
   defaultOption,
   error,
   touched,
-
   disabled,
 }) {
   return (
     <div className={style.customInput}>
       <label htmlFor={htmlFor}>{label}</label>
-
       <select
         id={id}
         onChange={onChange}
@@ -26,8 +24,12 @@ function CustomSelect({
         name={name}
         disabled={disabled}
         className={disabled ? style.disabled : ""}
+        // defaultValue={defaultOption}
       >
-        <option value="" disabled>
+        <option value={defaultOption} hidden>
+          {defaultOption}
+        </option>
+        <option value={""} disabled>
           {defaultOption}
         </option>
         {Array.isArray(options)
@@ -36,9 +38,9 @@ function CustomSelect({
                 {option}
               </option>
             ))
-          : Object.keys(options).map((keys, index) => (
-              <option key={index} value={options[keys]}>
-                {keys}
+          : Object.keys(options).map((key, index) => (
+              <option key={index} value={options[key]}>
+                {key}
               </option>
             ))}
       </select>
