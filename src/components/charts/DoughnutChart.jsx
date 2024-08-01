@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import Button from "../../pages/admin/layout/Button";
 import style from "../../pages/admin/studios/studio.module.css";
@@ -6,6 +6,7 @@ import { BsGraphUpArrow } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
 import ChartNav from "./ChartNav";
 import { FaChartPie } from "react-icons/fa";
+import chartApi from "../../services/chartApi";
 
 const data = [
   { name: "Production", value: 52430, color: "#ffc658" },
@@ -13,28 +14,24 @@ const data = [
   { name: "Mixing", value: 20411, color: "#ff0000" },
 ];
 
-const CustomTooltip = ({ active, payload }) => {
-  if (active && payload && payload.length) {
-    const { name, value } = payload[0];
-    const percentage = (
-      (value / data.reduce((acc, item) => acc + item.value, 0)) *
-      100
-    ).toFixed(0);
-    return (
-      <div className={style.customTooltip}>
-        <p>{`${name} : ₹${value.toLocaleString("en-IN")}`}</p>
-        {/* <p>{`${percentage}% from ${name}`}</p> */}
-      </div>
-    );
-  }
-  return null;
-};
-
 const DoughnutChart = ({ products }) => {
+  const [chartData, setChartData] = useState([]);
+  const [filterData, setFilterData] = useState("");
   const [hoveredSegment, setHoveredSegment] = useState(null);
-  const total = data.reduce((acc, item) => acc + item.value, 0);
 
-  const handleMouseEnter = (data, index) => {
+  useEffect(() => {
+    if (filterData) {
+      chartApi.getAllCharts(filterData, "revenue").then((res) => {
+        setChartData(res?.revenueData?.data || []);
+      });
+    } else {
+      setChartData(products?.revenueData?.data || []);
+    }
+  }, [filterData, products]);
+
+  const total = chartData.reduce((acc, item) => acc + item.value, 0);
+
+  const handleMouseEnter = (_, index) => {
     setHoveredSegment(index);
   };
 
@@ -42,19 +39,40 @@ const DoughnutChart = ({ products }) => {
     setHoveredSegment(null);
   };
 
-  const currentSegment = hoveredSegment !== null ? data[hoveredSegment] : null;
+  const currentSegment =
+    hoveredSegment !== null ? chartData[hoveredSegment] : null;
   const percentage = currentSegment
     ? ((currentSegment.value / total) * 100).toFixed(0)
-    : ((data[1].value / total) * 100).toFixed(0);
-  const segmentName = currentSegment ? currentSegment.name : "Studio";
-  console.log("products.revenueData", products);
+    : ((chartData[1]?.value / total) * 100).toFixed(0);
+  const segmentName = currentSegment ? currentSegment.name : "Production";
+
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const { name, value } = payload[0];
+      const percentage = (
+        (value / chartData.reduce((acc, item) => acc + item.value, 0)) *
+        100
+      ).toFixed(0);
+      return (
+        <div className={style.customTooltip}>
+          <p>{`${name} : ₹${value.toLocaleString("en-IN")}`}</p>
+          {/* <p>{`${percentage}% from ${name}`}</p> */}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className={style.donutChart}>
-      <ChartNav chartTitle={"Earning Breakdown"} chartLogo={<FaChartPie />} />
+      <ChartNav
+        chartTitle={"Earning Breakdown"}
+        chartLogo={<FaChartPie />}
+        setFilterData={setFilterData}
+      />
       <div
         style={{
           textAlign: "center",
-          // border: "1px solid #FFAA00",
           position: "relative",
           width: "400px",
           height: "400px",
@@ -64,7 +82,7 @@ const DoughnutChart = ({ products }) => {
       >
         <PieChart width={400} height={400}>
           <Pie
-            data={products.revenueData.data}
+            data={chartData}
             cx="50%"
             cy="50%"
             innerRadius={120}
@@ -77,7 +95,7 @@ const DoughnutChart = ({ products }) => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            {data.map((entry, index) => (
+            {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
@@ -108,7 +126,7 @@ const DoughnutChart = ({ products }) => {
           marginTop: "20px",
         }}
       >
-        {data.map((item, index) => (
+        {chartData.map((item, index) => (
           <div key={index} style={{ margin: "0 20px", textAlign: "center" }}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <span

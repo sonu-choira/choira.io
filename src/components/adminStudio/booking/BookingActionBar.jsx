@@ -62,9 +62,7 @@ function BookingActionBar({
   const gotoAddNew = (bookingPageCount) => {
     if (bookingPageCount === "c1") {
       navigate("/studio/add", {
-
         state: { navCount: 4, bookingPageCount: bookingPageCount },
-
       });
     } else {
       navigate("/service/musicProduction/add", {
@@ -73,9 +71,7 @@ function BookingActionBar({
     }
   };
   const gotoSlotBooking = () => {
-
     router.push("/adminDashboard/Bookings/AddSlotBooking", {
-
       state: { navCount: 4 },
     });
   };
