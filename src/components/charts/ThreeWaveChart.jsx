@@ -18,6 +18,7 @@ import {
 } from "recharts";
 import ChartNav from "./ChartNav";
 import chartApi from "../../services/chartApi";
+import { errorAlert } from "../../pages/admin/layout/Alert";
 
 // const data = [
 //   { name: "SEP", studio: 40, production: 80, mixmaster: 60 },
@@ -65,13 +66,24 @@ const ThreeWaveChart = ({
 }) => {
   const [chartData, setChartData] = useState([]);
   const [filterData, setFilterData] = useState("");
+  const [showBtnLoader, setShowBtnLoader] = useState(true);
+
   useEffect(() => {
     if (filterData) {
-      chartApi.getAllCharts(filterData, "transaction").then((res) => {
-        setChartData(res?.transactionData?.data || []);
-      });
+      setShowBtnLoader(true);
+      chartApi
+        .getAllCharts(filterData, "transaction")
+        .then((res) => {
+          setChartData(res?.transactionData?.data || []);
+          setShowBtnLoader(false);
+        })
+        .catch((err) => {
+          setShowBtnLoader(false);
+          errorAlert(err);
+        });
     } else {
       setChartData(products?.transactionData?.data || []);
+      setShowBtnLoader(false);
     }
   }, [filterData, products]);
   console.log(products, "products?.transactionData?.data");
@@ -94,7 +106,11 @@ const ThreeWaveChart = ({
   });
   return (
     <div className={style.transactionChart}>
-      <ChartNav chartTitle={"Transaction "} setFilterData={setFilterData} />
+      <ChartNav
+        chartTitle={"Transaction "}
+        setFilterData={setFilterData}
+        showBtnLoader={showBtnLoader}
+      />
 
       <ResponsiveContainer width="100%" height="80%">
         <AreaChart

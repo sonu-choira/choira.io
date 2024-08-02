@@ -20,17 +20,19 @@ function AddNewDiscount({
   submitData,
   setSubmitData,
   setShowTable,
+  setShowBtnLoader,
 }) {
   const option = {
     "New User Discount": 0,
     "Discount Recurring": 1,
     "Event Based": 2,
+    // "Specific User": 4,
     "Special Session": 3,
-    "Specific User": 4,
   };
 
   const hitApi = (sendDataToApi) => {
     if (editMode.current) {
+      setShowBtnLoader(true);
       promotionApi
         .updateDiscount(editData._id, sendDataToApi)
         .then((res) => {
@@ -38,30 +40,37 @@ function AddNewDiscount({
 
           if (res.status) {
             sucessAlret("Discount Updated Successfully");
+            setShowBtnLoader(false);
 
             setShowTable(true);
           } else {
+            setShowBtnLoader(false);
             errorAlert(res.message || "Error in updating discount");
           }
         })
         .catch((err) => {
+          setShowBtnLoader(false);
           console.log(err);
           errorAlert("Error in updating discount");
           setShowTable(true);
         });
     } else {
+      setShowBtnLoader(true);
       promotionApi
         .createDiscount(sendDataToApi)
         .then((res) => {
           console.log(res);
           if (res.status) {
+            setShowBtnLoader(false);
             sucessAlret("Discount Created Successfully");
             setShowTable(true);
           } else {
+            setShowBtnLoader(false);
             errorAlert(res.message || "Error in creating discount");
           }
         })
         .catch((err) => {
+          setShowBtnLoader(false);
           console.log(err);
           errorAlert(err.message || "Error in creating discount");
         });

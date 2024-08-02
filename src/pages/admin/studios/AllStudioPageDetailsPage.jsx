@@ -58,6 +58,8 @@ function AllStudioPageDetailsPage() {
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  let loaderText = "Downloading ...";
 
   // let { page: paramData } = useParams();
   // console.log("paramData", paramData);
@@ -93,24 +95,33 @@ function AllStudioPageDetailsPage() {
 
       delete tempData.serviceType;
       tempData.type = idToUse;
+      setShowBtnLoader(true);
       appAndmoreApi
         .downloadServiceData(tempData)
         .then((response) => {
           console.log("data download", response);
+          setShowBtnLoader(false);
         })
         .catch((error) => {
           console.error("Error download studio:", error);
+          setShowBtnLoader(false);
         });
     } else {
       let tempData = { ...sendFilterDataToapi };
       delete tempData.sortBy;
       delete tempData.page;
+      setShowBtnLoader(true);
+
       appAndmoreApi
         .downloadData(tempData)
         .then((response) => {
+          setShowBtnLoader(false);
+
           console.log("data download:", response);
         })
         .catch((error) => {
+          setShowBtnLoader(false);
+
           console.error("Error filter studio:", error);
         });
     }
@@ -218,6 +229,8 @@ function AllStudioPageDetailsPage() {
           bookingPageCount={bookingPageCount}
           setBookingPageCount={setBookingPageCount}
           downloadAllData={downloadAllData}
+          loaderText={loaderText}
+          showBtnLoader={showBtnLoader}
         />
         {bookingPageCount === "c1" ? (
           <AllStudioDetail2

@@ -13,6 +13,8 @@ function StudioFooter({
   sname,
   backDisabled,
   saveDisabled,
+  showBtnLoader,
+  loaderText,
 }) {
   return (
     <>
@@ -31,6 +33,8 @@ function StudioFooter({
           style={{ height: "55%" }}
           type={saveType}
           disabled={saveDisabled}
+          loaderText={loaderText}
+          showBtnLoader={showBtnLoader}
         />
       </div>
     </>

@@ -13,6 +13,7 @@ function Discount({
   setShowTable,
   submitData,
   setSubmitData,
+  setShowBtnLoader,
 }) {
   const addNewBtn = () => {
     setShowTable(false);
@@ -58,6 +59,7 @@ function Discount({
               submitData={submitData}
               setSubmitData={setSubmitData}
               setShowTable={setShowTable}
+              setShowBtnLoader={setShowBtnLoader}
             />
           )}
         </div>

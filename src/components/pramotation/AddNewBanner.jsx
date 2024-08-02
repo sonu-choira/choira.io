@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import style from "../../pages/admin/studios/studio.module.css";
 import CustomSelect from "../../pages/admin/layout/CustomSelect";
 import CustomInput from "../../pages/admin/layout/CustomInput";
@@ -66,6 +66,8 @@ function AddNewBanner({
       hitapi(sendDataToApi);
     },
   });
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  let loaderText = "saving ...";
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -120,35 +122,43 @@ function AddNewBanner({
 
   const hitapi = (sendDataToApi) => {
     console.log("Api hit", sendDataToApi);
-    alert("apihiut");
+
     if (editMode.current) {
+      setShowBtnLoader(true);
       promotionApi
         .updateBanner(sendDataToApi)
         .then((res) => {
           console.log(res);
           if (res.status) {
+            setShowBtnLoader(false);
             sucessAlret("Banner Updated Successfully");
           } else {
+            setShowBtnLoader(false);
             errorAlert(res.message || "Error in updating banner");
           }
         })
         .catch((err) => {
+          setShowBtnLoader(false);
           console.log(err);
           errorAlert("Error in updating banner");
         });
     } else {
+      setShowBtnLoader(true);
       console.log("Create Banner");
       promotionApi
         .createBanner(sendDataToApi)
         .then((res) => {
           console.log(res);
           if (res.status == true) {
+            setShowBtnLoader(false);
             sucessAlret("Banner Created Successfully");
           } else {
+            setShowBtnLoader(false);
             errorAlert(res.message || "Error in creating banner");
           }
         })
         .catch((err) => {
+          setShowBtnLoader(false);
           console.log(err);
           errorAlert(err.message);
         });
@@ -417,6 +427,8 @@ function AddNewBanner({
           }}
           saveDisabled={false}
           saveType={"submit"}
+          loaderText={loaderText}
+          showBtnLoader={showBtnLoader}
         />
       </form>
     </>

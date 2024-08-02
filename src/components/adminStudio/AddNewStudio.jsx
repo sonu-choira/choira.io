@@ -32,6 +32,8 @@ import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
   const [images, setImages] = useState([]);
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  let loaderText = "saving ...";
 
   const [isOver, setIsOver] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -389,6 +391,9 @@ function AddNewStudio({ setSelectTab }) {
         }).then((result) => {
           if (result.isConfirmed) {
             console.log("studioDetails", correctedRealData);
+            // showBtnLoader = true;
+            setShowBtnLoader(true);
+            console.log(showBtnLoader);
             appAndmoreApi
               .updateStudio(userStudioid, correctedRealData)
               .then((response) => {
@@ -397,14 +402,19 @@ function AddNewStudio({ setSelectTab }) {
                   if (response.status) {
                     sucessAlret("Studio Updated!", "Your data has been saved.");
 
+                    setShowBtnLoader(false);
+
                     navigate("/adminDashboard/Apps&More/studio");
                   } else {
                     errorAlert(response.message);
+
+                    setShowBtnLoader(false);
                   }
                 }
               })
               .catch((error) => {
                 console.error("Error updating studio:", error);
+                setShowBtnLoader(false);
                 Swal.fire({
                   icon: "error",
                   title: "Oops...",
@@ -449,12 +459,15 @@ function AddNewStudio({ setSelectTab }) {
           confirmButtonText: "Yes, Create it!",
         }).then((result) => {
           if (result.isConfirmed) {
+            setShowBtnLoader(true);
+
             appAndmoreApi
               .createStudio(correctedRealData)
               .then((response) => {
                 console.log("Studio created:", response);
                 if (response) {
                   if (response.status) {
+                    setShowBtnLoader(false);
                     Swal.fire({
                       title: "Studio Created!",
                       text: "Your data has been saved.",
@@ -464,12 +477,14 @@ function AddNewStudio({ setSelectTab }) {
                     });
                     navigate("/adminDashboard/Apps&More/studio");
                   } else {
+                    setShowBtnLoader(false);
                     errorAlert(response.message);
                   }
                 }
               })
               .catch((error) => {
                 console.error("Error creating studio:", error);
+                setShowBtnLoader(false);
                 Swal.fire({
                   icon: "error",
                   title: "Oops...",
@@ -859,6 +874,8 @@ function AddNewStudio({ setSelectTab }) {
                 saveType={"submit"}
                 saveOnclick={showMode ? "" : handleSubmitButtonClick}
                 saveDisabled={showMode}
+                loaderText={loaderText}
+                showBtnLoader={showBtnLoader}
               />
             </>
           )}

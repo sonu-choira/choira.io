@@ -26,6 +26,8 @@ import MultipleSelect from "../../../pages/admin/layout/MultipleSelect";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 
 function AddNewProduction({ setSelectTab }) {
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  let loaderText = "saving ...";
   const data = useLocation();
   const navCount = data?.state?.navCount;
   const showMode = data?.state?.showMode || false;
@@ -291,11 +293,13 @@ function AddNewProduction({ setSelectTab }) {
         }).then((result) => {
           if (result.isConfirmed) {
             console.log("updatedData", updatedData);
+            setShowBtnLoader(true);
 
             appAndmoreApi
               .updateService(serviceId, updatedData)
               .then((response) => {
                 if (response.status) {
+                  setShowBtnLoader(false);
                   Swal.fire({
                     title: "Service Updated!",
                     text: "Your Data has been saved.",
@@ -305,6 +309,7 @@ function AddNewProduction({ setSelectTab }) {
                   });
                   navigate("/adminDashboard/Apps&More/studio");
                 } else {
+                  setShowBtnLoader(false);
                   errorAlert(response.message);
                 }
                 console.log(
@@ -313,6 +318,7 @@ function AddNewProduction({ setSelectTab }) {
                 );
               })
               .catch((error) => {
+                setShowBtnLoader(false);
                 if (error) {
                   Swal.fire({
                     icon: "error",
@@ -359,10 +365,12 @@ function AddNewProduction({ setSelectTab }) {
           confirmButtonText: "Yes, Create service!",
         }).then((result) => {
           if (result.isConfirmed) {
+            setShowBtnLoader(true);
             appAndmoreApi
               .createService(updatedData)
               .then((response) => {
                 if (response.status) {
+                  setShowBtnLoader(false);
                   Swal.fire({
                     title: "Service Created!",
                     text: "Your Data has been saved.",
@@ -372,6 +380,7 @@ function AddNewProduction({ setSelectTab }) {
                   });
                   navigate("/adminDashboard/Apps&More/studio");
                 } else {
+                  setShowBtnLoader(false);
                   errorAlert(response.message);
                 }
                 console.log(
@@ -380,6 +389,7 @@ function AddNewProduction({ setSelectTab }) {
                 );
               })
               .catch((error) => {
+                setShowBtnLoader(false);
                 if (error) {
                   Swal.fire({
                     icon: "error",
@@ -764,6 +774,8 @@ function AddNewProduction({ setSelectTab }) {
                 backOnclick={gotoadminpage}
                 saveOnclick={showMode ? "" : handelSavebtn}
                 saveDisabled={showMode}
+                loaderText={loaderText}
+                showBtnLoader={showBtnLoader}
               />
             </>
           )}
