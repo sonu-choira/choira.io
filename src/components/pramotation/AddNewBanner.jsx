@@ -20,7 +20,7 @@ import MixMaster from "../adminStudio/booking/MixMaster";
 function AddNewBanner({
   setShowAddPage,
   pageType,
-  editMode,
+  editMode = false,
   editData,
   setEditData,
 }) {
@@ -381,21 +381,22 @@ function AddNewBanner({
                     touched={touched.forr}
                   />
 
-                  {(values.forr === "page" || values.for === "page") && (
-                    <div className={style.customInput}>
-                      <label htmlFor="UserName">Studio Name</label>
-                      <SearchSelectInput
-                        placeholder="Search Studio"
-                        fetchOptions={fetchUserList}
-                        onChange={handelStudioChange}
-                        defaultValue={values?.tempStudioName || studioName}
-                        style={{ width: "100%", height: "100%" }}
-                      />
-                      {errors.entity_id && touched.entity_id && (
-                        <div className={style.error}>{errors.entity_id}</div>
-                      )}
-                    </div>
-                  )}
+                  {(values.forr === "page" || values.for === "page") &&
+                    editMode.current == false && (
+                      <div className={style.customInput}>
+                        <label htmlFor="UserName">Studio Name</label>
+                        <SearchSelectInput
+                          placeholder="Search Studio"
+                          fetchOptions={fetchUserList}
+                          onChange={handelStudioChange}
+                          defaultValue={values?.tempStudioName || studioName}
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                        {errors.entity_id && touched.entity_id && (
+                          <div className={style.error}>{errors.entity_id}</div>
+                        )}
+                      </div>
+                    )}
                   {(values.forr === "page" || values.for === "page") &&
                     editMode &&
                     studioName && (
