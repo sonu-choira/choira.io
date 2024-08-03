@@ -16,7 +16,7 @@ import promotionApi from "../../services/promotionApi";
 import { send } from "react-ga";
 import { useNavigate } from "react-router-dom";
 import MixMaster from "../adminStudio/booking/MixMaster";
-let studioName = "";
+// let studioName = "";
 function AddNewBanner({
   setShowAddPage,
   pageType,
@@ -24,6 +24,7 @@ function AddNewBanner({
   editData,
   setEditData,
 }) {
+  const [studioName, setStudioName] = useState("");
   const {
     values,
     errors,
@@ -229,7 +230,8 @@ function AddNewBanner({
             console.log("-------------------------data", data[0].label);
 
             if (data && data.length > 0) {
-              studioName = data[0].label;
+              setStudioName(data[0].label);
+              // studioName = data[0].label;
             }
           })
           .catch((error) => {
@@ -394,6 +396,23 @@ function AddNewBanner({
                       )}
                     </div>
                   )}
+                  {(values.forr === "page" || values.for === "page") &&
+                    editMode &&
+                    studioName && (
+                      <div className={style.customInput}>
+                        <label htmlFor="UserName">Studio Name</label>
+                        <SearchSelectInput
+                          placeholder="Search Studio"
+                          fetchOptions={fetchUserList}
+                          onChange={handelStudioChange}
+                          defaultValue={values?.tempStudioName || studioName}
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                        {errors.entity_id && touched.entity_id && (
+                          <div className={style.error}>{errors.entity_id}</div>
+                        )}
+                      </div>
+                    )}
 
                   {values.forr === "list" && (
                     <CustomSelect

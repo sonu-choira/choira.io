@@ -8,7 +8,7 @@ import deleteAccountapi from "../../services/deleteAccountapi";
 const OptVerify = ({
   mobileNumber,
   countryCode,
-  setCheckOtp,
+  // setCheckOtp,
   checkOtp,
   setRedicrectToDetail,
   redicrectToDetail,
@@ -19,7 +19,7 @@ const OptVerify = ({
   setDeleteCheckOtp,
   setDeleteAccount,
   // apiOtp,
-  checkLoginData,
+  checkLoginData = () => {},
   deletePage,
   sendPhoneNumber,
   setdisableBtn,
