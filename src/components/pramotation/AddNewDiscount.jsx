@@ -237,7 +237,7 @@ function AddNewDiscount({
           error={errors.couponCode}
           touched={touched.couponCode}
         />
-        {parseInt(values.discountType) === 4 && (
+        {parseInt(values.discountType) === 3 && (
           <div className={style.addNewStudioinputBox}>
             <label htmlFor="UserName">User Name</label>
             <SearchSelectInput
