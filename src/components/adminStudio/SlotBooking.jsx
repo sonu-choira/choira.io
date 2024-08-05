@@ -257,10 +257,10 @@ function SlotBooking({ setSelectTab }) {
         // slotBookingApi();
         setshowAllSlots(false);
       } else {
-        alert("Please choose a slot");
+        errorAlert("Please choose a slot");
       }
     } else if (selectedSlot) {
-      alert("sendingData to api");
+      sucessAlret("sendingData to api");
       timeSlotApi
         .getAllSolts(timeSlotApiData)
         .then((res) => {

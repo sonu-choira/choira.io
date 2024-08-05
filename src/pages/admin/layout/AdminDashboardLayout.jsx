@@ -26,7 +26,7 @@ import Promotions from "../../../components/pramotation/Promotions";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
-  const [tabCount, setTabCount] = useState(1);
+  const [tabCount, setTabCount] = useState(0);
   useEffect(() => {
     const token = localStorage.getItem("token");
     // console.log("Token from localStorage:", token);

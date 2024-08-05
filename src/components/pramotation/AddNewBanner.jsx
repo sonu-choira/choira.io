@@ -23,8 +23,10 @@ function AddNewBanner({
   editMode = false,
   editData,
   setEditData,
+  bannerLength,
 }) {
   const [studioName, setStudioName] = useState("");
+  const [bL, setBL] = useState(0);
   const {
     values,
     errors,
@@ -85,7 +87,7 @@ function AddNewBanner({
         forr: "",
         tempStudioName: "", // Used only for display
         active: "",
-        stage: "",
+        stage: values.stage,
       };
       setValues(resetValues);
     } else {
@@ -100,7 +102,7 @@ function AddNewBanner({
         forr: "",
         tempStudioName: "", // Used only for display
         active: "",
-        stage: "",
+        stage: values.stage,
       };
       setValues(resetValues);
       console.log("pageType", pageType);
@@ -119,7 +121,17 @@ function AddNewBanner({
   }, [values]);
   useEffect(() => {
     setFieldValue("type", pageType);
-  }, [pageType]);
+    if (editMode.current == false) {
+      // alert("false");
+      setFieldValue("stage", bL);
+    }
+  }, [pageType, bL]);
+
+  useEffect(() => {
+    if (editMode.current == false) {
+      setBL(bannerLength);
+    }
+  }, []);
 
   const hitapi = (sendDataToApi) => {
     console.log("Api hit", sendDataToApi);
@@ -341,6 +353,7 @@ function AddNewBanner({
                     value={values.stage}
                     error={errors.stage}
                     touched={touched.stage}
+                    disabled={editMode.current == false}
                   />
                 </>
               ) : (

@@ -460,7 +460,7 @@ function Signin() {
     // console.log(mobileNumber);
   };
   const gotoBooking = () => {
-    navigate("/adminDashboard");
+    navigate("/adminDashboard/Overview");
   };
 
   const handleContinueButtonClick = (e) => {

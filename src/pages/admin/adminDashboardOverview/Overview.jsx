@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import { useLocation } from "react-router-dom";
 import ThreeWaveChart from "../../../components/charts/ThreeWaveChart";
 import chartApi from "../../../services/chartApi";
+import NumberCounter from "../layout/NumberCounter";
 // import chartApi from "../../../services/chartApi";
 
 function Overview() {
@@ -86,9 +87,13 @@ function Overview() {
             <div key={index} className={style.overviewTicketDiv}>
               <div>
                 <h3>{item.title}</h3>
-                <h2>{item.count}</h2>
+                <h2>
+                  <NumberCounter end={item.count} />
+                </h2>
                 <u>
-                  <small>Active : {item.active}</small>
+                  <small>
+                    Active : <NumberCounter end={item.active} />
+                  </small>
                 </u>
               </div>
               <div>
@@ -109,10 +114,10 @@ function Overview() {
         </div>
         <div className={style.overviewPage3}>
           <div>
-            <BarGraph />
+            <BarGraph products={products} />
           </div>
           <div>
-            <AreaGraph />
+            <AreaGraph products={products} />
           </div>
         </div>
         <br />
