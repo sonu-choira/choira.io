@@ -1,4 +1,6 @@
+
 import React, { useRef, useState } from "react";
+
 import style from "../../pages/admin/studios/studio.module.css";
 import CustomSelect from "../../pages/admin/layout/CustomSelect";
 import CustomInput from "../../pages/admin/layout/CustomInput";
@@ -16,7 +18,10 @@ import promotionApi from "../../services/promotionApi";
 import { send } from "react-ga";
 import { useNavigate } from "react-router-dom";
 import MixMaster from "../adminStudio/booking/MixMaster";
+
 // let studioName = "";
+
+
 function AddNewBanner({
   setShowAddPage,
   pageType,
@@ -69,8 +74,10 @@ function AddNewBanner({
       hitapi(sendDataToApi);
     },
   });
+
   const [showBtnLoader, setShowBtnLoader] = useState(false);
   let loaderText = "saving ...";
+
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -135,6 +142,9 @@ function AddNewBanner({
 
   const hitapi = (sendDataToApi) => {
     console.log("Api hit", sendDataToApi);
+
+
+
 
     if (editMode.current) {
       setShowBtnLoader(true);
@@ -242,8 +252,10 @@ function AddNewBanner({
             console.log("-------------------------data", data[0].label);
 
             if (data && data.length > 0) {
+
               setStudioName(data[0].label);
               // studioName = data[0].label;
+
             }
           })
           .catch((error) => {
@@ -394,6 +406,7 @@ function AddNewBanner({
                     touched={touched.forr}
                   />
 
+
                   {(values.forr === "page" || values.for === "page") &&
                     editMode.current == false && (
                       <div className={style.customInput}>
@@ -427,6 +440,7 @@ function AddNewBanner({
                         )}
                       </div>
                     )}
+
 
                   {values.forr === "list" && (
                     <CustomSelect

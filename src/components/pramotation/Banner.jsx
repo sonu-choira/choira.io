@@ -259,7 +259,9 @@ function Banner({
           editMode={editMode}
           editData={editData}
           setEditData={setEditData}
+
           bannerLength={bannerLength}
+
         />
       ) : (
         <div className={style.bannerPage}>

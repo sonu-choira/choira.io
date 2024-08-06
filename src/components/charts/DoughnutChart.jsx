@@ -18,6 +18,7 @@ const DoughnutChart = ({ products }) => {
   const [chartData, setChartData] = useState([]);
   const [filterData, setFilterData] = useState("");
   const [hoveredSegment, setHoveredSegment] = useState(null);
+
   const [showBtnLoader, setShowBtnLoader] = useState(false);
 
   useEffect(() => {
@@ -33,6 +34,7 @@ const DoughnutChart = ({ products }) => {
       setChartData(products?.revenueData?.data || []);
     }
   }, [filterData, products]);
+
 
   const total = chartData.reduce((acc, item) => acc + item.value, 0);
 
@@ -74,7 +76,9 @@ const DoughnutChart = ({ products }) => {
         chartTitle={"Earning Breakdown"}
         chartLogo={<FaChartPie />}
         setFilterData={setFilterData}
+
         showBtnLoader={showBtnLoader}
+
       />
       <div
         style={{

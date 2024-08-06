@@ -64,6 +64,7 @@ const ThreeWaveChart = ({
   mixmasterColor = "#8884d8",
   products,
 }) => {
+
   const [chartData, setChartData] = useState([]);
   const [filterData, setFilterData] = useState("");
   const [showBtnLoader, setShowBtnLoader] = useState(true);
@@ -86,6 +87,7 @@ const ThreeWaveChart = ({
       setShowBtnLoader(products?.transactionData?.data ? false : true);
     }
   }, [filterData, products]);
+
   console.log(products, "products?.transactionData?.data");
   const monthOrder = [
     "JAN",
@@ -101,7 +103,9 @@ const ThreeWaveChart = ({
     "NOV",
     "DEC",
   ];
+
   const sortedData = chartData.sort((a, b) => {
+
     return monthOrder.indexOf(a.name) - monthOrder.indexOf(b.name);
   });
   return (

@@ -97,6 +97,7 @@ function MusicProduction({
                         <CopyToClipboard textToCopy={prod?.userFullName} />
                       </td>
 
+
                       <td title={prod.userPhone}>
                         <CopyToClipboard textToCopy={prod?.userPhone} />
                       </td>
@@ -111,6 +112,7 @@ function MusicProduction({
                         />
                       </td>
                       <td>₹{prod.totalPrice}</td>
+
                       <td className={style.tableActionbtn}>
                         <div>
                           <select
@@ -141,6 +143,7 @@ function MusicProduction({
                               // gotoShowDetails(prod._id);
                             }}
                           />
+
 
                           <RiDeleteBin5Fill
                             style={{ color: "red", cursor: "pointer" }}

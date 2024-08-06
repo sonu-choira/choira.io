@@ -20,6 +20,7 @@ function ChartNav({
     // data = event.target.value;
   };
 
+
   return (
     <>
       <div className={style.chartNav}>
@@ -42,6 +43,7 @@ function ChartNav({
             }}
           />
 
+
           {showBtnLoader ? (
             <Button
               name={"sonu"}
@@ -62,6 +64,7 @@ function ChartNav({
               <option value={"week"}>week</option>
             </select>
           )}
+
         </div>
       </div>
     </>
