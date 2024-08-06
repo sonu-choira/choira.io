@@ -20,7 +20,8 @@ import { update } from "firebase/database";
 import promotionApi from "../../services/promotionApi";
 import { clearEmptyField } from "../../utils/helperFunction";
 import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
-
+import noDataFound from "../../components/loader/nodataFound.png";
+let bannerLength = 0;
 function Banner({
   setProducts,
   products,
@@ -42,6 +43,17 @@ function Banner({
   const [isExclusiveValidUrl, setIsExclusiveValidUrl] = useState(true);
 
   const [reorder, setReorder] = useState(false);
+  const [loader, setLoader] = useState(true);
+
+  useEffect(() => {
+    let t = setTimeout(() => {
+      setLoader(false);
+    }, 5000);
+    return () => {
+      clearTimeout(t);
+    };
+  });
+
   useEffect(() => {
     if (products) {
       //
@@ -51,25 +63,14 @@ function Banner({
 
       //
       const mainbanners = products.filter((prod) => prod.type === "AdBanner");
+
+      bannerLength = mainbanners.length + 1;
+      console.log("==============<> ", bannerLength);
       const sortedData = mainbanners.sort((a, b) => a.stage - b.stage);
       setMainBannerData(sortedData);
       setReorder(true);
     }
   }, [products]);
-
-  // useEffect(() => {
-  //   console.log("==============<>");
-  //   if (mainBannerData && mainBannerData.length > 0) {
-  //     const sortedData = mainBannerData.sort((a, b) => a.stage - b.stage);
-  //       setMainBannerData([...sortedData]);
-  //   }
-  //   if (exclusiveBannerData && exclusiveBannerData.length > 0) {
-  //     const sortedData = exclusiveBannerData.sort((a, b) => a.stage - b.stage);
-  //     setExclusiveBannerData([...sortedData]);
-  //   }
-  // }, [reorder]);
-
-  // Define state for URL validity
 
   const isValidUrl = (url) => {
     const urlPattern = new RegExp(
@@ -218,7 +219,10 @@ function Banner({
   const [editData, setEditData] = useState({});
   const gotoEditPage = (id) => {
     console.log(id);
-    setEditData(products.filter((item) => item.id === id)[0]);
+    let datatosend = products.filter((item) => item.id === id)[0];
+    datatosend.bannerCount = products.length + 1;
+    // console.log(products.length);
+    setEditData(datatosend);
   };
 
   const handelDeleteBanner = (id) => {
@@ -255,6 +259,9 @@ function Banner({
           editMode={editMode}
           editData={editData}
           setEditData={setEditData}
+
+          bannerLength={bannerLength}
+
         />
       ) : (
         <div className={style.bannerPage}>
@@ -598,8 +605,15 @@ function Banner({
                   </div>
                 ))}
               </div>
-            ) : (
+            ) : loader ? (
               <Skeleton active />
+            ) : (
+              // <img
+              //   src={noDataFound}
+              //   alt="No Data Found"
+              //   style={{ width: "10%", height: "30%" }}
+              // />
+              <h3>No Data Found</h3>
             )}
             <br />
             <br />

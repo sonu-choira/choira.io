@@ -20,6 +20,8 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
 
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
+  let loaderText = "saving ...";
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
 
   const [pageCount, setPageCount] = useState(1);
   const [showAddPage, setShowAddPage] = useState(false);
@@ -243,6 +245,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
                   showTable={showTable}
                   submitData={submitData}
                   setSubmitData={setSubmitData}
+                  setShowBtnLoader={setShowBtnLoader}
                 />
               ) : sidebarPageCount == 3 ? (
                 ""
@@ -268,6 +271,9 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
             saveOnclick={() => {
               setSubmitData(true);
             }}
+            loaderText={loaderText}
+            showBtnLoader={showBtnLoader}
+
             // disabled={true}
             //   saveOnclick={handelSavebtn}
           />

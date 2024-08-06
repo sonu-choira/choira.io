@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -12,6 +12,7 @@ import {
 import style from "../../pages/admin/studios/studio.module.css";
 import ChartNav from "./ChartNav";
 import { VscGraph } from "react-icons/vsc";
+import chartApi from "../../services/chartApi";
 
 const data = [
   { name: "Ket Studio", bookings: 85 },
@@ -26,31 +27,55 @@ const data = [
   { name: "Arvind Recording Studio", bookings: 40 },
 ];
 
-const BarGraph = () => (
-  <div className={style.donutChart}>
-    <ChartNav chartTitle={"Studio Bookings"} chartLogo={<VscGraph />} />
-    <div style={{ width: "100%", height: 400 }}>
-      {/* <div
+const BarGraph = ({ products }) => {
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  const [filterData, setFilterData] = useState("");
+  const [chartData, setChartData] = useState([]);
+  useEffect(() => {
+    if (filterData) {
+      setShowBtnLoader(true);
+      chartApi.getAllCharts(filterData, "NoOfBookings").then((res) => {
+        setShowBtnLoader(false);
+        setChartData(res?.NoOfBookings?.data || []);
+      });
+    } else {
+      setShowBtnLoader(false);
+
+      setChartData(products?.NoOfBookings?.data || []);
+    }
+  }, [filterData, products]);
+
+  return (
+    <div className={style.donutChart}>
+      <ChartNav
+        chartTitle={"Studio Bookings"}
+        chartLogo={<VscGraph />}
+        setFilterData={setFilterData}
+        showBtnLoader={showBtnLoader}
+      />
+      <div style={{ width: "100%", height: 400 }}>
+        {/* <div
       style={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
       }}
     ></div> */}
-      <ResponsiveContainer width="100%" height="90%">
-        <BarChart
-          data={data}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="bookings" fill="#FFAA00" />
-        </BarChart>
-      </ResponsiveContainer>
+        <ResponsiveContainer width="100%" height="90%">
+          <BarChart
+            data={chartData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="bookings" fill="#FFAA00" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default BarGraph;

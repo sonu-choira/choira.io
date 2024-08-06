@@ -30,6 +30,7 @@ import { loginUrl, getTokenByUrl } from "../../spotify";
 import { httpUrl, nodeUrl } from "../../restservice";
 import { Alert } from "antd";
 import { errorAlert, sucessAlret } from "../admin/layout/Alert";
+import Button from "../admin/layout/Button";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -410,34 +411,48 @@ function Signin() {
   };
 
   // api integration ----------------------------------------
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  let loaderText = "verifying ...";
 
   const checkLoginData = () => {
+    setShowBtnLoader(true);
     // const role = mobileNumber === "9898989898" ? "admin" : "user";
-    AuthService.login(countryCode + mobileNumber, "NUMBER").then((response) => {
-      console.log("res------", response);
-      console.log("res------", response.user);
-      localStorage.setItem("adminData", JSON.stringify(response.user));
-      if (response.status) {
-        // TokenService.setUser(response.user.role);
-        TokenService.setData("token", response.token);
-        setSign(2);
-        sucessAlret(response.message);
-      } else {
-        console.log("Not get Token");
-        errorAlert(response.message);
-      }
+    AuthService.login(countryCode + mobileNumber, "NUMBER")
+      .then((response) => {
+        setShowBtnLoader(false);
+        console.log("res------", response);
+        console.log("res------", response.user);
+        localStorage.setItem("adminData", JSON.stringify(response.user));
+        if (response.status) {
+          setShowBtnLoader(false);
 
-      // if (response.user.role === "admin") {
-      //   console.log(response.newUser);
-      //   setSign(2);
-      //   navigate("/adminDashboard/Apps&More/studio");
-      // } else if (response.newUser === true) {
-      //   console.log(response.newUser);
-      //   localStorage.removeItem("token");
-      //   setApiOtp(response.otp);
-      //   setSign(2);
-      // }
-    });
+          // TokenService.setUser(response.user.role);
+          TokenService.setData("token", response.token);
+          setSign(2);
+          sucessAlret(response.message);
+        } else {
+          setShowBtnLoader(false);
+
+          console.log("Not get Token");
+          errorAlert(response.message);
+        }
+
+        // if (response.user.role === "admin") {
+        //   console.log(response.newUser);
+        //   setSign(2);
+        //   navigate("/adminDashboard/Apps&More/studio");
+        // } else if (response.newUser === true) {
+        //   console.log(response.newUser);
+        //   localStorage.removeItem("token");
+        //   setApiOtp(response.otp);
+        //   setSign(2);
+        // }
+      })
+      .catch((error) => {
+        setShowBtnLoader(false);
+        errorAlert(error.message);
+        console.log(error);
+      });
   };
 
   const handleMobileNumberChange = (e) => {
@@ -445,7 +460,7 @@ function Signin() {
     // console.log(mobileNumber);
   };
   const gotoBooking = () => {
-    navigate("/adminDashboard");
+    navigate("/adminDashboard/Overview");
   };
 
   const handleContinueButtonClick = (e) => {
@@ -472,29 +487,38 @@ function Signin() {
   const source = axios.CancelToken.source();
 
   const check_otp_btn = () => {
-    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, "admin", {
-      cancelToken: source.token,
-    }).then((response) => {
-      console.log("res------", response);
-      if (response.status) {
-        TokenService.setData("token", response.token);
-        sucessAlret("OTP is Correct!", "Welcome back 😊");
+    setShowBtnLoader(true);
 
-        gotoBooking();
-        setCheckOtp(false);
-        localStorage.setItem("isSignin", "true");
-      } else {
-        errorAlert("OTP is Incorrect!", "Please try again 😕");
-        console.log("Not get Token");
-      }
-    });
+    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, "admin")
+      .then((response) => {
+        setShowBtnLoader(false);
+        console.log("res------", response);
+        if (response.status) {
+          setShowBtnLoader(false);
+          TokenService.setData("token", response.token);
+          sucessAlret("OTP is Correct!", "Welcome back 😊");
+
+          gotoBooking();
+          // setCheckOtp(false);
+          localStorage.setItem("isSignin", "true");
+        } else {
+          setShowBtnLoader(false);
+          errorAlert("OTP is Incorrect!", "Please try again 😕");
+          console.log("Not get Token");
+        }
+      })
+      .catch((error) => {
+        setShowBtnLoader(false);
+        errorAlert(error.message);
+        console.log(error);
+      });
   };
 
-  useEffect(() => {
-    return () => {
-      source.cancel("Operation canceled by the user.");
-    };
-  }, [source]);
+  // useEffect(() => {
+  //   return () => {
+  //     source.cancel("Operation canceled by the user.");
+  //   };
+  // }, [source]);
 
   const gotoHome = () => {
     navigate("/home");
@@ -561,8 +585,8 @@ function Signin() {
                       <OptVerify
                         mobileNumber={mobileNumber}
                         countryCode={countryCode}
-                        checkOtp={checkOtp}
-                        setCheckOtp={setCheckOtp}
+                        // checkOtp={checkOtp}
+                        // setCheckOtp={setCheckOtp}
                         // apiOtp={apiOtp}
                         checkLoginData={checkLoginData}
                         enteredOTP={enteredOTP}
@@ -626,16 +650,30 @@ function Signin() {
                       >
                         <div>
                           {sign === 2 && signin ? (
-                            <button type="submit" onClick={check_otp_btn}>
-                              submit
-                            </button>
+                            <Button
+                              type="submit"
+                              onClick={check_otp_btn}
+                              name={"submit"}
+                              showBtnLoader={showBtnLoader}
+                              loaderText={loaderText}
+                            />
                           ) : (
-                            <button
+                            // <button type="submit" onClick={check_otp_btn}>
+                            //   submit
+                            // </button>
+                            <Button
                               type="submit"
                               onClick={handleContinueButtonClick}
-                            >
-                              continue
-                            </button>
+                              name={"continue"}
+                              showBtnLoader={showBtnLoader}
+                              loaderText={loaderText}
+                            />
+                            // <button
+                            //   type="submit"
+                            //   onClick={handleContinueButtonClick}
+                            // >
+                            //   continue
+                            // </button>
                           )}
                         </div>
                         <div>

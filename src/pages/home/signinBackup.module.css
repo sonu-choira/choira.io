@@ -321,7 +321,7 @@ h6 {
   border-radius: 10px;
   outline: none;
   border: none;
-  background-color: #ffc701;
+  /* background-color: #ffc701; */
   color: #262727;
   font-weight: 600;
 }

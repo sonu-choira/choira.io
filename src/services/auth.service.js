@@ -45,13 +45,12 @@ class AuthService {
     };
 
     verifyOtp = async (phoneNumber, otp,role = "admin",option) => {
-        const {cancelToken} = option
         const response = await axios.get('/users/verify-otp', {
            params: {
                phoneNumber,
                otp,
                role,
-           },cancelToken
+           }
         }).then((res) => {
             console.log("otp res ===>", res)
             return res.data;

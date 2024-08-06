@@ -217,14 +217,19 @@ function ShowAllUser() {
 
     // setShowUserProfile(true);
   };
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  let loaderText = "Downloading ...";
   const downloadUserData = () => {
+    setShowBtnLoader(true);
     userApi
       .downloadUserData(userAllFilterData)
       .then((response) => {
         console.log("data download", response);
+        setShowBtnLoader(false);
       })
       .catch((error) => {
         console.error("Error download data:", error);
+        setShowBtnLoader(false);
       });
   };
 
@@ -252,6 +257,8 @@ function ShowAllUser() {
                 style={{ height: "60%", gap: "5%" }}
                 // disabled={true}
                 onClick={downloadUserData}
+                showBtnLoader={showBtnLoader}
+                loaderText={loaderText}
               />
             </div>
           </div>

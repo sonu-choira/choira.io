@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AreaChart,
   Area,
@@ -12,6 +12,7 @@ import {
 import style from "../../pages/admin/studios/studio.module.css";
 import ChartNav from "./ChartNav";
 import { FaCalendarCheck } from "react-icons/fa6";
+import chartApi from "../../services/chartApi";
 
 const data = [
   { name: "Sep", BookingHours: 40, BookingCount: 20 },
@@ -52,49 +53,83 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-const AreaGraph = () => (
-  <div className={style.donutChart}>
-    <ChartNav chartTitle={"Bookings"} chartLogo={<FaCalendarCheck />} />
+const AreaGraph = ({ products }) => {
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  const [filterData, setFilterData] = useState("");
+  const [chartData, setChartData] = useState([]);
+  useEffect(() => {
+    if (filterData) {
+      setShowBtnLoader(true);
+      chartApi.getAllCharts(filterData, "BookingCountAndHours").then((res) => {
+        setShowBtnLoader(false);
+        setChartData(res?.BookingCountAndHours?.data || []);
+      });
+    } else {
+      setShowBtnLoader(false);
 
-    <div style={{ width: "100%", height: 400 }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart
-          data={data}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
-          <defs>
-            <linearGradient id="colorBookingHours" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-            </linearGradient>
-            <linearGradient id="colorBookingCount" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#FF00FF" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#FF00FF" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          <Area
-            type="monotone"
-            dataKey="BookingHours"
-            stroke="#8884d8"
-            fillOpacity={1}
-            fill="url(#colorBookingHours)"
-          />
-          <Area
-            type="monotone"
-            dataKey="BookingCount"
-            stroke="#FF00FF"
-            fillOpacity={1}
-            fill="url(#colorBookingCount)"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+      setChartData(products?.BookingCountAndHours?.data || []);
+    }
+  }, [filterData, products]);
+  return (
+    <div className={style.donutChart}>
+      <ChartNav
+        chartTitle={"Bookings"}
+        chartLogo={<FaCalendarCheck />}
+        setFilterData={setFilterData}
+        showBtnLoader={showBtnLoader}
+      />
+
+      <div style={{ width: "100%", height: 400 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            data={chartData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <defs>
+              <linearGradient
+                id="colorBookingHours"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient
+                id="colorBookingCount"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="5%" stopColor="#FF00FF" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#FF00FF" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <XAxis dataKey="name" />
+            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend />
+            <Area
+              type="monotone"
+              dataKey="BookingHours"
+              stroke="#8884d8"
+              fillOpacity={1}
+              fill="url(#colorBookingHours)"
+            />
+            <Area
+              type="monotone"
+              dataKey="BookingCount"
+              stroke="#FF00FF"
+              fillOpacity={1}
+              fill="url(#colorBookingCount)"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     </div>
-  </div>
-);
-
+  );
+};
 export default AreaGraph;

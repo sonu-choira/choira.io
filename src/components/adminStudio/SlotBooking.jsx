@@ -27,6 +27,8 @@ import ChoiraLoder2 from "../loader/ChoiraLoder2";
 import ChoiraLoader from "../loader/ChoiraLoader";
 
 function SlotBooking({ setSelectTab }) {
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  let loaderText = "Booking ...";
   const [timeSlotApiData, setTimeSlotApiData] = useState({
     bookingType: "",
     fullName: "",
@@ -222,21 +224,25 @@ function SlotBooking({ setSelectTab }) {
     }
     newData.bookingDate = newData.bookingDate + "T00:00:00.000Z";
     setshowLoader(true);
+    setShowBtnLoader(true);
     timeSlotApi
       .offlineStudioBooking(newData)
       .then((res) => {
         console.log(res);
         if (res.status) {
+          setShowBtnLoader(false);
           setshowAllSlots(false);
           setshowLoader(false);
           sucessAlret("Booking done");
           navigate("/adminDashboard/Bookings/studio");
         } else {
+          setShowBtnLoader(false);
           errorAlert(res.message || "Booking failed");
           setshowLoader(false);
         }
       })
       .catch((err) => {
+        setShowBtnLoader(false);
         console.log(err);
         errorAlert(err || "Booking failed");
 
@@ -251,10 +257,10 @@ function SlotBooking({ setSelectTab }) {
         // slotBookingApi();
         setshowAllSlots(false);
       } else {
-        alert("Please choose a slot");
+        errorAlert("Please choose a slot");
       }
     } else if (selectedSlot) {
-      alert("sendingData to api");
+      sucessAlret("sendingData to api");
       timeSlotApi
         .getAllSolts(timeSlotApiData)
         .then((res) => {
@@ -574,6 +580,8 @@ function SlotBooking({ setSelectTab }) {
             saveDisabled={!timeSlotApiData?.bookingTime && true}
             backOnclick={backOnclick}
             saveOnclick={!showAllSlots ? slotBookingApi : handelSavebtn}
+            loaderText={loaderText}
+            showBtnLoader={showBtnLoader}
           />
         </div>
       </div>

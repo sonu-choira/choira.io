@@ -27,6 +27,8 @@ function BookingPages() {
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+
   // let { page: paramData } = useParams();
 
   // setBookingPageCount("c2");
@@ -165,6 +167,9 @@ function BookingPages() {
         <BookingActionBar
           bookingPageCount={bookingPageCount}
           setBookingPageCount={setBookingPageCount}
+          setShowBtnLoader={setShowBtnLoader}
+          showBtnLoader={showBtnLoader}
+          loaderText={"Downloading ..."}
         />
         {bookingPageCount === "c1" ? (
           <StudioBookingDetail

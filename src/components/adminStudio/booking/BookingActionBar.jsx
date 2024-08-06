@@ -14,6 +14,9 @@ function BookingActionBar({
   bookingPageCount,
   pagetype,
   downloadAllData,
+  loaderText,
+  showBtnLoader,
+  setShowBtnLoader,
 }) {
   console.log(bookingPageCount);
   const navigate = useNavigate();
@@ -28,32 +31,45 @@ function BookingActionBar({
     };
     if (pageData == "Bookings" && type == "studio") {
       bookingData.type = "c1";
+      setShowBtnLoader(true);
       appAndmoreApi
         .downloadBookingServiceData(bookingData)
         .then((response) => {
           console.log("data download", response);
+          setShowBtnLoader(false);
         })
         .catch((error) => {
           console.error("Error download data:", error);
+          setShowBtnLoader(false);
         });
     } else if (pageData == "Bookings" && type == "musicproduction") {
       bookingData.type = "c2";
+      setShowBtnLoader(true);
+
       appAndmoreApi
         .downloadBookingServiceData(bookingData)
         .then((response) => {
           console.log("data download", response);
+          setShowBtnLoader(false);
         })
         .catch((error) => {
           console.error("Error download data:", error);
+          setShowBtnLoader(false);
         });
     } else if (pageData == "Bookings" && type == "mixmaster") {
       bookingData.type = "c3";
+      setShowBtnLoader(true);
+
       appAndmoreApi
         .downloadBookingServiceData(bookingData)
         .then((response) => {
+          setShowBtnLoader(false);
+
           console.log("data download", response);
         })
         .catch((error) => {
+          setShowBtnLoader(false);
+
           console.error("Error download data:", error);
         });
     }
@@ -184,6 +200,8 @@ function BookingActionBar({
             onClick={
               pagetype == "apps" ? downloadAllData : downloadBookingsData
             }
+            loaderText={loaderText}
+            showBtnLoader={showBtnLoader}
           />
           {(bookingPageCount === "c1") & (pagetype != "apps") ? (
             <Button

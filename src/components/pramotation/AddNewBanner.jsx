@@ -1,4 +1,6 @@
-import React, { useRef } from "react";
+
+import React, { useRef, useState } from "react";
+
 import style from "../../pages/admin/studios/studio.module.css";
 import CustomSelect from "../../pages/admin/layout/CustomSelect";
 import CustomInput from "../../pages/admin/layout/CustomInput";
@@ -16,14 +18,20 @@ import promotionApi from "../../services/promotionApi";
 import { send } from "react-ga";
 import { useNavigate } from "react-router-dom";
 import MixMaster from "../adminStudio/booking/MixMaster";
-let studioName = "";
+
+// let studioName = "";
+
+
 function AddNewBanner({
   setShowAddPage,
   pageType,
-  editMode,
+  editMode = false,
   editData,
   setEditData,
+  bannerLength,
 }) {
+  const [studioName, setStudioName] = useState("");
+  const [bL, setBL] = useState(0);
   const {
     values,
     errors,
@@ -67,6 +75,10 @@ function AddNewBanner({
     },
   });
 
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  let loaderText = "saving ...";
+
+
   const navigate = useNavigate();
   useEffect(() => {
     if (editMode.current) {
@@ -82,7 +94,7 @@ function AddNewBanner({
         forr: "",
         tempStudioName: "", // Used only for display
         active: "",
-        stage: "",
+        stage: values.stage,
       };
       setValues(resetValues);
     } else {
@@ -97,7 +109,7 @@ function AddNewBanner({
         forr: "",
         tempStudioName: "", // Used only for display
         active: "",
-        stage: "",
+        stage: values.stage,
       };
       setValues(resetValues);
       console.log("pageType", pageType);
@@ -116,39 +128,60 @@ function AddNewBanner({
   }, [values]);
   useEffect(() => {
     setFieldValue("type", pageType);
-  }, [pageType]);
+    if (editMode.current == false) {
+      // alert("false");
+      setFieldValue("stage", bL);
+    }
+  }, [pageType, bL]);
+
+  useEffect(() => {
+    if (editMode.current == false) {
+      setBL(bannerLength);
+    }
+  }, []);
 
   const hitapi = (sendDataToApi) => {
     console.log("Api hit", sendDataToApi);
-    alert("apihiut");
+
+
+
+
     if (editMode.current) {
+      setShowBtnLoader(true);
       promotionApi
         .updateBanner(sendDataToApi)
         .then((res) => {
           console.log(res);
           if (res.status) {
+            setShowBtnLoader(false);
             sucessAlret("Banner Updated Successfully");
           } else {
+            setShowBtnLoader(false);
             errorAlert(res.message || "Error in updating banner");
           }
         })
         .catch((err) => {
+          setShowBtnLoader(false);
           console.log(err);
           errorAlert("Error in updating banner");
         });
     } else {
+      setShowBtnLoader(true);
       console.log("Create Banner");
       promotionApi
         .createBanner(sendDataToApi)
         .then((res) => {
           console.log(res);
           if (res.status == true) {
+            setShowBtnLoader(false);
             sucessAlret("Banner Created Successfully");
           } else {
+            setShowBtnLoader(false);
             errorAlert(res.message || "Error in creating banner");
           }
         })
         .catch((err) => {
+          setShowBtnLoader(false);
           console.log(err);
           errorAlert(err.message);
         });
@@ -219,7 +252,10 @@ function AddNewBanner({
             console.log("-------------------------data", data[0].label);
 
             if (data && data.length > 0) {
-              studioName = data[0].label;
+
+              setStudioName(data[0].label);
+              // studioName = data[0].label;
+
             }
           })
           .catch((error) => {
@@ -329,6 +365,7 @@ function AddNewBanner({
                     value={values.stage}
                     error={errors.stage}
                     touched={touched.stage}
+                    disabled={editMode.current == false}
                   />
                 </>
               ) : (
@@ -369,21 +406,41 @@ function AddNewBanner({
                     touched={touched.forr}
                   />
 
-                  {(values.forr === "page" || values.for === "page") && (
-                    <div className={style.customInput}>
-                      <label htmlFor="UserName">Studio Name</label>
-                      <SearchSelectInput
-                        placeholder="Search Studio"
-                        fetchOptions={fetchUserList}
-                        onChange={handelStudioChange}
-                        defaultValue={values?.tempStudioName || studioName}
-                        style={{ width: "100%", height: "100%" }}
-                      />
-                      {errors.entity_id && touched.entity_id && (
-                        <div className={style.error}>{errors.entity_id}</div>
-                      )}
-                    </div>
-                  )}
+
+                  {(values.forr === "page" || values.for === "page") &&
+                    editMode.current == false && (
+                      <div className={style.customInput}>
+                        <label htmlFor="UserName">Studio Name</label>
+                        <SearchSelectInput
+                          placeholder="Search Studio"
+                          fetchOptions={fetchUserList}
+                          onChange={handelStudioChange}
+                          defaultValue={values?.tempStudioName || studioName}
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                        {errors.entity_id && touched.entity_id && (
+                          <div className={style.error}>{errors.entity_id}</div>
+                        )}
+                      </div>
+                    )}
+                  {(values.forr === "page" || values.for === "page") &&
+                    editMode &&
+                    studioName && (
+                      <div className={style.customInput}>
+                        <label htmlFor="UserName">Studio Name</label>
+                        <SearchSelectInput
+                          placeholder="Search Studio"
+                          fetchOptions={fetchUserList}
+                          onChange={handelStudioChange}
+                          defaultValue={values?.tempStudioName || studioName}
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                        {errors.entity_id && touched.entity_id && (
+                          <div className={style.error}>{errors.entity_id}</div>
+                        )}
+                      </div>
+                    )}
+
 
                   {values.forr === "list" && (
                     <CustomSelect
@@ -417,6 +474,8 @@ function AddNewBanner({
           }}
           saveDisabled={false}
           saveType={"submit"}
+          loaderText={loaderText}
+          showBtnLoader={showBtnLoader}
         />
       </form>
     </>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../pages/admin/layout/Button";
 
 import style from "../../pages/admin/studios/studio.module.css";
@@ -17,6 +17,8 @@ import {
   AreaChart,
 } from "recharts";
 import ChartNav from "./ChartNav";
+import chartApi from "../../services/chartApi";
+import { errorAlert } from "../../pages/admin/layout/Alert";
 
 // const data = [
 //   { name: "SEP", studio: 40, production: 80, mixmaster: 60 },
@@ -62,6 +64,30 @@ const ThreeWaveChart = ({
   mixmasterColor = "#8884d8",
   products,
 }) => {
+
+  const [chartData, setChartData] = useState([]);
+  const [filterData, setFilterData] = useState("");
+  const [showBtnLoader, setShowBtnLoader] = useState(true);
+
+  useEffect(() => {
+    if (filterData) {
+      setShowBtnLoader(true);
+      chartApi
+        .getAllCharts(filterData, "transaction")
+        .then((res) => {
+          setChartData(res?.transactionData?.data || []);
+          setShowBtnLoader(false);
+        })
+        .catch((err) => {
+          setShowBtnLoader(false);
+          errorAlert(err);
+        });
+    } else {
+      setChartData(products?.transactionData?.data || []);
+      setShowBtnLoader(products?.transactionData?.data ? false : true);
+    }
+  }, [filterData, products]);
+
   console.log(products, "products?.transactionData?.data");
   const monthOrder = [
     "JAN",
@@ -77,12 +103,18 @@ const ThreeWaveChart = ({
     "NOV",
     "DEC",
   ];
-  const sortedData = products?.transactionData?.data.sort((a, b) => {
+
+  const sortedData = chartData.sort((a, b) => {
+
     return monthOrder.indexOf(a.name) - monthOrder.indexOf(b.name);
   });
   return (
     <div className={style.transactionChart}>
-      <ChartNav chartTitle={"Transaction "} />
+      <ChartNav
+        chartTitle={"Transaction "}
+        setFilterData={setFilterData}
+        showBtnLoader={showBtnLoader}
+      />
 
       <ResponsiveContainer width="100%" height="80%">
         <AreaChart

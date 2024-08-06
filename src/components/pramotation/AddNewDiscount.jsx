@@ -20,17 +20,19 @@ function AddNewDiscount({
   submitData,
   setSubmitData,
   setShowTable,
+  setShowBtnLoader,
 }) {
   const option = {
     "New User Discount": 0,
     "Discount Recurring": 1,
     "Event Based": 2,
+    // "Specific User": 4,
     "Special Session": 3,
-    "Specific User": 4,
   };
 
   const hitApi = (sendDataToApi) => {
     if (editMode.current) {
+      setShowBtnLoader(true);
       promotionApi
         .updateDiscount(editData._id, sendDataToApi)
         .then((res) => {
@@ -38,30 +40,37 @@ function AddNewDiscount({
 
           if (res.status) {
             sucessAlret("Discount Updated Successfully");
+            setShowBtnLoader(false);
 
             setShowTable(true);
           } else {
+            setShowBtnLoader(false);
             errorAlert(res.message || "Error in updating discount");
           }
         })
         .catch((err) => {
+          setShowBtnLoader(false);
           console.log(err);
           errorAlert("Error in updating discount");
           setShowTable(true);
         });
     } else {
+      setShowBtnLoader(true);
       promotionApi
         .createDiscount(sendDataToApi)
         .then((res) => {
           console.log(res);
           if (res.status) {
+            setShowBtnLoader(false);
             sucessAlret("Discount Created Successfully");
             setShowTable(true);
           } else {
+            setShowBtnLoader(false);
             errorAlert(res.message || "Error in creating discount");
           }
         })
         .catch((err) => {
+          setShowBtnLoader(false);
           console.log(err);
           errorAlert(err.message || "Error in creating discount");
         });
@@ -178,6 +187,34 @@ function AddNewDiscount({
       return [];
     }
   }
+  useEffect(() => {
+    console.log(values);
+  }, [values]);
+  const [userData, setUserData] = useState("");
+
+  useEffect(() => {
+    if (editMode.current && editData.discountType === 3) {
+      let dataToSend = {
+        searchUser: editData.usersList,
+      };
+      userApi
+        .getAllUser(1, dataToSend)
+        .then((res) => {
+          console.log(res);
+          setFieldValue(
+            "usersList",
+            res.users.map((user) => ({
+              label: `${user.fullName} `,
+              value: user._id,
+            }))
+          );
+          setUserData(res.users);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
   const getCurrentdate = (day_count = 0) => {
     // Get the current date
@@ -228,7 +265,28 @@ function AddNewDiscount({
           error={errors.couponCode}
           touched={touched.couponCode}
         />
-        {parseInt(values.discountType) === 4 && (
+        {parseInt(values.discountType) === 3 &&
+          userData &&
+          editMode.current && (
+            <div className={style.addNewStudioinputBox}>
+              <label htmlFor="UserName">User Name</label>
+              <SearchSelectInput
+                placeholder="Select users"
+                fetchOptions={fetchUserList}
+                onChange={handleUserChange}
+                name="usersList"
+                mode="multiple"
+                defaultValue={values.usersList}
+                style={{
+                  width: "100%",
+                }}
+              />
+              {errors.usersList && touched.usersList && (
+                <p className={style.error}>{errors.usersList}</p>
+              )}
+            </div>
+          )}
+        {parseInt(values.discountType) === 3 && editMode.current == false && (
           <div className={style.addNewStudioinputBox}>
             <label htmlFor="UserName">User Name</label>
             <SearchSelectInput
@@ -237,7 +295,7 @@ function AddNewDiscount({
               onChange={handleUserChange}
               name="usersList"
               mode="multiple"
-              defaultValue={values.searchUser}
+              defaultValue={values.usersList}
               style={{
                 width: "100%",
               }}
