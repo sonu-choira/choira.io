@@ -19,52 +19,51 @@ import NumberCounter from "../layout/NumberCounter";
 // import chartApi from "../../../services/chartApi";
 
 function Overview() {
-  const data = [
+  const { pathname } = useLocation();
+  const [products, setProducts] = useState({});
+  const [data, setdata] = useState([
     {
       title: "Users",
-      count: 1259,
-      active: 238,
+      count: 0,
+      active: 0,
       image: t1,
     },
     {
       title: "Booking",
-      count: 1069,
-      active: 5558,
+      count: 0,
+      active: 0,
       image: t2,
     },
     {
       title: "Studio",
-      count: 1589,
-      active: 1589,
+      count: 0,
+      active: 0,
       image: t3,
     },
     {
       title: "Project",
-      count: 159,
-      active: 38,
+      count: 0,
+      active: 0,
       image: t4,
     },
-  ];
-
-  const { pathname } = useLocation();
-  const [products, setProducts] = useState({});
+  ]);
 
   useEffect(() => {
-    if (pathname.includes("Overview")) {
-      Swal.fire({
-        title: "<strong>Under Development </strong>",
-        icon: "info",
-        html: `
-         This Page is Under Development.
-         The Data Of this Page is not Real.
-        `,
-        // showCloseButton: true,
-        // showCancelButton: true,
-        focusConfirm: false,
+    // if (pathname.includes("Overview")) {
+    //   Swal.fire({
+    //     title: "<strong>Under Development </strong>",
+    //     icon: "info",
+    //     html: `
+    //      This Page is Under Development.
+    //      The Data Of this Page is not Real.
+    //     `,
+    //     // showCloseButton: true,
+    //     // showCancelButton: true,
+    //     focusConfirm: false,
 
-        confirmButtonAriaLabel: "Ok",
-      });
-    }
+    //     confirmButtonAriaLabel: "Ok",
+    //   });
+    // }
     chartApi
       .getAllCharts()
       .then((res) => {
@@ -76,9 +75,38 @@ function Overview() {
         console.log(err);
       });
   }, []);
+
   useEffect(() => {
     console.log("{{{{{{{{{{{{{{{{{", products);
+    let adata = [
+      {
+        title: "Users",
+        count: products.UserData?.data[0].totalCount || 0,
+        active: products.UserData?.data[0].activeCount || 0,
+        image: t1,
+      },
+      {
+        title: "Booking",
+        count: products.BookingData?.data[0].totalCount || 0,
+        active: products.BookingData?.data[0].activeCount || 0,
+        image: t2,
+      },
+      {
+        title: "Studio",
+        count: products.StudioData?.data[0].totalCount || 0,
+        active: products.StudioData?.data[0].activeCount || 0,
+        image: t3,
+      },
+      {
+        title: "Project",
+        count: 0,
+        active: 0,
+        image: t4,
+      },
+    ];
+    setdata(adata);
   }, [products]);
+
   return (
     <>
       <div className={style.overviewPage1}>
@@ -90,11 +118,11 @@ function Overview() {
                 <h2>
                   <NumberCounter end={item.count} />
                 </h2>
-                <u>
+                <>
                   <small>
                     Active : <NumberCounter end={item.active} />
                   </small>
-                </u>
+                </>
               </div>
               <div>
                 <img src={item.image} alt={item.title} />
@@ -109,7 +137,7 @@ function Overview() {
             <DoughnutChart products={products} />
           </div>
           <div>
-            <LineGraph />
+            <LineGraph products={products} />
           </div>
         </div>
         <div className={style.overviewPage3}>
@@ -122,11 +150,11 @@ function Overview() {
         </div>
         <br />
         <br />
-        <div className={style.overviewPage4}>
+        {/* <div className={style.overviewPage4}>
           <div>
             <SimpleLineChart />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
