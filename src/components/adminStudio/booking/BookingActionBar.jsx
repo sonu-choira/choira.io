@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../../pages/admin/layout/Button";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 import { LuFilePlus } from "react-icons/lu";
@@ -8,6 +8,7 @@ import { MdNoteAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import { useNavigateRouter } from "../../../navigateRoute";
+import { userAccess } from "../../../config/userAccess";
 
 function BookingActionBar({
   setBookingPageCount,
@@ -112,47 +113,76 @@ function BookingActionBar({
       router.push("/adminDashboard/Bookings/mixmaster");
     }
   };
+  const bookingOptions = [
+    {
+      id: "c1",
+      label: "Studio",
+      onClick: () => {
+        setBookingPageCount("c1");
+        gotoStudio();
+      },
+      style: { borderLeft: "none" },
+    },
+    {
+      id: "c2",
+      label: "Music Production",
+      onClick: () => {
+        setBookingPageCount("c2");
+        gotoMusicProduction();
+      },
+      style: {},
+    },
+    {
+      id: "c3",
+      label: "Mix-Master",
+      onClick: () => {
+        setBookingPageCount("c3");
+        gotoMixMaster();
+      },
+      style: { borderRight: "none" },
+    },
+  ];
+  const [navAccess, setnavAccess] = useState(userAccess || "");
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
         <div>
           <div>
-            <div
-              style={{
-                borderLeft: "none",
-                backgroundColor: bookingPageCount === "c1" ? "#ffc701" : "",
-              }}
-              onClick={() => {
-                setBookingPageCount("c1");
-                gotoStudio();
-              }}
-            >
-              Studio
-            </div>
-            <div
-              style={{
-                backgroundColor: bookingPageCount === "c2" ? "#ffc701" : "",
-              }}
-              onClick={() => {
-                setBookingPageCount("c2");
-                gotoMusicProduction();
-              }}
-            >
-              Music Production
-            </div>
-
-            <div
-              style={{
-                borderRight: "none",
-                backgroundColor: bookingPageCount === "c3" ? "#ffc701" : "",
-              }}
-              onClick={() => {
-                setBookingPageCount("c3");
-                gotoMixMaster();
-              }}
-            >
-              Mix-Master
-            </div>
+            {navAccess.bookings.navbar.length > 0 ? (
+              navAccess.bookings.navbar.map((data) =>
+                bookingOptions.map((option) =>
+                  data.toLowerCase() === option.label.toLowerCase() ? (
+                    <div
+                      key={option.id}
+                      style={{
+                        ...option.style,
+                        backgroundColor:
+                          bookingPageCount === option.id ? "#ffc701" : "",
+                      }}
+                      onClick={option.onClick}
+                    >
+                      {option.label}
+                    </div>
+                  ) : null
+                )
+              )
+            ) : (
+              <>
+                {bookingOptions.map((option) => (
+                  <div
+                    key={option.id}
+                    style={{
+                      ...option.style,
+                      backgroundColor:
+                        bookingPageCount === option.id ? "#ffc701" : "",
+                    }}
+                    onClick={option.onClick}
+                  >
+                    {option.label}
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </div>
         <div style={{ justifyContent: bookingPageCount === "c1" ? "" : "end" }}>

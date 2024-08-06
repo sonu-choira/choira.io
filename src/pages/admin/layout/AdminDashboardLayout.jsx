@@ -23,6 +23,7 @@ import AllteamDetails from "../../../components/teamsSection/AllteamDetails";
 import ShowAllUser from "../../../components/userSection/ShowAllUser";
 import Overview from "../adminDashboardOverview/Overview";
 import Promotions from "../../../components/pramotation/Promotions";
+import { userAccess, userAcess } from "../../../config/userAccess";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -39,7 +40,10 @@ function AdminDashboardLayout() {
       }
     }
   }, []);
-
+  console.log(userAccess, "userAcess");
+  const [navAccess, setnavAccess] = useState(
+    userAccess ? Object.keys(userAccess) : ""
+  );
   return (
     <>
       <div className={style.wrapper}>
@@ -68,18 +72,31 @@ function AdminDashboardLayout() {
               <MdOutlineSettings />
             </div>
           </div> */}
-          {tabCount === 1 && <Overview />}
-          {tabCount === 2 && <ShowAllUser />}
-          {tabCount === 3 && <AllteamDetails />}
-
-          {tabCount === 4 ? (
-            <AllStudioPageDetailsPage />
-          ) : tabCount === 5 ? (
-            <BookingPages />
-          ) : tabCount === 6 ? (
-            <Promotions />
+          {navAccess ? (
+            navAccess.map((data) => (
+              <>
+                {tabCount === 1 && data === "dashboard" && <Overview />}
+                {tabCount === 4 && data === "app&more" && (
+                  <AllStudioPageDetailsPage />
+                )}
+                {tabCount === 5 && data === "bookings" && <BookingPages />}
+              </>
+            ))
           ) : (
-            ""
+            <>
+              {tabCount === 1 && <Overview />}
+              {tabCount === 2 && <ShowAllUser />}
+              {tabCount === 3 && <AllteamDetails />}
+              {tabCount === 4 ? (
+                <AllStudioPageDetailsPage />
+              ) : tabCount === 5 ? (
+                <BookingPages />
+              ) : tabCount === 6 ? (
+                <Promotions />
+              ) : (
+                ""
+              )}
+            </>
           )}
         </div>
       </div>

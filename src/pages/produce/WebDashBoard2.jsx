@@ -14,6 +14,7 @@ import { LuHome } from "react-icons/lu";
 import { TbSpeakerphone } from "react-icons/tb";
 import { PiChartBarLight } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
+import { userAccess } from "../../config/userAccess";
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
 
@@ -75,6 +76,51 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   };
   let data = localStorage.getItem("adminData");
   let adminData = JSON.parse(data);
+
+  const tabs = [
+    {
+      id: 1,
+      icon: <LuHome style={{ fontSize: "1vmax" }} />,
+      label: "DashBoard",
+      onClick: gotoOverview,
+    },
+    {
+      id: 2,
+      icon: <FaRegUser style={{ fontSize: "1vmax" }} />,
+      label: "User",
+      onClick: gotoStudios,
+    },
+    {
+      id: 3,
+      icon: <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />,
+      label: "Teams",
+      onClick: gotoTeams,
+    },
+    {
+      id: 4,
+      icon: <PiChartBarLight style={{ fontSize: "1.3vmax" }} />,
+      label: "App & More",
+      onClick: gotoAllStudioDetailPage,
+    },
+    {
+      id: 5,
+      icon: <CiCalendar style={{ fontSize: "1.3vmax" }} />,
+      label: "Bookings",
+      onClick: gotoBookings,
+    },
+    {
+      id: 6,
+      icon: <TbSpeakerphone style={{ fontSize: "1vmax" }} />,
+      label: "Promotions",
+      onClick: gotoPromotions,
+    },
+  ];
+  const [navAccess, setnavAccess] = useState(
+    userAccess ? Object.keys(userAccess) : ""
+  );
+  console.log("------------------------------}}}}}}}}>>");
+  console.log(tabs.map((tab) => tab.label.replace(/ /g, "").toLowerCase()));
+
   return (
     <>
       <ProfileEdit editProfile={editProfile} setEditProfile={setEditProfile} />
@@ -85,48 +131,38 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
               <img src={logo} alt="" />
             </div>
             <div className={style.community}>
-              <div
-                className={tabCount === 1 ? style.tabActive : style.padding}
-                onClick={gotoOverview}
-              >
-                <LuHome style={{ fontSize: "1vmax" }} />
-                DashBoard
-              </div>
-              <div
-                className={tabCount === 2 ? style.tabActive : style.padding}
-                onClick={gotoStudios}
-              >
-                <FaRegUser style={{ fontSize: "1vmax" }} />
-                User
-              </div>
-              <div
-                className={tabCount === 3 ? style.tabActive : style.padding}
-                onClick={gotoTeams}
-              >
-                <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />
-                Teams
-              </div>
-              <div
-                className={tabCount === 4 ? style.tabActive : style.padding}
-                onClick={gotoAllStudioDetailPage}
-              >
-                <PiChartBarLight style={{ fontSize: "1.3vmax" }} />
-                App & More
-              </div>
-              <div
-                className={tabCount === 5 ? style.tabActive : style.padding}
-                onClick={gotoBookings}
-              >
-                <CiCalendar style={{ fontSize: "1.3vmax" }} />
-                Bookings
-              </div>
-              <div
-                className={tabCount === 6 ? style.tabActive : style.padding}
-                onClick={gotoPromotions}
-              >
-                <TbSpeakerphone style={{ fontSize: "1vmax" }} />
-                Promotions
-              </div>
+              {navAccess
+                ? navAccess.map((data) =>
+                    tabs.map(
+                      (tab) =>
+                        tab.label.toLowerCase().replace(/ /g, "") == data && (
+                          <div
+                            key={tab.id}
+                            className={
+                              tabCount === tab.id
+                                ? style.tabActive
+                                : style.padding
+                            }
+                            onClick={tab.onClick}
+                          >
+                            {tab.icon}
+                            {tab.label}
+                          </div>
+                        )
+                    )
+                  )
+                : tabs.map((tab) => (
+                    <div
+                      key={tab.id}
+                      className={
+                        tabCount === tab.id ? style.tabActive : style.padding
+                      }
+                      onClick={tab.onClick}
+                    >
+                      {tab.icon}
+                      {tab.label}
+                    </div>
+                  ))}
             </div>
           </div>
 
