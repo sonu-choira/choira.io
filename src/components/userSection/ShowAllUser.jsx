@@ -43,9 +43,6 @@ function ShowAllUser() {
   const [shortby, setShortby] = useState(false);
   const status = ["active", "inactive"];
 
-  useEffect(() => {
-    console.log(totalResult, "totalResult");
-  }, [totalResult]);
   const [shortBySrNo, setShortBySrNo] = useState(false);
   const [shortByUser, setShortByUser] = useState(false);
   const [shortByEmail, setShortByEmail] = useState(false);
