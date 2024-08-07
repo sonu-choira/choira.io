@@ -36,6 +36,7 @@ let userAllFilterData = {
 function ShowAllUser() {
   const [products, setProducts] = useState([]);
   const [totalResult, setTotalResult] = useState();
+  const [perPage, setPerPage] = useState(5);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
@@ -62,10 +63,8 @@ function ShowAllUser() {
 
   const handelFilterApi = (pageCount, userAllFilterData) => {
     userApi
-      .getAllUser(pageCount, userAllFilterData)
+      .getAllUser(perPage,pageCount, userAllFilterData)
       .then((response) => {
-        console.log(`====================> response `, response);
-        console.log("response.data.users", response.users);
         if (response.users) {
           setProducts(response.users);
           setTotalPage(response.paginate.totalPages);
@@ -115,7 +114,7 @@ function ShowAllUser() {
         // userAllFilterData.sortDirection = dataTosend;
       }
       userApi
-        .getAllUser(pageCount, userAllFilterData, { cancelToken: source.token })
+        .getAllUser(perPage,pageCount, userAllFilterData, { cancelToken: source.token })
         .then((response) => {
           console.log(`====================> response `, response);
           console.log("response.data.users", response.users);
@@ -267,6 +266,7 @@ function ShowAllUser() {
               setProducts={setProducts}
               setTotalPage={setTotalPage}
               pageCount={pageCount}
+              perPage={perPage}
               setPageCount={setPageCount}
               userFiler={userFiler}
               setUserFilterText={setUserFilterText}
@@ -404,12 +404,12 @@ function ShowAllUser() {
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
                           {!shortBySrNo
-                            ? isNaN(totalResult - pageCount * 10 + 10 - index)
+                            ? isNaN(totalResult - pageCount * perPage + perPage - index)
                               ? "N/A"
-                              : index + 1 + (pageCount - 1) * 10
-                            : isNaN(index + 1 + (pageCount - 1) * 10)
+                              : index + 1 + (pageCount - 1) * perPage
+                            : isNaN(index + 1 + (pageCount - 1) * perPage)
                             ? "N/A"
-                            : totalResult - pageCount * 10 + 10 - index}
+                            : totalResult - pageCount * perPage + perPage - index}
                         </td>
                         <td
                           title={product.fullName}

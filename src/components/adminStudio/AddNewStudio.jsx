@@ -152,6 +152,7 @@ function AddNewStudio({ setSelectTab }) {
 
     const check = (data) => {
       for (const key of Object.keys(data)) {
+        if(["photo","imgUrl"].includes(key)) continue
         const value = data[key];
 
         if (isEmpty(value)) {
@@ -549,7 +550,7 @@ function AddNewStudio({ setSelectTab }) {
                 {isEditMode && showMode
                   ? "Studio details"
                   : isEditMode
-                  ? "Edit Studio"
+                  ? "Edit Studio."
                   : "Add new studio"}
               </div>
               <form className={style.addNewStudioPage}>
