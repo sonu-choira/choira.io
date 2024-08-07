@@ -14,7 +14,7 @@ import { LuHome } from "react-icons/lu";
 import { TbSpeakerphone } from "react-icons/tb";
 import { PiChartBarLight } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
-import { userAccess } from "../../config/userAccess";
+import { partnerAccess } from "../../config/partnerAccess";
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
 
@@ -116,7 +116,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     },
   ];
   const [navAccess, setnavAccess] = useState(
-    userAccess ? Object.keys(userAccess) : ""
+    partnerAccess ? Object.keys(partnerAccess) : ""
   );
   console.log("------------------------------}}}}}}}}>>");
   console.log(tabs.map((tab) => tab.label.replace(/ /g, "").toLowerCase()));

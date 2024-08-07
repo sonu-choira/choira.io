@@ -23,7 +23,7 @@ import AllteamDetails from "../../../components/teamsSection/AllteamDetails";
 import ShowAllUser from "../../../components/userSection/ShowAllUser";
 import Overview from "../adminDashboardOverview/Overview";
 import Promotions from "../../../components/pramotation/Promotions";
-import { userAccess, userAcess } from "../../../config/userAccess";
+import { partnerAccess, userAcess } from "../../../config/partnerAccess";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -40,9 +40,9 @@ function AdminDashboardLayout() {
       }
     }
   }, []);
-  console.log(userAccess, "userAcess");
+  console.log(partnerAccess, "userAcess");
   const [navAccess, setnavAccess] = useState(
-    userAccess ? Object.keys(userAccess) : ""
+    partnerAccess ? Object.keys(partnerAccess) : ""
   );
   return (
     <>

@@ -8,7 +8,7 @@ import { MdNoteAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import { useNavigateRouter } from "../../../navigateRoute";
-import { userAccess } from "../../../config/userAccess";
+import { partnerAccess } from "../../../config/partnerAccess";
 
 function BookingActionBar({
   setBookingPageCount,
@@ -142,33 +142,108 @@ function BookingActionBar({
       style: { borderRight: "none" },
     },
   ];
-  const [navAccess, setnavAccess] = useState(userAccess || "");
+
+  const buttons = [
+    {
+      name: "Card view",
+      disabled: true,
+      icon: <FaTableCellsLarge />,
+      style: {
+        height: "50%",
+        width: "20%",
+        gap: "5%",
+        backgroundColor: "#ADB5BD",
+      },
+    },
+    {
+      name: "Filter",
+      disabled: true,
+      icon: <FaFilter />,
+      style: {
+        height: "50%",
+        width: "15%",
+        gap: "5%",
+        backgroundColor: "#ADB5BD",
+      },
+    },
+    {
+      name: "Share",
+      disabled: true,
+      icon: <FaShare />,
+      style: {
+        height: "50%",
+        width: "15%",
+        gap: "5%",
+        backgroundColor: "#ADB5BD",
+      },
+    },
+    {
+      name: "Download",
+      icon: <FaDownload />,
+      style: {
+        height: "50%",
+        width: "15%",
+        gap: "5%",
+      },
+      onClick: pagetype === "apps" ? downloadAllData : downloadBookingsData,
+      loaderText: loaderText,
+      showBtnLoader: showBtnLoader,
+    },
+  ];
+  if (bookingPageCount === "c1" && pagetype !== "apps") {
+    buttons.push({
+      name: "Slot Booking",
+      icon: <LuFilePlus />,
+      style: { height: "50%", width: "20%", gap: "5%" },
+      onClick: gotoSlotBooking,
+    });
+  }
+
+  if (
+    pagetype === "apps" &&
+    (bookingPageCount === "c2" ||
+      bookingPageCount === "c3" ||
+      bookingPageCount === "c1")
+  ) {
+    buttons.push({
+      name: "Add New",
+      icon: <MdNoteAdd />,
+      style: { height: "50%", width: "15%", gap: "5%" },
+      onClick: () => gotoAddNew(bookingPageCount),
+    });
+  }
+  let navToMap = pageData.toLocaleLowerCase().replace(/ /g, "");
+  if (navToMap === "apps&more") {
+    navToMap = "app&more";
+  }
+
+  const [navAccess, setnavAccess] = useState(partnerAccess || "");
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
         <div>
           <div>
-            {navAccess.bookings.navbar.length > 0 ? (
-              navAccess.bookings.navbar.map((data) =>
-                bookingOptions.map((option) =>
-                  data.toLowerCase() === option.label.toLowerCase() ? (
-                    <div
-                      key={option.id}
-                      style={{
-                        ...option.style,
-                        backgroundColor:
-                          bookingPageCount === option.id ? "#ffc701" : "",
-                      }}
-                      onClick={option.onClick}
-                    >
-                      {option.label}
-                    </div>
-                  ) : null
+            {navAccess
+              ? navAccess[navToMap]?.navbar.map((data) =>
+                  bookingOptions.map(
+                    (option) =>
+                      data.toLowerCase().replace(/ /g, "") ===
+                        option.label.toLowerCase().replace(/ /g, "") && (
+                        <div
+                          key={option.id}
+                          style={{
+                            ...option.style,
+                            backgroundColor:
+                              bookingPageCount === option.id ? "#ffc701" : "",
+                          }}
+                          onClick={option.onClick}
+                        >
+                          {option.label}
+                        </div>
+                      )
+                  )
                 )
-              )
-            ) : (
-              <>
-                {bookingOptions.map((option) => (
+              : bookingOptions.map((option) => (
                   <div
                     key={option.id}
                     style={{
@@ -181,85 +256,48 @@ function BookingActionBar({
                     {option.label}
                   </div>
                 ))}
-              </>
-            )}
           </div>
         </div>
         <div style={{ justifyContent: bookingPageCount === "c1" ? "" : "end" }}>
-          <Button
-            name={"Card view"}
-            disabled={true}
-            icon={<FaTableCellsLarge />}
-            style={{
-              height: "50%",
-              width: "20%",
-              gap: "5%",
-              backgroundColor: "#ADB5BD",
-            }}
-          />
-          <Button
-            name={"Filter"}
-            disabled={true}
-            icon={<FaFilter />}
-            style={{
-              height: "50%",
-              width: "15%",
-              gap: "5%",
-              backgroundColor: "#ADB5BD",
-            }}
-          />
-          <Button
-            name={"Share"}
-            disabled={true}
-            icon={<FaShare />}
-            style={{
-              height: "50%",
-              width: "15%",
-              gap: "5%",
-              backgroundColor: "#ADB5BD",
-            }}
-          />
-          <Button
-            name={"Download"}
-            icon={<FaDownload />}
-            style={{
-              height: "50%",
-              width: "15%",
-              gap: "5%",
-            }}
-            onClick={
-              pagetype == "apps" ? downloadAllData : downloadBookingsData
-            }
-            loaderText={loaderText}
-            showBtnLoader={showBtnLoader}
-          />
-          {(bookingPageCount === "c1") & (pagetype != "apps") ? (
-            <Button
-              name={"Slot Booking"}
-              icon={<LuFilePlus />}
-              style={{ height: "50%", width: "20%", gap: "5%" }}
-              onClick={gotoSlotBooking}
-            />
-          ) : (
-            ""
-          )}
-
-          {pagetype != "apps" ? (
-            ""
-          ) : bookingPageCount === "c2" ||
-            bookingPageCount === "c3" ||
-            bookingPageCount === "c1" ? (
-            <Button
-              name={"Add New"}
-              onClick={() => {
-                gotoAddNew(bookingPageCount);
-              }}
-              icon={<MdNoteAdd />}
-              style={{ height: "50%", width: "15%", gap: "5%" }}
-            />
-          ) : (
-            ""
-          )}
+          {navAccess
+            ? navAccess[navToMap]?.button.map((data) =>
+                buttons.map(
+                  (option) =>
+                    data.toLowerCase().replace(/ /g, "") ===
+                      option.name.toLowerCase().replace(/ /g, "") && (
+                      <Button
+                        key={option.id}
+                        name={option.name}
+                        style={{
+                          ...option.style,
+                          backgroundColor:
+                            bookingPageCount === option.id ? "#ffc701" : "",
+                        }}
+                        onClick={option.onClick}
+                        disabled={option.disabled}
+                        icon={option.icon}
+                        loaderText={option.loaderText}
+                        showBtnLoader={option.showBtnLoader}
+                      />
+                    )
+                )
+              )
+            : buttons.map((option) => (
+                <Button
+                  key={option.id}
+                  name={option.name}
+                  style={{
+                    ...option.style,
+                    backgroundColor:
+                      bookingPageCount === option.id ? "#ffc701" : "",
+                  }}
+                  onClick={option.onClick}
+                  disabled={option.disabled}
+                  icon={option.icon}
+                  loaderText={option.loaderText}
+                  showBtnLoader={option.showBtnLoader}
+                />
+              ))}
         </div>
       </div>
     </>
