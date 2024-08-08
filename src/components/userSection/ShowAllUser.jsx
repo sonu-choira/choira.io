@@ -381,6 +381,7 @@ function ShowAllUser() {
                               closeAllFilter={closeAllFilter}
                               userFiler={userFiler}
                               userAllFilterData={userAllFilterData}
+                              perPage={perPage}
                             />
                           )}
                         </div>
