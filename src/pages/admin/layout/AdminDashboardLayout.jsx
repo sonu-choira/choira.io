@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 // import "../studios/studios.css";
 import style from "../studios/studio.module.css";
 import { IoSearch } from "react-icons/io5";
@@ -24,6 +24,7 @@ import ShowAllUser from "../../../components/userSection/ShowAllUser";
 import Overview from "../adminDashboardOverview/Overview";
 import Promotions from "../../../components/pramotation/Promotions";
 import { partnerAccess, userAcess } from "../../../config/partnerAccess";
+import { AccessContext } from "../../../utils/context";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -44,12 +45,15 @@ function AdminDashboardLayout() {
   const [navAccess, setnavAccess] = useState(
     partnerAccess ? Object.keys(partnerAccess) : ""
   );
+
   return (
     <>
-      <div className={style.wrapper}>
-        <WebDashboard2 tabCount={tabCount} setTabCount={setTabCount} />
-        <div className={style.studioMainScreen}>
-          {/* <div className={style.studioHeader}>
+      {" "}
+      <AccessContext.Provider value={partnerAccess}>
+        <div className={style.wrapper}>
+          <WebDashboard2 tabCount={tabCount} setTabCount={setTabCount} />
+          <div className={style.studioMainScreen}>
+            {/* <div className={style.studioHeader}>
             <div className={style.puredisabled}>
               <input
                 type="text"
@@ -72,36 +76,41 @@ function AdminDashboardLayout() {
               <MdOutlineSettings />
             </div>
           </div> */}
-          {navAccess ? (
-            navAccess.map((data) => (
+            {navAccess ? (
+              navAccess.map((data) => (
+                <>
+                  {tabCount === 1 && data === "dashboard" && <Overview />}
+                  {tabCount === 2 && data === "user" && <ShowAllUser />}
+                  {tabCount === 3 && data === "teams" && <AllteamDetails />}
+                  {tabCount === 4 && data === "app&more" && (
+                    <AllStudioPageDetailsPage />
+                  )}
+                  {tabCount === 5 && data === "bookings" && <BookingPages />}
+                  {tabCount === 6 && data === "promotion" && <Promotions />}
+                </>
+              ))
+            ) : (
               <>
-                {tabCount === 1 && data === "dashboard" && <Overview />}
-                {tabCount === 4 && data === "app&more" && (
+                {tabCount === 1 && <Overview />}
+                {tabCount === 2 && <ShowAllUser />}
+                {tabCount === 3 && <AllteamDetails />}
+                {tabCount === 4 ? (
                   <AllStudioPageDetailsPage />
+                ) : tabCount === 5 ? (
+                  <BookingPages />
+                ) : tabCount === 6 ? (
+                  <Promotions />
+                ) : (
+                  ""
                 )}
-                {tabCount === 5 && data === "bookings" && <BookingPages />}
               </>
-            ))
-          ) : (
-            <>
-              {tabCount === 1 && <Overview />}
-              {tabCount === 2 && <ShowAllUser />}
-              {tabCount === 3 && <AllteamDetails />}
-              {tabCount === 4 ? (
-                <AllStudioPageDetailsPage />
-              ) : tabCount === 5 ? (
-                <BookingPages />
-              ) : tabCount === 6 ? (
-                <Promotions />
-              ) : (
-                ""
-              )}
-            </>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      </AccessContext.Provider>
     </>
   );
 }
 
 export default AdminDashboardLayout;
+export { AccessContext };

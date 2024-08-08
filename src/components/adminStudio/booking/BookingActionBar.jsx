@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "../../../pages/admin/layout/Button";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 import { LuFilePlus } from "react-icons/lu";
@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import { useNavigateRouter } from "../../../navigateRoute";
 import { partnerAccess } from "../../../config/partnerAccess";
+import { AccessContext } from "../../../utils/context";
 
 function BookingActionBar({
   setBookingPageCount,
@@ -216,8 +217,9 @@ function BookingActionBar({
   if (navToMap === "apps&more") {
     navToMap = "app&more";
   }
+  const context = useContext(AccessContext);
 
-  const [navAccess, setnavAccess] = useState(partnerAccess || "");
+  const [navAccess, setnavAccess] = useState(context || "");
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
@@ -264,7 +266,8 @@ function BookingActionBar({
                 buttons.map(
                   (option) =>
                     data.toLowerCase().replace(/ /g, "") ===
-                      option.name.toLowerCase().replace(/ /g, "") && (
+                      option.name.toLowerCase().replace(/ /g, "") &&
+                    navAccess[navToMap].disabledButton.map((disabled) => (
                       <Button
                         key={option.id}
                         name={option.name}
@@ -274,12 +277,17 @@ function BookingActionBar({
                             bookingPageCount === option.id ? "#ffc701" : "",
                         }}
                         onClick={option.onClick}
-                        disabled={option.disabled}
+                        disabled={
+                          disabled.toLowerCase().replace(/ /g, "") ===
+                          option.name.toLowerCase().replace(/ /g, "")
+                            ? true
+                            : false
+                        }
                         icon={option.icon}
                         loaderText={option.loaderText}
                         showBtnLoader={option.showBtnLoader}
                       />
-                    )
+                    ))
                 )
               )
             : buttons.map((option) => (

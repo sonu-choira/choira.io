@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import style from "../../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
@@ -31,6 +37,7 @@ import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/Dat
 import DateAndSearchFilterComponent from "../../../pages/admin/layout/filterComponent/DateAndSearchFilterComponent";
 import { clearEmptyField } from "../../../utils/helperFunction";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
+import { AccessContext } from "../../../utils/context";
 let PageSize = 10;
 
 let userFiler = true;
@@ -156,7 +163,7 @@ function StudioBookingDetail({
       }
     });
   };
-
+  const tableAccess = useContext(AccessContext);
   return (
     <>
       <div className={style.studioTabelDiv}>
@@ -296,16 +303,46 @@ function StudioBookingDetail({
                       </td>
                       <td className={style.tableActionbtn}>
                         <div>
-                          <GoEye
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              // gotoShowDetails(products._id);
-                            }}
-                          />{" "}
-                          &nbsp;
-                          <RiDeleteBin5Fill
-                            style={{ color: "red", cursor: "pointer" }}
-                          />
+                          {tableAccess ? (
+                            (console.log(
+                              "tableAccess",
+                              tableAccess?.bookings?.action
+                            ),
+                            tableAccess?.bookings?.action == "write" ? (
+                              <>
+                                <GoEye
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    // gotoShowDetails(products._id);
+                                  }}
+                                />
+                                &nbsp;
+                                <RiDeleteBin5Fill
+                                  style={{ color: "red", cursor: "pointer" }}
+                                />
+                              </>
+                            ) : (
+                              <GoEye
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  // gotoShowDetails(products._id);
+                                }}
+                              />
+                            ))
+                          ) : (
+                            <>
+                              <GoEye
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  // gotoShowDetails(products._id);
+                                }}
+                              />
+                              &nbsp;
+                              <RiDeleteBin5Fill
+                                style={{ color: "red", cursor: "pointer" }}
+                              />
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>

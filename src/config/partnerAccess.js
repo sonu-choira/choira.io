@@ -5,14 +5,14 @@ export const partnerAccess = {
     disabledButton : ["add new"],
     table : "all",
     table_col: ["studio", "price", "location", "rooms", "created", "status"],
-    table_action: ["view", "edit"],
+    action : "read",
     navbar: ["studio"],
   },
   bookings:{
     button : ["download","slot Booking"],
-    // disabledButton : ["add new"],
-    table : "all",
-    action : "write",
+    disabledButton : ["slot Booking"],
+    table_col : ["id", "user name", "studio name", "hours", "creation date ", "booking date", "time slot", "Amount", "status"],
+    action : "read",
     navbar: ["studio"]
   },
 }
