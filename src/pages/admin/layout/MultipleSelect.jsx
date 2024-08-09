@@ -11,6 +11,18 @@ const studioamenitiesList = [
   "Drum",
   "Car Parking",
   "Banjo",
+  "Rode NT1",
+  "Shure SM7B",
+  "AKG C214",
+  "Shure SM58",
+  "Shure SM57",
+  "Neumann TLM103",
+  "Neumann TLM102",
+  "AKG C414B ULS",
+  "SE Electronics RNR1",
+  "Logic Pro X",
+  "Steinberg Nuendo",
+  "Steinberg Cubase",
 ];
 
 function MultipleSelect({ selectedItems = [], setSelectedItems = () => {} }) {

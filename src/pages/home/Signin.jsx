@@ -456,9 +456,10 @@ function Signin() {
   };
 
   const handleMobileNumberChange = (e) => {
-    setMobileNumber(e.target.value);
-    // console.log(mobileNumber);
+    const value = e.target.value.slice(0, 10);
+    setMobileNumber(value ? value : "");
   };
+
   const gotoBooking = () => {
     navigate("/adminDashboard/Overview");
   };

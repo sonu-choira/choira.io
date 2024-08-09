@@ -36,7 +36,7 @@ let userAllFilterData = {
 function ShowAllUser() {
   const [products, setProducts] = useState([]);
   const [totalResult, setTotalResult] = useState();
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(7);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
@@ -60,7 +60,7 @@ function ShowAllUser() {
 
   const handelFilterApi = (pageCount, userAllFilterData) => {
     userApi
-      .getAllUser(perPage,pageCount, userAllFilterData)
+      .getAllUser(perPage, pageCount, userAllFilterData)
       .then((response) => {
         if (response.users) {
           setProducts(response.users);
@@ -81,60 +81,51 @@ function ShowAllUser() {
 
     const source = axios.CancelToken.source();
 
-    // checking if filter has any data
-
-    console.log(selectedStatus);
     if (selectedStatus[0]) {
-      let status;
-      if (selectedStatus[0] == "active") {
-        status = 1;
-        userAllFilterData.status = status;
-      } else if (selectedStatus[0] == "inactive") {
-        status = 0;
-        userAllFilterData.status = status;
-      } else {
-        status = undefined;
-        userAllFilterData.status = status;
-      }
+      userAllFilterData.status =
+        selectedStatus[0] === "active"
+          ? 1
+          : selectedStatus[0] === "inactive"
+          ? 0
+          : undefined;
     } else {
-      let dataTosend;
+      let dataToSend;
 
       if (shortByUser) {
-        dataTosend = "fullName";
-        userAllFilterData.sortfield = dataTosend;
+        dataToSend = "fullName";
+        userAllFilterData.sortfield = dataToSend;
       } else if (shortByEmail) {
-        dataTosend = "email";
-        userAllFilterData.sortfield = dataTosend;
+        dataToSend = "email";
+        userAllFilterData.sortfield = dataToSend;
       } else if (shortBySrNo) {
-        userAllFilterData.sortDirection = "asc" ? "desc" : "asc";
-        handelFilterApi(pageCount, userAllFilterData);
-        // userAllFilterData.sortDirection = dataTosend;
+        userAllFilterData.sortDirection =
+          userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
       }
-      userApi
-        .getAllUser(perPage,pageCount, userAllFilterData, { cancelToken: source.token })
-        .then((response) => {
-          console.log(`====================> response `, response);
-          console.log("response.data.users", response.users);
-          if (response.users) {
-            setProducts(response?.users);
-            setTotalPage(response.paginate.totalPages);
-            setTotalResult(response.paginate.totalResults);
-
-            // setPageCount(response.paginate.page);
-          }
-        })
-        .catch((error) => {
-          // console.error("Error fetching studios:", error);
-        });
     }
 
-    // const type =  ;
+    userApi
+      .getAllUser(perPage, pageCount, userAllFilterData, {
+        cancelToken: source.token,
+      })
+      .then((response) => {
+        console.log(`====================> response `, response);
+        console.log("response.data.users", response.users);
+        if (response.users) {
+          setProducts(response.users);
+          setTotalPage(response.paginate.totalPages);
+          setTotalResult(response.paginate.totalResults);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
 
     console.log("inside useEffect");
+
     return () => {
       source.cancel("Operation canceled by the user.");
     };
-  }, [pageCount, shortByUser, shortByEmail]);
+  }, [pageCount, shortByUser, shortByEmail, shortBySrNo]);
 
   const [selectedCity, setSelectedCity] = useState([]);
 
@@ -402,12 +393,20 @@ function ShowAllUser() {
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
                           {!shortBySrNo
-                            ? isNaN(totalResult - pageCount * perPage + perPage - index)
+                            ? isNaN(
+                                totalResult -
+                                  pageCount * perPage +
+                                  perPage -
+                                  index
+                              )
                               ? "N/A"
                               : index + 1 + (pageCount - 1) * perPage
                             : isNaN(index + 1 + (pageCount - 1) * perPage)
                             ? "N/A"
-                            : totalResult - pageCount * perPage + perPage - index}
+                            : totalResult -
+                              pageCount * perPage +
+                              perPage -
+                              index}
                         </td>
                         <td
                           title={product.fullName}
