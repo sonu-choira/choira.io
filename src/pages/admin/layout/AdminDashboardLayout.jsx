@@ -77,8 +77,8 @@ function AdminDashboardLayout() {
             </div>
           </div> */}
             {navAccess ? (
-              navAccess.map((data) => (
-                <>
+              navAccess.map((data, index) => (
+                <React.Fragment key={index}>
                   {tabCount === 1 && data === "dashboard" && <Overview />}
                   {tabCount === 2 && data === "user" && <ShowAllUser />}
                   {tabCount === 3 && data === "teams" && <AllteamDetails />}
@@ -87,7 +87,7 @@ function AdminDashboardLayout() {
                   )}
                   {tabCount === 5 && data === "bookings" && <BookingPages />}
                   {tabCount === 6 && data === "promotion" && <Promotions />}
-                </>
+                </React.Fragment>
               ))
             ) : (
               <>

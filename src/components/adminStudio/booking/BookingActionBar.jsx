@@ -226,13 +226,13 @@ function BookingActionBar({
         <div>
           <div>
             {navAccess
-              ? navAccess[navToMap]?.navbar.map((data) =>
+              ? navAccess[navToMap]?.navbar.map((data, index) =>
                   bookingOptions.map(
                     (option) =>
                       data.toLowerCase().replace(/ /g, "") ===
                         option.label.toLowerCase().replace(/ /g, "") && (
                         <div
-                          key={option.id}
+                          key={index}
                           style={{
                             ...option.style,
                             backgroundColor:
@@ -245,9 +245,9 @@ function BookingActionBar({
                       )
                   )
                 )
-              : bookingOptions.map((option) => (
+              : bookingOptions.map((option, index) => (
                   <div
-                    key={option.id}
+                    key={index}
                     style={{
                       ...option.style,
                       backgroundColor:
@@ -262,14 +262,14 @@ function BookingActionBar({
         </div>
         <div style={{ justifyContent: bookingPageCount === "c1" ? "" : "end" }}>
           {navAccess
-            ? navAccess[navToMap]?.button.map((data) =>
+            ? navAccess[navToMap]?.button.map((data, index) =>
                 buttons.map(
                   (option) =>
                     data.toLowerCase().replace(/ /g, "") ===
                       option.name.toLowerCase().replace(/ /g, "") &&
                     navAccess[navToMap].disabledButton.map((disabled) => (
                       <Button
-                        key={option.id}
+                        key={index}
                         name={option.name}
                         style={{
                           ...option.style,
@@ -290,9 +290,9 @@ function BookingActionBar({
                     ))
                 )
               )
-            : buttons.map((option) => (
+            : buttons.map((option, index) => (
                 <Button
-                  key={option.id}
+                  key={index}
                   name={option.name}
                   style={{
                     ...option.style,

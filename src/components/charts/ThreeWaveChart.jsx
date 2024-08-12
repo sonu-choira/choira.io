@@ -83,6 +83,7 @@ const ThreeWaveChart = ({
         });
     } else {
       setChartData(products?.transactionData?.data || []);
+
       setShowBtnLoader(products?.transactionData?.data ? false : true);
     }
   }, [filterData, products]);

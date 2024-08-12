@@ -132,12 +132,12 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
             </div>
             <div className={style.community}>
               {navAccess
-                ? navAccess.map((data) =>
+                ? navAccess.map((data, index) =>
                     tabs.map(
                       (tab) =>
                         tab.label.toLowerCase().replace(/ /g, "") == data && (
                           <div
-                            key={tab.id}
+                            key={index}
                             className={
                               tabCount === tab.id
                                 ? style.tabActive
