@@ -216,6 +216,8 @@ function UserBookingDetails({
         style={{ height: "90%", width: "100%" }}
       >
         <DateAndSearchFilter
+          dateDisable={true}
+          searchDisable={true}
           setProducts={setProducts}
           setTotalPage={setTotalPage}
           bookingPageCount={bookingPageCount}
@@ -232,10 +234,10 @@ function UserBookingDetails({
           <table>
             <thead className={style.studiotabelHead}>
               <tr>
-                <th style={{ width: "8%" }}>
+                <th style={{ width: "10%" }}>
                   <div className={style.headingContainer}>
                     Booking Id
-                    <div
+                    {/* <div
                       className={style.filterBox}
                       onClick={handelShortbyClick}
                       style={{
@@ -243,7 +245,7 @@ function UserBookingDetails({
                       }}
                     >
                       <RiExpandUpDownLine />
-                    </div>
+                    </div> */}
                   </div>
                 </th>
                 <th>
@@ -259,7 +261,7 @@ function UserBookingDetails({
                       }}
                     >
                       <span onClick={handelpriceFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showpricefilter
                         ? // <PriceFilter
@@ -289,7 +291,7 @@ function UserBookingDetails({
                       }}
                     >
                       <span onClick={handellocationFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showloactionfilter
                         ? // <CheckboxFilter
@@ -319,7 +321,7 @@ function UserBookingDetails({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -349,7 +351,7 @@ function UserBookingDetails({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -379,7 +381,7 @@ function UserBookingDetails({
                       }}
                     >
                       <span onClick={handelStatusFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showstatusFilter
                         ? ""

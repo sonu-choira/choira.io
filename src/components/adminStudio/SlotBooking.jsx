@@ -306,7 +306,7 @@ function SlotBooking({ setSelectTab }) {
       searchUser: username,
     };
     try {
-      const response = await userApi.getAllUser(20,1, dataToSend);
+      const response = await userApi.getAllUser(20, 1, dataToSend);
       console.log("response.data.users", response.users);
       return response.users.map((user) => ({
         label: `${user.fullName} `,
@@ -447,7 +447,8 @@ function SlotBooking({ setSelectTab }) {
                           onChange={(e) => {
                             setTimeSlotApiData((prevData) => ({
                               ...prevData,
-                              phoneNumber: e.target.value,
+
+                              phoneNumber: e.target.value.slice(0, 10),
                             }));
                           }}
                           disabled={registered}

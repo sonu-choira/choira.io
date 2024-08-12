@@ -440,7 +440,10 @@ function ShowAllUser() {
                           )}
                         </td>
                         <td style={{ width: "10%" }}>
-                          <Switch status={product.status} />
+                          <Switch
+                            status={product.status}
+                            switchDisabled={true}
+                          />
                         </td>
                         <td className={style.tableActionbtn}>
                           <div

@@ -259,7 +259,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelpriceFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showpricefilter
                         ? // <PriceFilter
@@ -289,7 +289,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handellocationFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showloactionfilter
                         ? // <CheckboxFilter
@@ -319,7 +319,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -349,7 +349,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -379,7 +379,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelStatusFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showstatusFilter
                         ? ""
