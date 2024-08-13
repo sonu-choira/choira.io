@@ -387,7 +387,7 @@ function AllStudioDetail2({
                       {showstatusFilter ? (
                         <CheckboxFilter
                           data={status}
-                          cusstyle={{ left: "-355%" }}
+                          // cusstyle={{ left: "-355%" }}
                           disabledsearch={true}
                           selectedData={selectedStatus}
                           setSelectedData={setSelectedStatus}
@@ -404,6 +404,7 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
+                <th style={{ width: "10%" }}></th>
               </tr>
             </thead>
             <tbody>
@@ -457,7 +458,7 @@ function AllStudioDetail2({
                         </small>
                       </td>
                       <td>{products.totalRooms}</td>
-                      <td className={style.tableActionbtn}>
+                      <td>
                         <div>
                           <Switch
                             isloading={pid === products._id && showloader}
@@ -468,7 +469,15 @@ function AllStudioDetail2({
                             }}
                           />
                         </div>
-                        <div>
+                      </td>
+                      <td
+                      // style={{
+                      //   display: "flex",
+                      //   alignItems: "center",
+                      //   justifyContent: " space-between",
+                      // }}
+                      >
+                        <div className={style.tableActionbtn}>
                           <GoEye
                             style={{ cursor: "pointer" }}
                             onClick={() => {

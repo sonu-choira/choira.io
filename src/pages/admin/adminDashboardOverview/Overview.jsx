@@ -49,21 +49,21 @@ function Overview() {
   ]);
 
   useEffect(() => {
-    // if (pathname.includes("Overview")) {
-    //   Swal.fire({
-    //     title: "<strong>Under Development </strong>",
-    //     icon: "info",
-    //     html: `
-    //      This Page is Under Development.
-    //      The Data Of this Page is not Real.
-    //     `,
-    //     // showCloseButton: true,
-    //     // showCancelButton: true,
-    //     focusConfirm: false,
+    if (pathname.includes("Overview")) {
+      Swal.fire({
+        title: "<strong>Under Development </strong>",
+        icon: "info",
+        html: `
+         This Page is Under Development.
+         The Data Of this Page is not Real.
+        `,
+        // showCloseButton: true,
+        // showCancelButton: true,
+        focusConfirm: false,
 
-    //     confirmButtonAriaLabel: "Ok",
-    //   });
-    // }
+        confirmButtonAriaLabel: "Ok",
+      });
+    }
     chartApi
       .getAllCharts()
       .then((res) => {

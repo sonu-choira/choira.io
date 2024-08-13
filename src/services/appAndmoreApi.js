@@ -87,7 +87,7 @@ class Appapi{
         filteredObject[key] = allfilterData[key];
       }
     }
-      filteredObject.limit = 5;
+      filteredObject.limit = 7;
       const response = await api.get(`/studios-all`,{ 
           params: filteredObject
       });
