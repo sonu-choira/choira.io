@@ -1,0 +1,50 @@
+.toggle-container {
+  display: inline-flex;
+  background-color: white;
+  border-radius: 30px;
+  padding: 5px;
+  position: relative;
+  width: 180px;
+  height: 50px;
+  user-select: none;
+}
+
+.toggle-option {
+  flex: 1;
+  text-align: center;
+  line-height: 40px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.3s ease-in-out;
+}
+
+.toggle-option:first-child {
+  color: white;
+}
+
+.toggle-active {
+  background-color: #ffc701;
+  border-radius: 25px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 50%;
+  height: 40px;
+  z-index: 1;
+  transition: left 0.3s ease-in-out;
+}
+
+.toggle-container.sub-admin .toggle-active {
+  left: calc(100% - 50%);
+}
+
+.toggle-container.sub-admin .toggle-option:first-child {
+  color: black;
+}
+
+.toggle-container.sub-admin .toggle-option:last-child {
+  color: black;
+}

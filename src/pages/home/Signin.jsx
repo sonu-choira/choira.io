@@ -31,6 +31,7 @@ import { httpUrl, nodeUrl } from "../../restservice";
 import { Alert } from "antd";
 import { errorAlert, sucessAlret } from "../admin/layout/Alert";
 import Button from "../admin/layout/Button";
+import ToggleSwitch from "../admin/layout/ToggleSwitch";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -573,7 +574,11 @@ function Signin() {
                     </div>
                   </div>
                   <div className={signStyle.signupHeader2}>
+                    <p>Select Account Type</p>{" "}
                     <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
+                  </div>
+                  <div className={signStyle.signupHeader2}>
+                    <ToggleSwitch />
                   </div>
                   <div className={signStyle.enterMob}>
                     {sign === 1 ? (
