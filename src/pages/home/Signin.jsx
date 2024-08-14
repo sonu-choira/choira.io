@@ -414,11 +414,18 @@ function Signin() {
   // api integration ----------------------------------------
   const [showBtnLoader, setShowBtnLoader] = useState(false);
   let loaderText = "verifying ...";
-
+  const [userType, setUserType] = useState("admin");
   const checkLoginData = () => {
     setShowBtnLoader(true);
+    let type = "login";
+    if (userType === "admin") {
+      type = "login";
+    } else {
+      type = "subLogin";
+    }
+
     // const role = mobileNumber === "9898989898" ? "admin" : "user";
-    AuthService.login(countryCode + mobileNumber, "NUMBER")
+    AuthService[type](countryCode + mobileNumber, "NUMBER")
       .then((response) => {
         setShowBtnLoader(false);
         console.log("res------", response);
@@ -490,8 +497,14 @@ function Signin() {
 
   const check_otp_btn = () => {
     setShowBtnLoader(true);
+    let type = "login";
+    if (userType === "admin") {
+      type = "login";
+    } else {
+      type = "subAdmin";
+    }
 
-    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, "admin")
+    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, type)
       .then((response) => {
         setShowBtnLoader(false);
         console.log("res------", response);
@@ -574,11 +587,14 @@ function Signin() {
                     </div>
                   </div>
                   <div className={signStyle.signupHeader2}>
-                    <p>Select Account Type</p>{" "}
                     <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
                   </div>
-                  <div className={signStyle.signupHeader2}>
-                    <ToggleSwitch />
+                  <div className={signStyle.signupToggel}>
+                    <p>Select Account Type</p>
+                    <ToggleSwitch
+                      userType={userType}
+                      setUserType={setUserType}
+                    />
                   </div>
                   <div className={signStyle.enterMob}>
                     {sign === 1 ? (

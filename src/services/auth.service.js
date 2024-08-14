@@ -32,6 +32,18 @@ class AuthService {
 
         return userData;
       };
+    subLogin = async (phoneNumber='9876543210', userType='NUMBER') => {
+
+        const response = await axios.post('sub-admins/login', {
+            phoneNumber,
+            userType,
+            
+        });
+
+        const userData = response.data;
+
+        return userData;
+      };
 
     register = async (phoneNumber='', authType='NUMBER') => {
     const response = await axios.post('/users/send-signup-v2', {
