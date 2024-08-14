@@ -46,6 +46,10 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
   const gotoSignin = () => {
     navigate("/signin");
   };
+  useEffect(() => {
+    setShowAddPage(false);
+    setShowTable(true);
+  }, [sidebarPageCount]);
 
   const handleChange = async (productId, event) => {
     /// api
