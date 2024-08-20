@@ -20,11 +20,11 @@ class partnerApi {
         }
     };
 
-    login = async (number='9876543210',role = "studio-owner", userType='NUMBER') => {
+    login = async (number='9876543210', userType='NUMBER') => {
 
         const response = await axios.post('/owners/login', {
             number,
-            role,
+            
             userType,
             
         });
@@ -45,12 +45,12 @@ class partnerApi {
     return status;
     };
 
-    verifyOtp = async (phoneNumber, otp,role = "studio-owner",option) => {
+    verifyOtp = async (phoneNumber, otp,option) => {
         const response = await axios.get('/owner/verify-otp', {
            params: {
                phoneNumber,
                otp,
-               role,
+               
            }
         }).then((res) => {
             console.log("otp res ===>", res)

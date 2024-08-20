@@ -421,7 +421,7 @@ function PartnerLogin() {
     setShowBtnLoader(true);
     // const role = mobileNumber === "9898989898" ? "admin" : "user";
     partnerApi
-      .login(countryCode + mobileNumber, "studio-owners", "NUMBER")
+      .login(countryCode + mobileNumber, "NUMBER")
       .then((response) => {
         setShowBtnLoader(false);
         console.log("res------", response);
@@ -466,7 +466,7 @@ function PartnerLogin() {
 
   const gotoBooking = () => {
     navigate("/adminDashboard/Overview");
-    window.location.reload();
+    // window.location.reload();
   };
 
   const handleContinueButtonClick = (e) => {
@@ -496,7 +496,7 @@ function PartnerLogin() {
     setShowBtnLoader(true);
 
     partnerApi
-      .verifyOtp(countryCode + mobileNumber, enteredOTP, "owner")
+      .verifyOtp(countryCode + mobileNumber, enteredOTP)
       .then((response) => {
         setShowBtnLoader(false);
         console.log("res------", response);

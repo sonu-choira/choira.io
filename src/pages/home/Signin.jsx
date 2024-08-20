@@ -430,7 +430,7 @@ function Signin() {
         setShowBtnLoader(false);
         console.log("res------", response);
         console.log("res------", response.user);
-        localStorage.setItem("adminData", JSON.stringify(response.user));
+        localStorage.setItem("adminData", JSON.stringify(response.user || {}));
         if (response.status) {
           setShowBtnLoader(false);
 
@@ -469,7 +469,7 @@ function Signin() {
   };
   const gotoBooking = () => {
     navigate("/adminDashboard/Overview");
-    window.location.reload();
+    // window.location.reload();
   };
 
   const handleContinueButtonClick = (e) => {
@@ -519,7 +519,10 @@ function Signin() {
           localStorage.setItem("isSignin", "true");
         } else {
           setShowBtnLoader(false);
-          errorAlert("OTP is Incorrect!", "Please try again 😕");
+          errorAlert(
+            response.message || "OTP is Incorrect!",
+            "Please try again 😕"
+          );
           console.log("Not get Token");
         }
       })
@@ -589,13 +592,16 @@ function Signin() {
                   <div className={signStyle.signupHeader2}>
                     <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
                   </div>
-                  <div className={signStyle.signupToggel}>
-                    <p>Select Account Type</p>
-                    <ToggleSwitch
-                      userType={userType}
-                      setUserType={setUserType}
-                    />
-                  </div>
+                  {sign == 1 && (
+                    <div className={signStyle.signupToggel}>
+                      <p>Select Account Type</p>
+                      <ToggleSwitch
+                        userType={userType}
+                        setUserType={setUserType}
+                      />
+                    </div>
+                  )}
+
                   <div className={signStyle.enterMob}>
                     {sign === 1 ? (
                       <SigninNum
