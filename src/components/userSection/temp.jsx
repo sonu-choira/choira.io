@@ -48,7 +48,7 @@ function ShowAllUser() {
       userAllFilterData.status = status;
     }
     userApi
-      .getAllUser(pageCount, userAllFilterData)
+      .getAllUser(20,pageCount, userAllFilterData)
       .then((response) => {
         if (response.users) {
           setProducts(response.users);

@@ -1120,7 +1120,7 @@ export default function Home() {
               </div>
               <div>
                 <label style={{ float: "left" }}>
-                  Email : connectus@choira.io
+                  Email : connect@choira.io
                 </label>
                 {/* <input type="email" name="email" value={values.email} className="inputfield" id="email" required onChange={inputsHandler('email')} /> */}
                 <br />

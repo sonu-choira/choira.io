@@ -620,7 +620,10 @@ function AddNewRoom({
           if (showMode) {
             setshowRoomsDetails(false);
           } else {
-            confirmAlret("Room data will be lost ", "").then((result) => {
+            confirmAlret(
+              "Please save data first, otherWise room data will be delete ",
+              ""
+            ).then((result) => {
               if (result.isConfirmed) {
                 console.log("default data is =====>", defaultData);
                 console.log("room data is =====>", rooms);

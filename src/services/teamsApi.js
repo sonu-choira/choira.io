@@ -4,12 +4,12 @@ import api from "./api"
 
 class teamApi{
   
- getStudioOwners = async (limit,active ,pageCount,shortby) => {
+ getStudioOwners = async (perPage,active ,pageCount,shortby) => {
   
 
   const response = await api.get(`/owner`, {
     params: {
-      limit: 7,
+      limit: perPage || 7,
       page :pageCount,
       sortDirection: shortby,
       sortField :"creationTimeStamp"

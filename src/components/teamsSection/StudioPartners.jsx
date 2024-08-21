@@ -49,6 +49,8 @@ function StudioPartners({
   teamsPageCount,
   shortby,
   setShortby,
+  perPage,
+  totalResult,
 }) {
   const navigate = useNavigate();
   const gotoEdit = (id) => {
@@ -64,6 +66,8 @@ function StudioPartners({
       },
     });
   };
+  const [shortBySrNo, setShortBySrNo] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   // const gotoShowStudioDetaisl = (id) => {
   //   const isEditMode = true;
@@ -255,7 +259,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelpriceFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showpricefilter
                         ? // <PriceFilter
@@ -285,7 +289,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handellocationFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showloactionfilter
                         ? // <CheckboxFilter
@@ -315,7 +319,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -345,7 +349,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -375,7 +379,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelStatusFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showstatusFilter
                         ? ""
@@ -409,7 +413,20 @@ function StudioPartners({
                 products?.map((products, index) => {
                   return (
                     <tr key={products._id}>
-                      <td>{index + 1 * (pageCount - 1) * 5 + 1}</td>
+                      <td style={{ textAlign: "center" }}>
+                        {shortby == "asc"
+                          ? isNaN(
+                              totalResult -
+                                pageCount * perPage +
+                                perPage -
+                                index
+                            )
+                            ? "N/A"
+                            : index + 1 + (pageCount - 1) * perPage
+                          : isNaN(index + 1 + (pageCount - 1) * perPage)
+                          ? "N/A"
+                          : totalResult - pageCount * perPage + perPage - index}
+                      </td>
                       <td
                         title={products.firstName}
                         style={{ display: "flex", alignItems: "center" }}

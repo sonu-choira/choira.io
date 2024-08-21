@@ -14,6 +14,8 @@ import { LuHome } from "react-icons/lu";
 import { TbSpeakerphone } from "react-icons/tb";
 import { PiChartBarLight } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
+import { TbLogout2 } from "react-icons/tb";
+import { confirmAlret } from "../admin/layout/Alert";
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
 
@@ -34,6 +36,15 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       setTabCount(6);
     }
   }, [pathname, setTabCount]);
+
+  const logout = () => {
+    confirmAlret("Are you sure you want to logout?", "").then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear();
+        navigate("/signin");
+      }
+    });
+  };
 
   useEffect(() => {
     if (navCount) {
@@ -131,16 +142,15 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
           </div>
 
           <div className={style.section2}>
-            <div
-              className={style.section2Main}
-              style={{ cursor: "pointer" }}
-              onClick={editProfiletab}
-            >
-              <div>
+            <div className={style.section2Main}>
+              <div style={{ cursor: "pointer" }} onClick={editProfiletab}>
                 <img src={adminData?.Image || tanmay} alt="" />
               </div>
               <div>
                 <h5>{adminData?.name || "Admin"}</h5> <br />
+                <span style={{ cursor: "pointer", fontSize: "1.2vmax" }}>
+                  <TbLogout2 onClick={logout} />
+                </span>
                 {/* <h6>{adminData?.role || "admin"}</h6> */}
               </div>
             </div>
