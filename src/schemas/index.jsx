@@ -28,9 +28,11 @@ export const studioPartner = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
-  password: Yup.string()
-    .required("Password is required")
-    .min(8, "password too short"),
+  phone: Yup.string()
+    .required("Mobile is required")
+    .min(10, "Mobile number should be at least  10 digit ")
+    .max(10, "Mobile number should be at most  10 digit "),
+  dateOfBirth: Yup.string().required("Date of birth is required"),
 });
 
 export const bannerSchema = Yup.object().shape({

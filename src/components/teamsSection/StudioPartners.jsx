@@ -58,7 +58,7 @@ function StudioPartners({
     const selectedProduct = products.find((product) => product._id === id);
     console.log("navigated=======>", selectedProduct);
 
-    navigate(`/studio/edit?id=${id}`, {
+    navigate(`/adminDashboard/Teams/AddStudioPatner?id=${id}`, {
       state: {
         productData: selectedProduct,
         navCount: 3,
@@ -471,6 +471,12 @@ function StudioPartners({
                           <GoEye
                             style={{ cursor: "pointer" }}
                             // onClick={() => gotoShowStudioDetaisl(products._id)}
+                          />
+                          <MdEdit
+                            style={{ color: "#ffc701", cursor: "pointer" }}
+                            onClick={() => {
+                              gotoEdit(products._id);
+                            }}
                           />
 
                           <RiDeleteBin5Fill

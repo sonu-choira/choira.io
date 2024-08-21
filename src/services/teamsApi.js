@@ -57,9 +57,18 @@ addStudioPartner = async (data) => {
   return response.data;
  };
 
+ updateStudioPartner = async (id, data) => {
+  const response = await api.patch(`/owners/${id}`,
+    data
+  );
+  const {status} = response.data
+  console.log("Studio partner update  ===>", response.data)
+  return response.data;
+
+ };
+
 
 }
-
 
 
 

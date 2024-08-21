@@ -33,31 +33,58 @@ function AddNewStudioPartners({ setSelectTab }) {
   const navCount = data?.state?.navCount;
   const [showAllSlots, setshowAllSlots] = useState(false);
   const navigate = useNavigate();
+
+  // console.log(data.state.productData);
+  let editData = data?.state?.productData;
+  console.log(data);
+  let isEditMode = data?.state?.isEditMode;
+
   const hitapi = (partnerData) => {
-    teamsApi
-      .addStudioPartner(partnerData)
-      .then((res) => {
-        if (res.status) {
-          sucessAlret("Studio Partner Successfully Added");
-        } else {
-          errorAlert(res.message);
-        }
-        console.log(res);
-      })
-      .catch((err) => {
-        errorAlert("something went wrong");
-        console.log(err);
-      });
+    if (isEditMode) {
+      teamsApi
+        .updateStudioPartner(partnerData._id, partnerData)
+        .then((response) => {
+          console.log("response=======>", response);
+          if (response.status) {
+            sucessAlret(
+              response.message || "Studio Partner Updated Successfully"
+            );
+            // navigate("/studio/studio-partners");
+          }
+        })
+        .catch((error) => {
+          errorAlert(error || "Something went wrong");
+        });
+    } else {
+      teamsApi
+        .addStudioPartner(partnerData)
+        .then((res) => {
+          if (res.status) {
+            sucessAlret("Studio Partner Successfully Added");
+          } else {
+            errorAlert(res.message);
+          }
+          console.log(res);
+        })
+        .catch((err) => {
+          errorAlert("something went wrong");
+          console.log(err);
+        });
+    }
   };
 
   const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      studioId: "",
-      password: "",
-    },
+    initialValues: isEditMode
+      ? editData
+      : {
+          firstName: "",
+          lastName: "",
+          email: "",
+          studioId: "",
+          phone: "",
+          dateOfBirth: "",
+        },
+
     validationSchema: studioPartner,
     onSubmit: (values) => {
       hitapi(values);
@@ -82,7 +109,9 @@ function AddNewStudioPartners({ setSelectTab }) {
   const backOnclick = () => {
     navigate("/adminDashboard/Teams/StudioPartners");
   };
-
+  useEffect(() => {
+    console.log("..........", values);
+  }, [values]);
   return (
     <>
       <div className={style.wrapper}>
@@ -92,29 +121,6 @@ function AddNewStudioPartners({ setSelectTab }) {
           setTabCount={setTabCount}
         />
         <form className={style.studioMainScreen} onSubmit={handleSubmit}>
-          {/* <div className={style.studioHeader}>
-            <div className={style.puredisabled}>
-              <input
-                type="text"
-                placeholder="Search"
-                readOnly
-                disabled
-                className={style.puredisabled}
-              />
-            </div>
-            <div>
-              <IoSearch />
-            </div>
-            <div>
-              <div className={style.notifyIcon}>
-                <GoDotFill />
-              </div>
-              <FaRegBell />
-            </div>
-            <div>
-              <MdOutlineSettings />
-            </div>
-          </div> */}
           <div className={style.addNewStudioTitle}>Add Studio Partner</div>
 
           <form className={style.addNewStudioPage}>
@@ -128,6 +134,7 @@ function AddNewStudioPartners({ setSelectTab }) {
                   htmlFor="firstName"
                   onChange={handleChange}
                   name="firstName"
+                  value={values.firstName}
                   error={errors.firstName}
                   touched={touched.firstName}
                   onBlur={handleBlur}
@@ -140,6 +147,7 @@ function AddNewStudioPartners({ setSelectTab }) {
                   htmlFor="Email"
                   onChange={handleChange}
                   name="email"
+                  value={values.email}
                   error={errors.email}
                   touched={touched.email}
                   onBlur={handleBlur}
@@ -155,6 +163,11 @@ function AddNewStudioPartners({ setSelectTab }) {
                     <option value="" disabled>
                       Select Studio
                     </option>
+                    {isEditMode && (
+                      <option value={editData.studioId}>
+                        {editData.studioName}
+                      </option>
+                    )}
                     {allStudio?.map((studio) => (
                       <option key={studio._id} value={studio._id}>
                         {studio.fullName}
@@ -177,18 +190,34 @@ function AddNewStudioPartners({ setSelectTab }) {
                   onChange={handleChange}
                   error={errors.lastName}
                   touched={touched.lastName}
+                  value={values.lastName}
                   onBlur={handleBlur}
                 />
                 <CustomInput
                   type="text"
-                  id="password"
-                  placeholder="Enter Password"
-                  label="Enter Password"
-                  htmlFor="password"
-                  name="password"
+                  id="mobile"
+                  placeholder="Mobile Number"
+                  label="Enter mobile number"
+                  htmlFor="mobile"
+                  name="phone"
+                  value={values.phone}
                   onChange={handleChange}
-                  error={errors.password}
-                  touched={touched.password}
+                  error={errors.phone}
+                  touched={touched.phone}
+                  onBlur={handleBlur}
+                />
+                <CustomInput
+                  type="date"
+                  id="date
+                  "
+                  placeholder="Mobile Number"
+                  label="Enter Date of Birth "
+                  htmlFor="date"
+                  value={values.dateOfBirth}
+                  name="dateOfBirth"
+                  onChange={handleChange}
+                  error={errors.dateOfBirth}
+                  touched={touched.dateOfBirth}
                   onBlur={handleBlur}
                 />
               </div>
