@@ -121,7 +121,9 @@ function AddNewStudioPartners({ setSelectTab }) {
           setTabCount={setTabCount}
         />
         <form className={style.studioMainScreen} onSubmit={handleSubmit}>
-          <div className={style.addNewStudioTitle}>Add Studio Partner</div>
+          <div className={style.addNewStudioTitle}>
+            {isEditMode ? "Edit Studio Partner" : "Add Studio Partner"}
+          </div>
 
           <form className={style.addNewStudioPage}>
             <div style={{ height: "80%" }}>
