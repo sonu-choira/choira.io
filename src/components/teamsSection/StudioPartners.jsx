@@ -53,8 +53,13 @@ function StudioPartners({
   totalResult,
 }) {
   const navigate = useNavigate();
-  const gotoEdit = (id) => {
-    const isEditMode = true;
+  const gotoEdit = (id, type) => {
+    if (type == "edit") {
+      type = "isEditMode";
+    } else {
+      type = "showMode";
+    }
+
     const selectedProduct = products.find((product) => product._id === id);
     console.log("navigated=======>", selectedProduct);
 
@@ -62,7 +67,7 @@ function StudioPartners({
       state: {
         productData: selectedProduct,
         navCount: 3,
-        isEditMode: isEditMode,
+        [type]: true,
       },
     });
   };
@@ -470,12 +475,14 @@ function StudioPartners({
                         >
                           <GoEye
                             style={{ cursor: "pointer" }}
-                            // onClick={() => gotoShowStudioDetaisl(products._id)}
+                            onClick={() => {
+                              gotoEdit(products._id, "showMode");
+                            }}
                           />
                           <MdEdit
                             style={{ color: "#ffc701", cursor: "pointer" }}
                             onClick={() => {
-                              gotoEdit(products._id);
+                              gotoEdit(products._id, "edit");
                             }}
                           />
 

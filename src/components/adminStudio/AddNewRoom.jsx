@@ -93,8 +93,8 @@ function AddNewRoom({
 
     let cal = (price, dis) => {
       let discountedAmount = (price * dis) / 100;
-      let calculatedBasePrice = price + discountedAmount; // Renamed to avoid conflict
-      return parseInt(calculatedBasePrice);
+      let calculatedBasePrice = price - discountedAmount; // Renamed to avoid conflict
+      return Math.ceil(calculatedBasePrice);
     };
     currentRoomsData.basePrice = cal(price, dis);
 
@@ -322,6 +322,17 @@ function AddNewRoom({
       return updatedRooms;
     });
   };
+  const handleBasePriceChange = (event) => {
+    const { value } = event.target;
+    setrooms((prevRooms) => {
+      const updatedRooms = [...prevRooms];
+      updatedRooms[indexofrooms] = {
+        ...currentRoomsData,
+        basePrice: parseInt(value),
+      };
+      return updatedRooms;
+    });
+  };
   const handlePricePerHourChange = (event) => {
     const { value } = event.target;
     setrooms((prevRooms) => {
@@ -339,7 +350,12 @@ function AddNewRoom({
   };
 
   const handleDiscountChange = (event) => {
-    const { value } = event.target;
+    let { value } = event.target;
+    if (value <= 100 && value >= 0) {
+      value = value;
+    } else {
+      value = 0;
+    }
     setrooms((prevRooms) => {
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
@@ -421,7 +437,8 @@ function AddNewRoom({
               />
             </div>
             <div className={style.addNewStudioinputBox}>
-              <label htmlFor="price">Price Per Hour</label>
+              <label htmlFor="Discount">Base Price</label>
+
               <input
                 type="number"
                 id="price"
@@ -440,6 +457,19 @@ function AddNewRoom({
                 min={0}
                 max={100}
                 onChange={handleDiscountChange}
+              />
+            </div>
+            <div className={style.addNewStudioinputBox}>
+              <label htmlFor="price">Price Per Hour</label>
+
+              <input
+                type="number"
+                id="Discount"
+                placeholder="Your Price per hour is "
+                value={currentRoomsData?.basePrice}
+                onChange={(event) => handleBasePriceChange(event)}
+                // disabled
+                // readOnly
               />
             </div>
             <div className={style.customInput}>

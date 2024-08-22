@@ -31,8 +31,8 @@ export const studioPartner = Yup.object().shape({
   phone: Yup.string()
     .required("Mobile is required")
     .min(10, "Mobile number should be at least  10 digit ")
-    .max(10, "Mobile number should be at most  10 digit "),
-  dateOfBirth: Yup.string().required("Date of birth is required"),
+    .max(12, "Mobile number should be at most  12 digit "),
+  dob: Yup.string().required("Date of birth is required"),
 });
 
 export const bannerSchema = Yup.object().shape({

@@ -38,6 +38,7 @@ function AddNewStudioPartners({ setSelectTab }) {
   let editData = data?.state?.productData;
   console.log(data);
   let isEditMode = data?.state?.isEditMode;
+  let showMode = data?.state?.showMode;
 
   const hitapi = (partnerData) => {
     if (isEditMode) {
@@ -74,16 +75,17 @@ function AddNewStudioPartners({ setSelectTab }) {
   };
 
   const formik = useFormik({
-    initialValues: isEditMode
-      ? editData
-      : {
-          firstName: "",
-          lastName: "",
-          email: "",
-          studioId: "",
-          phone: "",
-          dateOfBirth: "",
-        },
+    initialValues:
+      isEditMode || showMode
+        ? editData
+        : {
+            firstName: "",
+            lastName: "",
+            email: "",
+            studioId: "",
+            phone: "",
+            dob: "",
+          },
 
     validationSchema: studioPartner,
     onSubmit: (values) => {
@@ -122,7 +124,11 @@ function AddNewStudioPartners({ setSelectTab }) {
         />
         <form className={style.studioMainScreen} onSubmit={handleSubmit}>
           <div className={style.addNewStudioTitle}>
-            {isEditMode ? "Edit Studio Partner" : "Add Studio Partner"}
+            {isEditMode
+              ? "Edit Studio Partner"
+              : showMode
+              ? "Studio Partner Details"
+              : "Add Studio Partner"}
           </div>
 
           <form className={style.addNewStudioPage}>
@@ -140,6 +146,7 @@ function AddNewStudioPartners({ setSelectTab }) {
                   error={errors.firstName}
                   touched={touched.firstName}
                   onBlur={handleBlur}
+                  disabled={showMode}
                 />
                 <CustomInput
                   type="email"
@@ -153,6 +160,7 @@ function AddNewStudioPartners({ setSelectTab }) {
                   error={errors.email}
                   touched={touched.email}
                   onBlur={handleBlur}
+                  disabled={showMode}
                 />
                 <div className={style.addNewStudioinputBox}>
                   <label>Studio</label>
@@ -161,11 +169,12 @@ function AddNewStudioPartners({ setSelectTab }) {
                     name="studioId"
                     value={values.studioId}
                     onBlur={handleBlur}
+                    disabled={showMode}
                   >
                     <option value="" disabled>
                       Select Studio
                     </option>
-                    {isEditMode && (
+                    {(isEditMode || showMode) && (
                       <option value={editData.studioId}>
                         {editData.studioName}
                       </option>
@@ -194,6 +203,7 @@ function AddNewStudioPartners({ setSelectTab }) {
                   touched={touched.lastName}
                   value={values.lastName}
                   onBlur={handleBlur}
+                  disabled={showMode}
                 />
                 <CustomInput
                   type="text"
@@ -207,6 +217,7 @@ function AddNewStudioPartners({ setSelectTab }) {
                   error={errors.phone}
                   touched={touched.phone}
                   onBlur={handleBlur}
+                  disabled={showMode}
                 />
                 <CustomInput
                   type="date"
@@ -215,12 +226,13 @@ function AddNewStudioPartners({ setSelectTab }) {
                   placeholder="Mobile Number"
                   label="Enter Date of Birth "
                   htmlFor="date"
-                  value={values.dateOfBirth}
-                  name="dateOfBirth"
+                  value={values.dob}
+                  name="dob"
                   onChange={handleChange}
-                  error={errors.dateOfBirth}
-                  touched={touched.dateOfBirth}
+                  error={errors.dob}
+                  touched={touched.dob}
                   onBlur={handleBlur}
+                  disabled={showMode}
                 />
               </div>
             </div>
@@ -229,6 +241,7 @@ function AddNewStudioPartners({ setSelectTab }) {
             backOnclick={backOnclick}
             // saveOnclick={handleSubmit}
             saveType="submit"
+            saveDisabled={showMode}
           />
         </form>
       </div>
