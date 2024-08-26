@@ -121,6 +121,45 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   console.log("------------------------------}}}}}}}}>>");
   console.log(tabs.map((tab) => tab.label.replace(/ /g, "").toLowerCase()));
 
+  let partnersTabs = [
+    {
+      id: 1,
+      icon: <LuHome style={{ fontSize: "1vmax" }} />,
+      label: "DashBoard",
+      onClick: gotoOverview,
+    },
+    {
+      id: 2,
+      icon: <PiChartBarLight style={{ fontSize: "1.3vmax" }} />,
+      label: "My Studio",
+      onClick: gotoAllStudioDetailPage,
+    },
+    {
+      id: 3,
+      icon: <CiCalendar style={{ fontSize: "1.3vmax" }} />,
+      label: "Bookings",
+      onClick: gotoBookings,
+    },
+    {
+      id: 4,
+      icon: <FaRegUser style={{ fontSize: "1vmax" }} />,
+      label: "Manage Slots",
+      onClick: gotoStudios,
+    },
+    {
+      id: 5,
+      icon: <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />,
+      label: "Transactions",
+      onClick: gotoTeams,
+    },
+
+    {
+      id: 6,
+      icon: <TbSpeakerphone style={{ fontSize: "1vmax" }} />,
+      label: "Reviews",
+      onClick: gotoPromotions,
+    },
+  ];
   return (
     <>
       <ProfileEdit editProfile={editProfile} setEditProfile={setEditProfile} />
@@ -133,7 +172,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
             <div className={style.community}>
               {navAccess
                 ? navAccess.map((data, index) =>
-                    tabs.map(
+                    partnersTabs.map(
                       (tab) =>
                         tab.label.toLowerCase().replace(/ /g, "") == data && (
                           <div

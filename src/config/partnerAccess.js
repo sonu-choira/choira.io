@@ -21,6 +21,7 @@ let type =  localStorage.getItem("userType");
       action : "read",
       navbar: ["studio"]
     },
+    
   }
 
  }else{
