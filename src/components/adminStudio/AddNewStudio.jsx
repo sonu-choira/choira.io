@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   MdAddAPhoto,
   MdCancel,
+  MdEdit,
   MdOutlineAddBox,
   MdOutlineSettings,
 } from "react-icons/md";
@@ -28,6 +29,7 @@ import appAndmoreApi from "../../services/appAndmoreApi";
 import Swal from "sweetalert2";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+import { fontSize } from "@mui/system";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -54,7 +56,8 @@ function AddNewStudio({ setSelectTab }) {
 
   const userStudioid = data?.state?.productData?._id;
   // alert(data.state.navCount);
-  const showMode = data?.state?.showMode || false;
+  const [showMode, setShowMode] = useState(data?.state?.showMode || false);
+  // let showMode = data?.state?.showMode || false;
   // const [showMode, setshowMode] = useState(data?.state?.showMode || false);
 
   const navCount = data?.state?.navCount;
@@ -357,23 +360,6 @@ function AddNewStudio({ setSelectTab }) {
         delete checkData.pricePerHour;
         delete checkData.reviews;
 
-        // for (const key of Object.keys(checkData)) {
-        //   const value = checkData[key];
-        //   alert("hii");
-
-        //   if (
-        //     value === null ||
-        //     value === "" ||
-        //     (Array.isArray(value) && value.length === 0) || //
-        //     (typeof value === "object" &&
-        //       !Array.isArray(value) &&
-        //       value !== null &&
-        //       Object.keys(value).length === 0)
-        //   ) {
-        //     return errorAlert(`${key} field is empty`);
-        //   }
-        // }
-
         const result = checkEmptyFields(checkData);
         let hasError = result.hasError;
         console.log(`Has error: ${result.hasError}`);
@@ -499,6 +485,12 @@ function AddNewStudio({ setSelectTab }) {
       }
     }
   };
+  const changeMode = () => {
+    setIsEditMode(true);
+    setShowMode(false);
+
+    sucessAlret("edit mode on");
+  };
 
   return (
     <>
@@ -551,6 +543,15 @@ function AddNewStudio({ setSelectTab }) {
                   : isEditMode
                   ? "Edit Studio"
                   : "Add new studio"}
+
+                {showMode && (
+                  <Button
+                    name={" Edit"}
+                    icon={<MdEdit />}
+                    style={{ height: "50%", fontSize: "0.8vmax", gap: "5%" }}
+                    onClick={changeMode}
+                  />
+                )}
               </div>
               <form className={style.addNewStudioPage}>
                 <div
@@ -685,6 +686,7 @@ function AddNewStudio({ setSelectTab }) {
                       images={images}
                       setImages={setImages}
                       isEditMode={isEditMode}
+                      showMode={showMode}
                     />
 
                     <div
@@ -858,6 +860,7 @@ function AddNewStudio({ setSelectTab }) {
                           setTeamsDetails={setTeamsDetails}
                           data={data}
                           isEditMode={isEditMode}
+                          showMode={showMode}
                         />
                       </div>
                     </div>

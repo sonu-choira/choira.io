@@ -480,6 +480,7 @@ function AddNewRoom({
               images={images}
               setImages={setImages}
               isEditMode={isEditMode}
+              showMode={showMode}
             />
             {/* <div className={style.addNewStudioinputBox}>
               <label htmlFor="roomAmenities">Amenities </label>
