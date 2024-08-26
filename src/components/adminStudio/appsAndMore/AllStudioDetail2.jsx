@@ -32,6 +32,7 @@ import LoaderUpdating from "../../../pages/admin/layout/LoaderUpdating";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 import { GoEye } from "react-icons/go";
 import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
+import moment from "moment";
 
 let PageSize = 10;
 
@@ -340,7 +341,7 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
-                <th>
+                <th style={{ width: "8%" }}>
                   <div className={style.headingContainer}>
                     No. of Rooms
                     <div
@@ -371,6 +372,7 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
+                <th style={{ width: "10%" }}>Created on</th>
                 <th>
                   <div className={style.headingContainer}>
                     Activity Status
@@ -459,6 +461,11 @@ function AllStudioDetail2({
                       </td>
                       <td>{products.totalRooms}</td>
                       <td>
+                        {moment(products.creationTimeStamp).format(
+                          "Do MMM  YY, hh:mm a"
+                        )}
+                      </td>
+                      <td>
                         <div>
                           <Switch
                             isloading={pid === products._id && showloader}
@@ -470,6 +477,7 @@ function AllStudioDetail2({
                           />
                         </div>
                       </td>
+
                       <td
                       // style={{
                       //   display: "flex",

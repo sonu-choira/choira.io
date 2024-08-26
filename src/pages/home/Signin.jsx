@@ -524,6 +524,12 @@ function Signin() {
   const gotoHome = () => {
     navigate("/home");
   };
+  useEffect(() => {
+    let signin = localStorage.getItem("isSignin");
+    if (signin) {
+      navigate("/adminDashboard/Overview");
+    }
+  }, []);
 
   return (
     <>
