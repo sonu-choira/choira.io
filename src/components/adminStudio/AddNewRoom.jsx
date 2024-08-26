@@ -618,6 +618,7 @@ function AddNewRoom({
               images={images}
               setImages={setImages}
               isEditMode={isEditMode}
+              showMode={showMode}
             />
             {/* <div className={style.addNewStudioinputBox}>
               <label htmlFor="roomAmenities">Amenities </label>
@@ -658,7 +659,7 @@ function AddNewRoom({
                     className={style.cancelDetailsUpload}
                     onClick={() => handleCancelDetails(0)}
                   >
-                    <img src={cross} alt="" />
+                    {!showMode && <img src={cross} alt="" />}
                   </span>
                 )}
               </div>
@@ -684,7 +685,7 @@ function AddNewRoom({
                         className={style.cancelDetailsUpload}
                         onClick={() => handleCancelDetails(index)}
                       >
-                        <img src={cross} alt="" />
+                        {!showMode && <img src={cross} alt="" />}
                       </span>
                     )}
                   </div>
@@ -738,7 +739,7 @@ function AddNewRoom({
                       className={style.cancelImageUpload}
                       onClick={() => handleCancelBooking(index)}
                     >
-                      <img src={cross} alt="" />
+                      {!showMode && <img src={cross} alt="" />}
                     </span>
                   )}
                 </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   MdAddAPhoto,
   MdCancel,
+  MdEdit,
   MdOutlineAddBox,
   MdOutlineSettings,
 } from "react-icons/md";
@@ -54,7 +55,8 @@ function AddNewStudio({ setSelectTab }) {
 
   const userStudioid = data?.state?.productData?._id;
   // alert(data.state.navCount);
-  const showMode = data?.state?.showMode || false;
+  const [showMode, setShowMode] = useState(data?.state?.showMode || false);
+  // const showMode = data?.state?.showMode || false;
   // const [showMode, setshowMode] = useState(data?.state?.showMode || false);
 
   const navCount = data?.state?.navCount;
@@ -500,6 +502,12 @@ function AddNewStudio({ setSelectTab }) {
       }
     }
   };
+  const changeMode = () => {
+    setIsEditMode(true);
+    setShowMode(false);
+
+    sucessAlret("edit mode on");
+  };
 
   return (
     <>
@@ -550,8 +558,17 @@ function AddNewStudio({ setSelectTab }) {
                 {isEditMode && showMode
                   ? "Studio details"
                   : isEditMode
-                  ? "Edit Studio."
+                  ? "Edit Studio"
                   : "Add new studio"}
+
+                {showMode && (
+                  <Button
+                    name={" Edit"}
+                    icon={<MdEdit />}
+                    style={{ height: "50%", fontSize: "0.8vmax", gap: "5%" }}
+                    onClick={changeMode}
+                  />
+                )}
               </div>
               <form className={style.addNewStudioPage}>
                 <div
@@ -686,6 +703,7 @@ function AddNewStudio({ setSelectTab }) {
                       images={images}
                       setImages={setImages}
                       isEditMode={isEditMode}
+                      showMode={showMode}
                     />
 
                     <div
@@ -861,6 +879,7 @@ function AddNewStudio({ setSelectTab }) {
                           setTeamsDetails={setTeamsDetails}
                           data={data}
                           isEditMode={isEditMode}
+                          showMode={showMode}
                         />
                       </div>
                     </div>
