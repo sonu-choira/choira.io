@@ -16,6 +16,8 @@ import { useLocation } from "react-router-dom";
 import ThreeWaveChart from "../../../components/charts/ThreeWaveChart";
 import chartApi from "../../../services/chartApi";
 import NumberCounter from "../layout/NumberCounter";
+import { partnerAccess } from "../../../config/partnerAccess";
+import PartnerTransChart from "../../../components/charts/PartnerTransChart";
 // import chartApi from "../../../services/chartApi";
 
 function Overview() {
@@ -44,6 +46,26 @@ function Overview() {
       active: 38,
       image: t4,
     },
+  ];
+  const partnerData = [
+    {
+      title: "Booking",
+      count: 1069,
+      active: 5558,
+      image: t2,
+    },
+    {
+      title: "Transaction",
+      count: 1589,
+      active: 1589,
+      image: t3,
+    },
+    // {
+    //   title: "Project",
+    //   count: 159,
+    //   active: 38,
+    //   image: t4,
+    // },
   ];
 
   const { pathname } = useLocation();
@@ -79,11 +101,22 @@ function Overview() {
   useEffect(() => {
     console.log("{{{{{{{{{{{{{{{{{", products);
   }, [products]);
+  const [navAccess, setnavAccess] = useState(
+    partnerAccess ? partnerAccess : ""
+  );
+  let header = navAccess ? partnerData : data;
+
   return (
     <>
       <div className={style.overviewPage1}>
-        <div className={style.overviewPageHeader}>
-          {data.map((item, index) => (
+        <div
+          className={style.overviewPageHeader}
+          style={{
+            justifyContent: navAccess && "flex-start",
+            gap: navAccess && "2%",
+          }}
+        >
+          {header.map((item, index) => (
             <div key={index} className={style.overviewTicketDiv}>
               <div>
                 <h3>{item.title}</h3>
@@ -102,31 +135,36 @@ function Overview() {
             </div>
           ))}
         </div>
-
-        <ThreeWaveChart products={products} />
-        <div className={style.overviewPage2}>
-          <div>
-            <DoughnutChart products={products} />
-          </div>
-          <div>
-            <LineGraph />
-          </div>
-        </div>
-        <div className={style.overviewPage3}>
-          <div>
-            <BarGraph products={products} />
-          </div>
-          <div>
-            <AreaGraph products={products} />
-          </div>
-        </div>
-        <br />
-        <br />
-        <div className={style.overviewPage4}>
-          <div>
-            <SimpleLineChart />
-          </div>
-        </div>
+        {navAccess ? (
+          <PartnerTransChart products={products} />
+        ) : (
+          <>
+            <ThreeWaveChart products={products} />
+            <div className={style.overviewPage2}>
+              <div>
+                <DoughnutChart products={products} />
+              </div>
+              <div>
+                <LineGraph />
+              </div>
+            </div>
+            <div className={style.overviewPage3}>
+              <div>
+                <BarGraph products={products} />
+              </div>
+              <div>
+                <AreaGraph products={products} />
+              </div>
+            </div>
+            <br />
+            <br />
+            <div className={style.overviewPage4}>
+              <div>
+                <SimpleLineChart />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

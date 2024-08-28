@@ -40,6 +40,7 @@ import { useLocation } from "react-router-dom";
 // services
 import Appapi from "../../../services/appAndmoreApi";
 import appAndmoreApi from "../../../services/appAndmoreApi";
+import { partnerAccess } from "../../../config/partnerAccess";
 
 let sendFilterDataToapi = {
   minPricePerHour: "",
@@ -65,14 +66,18 @@ function AllStudioPageDetailsPage() {
   // console.log("paramData", paramData);
 
   const { pathname } = useLocation();
-
+  const [navAccess, setnavAccess] = useState(partnerAccess || "");
   useEffect(() => {
-    if (pathname.includes("/Apps&More/studio")) {
+    if (navAccess) {
       setBookingPageCount("c1");
-    } else if (pathname.includes("/Apps&More/musicproduction")) {
-      setBookingPageCount("c2");
-    } else if (pathname.includes("/Apps&More/mixmaster")) {
-      setBookingPageCount("c3");
+    } else {
+      if (pathname.includes("/Apps&More/studio")) {
+        setBookingPageCount("c1");
+      } else if (pathname.includes("/Apps&More/musicproduction")) {
+        setBookingPageCount("c2");
+      } else if (pathname.includes("/Apps&More/mixmaster")) {
+        setBookingPageCount("c3");
+      }
     }
   }, [pathname, bookingPageCount]);
 

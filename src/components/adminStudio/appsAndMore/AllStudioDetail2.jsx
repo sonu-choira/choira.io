@@ -495,7 +495,7 @@ function AllStudioDetail2({
                           )}
                         </div>
                         {tableAccess ? (
-                          tableAccess["app&more"].action === "write" ? (
+                          tableAccess["MyStudio"].action === "write" ? (
                             <div>
                               <GoEye
                                 style={{ cursor: "pointer" }}

@@ -216,6 +216,8 @@ function BookingActionBar({
   let navToMap = pageData.toLocaleLowerCase().replace(/ /g, "");
   if (navToMap === "apps&more") {
     navToMap = "app&more";
+  } else if (navToMap === "mystudio") {
+    navToMap = "MyStudio";
   }
   const context = useContext(AccessContext);
 
@@ -223,43 +225,48 @@ function BookingActionBar({
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
-        <div>
+        {!navAccess ? (
           <div>
-            {navAccess
-              ? navAccess[navToMap]?.navbar.map((data, index) =>
-                  bookingOptions.map(
-                    (option) =>
-                      data.toLowerCase().replace(/ /g, "") ===
-                        option.label.toLowerCase().replace(/ /g, "") && (
-                        <div
-                          key={index}
-                          style={{
-                            ...option.style,
-                            backgroundColor:
-                              bookingPageCount === option.id ? "#ffc701" : "",
-                          }}
-                          onClick={option.onClick}
-                        >
-                          {option.label}
-                        </div>
-                      )
+            <div>
+              {navAccess
+                ? navAccess[navToMap]?.navbar.map((data, index) =>
+                    bookingOptions.map(
+                      (option) =>
+                        data.toLowerCase().replace(/ /g, "") ===
+                          option.label.toLowerCase().replace(/ /g, "") && (
+                          <div
+                            key={index}
+                            style={{
+                              ...option.style,
+                              backgroundColor:
+                                bookingPageCount === option.id ? "#ffc701" : "",
+                            }}
+                            onClick={option.onClick}
+                          >
+                            {option.label}
+                          </div>
+                        )
+                    )
                   )
-                )
-              : bookingOptions.map((option, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      ...option.style,
-                      backgroundColor:
-                        bookingPageCount === option.id ? "#ffc701" : "",
-                    }}
-                    onClick={option.onClick}
-                  >
-                    {option.label}
-                  </div>
-                ))}
+                : bookingOptions.map((option, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        ...option.style,
+                        backgroundColor:
+                          bookingPageCount === option.id ? "#ffc701" : "",
+                      }}
+                      onClick={option.onClick}
+                    >
+                      {option.label}
+                    </div>
+                  ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div></div>
+        )}
+
         <div style={{ justifyContent: bookingPageCount === "c1" ? "" : "end" }}>
           {navAccess
             ? navAccess[navToMap]?.button.map((data, index) =>

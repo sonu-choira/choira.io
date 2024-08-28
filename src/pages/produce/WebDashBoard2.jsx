@@ -15,24 +15,45 @@ import { TbSpeakerphone } from "react-icons/tb";
 import { PiChartBarLight } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
 import { partnerAccess } from "../../config/partnerAccess";
+import { MdAccessTime } from "react-icons/md";
+import { CiCreditCard1 } from "react-icons/ci";
+import { MdOutlineRateReview } from "react-icons/md";
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
 
   let { pathname } = useLocation();
 
   useEffect(() => {
-    if (pathname.includes("Overview")) {
-      setTabCount(1);
-    } else if (pathname.includes("User")) {
-      setTabCount(2);
-    } else if (pathname.includes("Teams")) {
-      setTabCount(3);
-    } else if (pathname.includes("Apps&More")) {
-      setTabCount(4);
-    } else if (pathname.includes("Bookings")) {
-      setTabCount(5);
-    } else if (pathname.includes("Promotions")) {
-      setTabCount(6);
+    if (!navAccess) {
+      if (pathname.includes("Overview")) {
+        setTabCount(1);
+      } else if (pathname.includes("User")) {
+        setTabCount(2);
+      } else if (pathname.includes("Teams")) {
+        setTabCount(3);
+      } else if (pathname.includes("Apps&More")) {
+        setTabCount(4);
+      } else if (pathname.includes("Bookings")) {
+        setTabCount(5);
+      } else if (pathname.includes("Promotions")) {
+        setTabCount(6);
+      }
+    } else if (navAccess) {
+      if (pathname.includes("Overview")) {
+        setTabCount(1);
+      } else if (pathname.includes("MyStudio")) {
+        setTabCount(2);
+      } else if (pathname.includes("Bookings/AddSlotBooking")) {
+        setTabCount(4);
+      } else if (pathname.includes("/adminDashboard/Bookings")) {
+        setTabCount(3);
+      } else if (pathname.includes("ManageSlots")) {
+        setTabCount(4);
+      } else if (pathname.includes("Transactions")) {
+        setTabCount(5);
+      } else if (pathname.includes("Reviews")) {
+        setTabCount(6);
+      }
     }
   }, [pathname, setTabCount]);
 
@@ -47,32 +68,10 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     setEditProfile(true);
   };
 
-  const gotoAllStudioDetailPage = () => {
-    setTabCount(4);
-    navigate("/adminDashboard/Apps&More/studio");
-  };
-
-  const gotoBookings = () => {
-    setTabCount(5);
-    navigate("/adminDashboard/Bookings/studio");
-  };
-  const gotoPromotions = () => {
-    setTabCount(6);
-    navigate("/adminDashboard/Promotions/Banner");
-  };
-
-  const gotoOverview = () => {
-    setTabCount(1);
-    navigate("/adminDashboard/Overview");
-  };
-  const gotoStudios = () => {
-    setTabCount(2);
-    navigate("/adminDashboard/User");
-  };
-
-  const gotoTeams = () => {
-    setTabCount(3);
-    navigate("/adminDashboard/Teams/StudioPartners");
+  const goToPage = (tab, mainPage, subPage = "") => {
+    let subPagelink = subPage ? `/${subPage}` : "";
+    setTabCount(tab);
+    navigate(`/adminDashboard/${mainPage}${subPagelink}`);
   };
   let data = localStorage.getItem("adminData");
   let adminData = JSON.parse(data);
@@ -82,43 +81,43 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       id: 1,
       icon: <LuHome style={{ fontSize: "1vmax" }} />,
       label: "DashBoard",
-      onClick: gotoOverview,
+      onClick: () => goToPage(1, "Overview"),
     },
     {
       id: 2,
       icon: <FaRegUser style={{ fontSize: "1vmax" }} />,
       label: "User",
-      onClick: gotoStudios,
+      onClick: () => goToPage(2, "User"),
     },
     {
       id: 3,
       icon: <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />,
       label: "Teams",
-      onClick: gotoTeams,
+      onClick: () => goToPage(3, "Teams", "StudioPartners"),
     },
     {
       id: 4,
       icon: <PiChartBarLight style={{ fontSize: "1.3vmax" }} />,
       label: "App & More",
-      onClick: gotoAllStudioDetailPage,
+      onClick: () => goToPage(4, "Apps&More", "studio"),
     },
     {
       id: 5,
       icon: <CiCalendar style={{ fontSize: "1.3vmax" }} />,
       label: "Bookings",
-      onClick: gotoBookings,
+      onClick: () => goToPage(5, "Bookings", "studio"),
     },
     {
       id: 6,
       icon: <TbSpeakerphone style={{ fontSize: "1vmax" }} />,
       label: "Promotions",
-      onClick: gotoPromotions,
+      onClick: () => goToPage(6, "Promotions", "Banner"),
     },
   ];
   const [navAccess, setnavAccess] = useState(
     partnerAccess ? Object.keys(partnerAccess) : ""
   );
-  console.log("------------------------------}}}}}}}}>>");
+  console.log("------------------------------}}}}}}}}>>", partnerAccess);
   console.log(tabs.map((tab) => tab.label.replace(/ /g, "").toLowerCase()));
 
   let partnersTabs = [
@@ -126,38 +125,38 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       id: 1,
       icon: <LuHome style={{ fontSize: "1vmax" }} />,
       label: "DashBoard",
-      onClick: gotoOverview,
+      onClick: () => goToPage(1, "Overview"),
     },
     {
       id: 2,
       icon: <PiChartBarLight style={{ fontSize: "1.3vmax" }} />,
       label: "My Studio",
-      onClick: gotoAllStudioDetailPage,
+      onClick: () => goToPage(2, "MyStudio"),
     },
     {
       id: 3,
       icon: <CiCalendar style={{ fontSize: "1.3vmax" }} />,
       label: "Bookings",
-      onClick: gotoBookings,
+      onClick: () => goToPage(3, "Bookings", "studio"),
     },
     {
       id: 4,
-      icon: <FaRegUser style={{ fontSize: "1vmax" }} />,
+      icon: <MdAccessTime style={{ fontSize: "1.3vmax" }} />,
       label: "Manage Slots",
-      onClick: gotoStudios,
+      onClick: () => goToPage(4, "ManageSlots"),
     },
     {
       id: 5,
-      icon: <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />,
+      icon: <CiCreditCard1 style={{ fontSize: "1.3vmax" }} />,
       label: "Transactions",
-      onClick: gotoTeams,
+      onClick: () => goToPage(5, "Transactions"),
     },
 
     {
       id: 6,
-      icon: <TbSpeakerphone style={{ fontSize: "1vmax" }} />,
+      icon: <MdOutlineRateReview style={{ fontSize: "1.3vmax" }} />,
       label: "Reviews",
-      onClick: gotoPromotions,
+      onClick: () => goToPage(6, "Reviews"),
     },
   ];
   return (
@@ -174,7 +173,8 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 ? navAccess.map((data, index) =>
                     partnersTabs.map(
                       (tab) =>
-                        tab.label.toLowerCase().replace(/ /g, "") == data && (
+                        tab.label.toLowerCase().replace(/ /g, "") ==
+                          data.toLowerCase().replace(/ /g, "") && (
                           <div
                             key={index}
                             className={

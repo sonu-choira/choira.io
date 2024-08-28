@@ -25,6 +25,7 @@ import Overview from "../adminDashboardOverview/Overview";
 import Promotions from "../../../components/pramotation/Promotions";
 import { partnerAccess, userAcess } from "../../../config/partnerAccess";
 import { AccessContext } from "../../../utils/context";
+import { useNavigateRouter } from "../../../navigateRoute";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -45,7 +46,12 @@ function AdminDashboardLayout() {
   const [navAccess, setnavAccess] = useState(
     partnerAccess ? Object.keys(partnerAccess) : ""
   );
-
+  const router = useNavigateRouter();
+  const gotoSlotBooking = () => {
+    router.push("/adminDashboard/Bookings/AddSlotBooking", {
+      state: { navCount: 4 },
+    });
+  };
   return (
     <>
       {" "}
@@ -77,32 +83,35 @@ function AdminDashboardLayout() {
             </div>
           </div> */}
             {navAccess ? (
-              navAccess.map((data, index) => (
-                <React.Fragment key={index}>
-                  {tabCount === 1 && data === "dashboard" && <Overview />}
-                  {tabCount === 2 && data === "user" && <ShowAllUser />}
-                  {tabCount === 3 && data === "teams" && <AllteamDetails />}
-                  {tabCount === 4 && data === "app&more" && (
-                    <AllStudioPageDetailsPage />
-                  )}
-                  {tabCount === 5 && data === "bookings" && <BookingPages />}
-                  {tabCount === 6 && data === "promotion" && <Promotions />}
-                </React.Fragment>
-              ))
+              navAccess.map((data, index) => {
+                const lowerCaseData = data.toLowerCase().replace(/ /g, "");
+                return (
+                  <React.Fragment key={index}>
+                    {tabCount === 1 && lowerCaseData === "dashboard" && (
+                      <Overview />
+                    )}
+                    {tabCount === 2 && lowerCaseData === "mystudio" && (
+                      <AllStudioPageDetailsPage />
+                    )}
+                    {tabCount === 3 && lowerCaseData === "bookings" && (
+                      <BookingPages />
+                    )}
+                    {tabCount === 4 &&
+                      lowerCaseData === "manageslots" &&
+                      gotoSlotBooking()}
+                    {tabCount === 5 && lowerCaseData === "bookings" && ""}
+                    {tabCount === 6 && lowerCaseData === "promotion" && ""}
+                  </React.Fragment>
+                );
+              })
             ) : (
               <>
                 {tabCount === 1 && <Overview />}
                 {tabCount === 2 && <ShowAllUser />}
                 {tabCount === 3 && <AllteamDetails />}
-                {tabCount === 4 ? (
-                  <AllStudioPageDetailsPage />
-                ) : tabCount === 5 ? (
-                  <BookingPages />
-                ) : tabCount === 6 ? (
-                  <Promotions />
-                ) : (
-                  ""
-                )}
+                {tabCount === 4 && <AllStudioPageDetailsPage />}
+                {tabCount === 5 && <BookingPages />}
+                {tabCount === 6 && <Promotions />}
               </>
             )}
           </div>

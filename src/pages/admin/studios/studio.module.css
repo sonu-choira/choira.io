@@ -1699,7 +1699,7 @@ td {
   min-height: 24vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   /* border: 2px solid green; */
 }
 

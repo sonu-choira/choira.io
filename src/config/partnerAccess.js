@@ -14,13 +14,24 @@ let type =  localStorage.getItem("userType");
       action : "read",
       navbar: ["studio"],
     },
+    MyStudio:{
+      button : ["download","add new"],
+      disabledButton : [""],
+      table : "all",
+      table_col: ["studio", "price", "location", "rooms", "created", "status"],
+      action : "write",
+      navbar: ["studio"],
+    },
     bookings:{
-      button : ["download","slot Booking"],
-      disabledButton : ["slot Booking"],
+      button : ["download",],
+      disabledButton : [""],
       table_col : ["id", "user name", "studio name", "hours", "creation date ", "booking date", "time slot", "Amount", "status"],
       action : "read",
-      navbar: ["studio"]
+      navbar: [""]
     },
+    ManageSlots:true,
+    Transactions:true,
+    Reviews:true,
     
   }
 

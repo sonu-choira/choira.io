@@ -435,7 +435,8 @@ function Signin() {
           setShowBtnLoader(false);
 
           // TokenService.setUser(response.user.role);
-          TokenService.setData("token", response.token);
+          console.log("taken isssss", response.token);
+          TokenService.setData("token", response.token || {});
           setSign(2);
           sucessAlret(response.message);
         } else {
@@ -511,7 +512,8 @@ function Signin() {
         if (response.status) {
           setShowBtnLoader(false);
           localStorage.setItem("userType", "admin");
-          TokenService.setData("token", response.token);
+          console.log("taken isssss", response.token);
+          TokenService.setData("token", response.token || {});
           sucessAlret("OTP is Correct!", "Welcome back 😊");
 
           gotoBooking();
