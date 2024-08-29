@@ -11,17 +11,29 @@ import { AiOutlineTeam } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { useLocale } from "antd/es/locale";
 import { LuHome } from "react-icons/lu";
-import { TbSpeakerphone } from "react-icons/tb";
+import { TbLogout2, TbSpeakerphone } from "react-icons/tb";
 import { PiChartBarLight } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
 import { partnerAccess } from "../../config/partnerAccess";
 import { MdAccessTime } from "react-icons/md";
 import { CiCreditCard1 } from "react-icons/ci";
 import { MdOutlineRateReview } from "react-icons/md";
+import { confirmAlret } from "../admin/layout/Alert";
+
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
-
+  const [navAccess, setnavAccess] = useState(
+    partnerAccess ? Object.keys(partnerAccess) : ""
+  );
   let { pathname } = useLocation();
+  const logout = () => {
+    confirmAlret("Are you sure you want to logout?", "").then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear();
+        navigate("/signin");
+      }
+    });
+  };
 
   useEffect(() => {
     if (!navAccess) {
@@ -73,8 +85,15 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     setTabCount(tab);
     navigate(`/adminDashboard/${mainPage}${subPagelink}`);
   };
-  let data = localStorage.getItem("adminData");
-  let adminData = JSON.parse(data);
+  let data = "";
+  let adminData = "";
+  if (navAccess) {
+    data = localStorage.getItem("studio-owner");
+    adminData = JSON.parse(data);
+  } else {
+    data = localStorage.getItem("adminData");
+    adminData = JSON.parse(data);
+  }
 
   const tabs = [
     {
@@ -114,9 +133,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       onClick: () => goToPage(6, "Promotions", "Banner"),
     },
   ];
-  const [navAccess, setnavAccess] = useState(
-    partnerAccess ? Object.keys(partnerAccess) : ""
-  );
+
   console.log("------------------------------}}}}}}}}>>", partnerAccess);
   console.log(tabs.map((tab) => tab.label.replace(/ /g, "").toLowerCase()));
 
@@ -206,16 +223,27 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
           </div>
 
           <div className={style.section2}>
-            <div
-              className={style.section2Main}
-              style={{ cursor: "pointer" }}
-              onClick={editProfiletab}
-            >
-              <div>
-                <img src={adminData?.Image || tanmay} alt="" />
+            <div className={style.section2Main}>
+              <div style={{ cursor: "pointer" }} onClick={editProfiletab}>
+                <img
+                  src={
+                    navAccess
+                      ? adminData?.ownerImage || tanmay
+                      : adminData?.Image || tanmay
+                  }
+                  alt=""
+                />
               </div>
               <div>
-                <h5>{adminData?.name || "Admin"}</h5> <br />
+                <h5>
+                  {navAccess
+                    ? adminData?.firstName || "Admin"
+                    : adminData?.name || "Admin"}
+                </h5>{" "}
+                <br />
+                <span style={{ cursor: "pointer", fontSize: "1.2vmax" }}>
+                  <TbLogout2 onClick={logout} />
+                </span>
                 {/* <h6>{adminData?.role || "admin"}</h6> */}
               </div>
             </div>

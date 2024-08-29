@@ -540,6 +540,12 @@ function Signin() {
   //     source.cancel("Operation canceled by the user.");
   //   };
   // }, [source]);
+  useEffect(() => {
+    let signin = localStorage.getItem("isSignin");
+    if (signin) {
+      navigate(-1);
+    }
+  }, []);
 
   const gotoHome = () => {
     navigate("/home");

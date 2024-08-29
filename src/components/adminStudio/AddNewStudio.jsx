@@ -48,7 +48,7 @@ function AddNewStudio({ setSelectTab }) {
   };
   const navigate = useNavigate();
   const gotoadminpage = () => {
-    navigate("/adminDashboard/Apps&More/studio");
+    navigate(-1);
   };
 
   const data = useLocation();

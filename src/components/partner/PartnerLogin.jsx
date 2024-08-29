@@ -426,7 +426,10 @@ function PartnerLogin() {
         setShowBtnLoader(false);
         console.log("res------", response);
         console.log("res------", response.user);
-        localStorage.setItem("studio-owner", JSON.stringify(response.user));
+        localStorage.setItem(
+          "studio-owner",
+          JSON.stringify(response.ownerData || {})
+        );
         if (response.status) {
           setShowBtnLoader(false);
 
@@ -506,9 +509,13 @@ function PartnerLogin() {
           localStorage.setItem("userType", "owner");
           sucessAlret("OTP is Correct!", "Welcome back 😊");
 
+          localStorage.setItem("isSignin", "true");
+          localStorage.setItem(
+            "studio-owner",
+            JSON.stringify(response.ownerData)
+          );
           gotoBooking();
           // setCheckOtp(false);
-          localStorage.setItem("isSignin", "true");
         } else {
           setShowBtnLoader(false);
           errorAlert("OTP is Incorrect!", "Please try again 😕");
@@ -527,7 +534,12 @@ function PartnerLogin() {
   //     source.cancel("Operation canceled by the user.");
   //   };
   // }, [source]);
-
+  useEffect(() => {
+    let signin = localStorage.getItem("isSignin");
+    if (signin) {
+      navigate(-1);
+    }
+  }, []);
   const gotoHome = () => {
     navigate("/home");
   };

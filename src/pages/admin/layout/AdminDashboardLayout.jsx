@@ -46,9 +46,9 @@ function AdminDashboardLayout() {
   const [navAccess, setnavAccess] = useState(
     partnerAccess ? Object.keys(partnerAccess) : ""
   );
-  const router = useNavigateRouter();
+  const router = useNavigate();
   const gotoSlotBooking = () => {
-    router.push("/adminDashboard/Bookings/AddSlotBooking", {
+    router("/adminDashboard/Bookings/AddSlotBooking", {
       state: { navCount: 4 },
     });
   };
