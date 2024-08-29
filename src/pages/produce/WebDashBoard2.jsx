@@ -85,7 +85,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     navigate("/adminDashboard/Teams/StudioPartners");
   };
   let data = localStorage.getItem("adminData");
-  let adminData = JSON.parse(data);
+  let adminData = JSON.parse(data || {});
   return (
     <>
       <ProfileEdit editProfile={editProfile} setEditProfile={setEditProfile} />
