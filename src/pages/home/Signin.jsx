@@ -210,7 +210,7 @@ function Signin() {
       .post(httpUrl + "login", sendableData)
       .then((result) => {
         let responseJson = result.data;
-        localStorage.setItem("userData", JSON.stringify(result.data));
+        localStorage.setItem("userData", JSON.stringify(result.data || {}));
         localStorage.setItem("isLogin", "true");
         localStorage.setItem("photo", JSON.stringify(result.data.photo));
         navigate("/userHome");
@@ -422,7 +422,7 @@ function Signin() {
         setShowBtnLoader(false);
         console.log("res------", response);
         console.log("res------", response.user);
-        localStorage.setItem("adminData", JSON.stringify(response.user));
+        localStorage.setItem("adminData", JSON.stringify(response.user || {}));
         if (response.status) {
           setShowBtnLoader(false);
 
