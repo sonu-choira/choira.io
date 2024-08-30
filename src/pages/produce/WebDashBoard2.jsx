@@ -32,8 +32,10 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       setTabCount(4);
     } else if (pathname.includes("Bookings")) {
       setTabCount(5);
-    } else if (pathname.includes("Promotions")) {
+    } else if (pathname.includes("Transaction")) {
       setTabCount(6);
+    } else if (pathname.includes("Promotions")) {
+      setTabCount(7);
     }
   }, [pathname, setTabCount]);
 
@@ -67,7 +69,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     navigate("/adminDashboard/Bookings/studio");
   };
   const gotoPromotions = () => {
-    setTabCount(6);
+    setTabCount(7);
     navigate("/adminDashboard/Promotions/Banner");
   };
 
@@ -83,6 +85,10 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const gotoTeams = () => {
     setTabCount(3);
     navigate("/adminDashboard/Teams/StudioPartners");
+  };
+  const gotoTransactions = () => {
+    setTabCount(6);
+    navigate("/adminDashboard/Transaction/studio");
   };
   let data = localStorage.getItem("adminData");
   let adminData = JSON.parse(data || {});
@@ -133,6 +139,13 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
               </div>
               <div
                 className={tabCount === 6 ? style.tabActive : style.padding}
+                onClick={gotoTransactions}
+              >
+                <TbSpeakerphone style={{ fontSize: "1vmax" }} />
+                Transaction
+              </div>
+              <div
+                className={tabCount === 7 ? style.tabActive : style.padding}
                 onClick={gotoPromotions}
               >
                 <TbSpeakerphone style={{ fontSize: "1vmax" }} />
