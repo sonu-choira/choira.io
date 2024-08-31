@@ -19,6 +19,9 @@ import Subadmin from "../teamsSection/Subadmin";
 import StudioBookingDetail from "../adminStudio/booking/StudioBookingDetail";
 import StudioTransaction from "./StudioTransaction";
 
+import { partnerAccess } from "../../config/partnerAccess";
+
+
 function ShowAllTransaction() {
   const [products, setProducts] = useState([]);
   const [totalResult, setTotalResult] = useState();
@@ -34,15 +37,23 @@ function ShowAllTransaction() {
   let { page: currentPage, navOption: currentNav } = useParams();
   console.log("currentPage", currentPage);
   console.log("currentNav", currentNav);
+
+  const [navAccess, setnavAccess] = useState(partnerAccess || "");
   useEffect(() => {
-    if (currentPage == "studio") {
+    if (!navAccess) {
+      if (currentPage == "studio") {
+        setTransactionPageCount("t1");
+      } else if (currentPage == "musicproduction") {
+        setTransactionPageCount("t2");
+      } else if (currentPage == "artist") {
+        setTransactionPageCount("t3");
+      } else if (currentPage == "mixmaster") {
+        setTransactionPageCount("t4");
+      }
+    }
+    if (navAccess) {
       setTransactionPageCount("t1");
-    } else if (currentPage == "musicproduction") {
-      setTransactionPageCount("t2");
-    } else if (currentPage == "artist") {
-      setTransactionPageCount("t3");
-    } else if (currentPage == "mixmaster") {
-      setTransactionPageCount("t4");
+
     }
   }, [currentPage]);
   const pagetype = "apps";
@@ -176,7 +187,10 @@ function ShowAllTransaction() {
           TransactionPageCount={TransactionPageCount}
           setTransactionPageCount={setTransactionPageCount}
         />
-        {currentNav == "Transaction" && currentPage == "studio" ? (
+
+        {currentNav == "Transactions" ? (
+
+
           <StudioTransaction
             sendFilterDataToapi={sendFilterDataToapi}
             products={products}
@@ -196,7 +210,9 @@ function ShowAllTransaction() {
             shortBySrNo={shortBySrNo}
           />
         ) : // <AllStudioDetail />
-        currentNav == "Transaction" && currentPage == "122" ? (
+
+        currentNav == "Transactions" && currentPage == "122" ? (
+
           <Subadmin
             sendFilterDataToapi={sendFilterDataToapi}
             products={products}
@@ -211,9 +227,12 @@ function ShowAllTransaction() {
             setShortby={setShortby}
             shortby={shortby}
           />
-        ) : currentNav == "Transaction" && currentPage == "Artist" ? (
+
+        ) : currentNav == "Transactions" && currentPage == "Artist" ? (
           "t3"
-        ) : currentNav == "Transaction" && currentPage == "MusicProducer" ? (
+        ) : currentNav == "Transactions" && currentPage == "MusicProducer" ? (
+
+     
           "t4"
         ) : (
           ""

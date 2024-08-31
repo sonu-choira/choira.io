@@ -11,31 +11,69 @@ import { AiOutlineTeam } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { useLocale } from "antd/es/locale";
 import { LuHome } from "react-icons/lu";
-import { TbSpeakerphone } from "react-icons/tb";
+import { TbLogout2, TbSpeakerphone } from "react-icons/tb";
 import { PiChartBarLight } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
+
+import { partnerAccess } from "../../config/partnerAccess";
+import { MdAccessTime } from "react-icons/md";
+import { CiCreditCard1 } from "react-icons/ci";
+import { MdOutlineRateReview } from "react-icons/md";
+import { confirmAlret } from "../admin/layout/Alert";
+
+
 import { TbLogout2 } from "react-icons/tb";
 import { confirmAlret } from "../admin/layout/Alert";
+
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
-
+  const [navAccess, setnavAccess] = useState(
+    partnerAccess ? Object.keys(partnerAccess) : ""
+  );
   let { pathname } = useLocation();
+  const logout = () => {
+    confirmAlret("Are you sure you want to logout?", "").then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear();
+        navigate("/signin");
+      }
+    });
+  };
 
   useEffect(() => {
-    if (pathname.includes("Overview")) {
-      setTabCount(1);
-    } else if (pathname.includes("User")) {
-      setTabCount(2);
-    } else if (pathname.includes("Teams")) {
-      setTabCount(3);
-    } else if (pathname.includes("Apps&More")) {
-      setTabCount(4);
-    } else if (pathname.includes("Bookings")) {
-      setTabCount(5);
-    } else if (pathname.includes("Transaction")) {
-      setTabCount(6);
-    } else if (pathname.includes("Promotions")) {
-      setTabCount(7);
+
+    if (!navAccess) {
+      if (pathname.includes("Overview")) {
+        setTabCount(1);
+      } else if (pathname.includes("User")) {
+        setTabCount(2);
+      } else if (pathname.includes("Teams")) {
+        setTabCount(3);
+      } else if (pathname.includes("Apps&More")) {
+        setTabCount(4);
+      } else if (pathname.includes("Bookings")) {
+        setTabCount(5);
+      } else if (pathname.includes("Promotions")) {
+        setTabCount(6);
+      }
+    }
+    if (navAccess) {
+      if (pathname.includes("Overview")) {
+        setTabCount(1);
+      } else if (pathname.includes("MyStudio")) {
+        setTabCount(2);
+      } else if (pathname.includes("Bookings/AddSlotBooking")) {
+        setTabCount(4);
+      } else if (pathname.includes("/adminDashboard/Bookings")) {
+        setTabCount(3);
+      } else if (pathname.includes("ManageSlots")) {
+        setTabCount(4);
+      } else if (pathname.includes("Transactions")) {
+        setTabCount(5);
+      } else if (pathname.includes("Reviews")) {
+        setTabCount(6);
+      }
+
     }
   }, [pathname, setTabCount]);
 
@@ -59,39 +97,106 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     setEditProfile(true);
   };
 
-  const gotoAllStudioDetailPage = () => {
-    setTabCount(4);
-    navigate("/adminDashboard/Apps&More/studio");
+  const goToPage = (tab, mainPage, subPage = "") => {
+    let subPagelink = subPage ? `/${subPage}` : "";
+    setTabCount(tab);
+    navigate(`/adminDashboard/${mainPage}${subPagelink}`);
   };
+  let data = "";
+  let adminData = "";
+  if (navAccess) {
+    data = localStorage.getItem("studio-owner");
+    adminData = JSON.parse(data);
+  } else {
+    data = localStorage.getItem("adminData");
+    adminData = JSON.parse(data);
+  }
 
-  const gotoBookings = () => {
-    setTabCount(5);
-    navigate("/adminDashboard/Bookings/studio");
-  };
-  const gotoPromotions = () => {
-    setTabCount(7);
-    navigate("/adminDashboard/Promotions/Banner");
-  };
 
-  const gotoOverview = () => {
-    setTabCount(1);
-    navigate("/adminDashboard/Overview");
-  };
-  const gotoStudios = () => {
-    setTabCount(2);
-    navigate("/adminDashboard/User");
-  };
+  const tabs = [
+    {
+      id: 1,
+      icon: <LuHome style={{ fontSize: "1vmax" }} />,
+      label: "DashBoard",
+      onClick: () => goToPage(1, "Overview"),
+    },
+    {
+      id: 2,
+      icon: <FaRegUser style={{ fontSize: "1vmax" }} />,
+      label: "User",
+      onClick: () => goToPage(2, "User"),
+    },
+    {
+      id: 3,
+      icon: <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />,
+      label: "Teams",
+      onClick: () => goToPage(3, "Teams", "StudioPartners"),
+    },
+    {
+      id: 4,
+      icon: <PiChartBarLight style={{ fontSize: "1.3vmax" }} />,
+      label: "App & More",
+      onClick: () => goToPage(4, "Apps&More", "studio"),
+    },
+    {
+      id: 5,
+      icon: <CiCalendar style={{ fontSize: "1.3vmax" }} />,
+      label: "Bookings",
+      onClick: () => goToPage(5, "Bookings", "studio"),
+    },
+    {
+      id: 6,
+      icon: <TbSpeakerphone style={{ fontSize: "1vmax" }} />,
+      label: "Promotions",
+      onClick: () => goToPage(6, "Promotions", "Banner"),
+    },
+  ];
 
-  const gotoTeams = () => {
-    setTabCount(3);
-    navigate("/adminDashboard/Teams/StudioPartners");
-  };
-  const gotoTransactions = () => {
-    setTabCount(6);
-    navigate("/adminDashboard/Transaction/studio");
-  };
-  let data = localStorage.getItem("adminData");
-  let adminData = JSON.parse(data || {});
+
+  console.log("------------------------------}}}}}}}}>>", partnerAccess);
+  console.log(tabs.map((tab) => tab.label.replace(/ /g, "").toLowerCase()));
+
+
+  let partnersTabs = [
+    {
+      id: 1,
+      icon: <LuHome style={{ fontSize: "1vmax" }} />,
+      label: "DashBoard",
+      onClick: () => goToPage(1, "Overview"),
+    },
+    {
+      id: 2,
+      icon: <PiChartBarLight style={{ fontSize: "1.3vmax" }} />,
+      label: "My Studio",
+      onClick: () => goToPage(2, "MyStudio"),
+    },
+    {
+      id: 3,
+      icon: <CiCalendar style={{ fontSize: "1.3vmax" }} />,
+      label: "Bookings",
+      onClick: () => goToPage(3, "Bookings", "studio"),
+    },
+    {
+      id: 4,
+      icon: <MdAccessTime style={{ fontSize: "1.3vmax" }} />,
+      label: "Manage Slots",
+      onClick: () => goToPage(4, "ManageSlots"),
+    },
+    {
+      id: 5,
+      icon: <CiCreditCard1 style={{ fontSize: "1.3vmax" }} />,
+      label: "Transactions",
+      onClick: () => goToPage(5, "Transactions"),
+    },
+
+    {
+      id: 6,
+      icon: <MdOutlineRateReview style={{ fontSize: "1.3vmax" }} />,
+      label: "Reviews",
+      onClick: () => goToPage(6, "Reviews"),
+    },
+  ];
+
   return (
     <>
       <ProfileEdit editProfile={editProfile} setEditProfile={setEditProfile} />
@@ -102,65 +207,65 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
               <img src={logo} alt="" />
             </div>
             <div className={style.community}>
-              <div
-                className={tabCount === 1 ? style.tabActive : style.padding}
-                onClick={gotoOverview}
-              >
-                <LuHome style={{ fontSize: "1vmax" }} />
-                DashBoard
-              </div>
-              <div
-                className={tabCount === 2 ? style.tabActive : style.padding}
-                onClick={gotoStudios}
-              >
-                <FaRegUser style={{ fontSize: "1vmax" }} />
-                User
-              </div>
-              <div
-                className={tabCount === 3 ? style.tabActive : style.padding}
-                onClick={gotoTeams}
-              >
-                <AiOutlineTeam style={{ fontSize: "1.3vmax" }} />
-                Teams
-              </div>
-              <div
-                className={tabCount === 4 ? style.tabActive : style.padding}
-                onClick={gotoAllStudioDetailPage}
-              >
-                <PiChartBarLight style={{ fontSize: "1.3vmax" }} />
-                App & More
-              </div>
-              <div
-                className={tabCount === 5 ? style.tabActive : style.padding}
-                onClick={gotoBookings}
-              >
-                <CiCalendar style={{ fontSize: "1.3vmax" }} />
-                Bookings
-              </div>
-              <div
-                className={tabCount === 6 ? style.tabActive : style.padding}
-                onClick={gotoTransactions}
-              >
-                <TbSpeakerphone style={{ fontSize: "1vmax" }} />
-                Transaction
-              </div>
-              <div
-                className={tabCount === 7 ? style.tabActive : style.padding}
-                onClick={gotoPromotions}
-              >
-                <TbSpeakerphone style={{ fontSize: "1vmax" }} />
-                Promotions
-              </div>
+
+              {navAccess
+                ? navAccess.map((data, index) =>
+                    partnersTabs.map(
+                      (tab) =>
+                        tab.label.toLowerCase().replace(/ /g, "") ==
+                          data.toLowerCase().replace(/ /g, "") && (
+                          <div
+                            key={index}
+                            className={
+                              tabCount === tab.id
+                                ? style.tabActive
+                                : style.padding
+                            }
+                            onClick={tab.onClick}
+                          >
+                            {tab.icon}
+                            {tab.label}
+                          </div>
+                        )
+                    )
+                  )
+                : tabs.map((tab) => (
+                    <div
+                      key={tab.id}
+                      className={
+                        tabCount === tab.id ? style.tabActive : style.padding
+                      }
+                      onClick={tab.onClick}
+                    >
+                      {tab.icon}
+                      {tab.label}
+                    </div>
+                  ))}
+
             </div>
           </div>
 
           <div className={style.section2}>
             <div className={style.section2Main}>
               <div style={{ cursor: "pointer" }} onClick={editProfiletab}>
-                <img src={adminData?.Image || tanmay} alt="" />
+
+                <img
+                  src={
+                    navAccess
+                      ? adminData?.ownerImage || tanmay
+                      : adminData?.Image || tanmay
+                  }
+                  alt=""
+                />
               </div>
               <div>
-                <h5>{adminData?.name || "Admin"}</h5> <br />
+                <h5>
+                  {navAccess
+                    ? adminData?.firstName || "Admin"
+                    : adminData?.name || "Admin"}
+                </h5>{" "}
+                <br />
+
                 <span style={{ cursor: "pointer", fontSize: "1.2vmax" }}>
                   <TbLogout2 onClick={logout} />
                 </span>

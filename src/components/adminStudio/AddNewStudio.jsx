@@ -29,6 +29,7 @@ import appAndmoreApi from "../../services/appAndmoreApi";
 import Swal from "sweetalert2";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+import { fontSize } from "@mui/system";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -47,7 +48,7 @@ function AddNewStudio({ setSelectTab }) {
   };
   const navigate = useNavigate();
   const gotoadminpage = () => {
-    navigate("/adminDashboard/Apps&More/studio");
+    navigate(-1);
   };
 
   const data = useLocation();
@@ -56,7 +57,7 @@ function AddNewStudio({ setSelectTab }) {
   const userStudioid = data?.state?.productData?._id;
   // alert(data.state.navCount);
   const [showMode, setShowMode] = useState(data?.state?.showMode || false);
-  // const showMode = data?.state?.showMode || false;
+
   // const [showMode, setshowMode] = useState(data?.state?.showMode || false);
 
   const navCount = data?.state?.navCount;
@@ -359,23 +360,6 @@ function AddNewStudio({ setSelectTab }) {
         delete checkData._id;
         delete checkData.pricePerHour;
         delete checkData.reviews;
-
-        // for (const key of Object.keys(checkData)) {
-        //   const value = checkData[key];
-        //   alert("hii");
-
-        //   if (
-        //     value === null ||
-        //     value === "" ||
-        //     (Array.isArray(value) && value.length === 0) || //
-        //     (typeof value === "object" &&
-        //       !Array.isArray(value) &&
-        //       value !== null &&
-        //       Object.keys(value).length === 0)
-        //   ) {
-        //     return errorAlert(`${key} field is empty`);
-        //   }
-        // }
 
         const result = checkEmptyFields(checkData);
         let hasError = result.hasError;

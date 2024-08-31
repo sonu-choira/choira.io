@@ -6,7 +6,7 @@ import { SERVER_API } from "../config/config";
 // utils
 import { isValidToken, setSession } from '../utils/jwt';
 
-class AuthService {
+class partnerApi {
 
 
     ChangePassword = async (adminId, oldPassword, newPassword) => {
@@ -20,22 +20,11 @@ class AuthService {
         }
     };
 
-    login = async (phoneNumber='9876543210', userType='NUMBER') => {
+    login = async (number='9876543210', userType='NUMBER') => {
 
-        const response = await axios.post('/admins/login', {
-            phoneNumber,
-            userType,
+        const response = await axios.post('/owners/login', {
+            number,
             
-        });
-
-        const userData = response.data;
-
-        return userData;
-      };
-    subLogin = async (phoneNumber='9876543210', userType='NUMBER') => {
-
-        const response = await axios.post('sub-admins/login', {
-            phoneNumber,
             userType,
             
         });
@@ -56,12 +45,12 @@ class AuthService {
     return status;
     };
 
-    verifyOtp = async (phoneNumber, otp,role = "admin",option) => {
-        const response = await axios.get('/users/verify-otp', {
+    verifyOtp = async (phoneNumber, otp,option) => {
+        const response = await axios.get('/owner/verify-otp', {
            params: {
                phoneNumber,
                otp,
-               role,
+               
            }
         }).then((res) => {
             console.log("otp res ===>", res)
@@ -73,4 +62,4 @@ class AuthService {
 
 }
 
-export default new AuthService();
+export default new partnerApi();

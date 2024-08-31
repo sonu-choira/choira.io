@@ -394,7 +394,8 @@ input[type="number"] {
 }
 .bookingStudiobtn > div:nth-child(1) > div {
   /* width: 90.5%; */
-  width: 68.1%;
+  min-width: fit-content;
+  max-width: 68.1%;
   height: 100%;
   /* border: 2px solid pink; */
   overflow: hidden;
@@ -1698,7 +1699,7 @@ td {
   min-height: 24vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   /* border: 2px solid green; */
 }
 

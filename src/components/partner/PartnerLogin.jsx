@@ -1,16 +1,16 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 
 import singer from "../../assets/img/singer3.png";
-import signStyle from "../home/signinBackup.module.css";
+import signStyle from "../../pages/home/signinBackup.module.css";
 import logo from "../../assets/img/logo-choira.svg";
 import google from "../../assets/img/google.png";
 import facebook from "../../assets/img/facebook.png";
 import apple from "../../assets/img/apple.png";
-import OptVerify from "../../components/signin/OptVerify";
-import SigninNum from "../../components/signin/SigninNum";
-import SignUpDetails from "../../components/signin/SignUpDetails";
+import OptVerify from "../signin/OptVerify";
+import SigninNum from "../signin/SigninNum";
+import SignUpDetails from "../signin/SignUpDetails";
 
-import "./home.scss";
+import "../../pages/home/home.scss";
 
 // SERVICES
 import AuthService from "../../services/auth.service";
@@ -29,9 +29,11 @@ import { loginUrl, getTokenByUrl } from "../../spotify";
 
 import { httpUrl, nodeUrl } from "../../restservice";
 import { Alert } from "antd";
-import { errorAlert, sucessAlret } from "../admin/layout/Alert";
-import Button from "../admin/layout/Button";
-import ToggleSwitch from "../admin/layout/ToggleSwitch";
+
+import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+import Button from "../../pages/admin/layout/Button";
+import PartnerOtpVerify from "./PartnerOtpVerify";
+import partnerApi from "../../services/partnerApi";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -81,7 +83,7 @@ const innertitle = {
   fontSize: "25px",
 };
 
-function Signin() {
+function PartnerLogin() {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
@@ -211,7 +213,7 @@ function Signin() {
       .post(httpUrl + "login", sendableData)
       .then((result) => {
         let responseJson = result.data;
-        localStorage.setItem("userData", JSON.stringify(result.data || {}));
+        localStorage.setItem("userData", JSON.stringify(result.data));
         localStorage.setItem("isLogin", "true");
         localStorage.setItem("photo", JSON.stringify(result.data.photo));
         navigate("/userHome");
@@ -414,29 +416,25 @@ function Signin() {
   // api integration ----------------------------------------
   const [showBtnLoader, setShowBtnLoader] = useState(false);
   let loaderText = "verifying ...";
-  const [userType, setUserType] = useState("admin");
+
   const checkLoginData = () => {
     setShowBtnLoader(true);
-    let type = "login";
-    if (userType === "admin") {
-      type = "login";
-    } else {
-      type = "subLogin";
-    }
-
     // const role = mobileNumber === "9898989898" ? "admin" : "user";
-    AuthService[type](countryCode + mobileNumber, "NUMBER")
+    partnerApi
+      .login(countryCode + mobileNumber, "NUMBER")
       .then((response) => {
         setShowBtnLoader(false);
         console.log("res------", response);
         console.log("res------", response.user);
-        localStorage.setItem("adminData", JSON.stringify(response.user || {}));
+        localStorage.setItem(
+          "studio-owner",
+          JSON.stringify(response.ownerData || {})
+        );
         if (response.status) {
           setShowBtnLoader(false);
 
           // TokenService.setUser(response.user.role);
-          console.log("taken isssss", response.token);
-          TokenService.setData("token", response.token || {});
+          TokenService.setData("token", response.token);
           setSign(2);
           sucessAlret(response.message);
         } else {
@@ -499,33 +497,28 @@ function Signin() {
 
   const check_otp_btn = () => {
     setShowBtnLoader(true);
-    let type = "login";
-    if (userType === "admin") {
-      type = "login";
-    } else {
-      type = "subAdmin";
-    }
 
-    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, type)
+    partnerApi
+      .verifyOtp(countryCode + mobileNumber, enteredOTP)
       .then((response) => {
         setShowBtnLoader(false);
         console.log("res------", response);
         if (response.status) {
           setShowBtnLoader(false);
-          localStorage.setItem("userType", "admin");
-          console.log("taken isssss", response.token);
-          TokenService.setData("token", response.token || {});
+          TokenService.setData("token", response?.token);
+          localStorage.setItem("userType", "owner");
           sucessAlret("OTP is Correct!", "Welcome back 😊");
 
+          localStorage.setItem("isSignin", "true");
+          localStorage.setItem(
+            "studio-owner",
+            JSON.stringify(response.ownerData)
+          );
           gotoBooking();
           // setCheckOtp(false);
-          localStorage.setItem("isSignin", "true");
         } else {
           setShowBtnLoader(false);
-          errorAlert(
-            response.message || "OTP is Incorrect!",
-            "Please try again 😕"
-          );
+          errorAlert("OTP is Incorrect!", "Please try again 😕");
           console.log("Not get Token");
         }
       })
@@ -547,16 +540,9 @@ function Signin() {
       navigate(-1);
     }
   }, []);
-
   const gotoHome = () => {
     navigate("/home");
   };
-  useEffect(() => {
-    let signin = localStorage.getItem("isSignin");
-    if (signin) {
-      navigate("/adminDashboard/Overview");
-    }
-  }, []);
 
   return (
     <>
@@ -607,16 +593,6 @@ function Signin() {
                   <div className={signStyle.signupHeader2}>
                     <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
                   </div>
-                  {sign == 1 && (
-                    <div className={signStyle.signupToggel}>
-                      <p>Select Account Type</p>
-                      <ToggleSwitch
-                        userType={userType}
-                        setUserType={setUserType}
-                      />
-                    </div>
-                  )}
-
                   <div className={signStyle.enterMob}>
                     {sign === 1 ? (
                       <SigninNum
@@ -626,7 +602,7 @@ function Signin() {
                         onCountryCodeChange={handleCountryCodeChange} // Pass the handler function
                       />
                     ) : sign === 2 ? (
-                      <OptVerify
+                      <PartnerOtpVerify
                         mobileNumber={mobileNumber}
                         countryCode={countryCode}
                         // checkOtp={checkOtp}
@@ -642,6 +618,7 @@ function Signin() {
 
                     <div className={signStyle.footer}>
                       <div
+                        style={{ visibility: "hidden" }}
                         className={`${
                           sign === 1
                             ? `${signStyle.hrLine}`
@@ -665,6 +642,7 @@ function Signin() {
                         }`}
                       >
                         <div
+                          style={{ visibility: "hidden" }}
                           onClick={() =>
                             handleFirebaseClick(googleProvider, "GOOGLE")
                           }
@@ -673,13 +651,14 @@ function Signin() {
                           <small>Sign in with Google </small>
                         </div>
                         <div
+                          style={{ visibility: "hidden" }}
                           onClick={() =>
                             handleFirebaseClick(facebookProvider, "FACEBOOK")
                           }
                         >
                           <img src={facebook} alt="Facebook" />
                         </div>
-                        <div>
+                        <div style={{ visibility: "hidden" }}>
                           <img src={apple} alt="Apple" />
                         </div>
                       </div>
@@ -740,4 +719,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default PartnerLogin;

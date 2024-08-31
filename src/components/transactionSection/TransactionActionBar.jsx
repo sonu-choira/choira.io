@@ -9,6 +9,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import { useNavigateRouter } from "../../navigateRoute";
 
+import { partnerAccess } from "../../config/partnerAccess";
+
+
 function TransactionActionBar({
   pagetype,
   downloadAllData,
@@ -27,66 +30,80 @@ function TransactionActionBar({
     router.push(`/adminDashboard/Transaction/${page}`);
   };
 
+  const [navAccess, setnavAccess] = useState(partnerAccess || "");
+
+
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
-        <div style={{ width: "56%" }}>
-          <div>
-            <div
-              style={{
-                borderLeft: "none",
-                backgroundColor: TransactionPageCount === "t1" ? "#ffc701" : "",
-                // backgroundColor: "#ADB5BD",
-                // cursor: "not-allowed",
-              }}
-              onClick={() => {
-                setTransactionPageCount("t1");
-                goToPage("studio");
-              }}
-            >
-              Studio
-            </div>
-            <div
-              style={{
-                backgroundColor: TransactionPageCount === "t2" ? "#ffc701" : "",
-              }}
-              onClick={() => {
-                setTransactionPageCount("t2");
-                goToPage("musicproduction");
-              }}
-            >
-              Music Production
-            </div>
 
-            <div
-              style={{
-                backgroundColor: TransactionPageCount === "t3" ? "#ffc701" : "",
-                // backgroundColor: "#ADB5BD",
-                // cursor: "not-allowed",
-              }}
-              onClick={() => {
-                setTransactionPageCount("t3");
-                goToPage("artist");
-              }}
-            >
-              Artist
-            </div>
-            <div
-              style={{
-                borderRight: "none",
-                backgroundColor: TransactionPageCount === "t4" ? "#ffc701" : "",
-                // backgroundColor: "#ADB5BD",
-                // cursor: "not-allowed",
-              }}
-              onClick={() => {
-                setTransactionPageCount("t4");
-                goToPage("mixmaster");
-              }}
-            >
-              Mix-Master
+        {!navAccess ? (
+          <div style={{ width: "56%" }}>
+            <div>
+              <div
+                style={{
+                  borderLeft: "none",
+                  backgroundColor:
+                    TransactionPageCount === "t1" ? "#ffc701" : "",
+                  // backgroundColor: "#ADB5BD",
+                  // cursor: "not-allowed",
+                }}
+                onClick={() => {
+                  setTransactionPageCount("t1");
+                  goToPage("studio");
+                }}
+              >
+                Studio
+              </div>
+              <div
+                style={{
+                  backgroundColor:
+                    TransactionPageCount === "t2" ? "#ffc701" : "",
+                }}
+                onClick={() => {
+                  setTransactionPageCount("t2");
+                  goToPage("musicproduction");
+                }}
+              >
+                Music Production
+              </div>
+
+              <div
+                style={{
+                  backgroundColor:
+                    TransactionPageCount === "t3" ? "#ffc701" : "",
+                  // backgroundColor: "#ADB5BD",
+                  // cursor: "not-allowed",
+                }}
+                onClick={() => {
+                  setTransactionPageCount("t3");
+                  goToPage("artist");
+                }}
+              >
+                Artist
+              </div>
+              <div
+                style={{
+                  borderRight: "none",
+                  backgroundColor:
+                    TransactionPageCount === "t4" ? "#ffc701" : "",
+                  // backgroundColor: "#ADB5BD",
+                  // cursor: "not-allowed",
+                }}
+                onClick={() => {
+                  setTransactionPageCount("t4");
+                  goToPage("mixmaster");
+                }}
+              >
+                Mix-Master
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div></div>
+        )}
+
+
         <div
           style={{ justifyContent: TransactionPageCount === "t1" ? "" : "end" }}
         >

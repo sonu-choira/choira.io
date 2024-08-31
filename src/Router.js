@@ -23,6 +23,7 @@ import AllStudioPageDetailsPage from "./pages/admin/studios/AllStudioPageDetails
 import AddNewStudio from "../src/components/adminStudio/AddNewStudio.jsx";
 import AddNewProduction from "../src/components/adminStudio/appsAndMore/AddNewProduction.jsx";
 import StudioPartners from "./components/teamsSection/StudioPartners.jsx";
+import PartnerLogin from "../src/components/partner/PartnerLogin.jsx";
 
 // import Signup from "./pages/home/Signup.jsx";
 
@@ -45,6 +46,7 @@ const Dashboard = lazy(() => import("./pages/produce/Dashboard.jsx"));
 const NewProject = lazy(() => import("./pages/produce/NewProject.jsx"));
 const ChoiraTest = lazy(() => import("./pages/produce/ChoiraTest.jsx"));
 const LandingPage = lazy(() => import("./pages/NewLandingPage/LandingPage.jsx"));
+const Partner = lazy(() => import("../src/components/partner/PartnerLogin.jsx"));
 
           {/* admin pagestart ========================> */}
 const Studios = lazy(() => import("./pages/admin/studios/Studios.jsx"));
@@ -108,6 +110,7 @@ const Routing = () => {
           <Route exact path='/adminDashboard/Bookings/AddSlotBooking' element={<SlotBooking/>} />
           <Route exact path='/adminDashboard/Teams/AddStudioPatner' element={<AddNewStudioPartners/>} />
           <Route exact path='/adminDashboard/Teams/AddNewArm' element={<AddNewArm/>} />
+          <Route exact path='/partner' element={<PartnerLogin/>} />
         
 
 
