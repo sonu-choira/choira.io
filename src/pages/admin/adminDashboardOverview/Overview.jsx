@@ -48,8 +48,7 @@ function Overview() {
       active: 0,
       image: t4,
     },
-
-  ];
+  ]);
   const partnerData = [
     {
       title: "Booking",
@@ -70,10 +69,6 @@ function Overview() {
     //   image: t4,
     // },
   ];
-
-  const { pathname } = useLocation();
-  const [products, setProducts] = useState({});
-
 
   useEffect(() => {
     if (pathname.includes("Overview")) {
@@ -139,7 +134,6 @@ function Overview() {
   );
   let header = navAccess ? partnerData : data;
 
-
   return (
     <>
       <div className={style.overviewPage1}>
@@ -200,7 +194,6 @@ function Overview() {
             </div>
           </>
         )}
-
       </div>
     </>
   );

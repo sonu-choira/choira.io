@@ -11,7 +11,7 @@ import { AiOutlineTeam } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { useLocale } from "antd/es/locale";
 import { LuHome } from "react-icons/lu";
-import { TbLogout2, TbSpeakerphone } from "react-icons/tb";
+
 import { PiChartBarLight } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
 
@@ -19,10 +19,8 @@ import { partnerAccess } from "../../config/partnerAccess";
 import { MdAccessTime } from "react-icons/md";
 import { CiCreditCard1 } from "react-icons/ci";
 import { MdOutlineRateReview } from "react-icons/md";
-import { confirmAlret } from "../admin/layout/Alert";
 
-
-import { TbLogout2 } from "react-icons/tb";
+import { TbLogout2, TbSpeakerphone } from "react-icons/tb";
 import { confirmAlret } from "../admin/layout/Alert";
 
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
@@ -41,7 +39,6 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   };
 
   useEffect(() => {
-
     if (!navAccess) {
       if (pathname.includes("Overview")) {
         setTabCount(1);
@@ -73,18 +70,8 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       } else if (pathname.includes("Reviews")) {
         setTabCount(6);
       }
-
     }
   }, [pathname, setTabCount]);
-
-  const logout = () => {
-    confirmAlret("Are you sure you want to logout?", "").then((result) => {
-      if (result.isConfirmed) {
-        localStorage.clear();
-        navigate("/signin");
-      }
-    });
-  };
 
   useEffect(() => {
     if (navCount) {
@@ -111,7 +98,6 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     data = localStorage.getItem("adminData");
     adminData = JSON.parse(data);
   }
-
 
   const tabs = [
     {
@@ -152,10 +138,8 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     },
   ];
 
-
   console.log("------------------------------}}}}}}}}>>", partnerAccess);
   console.log(tabs.map((tab) => tab.label.replace(/ /g, "").toLowerCase()));
-
 
   let partnersTabs = [
     {
@@ -207,7 +191,6 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
               <img src={logo} alt="" />
             </div>
             <div className={style.community}>
-
               {navAccess
                 ? navAccess.map((data, index) =>
                     partnersTabs.map(
@@ -241,14 +224,12 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                       {tab.label}
                     </div>
                   ))}
-
             </div>
           </div>
 
           <div className={style.section2}>
             <div className={style.section2Main}>
               <div style={{ cursor: "pointer" }} onClick={editProfiletab}>
-
                 <img
                   src={
                     navAccess
@@ -265,7 +246,6 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                     : adminData?.name || "Admin"}
                 </h5>{" "}
                 <br />
-
                 <span style={{ cursor: "pointer", fontSize: "1.2vmax" }}>
                   <TbLogout2 onClick={logout} />
                 </span>

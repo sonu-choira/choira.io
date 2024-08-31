@@ -499,9 +499,9 @@ function Signin() {
 
   const check_otp_btn = () => {
     setShowBtnLoader(true);
-    let type = "login";
+    let type = "admin";
     if (userType === "admin") {
-      type = "login";
+      type = "admin";
     } else {
       type = "subAdmin";
     }
