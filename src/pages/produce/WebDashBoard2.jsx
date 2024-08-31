@@ -50,7 +50,8 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       } else if (pathname.includes("Promotions")) {
         setTabCount(6);
       }
-    } else if (navAccess) {
+    }
+    if (navAccess) {
       if (pathname.includes("Overview")) {
         setTabCount(1);
       } else if (pathname.includes("MyStudio")) {

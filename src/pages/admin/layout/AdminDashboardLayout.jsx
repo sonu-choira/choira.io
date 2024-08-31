@@ -26,6 +26,7 @@ import Promotions from "../../../components/pramotation/Promotions";
 import { partnerAccess, userAcess } from "../../../config/partnerAccess";
 import { AccessContext } from "../../../utils/context";
 import { useNavigateRouter } from "../../../navigateRoute";
+import ShowAllTransaction from "../../../components/transactionSection/ShowAllTransaction";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -99,7 +100,9 @@ function AdminDashboardLayout() {
                     {tabCount === 4 &&
                       lowerCaseData === "manageslots" &&
                       gotoSlotBooking()}
-                    {tabCount === 5 && lowerCaseData === "bookings" && ""}
+                    {tabCount === 5 && lowerCaseData === "transactions" && (
+                      <ShowAllTransaction />
+                    )}
                     {tabCount === 6 && lowerCaseData === "promotion" && ""}
                   </React.Fragment>
                 );
