@@ -21,10 +21,14 @@ import Subadmin from "./Subadmin";
 
 function AllteamDetails() {
   const [products, setProducts] = useState([]);
+  const [totalResult, setTotalResult] = useState();
+
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
   const [shortby, setShortby] = useState("asc");
+  const [perPage, setPerPage] = useState(7);
+  const [shortBySrNo, setShortBySrNo] = useState(false);
 
   const [teamsPageCount, setTeamsPageCount] = useState("t2");
   let { page: currentPage, navOption: currentNav } = useParams();
@@ -102,7 +106,7 @@ function AllteamDetails() {
       //     });
       // }
       teamsApi
-        .getStudioOwners("5", idToUse, pageCount, shortby)
+        .getStudioOwners(perPage, idToUse, pageCount, shortby)
         .then((response) => {
           console.log(
             `====================> response from team ${response}`,
@@ -112,13 +116,13 @@ function AllteamDetails() {
             setProducts(response.owners);
             console.log("lkasdnflkjsdnf", response.status);
             setTotalPage(response.paginate.totalPages);
+            setTotalResult(response.paginate.totalResults);
           }
         })
         .catch((error) => {
           console.error("Error fetching studios:", error);
         });
     } else if (teamsPageCount === "t1") {
-      const limit = 8;
       const active = 1;
       // const type = teamsPageCount;
       if (hasFilter) {
@@ -136,7 +140,7 @@ function AllteamDetails() {
         //   });
 
         teamsApi
-          .getStudioOwners(limit, active, pageCount)
+          .getStudioOwners(perPage, active, pageCount)
           .then((response) => {
             console.log(
               `====================> response ${teamsPageCount}`,
@@ -146,6 +150,7 @@ function AllteamDetails() {
             if (response) {
               setProducts(response.studios);
               setTotalPage(response.paginate.totalPages);
+              setTotalResult(response.paginate.totalResults);
 
               // setPageCount(response.paginate.page);
             }
@@ -201,6 +206,10 @@ function AllteamDetails() {
             setfilterNav={setfilterNav}
             setShortby={setShortby}
             shortby={shortby}
+            perPage={perPage}
+            totalResult={totalResult}
+            setShortBySrNo={setShortBySrNo}
+            shortBySrNo={shortBySrNo}
           />
         ) : currentNav == "Teams" && currentPage == "Artist" ? (
           "t3"

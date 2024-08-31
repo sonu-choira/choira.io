@@ -12,9 +12,11 @@ const NumberCounter = ({ end }) => {
 
     const counter = setInterval(() => {
       start += incrementValue;
-      setCount(Math.ceil(start));
       if (start >= end) {
         clearInterval(counter);
+        setCount(end);
+      } else {
+        setCount(Math.ceil(start));
       }
     }, incrementTime);
 

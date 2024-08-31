@@ -46,10 +46,15 @@ const DoughnutChart = ({ products }) => {
 
   const currentSegment =
     hoveredSegment !== null ? chartData[hoveredSegment] : null;
+  const studioSegmentIndex = chartData.findIndex(
+    (item) => item.name === "Studio"
+  );
+
   const percentage = currentSegment
     ? ((currentSegment.value / total) * 100).toFixed(0)
-    : ((chartData[1]?.value / total) * 100).toFixed(0);
-  const segmentName = currentSegment ? currentSegment.name : "Production";
+    : ((chartData[studioSegmentIndex]?.value / total) * 100).toFixed(0);
+
+  const segmentName = currentSegment ? currentSegment.name : "Studio";
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {

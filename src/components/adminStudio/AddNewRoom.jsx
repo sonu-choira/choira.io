@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa6";
 
 import StudioFooter from "./StudioFooter";
-import { Button, Divider, Input, Select, Space } from "antd";
+import { Divider, Input, Select, Space } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import DragAndDropImageDiv from "../../pages/admin/layout/DragAndDropImageDiv";
 import { TimePicker } from "antd";
@@ -22,6 +22,8 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 import { errorAlert, confirmAlret } from "../../pages/admin/layout/Alert";
+import Button from "../../pages/admin/layout/Button";
+import { fontSize, width } from "@mui/system";
 
 function AddNewRoom({
   setshowRoomsDetails,
@@ -88,18 +90,46 @@ function AddNewRoom({
   );
 
   useEffect(() => {
+    if (currentRoomsData.basePrice <= 0 && currentRoomsData.basePrice == "") {
+    }
+
+    // Update basePrice in state or do something with it here
+  }, [currentRoomsData.discountPercentage]);
+
+  const ApplyDiscount = () => {
     let dis = currentRoomsData.discountPercentage;
-    let price = currentRoomsData.pricePerHour;
+    let price = currentRoomsData.basePrice;
 
     let cal = (price, dis) => {
       let discountedAmount = (price * dis) / 100;
-      let calculatedBasePrice = price + discountedAmount; // Renamed to avoid conflict
-      return parseInt(calculatedBasePrice);
+      let calculatedBasePrice = price - discountedAmount; // Renamed to avoid conflict
+      return Math.ceil(calculatedBasePrice || 0);
     };
-    currentRoomsData.basePrice = cal(price, dis);
 
-    // Update basePrice in state or do something with it here
-  }, [currentRoomsData.pricePerHour, currentRoomsData.discountPercentage]);
+    setrooms((prevRooms) => {
+      const updatedRooms = [...prevRooms];
+      updatedRooms[indexofrooms] = {
+        ...currentRoomsData,
+        pricePerHour: cal(price, dis),
+      };
+      return updatedRooms;
+    });
+  };
+
+  const calculateDiscount = () => {
+    let actualPrice = currentRoomsData.basePrice;
+    let priceToOffer = currentRoomsData.pricePerHour;
+    let discount = (priceToOffer / actualPrice) * 100;
+    discount = 100 - discount;
+    setrooms((prevRooms) => {
+      const updatedRooms = [...prevRooms];
+      updatedRooms[indexofrooms] = {
+        ...currentRoomsData,
+        discountPercentage: Math.ceil(discount || 0),
+      };
+      return updatedRooms;
+    });
+  };
 
   useEffect(() => {
     setrooms((prevRooms) => {
@@ -322,13 +352,56 @@ function AddNewRoom({
       return updatedRooms;
     });
   };
-  const handlePricePerHourChange = (event) => {
+  const handleBasePriceChange = (event) => {
     const { value } = event.target;
+    if (currentRoomsData.basePrice >= value) {
+      setrooms((prevRooms) => {
+        const updatedRooms = [...prevRooms];
+        updatedRooms[indexofrooms] = {
+          ...currentRoomsData,
+          pricePerHour: value ? parseInt(value) : "",
+        };
+        return updatedRooms;
+      });
+    } else {
+      setrooms((prevRooms) => {
+        const updatedRooms = [...prevRooms];
+        updatedRooms[indexofrooms] = {
+          ...currentRoomsData,
+          pricePerHour: "",
+        };
+        return updatedRooms;
+      });
+    }
+  };
+  const handleDiscountUpdate = (event) => {
+    const { value } = event.target;
+
+    let actualPrice = currentRoomsData.pricePerHour;
+    let priceToOffer = value;
+    let discount = (value / actualPrice) * 100;
+    setrooms((prevRooms) => {
+      const updatedRooms = [...prevRooms];
+      updatedRooms[indexofrooms] = {
+        ...currentRoomsData,
+        discountPercentage: Math.ceil(discount),
+      };
+      return updatedRooms;
+    });
+  };
+
+  const handlePricePerHourChange = (event) => {
+    let { value } = event.target;
+    if (value >= 0) {
+      value = value;
+    } else {
+      value = 0;
+    }
     setrooms((prevRooms) => {
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
         ...updatedRooms[indexofrooms],
-        pricePerHour: parseInt(value),
+        basePrice: value ? parseInt(value) : "",
       };
       console.log(
         "updatedRooms--------------------------------------",
@@ -339,12 +412,17 @@ function AddNewRoom({
   };
 
   const handleDiscountChange = (event) => {
-    const { value } = event.target;
+    let { value } = event.target;
+    if (value <= 100 && value >= 0) {
+      value = value;
+    } else {
+      value = 0;
+    }
     setrooms((prevRooms) => {
       const updatedRooms = [...prevRooms];
       updatedRooms[indexofrooms] = {
         ...currentRoomsData,
-        discountPercentage: parseInt(value),
+        discountPercentage: value ? parseInt(value) : "",
       };
       return updatedRooms;
     });
@@ -421,16 +499,20 @@ function AddNewRoom({
               />
             </div>
             <div className={style.addNewStudioinputBox}>
-              <label htmlFor="price">Price Per Hour</label>
+              <label htmlFor="Discount">Base Price</label>
+
               <input
                 type="number"
                 id="price"
                 placeholder="Enter Price Per Hour"
-                value={currentRoomsData?.pricePerHour}
+                value={currentRoomsData?.basePrice}
                 onChange={handlePricePerHourChange}
               />
             </div>
-            <div className={style.addNewStudioinputBox}>
+            <div
+              className={style.addNewStudioinputBox}
+              style={{ position: "relative" }}
+            >
               <label htmlFor="Discount">Discount</label>
               <input
                 type="number"
@@ -440,6 +522,62 @@ function AddNewRoom({
                 min={0}
                 max={100}
                 onChange={handleDiscountChange}
+                style={{ position: "relative" }}
+              />
+              <Button
+                name="Apply Discount"
+                style={{
+                  height: "4vh",
+                  fontSize: "0.8vmax",
+                  position: "absolute",
+                  bottom: "16%",
+                  right: "2%",
+                }}
+                onClick={ApplyDiscount}
+                disabled={
+                  currentRoomsData?.discountPercentage == "" ||
+                  currentRoomsData?.discountPercentage == NaN
+                    ? true
+                    : false
+                }
+                type={"button"}
+              />
+            </div>
+
+            <div
+              className={style.addNewStudioinputBox}
+              style={{ position: "relative" }}
+            >
+              <label htmlFor="price">Price Per Hour</label>
+
+              <input
+                type="number"
+                id="Discount"
+                placeholder="Your Price per hour is "
+                value={currentRoomsData?.pricePerHour}
+                onChange={(event) => handleBasePriceChange(event)}
+                // onKeyUp={(event) => handleDiscountUpdate(event)}
+                style={{ position: "relative" }}
+                // disabled
+                // readOnly
+              />
+              <Button
+                name="Calc. Discount"
+                onClick={calculateDiscount}
+                style={{
+                  height: "4vh",
+                  fontSize: "0.8vmax",
+                  position: "absolute",
+                  bottom: "16%",
+                  right: "2%",
+                }}
+                disabled={
+                  currentRoomsData?.pricePerHour == "" ||
+                  currentRoomsData?.pricePerHour == NaN
+                    ? true
+                    : false
+                }
+                type={"button"}
               />
             </div>
             <div className={style.customInput}>
@@ -521,7 +659,7 @@ function AddNewRoom({
                     className={style.cancelDetailsUpload}
                     onClick={() => handleCancelDetails(0)}
                   >
-                    <img src={cross} alt="" />
+                    {!showMode && <img src={cross} alt="" />}
                   </span>
                 )}
               </div>
@@ -547,7 +685,7 @@ function AddNewRoom({
                         className={style.cancelDetailsUpload}
                         onClick={() => handleCancelDetails(index)}
                       >
-                        <img src={cross} alt="" />
+                        {!showMode && <img src={cross} alt="" />}
                       </span>
                     )}
                   </div>
@@ -601,7 +739,7 @@ function AddNewRoom({
                       className={style.cancelImageUpload}
                       onClick={() => handleCancelBooking(index)}
                     >
-                      <img src={cross} alt="" />
+                      {!showMode && <img src={cross} alt="" />}
                     </span>
                   )}
                 </div>
@@ -621,7 +759,10 @@ function AddNewRoom({
           if (showMode) {
             setshowRoomsDetails(false);
           } else {
-            confirmAlret("Room data will be lost ", "").then((result) => {
+            confirmAlret(
+              "Please save data first, otherWise room data will be delete ",
+              ""
+            ).then((result) => {
               if (result.isConfirmed) {
                 console.log("default data is =====>", defaultData);
                 console.log("room data is =====>", rooms);

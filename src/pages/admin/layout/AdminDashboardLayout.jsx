@@ -23,9 +23,11 @@ import AllteamDetails from "../../../components/teamsSection/AllteamDetails";
 import ShowAllUser from "../../../components/userSection/ShowAllUser";
 import Overview from "../adminDashboardOverview/Overview";
 import Promotions from "../../../components/pramotation/Promotions";
+
 import { partnerAccess, userAcess } from "../../../config/partnerAccess";
 import { AccessContext } from "../../../utils/context";
 import { useNavigateRouter } from "../../../navigateRoute";
+
 import ShowAllTransaction from "../../../components/transactionSection/ShowAllTransaction";
 
 function AdminDashboardLayout() {
@@ -83,6 +85,7 @@ function AdminDashboardLayout() {
               <MdOutlineSettings />
             </div>
           </div> */}
+
             {navAccess ? (
               navAccess.map((data, index) => {
                 const lowerCaseData = data.toLowerCase().replace(/ /g, "");
@@ -118,6 +121,7 @@ function AdminDashboardLayout() {
               </>
             )}
           </div>
+
         </div>
       </AccessContext.Provider>
     </>

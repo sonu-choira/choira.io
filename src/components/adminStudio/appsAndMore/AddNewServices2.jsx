@@ -635,7 +635,10 @@ function AddNewServices2({
           if (showMode) {
             setShowServices(false);
           } else {
-            confirmAlret("Service data will be lost ", "").then((result) => {
+            confirmAlret(
+              "Please save data first, otherWise room data will be delete  ",
+              ""
+            ).then((result) => {
               if (result.isConfirmed) {
                 console.log("default data is =====>", defaultData);
 

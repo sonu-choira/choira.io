@@ -18,7 +18,9 @@ import TransactionActionBar from "./TransactionActionBar";
 import Subadmin from "../teamsSection/Subadmin";
 import StudioBookingDetail from "../adminStudio/booking/StudioBookingDetail";
 import StudioTransaction from "./StudioTransaction";
+
 import { partnerAccess } from "../../config/partnerAccess";
+
 
 function ShowAllTransaction() {
   const [products, setProducts] = useState([]);
@@ -35,6 +37,7 @@ function ShowAllTransaction() {
   let { page: currentPage, navOption: currentNav } = useParams();
   console.log("currentPage", currentPage);
   console.log("currentNav", currentNav);
+
   const [navAccess, setnavAccess] = useState(partnerAccess || "");
   useEffect(() => {
     if (!navAccess) {
@@ -50,6 +53,7 @@ function ShowAllTransaction() {
     }
     if (navAccess) {
       setTransactionPageCount("t1");
+
     }
   }, [currentPage]);
   const pagetype = "apps";
@@ -183,7 +187,10 @@ function ShowAllTransaction() {
           TransactionPageCount={TransactionPageCount}
           setTransactionPageCount={setTransactionPageCount}
         />
+
         {currentNav == "Transactions" ? (
+
+
           <StudioTransaction
             sendFilterDataToapi={sendFilterDataToapi}
             products={products}
@@ -203,7 +210,9 @@ function ShowAllTransaction() {
             shortBySrNo={shortBySrNo}
           />
         ) : // <AllStudioDetail />
+
         currentNav == "Transactions" && currentPage == "122" ? (
+
           <Subadmin
             sendFilterDataToapi={sendFilterDataToapi}
             products={products}
@@ -218,9 +227,12 @@ function ShowAllTransaction() {
             setShortby={setShortby}
             shortby={shortby}
           />
+
         ) : currentNav == "Transactions" && currentPage == "Artist" ? (
           "t3"
         ) : currentNav == "Transactions" && currentPage == "MusicProducer" ? (
+
+     
           "t4"
         ) : (
           ""

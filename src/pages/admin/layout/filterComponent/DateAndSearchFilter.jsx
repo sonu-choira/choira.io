@@ -24,6 +24,7 @@ function DateAndSearchFilter({
   setPriceFilter,
   setShortby,
   setProducts,
+  perPage,
   pageCount,
   setPageCount,
   userFiler,
@@ -162,7 +163,7 @@ function DateAndSearchFilter({
     userAllFilterData.searchUser = userFilterText?.trim();
 
     userApi
-      .getAllUser(pageCount, userAllFilterData)
+      .getAllUser(perPage,pageCount, userAllFilterData)
       .then((response) => {
         console.log(`====================> response `, response);
         console.log("response.data.users", response.users);

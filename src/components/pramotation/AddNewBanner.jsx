@@ -138,6 +138,9 @@ function AddNewBanner({
 
     if (editMode.current) {
       setShowBtnLoader(true);
+      delete sendDataToApi.tempStudioName;
+      sendDataToApi.for = sendDataToApi.forr;
+      delete sendDataToApi.forr;
       promotionApi
         .updateBanner(sendDataToApi)
         .then((res) => {
@@ -232,7 +235,7 @@ function AddNewBanner({
     // };
     return findStudioName(username);
   }
-
+  const [gotApiData, setGotApiData] = useState(false);
   useEffect(() => {
     if (editMode.current) {
       console.log(values?.entity_id);
@@ -243,12 +246,17 @@ function AddNewBanner({
 
             if (data && data.length > 0) {
               setStudioName(data[0].label);
+              setGotApiData(true);
               // studioName = data[0].label;
+            } else {
+              setGotApiData(true);
             }
           })
           .catch((error) => {
             console.error("Error fetching data:", error);
           });
+      } else if (values.for == "list" || values.for == "list") {
+        setGotApiData(true);
       }
     }
   }, [editMode.current]);
@@ -410,18 +418,30 @@ function AddNewBanner({
                         )}
                       </div>
                     )}
-                  {(values.forr === "page" || values.for === "page") &&
-                    editMode &&
-                    studioName && (
+                  {console.log(gotApiData)}
+                  {values.forr === "page" &&
+                    editMode.current == true &&
+                    gotApiData && (
                       <div className={style.customInput}>
                         <label htmlFor="UserName">Studio Name</label>
-                        <SearchSelectInput
-                          placeholder="Search Studio"
-                          fetchOptions={fetchUserList}
-                          onChange={handelStudioChange}
-                          defaultValue={values?.tempStudioName || studioName}
-                          style={{ width: "100%", height: "100%" }}
-                        />
+                        {studioName ? (
+                          <SearchSelectInput
+                            placeholder="Search Studio"
+                            fetchOptions={fetchUserList}
+                            onChange={handelStudioChange}
+                            defaultValue={studioName}
+                            style={{ width: "100%", height: "100%" }}
+                          />
+                        ) : (
+                          <SearchSelectInput
+                            placeholder="Search Studio"
+                            fetchOptions={fetchUserList}
+                            onChange={handelStudioChange}
+                            defaultValue={values?.tempStudioName || studioName}
+                            style={{ width: "100%", height: "100%" }}
+                          />
+                        )}
+
                         {errors.entity_id && touched.entity_id && (
                           <div className={style.error}>{errors.entity_id}</div>
                         )}

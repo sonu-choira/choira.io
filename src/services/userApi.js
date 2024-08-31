@@ -4,7 +4,7 @@ import api from "./api"
 
 class userApi{
   
- getAllUser = async (pageCount,userAllFilterData,options={}) => {
+ getAllUser = async (perPage,pageCount,userAllFilterData,options={}) => {
   const { cancelToken } = options;
   let { searchUser, status, sortfield,startDate,endDate,sortDirection } = userAllFilterData;
   if (searchUser === "") {
@@ -26,7 +26,7 @@ class userApi{
   const response = await api.get('/users', {
     params: {
 
-      limit: 7,
+      limit: perPage || 7,
       page: pageCount,
 
       sortfield,

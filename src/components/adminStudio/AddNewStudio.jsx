@@ -57,7 +57,7 @@ function AddNewStudio({ setSelectTab }) {
   const userStudioid = data?.state?.productData?._id;
   // alert(data.state.navCount);
   const [showMode, setShowMode] = useState(data?.state?.showMode || false);
-  // let showMode = data?.state?.showMode || false;
+
   // const [showMode, setshowMode] = useState(data?.state?.showMode || false);
 
   const navCount = data?.state?.navCount;
@@ -155,6 +155,7 @@ function AddNewStudio({ setSelectTab }) {
 
     const check = (data) => {
       for (const key of Object.keys(data)) {
+        if (["photo", "imgUrl"].includes(key)) continue;
         const value = data[key];
 
         if (isEmpty(value)) {
@@ -693,7 +694,7 @@ function AddNewStudio({ setSelectTab }) {
                       className={style.addNewStudioinputBox}
                       style={{ paddingTop: "2%" }}
                     >
-                      <label htmlFor="guest">Max Guests</label>
+                      <label htmlFor="guest">Studio Capacity (Artist)</label>
 
                       <select
                         required
@@ -706,7 +707,9 @@ function AddNewStudio({ setSelectTab }) {
                           })
                         }
                       >
-                        <option value={""}>Select Maximum Guest allowed</option>
+                        <option value={""}>
+                          Select Maximum Artist allowed
+                        </option>
                         <option value={"1"}>1</option>
                         <option value={"2"}>2</option>
                         <option value={"3"}>3</option>

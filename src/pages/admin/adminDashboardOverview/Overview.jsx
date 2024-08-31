@@ -21,31 +21,34 @@ import PartnerTransChart from "../../../components/charts/PartnerTransChart";
 // import chartApi from "../../../services/chartApi";
 
 function Overview() {
-  const data = [
+  const { pathname } = useLocation();
+  const [products, setProducts] = useState({});
+  const [data, setdata] = useState([
     {
       title: "Users",
-      count: 1259,
-      active: 238,
+      count: 0,
+      active: 0,
       image: t1,
     },
     {
       title: "Booking",
-      count: 1069,
-      active: 5558,
+      count: 0,
+      active: 0,
       image: t2,
     },
     {
       title: "Studio",
-      count: 1589,
-      active: 1589,
+      count: 0,
+      active: 0,
       image: t3,
     },
     {
       title: "Project",
-      count: 159,
-      active: 38,
+      count: 0,
+      active: 0,
       image: t4,
     },
+
   ];
   const partnerData = [
     {
@@ -70,6 +73,7 @@ function Overview() {
 
   const { pathname } = useLocation();
   const [products, setProducts] = useState({});
+
 
   useEffect(() => {
     if (pathname.includes("Overview")) {
@@ -98,13 +102,43 @@ function Overview() {
         console.log(err);
       });
   }, []);
+
   useEffect(() => {
     console.log("{{{{{{{{{{{{{{{{{", products);
+    let adata = [
+      {
+        title: "Users",
+        count: products.UserData?.data[0].totalCount || 0,
+        active: products.UserData?.data[0].activeCount || 0,
+        image: t1,
+      },
+      {
+        title: "Booking",
+        count: products.BookingData?.data[0].totalCount || 0,
+        active: products.BookingData?.data[0].activeCount || 0,
+        image: t2,
+      },
+      {
+        title: "Studio",
+        count: products.StudioData?.data[0].totalCount || 0,
+        active: products.StudioData?.data[0].activeCount || 0,
+        image: t3,
+      },
+      {
+        title: "Project",
+        count: 0,
+        active: 0,
+        image: t4,
+      },
+    ];
+    setdata(adata);
   }, [products]);
+
   const [navAccess, setnavAccess] = useState(
     partnerAccess ? partnerAccess : ""
   );
   let header = navAccess ? partnerData : data;
+
 
   return (
     <>
@@ -123,11 +157,11 @@ function Overview() {
                 <h2>
                   <NumberCounter end={item.count} />
                 </h2>
-                <u>
+                <>
                   <small>
                     Active : <NumberCounter end={item.active} />
                   </small>
-                </u>
+                </>
               </div>
               <div>
                 <img src={item.image} alt={item.title} />
@@ -135,6 +169,7 @@ function Overview() {
             </div>
           ))}
         </div>
+
         {navAccess ? (
           <PartnerTransChart products={products} />
         ) : (
@@ -165,6 +200,7 @@ function Overview() {
             </div>
           </>
         )}
+
       </div>
     </>
   );

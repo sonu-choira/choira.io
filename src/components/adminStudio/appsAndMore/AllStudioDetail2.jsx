@@ -32,7 +32,11 @@ import LoaderUpdating from "../../../pages/admin/layout/LoaderUpdating";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 import { GoEye } from "react-icons/go";
 import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
+
 import { AccessContext } from "../../../utils/context";
+
+import moment from "moment";
+
 
 let PageSize = 10;
 
@@ -341,7 +345,7 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
-                <th>
+                <th style={{ width: "8%" }}>
                   <div className={style.headingContainer}>
                     No. of Rooms
                     <div
@@ -372,6 +376,7 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
+                <th style={{ width: "10%" }}>Created on</th>
                 <th>
                   <div className={style.headingContainer}>
                     Activity Status
@@ -388,7 +393,7 @@ function AllStudioDetail2({
                       {showstatusFilter ? (
                         <CheckboxFilter
                           data={status}
-                          cusstyle={{ left: "-355%" }}
+                          // cusstyle={{ left: "-355%" }}
                           disabledsearch={true}
                           selectedData={selectedStatus}
                           setSelectedData={setSelectedStatus}
@@ -405,6 +410,7 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
+                <th style={{ width: "10%" }}></th>
               </tr>
             </thead>
             <tbody>
@@ -458,8 +464,14 @@ function AllStudioDetail2({
                         </small>
                       </td>
                       <td>{products.totalRooms}</td>
-                      <td className={style.tableActionbtn}>
+                      <td>
+                        {moment(products.creationTimeStamp).format(
+                          "Do MMM  YY, hh:mm a"
+                        )}
+                      </td>
+                      <td>
                         <div>
+
                           {tableAccess ? (
                             tableAccess["app&more"].action === "read" ? (
                               <Switch
@@ -493,6 +505,7 @@ function AllStudioDetail2({
                               }}
                             />
                           )}
+
                         </div>
                         {tableAccess ? (
                           tableAccess["MyStudio"].action === "write" ? (

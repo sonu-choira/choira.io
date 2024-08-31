@@ -22,6 +22,7 @@ function CustomInput({
         type={type || "text"}
         id={id}
         placeholder={placeholder}
+        disabled={disabled}
         onChange={onChange}
         value={value}
         name={name}

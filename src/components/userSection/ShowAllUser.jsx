@@ -36,15 +36,13 @@ let userAllFilterData = {
 function ShowAllUser() {
   const [products, setProducts] = useState([]);
   const [totalResult, setTotalResult] = useState();
+  const [perPage, setPerPage] = useState(7);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
   const [shortby, setShortby] = useState(false);
   const status = ["active", "inactive"];
 
-  useEffect(() => {
-    console.log(totalResult, "totalResult");
-  }, [totalResult]);
   const [shortBySrNo, setShortBySrNo] = useState(false);
   const [shortByUser, setShortByUser] = useState(false);
   const [shortByEmail, setShortByEmail] = useState(false);
@@ -62,10 +60,8 @@ function ShowAllUser() {
 
   const handelFilterApi = (pageCount, userAllFilterData) => {
     userApi
-      .getAllUser(pageCount, userAllFilterData)
+      .getAllUser(perPage, pageCount, userAllFilterData)
       .then((response) => {
-        console.log(`====================> response `, response);
-        console.log("response.data.users", response.users);
         if (response.users) {
           setProducts(response.users);
           setTotalPage(response.paginate.totalPages);
@@ -85,60 +81,51 @@ function ShowAllUser() {
 
     const source = axios.CancelToken.source();
 
-    // checking if filter has any data
-
-    console.log(selectedStatus);
     if (selectedStatus[0]) {
-      let status;
-      if (selectedStatus[0] == "active") {
-        status = 1;
-        userAllFilterData.status = status;
-      } else if (selectedStatus[0] == "inactive") {
-        status = 0;
-        userAllFilterData.status = status;
-      } else {
-        status = undefined;
-        userAllFilterData.status = status;
-      }
+      userAllFilterData.status =
+        selectedStatus[0] === "active"
+          ? 1
+          : selectedStatus[0] === "inactive"
+          ? 0
+          : undefined;
     } else {
-      let dataTosend;
+      let dataToSend;
 
       if (shortByUser) {
-        dataTosend = "fullName";
-        userAllFilterData.sortfield = dataTosend;
+        dataToSend = "fullName";
+        userAllFilterData.sortfield = dataToSend;
       } else if (shortByEmail) {
-        dataTosend = "email";
-        userAllFilterData.sortfield = dataTosend;
+        dataToSend = "email";
+        userAllFilterData.sortfield = dataToSend;
       } else if (shortBySrNo) {
-        userAllFilterData.sortDirection = "asc" ? "desc" : "asc";
-        handelFilterApi(pageCount, userAllFilterData);
-        // userAllFilterData.sortDirection = dataTosend;
+        userAllFilterData.sortDirection =
+          userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
       }
-      userApi
-        .getAllUser(pageCount, userAllFilterData, { cancelToken: source.token })
-        .then((response) => {
-          console.log(`====================> response `, response);
-          console.log("response.data.users", response.users);
-          if (response.users) {
-            setProducts(response?.users);
-            setTotalPage(response.paginate.totalPages);
-            setTotalResult(response.paginate.totalResults);
-
-            // setPageCount(response.paginate.page);
-          }
-        })
-        .catch((error) => {
-          // console.error("Error fetching studios:", error);
-        });
     }
 
-    // const type =  ;
+    userApi
+      .getAllUser(perPage, pageCount, userAllFilterData, {
+        cancelToken: source.token,
+      })
+      .then((response) => {
+        console.log(`====================> response `, response);
+        console.log("response.data.users", response.users);
+        if (response.users) {
+          setProducts(response.users);
+          setTotalPage(response.paginate.totalPages);
+          setTotalResult(response.paginate.totalResults);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
 
     console.log("inside useEffect");
+
     return () => {
       source.cancel("Operation canceled by the user.");
     };
-  }, [pageCount, shortByUser, shortByEmail]);
+  }, [pageCount, shortByUser, shortByEmail, shortBySrNo]);
 
   const [selectedCity, setSelectedCity] = useState([]);
 
@@ -267,6 +254,7 @@ function ShowAllUser() {
               setProducts={setProducts}
               setTotalPage={setTotalPage}
               pageCount={pageCount}
+              perPage={perPage}
               setPageCount={setPageCount}
               userFiler={userFiler}
               setUserFilterText={setUserFilterText}
@@ -384,6 +372,7 @@ function ShowAllUser() {
                               closeAllFilter={closeAllFilter}
                               userFiler={userFiler}
                               userAllFilterData={userAllFilterData}
+                              perPage={perPage}
                             />
                           )}
                         </div>
@@ -404,12 +393,20 @@ function ShowAllUser() {
                       <tr key={product._id}>
                         <td style={{ textAlign: "center" }}>
                           {!shortBySrNo
-                            ? isNaN(totalResult - pageCount * 10 + 10 - index)
+                            ? isNaN(
+                                totalResult -
+                                  pageCount * perPage +
+                                  perPage -
+                                  index
+                              )
                               ? "N/A"
-                              : index + 1 + (pageCount - 1) * 10
-                            : isNaN(index + 1 + (pageCount - 1) * 10)
+                              : index + 1 + (pageCount - 1) * perPage
+                            : isNaN(index + 1 + (pageCount - 1) * perPage)
                             ? "N/A"
-                            : totalResult - pageCount * 10 + 10 - index}
+                            : totalResult -
+                              pageCount * perPage +
+                              perPage -
+                              index}
                         </td>
                         <td
                           title={product.fullName}
@@ -443,7 +440,10 @@ function ShowAllUser() {
                           )}
                         </td>
                         <td style={{ width: "10%" }}>
-                          <Switch status={product.status} />
+                          <Switch
+                            status={product.status}
+                            switchDisabled={true}
+                          />
                         </td>
                         <td className={style.tableActionbtn}>
                           <div

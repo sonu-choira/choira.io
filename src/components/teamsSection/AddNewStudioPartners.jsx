@@ -33,31 +33,60 @@ function AddNewStudioPartners({ setSelectTab }) {
   const navCount = data?.state?.navCount;
   const [showAllSlots, setshowAllSlots] = useState(false);
   const navigate = useNavigate();
+
+  // console.log(data.state.productData);
+  let editData = data?.state?.productData;
+  console.log(data);
+  let isEditMode = data?.state?.isEditMode;
+  let showMode = data?.state?.showMode;
+
   const hitapi = (partnerData) => {
-    teamsApi
-      .addStudioPartner(partnerData)
-      .then((res) => {
-        if (res.status) {
-          sucessAlret("Studio Partner Successfully Added");
-        } else {
-          errorAlert(res.message);
-        }
-        console.log(res);
-      })
-      .catch((err) => {
-        errorAlert("something went wrong");
-        console.log(err);
-      });
+    if (isEditMode) {
+      teamsApi
+        .updateStudioPartner(partnerData._id, partnerData)
+        .then((response) => {
+          console.log("response=======>", response);
+          if (response.status) {
+            sucessAlret(
+              response.message || "Studio Partner Updated Successfully"
+            );
+            // navigate("/studio/studio-partners");
+          }
+        })
+        .catch((error) => {
+          errorAlert(error || "Something went wrong");
+        });
+    } else {
+      teamsApi
+        .addStudioPartner(partnerData)
+        .then((res) => {
+          if (res.status) {
+            sucessAlret("Studio Partner Successfully Added");
+          } else {
+            errorAlert(res.message);
+          }
+          console.log(res);
+        })
+        .catch((err) => {
+          errorAlert("something went wrong");
+          console.log(err);
+        });
+    }
   };
 
   const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      studioId: "",
-      password: "",
-    },
+    initialValues:
+      isEditMode || showMode
+        ? editData
+        : {
+            firstName: "",
+            lastName: "",
+            email: "",
+            studioId: "",
+            phone: "",
+            dob: "",
+          },
+
     validationSchema: studioPartner,
     onSubmit: (values) => {
       hitapi(values);
@@ -82,7 +111,9 @@ function AddNewStudioPartners({ setSelectTab }) {
   const backOnclick = () => {
     navigate("/adminDashboard/Teams/StudioPartners");
   };
-
+  useEffect(() => {
+    console.log("..........", values);
+  }, [values]);
   return (
     <>
       <div className={style.wrapper}>
@@ -92,30 +123,13 @@ function AddNewStudioPartners({ setSelectTab }) {
           setTabCount={setTabCount}
         />
         <form className={style.studioMainScreen} onSubmit={handleSubmit}>
-          {/* <div className={style.studioHeader}>
-            <div className={style.puredisabled}>
-              <input
-                type="text"
-                placeholder="Search"
-                readOnly
-                disabled
-                className={style.puredisabled}
-              />
-            </div>
-            <div>
-              <IoSearch />
-            </div>
-            <div>
-              <div className={style.notifyIcon}>
-                <GoDotFill />
-              </div>
-              <FaRegBell />
-            </div>
-            <div>
-              <MdOutlineSettings />
-            </div>
-          </div> */}
-          <div className={style.addNewStudioTitle}>Add Studio Partner</div>
+          <div className={style.addNewStudioTitle}>
+            {isEditMode
+              ? "Edit Studio Partner"
+              : showMode
+              ? "Studio Partner Details"
+              : "Add Studio Partner"}
+          </div>
 
           <form className={style.addNewStudioPage}>
             <div style={{ height: "80%" }}>
@@ -128,9 +142,11 @@ function AddNewStudioPartners({ setSelectTab }) {
                   htmlFor="firstName"
                   onChange={handleChange}
                   name="firstName"
+                  value={values.firstName}
                   error={errors.firstName}
                   touched={touched.firstName}
                   onBlur={handleBlur}
+                  disabled={showMode}
                 />
                 <CustomInput
                   type="email"
@@ -140,9 +156,11 @@ function AddNewStudioPartners({ setSelectTab }) {
                   htmlFor="Email"
                   onChange={handleChange}
                   name="email"
+                  value={values.email}
                   error={errors.email}
                   touched={touched.email}
                   onBlur={handleBlur}
+                  disabled={showMode}
                 />
                 <div className={style.addNewStudioinputBox}>
                   <label>Studio</label>
@@ -151,10 +169,16 @@ function AddNewStudioPartners({ setSelectTab }) {
                     name="studioId"
                     value={values.studioId}
                     onBlur={handleBlur}
+                    disabled={showMode}
                   >
                     <option value="" disabled>
                       Select Studio
                     </option>
+                    {(isEditMode || showMode) && (
+                      <option value={editData.studioId}>
+                        {editData.studioName}
+                      </option>
+                    )}
                     {allStudio?.map((studio) => (
                       <option key={studio._id} value={studio._id}>
                         {studio.fullName}
@@ -177,19 +201,38 @@ function AddNewStudioPartners({ setSelectTab }) {
                   onChange={handleChange}
                   error={errors.lastName}
                   touched={touched.lastName}
+                  value={values.lastName}
                   onBlur={handleBlur}
+                  disabled={showMode}
                 />
                 <CustomInput
                   type="text"
-                  id="password"
-                  placeholder="Enter Password"
-                  label="Enter Password"
-                  htmlFor="password"
-                  name="password"
+                  id="mobile"
+                  placeholder="Mobile Number"
+                  label="Enter mobile number"
+                  htmlFor="mobile"
+                  name="phone"
+                  value={values.phone}
                   onChange={handleChange}
-                  error={errors.password}
-                  touched={touched.password}
+                  error={errors.phone}
+                  touched={touched.phone}
                   onBlur={handleBlur}
+                  disabled={showMode}
+                />
+                <CustomInput
+                  type="date"
+                  id="date
+                  "
+                  placeholder="Mobile Number"
+                  label="Enter Date of Birth "
+                  htmlFor="date"
+                  value={values.dob}
+                  name="dob"
+                  onChange={handleChange}
+                  error={errors.dob}
+                  touched={touched.dob}
+                  onBlur={handleBlur}
+                  disabled={showMode}
                 />
               </div>
             </div>
@@ -198,6 +241,7 @@ function AddNewStudioPartners({ setSelectTab }) {
             backOnclick={backOnclick}
             // saveOnclick={handleSubmit}
             saveType="submit"
+            saveDisabled={showMode}
           />
         </form>
       </div>

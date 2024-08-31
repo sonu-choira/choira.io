@@ -4,12 +4,12 @@ import api from "./api"
 
 class teamApi{
   
- getStudioOwners = async (limit,active ,pageCount,shortby) => {
+ getStudioOwners = async (perPage,active ,pageCount,shortby) => {
   
 
   const response = await api.get(`/owner`, {
     params: {
-      limit: 7,
+      limit: perPage || 7,
       page :pageCount,
       sortDirection: shortby,
       sortField :"creationTimeStamp"
@@ -57,9 +57,18 @@ addStudioPartner = async (data) => {
   return response.data;
  };
 
+ updateStudioPartner = async (id, data) => {
+  const response = await api.patch(`/owners/${id}`,
+    data
+  );
+  const {status} = response.data
+  console.log("Studio partner update  ===>", response.data)
+  return response.data;
+
+ };
+
 
 }
-
 
 
 

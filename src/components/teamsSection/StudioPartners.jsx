@@ -49,21 +49,30 @@ function StudioPartners({
   teamsPageCount,
   shortby,
   setShortby,
+  perPage,
+  totalResult,
 }) {
   const navigate = useNavigate();
-  const gotoEdit = (id) => {
-    const isEditMode = true;
+  const gotoEdit = (id, type) => {
+    if (type == "edit") {
+      type = "isEditMode";
+    } else {
+      type = "showMode";
+    }
+
     const selectedProduct = products.find((product) => product._id === id);
     console.log("navigated=======>", selectedProduct);
 
-    navigate(`/studio/edit?id=${id}`, {
+    navigate(`/adminDashboard/Teams/AddStudioPatner?id=${id}`, {
       state: {
         productData: selectedProduct,
         navCount: 3,
-        isEditMode: isEditMode,
+        [type]: true,
       },
     });
   };
+  const [shortBySrNo, setShortBySrNo] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   // const gotoShowStudioDetaisl = (id) => {
   //   const isEditMode = true;
@@ -255,7 +264,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelpriceFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showpricefilter
                         ? // <PriceFilter
@@ -285,7 +294,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handellocationFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showloactionfilter
                         ? // <CheckboxFilter
@@ -315,7 +324,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -345,7 +354,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -375,7 +384,7 @@ function StudioPartners({
                       }}
                     >
                       <span onClick={handelStatusFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showstatusFilter
                         ? ""
@@ -409,7 +418,20 @@ function StudioPartners({
                 products?.map((products, index) => {
                   return (
                     <tr key={products._id}>
-                      <td>{index + 1 * (pageCount - 1) * 5 + 1}</td>
+                      <td style={{ textAlign: "center" }}>
+                        {shortby == "asc"
+                          ? isNaN(
+                              totalResult -
+                                pageCount * perPage +
+                                perPage -
+                                index
+                            )
+                            ? "N/A"
+                            : index + 1 + (pageCount - 1) * perPage
+                          : isNaN(index + 1 + (pageCount - 1) * perPage)
+                          ? "N/A"
+                          : totalResult - pageCount * perPage + perPage - index}
+                      </td>
                       <td
                         title={products.firstName}
                         style={{ display: "flex", alignItems: "center" }}
@@ -453,7 +475,15 @@ function StudioPartners({
                         >
                           <GoEye
                             style={{ cursor: "pointer" }}
-                            // onClick={() => gotoShowStudioDetaisl(products._id)}
+                            onClick={() => {
+                              gotoEdit(products._id, "showMode");
+                            }}
+                          />
+                          <MdEdit
+                            style={{ color: "#ffc701", cursor: "pointer" }}
+                            onClick={() => {
+                              gotoEdit(products._id, "edit");
+                            }}
                           />
 
                           <RiDeleteBin5Fill

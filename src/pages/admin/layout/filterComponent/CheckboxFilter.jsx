@@ -20,6 +20,7 @@ function CheckboxFilter({
   pageCount,
   setPageCount,
   userAllFilterData,
+  perPage
 }) {
   useEffect(() => {
     console.log("selectedData", selectedData);
@@ -69,7 +70,7 @@ function CheckboxFilter({
         userAllFilterData.status = status;
       }
       userApi
-        .getAllUser(pageCount, userAllFilterData)
+        .getAllUser(perPage,pageCount, userAllFilterData)
         .then((response) => {
           console.log("filter applied:", response);
           setProducts(response.users);
@@ -160,7 +161,7 @@ function CheckboxFilter({
       userAllFilterData.status = undefined;
 
       userApi
-        .getAllUser(pageCount, userAllFilterData)
+        .getAllUser(perPage,pageCount, userAllFilterData)
         .then((response) => {
           console.log(`====================> response `, response);
           console.log("response.data.users", response.users);

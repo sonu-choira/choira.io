@@ -211,7 +211,7 @@ function Signin() {
       .post(httpUrl + "login", sendableData)
       .then((result) => {
         let responseJson = result.data;
-        localStorage.setItem("userData", JSON.stringify(result.data));
+        localStorage.setItem("userData", JSON.stringify(result.data || {}));
         localStorage.setItem("isLogin", "true");
         localStorage.setItem("photo", JSON.stringify(result.data.photo));
         navigate("/userHome");
@@ -465,9 +465,10 @@ function Signin() {
   };
 
   const handleMobileNumberChange = (e) => {
-    setMobileNumber(e.target.value);
-    // console.log(mobileNumber);
+    const value = e.target.value.slice(0, 10);
+    setMobileNumber(value ? value : "");
   };
+
   const gotoBooking = () => {
     navigate("/adminDashboard/Overview");
     // window.location.reload();
@@ -550,6 +551,12 @@ function Signin() {
   const gotoHome = () => {
     navigate("/home");
   };
+  useEffect(() => {
+    let signin = localStorage.getItem("isSignin");
+    if (signin) {
+      navigate("/adminDashboard/Overview");
+    }
+  }, []);
 
   return (
     <>

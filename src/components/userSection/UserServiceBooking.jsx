@@ -216,6 +216,8 @@ function UserServiceBooking({
         style={{ height: "90%", width: "100%" }}
       >
         <DateAndSearchFilter
+          dateDisable={true}
+          searchDisable={true}
           setProducts={setProducts}
           setTotalPage={setTotalPage}
           bookingPageCount={bookingPageCount}
@@ -234,13 +236,13 @@ function UserServiceBooking({
               <tr>
                 <th
                   style={{
-                    width: "5%",
+                    width: "10%",
                   }}
                   className={style.shortTableData}
                 >
                   <div className={style.headingContainer}>
                     Booking Id
-                    <div
+                    {/* <div
                       className={style.filterBox}
                       onClick={handelShortbyClick}
                       style={{
@@ -248,7 +250,7 @@ function UserServiceBooking({
                       }}
                     >
                       <RiExpandUpDownLine />
-                    </div>
+                    </div> */}
                   </div>
                 </th>
                 <th style={{ width: "20%" }}>
@@ -264,7 +266,7 @@ function UserServiceBooking({
                       // }}
                     >
                       <span onClick={handelpriceFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showpricefilter
                         ? // <PriceFilter
@@ -294,7 +296,7 @@ function UserServiceBooking({
                       }}
                     >
                       <span onClick={handellocationFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showloactionfilter
                         ? // <CheckboxFilter
@@ -324,7 +326,7 @@ function UserServiceBooking({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -354,7 +356,7 @@ function UserServiceBooking({
                       }}
                     >
                       <span onClick={handelRoomFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showRoomFilter
                         ? // <CheckboxFilter
@@ -384,7 +386,7 @@ function UserServiceBooking({
                       }}
                     >
                       <span onClick={handelStatusFilter}>
-                        <CiFilter />
+                        {/* <CiFilter /> */}
                       </span>
                       {showstatusFilter
                         ? ""

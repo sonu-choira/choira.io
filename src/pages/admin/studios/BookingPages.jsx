@@ -175,8 +175,8 @@ function BookingPages() {
           <StudioBookingDetail
             products={products}
             setProducts={setProducts}
-            handleChange={handleChange}
-            getStatusColor={getStatusColor}
+            // handleChange={handleChange}
+            // getStatusColor={getStatusColor}
             // setTotalPage={setTotalPage}
             bookingPageCount={bookingPageCount}
             setPageCount={setPageCount}

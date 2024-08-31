@@ -8,7 +8,9 @@ import { MdNoteAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import { useNavigateRouter } from "../../navigateRoute";
+
 import { partnerAccess } from "../../config/partnerAccess";
+
 
 function TransactionActionBar({
   pagetype,
@@ -27,11 +29,14 @@ function TransactionActionBar({
   const goToPage = (page) => {
     router.push(`/adminDashboard/Transaction/${page}`);
   };
+
   const [navAccess, setnavAccess] = useState(partnerAccess || "");
+
 
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
+
         {!navAccess ? (
           <div style={{ width: "56%" }}>
             <div>
@@ -97,6 +102,7 @@ function TransactionActionBar({
         ) : (
           <div></div>
         )}
+
 
         <div
           style={{ justifyContent: TransactionPageCount === "t1" ? "" : "end" }}
