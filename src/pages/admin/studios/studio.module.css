@@ -541,6 +541,7 @@ input[type="number"] {
 
   overflow-y: auto;
   overflow-x: hidden;
+  padding-bottom: 2%;
 }
 .studioTabelDiv > div:nth-child(2) table {
   table-layout: auto;
@@ -1699,7 +1700,7 @@ td {
   min-height: 24vh;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   /* border: 2px solid green; */
 }
 

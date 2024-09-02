@@ -115,13 +115,21 @@ function AdminDashboardLayout() {
                 {tabCount === 1 && <Overview />}
                 {tabCount === 2 && <ShowAllUser />}
                 {tabCount === 3 && <AllteamDetails />}
-                {tabCount === 4 && <AllStudioPageDetailsPage />}
-                {tabCount === 5 && <BookingPages />}
-                {tabCount === 6 && <Promotions />}
+
+                {tabCount === 4 ? (
+                  <AllStudioPageDetailsPage />
+                ) : tabCount === 5 ? (
+                  <BookingPages />
+                ) : tabCount === 6 ? (
+                  <ShowAllTransaction />
+                ) : tabCount === 7 ? (
+                  <Promotions />
+                ) : (
+                  ""
+                )}
               </>
             )}
           </div>
-
         </div>
       </AccessContext.Provider>
     </>

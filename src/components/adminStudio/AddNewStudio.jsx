@@ -30,6 +30,7 @@ import Swal from "sweetalert2";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import { fontSize } from "@mui/system";
+import { partnerAccess } from "../../config/partnerAccess";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -497,7 +498,7 @@ function AddNewStudio({ setSelectTab }) {
     <>
       <div className={style.wrapper}>
         <WebDashboard2
-          navCount={4}
+          navCount={partnerAccess ? 2 : 4}
           tabCount={tabCount}
           setTabCount={setTabCount}
         />

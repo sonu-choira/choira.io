@@ -37,7 +37,6 @@ import { AccessContext } from "../../../utils/context";
 
 import moment from "moment";
 
-
 let PageSize = 10;
 
 function AllStudioDetail2({
@@ -471,7 +470,6 @@ function AllStudioDetail2({
                       </td>
                       <td>
                         <div>
-
                           {tableAccess ? (
                             tableAccess["app&more"].action === "read" ? (
                               <Switch
@@ -505,11 +503,12 @@ function AllStudioDetail2({
                               }}
                             />
                           )}
-
                         </div>
+                      </td>
+                      <td>
                         {tableAccess ? (
                           tableAccess["MyStudio"].action === "write" ? (
-                            <div>
+                            <div className={style.tableActionbtn}>
                               <GoEye
                                 style={{ cursor: "pointer" }}
                                 onClick={() => {
@@ -517,7 +516,10 @@ function AllStudioDetail2({
                                 }}
                               />
                               <MdEdit
-                                style={{ color: "#ffc701", cursor: "pointer" }}
+                                style={{
+                                  color: "#ffc701",
+                                  cursor: "pointer",
+                                }}
                                 onClick={() => {
                                   gotoEdit(products._id);
                                 }}
@@ -537,7 +539,7 @@ function AllStudioDetail2({
                             </div>
                           )
                         ) : (
-                          <div>
+                          <div className={style.tableActionbtn}>
                             <GoEye
                               style={{ cursor: "pointer" }}
                               onClick={() => {

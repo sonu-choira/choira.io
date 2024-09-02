@@ -21,7 +21,6 @@ import StudioTransaction from "./StudioTransaction";
 
 import { partnerAccess } from "../../config/partnerAccess";
 
-
 function ShowAllTransaction() {
   const [products, setProducts] = useState([]);
   const [totalResult, setTotalResult] = useState();
@@ -53,7 +52,6 @@ function ShowAllTransaction() {
     }
     if (navAccess) {
       setTransactionPageCount("t1");
-
     }
   }, [currentPage]);
   const pagetype = "apps";
@@ -188,9 +186,7 @@ function ShowAllTransaction() {
           setTransactionPageCount={setTransactionPageCount}
         />
 
-        {currentNav == "Transactions" ? (
-
-
+        {currentNav == "Transactions" && currentPage == "studio" ? (
           <StudioTransaction
             sendFilterDataToapi={sendFilterDataToapi}
             products={products}
@@ -212,7 +208,6 @@ function ShowAllTransaction() {
         ) : // <AllStudioDetail />
 
         currentNav == "Transactions" && currentPage == "122" ? (
-
           <Subadmin
             sendFilterDataToapi={sendFilterDataToapi}
             products={products}
@@ -227,12 +222,9 @@ function ShowAllTransaction() {
             setShortby={setShortby}
             shortby={shortby}
           />
-
         ) : currentNav == "Transactions" && currentPage == "Artist" ? (
           "t3"
         ) : currentNav == "Transactions" && currentPage == "MusicProducer" ? (
-
-     
           "t4"
         ) : (
           ""

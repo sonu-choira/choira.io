@@ -11,7 +11,6 @@ import { useNavigateRouter } from "../../navigateRoute";
 
 import { partnerAccess } from "../../config/partnerAccess";
 
-
 function TransactionActionBar({
   pagetype,
   downloadAllData,
@@ -27,16 +26,14 @@ function TransactionActionBar({
   console.log("page ka data ", useParams());
 
   const goToPage = (page) => {
-    router.push(`/adminDashboard/Transaction/${page}`);
+    router.push(`/adminDashboard/Transactions/${page}`);
   };
 
   const [navAccess, setnavAccess] = useState(partnerAccess || "");
 
-
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
-
         {!navAccess ? (
           <div style={{ width: "56%" }}>
             <div>
@@ -102,7 +99,6 @@ function TransactionActionBar({
         ) : (
           <div></div>
         )}
-
 
         <div
           style={{ justifyContent: TransactionPageCount === "t1" ? "" : "end" }}

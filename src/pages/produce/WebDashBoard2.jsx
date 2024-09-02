@@ -33,7 +33,12 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     confirmAlret("Are you sure you want to logout?", "").then((result) => {
       if (result.isConfirmed) {
         localStorage.clear();
-        navigate("/signin");
+
+        if (partnerAccess) {
+          navigate("/partner");
+        } else {
+          navigate("/signin");
+        }
       }
     });
   };
@@ -50,8 +55,10 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
         setTabCount(4);
       } else if (pathname.includes("Bookings")) {
         setTabCount(5);
-      } else if (pathname.includes("Promotions")) {
+      } else if (pathname.includes("Transactions")) {
         setTabCount(6);
+      } else if (pathname.includes("Promotions")) {
+        setTabCount(7);
       }
     }
     if (navAccess) {
@@ -133,8 +140,14 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     {
       id: 6,
       icon: <TbSpeakerphone style={{ fontSize: "1vmax" }} />,
+      label: "Transaction",
+      onClick: () => goToPage(6, "Transactions", "studio"),
+    },
+    {
+      id: 7,
+      icon: <TbSpeakerphone style={{ fontSize: "1vmax" }} />,
       label: "Promotions",
-      onClick: () => goToPage(6, "Promotions", "Banner"),
+      onClick: () => goToPage(7, "Promotions", "Banner"),
     },
   ];
 
