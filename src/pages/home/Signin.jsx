@@ -471,7 +471,7 @@ function Signin() {
 
   const gotoBooking = () => {
     navigate("/adminDashboard/Overview");
-    // window.location.reload();
+    window.location.reload();
   };
 
   const handleContinueButtonClick = (e) => {
