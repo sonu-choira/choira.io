@@ -53,12 +53,12 @@ const PartnerTransChart = ({ products }) => {
       setShowBtnLoader(true);
       chartApi.getAllCharts(filterData, "BookingCountAndHours").then((res) => {
         setShowBtnLoader(false);
-        setChartData(res?.BookingCountAndHours?.data || []);
+        setChartData(res?.BookingsData?.data || []);
       });
     } else {
       setShowBtnLoader(false);
 
-      setChartData(products?.BookingCountAndHours?.data || []);
+      setChartData(products?.BookingsData?.data || []);
     }
   }, [filterData, products]);
   return (

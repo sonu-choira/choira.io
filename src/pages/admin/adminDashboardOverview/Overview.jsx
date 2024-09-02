@@ -49,16 +49,17 @@ function Overview() {
       image: t4,
     },
   ]);
+
   const partnerData = [
     {
       title: "Booking",
-      count: 1069,
-      active: 5558,
+      count: products?.bookingCount?.data[0]?.totalCount,
+      active: products?.bookingCount?.data[0]?.activeCount,
       image: t2,
     },
     {
       title: "Transaction",
-      count: 1589,
+      count: products?.transactionCount?.data[0]?.totalAmount,
       active: 1589,
       image: t3,
     },
