@@ -139,7 +139,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
     },
     {
       id: 6,
-      icon: <TbSpeakerphone style={{ fontSize: "1vmax" }} />,
+      icon: <CiCreditCard1 style={{ fontSize: "1vmax" }} />,
       label: "Transaction",
       onClick: () => goToPage(6, "Transactions", "studio"),
     },
