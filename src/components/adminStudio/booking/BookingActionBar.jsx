@@ -10,6 +10,7 @@ import appAndmoreApi from "../../../services/appAndmoreApi";
 import { useNavigateRouter } from "../../../navigateRoute";
 import { partnerAccess } from "../../../config/partnerAccess";
 import { AccessContext } from "../../../utils/context";
+import dynamicNav from "../../../utils/dynamicNav";
 
 function BookingActionBar({
   setBookingPageCount,
@@ -89,29 +90,29 @@ function BookingActionBar({
     }
   };
   const gotoSlotBooking = () => {
-    router.push("/adminDashboard/Bookings/AddSlotBooking", {
+    router.push(`/${dynamicNav}/Bookings/AddSlotBooking`, {
       state: { navCount: 4 },
     });
   };
   const gotoMusicProduction = () => {
     if (pageData == "Apps&More") {
-      router.push("/adminDashboard/Apps&More/musicproduction");
+      router.push(`/${dynamicNav}/Apps&More/musicproduction`);
     } else {
-      router.push("/adminDashboard/Bookings/musicproduction");
+      router.push(`/${dynamicNav}/Bookings/musicproduction`);
     }
   };
   const gotoStudio = () => {
     if (pageData == "Apps&More") {
-      router.push("/adminDashboard/Apps&More/studio");
+      router.push(`/${dynamicNav}/Apps&More/studio`);
     } else {
-      router.push("/adminDashboard/Bookings/studio");
+      router.push(`/${dynamicNav}/Bookings/studio`);
     }
   };
   const gotoMixMaster = () => {
     if (pageData == "Apps&More") {
-      router.push("/adminDashboard/Apps&More/mixmaster");
+      router.push(`/${dynamicNav}/Apps&More/mixmaster`);
     } else {
-      router.push("/adminDashboard/Bookings/mixmaster");
+      router.push(`/${dynamicNav}/Bookings/mixmaster`);
     }
   };
   const bookingOptions = [

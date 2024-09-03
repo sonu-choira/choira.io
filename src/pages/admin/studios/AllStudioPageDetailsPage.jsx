@@ -4,30 +4,13 @@ import axios from "axios";
 // import Cookies from "js-cookie";
 
 // import "../studios/studios.css";
-import { IoSearch } from "react-icons/io5";
-import { MdAddAPhoto } from "react-icons/md";
-import { IoMdAddCircle } from "react-icons/io";
+
 import style from "../studios/studio.module.css";
 
-import { FaRegBell } from "react-icons/fa6";
-import { MdCalendarMonth, MdOutlineSettings } from "react-icons/md";
-import { GoDotFill } from "react-icons/go";
-import { LuFilePlus } from "react-icons/lu";
-import Pagination from "./Pagination";
 // import data from "../studios/mock-data.json";
-import Button from "../layout/Button";
-import { FaTableCellsLarge } from "react-icons/fa6";
-import Switch from "../layout/Switch";
-import OnboardStudio from "../../../components/adminStudio/OnboardStudio";
 
 // components
-import StudioFooter from "../../../components/adminStudio/StudioFooter";
-import upload from "../../../assets/img/upload.png";
-import AddNewStudio from "../../../components/adminStudio/AddNewStudio";
-import AddNewRoom from "../../../components/adminStudio/AddNewRoom";
-import StudioBookingDetail from "../../../components/adminStudio/booking/StudioBookingDetail";
-import MusicProduction from "../../../components/adminStudio/booking/MusicProduction";
-import MixMaster from "../../../components/adminStudio/booking/MixMaster";
+
 import Artist from "../../../components/adminStudio/booking/Artist";
 import BookingActionBar from "../../../components/adminStudio/booking/BookingActionBar";
 import { useNavigate, useParams } from "react-router-dom";
@@ -187,6 +170,9 @@ function AllStudioPageDetailsPage() {
       const limit = 64;
       const active = 1;
       // const type = bookingPageCount;
+      if (partnerAccess) {
+        hasFilter = false;
+      }
       if (hasFilter) {
         delete sendFilterDataToapi.serviceType;
         sendFilterDataToapi.page = pageCount;
@@ -209,7 +195,9 @@ function AllStudioPageDetailsPage() {
             );
             console.log("response.data.studios", response.studios);
             if (response.studios) {
-              setProducts(response.studios);
+              setProducts(
+                partnerAccess ? response.allBookings : response.studios
+              );
               setTotalPage(response.paginate.totalPages);
 
               // setPageCount(response.paginate.page);

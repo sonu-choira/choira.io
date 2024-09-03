@@ -186,7 +186,7 @@ function ShowAllTransaction() {
           setTransactionPageCount={setTransactionPageCount}
         />
 
-        {currentNav == "Transactions" && currentPage == "studio" ? (
+        {currentNav == "Transactions" ? (
           <StudioTransaction
             sendFilterDataToapi={sendFilterDataToapi}
             products={products}

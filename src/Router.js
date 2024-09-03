@@ -24,6 +24,8 @@ import AddNewStudio from "../src/components/adminStudio/AddNewStudio.jsx";
 import AddNewProduction from "../src/components/adminStudio/appsAndMore/AddNewProduction.jsx";
 import StudioPartners from "./components/teamsSection/StudioPartners.jsx";
 import PartnerLogin from "../src/components/partner/PartnerLogin.jsx";
+import { partnerAccess } from "./config/partnerAccess.js";
+import dynamicNav from "./utils/dynamicNav.js";
 
 // import Signup from "./pages/home/Signup.jsx";
 
@@ -99,17 +101,17 @@ const Routing = () => {
 
           <Route exact path='/studios' element={<Studios/>} />
           <Route exact path='/allStudioPageDetailsPage' element={<AllStudioPageDetailsPage/>} />
-          <Route path='/adminDashboard/:navOption/:page' element={<AdminDashboardLayout/>} />
-          <Route path='/adminDashboard/:navOption' element={<AdminDashboardLayout/>} />
-          <Route path='/adminDashboard' element={<AdminDashboardLayout/>} />
+          <Route path={`/${dynamicNav}/:navOption/:page`} element={<AdminDashboardLayout/>} />
+          <Route path={`/${dynamicNav}/:navOption`} element={<AdminDashboardLayout/>} />
+          <Route path={`/${dynamicNav}`} element={<AdminDashboardLayout/>} />
           <Route exact path='/studio/edit' element={<AddNewStudio/>} />
           <Route exact path='/studio/add' element={<AddNewStudio/>} />
           <Route exact path='/service/musicProduction/edit' element={<AddNewProduction/>} />
           <Route exact path='/service/musicProduction/add' element={<AddNewProduction/>} />
           <Route exact path='/service/showBookingDetails' element={<ShowBookingsDetail/>} />
-          <Route exact path='/adminDashboard/Bookings/AddSlotBooking' element={<SlotBooking/>} />
-          <Route exact path='/adminDashboard/Teams/AddStudioPatner' element={<AddNewStudioPartners/>} />
-          <Route exact path='/adminDashboard/Teams/AddNewArm' element={<AddNewArm/>} />
+          <Route exact path={`/${dynamicNav}/Bookings/AddSlotBooking`} element={<SlotBooking/>} />
+          <Route exact path={`/${dynamicNav}/Teams/AddStudioPatner`} element={<AddNewStudioPartners/>} />
+          <Route exact path={`/${dynamicNav}/Teams/AddNewArm`} element={<AddNewArm/>} />
           <Route exact path='/partner' element={<PartnerLogin/>} />
         
 

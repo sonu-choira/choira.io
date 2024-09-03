@@ -1,13 +1,19 @@
 
 import fileDownload from "js-file-download";
 import api from "./api"
+import { partnerAccess } from "../config/partnerAccess";
 
 class Appapi{
   
  getStudios = async (limit,active ,pageCount) => {
-  
+  let link = ""
+  if(partnerAccess){
+    link = " /owners/studios/studioId"
+  }else{
+    link = "/studios-all"
+  }
 
-  const response = await api.get(`/studios-all`, {
+  const response = await api.get(link, {
     params: {
       limit: 8,
       page :pageCount,
@@ -88,7 +94,8 @@ class Appapi{
       }
     }
       filteredObject.limit = 7;
-      const response = await api.get(`/studios-all`,{ 
+
+      const response = await api.get("/studios-all",{ 
           params: filteredObject
       });
       const {status} = response.data

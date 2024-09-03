@@ -25,6 +25,7 @@ import SearchSelectInput from "../../pages/admin/layout/SearchAndSelectInput";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import ChoiraLoder2 from "../loader/ChoiraLoder2";
 import ChoiraLoader from "../loader/ChoiraLoader";
+import dynamicNav from "../../utils/dynamicNav";
 
 function SlotBooking({ setSelectTab }) {
   const [showBtnLoader, setShowBtnLoader] = useState(false);
@@ -106,7 +107,7 @@ function SlotBooking({ setSelectTab }) {
     if (showAllSlots) {
       setshowAllSlots(false);
     } else {
-      navigate("/adminDashboard/Bookings/studio");
+      navigate(`/${dynamicNav}/Bookings/studio`);
     }
   };
   const [selectedStudioid, setselectedStudioid] = useState("");
@@ -234,7 +235,7 @@ function SlotBooking({ setSelectTab }) {
           setshowAllSlots(false);
           setshowLoader(false);
           sucessAlret("Booking done");
-          navigate("/adminDashboard/Bookings/studio");
+          navigate(`/${dynamicNav}/Bookings/studio`);
         } else {
           setShowBtnLoader(false);
           errorAlert(res.message || "Booking failed");

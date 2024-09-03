@@ -10,6 +10,7 @@ import appAndmoreApi from "../../services/appAndmoreApi";
 import { useNavigateRouter } from "../../navigateRoute";
 
 import { partnerAccess } from "../../config/partnerAccess";
+import dynamicNav from "../../utils/dynamicNav";
 
 function TransactionActionBar({
   pagetype,
@@ -26,7 +27,7 @@ function TransactionActionBar({
   console.log("page ka data ", useParams());
 
   const goToPage = (page) => {
-    router.push(`/adminDashboard/Transactions/${page}`);
+    router.push(`/${dynamicNav}/Transactions/${page}`);
   };
 
   const [navAccess, setnavAccess] = useState(partnerAccess || "");

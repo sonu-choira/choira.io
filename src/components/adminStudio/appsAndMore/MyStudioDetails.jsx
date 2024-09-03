@@ -35,7 +35,7 @@ import moment from "moment";
 
 let PageSize = 10;
 
-function AllStudioDetail2({
+function MyStudioDetails({
   products,
   setProducts,
   setPageCount,
@@ -574,4 +574,4 @@ function AllStudioDetail2({
   );
 }
 
-export default AllStudioDetail2;
+export default MyStudioDetails;

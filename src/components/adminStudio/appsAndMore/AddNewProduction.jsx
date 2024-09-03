@@ -24,6 +24,7 @@ import appAndmoreApi from "../../../services/appAndmoreApi";
 import Swal from "sweetalert2";
 import MultipleSelect from "../../../pages/admin/layout/MultipleSelect";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
+import dynamicNav from "../../../utils/dynamicNav";
 
 function AddNewProduction({ setSelectTab }) {
   const [showBtnLoader, setShowBtnLoader] = useState(false);
@@ -48,7 +49,7 @@ function AddNewProduction({ setSelectTab }) {
     // } else if (bookingPageCount == "c3") {
     //   navigate("/adminDashboard/Apps&More/studio");
     // }
-    navigate("/adminDashboard/Apps&More/studio");
+    navigate(`/${dynamicNav}/Apps&More/studio`);
   };
 
   useEffect(() => {
@@ -307,7 +308,7 @@ function AddNewProduction({ setSelectTab }) {
                     showConfirmButton: false,
                     timer: 1800,
                   });
-                  navigate("/adminDashboard/Apps&More/studio");
+                  navigate(`/${dynamicNav}/Apps&More/studio`);
                 } else {
                   setShowBtnLoader(false);
                   errorAlert(response.message);
@@ -378,7 +379,7 @@ function AddNewProduction({ setSelectTab }) {
                     showConfirmButton: false,
                     timer: 1800,
                   });
-                  navigate("/adminDashboard/Apps&More/studio");
+                  navigate(`/${dynamicNav}/Apps&More/studio`);
                 } else {
                   setShowBtnLoader(false);
                   errorAlert(response.message);

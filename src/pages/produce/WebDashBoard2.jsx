@@ -22,6 +22,7 @@ import { MdOutlineRateReview } from "react-icons/md";
 
 import { TbLogout2, TbSpeakerphone } from "react-icons/tb";
 import { confirmAlret } from "../admin/layout/Alert";
+import dynamicNav from "../../utils/dynamicNav";
 
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
         setTabCount(2);
       } else if (pathname.includes("Bookings/AddSlotBooking")) {
         setTabCount(4);
-      } else if (pathname.includes("/adminDashboard/Bookings")) {
+      } else if (pathname.includes("/partner-dashboard/Bookings")) {
         setTabCount(3);
       } else if (pathname.includes("ManageSlots")) {
         setTabCount(4);
@@ -94,7 +95,8 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const goToPage = (tab, mainPage, subPage = "") => {
     let subPagelink = subPage ? `/${subPage}` : "";
     setTabCount(tab);
-    navigate(`/adminDashboard/${mainPage}${subPagelink}`);
+
+    navigate(`/${dynamicNav}/${mainPage}${subPagelink}`);
   };
   let data = "";
   let adminData = "";

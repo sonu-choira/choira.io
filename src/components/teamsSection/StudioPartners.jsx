@@ -32,6 +32,7 @@ import appAndmoreApi from "../../services/appAndmoreApi";
 import moment from "moment";
 import { GoEye } from "react-icons/go";
 import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
+import dynamicNav from "../../utils/dynamicNav";
 
 let PageSize = 10;
 
@@ -63,7 +64,7 @@ function StudioPartners({
     const selectedProduct = products.find((product) => product._id === id);
     console.log("navigated=======>", selectedProduct);
 
-    navigate(`/adminDashboard/Teams/AddStudioPatner?id=${id}`, {
+    navigate(`/${dynamicNav}/Teams/AddStudioPatner?id=${id}`, {
       state: {
         productData: selectedProduct,
         navCount: 3,

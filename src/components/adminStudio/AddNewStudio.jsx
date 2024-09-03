@@ -31,6 +31,7 @@ import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import { fontSize } from "@mui/system";
 import { partnerAccess } from "../../config/partnerAccess";
+import dynamicNav from "../../utils/dynamicNav";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -392,7 +393,7 @@ function AddNewStudio({ setSelectTab }) {
 
                     setShowBtnLoader(false);
 
-                    navigate("/adminDashboard/Apps&More/studio");
+                    navigate(`/${dynamicNav}/Apps&More/studio`);
                   } else {
                     errorAlert(response.message);
 
@@ -463,7 +464,7 @@ function AddNewStudio({ setSelectTab }) {
                       showConfirmButton: false,
                       timer: 1800,
                     });
-                    navigate("/adminDashboard/Apps&More/studio");
+                    navigate(`/${dynamicNav}/Apps&More/studio`);
                   } else {
                     setShowBtnLoader(false);
                     errorAlert(response.message);

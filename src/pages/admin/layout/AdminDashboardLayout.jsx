@@ -29,6 +29,8 @@ import { AccessContext } from "../../../utils/context";
 import { useNavigateRouter } from "../../../navigateRoute";
 
 import ShowAllTransaction from "../../../components/transactionSection/ShowAllTransaction";
+import dynamicNav from "../../../utils/dynamicNav";
+import AllMyStudioDetails from "../studios/AllMyStudioDetails";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
@@ -51,10 +53,11 @@ function AdminDashboardLayout() {
   );
   const router = useNavigate();
   const gotoSlotBooking = () => {
-    router("/adminDashboard/Bookings/AddSlotBooking", {
+    router(`/${dynamicNav}/Bookings/AddSlotBooking`, {
       state: { navCount: 4 },
     });
   };
+
   return (
     <>
       {" "}
@@ -95,7 +98,7 @@ function AdminDashboardLayout() {
                       <Overview />
                     )}
                     {tabCount === 2 && lowerCaseData === "mystudio" && (
-                      <AllStudioPageDetailsPage />
+                      <AllMyStudioDetails />
                     )}
                     {tabCount === 3 && lowerCaseData === "bookings" && (
                       <BookingPages />

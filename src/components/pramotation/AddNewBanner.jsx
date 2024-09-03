@@ -16,6 +16,7 @@ import promotionApi from "../../services/promotionApi";
 import { send } from "react-ga";
 import { useNavigate } from "react-router-dom";
 import MixMaster from "../adminStudio/booking/MixMaster";
+import dynamicNav from "../../utils/dynamicNav";
 // let studioName = "";
 function AddNewBanner({
   setShowAddPage,
@@ -475,7 +476,8 @@ function AddNewBanner({
         <StudioFooter
           backOnclick={() => {
             setShowAddPage(false);
-            navigate("/adminDashboard/Promotions/Banner");
+            navigate(`/${dynamicNav}/Promotions/Banner`);
+
             editMode.current = false;
           }}
           saveDisabled={false}

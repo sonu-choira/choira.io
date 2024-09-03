@@ -468,7 +468,7 @@ function PartnerLogin() {
   };
 
   const gotoBooking = () => {
-    navigate("/adminDashboard/Overview");
+    navigate("/partner-dashboard/Overview");
     window.location.reload();
   };
 

@@ -32,6 +32,7 @@ import { Alert } from "antd";
 import { errorAlert, sucessAlret } from "../admin/layout/Alert";
 import Button from "../admin/layout/Button";
 import ToggleSwitch from "../admin/layout/ToggleSwitch";
+import dynamicNav from "../../utils/dynamicNav";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -470,7 +471,8 @@ function Signin() {
   };
 
   const gotoBooking = () => {
-    navigate("/adminDashboard/Overview");
+    navigate(`/${dynamicNav}/Overview`);
+
     window.location.reload();
   };
 
@@ -554,7 +556,7 @@ function Signin() {
   useEffect(() => {
     let signin = localStorage.getItem("isSignin");
     if (signin) {
-      navigate("/adminDashboard/Overview");
+      navigate(`/${dynamicNav}/Overview`);
     }
   }, []);
 

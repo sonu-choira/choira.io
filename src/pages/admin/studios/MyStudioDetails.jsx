@@ -13,8 +13,7 @@ import imageNotFound from "../../../assets/imagesNotFound.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
-import ChoiraLoader from "../../loader/ChoiraLoader";
-import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import { RiExpandUpDownLine } from "react-icons/ri";
@@ -32,10 +31,11 @@ import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 import { AccessContext } from "../../../utils/context";
 
 import moment from "moment";
+import ChoiraLoder2 from "../../../components/loader/ChoiraLoder2";
 
 let PageSize = 10;
 
-function AllStudioDetail2({
+function MyStudioDetails({
   products,
   setProducts,
   setPageCount,
@@ -84,31 +84,31 @@ function AllStudioDetail2({
 
   const handleSwitchChange = (studioId) => {
     setShowloader(true);
-    appAndmoreApi
-      .updateStudioStatus(studioId)
-      .then((response) => {
-        console.log("response=======>", response.studio);
-        setProducts((prevState) => {
-          return prevState.map((product) => {
-            if (product._id === studioId) {
-              return {
-                ...product,
-                isActive: response.studio.isActive,
-              };
-            }
-            return product;
-          });
-        });
+    // appAndmoreApi
+    //   .updateStudioStatus(studioId)
+    //   .then((response) => {
+    //     console.log("response=======>", response.studio);
+    //     setProducts((prevState) => {
+    //       return prevState.map((product) => {
+    //         if (product._id === studioId) {
+    //           return {
+    //             ...product,
+    //             isActive: response.studio.isActive,
+    //           };
+    //         }
+    //         return product;
+    //       });
+    //     });
 
-        loading_timeout = setTimeout(() => {
-          setShowloader(false);
-        }, 700);
-      })
-      .catch((error) => {
-        console.log("error=======>", error);
-        errorAlert(error.message || "Something went wrong");
-        setShowloader(false);
-      });
+    //     loading_timeout = setTimeout(() => {
+    //       setShowloader(false);
+    //     }, 700);
+    //   })
+    //   .catch((error) => {
+    //     console.log("error=======>", error);
+    //     errorAlert(error.message || "Something went wrong");
+    //     setShowloader(false);
+    //   });
   };
 
   const [showpricefilter, setshowpricefilter] = useState(false);
@@ -217,16 +217,16 @@ function AllStudioDetail2({
 
   useEffect(() => {
     setProducts([]);
-    appAndmoreApi
-      .filterData(sendFilterDataToapi)
-      .then((response) => {
-        console.log("filter applied:", response);
-        setProducts(response.studios);
-        setTotalPage(response.paginate.totalPages);
-      })
-      .catch((error) => {
-        console.error("Error filter studio:", error);
-      });
+    // appAndmoreApi
+    //   .filterData(sendFilterDataToapi)
+    //   .then((response) => {
+    //     console.log("filter applied:", response);
+    //     setProducts(response.studios);
+    //     setTotalPage(response.paginate.totalPages);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error filter studio:", error);
+    //   });
 
     return () => {
       setProducts([]);
@@ -243,17 +243,19 @@ function AllStudioDetail2({
     <>
       <div className={style.studioTabelDiv}>
         <DateAndSearchFilter
-          setProducts={setProducts}
-          setTotalPage={setTotalPage}
-          bookingPageCount={bookingPageCount}
-          filterNav={filterNav}
-          setfilterNav={setfilterNav}
-          sendFilterDataToapi={sendFilterDataToapi}
-          setSelectedCity={setSelectedCity}
-          setSelectedRoom={setSelectedRoom}
-          setSelectedStatus={setSelectedStatus}
-          setPriceFilter={setPriceFilter}
-          setShortby={setShortby}
+          // setProducts={setProducts}
+          // setTotalPage={setTotalPage}
+          // bookingPageCount={bookingPageCount}
+          // filterNav={filterNav}
+          // setfilterNav={setfilterNav}
+          // sendFilterDataToapi={sendFilterDataToapi}
+          // setSelectedCity={setSelectedCity}
+          // setSelectedRoom={setSelectedRoom}
+          // setSelectedStatus={setSelectedStatus}
+          // setPriceFilter={setPriceFilter}
+          // setShortby={setShortby}
+          searchDisable={true}
+          dateDisable={true}
         />
         <div>
           <table>
@@ -574,4 +576,4 @@ function AllStudioDetail2({
   );
 }
 
-export default AllStudioDetail2;
+export default MyStudioDetails;

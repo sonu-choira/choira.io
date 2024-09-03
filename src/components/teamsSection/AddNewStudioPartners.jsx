@@ -25,6 +25,7 @@ import { useFormik } from "formik";
 import CustomInput from "../../pages/admin/layout/CustomInput";
 import { studioPartner } from "../../schemas";
 import * as Yup from "yup";
+import dynamicNav from "../../utils/dynamicNav";
 
 function AddNewStudioPartners({ setSelectTab }) {
   const [allStudio, setAllStudio] = useState([]);
@@ -109,7 +110,7 @@ function AddNewStudioPartners({ setSelectTab }) {
   }, []);
 
   const backOnclick = () => {
-    navigate("/adminDashboard/Teams/StudioPartners");
+    navigate(`/${dynamicNav}/Teams/StudioPartners`);
   };
   useEffect(() => {
     console.log("..........", values);

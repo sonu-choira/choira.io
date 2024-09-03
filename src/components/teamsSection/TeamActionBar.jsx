@@ -8,6 +8,7 @@ import { MdNoteAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import appAndmoreApi from "../../services/appAndmoreApi";
 import { useNavigateRouter } from "../../navigateRoute";
+import dynamicNav from "../../utils/dynamicNav";
 
 function TeamsActionBar({
   pagetype,
@@ -25,9 +26,9 @@ function TeamsActionBar({
 
   const gotoAddNew = (teamsPageCount) => {
     if (teamsPageCount === "t2") {
-      router.push("/adminDashboard/Teams/AddStudioPatner");
+      router.push(`/${dynamicNav}/Teams/AddStudioPatner`);
     } else if (teamsPageCount === "t1") {
-      router.push("/adminDashboard/Teams/AddNewArm");
+      router.push(`/${dynamicNav}/Teams/AddNewArm`);
     }
     //  else {
     //   router.push("/adminDashboard/Teams/AddStudioPatner");
@@ -46,32 +47,12 @@ function TeamsActionBar({
 
   const gotoStudioPartners = () => {
     if (pageData == "Teams") {
-      router.push("/adminDashboard/Teams/StudioPartners");
+      router.push(`/${dynamicNav}/Teams/StudioPartners`);
     } else {
-      router.push("/adminDashboard/Bookings/musicproduction");
+      router.push(`/${dynamicNav}/Bookings/musicproduction`);
     }
   };
-  const gotoARM = () => {
-    if (pageData == "Teams") {
-      router.push("/adminDashboard/Teams/Arm");
-    } else {
-      router.push("/adminDashboard/Bookings/studio");
-    }
-  };
-  const gotoArtist = () => {
-    if (pageData == "Teams") {
-      router.push("/adminDashboard/Teams/Artist");
-    } else {
-      router.push("/adminDashboard/Bookings/mixmaster");
-    }
-  };
-  const gotoMusicProducer = () => {
-    if (pageData == "Teams") {
-      router.push("/adminDashboard/Teams/MusicProducer");
-    } else {
-      router.push("/adminDashboard/Bookings/mixmaster");
-    }
-  };
+
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>

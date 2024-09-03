@@ -14,6 +14,7 @@ import Banner from "./Banner";
 import Discount from "./Discount";
 import Integration from "./Integration";
 import promotionApi from "../../services/promotionApi";
+import dynamicNav from "../../utils/dynamicNav";
 function Promotions({ userAllDetails, setShowUserProfile, userid }) {
   // const [products, setProducts] = useState([]);
   // const handleChange = () => {};
@@ -153,21 +154,21 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
       icon: <IoImageOutline style={{ fontSize: "1.2vmax" }} />,
       title: "Banner",
       description: "Ensure your app stands out with captivating banners!",
-      navigate: "/adminDashboard/Promotions/Banner",
+      navigate: `/${dynamicNav}/Promotions/Banner`,
     },
     {
       id: 2,
       icon: <CiDiscount1 style={{ fontSize: "1.2vmax" }} />,
       title: "Discounts",
       description: "Attract users with amazing discounts!",
-      navigate: "/adminDashboard/Promotions/Discounts",
+      navigate: `/${dynamicNav}/Promotions/Discounts`,
     },
     {
       id: 3,
       icon: <PiSquaresFour style={{ fontSize: "1.2vmax" }} />,
       title: "Integrations",
       description: "Boost functionality with seamless integrations!",
-      navigate: "/adminDashboard/Promotions/Integrations",
+      navigate: `/${dynamicNav}/Promotions/Integrations`,
       disable: true,
     },
     {
@@ -176,7 +177,7 @@ function Promotions({ userAllDetails, setShowUserProfile, userid }) {
       title: "Notifications",
       description: "Ensure your app stands out with captivating banners!",
       disable: true,
-      navigate: "/adminDashboard/Promotions/Notifications",
+      navigate: `/${dynamicNav}/Promotions/Notifications`,
     },
   ];
 
