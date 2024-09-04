@@ -32,6 +32,7 @@ import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import { fontSize } from "@mui/system";
 import { partnerAccess } from "../../config/partnerAccess";
 import dynamicNav from "../../utils/dynamicNav";
+import MyStudioApi from "../../services/MyStudioApi";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -380,10 +381,17 @@ function AddNewStudio({ setSelectTab }) {
         }).then((result) => {
           if (result.isConfirmed) {
             console.log("studioDetails", correctedRealData);
-            // showBtnLoader = true;
+            let dynamicApi = null;
+            if (partnerAccess) {
+              dynamicApi = MyStudioApi;
+            } else {
+              dynamicApi = appAndmoreApi;
+            }
+
             setShowBtnLoader(true);
             console.log(showBtnLoader);
-            appAndmoreApi
+
+            dynamicApi
               .updateStudio(userStudioid, correctedRealData)
               .then((response) => {
                 console.log("Studio updated:", response);
@@ -393,7 +401,7 @@ function AddNewStudio({ setSelectTab }) {
 
                     setShowBtnLoader(false);
 
-                    navigate(`/${dynamicNav}/Apps&More/studio`);
+                    navigate(-1);
                   } else {
                     errorAlert(response.message);
 
@@ -464,7 +472,7 @@ function AddNewStudio({ setSelectTab }) {
                       showConfirmButton: false,
                       timer: 1800,
                     });
-                    navigate(`/${dynamicNav}/Apps&More/studio`);
+                    navigate(-1);
                   } else {
                     setShowBtnLoader(false);
                     errorAlert(response.message);

@@ -38,6 +38,7 @@ import DateAndSearchFilterComponent from "../../../pages/admin/layout/filterComp
 import { clearEmptyField } from "../../../utils/helperFunction";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 import { AccessContext } from "../../../utils/context";
+import { partnerAccess } from "../../../config/partnerAccess";
 let PageSize = 10;
 
 let userFiler = true;
@@ -155,7 +156,14 @@ function StudioBookingDetail({
     sendFilterDataToapi.pageCount = pageCount;
 
     clearEmptyField(sendFilterDataToapi);
-    bookingPageApi.getBookings(sendFilterDataToapi).then((response) => {
+    let dynamicApi = "";
+    if (partnerAccess) {
+      dynamicApi = "getPartnerBookings";
+    } else {
+      dynamicApi = "getBookings";
+    }
+
+    bookingPageApi[dynamicApi](sendFilterDataToapi).then((response) => {
       console.log("date filter response:", response);
       if (response.status) {
         setProducts(response.data);

@@ -177,7 +177,7 @@ function AddNewDiscount({
       searchUser: username,
     };
     try {
-      const response = await userApi.getAllUser(20,1, dataToSend);
+      const response = await userApi.getAllUser(20, 1, dataToSend);
       return response.users.map((user) => ({
         label: `${user.fullName} `,
         value: user._id,
@@ -198,7 +198,7 @@ function AddNewDiscount({
         searchUser: editData.usersList,
       };
       userApi
-        .getAllUser(20,1, dataToSend)
+        .getAllUser(20, 1, dataToSend)
         .then((res) => {
           console.log(res);
           setFieldValue(
@@ -244,7 +244,7 @@ function AddNewDiscount({
           touched={touched.discountType}
         />
         <CustomInput
-          type="text"
+          type="number"
           placeholder="Enter Discount Percentage"
           label="Discount Percentage"
           name="discountPercentage"

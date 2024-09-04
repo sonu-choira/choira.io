@@ -15,7 +15,7 @@ let type =  localStorage.getItem("userType");
       navbar: ["studio"],
     },
     MyStudio:{
-      button : ["download","add new"],
+      button : ["download",],
       disabledButton : [""],
       table : "all",
       table_col: ["studio", "price", "location", "rooms", "created", "status"],

@@ -12,6 +12,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import WebDashboard2 from "../../produce/WebDashBoard2";
 import bookingPageApi from "../../../services/bookingPageApi";
 import { clearEmptyField } from "../../../utils/helperFunction";
+import { partnerAccess } from "../../../config/partnerAccess";
 let sendFilterDataToapi = {
   limit: 8,
   bookingType: "",
@@ -146,8 +147,14 @@ function BookingPages() {
 
       // const type = bookingPageCount;
       clearEmptyField(sendFilterDataToapi);
-      bookingPageApi
-        .getBookings(sendFilterDataToapi)
+      let dynamicApi = null;
+      if (partnerAccess) {
+        dynamicApi = "getPartnerBookings";
+      } else {
+        dynamicApi = "getBookings";
+      }
+
+      bookingPageApi[dynamicApi](sendFilterDataToapi)
         .then((response) => {
           console.log("====================> response C1", response);
           if (response.data) {

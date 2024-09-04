@@ -9,6 +9,7 @@ import { FaPencilAlt, FaRegEye } from "react-icons/fa";
 import promotionApi from "../../services/promotionApi";
 import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 import Switch from "../../pages/admin/layout/Switch";
+import { clearEmptyField } from "../../utils/helperFunction";
 
 function DiscountTable({ editData, setEditData }) {
   const [products, setProducts] = useState("");
@@ -35,6 +36,7 @@ function DiscountTable({ editData, setEditData }) {
       data.active = 1;
     }
     console.log(data);
+    clearEmptyField(data);
 
     promotionApi
       .updateDiscount(id, data)

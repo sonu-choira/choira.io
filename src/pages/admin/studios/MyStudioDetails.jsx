@@ -32,6 +32,7 @@ import { AccessContext } from "../../../utils/context";
 
 import moment from "moment";
 import ChoiraLoder2 from "../../../components/loader/ChoiraLoder2";
+import MyStudioApi from "../../../services/MyStudioApi";
 
 let PageSize = 10;
 
@@ -84,32 +85,36 @@ function MyStudioDetails({
 
   const handleSwitchChange = (studioId) => {
     setShowloader(true);
-    // appAndmoreApi
-    //   .updateStudioStatus(studioId)
-    //   .then((response) => {
-    //     console.log("response=======>", response.studio);
-    //     setProducts((prevState) => {
-    //       return prevState.map((product) => {
-    //         if (product._id === studioId) {
-    //           return {
-    //             ...product,
-    //             isActive: response.studio.isActive,
-    //           };
-    //         }
-    //         return product;
-    //       });
-    //     });
+    console.log("insid handleSwitchChange", studioId);
+    MyStudioApi.updateStatus(studioId)
+      .then((response) => {
+        console.log("response=======>", response);
+        setProducts((prevState) => {
+          return prevState.map((product) => {
+            if (product._id === studioId) {
+              return {
+                ...product,
+                isActive: response.studio.isActive,
+              };
+            }
+            return product;
+          });
+        });
 
-    //     loading_timeout = setTimeout(() => {
-    //       setShowloader(false);
-    //     }, 700);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error=======>", error);
-    //     errorAlert(error.message || "Something went wrong");
-    //     setShowloader(false);
-    //   });
+        loading_timeout = setTimeout(() => {
+          setShowloader(false);
+        }, 700);
+      })
+      .catch((error) => {
+        console.log("error=======>", error);
+        errorAlert(error.message || "Something went wrong");
+        setShowloader(false);
+      });
   };
+
+  useEffect(() => {
+    console.log("products=======>", products);
+  }, [products]);
 
   const [showpricefilter, setshowpricefilter] = useState(false);
   const handelpriceFilter = () => {
@@ -468,39 +473,14 @@ function MyStudioDetails({
                       </td>
                       <td>
                         <div>
-                          {tableAccess ? (
-                            tableAccess["app&more"].action === "read" ? (
-                              <Switch
-                                // isloading={pid === products._id && showloader}
-                                status={products.isActive}
-                                // onClick={() => {
-                                //   setPid(products._id);
-                                //   handleSwitchChange(products._id);
-                                // }}
-                                switchDisabled={
-                                  tableAccess["app&more"].action === "read"
-                                }
-                              />
-                            ) : (
-                              <Switch
-                                isloading={pid === products._id && showloader}
-                                status={products.isActive}
-                                onClick={() => {
-                                  setPid(products._id);
-                                  handleSwitchChange(products._id);
-                                }}
-                              />
-                            )
-                          ) : (
-                            <Switch
-                              isloading={pid === products._id && showloader}
-                              status={products.isActive}
-                              onClick={() => {
-                                setPid(products._id);
-                                handleSwitchChange(products._id);
-                              }}
-                            />
-                          )}
+                          <Switch
+                            isloading={pid === products._id && showloader}
+                            status={products.isActive}
+                            onClick={() => {
+                              setPid(products._id);
+                              handleSwitchChange(products._id);
+                            }}
+                          />
                         </div>
                       </td>
                       <td>

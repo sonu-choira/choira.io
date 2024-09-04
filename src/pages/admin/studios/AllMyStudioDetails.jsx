@@ -82,10 +82,7 @@ function AllMyStudioDetails() {
     setProducts([]);
     MyStudioApi.getStudios()
       .then((response) => {
-        console.log(
-          "response.=================@@@@@@@@@@@@@@@@@@@@.studios",
-          response.studio
-        );
+        console.log("response.studios", response.studio);
         if (response) {
           setProducts(response?.studio);
           setTotalPage(response?.paginate?.totalPages);

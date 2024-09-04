@@ -50,6 +50,24 @@ import api from "./api"
     console.log("res ===>", response.data)
     return response.data;
    };
+   
+   getPartnerBookings = async ({limit, active,bookingType,pageCount,startDate,endDate,searchField}) => {
+  
+    const response = await api.get(`/owners/bookings/studioId`,{
+      params: {
+        limit: 8,
+        active: active,
+        bookingType:bookingType,
+        page:pageCount,
+        startDate,
+        endDate,
+        searchField,}
+
+    });
+    const {status} = response.data
+    console.log("res ===>", response.data)
+    return response.data;
+   };
 
  }
 
