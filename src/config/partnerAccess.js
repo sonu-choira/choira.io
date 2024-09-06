@@ -16,7 +16,7 @@ let type =  localStorage.getItem("userType");
     },
     MyStudio:{
       button : ["download",],
-      disabledButton : [""],
+      disabledButton : ["download"],
       table : "all",
       table_col: ["studio", "price", "location", "rooms", "created", "status"],
       action : "write",
@@ -24,7 +24,7 @@ let type =  localStorage.getItem("userType");
     },
     bookings:{
       button : ["download",],
-      disabledButton : [""],
+      disabledButton : ["download"],
       table_col : ["id", "user name", "studio name", "hours", "creation date ", "booking date", "time slot", "Amount", "status"],
       action : "read",
       navbar: [""]

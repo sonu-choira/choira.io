@@ -33,6 +33,7 @@ import { errorAlert, sucessAlret } from "../admin/layout/Alert";
 import Button from "../admin/layout/Button";
 import ToggleSwitch from "../admin/layout/ToggleSwitch";
 import dynamicNav from "../../utils/dynamicNav";
+import { partnerAccess } from "../../config/partnerAccess";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -437,7 +438,7 @@ function Signin() {
 
           // TokenService.setUser(response.user.role);
           console.log("taken isssss", response.token);
-          TokenService.setData("token", response.token || {});
+          TokenService.setData("token", response.token || null);
           setSign(2);
           sucessAlret(response.message);
         } else {
@@ -516,7 +517,7 @@ function Signin() {
           setShowBtnLoader(false);
           localStorage.setItem("userType", "admin");
           console.log("taken isssss", response.token);
-          TokenService.setData("token", response.token || {});
+          TokenService.setData("token", response.token || null);
           sucessAlret("OTP is Correct!", "Welcome back 😊");
 
           gotoBooking();
@@ -546,19 +547,17 @@ function Signin() {
   useEffect(() => {
     let signin = localStorage.getItem("isSignin");
     if (signin) {
-      navigate(-1);
+      if (partnerAccess) {
+        navigate(`/${dynamicNav}/Overview`);
+      } else {
+        navigate(`/${dynamicNav}/Overview`);
+      }
     }
   }, []);
 
   const gotoHome = () => {
     navigate("/home");
   };
-  useEffect(() => {
-    let signin = localStorage.getItem("isSignin");
-    if (signin) {
-      navigate(`/${dynamicNav}/Overview`);
-    }
-  }, []);
 
   return (
     <>

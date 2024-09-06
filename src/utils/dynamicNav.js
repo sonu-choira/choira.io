@@ -8,4 +8,7 @@ if(!partnerAccess){
   dynamicNav = "partner-dashboard"
 }
 
+console.log(dynamicNav);
+
+
 export default dynamicNav;

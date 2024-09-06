@@ -104,6 +104,10 @@ function AddNewDiscount({
         }
       });
       console.log("sendDataToApi", sendDataToApi);
+      sendDataToApi.discountPercentage = parseFloat(
+        sendDataToApi.discountPercentage
+      );
+      sendDataToApi.maxCapAmount = parseFloat(sendDataToApi.maxCapAmount);
       // hitApi(sendDataToApi);
       hitApi(sendDataToApi);
 

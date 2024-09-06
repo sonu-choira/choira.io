@@ -26,6 +26,28 @@ import dynamicNav from "../../utils/dynamicNav";
 
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    // console.log("Token from localStorage:", token);
+    if (token === null || token === undefined) {
+      const isSignin = localStorage.getItem("isSignin");
+      if (isSignin) {
+        // navigate("/landingpage");
+        localStorage.setItem("isSignin", false);
+        if (partnerAccess) {
+          navigate("/partner");
+        } else {
+          navigate("/signin");
+        }
+      } else {
+        if (partnerAccess) {
+          navigate("/partner");
+        } else {
+          navigate("/signin");
+        }
+      }
+    }
+  }, []);
   const [navAccess, setnavAccess] = useState(
     partnerAccess ? Object.keys(partnerAccess) : ""
   );

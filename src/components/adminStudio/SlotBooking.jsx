@@ -26,6 +26,8 @@ import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import ChoiraLoder2 from "../loader/ChoiraLoder2";
 import ChoiraLoader from "../loader/ChoiraLoader";
 import dynamicNav from "../../utils/dynamicNav";
+import { partnerAccess } from "../../config/partnerAccess";
+import MyStudioApi from "../../services/MyStudioApi";
 
 function SlotBooking({ setSelectTab }) {
   const [showBtnLoader, setShowBtnLoader] = useState(false);
@@ -46,6 +48,23 @@ function SlotBooking({ setSelectTab }) {
     userId: "",
     tempUserName: "",
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    // console.log("Token from localStorage:", token);
+    if (token === null || token === undefined) {
+      const isSignin = localStorage.getItem("isSignin");
+      if (isSignin) {
+        // navigate("/landingpage");
+      } else {
+        if (partnerAccess) {
+          navigate("/partner");
+        } else {
+          navigate("/signin");
+        }
+      }
+    }
+  }, []);
   // let navigate = useNavigate();
   const data = useLocation();
   const [tabCount, setTabCount] = useState();
@@ -57,11 +76,19 @@ function SlotBooking({ setSelectTab }) {
   const [showLoader, setshowLoader] = useState(false);
 
   useEffect(() => {
-    timeSlotApi
-      .getonlyStudio()
+    let Api = "";
+    let endpoint = "";
+    if (partnerAccess) {
+      Api = MyStudioApi;
+      endpoint = "getStudios";
+    } else {
+      Api = timeSlotApi;
+      endpoint = "getonlyStudio";
+    }
+    Api[endpoint]()
       .then((res) => {
-        console.log(res.studios);
-        setAllStudio(res.studios);
+        // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@", res.studio);
+        setAllStudio(partnerAccess ? res.studio : res.studios);
       })
       .catch((err) => {
         console.log(err);
@@ -185,12 +212,17 @@ function SlotBooking({ setSelectTab }) {
       delete newData.phoneNumber;
       delete newData.fullName;
       delete newData.tempUserName;
+      delete newData.bookingTime;
+      delete newData.actualBasePrice;
+      delete newData.serviceType;
+      delete newData.tempUserName;
+    } else {
+      delete newData.bookingTime;
+      delete newData.actualBasePrice;
+      delete newData.serviceType;
+      delete newData.userId;
+      delete newData.tempUserName;
     }
-    delete newData.bookingTime;
-    delete newData.actualBasePrice;
-    delete newData.serviceType;
-    delete newData.userId;
-    delete newData.tempUserName;
 
     let ans = Object.keys(newData);
 
@@ -427,7 +459,7 @@ function SlotBooking({ setSelectTab }) {
                       <div className={style.addNewStudioinputBox}>
                         <label htmlFor="UserName">User Name</label>
                         <SearchSelectInput
-                          placeholder="Select users"
+                          placeholder="Search by number"
                           fetchOptions={fetchUserList}
                           onChange={handleUserChange}
                           defaultValue={timeSlotApiData?.tempUserName}

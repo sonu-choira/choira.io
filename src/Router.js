@@ -26,6 +26,7 @@ import StudioPartners from "./components/teamsSection/StudioPartners.jsx";
 import PartnerLogin from "../src/components/partner/PartnerLogin.jsx";
 import { partnerAccess } from "./config/partnerAccess.js";
 import dynamicNav from "./utils/dynamicNav.js";
+import PageNotFound from "./pages/pageNotFound/PageNotFound.jsx";
 
 // import Signup from "./pages/home/Signup.jsx";
 
@@ -113,6 +114,7 @@ const Routing = () => {
           <Route exact path={`/${dynamicNav}/Teams/AddStudioPatner`} element={<AddNewStudioPartners/>} />
           <Route exact path={`/${dynamicNav}/Teams/AddNewArm`} element={<AddNewArm/>} />
           <Route exact path='/partner' element={<PartnerLogin/>} />
+          <Route exact path='*' element={<PageNotFound/>} />
         
 
 

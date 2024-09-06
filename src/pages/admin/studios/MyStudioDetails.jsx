@@ -269,7 +269,7 @@ function MyStudioDetails({
                 <th>
                   <div className={style.headingContainer}>
                     Studio
-                    <div
+                    {/* <div
                       className={style.filterBox}
                       onClick={handelShortbyClick}
                       style={{
@@ -280,13 +280,13 @@ function MyStudioDetails({
                       }}
                     >
                       <RiExpandUpDownLine />
-                    </div>
+                    </div> */}
                   </div>
                 </th>
                 <th>
                   <div className={style.headingContainer}>
                     Price
-                    <div
+                    {/* <div
                       className={style.filterBox}
                       style={{
                         backgroundColor:
@@ -312,14 +312,14 @@ function MyStudioDetails({
                       ) : (
                         ""
                       )}
-                    </div>
+                    </div> */}
                   </div>
                 </th>
 
                 <th>
                   <div className={style.headingContainer}>
                     Location
-                    <div
+                    {/* <div
                       className={style.filterBox}
                       style={{
                         backgroundColor:
@@ -344,13 +344,13 @@ function MyStudioDetails({
                       ) : (
                         ""
                       )}
-                    </div>
+                    </div> */}
                   </div>
                 </th>
                 <th style={{ width: "8%" }}>
                   <div className={style.headingContainer}>
                     No. of Rooms
-                    <div
+                    {/* <div
                       className={style.filterBox}
                       style={{
                         backgroundColor:
@@ -375,14 +375,14 @@ function MyStudioDetails({
                       ) : (
                         ""
                       )}
-                    </div>
+                    </div> */}
                   </div>
                 </th>
                 <th style={{ width: "10%" }}>Created on</th>
                 <th>
                   <div className={style.headingContainer}>
                     Activity Status
-                    <div
+                    {/* <div
                       className={style.filterBox}
                       style={{
                         backgroundColor:
@@ -409,7 +409,7 @@ function MyStudioDetails({
                       ) : (
                         ""
                       )}
-                    </div>
+                    </div> */}
                   </div>
                 </th>
                 <th style={{ width: "10%" }}></th>

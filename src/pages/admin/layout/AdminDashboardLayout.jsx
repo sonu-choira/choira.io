@@ -41,13 +41,17 @@ function AdminDashboardLayout() {
     if (token === null || token === undefined) {
       const isSignin = localStorage.getItem("isSignin");
       if (isSignin) {
-        navigate("/landingpage");
+        // navigate("/landingpage");
       } else {
-        navigate("/signin");
+        if (partnerAccess) {
+          navigate("/partner");
+        } else {
+          navigate("/signin");
+        }
       }
     }
   }, []);
-  console.log(partnerAccess, "userAcess");
+
   const [navAccess, setnavAccess] = useState(
     partnerAccess ? Object.keys(partnerAccess) : ""
   );
