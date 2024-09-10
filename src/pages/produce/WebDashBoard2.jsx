@@ -27,25 +27,34 @@ import dynamicNav from "../../utils/dynamicNav";
 function WebDashboard2({ tabCount, setTabCount, navCount }) {
   const navigate = useNavigate();
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    // console.log("Token from localStorage:", token);
-    if (token === null || token === undefined) {
-      const isSignin = localStorage.getItem("isSignin");
-      if (isSignin) {
-        // navigate("/landingpage");
-        localStorage.setItem("isSignin", false);
-        if (partnerAccess) {
-          navigate("/partner");
+    try {
+      let token = localStorage.getItem("token");
+      token = token || null;
+      // console.log("Token from localStorage:", token);
+      if (token === null || token === undefined) {
+        const isSignin = localStorage.getItem("isSignin");
+        if (isSignin) {
+          // navigate("/landingpage");
+          localStorage.setItem("isSignin", false);
+          if (partnerAccess) {
+            localStorage.clear();
+            navigate("/partner");
+          } else {
+            localStorage.clear();
+            navigate("/signin");
+          }
         } else {
-          navigate("/signin");
-        }
-      } else {
-        if (partnerAccess) {
-          navigate("/partner");
-        } else {
-          navigate("/signin");
+          if (partnerAccess) {
+            localStorage.clear();
+            navigate("/partner");
+          } else {
+            localStorage.clear();
+            navigate("/signin");
+          }
         }
       }
+    } catch (e) {
+      console.log(e);
     }
   }, []);
   const [navAccess, setnavAccess] = useState(
@@ -122,12 +131,16 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
   };
   let data = "";
   let adminData = "";
-  if (navAccess) {
-    data = localStorage.getItem("studio-owner");
-    adminData = JSON.parse(data);
-  } else {
-    data = localStorage.getItem("adminData");
-    adminData = JSON.parse(data);
+  try {
+    if (navAccess) {
+      data = localStorage.getItem("studio-owner");
+      adminData = JSON.parse(data || "");
+    } else {
+      data = localStorage.getItem("adminData");
+      adminData = JSON.parse(data || "");
+    }
+  } catch (e) {
+    console.log(e);
   }
 
   const tabs = [

@@ -11,13 +11,16 @@ function ProfileEdit({ setEditProfile, editProfile }) {
   const [navAccess, setnavAccess] = useState(partnerAccess || "");
   let data = "";
   let adminData = "";
-  if (navAccess) {
-    data = localStorage.getItem("studio-owner");
-    adminData = JSON.parse(data);
-    console.log(adminData);
-  } else {
-    data = localStorage.getItem("adminData");
-    adminData = JSON.parse(data);
+  try {
+    if (navAccess) {
+      data = localStorage.getItem("studio-owner");
+      adminData = JSON.parse(data || "");
+    } else {
+      data = localStorage.getItem("adminData");
+      adminData = JSON.parse(data || "");
+    }
+  } catch (e) {
+    console.log(e);
   }
   // console.log("admin Data is****************>> ", adminData);
 

@@ -34,6 +34,7 @@ import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import Button from "../../pages/admin/layout/Button";
 import PartnerOtpVerify from "./PartnerOtpVerify";
 import partnerApi from "../../services/partnerApi";
+import PartnerSignup from "./PartnerSignup";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -306,37 +307,6 @@ function PartnerLogin() {
     });
   };
 
-  const showComingSoon = () => {
-    // function for other page to move in coming soon section.
-    setIsExplorerOpen(true);
-    // setIsComingOpen(true)
-  };
-
-  const proceedNext = () => {
-    if (isLogin) {
-      gotoDashboard();
-    } else {
-      setIsLoginOpen(true);
-    }
-  };
-
-  const spotifyLogin = () => {
-    let spotifyWindow = window.open(loginUrl, "_blank", "width=500,height=500");
-    saveIntervalSpotify = setInterval(function () {
-      try {
-        let letToken = getTokenByUrl(spotifyWindow.window.location);
-        console.log("letToken");
-        console.log(letToken);
-        storedata = letToken.access_token;
-        clearExtra();
-        spotifyWindow.close();
-        getSpotifyapi();
-      } catch (error) {
-        console.log(error);
-      }
-    }, 2000);
-  };
-
   const getSpotifyapi = () => {
     axios
       .get("https://api.spotify.com/v1/me", {
@@ -389,10 +359,6 @@ function PartnerLogin() {
     clearInterval(saveIntervalSpotify);
   };
 
-  const connectedUsBox = (event) => {
-    setIsWordData(event.target.value);
-  };
-
   const connectedUs = (event) => {
     event.preventDefault();
 
@@ -419,6 +385,7 @@ function PartnerLogin() {
 
   const checkLoginData = () => {
     setShowBtnLoader(true);
+
     // const role = mobileNumber === "9898989898" ? "admin" : "user";
     partnerApi
       .login(countryCode + mobileNumber, "NUMBER")
@@ -434,7 +401,7 @@ function PartnerLogin() {
           setShowBtnLoader(false);
 
           // TokenService.setUser(response.user.role);
-          TokenService.setData("token", response.token);
+          TokenService.setData("token", response.token || "");
           setSign(2);
           sucessAlret(response.message);
         } else {
@@ -443,17 +410,6 @@ function PartnerLogin() {
           console.log("Not get Token");
           errorAlert(response.message);
         }
-
-        // if (response.user.role === "admin") {
-        //   console.log(response.newUser);
-        //   setSign(2);
-        //   navigate("/adminDashboard/Apps&More/studio");
-        // } else if (response.newUser === true) {
-        //   console.log(response.newUser);
-        //   localStorage.removeItem("token");
-        //   setApiOtp(response.otp);
-        //   setSign(2);
-        // }
       })
       .catch((error) => {
         setShowBtnLoader(false);
@@ -469,8 +425,21 @@ function PartnerLogin() {
 
   const gotoBooking = () => {
     navigate("/partner-dashboard/Overview");
-    window.location.reload();
+    // window.location.reload();
   };
+  const [partnerDetails, setPartnerDetails] = useState({
+    firstName: "",
+    lastName: "",
+    phone: countryCode + mobileNumber,
+    email: "",
+    dateOfBirth: "",
+    type: "NUMBER",
+  });
+
+  useEffect(() => {
+    setPartnerDetails({ ...partnerDetails, phone: countryCode + mobileNumber });
+  }, [mobileNumber]);
+  console.log("mobile no issssss", mobileNumber);
 
   const handleContinueButtonClick = (e) => {
     // Check if the mobile number is not empty and has exactly 10 digits
@@ -514,7 +483,11 @@ function PartnerLogin() {
             "studio-owner",
             JSON.stringify(response.ownerData)
           );
-          gotoBooking();
+          if (!response.newOwner) {
+            gotoBooking();
+          } else {
+            setSign(3);
+          }
           // setCheckOtp(false);
         } else {
           setShowBtnLoader(false);
@@ -543,7 +516,31 @@ function PartnerLogin() {
   const gotoHome = () => {
     navigate("/home");
   };
-
+  const handlePartnerSignup = (e) => {
+    e.preventDefault();
+    TokenService.removeData("token");
+    partnerApi
+      .partnerSignup(partnerDetails)
+      .then((response) => {
+        console.log("res------", response);
+        if (response.newOwner) {
+          localStorage.setItem(
+            "studio-owner",
+            JSON.stringify(response.ownerData || {})
+          );
+          TokenService.setData("token", response.token);
+          sucessAlret(response.message);
+          gotoBooking();
+        } else {
+          errorAlert(response.message);
+          setSign(1);
+        }
+      })
+      .catch((error) => {
+        errorAlert(error.message);
+        console.log(error);
+      });
+  };
   return (
     <>
       <div className={signStyle.SignInnavbar}>
@@ -581,17 +578,17 @@ function PartnerLogin() {
                     <div>
                       <div>
                         <h5>
-                          {`${signin ? "No Account ?" : "Have an Account ?"}`}
+                          {`${sign < 3 ? "No Account ?" : "Have an Account ?"}`}
                           <br />{" "}
                           <h3 onClick={gotoSignup}>{`${
-                            signin ? "Signup" : "Signin"
+                            sign < 3 ? "Signup" : "Signin"
                           }`}</h3>
                         </h5>
                       </div>
                     </div>
                   </div>
                   <div className={signStyle.signupHeader2}>
-                    <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
+                    <h1>{`${sign < 3 ? "Sign in" : "Sign Up"}`} </h1>
                   </div>
                   <div className={signStyle.enterMob}>
                     {sign === 1 ? (
@@ -612,8 +609,13 @@ function PartnerLogin() {
                         enteredOTP={enteredOTP}
                         setEnteredOTP={setEnteredOTP}
                       />
+                    ) : sign === 3 ? (
+                      <PartnerSignup
+                        partnerDetails={partnerDetails}
+                        setPartnerDetails={setPartnerDetails}
+                      />
                     ) : (
-                      <SignUpDetails />
+                      ""
                     )}
 
                     <div className={signStyle.footer}>
@@ -680,10 +682,18 @@ function PartnerLogin() {
                               showBtnLoader={showBtnLoader}
                               loaderText={loaderText}
                             />
-                          ) : (
+                          ) : sign === 3 ? (
                             // <button type="submit" onClick={check_otp_btn}>
                             //   submit
                             // </button>
+                            <Button
+                              type="submit"
+                              onClick={(e) => handlePartnerSignup(e)}
+                              name={"Submit"}
+                              showBtnLoader={showBtnLoader}
+                              loaderText={loaderText}
+                            />
+                          ) : (
                             <Button
                               type="submit"
                               onClick={handleContinueButtonClick}
@@ -691,12 +701,6 @@ function PartnerLogin() {
                               showBtnLoader={showBtnLoader}
                               loaderText={loaderText}
                             />
-                            // <button
-                            //   type="submit"
-                            //   onClick={handleContinueButtonClick}
-                            // >
-                            //   continue
-                            // </button>
                           )}
                         </div>
                         <div>

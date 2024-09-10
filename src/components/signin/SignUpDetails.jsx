@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../../pages/home/signin.css";
 
 function SignUpDetails(props) {
   const [name, setName] = useState("");
@@ -33,6 +34,26 @@ function SignUpDetails(props) {
               placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+        </div>
+        <div className="input-title">
+          <div>
+            {wrongDetails ? (
+              <h5>Enter your Email Id</h5>
+            ) : (
+              <h5 style={{ color: "red" }}> Email Id is alredy present</h5>
+            )}
+          </div>
+          <div>
+            <input
+              className={`${wrongDetails ? "" : "wrong-details"}`}
+              type="email"
+              name="email"
+              placeholder="Email Id"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>

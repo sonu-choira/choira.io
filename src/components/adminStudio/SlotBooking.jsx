@@ -335,19 +335,41 @@ function SlotBooking({ setSelectTab }) {
     console.log("Selected user:", newValue);
   };
   async function fetchUserList(username) {
-    let dataToSend = {
-      searchUser: username,
-    };
-    try {
-      const response = await userApi.getAllUser(20, 1, dataToSend);
-      console.log("response.data.users", response.users);
-      return response.users.map((user) => ({
-        label: `${user.fullName} `,
-        value: user._id,
-      }));
-    } catch (error) {
-      console.error("Error fetching user list:", error);
-      return []; // return empty array in case of error
+    let dataToSend = {};
+    if (!partnerAccess) {
+      dataToSend = {
+        searchUser: username,
+      };
+      try {
+        const response = await userApi.getAllUser(20, 1, dataToSend);
+        console.log("response.data.users", response.users);
+        return response.users.map((user) => ({
+          label: `${user.fullName} ( ${user.email} )`,
+          value: user._id,
+        }));
+      } catch (error) {
+        console.error("Error fetching user list:", error);
+        return []; // return empty array in case of error
+      }
+    }
+    if (partnerAccess) {
+      if (username.length >= 10) {
+        dataToSend = {
+          searchUser: username,
+        };
+
+        try {
+          const response = await userApi.getAllUser(20, 1, dataToSend);
+          console.log("response.data.users", response.users);
+          return response.users.map((user) => ({
+            label: `${user.fullName} ( ${user.email} )`,
+            value: user._id,
+          }));
+        } catch (error) {
+          console.error("Error fetching user list:", error);
+          return []; // return empty array in case of error
+        }
+      }
     }
   }
 
@@ -459,7 +481,11 @@ function SlotBooking({ setSelectTab }) {
                       <div className={style.addNewStudioinputBox}>
                         <label htmlFor="UserName">User Name</label>
                         <SearchSelectInput
-                          placeholder="Search by number"
+                          placeholder={
+                            partnerAccess
+                              ? "Search by number"
+                              : "Search and select user "
+                          }
                           fetchOptions={fetchUserList}
                           onChange={handleUserChange}
                           defaultValue={timeSlotApiData?.tempUserName}

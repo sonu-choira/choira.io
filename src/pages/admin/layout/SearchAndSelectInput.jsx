@@ -1,25 +1,40 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Select, Spin } from "antd";
 import debounce from "lodash/debounce";
+import { partnerAccess } from "../../../config/partnerAccess";
 
 function DebounceSelect({
   fetchOptions,
-
   debounceTimeout = 800,
+
   ...props
 }) {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState([]);
+  const [noData, setNoData] = useState(false); // Track empty state
   const fetchRef = useRef(0);
 
   const debounceFetcher = useMemo(() => {
     const loadOptions = (value) => {
+      // Filter numeric input based on partnerAccess
+      const processedValue = partnerAccess
+        ? value.replace(/[^0-9]/g, "")
+        : value;
+
+      if (processedValue === "") {
+        setOptions([]);
+        setFetching(false);
+        setNoData(true); // No data found
+        return;
+      }
+
       fetchRef.current += 1;
       const fetchId = fetchRef.current;
       setOptions([]);
       setFetching(true);
+      setNoData(false); // Reset no data state
 
-      fetchOptions(value).then((newOptions) => {
+      fetchOptions(processedValue).then((newOptions) => {
         if (fetchId !== fetchRef.current) {
           // for fetch callback order
           return;
@@ -27,11 +42,22 @@ function DebounceSelect({
 
         setOptions(newOptions);
         setFetching(false);
+        if (newOptions?.length === 0) {
+          setNoData(true); // No data found
+        } else {
+          setNoData(false);
+        }
       });
     };
 
     return debounce(loadOptions, debounceTimeout);
-  }, [fetchOptions, debounceTimeout]);
+  }, [fetchOptions, debounceTimeout, partnerAccess]);
+
+  const handleInput = (e) => {
+    if (partnerAccess) {
+      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+    }
+  };
 
   return (
     <Select
@@ -39,9 +65,12 @@ function DebounceSelect({
       labelInValue
       filterOption={false}
       onSearch={debounceFetcher}
-      notFoundContent={fetching ? <Spin size="small" /> : null}
+      notFoundContent={
+        fetching ? <Spin size="small" /> : noData ? "User not found" : null
+      }
       {...props}
       options={options}
+      onInput={handleInput}
     />
   );
 }
@@ -52,6 +81,7 @@ function SearchSelectInput({
   mode,
   defaultValue,
   name,
+  partnerAccess, // Add partnerAccess prop
   ...props
 }) {
   const [value, setValue] = useState(defaultValue || []);
@@ -69,6 +99,7 @@ function SearchSelectInput({
         setValue(newValue);
         onChange && onChange(newValue);
       }}
+      partnerAccess={partnerAccess} // Pass partnerAccess prop
       {...props}
       fetchOptions={fetchOptions}
     />

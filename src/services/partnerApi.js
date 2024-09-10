@@ -59,6 +59,15 @@ class partnerApi {
         return response;
     };
     
+    partnerSignup = async (partnerDetails) => {
+        const response = await api
+            .post("/owners/register", {...partnerDetails
+            });
+        // console.log("response",response)
+        if (response.data) {
+            return response.data;
+        }
+    };
 
 }
 
