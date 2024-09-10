@@ -597,10 +597,11 @@ function Signin() {
                       <div>
                         <h5>
                           {`${signin ? "No Account ?" : "Have an Account ?"}`}
-                          <br />{" "}
-                          <h3 onClick={gotoSignup}>{`${
-                            signin ? "Signup" : "Signin"
-                          }`}</h3>
+                          <br />
+                          <div
+                            style={{ fontSize: "0.8vmax" }}
+                            onClick={gotoSignup}
+                          >{`${signin ? "Signup" : "Signin"}`}</div>
                         </h5>
                       </div>
                     </div>

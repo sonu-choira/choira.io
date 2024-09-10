@@ -425,7 +425,7 @@ function PartnerLogin() {
 
   const gotoBooking = () => {
     navigate("/partner-dashboard/Overview");
-    // window.location.reload();
+    window.location.reload();
   };
   const [partnerDetails, setPartnerDetails] = useState({
     firstName: "",
@@ -523,7 +523,7 @@ function PartnerLogin() {
       .partnerSignup(partnerDetails)
       .then((response) => {
         console.log("res------", response);
-        if (response.newOwner) {
+        if (response.status) {
           localStorage.setItem(
             "studio-owner",
             JSON.stringify(response.ownerData || {})
@@ -577,12 +577,19 @@ function PartnerLogin() {
                     </div>
                     <div>
                       <div>
-                        <h5>
+                        <h5 style={{ visibility: sign <= 2 ? "hidden" : "" }}>
                           {`${sign < 3 ? "No Account ?" : "Have an Account ?"}`}
-                          <br />{" "}
-                          <h3 onClick={gotoSignup}>{`${
-                            sign < 3 ? "Signup" : "Signin"
-                          }`}</h3>
+                          <br />
+                          <br />
+                          <div
+                            // style={{ fontSize: "0.8vmax" }}
+                            onClick={gotoSignup}
+                            style={{
+                              visibility: sign <= 2 ? "hidden" : "",
+                              fontSize: "0.8vmax",
+                              cursor: "pointer",
+                            }}
+                          >{`${sign < 3 ? "Signup" : "Signin"}`}</div>
                         </h5>
                       </div>
                     </div>

@@ -64,7 +64,7 @@ const PartnerTransChart = ({ products }) => {
   return (
     <div className={style.transactionChart}>
       <ChartNav
-        chartTitle={"Transaction "}
+        chartTitle={"Bookings "}
         setFilterData={setFilterData}
         showBtnLoader={showBtnLoader}
       />
