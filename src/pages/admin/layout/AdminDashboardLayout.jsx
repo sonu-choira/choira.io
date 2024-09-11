@@ -37,17 +37,14 @@ function AdminDashboardLayout() {
   const [tabCount, setTabCount] = useState(0);
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     // console.log("Token from localStorage:", token);
-    if (token === null || token === undefined) {
-      const isSignin = localStorage.getItem("isSignin");
-      if (isSignin) {
-        // navigate("/landingpage");
+    if (token == "undefined" || token == "null") {
+      localStorage.clear();
+      if (partnerAccess) {
+        navigate("/partner");
       } else {
-        if (partnerAccess) {
-          navigate("/partner");
-        } else {
-          navigate("/signin");
-        }
+        navigate("/signin");
       }
     }
   }, []);
@@ -64,7 +61,6 @@ function AdminDashboardLayout() {
 
   return (
     <>
-      {" "}
       <AccessContext.Provider value={partnerAccess}>
         <div className={style.wrapper}>
           <WebDashboard2 tabCount={tabCount} setTabCount={setTabCount} />

@@ -49,28 +49,43 @@ function Overview() {
       image: t4,
     },
   ]);
-
   const partnerData = [
     {
       title: "Booking",
-      count: products?.bookingCount?.data[0]?.totalCount,
-      active: products?.bookingCount?.data[0]?.activeCount,
+      count:
+        products?.bookingCount?.data?.length > 0
+          ? products?.bookingCount?.data[0]?.totalCount
+          : 0,
+      active:
+        products?.bookingCount?.data?.length > 0
+          ? products?.bookingCount?.data[0]?.activeCount
+          : 0,
       image: t2,
     },
     {
+      title: "Active Booking",
+      count: 159,
+      active: 38,
+      image: t4,
+    },
+    {
       title: "Transaction",
-      count: products?.transactionCount?.data[0]?.totalAmount,
+      count:
+        products?.transactionCount?.data?.length > 0
+          ? products.transactionCount.data[0].totalAmount
+          : 0,
       active: 1589,
       image: t3,
     },
-    // {
-    //   title: "Project",
-    //   count: 159,
-    //   active: 38,
-    //   image: t4,
-    // },
+    {
+      title: "Active Transaction",
+      count: 159,
+      active: 38,
+      image: t4,
+    },
   ];
-
+  console.log("Booking Data:", products?.bookingCount);
+  console.log("Transaction Data:", products?.transactionCount);
   useEffect(() => {
     if (pathname.includes("Overview")) {
       Swal.fire({
@@ -153,9 +168,11 @@ function Overview() {
                   <NumberCounter end={item.count} />
                 </h2>
                 <>
-                  <small>
-                    Active : <NumberCounter end={item.active} />
-                  </small>
+                  {!partnerAccess && (
+                    <small>
+                      Active : <NumberCounter end={item.active} />
+                    </small>
+                  )}
                 </>
               </div>
               <div>
