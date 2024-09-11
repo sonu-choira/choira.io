@@ -33,6 +33,8 @@ const AdminHome = lazy(() => import("./pages/admin/adminHome"));
 const ArmHome = lazy(() => import("./pages/arm/armHome"));
 const TermsandCondition = lazy(() => import("./pages/home/TermsandCondition"));
 const Privacypolicy = lazy(() => import("./pages/home/Privacypolicy"));
+const PartnerPrivacypolicy = lazy(() => import("./pages/partner/privacy_policy"));
+const PartnerTerms = lazy(() => import("./pages/partner/terms.jsx"));
 const Disclaimer = lazy(() => import("./pages/home/Disclaimer"));
 const Contactus = lazy(() => import("./pages/home/Contactus"));
 const About = lazy(() => import("./pages/home/about"));
@@ -84,7 +86,9 @@ const Routing = () => {
           <Route exact path='/adminHome' element={<AdminHome/>}/> 
           <Route exact path='/armHome' element={<ArmHome/>}/> 
           <Route exact path='/TermsandCondition' element={<TermsandCondition/>}/>
-          <Route exact path='/privacyPolicy' element={<Privacypolicy/>}/> 
+          <Route exact path='/privacyPolicy' element={<Privacypolicy/>}/>
+          <Route exact path='/partner_privacy_policy' element={<PartnerPrivacypolicy/>}/>
+          <Route exact path='/partner_terms' element={<PartnerTerms/>}/>
           <Route exact path='/Disclaimer' element={<Disclaimer/>}/> 
           <Route exact path='/contactUs' element={<Contactus/>}/> 
           <Route exact path='/about' element={<About/>}/> 
