@@ -1,452 +1,577 @@
-// import React, { useState, useRef, useEffect } from "react";
-// import { PlusOutlined } from "@ant-design/icons";
-// import { Divider, Input, Select, Space, Button } from "antd";
-// import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
-// import { IoMdAddCircle } from "react-icons/io";
-// import upload from "../../../assets/img/upload.png";
-// import style from "../../../pages/admin/studios/studio.module.css";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import style from "../../../pages/admin/studios/studio.module.css";
 
-// import {
-//   FaCheckDouble,
-//   FaFilter,
-//   FaRegBell,
-//   FaRegClock,
-//   FaShare,
-// } from "react-icons/fa6";
-// import StudioFooter from "../StudioFooter";
-// import cross from "../../../assets/cross.svg";
-// import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
-// import { MdCancel } from "react-icons/md";
+import { GrShare } from "react-icons/gr";
+import { MdEdit } from "react-icons/md";
+import { RiDeleteBin5Fill } from "react-icons/ri";
 
-// function AddNewServices2({
-//   setShowServices,
-//   service,
-//   setService,
-//   indexofServices,
-//   isEditMode,
-//   showMode,
-// }) {
-//   const [items, setItems] = useState([
-//     "Wifi",
-//     "AC",
-//     "DJ",
-//     "Piano",
-//     "Drum",
-//     "Banjo",
-//     "Car Parking",
-//   ]);
+// import Button from "../../../pages/admin/layout/Button";
+import Switch from "../../../pages/admin/layout/Switch";
+import Pagination from "../../../pages/admin/studios/Pagination";
+import { LuFilePlus } from "react-icons/lu";
+import imageNotFound from "../../../assets/imagesNotFound.png";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+import ChoiraLoader from "../../loader/ChoiraLoader";
+import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+import { IoCalendarOutline } from "react-icons/io5";
+import { BiSearchAlt } from "react-icons/bi";
+import { RiExpandUpDownLine } from "react-icons/ri";
+import { CiFilter } from "react-icons/ci";
+import { DatePicker, Space } from "antd";
+import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter";
+import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
+import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import appAndmoreApi from "../../../services/appAndmoreApi";
+import LoaderUpdating from "../../../pages/admin/layout/LoaderUpdating";
+import { errorAlert } from "../../../pages/admin/layout/Alert";
+import { GoEye } from "react-icons/go";
+import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 
-//   const inputRef = useRef(null);
+import { AccessContext } from "../../../utils/context";
 
-//   const currentServiceData = service[indexofServices] || {};
-//   useEffect(() => {
-//     console.log("currentServiceData-------->", currentServiceData);
-//   }, [currentServiceData]);
+import moment from "moment";
 
-//   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
-//   const [selectedItems, setSelectedItems] = useState([]);
+let PageSize = 10;
 
-//   // useEffect(() => {
-//   //   if (isEditMode) {
-//   //     setSelectedItems(
-//   //       currentServiceData?.amenites?.map((item) => item?.name) || []
-//   //     );
-//   //   }
-//   // }, [isEditMode]);
+function AllStudioDetail2({
+  products,
+  setProducts,
+  setPageCount,
+  pageCount,
+  totalPage,
+  bookingPageCount,
+  setTotalPage,
+  filterNav,
+  setfilterNav,
+  sendFilterDataToapi,
+}) {
+  let loading_timeout = null;
+  const navigate = useNavigate();
+  const gotoEdit = (id) => {
+    const isEditMode = true;
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
 
-//   useEffect(() => {
-//     if (isEditMode) {
-//       const tempaminities = currentServiceData?.amenites;
-//       console.log("tempaminities:", tempaminities);
-//       if (tempaminities && tempaminities.length > 0) {
-//         const slectedtempaminities = tempaminities.map(
-//           (item) => item?.name || item
-//         );
-//         console.log("selectedDateNames:", slectedtempaminities);
-//         setSelectedItems(slectedtempaminities);
-//       } else {
-//         setSelectedItems([]);
-//       }
-//     }
-//   }, [isEditMode]);
+    navigate(`/studio/edit?id=${id}`, {
+      state: {
+        productData: selectedProduct,
+        navCount: 3,
+        isEditMode: isEditMode,
+      },
+    });
+  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const gotoShowStudioDetails = (id) => {
+    const isEditMode = true;
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
+    // alert(selectedProduct);
+    navigate(`/studio/edit?id=${id}`, {
+      state: {
+        productData: selectedProduct,
+        navCount: 4,
+        isEditMode: isEditMode,
+        showMode: true,
+      },
+    });
+  };
 
-//   const filteredOptions = OPTIONS.filter((o) => !selectedItems.includes(o));
-//   const [images, setImages] = useState(
-//     currentServiceData ? currentServiceData.photo_url : []
-//   );
-//   const onNameChange = (event) => {
-//     setService((prevService) => {
-//       const updatedService = [...prevService]; // Copy the existing service array
-//       updatedService[indexofServices] = {
-//         ...updatedService[indexofServices], // Copy the existing object
-//         name: event.target.value, // Update the 'name' property
-//       };
-//       return updatedService; // Return the updated array
-//     });
-//   };
+  // const [activityStatus, setActivityStatus] = useState({});
+  const [showloader, setShowloader] = useState(false);
+  const [pid, setPid] = useState(0);
 
-//   // useEffect(() => {
-//   //   if()
+  const handleSwitchChange = (studioId) => {
+    setShowloader(true);
+    appAndmoreApi
+      .updateStudioStatus(studioId)
+      .then((response) => {
+        console.log("response=======>", response.studio);
+        setProducts((prevState) => {
+          return prevState.map((product) => {
+            if (product._id === studioId) {
+              return {
+                ...product,
+                isActive: response.studio.isActive,
+              };
+            }
+            return product;
+          });
+        });
 
-//   // }, [images])
+        loading_timeout = setTimeout(() => {
+          setShowloader(false);
+        }, 700);
+      })
+      .catch((error) => {
+        console.log("error=======>", error);
+        errorAlert(error.message || "Something went wrong");
+        setShowloader(false);
+      });
+  };
 
-//   useEffect(() => {
-//     setService((prerooms) => {
-//       prerooms.map((rm, idex) => {
-//         if (idex === indexofServices) {
-//           rm.photo_url = images;
-//         }
-//       });
-//       return prerooms;
-//     });
-//   }, [images]);
-//   useEffect(() => {
-//     setService((prerooms) => {
-//       prerooms.map((rm, idex) => {
-//         if (idex === indexofServices) {
-//           rm.amenites = selectedItems;
-//         }
-//       });
-//       return prerooms;
-//     });
-//   }, [selectedItems.length]);
+  const [showpricefilter, setshowpricefilter] = useState(false);
+  const handelpriceFilter = () => {
+    setshowpricefilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowloactionfilter(false);
+        setShowRoomFilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
+  const closeAllFilter = () => {
+    setshowloactionfilter(false);
+    setShowRoomFilter(false);
+    setShowstatusFilter(false);
+    setshowpricefilter(false);
+  };
 
-//   const handleImageChange = (event) => {
-//     const selectedImages = Array.from(event.target.files);
-//     const newImages = [
-//       ...currentServiceData.photo_url,
-//       ...selectedImages.slice(0, 5 - currentServiceData.photo_url.length),
-//     ];
+  const [showloactionfilter, setshowloactionfilter] = useState(false);
+  const handellocationFilter = () => {
+    setshowloactionfilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setShowRoomFilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
 
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...currentServiceData,
-//         photo_url: newImages,
-//       };
-//       return updatedService;
-//     });
-//   };
+  const [showRoomFilter, setShowRoomFilter] = useState(false);
+  const handelRoomFilter = () => {
+    setShowRoomFilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setshowloactionfilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
 
-//   const handleRemoveImage = (index) => {
-//     const newImages = [...currentServiceData.photo_url];
-//     newImages.splice(index, 1);
+  const [showstatusFilter, setShowstatusFilter] = useState(false);
+  const handelStatusFilter = () => {
+    setShowstatusFilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setshowloactionfilter(false);
+        setShowRoomFilter(false);
+      }
+      return !prevState;
+    });
+  };
 
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...currentServiceData,
-//         photo_url: newImages,
-//       };
-//       return updatedService;
-//     });
-//   };
+  const city = ["Mumbai", "Delhi", "Bangalore", "Chennai"];
+  const room = ["1", "2", "3", "4", "5"];
+  const status = ["active", "inactive"];
 
-//   const handlePriceChange = (event) => {
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...updatedService[indexofServices],
-//         price: event.target.value,
-//       };
-//       return updatedService;
-//     });
-//   };
+  const [selectedCity, setSelectedCity] = useState([]);
+  const [shortby, setShortby] = useState("creationTimeStamp:desc");
+  const [selectedRoom, setSelectedRoom] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState([]);
+  // var selectedDate = "";
+  const [priceFilter, setPriceFilter] = useState({
+    minPrice: "",
+    maxPrice: "",
+  });
 
-//   const handleAboutChange = (event) => {
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...updatedService[indexofServices],
-//         about: event.target.value,
-//       };
-//       return updatedService;
-//     });
-//   };
+  const handelShortbyClick = () => {
+    if (shortby == "creationTimeStamp:asc") {
+      setShortby("creationTimeStamp:desc");
+    } else {
+      setShortby("creationTimeStamp:asc");
+    }
+  };
 
-//   const handleAmenitiesChange = (selectedAmenities) => {
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...updatedService[indexofServices],
-//         amenities: selectedAmenities,
-//       };
-//       return updatedService;
-//     });
-//   };
+  useEffect(() => {
+    sendFilterDataToapi.city = selectedCity[0];
+    sendFilterDataToapi.totalRooms = selectedRoom[0];
+    sendFilterDataToapi.active =
+      selectedStatus[0] === "active"
+        ? 1
+        : selectedStatus[0] === "inactive"
+        ? "0"
+        : "";
+    sendFilterDataToapi.minPricePerHour = priceFilter.minPrice;
+    sendFilterDataToapi.maxPricePerHour = priceFilter.maxPrice;
+    // sendFilterDataToapi.creationTimeStamp = selectedDate;
+    sendFilterDataToapi.sortBy = shortby;
 
-//   const [countryWithPrice, setCountryWithPrice] = useState([
-//     { "India(₹)": 100 },
-//     { "USA($)": 200 },
-//     { "Japan(¥)": 300 },
-//   ]);
+    console.log(sendFilterDataToapi);
+  }, [
+    selectedCity,
+    selectedRoom,
+    selectedStatus,
+    priceFilter,
+    // selectedDate,
+    shortby,
+  ]);
 
-//   const [apiData, setApiData] = useState([
-//     { IN: { prize: 100 } },
-//     { USA: { prize: 200 } },
-//   ]);
-//   const [countryPrice, setCountryPrice] = useState([]);
-//   useEffect(() => {
-//     console.log("apiData-----------------------------------");
+  useEffect(() => {
+    setProducts([]);
+    appAndmoreApi
+      .filterData(sendFilterDataToapi)
+      .then((response) => {
+        console.log("filter applied:", response);
+        setProducts(response.studios);
+        setTotalPage(response.paginate.totalPages);
+      })
+      .catch((error) => {
+        console.error("Error filter studio:", error);
+      });
 
-//     console.log(apiData);
-//   }, [apiData]);
+    return () => {
+      setProducts([]);
+    };
+  }, [shortby]);
 
-//   useEffect(() => {
-//     let scon = [];
-//     let sp = [];
-//     apiData.map((item) => {
-//       scon.push(Object.keys(item)[0]);
-//       sp.push(item[Object.keys(item)[0]]?.prize);
-//     });
-//     console.log(scon);
-//     setSelectedCountry(scon);
-//     setCountryPrice(sp);
-//   }, [apiData]);
-//   const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState(
-//     Array.from({ length: apiData.length }, () => [])
-//   );
-//   // const [filteredCountryData, setFilteredCountryData] = useState([
-//   //   { "India(₹)": "" },
-//   //   { "USA($)": "" },
-//   //   { "Japan(¥)": "" },
-//   // ]);
+  useEffect(() => {
+    return () => {
+      clearTimeout(loading_timeout);
+    };
+  }, []);
+  const tableAccess = useContext(AccessContext);
+  return (
+    <>
+      <div className={style.studioTabelDiv}>
+        <DateAndSearchFilter
+          setProducts={setProducts}
+          setTotalPage={setTotalPage}
+          bookingPageCount={bookingPageCount}
+          filterNav={filterNav}
+          setfilterNav={setfilterNav}
+          sendFilterDataToapi={sendFilterDataToapi}
+          setSelectedCity={setSelectedCity}
+          setSelectedRoom={setSelectedRoom}
+          setSelectedStatus={setSelectedStatus}
+          setPriceFilter={setPriceFilter}
+          setShortby={setShortby}
+        />
+        <div>
+          <table>
+            <thead className={style.studiotabelHead}>
+              <tr>
+                <th>
+                  <div className={style.headingContainer}>
+                    Studio
+                    <div
+                      className={style.filterBox}
+                      onClick={handelShortbyClick}
+                      style={{
+                        backgroundColor:
+                          shortby !== "creationTimeStamp:desc"
+                            ? "#ffc70133"
+                            : "",
+                      }}
+                    >
+                      <RiExpandUpDownLine />
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div className={style.headingContainer}>
+                    Price
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          priceFilter.minPrice || priceFilter.maxPrice !== ""
+                            ? "#ffc70133"
+                            : "",
+                      }}
+                    >
+                      <span onClick={handelpriceFilter}>
+                        <CiFilter />
+                      </span>
+                      {showpricefilter ? (
+                        <PriceFilter
+                          closeAllFilter={closeAllFilter}
+                          priceFilter={priceFilter}
+                          setPriceFilter={setPriceFilter}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          setfilterNav={setfilterNav}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                </th>
 
-//   const [filteredCountryData, setFilteredCountryData] = useState([
-//     "IN",
-//     "USA",
-//     "JP",
-//   ]);
+                <th>
+                  <div className={style.headingContainer}>
+                    Location
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedCity.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
+                      <span onClick={handellocationFilter}>
+                        <CiFilter />
+                      </span>
+                      {showloactionfilter ? (
+                        <CheckboxFilter
+                          data={city}
+                          setSelectedData={setSelectedCity}
+                          selectedData={selectedCity}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          closeAllFilter={closeAllFilter}
+                          setfilterNav={setfilterNav}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                </th>
+                <th style={{ width: "8%" }}>
+                  <div className={style.headingContainer}>
+                    No. of Rooms
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedRoom.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
+                      <span onClick={handelRoomFilter}>
+                        <CiFilter />
+                      </span>
+                      {showRoomFilter ? (
+                        <CheckboxFilter
+                          data={room}
+                          selectedData={selectedRoom}
+                          setSelectedData={setSelectedRoom}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          setfilterNav={setfilterNav}
+                          closeAllFilter={closeAllFilter}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                </th>
+                <th style={{ width: "10%" }}>Created on</th>
+                <th>
+                  <div className={style.headingContainer}>
+                    Activity Status
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedStatus.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
+                      <span onClick={handelStatusFilter}>
+                        <CiFilter />
+                      </span>
+                      {showstatusFilter ? (
+                        <CheckboxFilter
+                          data={status}
+                          // cusstyle={{ left: "-355%" }}
+                          disabledsearch={true}
+                          selectedData={selectedStatus}
+                          setSelectedData={setSelectedStatus}
+                          sendFilterDataToapi={sendFilterDataToapi}
+                          setProducts={setProducts}
+                          setTotalPage={setTotalPage}
+                          bookingPageCount={bookingPageCount}
+                          setfilterNav={setfilterNav}
+                          closeAllFilter={closeAllFilter}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                </th>
+                <th style={{ width: "10%" }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {products?.length === 0 ? (
+                <tr>
+                  <td>
+                    <ChoiraLoder2 />
+                  </td>
+                </tr>
+              ) : (
+                products?.map((products) => {
+                  return (
+                    <tr key={products._id}>
+                      <td
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "100%",
+                        }}
+                        title={products.fullName}
+                      >
+                        <div className={style.studioImage}>
+                          {products.studioPhotos ? (
+                            <img
+                              src={products.studioPhotos[0]}
+                              alt=""
+                              onError={(e) => {
+                                e.target.src = imageNotFound;
+                              }}
+                            />
+                          ) : (
+                            <img src={imageNotFound} alt="" />
+                          )}
+                        </div>
+                        &nbsp;&nbsp;
+                        <CopyToClipboard textToCopy={products.fullName} />
+                      </td>
+                      <td style={{ padding: "0px 8rem 0px 0px" }}>
+                        ₹{products?.roomsDetails?.[0]?.pricePerHour || "N/A"}
+                        <br />
+                        <small>per hour</small>
+                      </td>
+                      <td title={products.address}>
+                        <CopyToClipboard
+                          textToCopy={products.address}
+                          textLength={30}
+                        />
+                        <br />
+                        <small title={products.state}>
+                          <CopyToClipboard textToCopy={products.state} />
+                        </small>
+                      </td>
+                      <td>{products.totalRooms}</td>
+                      <td>
+                        {moment(products.creationTimeStamp).format(
+                          "Do MMM  YY, hh:mm a"
+                        )}
+                      </td>
+                      <td>
+                        <div>
+                          {tableAccess ? (
+                            tableAccess["app&more"].action === "read" ? (
+                              <Switch
+                                // isloading={pid === products._id && showloader}
+                                status={products.isActive}
+                                // onClick={() => {
+                                //   setPid(products._id);
+                                //   handleSwitchChange(products._id);
+                                // }}
+                                switchDisabled={
+                                  tableAccess["app&more"].action === "read"
+                                }
+                              />
+                            ) : (
+                              <Switch
+                                isloading={pid === products._id && showloader}
+                                status={products.isActive}
+                                onClick={() => {
+                                  setPid(products._id);
+                                  handleSwitchChange(products._id);
+                                }}
+                              />
+                            )
+                          ) : (
+                            <Switch
+                              isloading={pid === products._id && showloader}
+                              status={products.isActive}
+                              onClick={() => {
+                                setPid(products._id);
+                                handleSwitchChange(products._id);
+                              }}
+                            />
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        {tableAccess ? (
+                          tableAccess["MyStudio"].action === "write" ? (
+                            <div className={style.tableActionbtn}>
+                              <GoEye
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  gotoShowStudioDetails(products._id);
+                                }}
+                              />
+                              <MdEdit
+                                style={{
+                                  color: "#ffc701",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                  gotoEdit(products._id);
+                                }}
+                              />
+                              <RiDeleteBin5Fill
+                                style={{ color: "red", cursor: "pointer" }}
+                              />
+                            </div>
+                          ) : (
+                            <div>
+                              <GoEye
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  gotoShowStudioDetails(products._id);
+                                }}
+                              />
+                            </div>
+                          )
+                        ) : (
+                          <div className={style.tableActionbtn}>
+                            <GoEye
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                gotoShowStudioDetails(products._id);
+                              }}
+                            />
+                            <MdEdit
+                              style={{ color: "#ffc701", cursor: "pointer" }}
+                              onClick={() => {
+                                gotoEdit(products._id);
+                              }}
+                            />
+                            <RiDeleteBin5Fill
+                              style={{ color: "red", cursor: "pointer" }}
+                            />
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className={style.tabelpaginationDiv}>
+        <PaginationNav
+          pageCount={pageCount}
+          totalPage={totalPage}
+          setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
+        />
+      </div>
+    </>
+  );
+}
 
-//   const [countryWithPrice2, setCountryWithPrice2] = useState([
-//     { "India(₹)": "" },
-//     { "USA($)": "" },
-//     { "Japan(¥)": "" },
-//   ]);
-
-//   const handelMultipleCountryPriceDiv = () => {
-//     setAddMultiplePriceDiv((prev) => {
-//       return [...prev, []];
-//     });
-//   };
-//   useEffect(() => {
-//     console.log(addMultiplePriceDiv);
-//   }, [addMultiplePriceDiv]);
-
-//   // Function to handle country selection
-//   const [selectedCountry, setSelectedCountry] = useState([]);
-//   useEffect(() => {
-//     console.log(selectedCountry);
-//   }, [selectedCountry]);
-
-//   const handleCountrySelect = (fnselectedCountry, index) => {
-//     console.log("------------");
-//     setSelectedCountry((prev) => {
-//       prev[index] = fnselectedCountry;
-//       return [...prev];
-//     });
-//   };
-
-//   const handleCancelcountry = (index) => {
-//     if (addMultiplePriceDiv.length > 1) {
-//       const newdata = [...addMultiplePriceDiv];
-//       newdata.splice(index, 1);
-//       setAddMultiplePriceDiv(newdata);
-//       let newCountyData = [...selectedCountry];
-//       newCountyData.splice(index, 1);
-//       setSelectedCountry(newCountyData);
-
-//       let newPrice = [...countryPrice];
-//       newPrice.splice(index, 1);
-//       setCountryPrice(newPrice);
-//     }
-//   };
-//   const handelCountryPrice = (value, index) => {
-//     setCountryPrice((prev) => {
-//       prev[index] = value;
-//       return [...prev];
-//     });
-//   };
-//   useEffect(() => {
-//     console.log("countryPrice", countryPrice);
-//   }, [countryPrice]);
-//   let countryWithPriceobj = {};
-//   useEffect(() => {
-//     selectedCountry.map((name, index) => {
-//       return (countryWithPriceobj[name] = countryPrice[index]);
-//     });
-//   }, [countryPrice, selectedCountry]);
-
-//   useEffect(() => {
-//     console.log("countryWithPriceobj", countryWithPriceobj);
-//   }, [countryWithPriceobj]);
-
-//   useEffect(() => {
-//     if (countryWithPriceobj && Object.keys(countryWithPriceobj).length > 0) {
-//       setService((prevService) => {
-//         return prevService.map((item, index) => {
-//           if (index === indexofServices) {
-//             return {
-//               ...item,
-//               pricing: {
-//                 ...(item.pricing || {}), // Ensure pricing object is defined
-//                 USA: {
-//                   ...(item.pricing?.USA || {}), // Ensure USA object is defined
-//                   basePrice: countryWithPriceobj["USA($)"] || 0,
-//                 },
-//                 IN: {
-//                   ...(item.pricing?.IN || {}), // Ensure IN object is defined
-//                   basePrice: countryWithPriceobj["India(₹)"] || 0,
-//                 },
-//                 JP: {
-//                   ...(item.pricing?.JP || {}), // Ensure JP object is defined
-//                   basePrice: countryWithPriceobj["Japan(¥)"] || 0,
-//                 },
-//               },
-//             };
-//           } else {
-//             return item;
-//           }
-//         });
-//       });
-//     }
-//   }, [countryPrice, selectedCountry]);
-
-//   return (
-//     <>
-//       <div className={style.addNewStudioTitle}>Add New Services</div>
-//       <div className={style.addNewStudioPage}>
-//         <div style={{ height: "90%" }}>
-//           <div
-//             style={{
-//               position: showMode ? "relative" : "",
-//               overflow: "hidden",
-//             }}
-//           >
-//             {showMode ? <p className={style.showmode}></p> : ""}
-//             <div className={style.addNewStudioinputBox}>
-//               <label htmlFor="serviceName">Service Name</label>
-//               <input
-//                 type="text"
-//                 id="serviceName"
-//                 placeholder="Enter Service Name"
-//                 value={currentServiceData.name}
-//                 onChange={onNameChange}
-//               />
-//             </div>
-
-//             {addMultiplePriceDiv.map((el, index) => (
-//               <div className={style.addPriceAndCountryInput}>
-//                 <div>
-//                   <select
-//                     name="price"
-//                     id=""
-//                     onChange={(e) => handleCountrySelect(e.target.value, index)}
-//                     value={selectedCountry[index]}
-//                     style={{
-//                       color: selectedCountry[index] ? "black" : "#757575",
-//                     }}
-//                   >
-//                     {selectedCountry[index] ? (
-//                       <option value={selectedCountry[index]}>
-//                         {selectedCountry[index]}
-//                       </option>
-//                     ) : (
-//                       <option value="" default>
-//                         select County
-//                       </option>
-//                     )}
-
-//                     {filteredCountryData.map((country, index) => {
-//                       if (!selectedCountry.includes(country)) {
-//                         return (
-//                           <option key={index} value={country}>
-//                             {country}
-//                           </option>
-//                         );
-//                       }
-//                     })}
-//                   </select>
-//                 </div>
-//                 {countryPrice.map((price, index) => {})}
-
-//                 <div>
-//                   <input
-//                     type="text"
-//                     placeholder="Enter Price"
-//                     onChange={(event) => {
-//                       handelCountryPrice(event.target.value, index);
-//                     }}
-//                     value={countryPrice[index]}
-//                   />
-//                 </div>
-//                 {addMultiplePriceDiv.length > 1 && (
-//                   <span
-//                     style={{ cursor: "pointer", top: "-15%", right: "-1.5%" }}
-//                     className={style.cancelTeamDetailUpload}
-//                     onClick={() => handleCancelcountry(index)}
-//                   >
-//                     <MdCancel
-//                       style={{ fontSize: "1.2vmax", color: "#7575759a" }}
-//                     />
-//                   </span>
-//                 )}
-//               </div>
-//             ))}
-
-//             {addMultiplePriceDiv.length <= 2 && (
-//               <span
-//                 className={style.addTeamDetailbtn}
-//                 onClick={handelMultipleCountryPriceDiv}
-//               >
-//                 <MdOutlineAddBox /> &nbsp;<div>Add new country</div>
-//               </span>
-//             )}
-
-//             <div className={style.addNewStudioinputBox2}>
-//               <label htmlFor="serviceDetails">Service Details</label>
-//               <textarea
-//                 type="text"
-//                 id="serviceDetails"
-//                 placeholder="Enter Service Details"
-//                 value={currentServiceData.about}
-//                 onChange={handleAboutChange}
-//               />
-//             </div>
-//           </div>
-
-//           <div>
-//             <DragAndDropImageDiv
-//               images={images}
-//               setImages={setImages}
-//               isEditMode={isEditMode}
-//             />
-//             <div className={style.addNewStudioinputBox}>
-//               <label htmlFor="Amenities">Amenities</label>
-
-//               <Select
-//                 id="Amenities"
-//                 mode="multiple"
-//                 placeholder="Select one or more Amenities"
-//                 value={selectedItems}
-//                 onChange={setSelectedItems}
-//                 // style={customStyles}
-//                 options={filteredOptions.map((item) => ({
-//                   value: item,
-//                   label: item,
-//                 }))}
-//               />
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//       <StudioFooter
-//         backOnclick={() => {
-//           setShowServices(false);
-//         }}
-//       />
-//     </>
-//   );
-// }
-
-// export default AddNewServices2;
+export default AllStudioDetail2;
