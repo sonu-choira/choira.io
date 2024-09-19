@@ -5,6 +5,7 @@ import style from "../../pages/admin/studios/studio.module.css";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { min } from "moment";
+import { partnerAccess } from "../../config/partnerAccess";
 
 function ChartNav({
   chartLogo,
@@ -58,8 +59,12 @@ function ChartNav({
               value={data}
             >
               <option value={"year"}>Year</option>
-              <option value={"month"}>month</option>
-              <option value={"week"}>week</option>
+              {!partnerAccess && (
+                <>
+                  <option value={"month"}>month</option>
+                  <option value={"week"}>week</option>
+                </>
+              )}
             </select>
           )}
         </div>
