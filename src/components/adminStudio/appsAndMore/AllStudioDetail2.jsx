@@ -46,8 +46,14 @@ const AllStudioDetail2 = ({
   setfilterNav,
   sendFilterDataToapi,
 }) => {
+  const [selectedCity, setSelectedCity] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState([]);
+  const [priceFilter, setPriceFilter] = useState([]);
+  const [shortby, setShortby] = useState([]);
   const navigate = useNavigate();
   const tableAccess = useContext(AccessContext);
+  const [loader, setLoader] = useState(false);
   const [showloader, setShowloader] = useState(false);
   const [pid, setPid] = useState(0);
 
@@ -81,6 +87,75 @@ const AllStudioDetail2 = ({
         errorAlert(error.message || "Something went wrong");
         setShowloader(false);
       });
+  };
+
+  const hitallstudioApi = () => {
+    if (bookingPageCount === "c2" || bookingPageCount === "c3") {
+      const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
+
+      appAndmoreApi
+        .getServices("10", idToUse, 1)
+        .then((response) => {
+          console.log(
+            `====================> response ${bookingPageCount}`,
+            response
+          );
+          if (response.status) {
+            setProducts(response.services.results);
+            console.log("lkasdnflkjsdnf", response.status);
+            setTotalPage(response.paginate.totalPages);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
+    } else if (bookingPageCount === "c1") {
+      const limit = 64;
+      const active = 1;
+
+      appAndmoreApi
+        .getStudios(limit, active)
+        .then((response) => {
+          console.log(
+            `====================> response ${bookingPageCount}`,
+            response
+          );
+          console.log("response.data.studios", response.studios);
+          if (response.studios) {
+            setProducts(response.studios);
+            setTotalPage(response.paginate.totalPages);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
+    } else {
+    }
+  };
+
+  const sendFilterDatatoapi = () => {
+    setProducts([]);
+    setLoader(true);
+    appAndmoreApi
+      .filterData(sendFilterDataToapi)
+      .then((response) => {
+        console.log("filter applied:", response);
+        setProducts(response.studios);
+        setLoader(false);
+        setTotalPage(response.paginate.totalPages);
+      })
+      .catch((error) => {
+        console.error("Error filter studio:", error);
+        setLoader(false);
+      });
+  };
+  const handleTableChange = (pagination, filters, sorter) => {
+    console.log("filters", filters);
+    sendFilterDataToapi.city = filters?.address?.[0];
+    sendFilterDataToapi.totalRooms = filters?.totalRooms?.[0];
+    sendFilterDataToapi.active = filters?.isActive?.[0];
+
+    sendFilterDatatoapi();
   };
   const gotoEdit = (id) => {
     const isEditMode = true;
@@ -117,12 +192,7 @@ const AllStudioDetail2 = ({
   }, []);
   const columns = [
     {
-      title: (
-        <div>
-          Studio
-          <RiExpandUpDownLine style={{ cursor: "pointer" }} />
-        </div>
-      ),
+      title: "Studio",
       dataIndex: "fullName",
       key: "fullName",
       render: (text, record) => (
@@ -187,9 +257,16 @@ const AllStudioDetail2 = ({
           value: "Chennai",
         },
       ],
+      filterMultiple: false,
       // specify the condition of filtering result
       // here is that finding the name started with `value`
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
+      // onFilter: (value, record) =>
+      //   console.log("valus is ", value, "record is ", record),
+
+      // onFilter: (value, record) => (
+      //   (sendFilterDataToapi.city = value), sendFilterDatatoapi()
+      // ),
+      reset: () => alert("Reset filters"),
     },
     {
       title: "No. of Rooms",
@@ -217,9 +294,10 @@ const AllStudioDetail2 = ({
           value: "5",
         },
       ],
+      filterMultiple: false,
       // specify the condition of filtering result
       // here is that finding the name started with `value`
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
+      // onFilter: (value, record) => record.name.indexOf(value) === 0,
     },
     {
       title: "Created on",
@@ -233,11 +311,11 @@ const AllStudioDetail2 = ({
       key: "isActive",
       render: (isActive, record) => (
         <Switch
-          checked={isActive}
-          loading={pid === record._id && showloader}
-          onChange={() => {
+          status={record.isActive}
+          isloading={pid === record._id && showloader}
+          onClick={() => {
+            setPid(record._id);
             handleSwitchChange(record._id);
-            setPid(products._id);
           }}
           disabled={tableAccess?.["app&more"]?.action === "read"}
         />
@@ -252,9 +330,10 @@ const AllStudioDetail2 = ({
           value: "0",
         },
       ],
+      filterMultiple: false,
       // specify the condition of filtering result
       // here is that finding the name started with `value`
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
+      // onFilter: (value, record) => record.name.indexOf(value) === 0,
     },
 
     {
@@ -298,15 +377,15 @@ const AllStudioDetail2 = ({
         <DateAndSearchFilter
           setProducts={setProducts}
           setTotalPage={setTotalPage}
-          // bookingPageCount={bookingPageCount}
-          // filterNav={filterNav}
-          // setfilterNav={setfilterNav}
-          // sendFilterDataToapi={sendFilterDataToapi}
-          // setSelectedCity={setSelectedCity}
-          // setSelectedRoom={setSelectedRoom}
-          // setSelectedStatus={setSelectedStatus}
-          // setPriceFilter={setPriceFilter}
-          // setShortby={setShortby}
+          bookingPageCount={bookingPageCount}
+          filterNav={filterNav}
+          setfilterNav={setfilterNav}
+          sendFilterDataToapi={sendFilterDataToapi}
+          setSelectedCity={setSelectedCity}
+          setSelectedRoom={setSelectedRoom}
+          setSelectedStatus={setSelectedStatus}
+          setPriceFilter={setPriceFilter}
+          setShortby={setShortby}
         />
         <div>
           <Table
@@ -314,6 +393,8 @@ const AllStudioDetail2 = ({
             dataSource={products}
             rowKey="_id"
             pagination={false} // Disable Ant Design's default pagination
+            onChange={handleTableChange}
+            loading={loader}
           />
 
           {/* Your Custom Pagination Component */}
