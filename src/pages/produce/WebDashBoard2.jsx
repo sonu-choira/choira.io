@@ -220,14 +220,14 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       id: 5,
       icon: <CiCreditCard1 style={{ fontSize: "1.3vmax" }} />,
       label: "Transactions",
-      onClick: () => goToPage(5, "Transactions"),
+      // onClick: () => goToPage(5, "Transactions"),
     },
 
     {
       id: 6,
       icon: <MdOutlineRateReview style={{ fontSize: "1.3vmax" }} />,
       label: "Reviews",
-      onClick: () => goToPage(6, "Reviews"),
+      // onClick: () => goToPage(6, "Reviews"),
     },
   ];
 
@@ -254,6 +254,11 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                                 ? style.tabActive
                                 : style.padding
                             }
+                            style={{
+                              color: tab.id == 5 || tab.id == 6 ? "grey" : "",
+                              cursor:
+                                tab.id == 5 || tab.id == 6 ? "not-allowed" : "",
+                            }}
                             onClick={tab.onClick}
                           >
                             {tab.icon}

@@ -106,10 +106,10 @@ function AdminDashboardLayout() {
                     {tabCount === 4 &&
                       lowerCaseData === "manageslots" &&
                       gotoSlotBooking()}
-                    {tabCount === 5 && lowerCaseData === "transactions" && (
+                    {/* {tabCount === 5 && lowerCaseData === "transactions" && (
                       <ShowAllTransaction />
-                    )}
-                    {tabCount === 6 && lowerCaseData === "promotion" && ""}
+                    )} */}
+                    {/* {tabCount === 6 && lowerCaseData === "promotion" && ""} */}
                   </React.Fragment>
                 );
               })

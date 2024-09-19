@@ -479,7 +479,12 @@ function SlotBooking({ setSelectTab }) {
                       </div>
                     ) : (
                       <div className={style.addNewStudioinputBox}>
-                        <label htmlFor="UserName">User Name</label>
+                        {partnerAccess ? (
+                          <label htmlFor="UserName">User Number</label>
+                        ) : (
+                          <label htmlFor="UserName">User Name</label>
+                        )}
+
                         <SearchSelectInput
                           placeholder={
                             partnerAccess

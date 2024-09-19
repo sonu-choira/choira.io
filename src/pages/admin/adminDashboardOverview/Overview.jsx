@@ -51,7 +51,7 @@ function Overview() {
   ]);
   const partnerData = [
     {
-      title: "Booking",
+      title: "Total Bookings",
       count:
         products?.bookingCount?.data?.length > 0
           ? products?.bookingCount?.data[0]?.totalCount
@@ -63,8 +63,11 @@ function Overview() {
       image: t2,
     },
     {
-      title: "Active Booking",
-      count: 159,
+      title: "Active Bookings",
+      count:
+        products?.bookingCount?.data?.length > 0
+          ? products?.bookingCount?.data[0]?.activeCount
+          : 0,
       active: 38,
       image: t4,
     },
@@ -77,12 +80,12 @@ function Overview() {
       active: 1589,
       image: t3,
     },
-    {
-      title: "Active Transaction",
-      count: 159,
-      active: 38,
-      image: t4,
-    },
+    // {
+    //   title: "Active Transaction",
+    //   count: 159,
+    //   active: 38,
+    //   image: t4,
+    // },
   ];
   console.log("Booking Data:", products?.bookingCount);
   console.log("Transaction Data:", products?.transactionCount);
