@@ -25,6 +25,7 @@ import Switch from "../../pages/admin/layout/Switch";
 
 import axios from "axios";
 import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
+import { Table, Tooltip } from "antd";
 
 let userAllFilterData = {
   sortfield: "",
@@ -219,6 +220,128 @@ function ShowAllUser() {
         setShowBtnLoader(false);
       });
   };
+  const handleTableChange = (pagination, filters, sorter) => {
+    let selectedData = filters?.status?.[0] || "";
+
+    setProducts([]);
+    setPageCount(1);
+
+    userAllFilterData.status = selectedData;
+
+    userApi
+      .getAllUser(perPage, pageCount, userAllFilterData)
+      .then((response) => {
+        console.log("filter applied:", response);
+        setProducts(response.users);
+        setTotalPage(response.paginate.totalPages);
+      })
+      .catch((error) => {
+        console.error("Error filter studio:", error);
+      });
+  };
+  const columns = [
+    {
+      title: (
+        <div className="headingContainer" style={{ display: "flex" }}>
+          Sr.No.
+          <div className="filterBox" onClick={handleSortBySrNo}>
+            <RiExpandUpDownLine />
+          </div>
+        </div>
+      ),
+      dataIndex: "srNo",
+      render: (_, __, index) =>
+        !shortBySrNo
+          ? isNaN(totalResult - pageCount * perPage + perPage - index)
+            ? "N/A"
+            : index + 1 + (pageCount - 1) * perPage
+          : isNaN(index + 1 + (pageCount - 1) * perPage)
+          ? "N/A"
+          : totalResult - pageCount * perPage + perPage - index,
+    },
+
+    {
+      title: (
+        <div className="headingContainer">
+          Users
+          <div className="filterBox" onClick={handleSortByUser}>
+            <RiExpandUpDownLine />
+          </div>
+        </div>
+      ),
+      dataIndex: "fullName",
+      render(text, record) {
+        return (
+          <>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                className={
+                  record.profileUrl === ""
+                    ? `${style.studioImageNotFound}`
+                    : `${style.studioImage} `
+                }
+              >
+                <img
+                  src={record?.profileUrl || userNotFound}
+                  alt=""
+                  onError={(e) => (e.target.src = userNotFound)}
+                />
+              </div>
+              &nbsp;&nbsp;
+              <CopyToClipboard textToCopy={record.fullName} />
+            </div>
+          </>
+        );
+      },
+    },
+    {
+      title: "Mobile",
+      dataIndex: "phone",
+      render: (phone) => <CopyToClipboard textToCopy={phone} />,
+    },
+    {
+      title: (
+        <div className="headingContainer">
+          Email
+          <div className="filterBox" onClick={handleSortByEmail}>
+            <RiExpandUpDownLine />
+          </div>
+        </div>
+      ),
+      dataIndex: "email",
+      render: (email) => <CopyToClipboard textToCopy={email} />,
+    },
+    {
+      title: "Created on",
+      dataIndex: "creationTimeStamp",
+      render: (creationTimeStamp) =>
+        moment(creationTimeStamp).format("Do MMM  YY, hh:mm a"),
+    },
+    {
+      title: "Activity Status",
+      dataIndex: "status",
+      render: (status) => <Switch status={status} switchDisabled={true} />,
+      filters: [
+        {
+          text: "active",
+          value: 1,
+        },
+        {
+          text: "inactive",
+          value: "0",
+        },
+      ],
+      filterMultiple: false,
+    },
+    {
+      title: "",
+      render: (record) => (
+        <Tooltip title="View Details">
+          <FaRegEye onClick={() => showUserDetails(record._id)} />
+        </Tooltip>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -229,26 +352,7 @@ function ShowAllUser() {
           userid={userid}
         />
       ) : (
-        <div className={style.allStudioDetailsPage}>
-          <div
-            className={style.bookingStudiobtn}
-            style={{ marginBottom: "2%" }}
-          >
-            <div>
-              <div style={{ background: "none" }}>All User</div>
-            </div>
-            <div>
-              <Button
-                name={"Download"}
-                icon={<FaDownload />}
-                style={{ height: "60%", gap: "5%" }}
-                // disabled={true}
-                onClick={downloadUserData}
-                showBtnLoader={showBtnLoader}
-                loaderText={loaderText}
-              />
-            </div>
-          </div>
+        <>
           <div className={style.studioTabelDiv}>
             <DateAndSearchFilter
               setProducts={setProducts}
@@ -261,211 +365,17 @@ function ShowAllUser() {
               userFilterText={userFilterText}
               userAllFilterData={userAllFilterData}
             />
-            <div className={style.tableContainer}>
-              <table>
-                <thead className={style.studiotabelHead}>
-                  <tr>
-                    <th style={{ width: "8%" }}>
-                      <div className={style.headingContainer}>
-                        Sr.No.
-                        <div
-                          className={style.filterBox}
-                          onClick={handleSortBySrNo}
-                          style={{
-                            backgroundColor: shortBySrNo ? "#ffc70133" : "",
-                          }}
-                        >
-                          <RiExpandUpDownLine />
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "20%" }}>
-                      <div className={style.headingContainer}>
-                        Users
-                        <div
-                          className={style.filterBox}
-                          onClick={handleSortByUser}
-                          style={{
-                            backgroundColor: shortByUser ? "#ffc70133" : "",
-                          }}
-                        >
-                          <RiExpandUpDownLine />
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "10%" }}>
-                      <div className={style.headingContainer}>
-                        Mobile
-                        <div
-                          className={style.filterBox}
-                          style={{
-                            visibility: "hidden",
-                          }}
-                        >
-                          <span
-                          //  onClick={handellocationFilter}
-                          >
-                            <RiExpandUpDownLine />
-                          </span>
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "20%" }}>
-                      <div className={style.headingContainer}>
-                        Email
-                        <div
-                          className={style.filterBox}
-                          onClick={handleSortByEmail}
-                          style={{
-                            backgroundColor: shortByEmail ? "#ffc70133" : "",
-                          }}
-                        >
-                          <span
-                          // onClick={handelRoomFilter}
-                          >
-                            <RiExpandUpDownLine />
-                          </span>
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "15%" }}>
-                      <div className={style.headingContainer}>
-                        Created on
-                        <div
-                          className={style.filterBox}
-                          style={{
-                            visibility: "hidden",
-                          }}
-                        >
-                          <span
-                          // onClick={handelRoomFilter}
-                          >
-                            <CiFilter />
-                          </span>
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "10%" }}>
-                      <div className={style.headingContainer}>
-                        Activity Status
-                        <div
-                          className={style.filterBox}
-                          style={{
-                            backgroundColor:
-                              selectedStatus.length > 0 ? "#ffc70133" : "",
-                          }}
-                        >
-                          <span onClick={handelStatusFilter}>
-                            <CiFilter />
-                          </span>
-                          {showstatusFilter && (
-                            <CheckboxFilter
-                              data={status}
-                              cusstyle={{ left: "-355%" }}
-                              disabledsearch={true}
-                              selectedData={selectedStatus}
-                              setSelectedData={setSelectedStatus}
-                              setProducts={setProducts}
-                              setTotalPage={setTotalPage}
-                              pageCount={pageCount}
-                              setPageCount={setPageCount}
-                              closeAllFilter={closeAllFilter}
-                              userFiler={userFiler}
-                              userAllFilterData={userAllFilterData}
-                              perPage={perPage}
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "10%" }}>{""}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.length === 0 ? (
-                    <tr>
-                      <td>
-                        <ChoiraLoder2 />
-                      </td>
-                    </tr>
-                  ) : (
-                    products.map((product, index) => (
-                      <tr key={product._id}>
-                        <td style={{ textAlign: "center" }}>
-                          {!shortBySrNo
-                            ? isNaN(
-                                totalResult -
-                                  pageCount * perPage +
-                                  perPage -
-                                  index
-                              )
-                              ? "N/A"
-                              : index + 1 + (pageCount - 1) * perPage
-                            : isNaN(index + 1 + (pageCount - 1) * perPage)
-                            ? "N/A"
-                            : totalResult -
-                              pageCount * perPage +
-                              perPage -
-                              index}
-                        </td>
-                        <td
-                          title={product.fullName}
-                          style={{ display: "flex", alignItems: "center" }}
-                        >
-                          <div
-                            className={
-                              product.profileUrl === ""
-                                ? `${style.studioImageNotFound}`
-                                : `${style.studioImage} `
-                            }
-                          >
-                            <img
-                              src={product.profileUrl || userNotFound}
-                              alt=""
-                              onError={(e) => (e.target.src = userNotFound)}
-                            />
-                          </div>
-                          &nbsp;&nbsp;
-                          <CopyToClipboard textToCopy={product?.fullName} />
-                        </td>
-                        <td title={product?.phone}>
-                          <CopyToClipboard textToCopy={product?.phone} />
-                        </td>
-                        <td title={product.email}>
-                          <CopyToClipboard textToCopy={product?.email} />
-                        </td>
-                        <td>
-                          {moment(product.creationTimeStamp).format(
-                            "Do MMM  YY, hh:mm a"
-                          )}
-                        </td>
-                        <td style={{ width: "10%" }}>
-                          <Switch
-                            status={product.status}
-                            switchDisabled={true}
-                          />
-                        </td>
-                        <td className={style.tableActionbtn}>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-around",
-                            }}
-                          >
-                            <FaRegEye
-                              style={{ cursor: "pointer" }}
-                              onClick={() => showUserDetails(product._id)}
-                            />
-                            <RiDeleteBin5Fill
-                              style={{ color: "red", cursor: "pointer" }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+            <div>
+              <Table
+                columns={columns}
+                dataSource={products}
+                rowKey="_id"
+                pagination={false} // Disable Ant Design's default pagination
+                onChange={handleTableChange}
+                // loading={loader}
+              />
+
+              {/* Your Custom Pagination Component */}
             </div>
           </div>
           <div className={style.tabelpaginationDiv}>
@@ -475,7 +385,7 @@ function ShowAllUser() {
               setPageCount={setPageCount}
             />
           </div>
-        </div>
+        </>
       )}
     </>
   );
