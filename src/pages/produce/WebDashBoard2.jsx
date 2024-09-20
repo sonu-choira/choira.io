@@ -178,7 +178,7 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
       id: 6,
       icon: <CiCreditCard1 style={{ fontSize: "1vmax" }} />,
       label: "Transaction",
-      onClick: () => goToPage(6, "Transactions", "studio"),
+      // onClick: () => goToPage(6, "Transactions", "studio"),
     },
     {
       id: 7,
@@ -274,6 +274,10 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                         tabCount === tab.id ? style.tabActive : style.padding
                       }
                       onClick={tab.onClick}
+                      style={{
+                        color: tab.id == 6 ? "grey" : "",
+                        cursor: tab.id == 6 ? "not-allowed" : "",
+                      }}
                     >
                       {tab.icon}
                       {tab.label}

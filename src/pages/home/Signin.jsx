@@ -415,7 +415,7 @@ function Signin() {
 
   // api integration ----------------------------------------
   const [showBtnLoader, setShowBtnLoader] = useState(false);
-  let loaderText = "verifying ...";
+  let loaderText = "Verifying ...";
   const [userType, setUserType] = useState("admin");
   const checkLoginData = () => {
     setShowBtnLoader(true);
@@ -699,7 +699,7 @@ function Signin() {
                             <Button
                               type="submit"
                               onClick={check_otp_btn}
-                              name={"submit"}
+                              name={"Submit"}
                               showBtnLoader={showBtnLoader}
                               loaderText={loaderText}
                             />
@@ -710,7 +710,7 @@ function Signin() {
                             <Button
                               type="submit"
                               onClick={handleContinueButtonClick}
-                              name={"continue"}
+                              name={"Continue"}
                               showBtnLoader={showBtnLoader}
                               loaderText={loaderText}
                             />
@@ -724,9 +724,9 @@ function Signin() {
                         </div>
                         <div>
                           <h6>
-                            By creating an account or logging in, you agree to
+                            By creating an account or login in, you agree to
                             Choira's <br /> <span>Conditions of Use</span> and
-                            <span>Privacy Policy.</span>
+                            <span> Privacy Policy.</span>
                           </h6>
                         </div>
                       </div>
