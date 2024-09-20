@@ -92,17 +92,14 @@ function Overview() {
   useEffect(() => {
     if (pathname.includes("Overview")) {
       Swal.fire({
-        title: "<strong>Under Development </strong>",
+        title: "<strong>Under Validation</strong>",
         icon: "info",
         html: `
-         This Page is Under Development.
-         The Data Of this Page is not Real.
+         <p>This page is currently <strong>under validation</strong>.</p>
+         <p>Please ensure it using <strong>real data</strong>.</p>
         `,
-        // showCloseButton: true,
-        // showCancelButton: true,
-        focusConfirm: false,
-
-        confirmButtonAriaLabel: "Ok",
+        confirmButtonText: "Got it",
+        confirmButtonAriaLabel: "Got it",
       });
     }
     chartApi
@@ -195,7 +192,7 @@ function Overview() {
                 <DoughnutChart products={products} />
               </div>
               <div>
-                <LineGraph />
+                <LineGraph products={products} />
               </div>
             </div>
             <div className={style.overviewPage3}>
@@ -206,13 +203,13 @@ function Overview() {
                 <AreaGraph products={products} />
               </div>
             </div>
-            <br />
-            <br />
-            <div className={style.overviewPage4}>
+            {/* <br />
+            <br /> */}
+            {/* <div className={style.overviewPage4}>
               <div>
                 <SimpleLineChart />
               </div>
-            </div>
+            </div> */}
           </>
         )}
       </div>

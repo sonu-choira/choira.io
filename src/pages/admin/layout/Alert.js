@@ -35,3 +35,14 @@ export const confirmAlret = (text, title, confirmButtonText) => {
     confirmButtonText: confirmButtonText || "Yes, do it!"
   });
 }
+
+export const infoAlert = (msg,title,showConfirmButton,timer) => {
+  Swal.fire({
+    icon: "info",
+    title: title ?  title :"Oops...",
+    text: msg ? msg : "Something went wrong!",
+    showConfirmButton: showConfirmButton || false,
+    timer: timer || 1500,
+
+  });
+};

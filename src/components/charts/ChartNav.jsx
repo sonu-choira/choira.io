@@ -41,6 +41,7 @@ function ChartNav({
               backgroundColor: "white",
               gap: "2%",
             }}
+            disabled={true}
           />
 
           {showBtnLoader ? (
