@@ -192,7 +192,7 @@ function Overview() {
                 <DoughnutChart products={products} />
               </div>
               <div>
-                <LineGraph />
+                <LineGraph products={products} />
               </div>
             </div>
             <div className={style.overviewPage3}>

@@ -14,6 +14,7 @@ import { render } from "@testing-library/react";
 import { GoEye } from "react-icons/go";
 import { MdEdit } from "react-icons/md";
 import dynamicNav from "../../utils/dynamicNav";
+import ChoiraLoder2 from "../loader/ChoiraLoder2";
 
 const StudioPartners = ({
   products,
@@ -201,6 +202,7 @@ const StudioPartners = ({
             dataSource={products}
             rowKey="_id"
             pagination={false} // Disable Ant Design's default pagination
+            locale={{ emptyText: <ChoiraLoder2 /> }}
           />
 
           {/* Your Custom Pagination Component */}
