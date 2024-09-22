@@ -53,6 +53,7 @@
   },
   "scripts": {
     "start": " react-scripts --openssl-legacy-provider start",
+    "start2": " react-scripts start",
     "start:qa": "env-cmd -f .env.qa react-scripts --openssl-legacy-provider start",
     "start:prod": "env-cmd -f .env.production react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --max_old_space_size=4096 --openssl-legacy-provider build",
