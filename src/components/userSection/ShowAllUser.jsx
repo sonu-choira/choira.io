@@ -241,15 +241,10 @@ function ShowAllUser() {
   };
   const columns = [
     {
-      title: (
-        <div className="headingContainer" style={{ display: "flex" }}>
-          Sr.No.
-          <div className="filterBox" onClick={handleSortBySrNo}>
-            <RiExpandUpDownLine />
-          </div>
-        </div>
-      ),
+      title: " Sr.No.",
       dataIndex: "srNo",
+      sorter: (a, b) => handleSortBySrNo(),
+
       render: (_, __, index) =>
         !shortBySrNo
           ? isNaN(totalResult - pageCount * perPage + perPage - index)
@@ -261,15 +256,10 @@ function ShowAllUser() {
     },
 
     {
-      title: (
-        <div className="headingContainer">
-          Users
-          <div className="filterBox" onClick={handleSortByUser}>
-            <RiExpandUpDownLine />
-          </div>
-        </div>
-      ),
+      title: "Users",
       dataIndex: "fullName",
+      sorter: (a, b) => handleSortByUser(),
+
       render(text, record) {
         return (
           <>
@@ -300,16 +290,10 @@ function ShowAllUser() {
       render: (phone) => <CopyToClipboard textToCopy={phone} />,
     },
     {
-      title: (
-        <div className="headingContainer">
-          Email
-          <div className="filterBox" onClick={handleSortByEmail}>
-            <RiExpandUpDownLine />
-          </div>
-        </div>
-      ),
+      title: "Email",
       dataIndex: "email",
       render: (email) => <CopyToClipboard textToCopy={email} />,
+      sorter: (a, b) => handleSortByEmail(),
     },
     {
       title: "Created on",
