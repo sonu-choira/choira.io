@@ -4,6 +4,7 @@ import style from "../studios/studio.module.css";
 import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
 import imageUploadapi from "../../../services/imageUploadapi";
 import Swal from "sweetalert2";
+// test
 
 function AddMultipleTeam({
   teamDetails,
