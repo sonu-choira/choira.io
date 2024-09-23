@@ -159,6 +159,8 @@ function ASMixandMaster({
           setTotalPage={setTotalPage}
           bookingPageCount={bookingPageCount}
           sendFilterDataToapi={sendFilterDataToapi}
+          searchDisable={true}
+          dateDisable={true}
         />
         <div>
           <table>
@@ -205,7 +207,7 @@ function ASMixandMaster({
                           )}
                         </div>
                         &nbsp;&nbsp;
-                        <CopyToClipboard  textToCopy={product?.fullName} />
+                        <CopyToClipboard textToCopy={product?.fullName} />
                       </td>
                       <td>Starting from ₹{product.pricing?.["IN"]?.price}</td>
                       <td>

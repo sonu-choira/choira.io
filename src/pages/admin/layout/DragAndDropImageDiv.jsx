@@ -9,7 +9,12 @@ import Swal from "sweetalert2";
 import ChoiraLoder2 from "../../../components/loader/ChoiraLoder2";
 import loder from "../../../assets/gifs/loading.gif";
 
-function DragAndDropImageDiv({ images, setImages, isEditMode }) {
+function DragAndDropImageDiv({
+  images,
+  setImages,
+  isEditMode,
+  showMode = false,
+}) {
   const [showloader, setshowloader] = useState(false);
 
   const uploadimagetoDataBase = (e) => {
@@ -201,7 +206,7 @@ function DragAndDropImageDiv({ images, setImages, isEditMode }) {
                             style={{ right: "-10%" }}
                             onClick={() => handleRemoveImage(index)}
                           >
-                            <img src={cross} alt="" />
+                            {!showMode && <img src={cross} alt="" />}
                           </span>
                         </div>
                       ))}

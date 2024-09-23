@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   MdAddAPhoto,
   MdCancel,
+  MdEdit,
   MdOutlineAddBox,
   MdOutlineSettings,
 } from "react-icons/md";
@@ -28,6 +29,10 @@ import appAndmoreApi from "../../services/appAndmoreApi";
 import Swal from "sweetalert2";
 import MultipleSelect from "../../pages/admin/layout/MultipleSelect";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
+import { fontSize } from "@mui/system";
+import { partnerAccess } from "../../config/partnerAccess";
+import dynamicNav from "../../utils/dynamicNav";
+import MyStudioApi from "../../services/MyStudioApi";
 
 function AddNewStudio({ setSelectTab }) {
   const submitButtonRef = useRef(null);
@@ -46,7 +51,7 @@ function AddNewStudio({ setSelectTab }) {
   };
   const navigate = useNavigate();
   const gotoadminpage = () => {
-    navigate("/adminDashboard/Apps&More/studio");
+    navigate(-1);
   };
 
   const data = useLocation();
@@ -54,7 +59,8 @@ function AddNewStudio({ setSelectTab }) {
 
   const userStudioid = data?.state?.productData?._id;
   // alert(data.state.navCount);
-  const showMode = data?.state?.showMode || false;
+  const [showMode, setShowMode] = useState(data?.state?.showMode || false);
+
   // const [showMode, setshowMode] = useState(data?.state?.showMode || false);
 
   const navCount = data?.state?.navCount;
@@ -152,7 +158,7 @@ function AddNewStudio({ setSelectTab }) {
 
     const check = (data) => {
       for (const key of Object.keys(data)) {
-        if(["photo","imgUrl"].includes(key)) continue
+        if (["photo", "imgUrl"].includes(key)) continue;
         const value = data[key];
 
         if (isEmpty(value)) {
@@ -358,23 +364,6 @@ function AddNewStudio({ setSelectTab }) {
         delete checkData.pricePerHour;
         delete checkData.reviews;
 
-        // for (const key of Object.keys(checkData)) {
-        //   const value = checkData[key];
-        //   alert("hii");
-
-        //   if (
-        //     value === null ||
-        //     value === "" ||
-        //     (Array.isArray(value) && value.length === 0) || //
-        //     (typeof value === "object" &&
-        //       !Array.isArray(value) &&
-        //       value !== null &&
-        //       Object.keys(value).length === 0)
-        //   ) {
-        //     return errorAlert(`${key} field is empty`);
-        //   }
-        // }
-
         const result = checkEmptyFields(checkData);
         let hasError = result.hasError;
         console.log(`Has error: ${result.hasError}`);
@@ -392,10 +381,17 @@ function AddNewStudio({ setSelectTab }) {
         }).then((result) => {
           if (result.isConfirmed) {
             console.log("studioDetails", correctedRealData);
-            // showBtnLoader = true;
+            let dynamicApi = null;
+            if (partnerAccess) {
+              dynamicApi = MyStudioApi;
+            } else {
+              dynamicApi = appAndmoreApi;
+            }
+
             setShowBtnLoader(true);
             console.log(showBtnLoader);
-            appAndmoreApi
+
+            dynamicApi
               .updateStudio(userStudioid, correctedRealData)
               .then((response) => {
                 console.log("Studio updated:", response);
@@ -405,7 +401,7 @@ function AddNewStudio({ setSelectTab }) {
 
                     setShowBtnLoader(false);
 
-                    navigate("/adminDashboard/Apps&More/studio");
+                    navigate(-1);
                   } else {
                     errorAlert(response.message);
 
@@ -476,7 +472,7 @@ function AddNewStudio({ setSelectTab }) {
                       showConfirmButton: false,
                       timer: 1800,
                     });
-                    navigate("/adminDashboard/Apps&More/studio");
+                    navigate(-1);
                   } else {
                     setShowBtnLoader(false);
                     errorAlert(response.message);
@@ -500,12 +496,18 @@ function AddNewStudio({ setSelectTab }) {
       }
     }
   };
+  const changeMode = () => {
+    setIsEditMode(true);
+    setShowMode(false);
+
+    sucessAlret("edit mode on");
+  };
 
   return (
     <>
       <div className={style.wrapper}>
         <WebDashboard2
-          navCount={4}
+          navCount={partnerAccess ? 2 : 4}
           tabCount={tabCount}
           setTabCount={setTabCount}
         />
@@ -550,8 +552,17 @@ function AddNewStudio({ setSelectTab }) {
                 {isEditMode && showMode
                   ? "Studio details"
                   : isEditMode
-                  ? "Edit Studio."
+                  ? "Edit Studio"
                   : "Add new studio"}
+
+                {showMode && (
+                  <Button
+                    name={" Edit"}
+                    icon={<MdEdit />}
+                    style={{ height: "50%", fontSize: "0.8vmax", gap: "5%" }}
+                    onClick={changeMode}
+                  />
+                )}
               </div>
               <form className={style.addNewStudioPage}>
                 <div
@@ -686,13 +697,14 @@ function AddNewStudio({ setSelectTab }) {
                       images={images}
                       setImages={setImages}
                       isEditMode={isEditMode}
+                      showMode={showMode}
                     />
 
                     <div
                       className={style.addNewStudioinputBox}
                       style={{ paddingTop: "2%" }}
                     >
-                      <label htmlFor="guest">Max Guests</label>
+                      <label htmlFor="guest">Studio Capacity (Artist)</label>
 
                       <select
                         required
@@ -705,7 +717,9 @@ function AddNewStudio({ setSelectTab }) {
                           })
                         }
                       >
-                        <option value={""}>Select Maximum Guest allowed</option>
+                        <option value={""}>
+                          Select Maximum Artist allowed
+                        </option>
                         <option value={"1"}>1</option>
                         <option value={"2"}>2</option>
                         <option value={"3"}>3</option>
@@ -851,6 +865,7 @@ function AddNewStudio({ setSelectTab }) {
                           isEditMode={isEditMode}
                           setIndexofrooms={setIndexofrooms}
                           showMode={showMode}
+                          studioDetails={studioDetails}
                         />
                       </div>
                       <div>
@@ -859,6 +874,7 @@ function AddNewStudio({ setSelectTab }) {
                           setTeamsDetails={setTeamsDetails}
                           data={data}
                           isEditMode={isEditMode}
+                          showMode={showMode}
                         />
                       </div>
                     </div>

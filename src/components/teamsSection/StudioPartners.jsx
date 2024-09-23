@@ -32,6 +32,7 @@ import appAndmoreApi from "../../services/appAndmoreApi";
 import moment from "moment";
 import { GoEye } from "react-icons/go";
 import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
+import dynamicNav from "../../utils/dynamicNav";
 
 let PageSize = 10;
 
@@ -53,16 +54,21 @@ function StudioPartners({
   totalResult,
 }) {
   const navigate = useNavigate();
-  const gotoEdit = (id) => {
-    const isEditMode = true;
+  const gotoEdit = (id, type) => {
+    if (type == "edit") {
+      type = "isEditMode";
+    } else {
+      type = "showMode";
+    }
+
     const selectedProduct = products.find((product) => product._id === id);
     console.log("navigated=======>", selectedProduct);
 
-    navigate(`/studio/edit?id=${id}`, {
+    navigate(`/${dynamicNav}/Teams/AddStudioPatner?id=${id}`, {
       state: {
         productData: selectedProduct,
         navCount: 3,
-        isEditMode: isEditMode,
+        [type]: true,
       },
     });
   };
@@ -470,7 +476,15 @@ function StudioPartners({
                         >
                           <GoEye
                             style={{ cursor: "pointer" }}
-                            // onClick={() => gotoShowStudioDetaisl(products._id)}
+                            onClick={() => {
+                              gotoEdit(products._id, "showMode");
+                            }}
+                          />
+                          <MdEdit
+                            style={{ color: "#ffc701", cursor: "pointer" }}
+                            onClick={() => {
+                              gotoEdit(products._id, "edit");
+                            }}
                           />
 
                           <RiDeleteBin5Fill

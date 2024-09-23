@@ -20,7 +20,7 @@ function CheckboxFilter({
   pageCount,
   setPageCount,
   userAllFilterData,
-  perPage
+  perPage,
 }) {
   useEffect(() => {
     console.log("selectedData", selectedData);
@@ -70,7 +70,7 @@ function CheckboxFilter({
         userAllFilterData.status = status;
       }
       userApi
-        .getAllUser(perPage,pageCount, userAllFilterData)
+        .getAllUser(perPage, pageCount, userAllFilterData)
         .then((response) => {
           console.log("filter applied:", response);
           setProducts(response.users);
@@ -161,7 +161,7 @@ function CheckboxFilter({
       userAllFilterData.status = undefined;
 
       userApi
-        .getAllUser(perPage,pageCount, userAllFilterData)
+        .getAllUser(perPage, pageCount, userAllFilterData)
         .then((response) => {
           console.log(`====================> response `, response);
           console.log("response.data.users", response.users);
@@ -201,7 +201,12 @@ function CheckboxFilter({
           ""
         ) : (
           <div>
-            <input type="text" placeholder="Search here.." />
+            <input
+              className={style.puredisabled}
+              disabled
+              type="text"
+              placeholder="Search here.."
+            />
           </div>
         )}
 

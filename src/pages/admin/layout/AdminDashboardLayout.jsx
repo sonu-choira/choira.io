@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 // import "../studios/studios.css";
 import style from "../studios/studio.module.css";
 import { IoSearch } from "react-icons/io5";
@@ -24,28 +24,48 @@ import ShowAllUser from "../../../components/userSection/ShowAllUser";
 import Overview from "../adminDashboardOverview/Overview";
 import Promotions from "../../../components/pramotation/Promotions";
 
+import { partnerAccess, userAcess } from "../../../config/partnerAccess";
+import { AccessContext } from "../../../utils/context";
+import { useNavigateRouter } from "../../../navigateRoute";
+
+import ShowAllTransaction from "../../../components/transactionSection/ShowAllTransaction";
+import dynamicNav from "../../../utils/dynamicNav";
+import AllMyStudioDetails from "../studios/AllMyStudioDetails";
+
 function AdminDashboardLayout() {
   const navigate = useNavigate();
   const [tabCount, setTabCount] = useState(0);
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     // console.log("Token from localStorage:", token);
-    if (token === null || token === undefined) {
-      const isSignin = localStorage.getItem("isSignin");
-      if (isSignin) {
-        navigate("/landingpage");
+    if (token == "undefined" || token == "null") {
+      localStorage.clear();
+      if (partnerAccess) {
+        navigate("/partner");
       } else {
         navigate("/signin");
       }
     }
   }, []);
 
+  const [navAccess, setnavAccess] = useState(
+    partnerAccess ? Object.keys(partnerAccess) : ""
+  );
+  const router = useNavigate();
+  const gotoSlotBooking = () => {
+    router(`/${dynamicNav}/Bookings/AddSlotBooking`, {
+      state: { navCount: 4 },
+    });
+  };
+
   return (
     <>
-      <div className={style.wrapper}>
-        <WebDashboard2 tabCount={tabCount} setTabCount={setTabCount} />
-        <div className={style.studioMainScreen}>
-          {/* <div className={style.studioHeader}>
+      <AccessContext.Provider value={partnerAccess}>
+        <div className={style.wrapper}>
+          <WebDashboard2 tabCount={tabCount} setTabCount={setTabCount} />
+          <div className={style.studioMainScreen}>
+            {/* <div className={style.studioHeader}>
             <div className={style.puredisabled}>
               <input
                 type="text"
@@ -68,23 +88,56 @@ function AdminDashboardLayout() {
               <MdOutlineSettings />
             </div>
           </div> */}
-          {tabCount === 1 && <Overview />}
-          {tabCount === 2 && <ShowAllUser />}
-          {tabCount === 3 && <AllteamDetails />}
 
-          {tabCount === 4 ? (
-            <AllStudioPageDetailsPage />
-          ) : tabCount === 5 ? (
-            <BookingPages />
-          ) : tabCount === 6 ? (
-            <Promotions />
-          ) : (
-            ""
-          )}
+            {navAccess ? (
+              navAccess.map((data, index) => {
+                const lowerCaseData = data.toLowerCase().replace(/ /g, "");
+                return (
+                  <React.Fragment key={index}>
+                    {tabCount === 1 && lowerCaseData === "dashboard" && (
+                      <Overview />
+                    )}
+                    {tabCount === 2 && lowerCaseData === "mystudio" && (
+                      <AllMyStudioDetails />
+                    )}
+                    {tabCount === 3 && lowerCaseData === "bookings" && (
+                      <BookingPages />
+                    )}
+                    {tabCount === 4 &&
+                      lowerCaseData === "manageslots" &&
+                      gotoSlotBooking()}
+                    {/* {tabCount === 5 && lowerCaseData === "transactions" && (
+                      <ShowAllTransaction />
+                    )} */}
+                    {/* {tabCount === 6 && lowerCaseData === "promotion" && ""} */}
+                  </React.Fragment>
+                );
+              })
+            ) : (
+              <>
+                {tabCount === 1 && <Overview />}
+                {tabCount === 2 && <ShowAllUser />}
+                {tabCount === 3 && <AllteamDetails />}
+
+                {tabCount === 4 ? (
+                  <AllStudioPageDetailsPage />
+                ) : tabCount === 5 ? (
+                  <BookingPages />
+                ) : tabCount === 6 ? (
+                  <ShowAllTransaction />
+                ) : tabCount === 7 ? (
+                  <Promotions />
+                ) : (
+                  ""
+                )}
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      </AccessContext.Provider>
     </>
   );
 }
 
 export default AdminDashboardLayout;
+export { AccessContext };

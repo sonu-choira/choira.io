@@ -31,6 +31,9 @@ import { httpUrl, nodeUrl } from "../../restservice";
 import { Alert } from "antd";
 import { errorAlert, sucessAlret } from "../admin/layout/Alert";
 import Button from "../admin/layout/Button";
+import ToggleSwitch from "../admin/layout/ToggleSwitch";
+import dynamicNav from "../../utils/dynamicNav";
+import { partnerAccess } from "../../config/partnerAccess";
 // import Cookies from "js-cookie";
 
 let loginCheckVerify = true;
@@ -210,7 +213,7 @@ function Signin() {
       .post(httpUrl + "login", sendableData)
       .then((result) => {
         let responseJson = result.data;
-        localStorage.setItem("userData", JSON.stringify(result.data));
+        localStorage.setItem("userData", JSON.stringify(result.data || {}));
         localStorage.setItem("isLogin", "true");
         localStorage.setItem("photo", JSON.stringify(result.data.photo));
         navigate("/userHome");
@@ -412,22 +415,30 @@ function Signin() {
 
   // api integration ----------------------------------------
   const [showBtnLoader, setShowBtnLoader] = useState(false);
-  let loaderText = "verifying ...";
-
+  let loaderText = "Verifying ...";
+  const [userType, setUserType] = useState("admin");
   const checkLoginData = () => {
     setShowBtnLoader(true);
+    let type = "login";
+    if (userType === "admin") {
+      type = "login";
+    } else {
+      type = "subLogin";
+    }
+
     // const role = mobileNumber === "9898989898" ? "admin" : "user";
-    AuthService.login(countryCode + mobileNumber, "NUMBER")
+    AuthService[type](countryCode + mobileNumber, "NUMBER")
       .then((response) => {
         setShowBtnLoader(false);
         console.log("res------", response);
         console.log("res------", response.user);
-        localStorage.setItem("adminData", JSON.stringify(response.user));
+        localStorage.setItem("adminData", JSON.stringify(response.user || {}));
         if (response.status) {
           setShowBtnLoader(false);
 
           // TokenService.setUser(response.user.role);
-          TokenService.setData("token", response.token);
+          console.log("taken isssss", response.token);
+          TokenService.setData("token", response.token || null);
           setSign(2);
           sucessAlret(response.message);
         } else {
@@ -461,7 +472,9 @@ function Signin() {
   };
 
   const gotoBooking = () => {
-    navigate("/adminDashboard/Overview");
+    navigate(`/${dynamicNav}/Overview`);
+
+    window.location.reload();
   };
 
   const handleContinueButtonClick = (e) => {
@@ -489,14 +502,22 @@ function Signin() {
 
   const check_otp_btn = () => {
     setShowBtnLoader(true);
+    let type = "admin";
+    if (userType === "admin") {
+      type = "admin";
+    } else {
+      type = "subAdmin";
+    }
 
-    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, "admin")
+    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, type)
       .then((response) => {
         setShowBtnLoader(false);
         console.log("res------", response);
         if (response.status) {
           setShowBtnLoader(false);
-          TokenService.setData("token", response.token);
+          localStorage.setItem("userType", "admin");
+          console.log("taken isssss", response.token);
+          TokenService.setData("token", response.token || null);
           sucessAlret("OTP is Correct!", "Welcome back 😊");
 
           gotoBooking();
@@ -504,7 +525,10 @@ function Signin() {
           localStorage.setItem("isSignin", "true");
         } else {
           setShowBtnLoader(false);
-          errorAlert("OTP is Incorrect!", "Please try again 😕");
+          errorAlert(
+            response.message || "OTP is Incorrect!",
+            "Please try again 😕"
+          );
           console.log("Not get Token");
         }
       })
@@ -520,6 +544,16 @@ function Signin() {
   //     source.cancel("Operation canceled by the user.");
   //   };
   // }, [source]);
+  useEffect(() => {
+    let signin = localStorage.getItem("isSignin");
+    if (signin) {
+      if (partnerAccess) {
+        navigate(`/${dynamicNav}/Overview`);
+      } else {
+        navigate(`/${dynamicNav}/Overview`);
+      }
+    }
+  }, []);
 
   const gotoHome = () => {
     navigate("/home");
@@ -563,10 +597,11 @@ function Signin() {
                       <div>
                         <h5>
                           {`${signin ? "No Account ?" : "Have an Account ?"}`}
-                          <br />{" "}
-                          <h3 onClick={gotoSignup}>{`${
-                            signin ? "Signup" : "Signin"
-                          }`}</h3>
+                          <br />
+                          <div
+                            style={{ fontSize: "0.8vmax" }}
+                            onClick={gotoSignup}
+                          >{`${signin ? "Signup" : "Signin"}`}</div>
                         </h5>
                       </div>
                     </div>
@@ -574,6 +609,16 @@ function Signin() {
                   <div className={signStyle.signupHeader2}>
                     <h1>{`${signin ? "Sign in" : "Sign Up"}`} </h1>
                   </div>
+                  {sign == 1 && (
+                    <div className={signStyle.signupToggel}>
+                      <p>Select Account Type</p>
+                      <ToggleSwitch
+                        userType={userType}
+                        setUserType={setUserType}
+                      />
+                    </div>
+                  )}
+
                   <div className={signStyle.enterMob}>
                     {sign === 1 ? (
                       <SigninNum
@@ -654,7 +699,7 @@ function Signin() {
                             <Button
                               type="submit"
                               onClick={check_otp_btn}
-                              name={"submit"}
+                              name={"Submit"}
                               showBtnLoader={showBtnLoader}
                               loaderText={loaderText}
                             />
@@ -665,7 +710,7 @@ function Signin() {
                             <Button
                               type="submit"
                               onClick={handleContinueButtonClick}
-                              name={"continue"}
+                              name={"Continue"}
                               showBtnLoader={showBtnLoader}
                               loaderText={loaderText}
                             />
@@ -679,9 +724,9 @@ function Signin() {
                         </div>
                         <div>
                           <h6>
-                            By creating an account or logging in, you agree to
+                            By creating an account or login in, you agree to
                             Choira's <br /> <span>Conditions of Use</span> and
-                            <span>Privacy Policy.</span>
+                            <span> Privacy Policy.</span>
                           </h6>
                         </div>
                       </div>

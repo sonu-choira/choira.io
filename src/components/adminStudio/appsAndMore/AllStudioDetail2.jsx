@@ -1,13 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import style from "../../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-import Button from "../../../pages/admin/layout/Button";
-
-import { IoIosArrowBack } from "react-icons/io";
-import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
 
 // import Button from "../../../pages/admin/layout/Button";
 import Switch from "../../../pages/admin/layout/Switch";
@@ -32,6 +28,10 @@ import LoaderUpdating from "../../../pages/admin/layout/LoaderUpdating";
 import { errorAlert } from "../../../pages/admin/layout/Alert";
 import { GoEye } from "react-icons/go";
 import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
+
+import { AccessContext } from "../../../utils/context";
+
+import moment from "moment";
 
 let PageSize = 10;
 
@@ -63,7 +63,7 @@ function AllStudioDetail2({
     });
   };
   const [currentPage, setCurrentPage] = useState(1);
-  const gotoShowStudioDetaisl = (id) => {
+  const gotoShowStudioDetails = (id) => {
     const isEditMode = true;
     const selectedProduct = products.find((product) => product._id === id);
     console.log("navigated=======>", selectedProduct);
@@ -238,7 +238,7 @@ function AllStudioDetail2({
       clearTimeout(loading_timeout);
     };
   }, []);
-
+  const tableAccess = useContext(AccessContext);
   return (
     <>
       <div className={style.studioTabelDiv}>
@@ -340,7 +340,7 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
-                <th>
+                <th style={{ width: "8%" }}>
                   <div className={style.headingContainer}>
                     No. of Rooms
                     <div
@@ -371,6 +371,7 @@ function AllStudioDetail2({
                     </div>
                   </div>
                 </th>
+                <th style={{ width: "10%" }}>Created on</th>
                 <th>
                   <div className={style.headingContainer}>
                     Activity Status
@@ -459,41 +460,99 @@ function AllStudioDetail2({
                       </td>
                       <td>{products.totalRooms}</td>
                       <td>
+                        {moment(products.creationTimeStamp).format(
+                          "Do MMM  YY, hh:mm a"
+                        )}
+                      </td>
+                      <td>
                         <div>
-                          <Switch
-                            isloading={pid === products._id && showloader}
-                            status={products.isActive}
-                            onClick={() => {
-                              setPid(products._id);
-                              handleSwitchChange(products._id);
-                            }}
-                          />
+                          {tableAccess ? (
+                            tableAccess["app&more"].action === "read" ? (
+                              <Switch
+                                // isloading={pid === products._id && showloader}
+                                status={products.isActive}
+                                // onClick={() => {
+                                //   setPid(products._id);
+                                //   handleSwitchChange(products._id);
+                                // }}
+                                switchDisabled={
+                                  tableAccess["app&more"].action === "read"
+                                }
+                              />
+                            ) : (
+                              <Switch
+                                isloading={pid === products._id && showloader}
+                                status={products.isActive}
+                                onClick={() => {
+                                  setPid(products._id);
+                                  handleSwitchChange(products._id);
+                                }}
+                              />
+                            )
+                          ) : (
+                            <Switch
+                              isloading={pid === products._id && showloader}
+                              status={products.isActive}
+                              onClick={() => {
+                                setPid(products._id);
+                                handleSwitchChange(products._id);
+                              }}
+                            />
+                          )}
                         </div>
                       </td>
-                      <td
-                      // style={{
-                      //   display: "flex",
-                      //   alignItems: "center",
-                      //   justifyContent: " space-between",
-                      // }}
-                      >
-                        <div className={style.tableActionbtn}>
-                          <GoEye
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              gotoShowStudioDetaisl(products._id);
-                            }}
-                          />
-                          <MdEdit
-                            style={{ color: "#ffc701", cursor: "pointer" }}
-                            onClick={() => {
-                              gotoEdit(products._id);
-                            }}
-                          />
-                          <RiDeleteBin5Fill
-                            style={{ color: "red", cursor: "pointer" }}
-                          />
-                        </div>
+                      <td>
+                        {tableAccess ? (
+                          tableAccess["MyStudio"].action === "write" ? (
+                            <div className={style.tableActionbtn}>
+                              <GoEye
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  gotoShowStudioDetails(products._id);
+                                }}
+                              />
+                              <MdEdit
+                                style={{
+                                  color: "#ffc701",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                  gotoEdit(products._id);
+                                }}
+                              />
+                              <RiDeleteBin5Fill
+                                style={{ color: "red", cursor: "pointer" }}
+                              />
+                            </div>
+                          ) : (
+                            <div>
+                              <GoEye
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  gotoShowStudioDetails(products._id);
+                                }}
+                              />
+                            </div>
+                          )
+                        ) : (
+                          <div className={style.tableActionbtn}>
+                            <GoEye
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                gotoShowStudioDetails(products._id);
+                              }}
+                            />
+                            <MdEdit
+                              style={{ color: "#ffc701", cursor: "pointer" }}
+                              onClick={() => {
+                                gotoEdit(products._id);
+                              }}
+                            />
+                            <RiDeleteBin5Fill
+                              style={{ color: "red", cursor: "pointer" }}
+                            />
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );

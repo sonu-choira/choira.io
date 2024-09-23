@@ -3,12 +3,25 @@ import tanmay from "../../assets/img/dashboard_img/tanmay.png";
 import { FaPen } from "react-icons/fa6";
 import "../../pages/produce/dashboard.css";
 import user from "../../assets/img/userNotFound.jpg";
+import { partnerAccess } from "../../config/partnerAccess";
 // import style from "../../pages/produce/dashboard.module.css";
 
 function ProfileEdit({ setEditProfile, editProfile }) {
   const [selectedImage, setSelectedImage] = useState(null);
-  let data = localStorage.getItem("adminData");
-  let adminData = JSON.parse(data);
+  const [navAccess, setnavAccess] = useState(partnerAccess || "");
+  let data = "";
+  let adminData = "";
+  try {
+    if (navAccess) {
+      data = localStorage.getItem("studio-owner");
+      adminData = JSON.parse(data || "");
+    } else {
+      data = localStorage.getItem("adminData");
+      adminData = JSON.parse(data || "");
+    }
+  } catch (e) {
+    console.log(e);
+  }
   // console.log("admin Data is****************>> ", adminData);
 
   const handleImageChange = (event) => {
@@ -89,7 +102,12 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                   />
                 ) : (
                   <img
-                    src={adminData?.Image || tanmay}
+                    // src={adminData?.Image || tanmay}
+                    src={
+                      navAccess
+                        ? adminData?.ownerImage || tanmay
+                        : adminData?.Image || tanmay
+                    }
                     alt="Default"
                     height={"100%"}
                     style={{
@@ -125,7 +143,12 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                 id="name"
                 type="text"
                 placeholder="Tanmay"
-                value={adminData?.name || "admin"}
+                value={
+                  navAccess
+                    ? adminData?.firstName + " " + adminData?.lastName ||
+                      "admin"
+                    : adminData?.name || "admin"
+                }
                 disabled
                 readOnly
               />
@@ -137,7 +160,7 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                 id="role"
                 type="text"
                 placeholder="Tanmay"
-                value={"admin"}
+                value={navAccess ? adminData?.role || "admin" : "admin"}
                 disabled
                 readOnly
               />
@@ -162,7 +185,11 @@ function ProfileEdit({ setEditProfile, editProfile }) {
               <input
                 id="mobile"
                 type="text"
-                value={adminData?.phoneNumber}
+                value={
+                  navAccess
+                    ? adminData?.phone || "1231231230"
+                    : adminData?.phoneNumber || "1231231230"
+                }
                 placeholder="Tanmay"
                 disabled
                 readOnly
@@ -176,7 +203,11 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                 id="email"
                 type="email"
                 placeholder="Tanmay"
-                value={adminData?.emailId}
+                value={
+                  navAccess
+                    ? adminData?.email || "sample@gmail.com"
+                    : adminData?.emailId || "sample@gmail.com"
+                }
                 disabled
                 readOnly
               />

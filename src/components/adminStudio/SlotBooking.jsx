@@ -25,6 +25,9 @@ import SearchSelectInput from "../../pages/admin/layout/SearchAndSelectInput";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import ChoiraLoder2 from "../loader/ChoiraLoder2";
 import ChoiraLoader from "../loader/ChoiraLoader";
+import dynamicNav from "../../utils/dynamicNav";
+import { partnerAccess } from "../../config/partnerAccess";
+import MyStudioApi from "../../services/MyStudioApi";
 
 function SlotBooking({ setSelectTab }) {
   const [showBtnLoader, setShowBtnLoader] = useState(false);
@@ -45,6 +48,23 @@ function SlotBooking({ setSelectTab }) {
     userId: "",
     tempUserName: "",
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    // console.log("Token from localStorage:", token);
+    if (token === null || token === undefined) {
+      const isSignin = localStorage.getItem("isSignin");
+      if (isSignin) {
+        // navigate("/landingpage");
+      } else {
+        if (partnerAccess) {
+          navigate("/partner");
+        } else {
+          navigate("/signin");
+        }
+      }
+    }
+  }, []);
   // let navigate = useNavigate();
   const data = useLocation();
   const [tabCount, setTabCount] = useState();
@@ -56,11 +76,19 @@ function SlotBooking({ setSelectTab }) {
   const [showLoader, setshowLoader] = useState(false);
 
   useEffect(() => {
-    timeSlotApi
-      .getonlyStudio()
+    let Api = "";
+    let endpoint = "";
+    if (partnerAccess) {
+      Api = MyStudioApi;
+      endpoint = "getStudios";
+    } else {
+      Api = timeSlotApi;
+      endpoint = "getonlyStudio";
+    }
+    Api[endpoint]()
       .then((res) => {
-        console.log(res.studios);
-        setAllStudio(res.studios);
+        // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@", res.studio);
+        setAllStudio(partnerAccess ? res.studio : res.studios);
       })
       .catch((err) => {
         console.log(err);
@@ -106,7 +134,7 @@ function SlotBooking({ setSelectTab }) {
     if (showAllSlots) {
       setshowAllSlots(false);
     } else {
-      navigate("/adminDashboard/Bookings/studio");
+      navigate(`/${dynamicNav}/Bookings/studio`);
     }
   };
   const [selectedStudioid, setselectedStudioid] = useState("");
@@ -184,12 +212,17 @@ function SlotBooking({ setSelectTab }) {
       delete newData.phoneNumber;
       delete newData.fullName;
       delete newData.tempUserName;
+      delete newData.bookingTime;
+      delete newData.actualBasePrice;
+      delete newData.serviceType;
+      delete newData.tempUserName;
+    } else {
+      delete newData.bookingTime;
+      delete newData.actualBasePrice;
+      delete newData.serviceType;
+      delete newData.userId;
+      delete newData.tempUserName;
     }
-    delete newData.bookingTime;
-    delete newData.actualBasePrice;
-    delete newData.serviceType;
-    delete newData.userId;
-    delete newData.tempUserName;
 
     let ans = Object.keys(newData);
 
@@ -234,7 +267,7 @@ function SlotBooking({ setSelectTab }) {
           setshowAllSlots(false);
           setshowLoader(false);
           sucessAlret("Booking done");
-          navigate("/adminDashboard/Bookings/studio");
+          navigate(`/${dynamicNav}/Bookings/studio`);
         } else {
           setShowBtnLoader(false);
           errorAlert(res.message || "Booking failed");
@@ -302,19 +335,41 @@ function SlotBooking({ setSelectTab }) {
     console.log("Selected user:", newValue);
   };
   async function fetchUserList(username) {
-    let dataToSend = {
-      searchUser: username,
-    };
-    try {
-      const response = await userApi.getAllUser(20, 1, dataToSend);
-      console.log("response.data.users", response.users);
-      return response.users.map((user) => ({
-        label: `${user.fullName} `,
-        value: user._id,
-      }));
-    } catch (error) {
-      console.error("Error fetching user list:", error);
-      return []; // return empty array in case of error
+    let dataToSend = {};
+    if (!partnerAccess) {
+      dataToSend = {
+        searchUser: username,
+      };
+      try {
+        const response = await userApi.getAllUser(20, 1, dataToSend);
+        console.log("response.data.users", response.users);
+        return response.users.map((user) => ({
+          label: `${user.fullName} ( ${user.email} )`,
+          value: user._id,
+        }));
+      } catch (error) {
+        console.error("Error fetching user list:", error);
+        return []; // return empty array in case of error
+      }
+    }
+    if (partnerAccess) {
+      if (username.length >= 10) {
+        dataToSend = {
+          searchUser: username,
+        };
+
+        try {
+          const response = await userApi.getAllUser(20, 1, dataToSend);
+          console.log("response.data.users", response.users);
+          return response.users.map((user) => ({
+            label: `${user.fullName} ( ${user.email} )`,
+            value: user._id,
+          }));
+        } catch (error) {
+          console.error("Error fetching user list:", error);
+          return []; // return empty array in case of error
+        }
+      }
     }
   }
 
@@ -424,9 +479,18 @@ function SlotBooking({ setSelectTab }) {
                       </div>
                     ) : (
                       <div className={style.addNewStudioinputBox}>
-                        <label htmlFor="UserName">User Name</label>
+                        {partnerAccess ? (
+                          <label htmlFor="UserName">User Number</label>
+                        ) : (
+                          <label htmlFor="UserName">User Name</label>
+                        )}
+
                         <SearchSelectInput
-                          placeholder="Select users"
+                          placeholder={
+                            partnerAccess
+                              ? "Search by number"
+                              : "Search and select user "
+                          }
                           fetchOptions={fetchUserList}
                           onChange={handleUserChange}
                           defaultValue={timeSlotApiData?.tempUserName}

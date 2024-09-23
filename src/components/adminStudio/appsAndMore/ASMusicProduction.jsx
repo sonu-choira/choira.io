@@ -146,6 +146,8 @@ function ASMusicProduction({
           setTotalPage={setTotalPage}
           bookingPageCount={bookingPageCount}
           sendFilterDataToapi={sendFilterDataToapi}
+          searchDisable={true}
+          dateDisable={true}
         />
         <div>
           <table>

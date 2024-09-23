@@ -13,6 +13,7 @@ function AddMultipleRooms({
   setshowRoomsDetails,
   setIndexofrooms,
   showMode,
+  studioDetails,
 }) {
   // useEffect(() => {
   //   console.log("ho raha hai change ", rooms);
@@ -146,17 +147,15 @@ function AddMultipleRooms({
                       fontSize: "1vmax",
                     }}
                   >
-                    BasePrice ₹
+                    Price per hour ₹
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
                     type="text"
                     placeholder=""
-
                     value={team.pricePerHour}
                     readOnly
                     disabled
-
                     onChange={(event) =>
                       handleInputChange(event, index, "basePrice")
                     }
@@ -235,17 +234,22 @@ function AddMultipleRooms({
                       fontSize: "1vmax",
                     }}
                   >
-                    Base Price ₹
+                    Base Price &nbsp;
+                    {studioDetails.country == "IN"
+                      ? "₹"
+                      : studioDetails.country == "JP"
+                      ? "¥"
+                      : studioDetails.country == "US"
+                      ? "$"
+                      : "₹"}
                   </small>
                   <input
                     style={{ paddingLeft: "55%" }}
                     type="text"
                     placeholder=""
-
                     readOnly
                     disabled
                     value={team.pricePerHour}
-
                     onChange={(event) =>
                       handleInputChange(event, index, "basePrice")
                     }

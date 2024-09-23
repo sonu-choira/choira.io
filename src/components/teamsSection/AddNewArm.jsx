@@ -12,6 +12,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import CustomInput from "../../pages/admin/layout/CustomInput";
 import { armSchema } from "../../schemas"; // Adjust the path
+import dynamicNav from "../../utils/dynamicNav";
 
 function AddNewArm({ setSelectTab }) {
   const timeSlotApiData = useRef({
@@ -92,7 +93,7 @@ function AddNewArm({ setSelectTab }) {
   }, [values.permission]);
 
   const backOnclick = () => {
-    navigate("/adminDashboard/Teams/StudioPartners");
+    navigate(`/${dynamicNav}/Teams/StudioPartners`);
   };
 
   const handelStudioid = (e) => {

@@ -5,7 +5,13 @@ import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
 import imageUploadapi from "../../../services/imageUploadapi";
 import Swal from "sweetalert2";
 
-function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
+function AddMultipleTeam({
+  teamDetails,
+  setTeamsDetails,
+  data,
+  isEditMode,
+  showMode = false,
+}) {
   useEffect(() => {
     if (data?.state?.productData?.teamDetails?.length)
       setTeamsDetails(data?.state?.productData.teamDetails);
@@ -27,7 +33,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
   const handlePhotoChange = (event, index) => {
     const imageFile = event.target.files[0];
 
-    if (imageFile.size > 1048576) {
+    if (imageFile?.size > 1048576) {
       Swal.fire({
         icon: "error",
         title: "File too large",
@@ -111,6 +117,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                     </label>
                     <input
                       type="file"
+                      accept=".jpg, .jpeg, .png"
                       id={`uploadteamPhoto-${index}`}
                       style={{ display: "none" }}
                       onChange={(event) => handlePhotoChange(event, index)}
@@ -128,7 +135,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                           className={style.cancelImageUpload}
                           onClick={() => handleCancelImage(index, "photo")}
                         >
-                          <img src={cross} alt="" />
+                          {!showMode && <img src={cross} alt="" />}
                         </span>
                       </div>
                     ) : team.imgUrl ? (
@@ -145,7 +152,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                           className={style.cancelImageUpload}
                           onClick={() => handleCancelImage(index, "imgUrl")}
                         >
-                          <img src={cross} alt="" />
+                          {!showMode && <img src={cross} alt="" />}
                         </span>
                       </div>
                     ) : (
@@ -176,7 +183,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                       className={style.cancelTeamDetailUpload}
                       onClick={() => handleCancelTeam(index)}
                     >
-                      <img src={cross} alt="" />
+                      {!showMode && <img src={cross} alt="" />}
                     </span>
                   )}
                 </div>
@@ -202,6 +209,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                   </label>
                   <input
                     type="file"
+                    accept=".jpg, .jpeg, .png"
                     id={`uploadteamPhoto-${index}`}
                     style={{ display: "none" }}
                     onChange={(event) => handlePhotoChange(event, index)}
@@ -233,7 +241,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                         className={style.cancelImageUpload}
                         onClick={() => handleCancelImage(index, "photo")}
                       >
-                        <img src={cross} alt="" />
+                        {!showMode && <img src={cross} alt="" />}
                       </span>
                     </div>
                   )}
@@ -261,7 +269,7 @@ function AddMultipleTeam({ teamDetails, setTeamsDetails, data, isEditMode }) {
                     className={style.cancelTeamDetailUpload}
                     onClick={() => handleCancelTeam(index)}
                   >
-                    <img src={cross} alt="" />
+                    {!showMode && <img src={cross} alt="" />}
                   </span>
                 )}
               </div>

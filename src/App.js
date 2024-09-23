@@ -14,7 +14,6 @@ if (process.env.NODE_ENV === 'production') {
   console.error = () => {};
 }
 function App() {
-  console.log(process.env);
 
   useEffect(()=>{
     googleanayticsaction.initgoogleanaytics('G-840J53TBNV')
