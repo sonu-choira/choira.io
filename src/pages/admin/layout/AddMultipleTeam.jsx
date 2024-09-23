@@ -12,12 +12,6 @@ function AddMultipleTeam({
   isEditMode,
   showMode = false,
 }) {
-  useEffect(() => {
-    if (data?.state?.productData?.teamDetails?.length)
-      setTeamsDetails(data?.state?.productData.teamDetails);
-    console.log("datails isssssss", teamDetails);
-  }, [data?.state?.productData?.teamDetails?.length]);
-
   const handleAddTeamDetail = () => {
     const newTeam = {
       id: teamDetails.length + 1,
