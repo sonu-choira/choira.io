@@ -235,11 +235,11 @@ function AddMultipleRooms({
                     }}
                   >
                     Base Price &nbsp;
-                    {studioDetails.country == "IN"
+                    {studioDetails?.country == "IN"
                       ? "₹"
-                      : studioDetails.country == "JP"
+                      : studioDetails?.country == "JP"
                       ? "¥"
-                      : studioDetails.country == "US"
+                      : studioDetails?.country == "US"
                       ? "$"
                       : "₹"}
                   </small>
