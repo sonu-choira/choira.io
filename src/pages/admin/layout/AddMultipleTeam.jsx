@@ -12,12 +12,6 @@ function AddMultipleTeam({
   isEditMode,
   showMode = false,
 }) {
-  useEffect(() => {
-    if (data?.state?.productData?.teamDetails?.length)
-      setTeamsDetails(data?.state?.productData.teamDetails);
-    console.log("datails isssssss", teamDetails);
-  }, [data?.state?.productData?.teamDetails?.length]);
-
   const handleAddTeamDetail = () => {
     const newTeam = {
       id: teamDetails.length + 1,
@@ -33,7 +27,7 @@ function AddMultipleTeam({
   const handlePhotoChange = (event, index) => {
     const imageFile = event.target.files[0];
 
-    if (imageFile?.size > 1048576) {
+    if (imageFile.size > 1048576) {
       Swal.fire({
         icon: "error",
         title: "File too large",
@@ -117,7 +111,6 @@ function AddMultipleTeam({
                     </label>
                     <input
                       type="file"
-                      accept=".jpg, .jpeg, .png"
                       id={`uploadteamPhoto-${index}`}
                       style={{ display: "none" }}
                       onChange={(event) => handlePhotoChange(event, index)}
@@ -209,7 +202,6 @@ function AddMultipleTeam({
                   </label>
                   <input
                     type="file"
-                    accept=".jpg, .jpeg, .png"
                     id={`uploadteamPhoto-${index}`}
                     style={{ display: "none" }}
                     onChange={(event) => handlePhotoChange(event, index)}
