@@ -24,6 +24,7 @@ import ToggleSwitch from "../admin/layout/ToggleSwitch";
 import dynamicNav from "../../utils/dynamicNav";
 import { partnerAccess } from "../../config/partnerAccess";
 import OtherLoginOption from "../../components/signin/OtherLoginOption";
+import { useMutation } from "react-query";
 
 function Signin() {
   const [countryCode, setCountryCode] = useState("91");
@@ -44,42 +45,46 @@ function Signin() {
   const [showBtnLoader, setShowBtnLoader] = useState(false);
   let loaderText = "Verifying ...";
   const [userType, setUserType] = useState("admin");
-  const checkLoginData = () => {
-    setShowBtnLoader(true);
-    let type = "login";
-    if (userType === "admin") {
-      type = "login";
+  const handleAuthResponse = (response) => {
+    localStorage.setItem("adminData", JSON.stringify(response.user || {}));
+    if (response.status) {
+      // TokenService.setUser(response.user.role);
+      console.log("taken isssss", response.token);
+      TokenService.setData("token", response.token || null);
+      setSign(2);
+      sucessAlret(response.message);
     } else {
-      type = "subLogin";
+      console.log("Not get Token");
+      errorAlert(response.message);
     }
-
-    // const role = mobileNumber === "9898989898" ? "admin" : "user";
-    AuthService[type](countryCode + mobileNumber, "NUMBER")
-      .then((response) => {
+  };
+  const loginMutation = useMutation(
+    ({ phoneNumber, userType }) => {
+      if (userType === "admin") {
+        return AuthService.login(phoneNumber, "NUMBER");
+      } else {
+        return AuthService.subLogin(phoneNumber, "NUMBER");
+      }
+    },
+    {
+      onMutate: () => {
+        setShowBtnLoader(true); // Show the button loader before request
+      },
+      onSuccess: (response) => {
         setShowBtnLoader(false);
-        console.log("res------", response);
-        console.log("res------", response.user);
-        localStorage.setItem("adminData", JSON.stringify(response.user || {}));
-        if (response.status) {
-          setShowBtnLoader(false);
-
-          // TokenService.setUser(response.user.role);
-          console.log("taken isssss", response.token);
-          TokenService.setData("token", response.token || null);
-          setSign(2);
-          sucessAlret(response.message);
-        } else {
-          setShowBtnLoader(false);
-
-          console.log("Not get Token");
-          errorAlert(response.message);
-        }
-      })
-      .catch((error) => {
+        handleAuthResponse(response); // Call your success handler
+      },
+      onError: (error) => {
         setShowBtnLoader(false);
-        errorAlert(error.message);
-        console.log(error);
-      });
+        errorAlert(error.message); // Handle error and show alert
+      },
+    }
+  );
+
+  // Refactored checkLoginData function
+  const checkLoginData = () => {
+    const phoneNumber = countryCode + mobileNumber;
+    loginMutation.mutate({ phoneNumber, userType });
   };
 
   const handleMobileNumberChange = (e) => {
@@ -116,43 +121,51 @@ function Signin() {
 
   const source = axios.CancelToken.source();
 
-  const check_otp_btn = () => {
-    setShowBtnLoader(true);
-    let type = "admin";
-    if (userType === "admin") {
-      type = "admin";
+  const handleOtpResponse = (response) => {
+    if (response.status) {
+      localStorage.setItem("userType", "admin");
+      TokenService.setData("token", response.token || null);
+      sucessAlret("OTP is Correct!", "Welcome back 😊");
+      gotoBooking(); // Assuming you have this navigation function
+      localStorage.setItem("isSignin", "true");
     } else {
-      type = "subAdmin";
+      errorAlert(
+        response.message || "OTP is Incorrect!",
+        "Please try again 😕"
+      );
+      console.log("Not get Token");
     }
+  };
 
-    AuthService.verifyOtp(countryCode + mobileNumber, enteredOTP, type)
-      .then((response) => {
+  const verifyOtpMutation = useMutation(
+    ({ phoneNumber, otp, type }) => {
+      return AuthService.verifyOtp(phoneNumber, otp, type);
+    },
+    {
+      onMutate: () => {
+        setShowBtnLoader(true); // Show the button loader
+      },
+      onSuccess: (response) => {
         setShowBtnLoader(false);
         console.log("res------", response);
-        if (response.status) {
-          setShowBtnLoader(false);
-          localStorage.setItem("userType", "admin");
-          console.log("taken isssss", response.token);
-          TokenService.setData("token", response.token || null);
-          sucessAlret("OTP is Correct!", "Welcome back 😊");
-
-          gotoBooking();
-          // setCheckOtp(false);
-          localStorage.setItem("isSignin", "true");
-        } else {
-          setShowBtnLoader(false);
-          errorAlert(
-            response.message || "OTP is Incorrect!",
-            "Please try again 😕"
-          );
-          console.log("Not get Token");
-        }
-      })
-      .catch((error) => {
+        handleOtpResponse(response);
+      },
+      onError: (error) => {
         setShowBtnLoader(false);
         errorAlert(error.message);
         console.log(error);
-      });
+      },
+      onSettled: () => {
+        setShowBtnLoader(false); // Reset loader in case of success or error
+      },
+    }
+  );
+
+  // Refactored check_otp_btn function
+  const check_otp_btn = () => {
+    const phoneNumber = countryCode + mobileNumber;
+    const type = userType === "admin" ? "admin" : "subAdmin";
+    verifyOtpMutation.mutate({ phoneNumber, otp: enteredOTP, type });
   };
 
   useEffect(() => {
