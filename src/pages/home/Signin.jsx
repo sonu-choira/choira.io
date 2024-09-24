@@ -1,11 +1,9 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import singer from "../../assets/img/singer3.png";
 import signStyle from "../home/signinBackup.module.css";
 import logo from "../../assets/img/logo-choira.svg";
-import google from "../../assets/img/google.png";
-import facebook from "../../assets/img/facebook.png";
-import apple from "../../assets/img/apple.png";
+
 import OptVerify from "../../components/signin/OptVerify";
 import SigninNum from "../../components/signin/SigninNum";
 import SignUpDetails from "../../components/signin/SignUpDetails";
@@ -20,23 +18,15 @@ import { useNavigate } from "react-router";
 
 import axios from "axios";
 
-import { errorAlert, infoAlert, sucessAlret } from "../admin/layout/Alert";
+import { errorAlert, sucessAlret } from "../admin/layout/Alert";
 import Button from "../admin/layout/Button";
 import ToggleSwitch from "../admin/layout/ToggleSwitch";
 import dynamicNav from "../../utils/dynamicNav";
 import { partnerAccess } from "../../config/partnerAccess";
-// import Cookies from "js-cookie";
-
-// console.log(btoa(JSON.stringify(initFirebase)))
+import OtherLoginOption from "../../components/signin/OtherLoginOption";
 
 function Signin() {
   const [countryCode, setCountryCode] = useState("91");
-  const [values, setInputField] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-  });
 
   const signin = true;
   let navigate = useNavigate();
@@ -271,47 +261,7 @@ function Signin() {
                         <div></div>
                       </div>
 
-                      <div
-                        className={`${
-                          sign === 1
-                            ? signStyle.signinOption
-                            : sign === 2
-                            ? signStyle.visiblity
-                            : signStyle.visiblity
-                        }`}
-                      >
-                        <div
-                          onClick={() =>
-                            infoAlert(
-                              "This feature is coming soon ...",
-                              "All Right"
-                            )
-                          }
-                        >
-                          <img src={google} alt="Google" />
-                          <small>Sign in with Google </small>
-                        </div>
-                        <div
-                          onClick={() =>
-                            infoAlert(
-                              "This feature is  coming soon ...",
-                              "All Right"
-                            )
-                          }
-                        >
-                          <img src={facebook} alt="Facebook" />
-                        </div>
-                        <div
-                          onClick={() =>
-                            infoAlert(
-                              "This feature is  coming soon ...",
-                              "All Right"
-                            )
-                          }
-                        >
-                          <img src={apple} alt="Apple" />
-                        </div>
-                      </div>
+                      <OtherLoginOption sign={sign} />
                       <div
                         className={`${
                           sign === 1
