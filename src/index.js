@@ -4,15 +4,18 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-// import { CookiesProvider } from 'react-cookie';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
+const queryClient = new QueryClient()
 
 ReactDOM.render(
   <React.StrictMode>
    {/* <CookiesProvider defaultSetOptions={{ path: '/' }}> */}
+   <QueryClientProvider client={queryClient}>
    <BrowserRouter>
       <App />
     </BrowserRouter>
+    </QueryClientProvider>
     {/* </CookiesProvider> */}
   </React.StrictMode>,
   document.getElementById('root')

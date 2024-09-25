@@ -69,6 +69,11 @@ function AddNewStudio({ setSelectTab }) {
   const [teamDetails, setTeamsDetails] = useState([
     { id: 1, photo: null, name: "", designation: "" },
   ]);
+  useEffect(() => {
+    if (data?.state?.productData?.teamDetails?.length)
+      setTeamsDetails(data?.state?.productData.teamDetails);
+    console.log("datails isssssss", teamDetails);
+  }, [data?.state?.productData?.teamDetails?.length]);
   const [selectedStudioAmenities, setSelectedStudioAmenities] = useState([]);
 
   const [rooms, setrooms] = useState([
@@ -97,9 +102,9 @@ function AddNewStudio({ setSelectTab }) {
   ]);
   const [showRoomsDetails, setshowRoomsDetails] = useState(false);
   const [indexofrooms, setIndexofrooms] = useState();
-  useEffect(() => {
-    console.log("teamDetails", teamDetails);
-  }, [teamDetails]);
+  // useEffect(() => {
+  //   console.log("teamDetails", teamDetails);
+  // }, [teamDetails]);
 
   const [studioDetails, setStudioDetails] = useState({
     aboutUs: {
@@ -211,11 +216,12 @@ function AddNewStudio({ setSelectTab }) {
   }, [images]);
 
   useEffect(() => {
-    setStudioDetails((prevdata) => {
-      prevdata.teamDetails = teamDetails;
-      return prevdata;
-    });
-  }, [teamDetails.length]);
+    setStudioDetails((prevdata) => ({
+      ...prevdata, // Spread previous state
+      teamDetails: teamDetails, // Update teamDetails
+    }));
+    console.log("teamDetails", teamDetails);
+  }, [teamDetails]); // Use teamDetails as the dependency
 
   // useEffect(() => {
   //   setStudioDetails((prevdata) => {
