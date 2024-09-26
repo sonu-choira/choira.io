@@ -1,485 +1,481 @@
-import React, { useEffect, useState } from "react";
-import StudioPartners from "../teamsSection/StudioPartners";
-import TeamsActionBar from "../teamsSection/TeamActionBar";
+import React, { useEffect, useMemo, useState } from "react";
 import style from "../../pages/admin/studios/studio.module.css";
-import Button from "../../pages/admin/layout/Button";
-import { FaDownload } from "react-icons/fa6";
-import teamsApi from "../../services/teamsApi";
-import PaginationNav from "../../pages/admin/layout/PaginationNav";
-import ChoiraLoder2 from "../loader/ChoiraLoder2";
-import { CiFilter } from "react-icons/ci";
-import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
-import { RiDeleteBin5Fill, RiExpandUpDownLine } from "react-icons/ri";
+
 import { GrShare } from "react-icons/gr";
-import userApi from "../../services/userApi";
-import imageNotFound from "../../assets/imagesNotFound.png";
-import { FaRegEye } from "react-icons/fa";
-import userNotFound from "../../assets/img/userNotFound.jpg";
-import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
-import UserProfile from "./UserProfile";
-import Alert from "antd/es/alert/Alert";
-import { errorAlert } from "../../pages/admin/layout/Alert";
+import { MdEdit } from "react-icons/md";
+import { RiDeleteBin5Fill } from "react-icons/ri";
+import Button from "../../pages/admin/layout/Button";
 import moment from "moment";
 
-import Switch from "../../pages/admin/layout/Switch";
+import { IoIosArrowBack } from "react-icons/io";
+import {
+  FaFilter,
+  FaRegEye,
+  FaShare,
+  FaTableCellsLarge,
+} from "react-icons/fa6";
 
+// import Button from "../../pages/admin/layout/Button";
+import Switch from "../../pages/admin/layout/Switch";
+import Pagination from "../../pages/admin/studios/Pagination";
+import { LuFilePlus } from "react-icons/lu";
+import imageNotFound from "../../assets/imagesNotFound.png";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import PaginationNav from "../../pages/admin/layout/PaginationNav";
+import ChoiraLoader from "../loader/ChoiraLoader";
+import ChoiraLoder2 from "../loader/ChoiraLoder2";
+import { IoCalendarOutline } from "react-icons/io5";
+import { BiSearchAlt } from "react-icons/bi";
+import { RiExpandUpDownLine } from "react-icons/ri";
+import { CiFilter } from "react-icons/ci";
+import { DatePicker, Space } from "antd";
+import PriceFilter from "../../pages/admin/layout/filterComponent/PriceFilter";
+import CheckboxFilter from "../../pages/admin/layout/filterComponent/CheckboxFilter";
+import DateAndSearchFilter from "../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+import appAndmoreApi from "../../services/appAndmoreApi";
 import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 
-let userAllFilterData = {
-  sortfield: "",
-  status: "",
-  searchUser: "",
-  startDate: undefined,
-  endDate: undefined,
-};
-function ShowAllUser() {
-  const [products, setProducts] = useState([]);
-  const [totalResult, setTotalResult] = useState();
-  const [perPage, setPerPage] = useState(7);
-  const [totalPage, setTotalPage] = useState();
-  const [pageCount, setPageCount] = useState(1);
-  const [filterNav, setfilterNav] = useState(false);
-  const [shortby, setShortby] = useState(false);
-  const status = ["active", "inactive"];
+let PageSize = 10;
 
-  const [shortBySrNo, setShortBySrNo] = useState(false);
-  const [shortByUser, setShortByUser] = useState(false);
-  const [shortByEmail, setShortByEmail] = useState(false);
+function UserServiceBooking({
+  products,
+  setProducts,
+  setPageCount,
+  pageCount,
+  totalPage,
+  bookingPageCount,
+  setTotalPage,
+  filterNav,
+  setfilterNav,
+  sendFilterDataToapi,
+  teamsPageCount,
+  shortby,
+  setShortby,
+}) {
+  const navigate = useNavigate();
+  const gotoEdit = (id) => {
+    const isEditMode = true;
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
 
+    navigate(`/studio/edit?id=${id}`, {
+      state: {
+        productData: selectedProduct,
+        navCount: 3,
+        isEditMode: isEditMode,
+      },
+    });
+  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const gotoShowStudioDetaisl = (id) => {
+    const isEditMode = true;
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
+
+    navigate(`/studio/edit?id=${id}`, {
+      state: {
+        productData: selectedProduct,
+        navCount: 3,
+        isEditMode: isEditMode,
+        showMode: true,
+      },
+    });
+  };
+
+  const [activityStatus, setActivityStatus] = useState({});
+  const handleSwitchChange = (studioId, status) => {
+    console.log(status);
+    setActivityStatus((prevStatus) => ({
+      ...prevStatus,
+      [studioId]: !prevStatus[studioId], // Toggle the switch state
+    }));
+  };
+  const [showpricefilter, setshowpricefilter] = useState(false);
+  const handelpriceFilter = () => {
+    setshowpricefilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowloactionfilter(false);
+        setShowRoomFilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
+  const closeAllFilter = () => {
+    setshowloactionfilter(false);
+    setShowRoomFilter(false);
+    setShowstatusFilter(false);
+    setshowpricefilter(false);
+  };
+
+  const [showloactionfilter, setshowloactionfilter] = useState(false);
+  const handellocationFilter = () => {
+    setshowloactionfilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setShowRoomFilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
+
+  const [showRoomFilter, setShowRoomFilter] = useState(false);
+  const handelRoomFilter = () => {
+    setShowRoomFilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+        setshowpricefilter(false);
+        setshowloactionfilter(false);
+        setShowstatusFilter(false);
+      }
+      return !prevState;
+    });
+  };
+
+  const [showstatusFilter, setShowstatusFilter] = useState(false);
   const handelStatusFilter = () => {
     setShowstatusFilter((prevState) => {
       if (!prevState) {
         // If toggling to true, set other filters to false
-
+        setshowpricefilter(false);
+        setshowloactionfilter(false);
         setShowRoomFilter(false);
       }
       return !prevState;
     });
   };
 
-  const handelFilterApi = (pageCount, userAllFilterData) => {
-    userApi
-      .getAllUser(perPage, pageCount, userAllFilterData)
-      .then((response) => {
-        if (response.users) {
-          setProducts(response.users);
-          setTotalPage(response.paginate.totalPages);
-          setTotalResult(response.paginate.totalResults);
-
-          // setPageCount(response.paginate.page);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching studios:", error);
-      });
-  };
-
-  useEffect(() => {
-    console.log(" -----");
-    setProducts([]);
-
-    const source = axios.CancelToken.source();
-
-    if (selectedStatus[0]) {
-      userAllFilterData.status =
-        selectedStatus[0] === "active"
-          ? 1
-          : selectedStatus[0] === "inactive"
-          ? 0
-          : undefined;
-    } else {
-      let dataToSend;
-
-      if (shortByUser) {
-        dataToSend = "fullName";
-        userAllFilterData.sortfield = dataToSend;
-      } else if (shortByEmail) {
-        dataToSend = "email";
-        userAllFilterData.sortfield = dataToSend;
-      } else if (shortBySrNo) {
-        userAllFilterData.sortDirection =
-          userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
-      }
-    }
-
-    userApi
-      .getAllUser(perPage, pageCount, userAllFilterData, {
-        cancelToken: source.token,
-      })
-      .then((response) => {
-        console.log(`====================> response `, response);
-        console.log("response.data.users", response.users);
-        if (response.users) {
-          setProducts(response.users);
-          setTotalPage(response.paginate.totalPages);
-          setTotalResult(response.paginate.totalResults);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching users:", error);
-        errorAlert(error || "Something went wrong");
-      });
-
-    console.log("inside useEffect");
-
-    return () => {
-      source.cancel("Operation canceled by the user.");
-    };
-  }, [pageCount, shortByUser, shortByEmail, shortBySrNo]);
+  const city = ["Mumbai", "Delhi", "Bangalore", "Chennai"];
+  const room = ["1", "2", "3", "4", "5"];
+  const status = ["active", "inactive"];
 
   const [selectedCity, setSelectedCity] = useState([]);
 
+  const [selectedRoom, setSelectedRoom] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
-  const [showstatusFilter, setShowstatusFilter] = useState(false);
-  const closeAllFilter = () => {
-    setShowstatusFilter(false);
-  };
-
   // var selectedDate = "";
   const [priceFilter, setPriceFilter] = useState({
     minPrice: "",
     maxPrice: "",
   });
-  const [showRoomFilter, setShowRoomFilter] = useState(false);
-  const [showCityFilter, setShowCityFilter] = useState(false);
-  const userFiler = true;
 
-  const handleSortBySrNo = () => {
-    console.log("shortBySrNo", shortBySrNo);
-
-    setShortBySrNo(!shortBySrNo);
-    setShortByUser(false);
-    setShortByEmail(false);
+  const handelShortbyClick = () => {
+    if (shortby == "desc") {
+      setShortby("asc");
+    } else {
+      setShortby("desc");
+    }
   };
+
   useEffect(() => {
-    userAllFilterData.sortDirection = shortBySrNo ? "asc" : "desc";
-    handelFilterApi(pageCount, userAllFilterData);
+    sendFilterDataToapi.city = selectedCity[0];
+    sendFilterDataToapi.totalRooms = selectedRoom[0];
+    sendFilterDataToapi.active =
+      selectedStatus[0] === "active"
+        ? 1
+        : selectedStatus[0] === "inactive"
+        ? "0"
+        : "";
+    sendFilterDataToapi.minPricePerHour = priceFilter.minPrice;
+    sendFilterDataToapi.maxPricePerHour = priceFilter.maxPrice;
+    // sendFilterDataToapi.creationTimeStamp = selectedDate;
+    sendFilterDataToapi.sortBy = shortby;
 
-    // setProducts((prev) => [...prev].reverse());
-  }, [shortBySrNo]);
+    console.log(sendFilterDataToapi);
+  }, [
+    selectedCity,
+    selectedRoom,
+    selectedStatus,
+    priceFilter,
+    // selectedDate,
+    shortby,
+  ]);
 
-  const handleSortByUser = () => {
-    setShortBySrNo(false);
-    setShortByUser(!shortByUser);
-    setShortByEmail(false);
-  };
-  const handelShortBySrno = () => {
-    setShortBySrNo(false);
-    setShortByUser(!shortByUser);
-    setShortByEmail(false);
-  };
-
-  const handleSortByEmail = () => {
-    setShortBySrNo(false);
-    setShortByUser(false);
-    setShortByEmail(!shortByEmail);
-  };
-  const [userFilterText, setUserFilterText] = useState("");
-  const [showUserProfile, setShowUserProfile] = useState(false);
-  const [userAllDetails, setuserAllDetails] = useState("");
-  let userid = "";
-  const showUserDetails = (id) => {
-    console.log("id", id);
-    userid = id;
-    console.log(userid, "user id is------------------------");
-    setuserAllDetails("");
-    setShowUserProfile(true);
-
-    userApi
-      .getSpecificUser(id)
-      .then((response) => {
-        console.log(`====================> response `, response);
-        // console.log("response.data.users", response.data.user);
-        console.log("response.users", response.user);
-
-        if (response.user) {
-          setuserAllDetails(response.user);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching studios:", error);
-        setShowUserProfile(false);
-        errorAlert(error || "Something went wrong");
-      });
-
-    // setShowUserProfile(true);
-  };
-  const [showBtnLoader, setShowBtnLoader] = useState(false);
-  let loaderText = "Downloading ...";
-  const downloadUserData = () => {
-    setShowBtnLoader(true);
-    userApi
-      .downloadUserData(userAllFilterData)
-      .then((response) => {
-        console.log("data download", response);
-        setShowBtnLoader(false);
-      })
-      .catch((error) => {
-        console.error("Error download data:", error);
-        setShowBtnLoader(false);
-      });
-  };
+  // useEffect(() => {
+  //   setProducts([]);
+  //   appAndmoreApi
+  //     .filterData(sendFilterDataToapi)
+  //     .then((response) => {
+  //       console.log("filter applied:", response);
+  //       setProducts(response.studios);
+  //       setTotalPage(response.paginate.totalPages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error filter studio:", error);
+  //     });
+  // }, [shortby]);
 
   return (
     <>
-      {showUserProfile ? (
-        <UserProfile
-          userAllDetails={userAllDetails}
-          setShowUserProfile={setShowUserProfile}
-          userid={userid}
+      <div
+        className={style.studioTabelDiv}
+        style={{ height: "90%", width: "100%" }}
+      >
+        <DateAndSearchFilter
+          dateDisable={true}
+          searchDisable={true}
+          setProducts={setProducts}
+          setTotalPage={setTotalPage}
+          bookingPageCount={bookingPageCount}
+          filterNav={filterNav}
+          setfilterNav={setfilterNav}
+          sendFilterDataToapi={sendFilterDataToapi}
+          setSelectedCity={setSelectedCity}
+          setSelectedRoom={setSelectedRoom}
+          setSelectedStatus={setSelectedStatus}
+          setPriceFilter={setPriceFilter}
+          setShortby={setShortby}
         />
-      ) : (
-        <div className={style.allStudioDetailsPage}>
-          <div
-            className={style.bookingStudiobtn}
-            style={{ marginBottom: "2%" }}
-          >
-            <div>
-              <div style={{ background: "none" }}>All User</div>
-            </div>
-            <div>
-              <Button
-                name={"Download"}
-                icon={<FaDownload />}
-                style={{ height: "60%", gap: "5%" }}
-                // disabled={true}
-                onClick={downloadUserData}
-                showBtnLoader={showBtnLoader}
-                loaderText={loaderText}
-              />
-            </div>
-          </div>
-          <div className={style.studioTabelDiv}>
-            <DateAndSearchFilter
-              setProducts={setProducts}
-              setTotalPage={setTotalPage}
-              pageCount={pageCount}
-              perPage={perPage}
-              setPageCount={setPageCount}
-              userFiler={userFiler}
-              setUserFilterText={setUserFilterText}
-              userFilterText={userFilterText}
-              userAllFilterData={userAllFilterData}
-            />
-            <div className={style.tableContainer}>
-              <table>
-                <thead className={style.studiotabelHead}>
-                  <tr>
-                    <th style={{ width: "8%" }}>
-                      <div className={style.headingContainer}>
-                        Sr.No.
+        <div>
+          <table>
+            <thead className={style.studiotabelHead}>
+              <tr>
+                <th
+                  style={{
+                    width: "10%",
+                  }}
+                  className={style.shortTableData}
+                >
+                  <div className={style.headingContainer}>
+                    Booking Id
+                    {/* <div
+                      className={style.filterBox}
+                      onClick={handelShortbyClick}
+                      style={{
+                        backgroundColor: shortby !== "asc" ? "#ffc70133" : "",
+                      }}
+                    >
+                      <RiExpandUpDownLine />
+                    </div> */}
+                  </div>
+                </th>
+                <th style={{ width: "20%" }}>
+                  <div className={style.headingContainer}>
+                    Service Name
+                    <div
+                      className={style.filterBox}
+                      // style={{
+                      //   backgroundColor:
+                      //     priceFilter.minPrice || priceFilter.maxPrice !== ""
+                      //       ? "#ffc70133"
+                      //       : "",
+                      // }}
+                    >
+                      <span onClick={handelpriceFilter}>
+                        {/* <CiFilter /> */}
+                      </span>
+                      {showpricefilter
+                        ? // <PriceFilter
+                          //   closeAllFilter={closeAllFilter}
+                          //   priceFilter={priceFilter}
+                          //   setPriceFilter={setPriceFilter}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          // />
+                          ""
+                        : ""}
+                    </div>
+                  </div>
+                </th>
+
+                <th style={{ width: "20%" }}>
+                  <div className={style.headingContainer}>
+                    Package Name
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedCity.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
+                      <span onClick={handellocationFilter}>
+                        {/* <CiFilter /> */}
+                      </span>
+                      {showloactionfilter
+                        ? // <CheckboxFilter
+                          //   data={city}
+                          //   setSelectedData={setSelectedCity}
+                          //   selectedData={selectedCity}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   closeAllFilter={closeAllFilter}
+                          //   setfilterNav={setfilterNav}
+                          // />
+                          ""
+                        : ""}
+                    </div>
+                  </div>
+                </th>
+                <th style={{ width: "15%" }}>
+                  <div className={style.headingContainer}>
+                    Date
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedRoom.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
+                      <span onClick={handelRoomFilter}>
+                        {/* <CiFilter /> */}
+                      </span>
+                      {showRoomFilter
+                        ? // <CheckboxFilter
+                          //   data={room}
+                          //   selectedData={selectedRoom}
+                          //   setSelectedData={setSelectedRoom}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          //   closeAllFilter={closeAllFilter}
+                          ""
+                        : // />
+                          ""}
+                    </div>
+                  </div>
+                </th>
+                <th style={{ width: "10%" }}>
+                  <div className={style.headingContainer}>
+                    Price
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedRoom.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
+                      <span onClick={handelRoomFilter}>
+                        {/* <CiFilter /> */}
+                      </span>
+                      {showRoomFilter
+                        ? // <CheckboxFilter
+                          //   data={room}
+                          //   selectedData={selectedRoom}
+                          //   setSelectedData={setSelectedRoom}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          //   closeAllFilter={closeAllFilter}
+                          // />
+                          ""
+                        : ""}
+                    </div>
+                  </div>
+                </th>
+                <th style={{ width: "15%" }}>
+                  <div className={style.headingContainer}>
+                    Project Status
+                    <div
+                      className={style.filterBox}
+                      style={{
+                        backgroundColor:
+                          selectedStatus.length > 0 ? "#ffc70133" : "",
+                      }}
+                    >
+                      <span onClick={handelStatusFilter}>
+                        {/* <CiFilter /> */}
+                      </span>
+                      {showstatusFilter
+                        ? ""
+                        : // <CheckboxFilter
+                          //   data={status}
+                          //   cusstyle={{ left: "-355%" }}
+                          //   disabledsearch={true}
+                          //   selectedData={selectedStatus}
+                          //   setSelectedData={setSelectedStatus}
+                          //   sendFilterDataToapi={sendFilterDataToapi}
+                          //   setProducts={setProducts}
+                          //   setTotalPage={setTotalPage}
+                          //   bookingPageCount={bookingPageCount}
+                          //   setfilterNav={setfilterNav}
+                          //   closeAllFilter={closeAllFilter}
+                          // />
+                          ""}
+                    </div>
+                  </div>
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {products?.length === 0 ? (
+                <ChoiraLoder2 />
+              ) : (
+                products?.map((products, index) => {
+                  return (
+                    <tr key={products._id} className={style.customUserTd}>
+                      <td>
+                        <span title={products._id}>
+                          {products._id.substring(0, 6)}
+                        </span>
+                      </td>
+                      <td title={products?.serviceFullName}>
+                        <CopyToClipboard
+                          textToCopy={products?.serviceFullName}
+                        />
+                      </td>
+                      <td title={products?.package?.name}>
+                        <CopyToClipboard textToCopy={products?.package?.name} />
+                      </td>
+                      <td>
+                        {moment(products.bookingDate).format(
+                          "Do MMM  YY, hh:mm a"
+                        )}
+                      </td>
+                      <td>{products.totalPrice}</td>
+                      <td className={style.tableActionbtn}>
                         <div
-                          className={style.filterBox}
-                          onClick={handleSortBySrNo}
-                          style={{
-                            backgroundColor: shortBySrNo ? "#ffc70133" : "",
-                          }}
-                        >
-                          <RiExpandUpDownLine />
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "20%" }}>
-                      <div className={style.headingContainer}>
-                        Users
-                        <div
-                          className={style.filterBox}
-                          onClick={handleSortByUser}
-                          style={{
-                            backgroundColor: shortByUser ? "#ffc70133" : "",
-                          }}
-                        >
-                          <RiExpandUpDownLine />
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "10%" }}>
-                      <div className={style.headingContainer}>
-                        Mobile
-                        <div
-                          className={style.filterBox}
-                          style={{
-                            visibility: "hidden",
-                          }}
-                        >
-                          <span
-                          //  onClick={handellocationFilter}
-                          >
-                            <RiExpandUpDownLine />
-                          </span>
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "20%" }}>
-                      <div className={style.headingContainer}>
-                        Email
-                        <div
-                          className={style.filterBox}
-                          onClick={handleSortByEmail}
-                          style={{
-                            backgroundColor: shortByEmail ? "#ffc70133" : "",
-                          }}
-                        >
-                          <span
-                          // onClick={handelRoomFilter}
-                          >
-                            <RiExpandUpDownLine />
-                          </span>
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "15%" }}>
-                      <div className={style.headingContainer}>
-                        Created on
-                        <div
-                          className={style.filterBox}
-                          style={{
-                            visibility: "hidden",
-                          }}
-                        >
-                          <span
-                          // onClick={handelRoomFilter}
-                          >
-                            <CiFilter />
-                          </span>
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "10%" }}>
-                      <div className={style.headingContainer}>
-                        Activity Status
-                        <div
-                          className={style.filterBox}
+                          className={style.userProjectStatus}
                           style={{
                             backgroundColor:
-                              selectedStatus.length > 0 ? "#ffc70133" : "",
+                              parseInt(products.bookingStatus) === 0
+                                ? "#FFF3CA"
+                                : parseInt(products.bookingStatus) == 1
+                                ? "#DDFFF3"
+                                : "#FFDDDD",
                           }}
                         >
-                          <span onClick={handelStatusFilter}>
-                            <CiFilter />
-                          </span>
-                          {showstatusFilter && (
-                            <CheckboxFilter
-                              data={status}
-                              cusstyle={{ left: "-355%" }}
-                              disabledsearch={true}
-                              selectedData={selectedStatus}
-                              setSelectedData={setSelectedStatus}
-                              setProducts={setProducts}
-                              setTotalPage={setTotalPage}
-                              pageCount={pageCount}
-                              setPageCount={setPageCount}
-                              closeAllFilter={closeAllFilter}
-                              userFiler={userFiler}
-                              userAllFilterData={userAllFilterData}
-                              perPage={perPage}
-                            />
-                          )}
+                          {parseInt(products.bookingStatus) === 0
+                            ? "Pending"
+                            : parseInt(products.bookingStatus) == 1
+                            ? "Complete"
+                            : "Cancelled"}
                         </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "10%" }}>{""}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.length === 0 ? (
-                    <tr>
-                      <td>
-                        <ChoiraLoder2 />
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <FaRegEye />
                       </td>
                     </tr>
-                  ) : (
-                    products.map((product, index) => (
-                      <tr key={product._id}>
-                        <td style={{ textAlign: "center" }}>
-                          {!shortBySrNo
-                            ? isNaN(
-                                totalResult -
-                                  pageCount * perPage +
-                                  perPage -
-                                  index
-                              )
-                              ? "N/A"
-                              : index + 1 + (pageCount - 1) * perPage
-                            : isNaN(index + 1 + (pageCount - 1) * perPage)
-                            ? "N/A"
-                            : totalResult -
-                              pageCount * perPage +
-                              perPage -
-                              index}
-                        </td>
-                        <td
-                          title={product.fullName}
-                          style={{ display: "flex", alignItems: "center" }}
-                        >
-                          <div
-                            className={
-                              product.profileUrl === ""
-                                ? `${style.studioImageNotFound}`
-                                : `${style.studioImage} `
-                            }
-                          >
-                            <img
-                              src={product.profileUrl || userNotFound}
-                              alt=""
-                              onError={(e) => (e.target.src = userNotFound)}
-                            />
-                          </div>
-                          &nbsp;&nbsp;
-                          <CopyToClipboard textToCopy={product?.fullName} />
-                        </td>
-                        <td title={product?.phone}>
-                          <CopyToClipboard textToCopy={product?.phone} />
-                        </td>
-                        <td title={product.email}>
-                          <CopyToClipboard textToCopy={product?.email} />
-                        </td>
-                        <td>
-                          {moment(product.creationTimeStamp).format(
-                            "Do MMM  YY, hh:mm a"
-                          )}
-                        </td>
-                        <td style={{ width: "10%" }}>
-                          <Switch
-                            status={product.status}
-                            switchDisabled={true}
-                          />
-                        </td>
-                        <td className={style.tableActionbtn}>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-around",
-                            }}
-                          >
-                            <FaRegEye
-                              style={{ cursor: "pointer" }}
-                              onClick={() => showUserDetails(product._id)}
-                            />
-                            <RiDeleteBin5Fill
-                              style={{ color: "red", cursor: "pointer" }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className={style.tabelpaginationDiv}>
-            <PaginationNav
-              pageCount={pageCount}
-              totalPage={totalPage}
-              setPageCount={setPageCount}
-            />
-          </div>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
+      <div className={style.tabelpaginationDiv}>
+        <PaginationNav
+          pageCount={pageCount}
+          totalPage={totalPage}
+          setPageCount={setPageCount}
+          bookingPageCount={bookingPageCount}
+        />
+      </div>
     </>
   );
 }
 
-export default ShowAllUser;
+export default UserServiceBooking;
