@@ -96,6 +96,13 @@ function AddMultipleRooms({
     return send;
   };
 
+  useEffect(() => {
+    console.log(
+      "rooom kaa studioDetails --------------------",
+      studioDetails?.country
+    );
+  }, [studioDetails]);
+
   return (
     <div className={style.addTeamDetailDiv}>
       <label htmlFor="Rooms">Rooms</label>
@@ -147,10 +154,17 @@ function AddMultipleRooms({
                       fontSize: "1vmax",
                     }}
                   >
-                    Price per hour ₹
+                    Price per hour &nbsp;
+                    {studioDetails?.country == "IN"
+                      ? "₹"
+                      : studioDetails?.country == "JP"
+                      ? "¥"
+                      : studioDetails?.country == "US"
+                      ? "$"
+                      : "₹"}
                   </small>
                   <input
-                    style={{ paddingLeft: "55%" }}
+                    style={{ paddingLeft: "58%" }}
                     type="text"
                     placeholder=""
                     value={team.pricePerHour}
