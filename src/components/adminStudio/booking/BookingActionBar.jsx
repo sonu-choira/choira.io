@@ -5,7 +5,7 @@ import { LuFilePlus } from "react-icons/lu";
 import style from "../../../pages/admin/studios/studio.module.css";
 import { FaDownload } from "react-icons/fa";
 import { MdNoteAdd } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import { useNavigateRouter } from "../../../navigateRoute";
 import { partnerAccess } from "../../../config/partnerAccess";
@@ -223,6 +223,13 @@ function BookingActionBar({
   const context = useContext(AccessContext);
 
   const [navAccess, setnavAccess] = useState(context || "");
+  let navCount = 0;
+  const { pathname } = useLocation();
+  if (pathname.includes("MyStudio")) {
+    navCount = 2;
+  } else if (pathname.includes("Bookings/studio")) {
+    navCount = 3;
+  }
   return (
     <>
       <div className={style.bookingStudiobtn} style={{ marginBottom: "2%" }}>
@@ -265,7 +272,7 @@ function BookingActionBar({
             </div>
           </div>
         ) : (
-          <div></div>
+          <div>{navCount == 2 ? <h2>My Studio</h2> : <h2>Bookings</h2>}</div>
         )}
 
         <div style={{ justifyContent: bookingPageCount === "c1" ? "" : "end" }}>
