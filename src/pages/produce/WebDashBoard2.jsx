@@ -5,6 +5,7 @@ import create from "../../assets/img/dashboard_img/create.svg";
 import produce from "../../assets/img/dashboard_img/produce_selected.svg";
 import community from "../../assets/img/dashboard_img/community.svg";
 import tanmay from "../../assets/img/dashboard_img/tanmay.png";
+import adminImg from "../../assets/img/dashboard_img/admin.jpeg";
 import ProfileEdit from "./ProfileEdit";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AiOutlineTeam } from "react-icons/ai";
@@ -292,8 +293,8 @@ function WebDashboard2({ tabCount, setTabCount, navCount }) {
                 <img
                   src={
                     navAccess
-                      ? adminData?.ownerImage || tanmay
-                      : adminData?.Image || tanmay
+                      ? adminData?.ownerImage || adminImg
+                      : adminData?.Image || adminImg
                   }
                   alt=""
                 />
