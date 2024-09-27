@@ -871,6 +871,7 @@ function AddNewStudio({ setSelectTab }) {
                           isEditMode={isEditMode}
                           setIndexofrooms={setIndexofrooms}
                           showMode={showMode}
+                          studioDetails={studioDetails}
                         />
                       </div>
                       <div>

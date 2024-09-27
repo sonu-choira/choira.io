@@ -34,6 +34,7 @@
     "react-modal": "^3.14.4",
     "react-model": "^4.2.0",
     "react-player": "^2.13.0",
+    "react-query": "^3.39.3",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.20.1",
     "react-scripts": "4.0.3",
@@ -53,12 +54,13 @@
   },
   "scripts": {
     "start": " react-scripts --openssl-legacy-provider start",
+    "start2": " react-scripts start",
     "start:qa": "env-cmd -f .env.qa react-scripts --openssl-legacy-provider start",
     "start:prod": "env-cmd -f .env.production react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --max_old_space_size=4096 --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-     "serve": "serve -s build"
+    "serve": "serve -s build"
   },
   "eslintConfig": {
     "extends": [

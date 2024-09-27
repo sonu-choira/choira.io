@@ -51,7 +51,7 @@ function Overview() {
   ]);
   const partnerData = [
     {
-      title: "Booking",
+      title: "Total Bookings",
       count:
         products?.bookingCount?.data?.length > 0
           ? products?.bookingCount?.data[0]?.totalCount
@@ -63,8 +63,11 @@ function Overview() {
       image: t2,
     },
     {
-      title: "Active Booking",
-      count: 159,
+      title: "Active Bookings",
+      count:
+        products?.bookingCount?.data?.length > 0
+          ? products?.bookingCount?.data[0]?.activeCount
+          : 0,
       active: 38,
       image: t4,
     },
@@ -77,29 +80,26 @@ function Overview() {
       active: 1589,
       image: t3,
     },
-    {
-      title: "Active Transaction",
-      count: 159,
-      active: 38,
-      image: t4,
-    },
+    // {
+    //   title: "Active Transaction",
+    //   count: 159,
+    //   active: 38,
+    //   image: t4,
+    // },
   ];
   console.log("Booking Data:", products?.bookingCount);
   console.log("Transaction Data:", products?.transactionCount);
   useEffect(() => {
     if (pathname.includes("Overview")) {
       Swal.fire({
-        title: "<strong>Under Development </strong>",
+        title: "<strong>Under Validation</strong>",
         icon: "info",
         html: `
-         This Page is Under Development.
-         The Data Of this Page is not Real.
+         <p>This page is currently <strong>under validation</strong>.</p>
+         <p>Please ensure it using <strong>real data</strong>.</p>
         `,
-        // showCloseButton: true,
-        // showCancelButton: true,
-        focusConfirm: false,
-
-        confirmButtonAriaLabel: "Ok",
+        confirmButtonText: "Got it",
+        confirmButtonAriaLabel: "Got it",
       });
     }
     chartApi
@@ -203,13 +203,13 @@ function Overview() {
                 <AreaGraph products={products} />
               </div>
             </div>
-            <br />
-            <br />
-            <div className={style.overviewPage4}>
+            {/* <br />
+            <br /> */}
+            {/* <div className={style.overviewPage4}>
               <div>
                 <SimpleLineChart />
               </div>
-            </div>
+            </div> */}
           </>
         )}
       </div>

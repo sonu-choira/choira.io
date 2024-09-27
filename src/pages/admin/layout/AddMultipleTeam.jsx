@@ -251,6 +251,7 @@ function AddMultipleTeam({
                   <input
                     type="text"
                     placeholder="designation"
+                    value={team.designation}
                     onChange={(event) =>
                       handleInputChange(event, index, "designation")
                     }

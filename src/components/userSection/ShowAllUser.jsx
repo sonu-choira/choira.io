@@ -91,13 +91,20 @@ function ShowAllUser() {
           : undefined;
     } else {
       let dataToSend;
-
       if (shortByUser) {
         dataToSend = "fullName";
         userAllFilterData.sortfield = dataToSend;
-      } else if (shortByEmail) {
+        userAllFilterData.sortDirection =
+          userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
+      } else {
+        userAllFilterData.sortDirection =
+          userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
+      }
+      if (shortByEmail) {
         dataToSend = "email";
         userAllFilterData.sortfield = dataToSend;
+        userAllFilterData.sortDirection =
+          userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
       } else if (shortBySrNo) {
         userAllFilterData.sortDirection =
           userAllFilterData.sortDirection === "asc" ? "desc" : "asc";

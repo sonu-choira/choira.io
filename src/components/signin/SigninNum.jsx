@@ -17,7 +17,8 @@ const SigninNum = ({
         <div>
           <label htmlFor="mob">Enter your mobile number</label>
         </div>
-        <div className={signStyle.enterMobInput}>
+
+        <div className={signStyle.enterMobInput} style={{ marginTop: "5px" }}>
           <div>
             <select
               name="mobpin"
