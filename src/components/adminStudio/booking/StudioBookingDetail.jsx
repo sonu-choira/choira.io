@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { Table, Popconfirm, Tag, Tooltip } from "antd";
 import style from "../../../pages/admin/studios/studio.module.css";
 
 import { GrShare } from "react-icons/gr";
@@ -82,11 +83,6 @@ function StudioBookingDetail({
       },
     });
   };
-  // const currentTableData = useMemo(() => {
-  //   const firstPageIndex = (currentPage - 1) * PageSize;
-  //   const lastPageIndex = firstPageIndex + PageSize;
-  //   return products.slice(firstPageIndex, lastPageIndex);
-  // }, [currentPage, products]);
 
   const [selectedStatus, setSelectedStatus] = useState([]);
 
@@ -94,15 +90,6 @@ function StudioBookingDetail({
     setProducts(products);
   }, [products]);
 
-  // const getNoOfhours = (bookingTime) => {
-  //   return moment
-  //     .duration(
-  //       moment(bookingTime?.endTime, "HH:mm").diff(
-  //         moment(bookingTime?.startTime, "HH:mm")
-  //       )
-  //     )
-  //     .asHours();
-  // };
   const closeAllFilter = () => {
     setShowstatusFilter(false);
   };
@@ -172,6 +159,127 @@ function StudioBookingDetail({
     });
   };
   const tableAccess = useContext(AccessContext);
+
+  const columns = [
+    {
+      title: "Id",
+      dataIndex: "_id",
+      key: "_id",
+      width: "5%",
+      render: (text) => `#${text.slice(-4)}`,
+    },
+    {
+      title: "User Name",
+      dataIndex: "userName",
+      key: "userName",
+      width: "10%",
+      render: (text) => <CopyToClipboard textToCopy={text} />,
+    },
+    {
+      title: "Studio Name",
+      dataIndex: "studioName",
+      key: "studioName",
+      width: "10%",
+      render: (text, record) => (
+        <>
+          <CopyToClipboard textToCopy={text} />
+          <br />
+          <small>
+            <CopyToClipboard textToCopy={record.roomName} />
+          </small>
+        </>
+      ),
+    },
+    {
+      title: "Hours",
+      dataIndex: "noOfHours",
+      key: "noOfHours",
+      width: "5%",
+    },
+    {
+      title: "Creation Date",
+      dataIndex: "creationTimeStamp",
+      key: "creationTimeStamp",
+      width: "10%",
+      render: (text) => moment(text).format("Do MMM YY"),
+    },
+    {
+      title: "Booking Date",
+      dataIndex: "bookingDate",
+      key: "bookingDate",
+      width: "10%",
+      render: (text) => moment(text).format("Do MMM YY"),
+    },
+    {
+      title: "Time Slot",
+      dataIndex: "bookingTime",
+      key: "bookingTime",
+      width: "10%",
+      render: (bookingTime) =>
+        `${moment(bookingTime?.startTime, ["HH:mm"]).format(
+          "hh:mm a"
+        )} - ${moment(bookingTime?.endTime, ["HH:mm"]).format("hh:mm a")}`,
+    },
+    {
+      title: "Amount",
+      dataIndex: "totalPrice",
+      key: "totalPrice",
+      width: "10%",
+      render: (text) => `₹${text}`,
+    },
+    {
+      title: "Status",
+      dataIndex: "bookingStatus",
+      key: "bookingStatus",
+      width: "10%",
+      render: (status) => (
+        <div
+          className={style.userProjectStatus}
+          style={{
+            backgroundColor:
+              parseInt(status) === 0
+                ? "#FFF3CA"
+                : parseInt(status) == 1
+                ? "#DDFFF3"
+                : "#FFDDDD",
+          }}
+        >
+          {parseInt(status) === 0
+            ? "Pending"
+            : parseInt(status) == 1
+            ? "Complete"
+            : "Cancelled"}
+        </div>
+      ),
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      width: "10%",
+      render: (text, record) => (
+        <div>
+          <Tooltip title="View">
+            <GoEye
+              style={{ cursor: "pointer" }}
+              // onClick={() => gotoShowDetails(record._id)}
+            />
+          </Tooltip>
+          &nbsp;
+          <Tooltip title="Delete">
+            {/* <Popconfirm
+              title="Are you sure to delete?"
+              onConfirm={() => console.log("Deleted", record._id)}
+              okText="Yes"
+              cancelText="No"
+            > */}
+            <RiDeleteBin5Fill style={{ color: "red", cursor: "pointer" }} />
+            {/* </Popconfirm> */}
+          </Tooltip>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
       <div className={style.studioTabelDiv}>
@@ -188,177 +296,14 @@ function StudioBookingDetail({
           sendFilterDataToapi={sendFilterDataToapi}
         />
         <div>
-          <table>
-            <thead className={style.studiotabelHead}>
-              <tr>
-                {headers.map((header, index) => (
-                  <th key={index} style={{ width: header.width }}>
-                    <div className={style.headingContainer}>
-                      {header.title}
-                      <div
-                        className={header.icon !== "" ? style.filterBox : ""}
-                        style={
-                          index === 8 && selectedData.length > 0
-                            ? getDynamicStyle(
-                                selectedData,
-                                selectedData.length > 0
-                              )
-                            : {}
-                        }
-                        onClick={() => {
-                          if (index == 8) {
-                            setShowstatusFilter(!showstatusFilter);
-                          }
-                        }}
-                        // onClick={handelShortbyClick}
-                      >
-                        <span>{header.icon}</span>
-                        {index == 8 &&
-                          (showstatusFilter ? (
-                            <CheckBoxFilterComponent
-                              data={status}
-                              // cusstyle={{ left: "-355%" }}
-                              disabledsearch={true}
-                              selectedData={selectedData}
-                              setSelectedData={setSelectedData}
-                              onFilterApply={handleFilterData}
-                              onResetFilter={handleResetFilter}
-                              sendFilterDataToapi={sendFilterDataToapi}
-                              closeAllFilter={() =>
-                                console.log("closeAllFilter triggered")
-                              }
-                            />
-                          ) : (
-                            ""
-                          ))}
-                      </div>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {products?.length === 0 ? (
-                <tr>
-                  <td>
-                    <ChoiraLoder2 />
-                  </td>
-                </tr>
-              ) : (
-                products?.map((products, i) => {
-                  return (
-                    <tr key={i}>
-                      <td title={products._id}>#{products._id.slice(-4)}</td>
-                      <td>
-                        <CopyToClipboard textToCopy={products.userName} />
-                      </td>
-                      <td title={products.studioName}>
-                        <CopyToClipboard textToCopy={products.studioName} />
-
-                        <br />
-                        <small title={products.studioName}>
-                          <CopyToClipboard textToCopy={products.roomName} />
-                        </small>
-                      </td>
-                      <td>{products.noOfHours}</td>
-                      <td
-                        style={{ textAlign: "center" }}
-                        title={moment(products.creationTimeStamp).format(
-                          "Do MMM  YY, hh:mm a "
-                        )}
-                      >
-                        {moment(products.creationTimeStamp).format(
-                          "Do MMM  YY"
-                        )}
-                      </td>
-                      <td
-                        style={{ textAlign: "center" }}
-                        title={moment(products.bookingDate).format(
-                          "Do MMM  YY, hh:mm a "
-                        )}
-                      >
-                        {moment(products.bookingDate).format("Do MMM  YY")}
-                      </td>
-
-                      {/* <td>{products.planId}</td> */}
-                      <td>
-                        {`${moment(products?.bookingTime?.startTime, [
-                          "HH:mm",
-                        ]).format("hh:mm a")} - ${moment(
-                          products?.bookingTime?.endTime,
-                          ["HH:mm"]
-                        ).format("hh:mm a")}`}
-                      </td>
-                      <td>₹{products?.totalPrice}</td>
-                      <td>
-                        <div
-                          className={style.userProjectStatus}
-                          style={{
-                            backgroundColor:
-                              parseInt(products.bookingStatus) === 0
-                                ? "#FFF3CA"
-                                : parseInt(products.bookingStatus) == 1
-                                ? "#DDFFF3"
-                                : "#FFDDDD",
-                          }}
-                        >
-                          {parseInt(products.bookingStatus) === 0
-                            ? "Pending"
-                            : parseInt(products.bookingStatus) == 1
-                            ? "Complete"
-                            : "Cancelled"}
-                        </div>
-                      </td>
-                      <td className={style.tableActionbtn}>
-                        <div>
-                          {tableAccess ? (
-                            (console.log(
-                              "tableAccess",
-                              tableAccess?.bookings?.action
-                            ),
-                            tableAccess?.bookings?.action == "write" ? (
-                              <>
-                                <GoEye
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    // gotoShowDetails(products._id);
-                                  }}
-                                />
-                                &nbsp;
-                                <RiDeleteBin5Fill
-                                  style={{ color: "red", cursor: "pointer" }}
-                                />
-                              </>
-                            ) : (
-                              <GoEye
-                                style={{ cursor: "pointer" }}
-                                onClick={() => {
-                                  // gotoShowDetails(products._id);
-                                }}
-                              />
-                            ))
-                          ) : (
-                            <>
-                              <GoEye
-                                style={{ cursor: "pointer" }}
-                                onClick={() => {
-                                  // gotoShowDetails(products._id);
-                                }}
-                              />
-                              &nbsp;
-                              <RiDeleteBin5Fill
-                                style={{ color: "red", cursor: "pointer" }}
-                              />
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+          <Table
+            columns={columns}
+            dataSource={products}
+            pagination={false}
+            rowKey={(record) => record._id}
+            // loading={products.length === 0}
+            locale={{ emptyText: <ChoiraLoder2 /> }}
+          />
         </div>
       </div>
       <div className={style.tabelpaginationDiv}>
