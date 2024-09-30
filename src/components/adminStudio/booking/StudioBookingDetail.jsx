@@ -272,6 +272,10 @@ function StudioBookingDetail({
           text: "Cancelled",
           value: 2,
         },
+        {
+          text: "Payment Pending",
+          value: 3,
+        },
       ],
       filterMultiple: false,
 
@@ -284,14 +288,21 @@ function StudioBookingDetail({
                 ? "#FFF3CA"
                 : parseInt(status) == 1
                 ? "#DDFFF3"
+                : parseInt(status) == 3
+                ? "#9c9d9d73"
                 : "#FFDDDD",
+            // : "#FFDDDD",
           }}
         >
           {parseInt(status) === 0
             ? "Pending"
             : parseInt(status) == 1
             ? "Complete"
-            : "Cancelled"}
+            : parseInt(status) == 3
+            ? "Payment Pending"
+            : parseInt(status) == 2
+            ? "Cancelled"
+            : ""}
         </div>
       ),
     },
