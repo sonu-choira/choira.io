@@ -344,37 +344,58 @@ function ShowAllUser() {
         />
       ) : (
         <>
-          <div className={style.studioTabelDiv}>
-            <DateAndSearchFilter
-              setProducts={setProducts}
-              setTotalPage={setTotalPage}
-              pageCount={pageCount}
-              perPage={perPage}
-              setPageCount={setPageCount}
-              userFiler={userFiler}
-              setUserFilterText={setUserFilterText}
-              userFilterText={userFilterText}
-              userAllFilterData={userAllFilterData}
-            />
-            <div>
-              <Table
-                columns={columns}
-                dataSource={products}
-                rowKey="_id"
-                pagination={false} // Disable Ant Design's default pagination
-                onChange={handleTableChange}
-                // loading={loader}
-              />
-
-              {/* Your Custom Pagination Component */}
+          <div className={style.allStudioDetailsPage}>
+            <div
+              className={style.bookingStudiobtn}
+              style={{ marginBottom: "2%" }}
+            >
+              <div>
+                <div style={{ background: "none" }}>All User</div>
+              </div>
+              <div>
+                <Button
+                  name={"Download"}
+                  icon={<FaDownload />}
+                  style={{ height: "60%", gap: "5%" }}
+                  // disabled={true}
+                  onClick={downloadUserData}
+                  showBtnLoader={showBtnLoader}
+                  loaderText={loaderText}
+                />
+              </div>
             </div>
-          </div>
-          <div className={style.tabelpaginationDiv}>
-            <PaginationNav
-              pageCount={pageCount}
-              totalPage={totalPage}
-              setPageCount={setPageCount}
-            />
+            <div className={style.studioTabelDiv}>
+              <DateAndSearchFilter
+                setProducts={setProducts}
+                setTotalPage={setTotalPage}
+                pageCount={pageCount}
+                perPage={perPage}
+                setPageCount={setPageCount}
+                userFiler={userFiler}
+                setUserFilterText={setUserFilterText}
+                userFilterText={userFilterText}
+                userAllFilterData={userAllFilterData}
+              />
+              <div>
+                <Table
+                  columns={columns}
+                  dataSource={products}
+                  rowKey="_id"
+                  pagination={false} // Disable Ant Design's default pagination
+                  onChange={handleTableChange}
+                  // loading={loader}
+                />
+
+                {/* Your Custom Pagination Component */}
+              </div>
+            </div>
+            <div className={style.tabelpaginationDiv}>
+              <PaginationNav
+                pageCount={pageCount}
+                totalPage={totalPage}
+                setPageCount={setPageCount}
+              />
+            </div>
           </div>
         </>
       )}

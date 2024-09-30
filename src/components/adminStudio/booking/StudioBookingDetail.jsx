@@ -130,6 +130,33 @@ function StudioBookingDetail({
     setSelectedData("");
     console.log("selectedData before reset:", selectedData);
   };
+  const handleTableChange = (pagination, filters, sorter) => {
+    console.log("filters:", filters);
+    let status = filters?.bookingStatus?.[0] || "";
+    setProducts([]);
+    setPageCount(1);
+    delete sendFilterDataToapi.bookingType;
+    if (status) {
+      sendFilterDataToapi.bookingType = status;
+    }
+    sendFilterDataToapi.pageCount = pageCount;
+
+    clearEmptyField(sendFilterDataToapi);
+    let dynamicApi = "";
+    if (partnerAccess) {
+      dynamicApi = "getPartnerBookings";
+    } else {
+      dynamicApi = "getBookings";
+    }
+
+    bookingPageApi[dynamicApi](sendFilterDataToapi).then((response) => {
+      console.log("date filter response:", response);
+      if (response.status) {
+        setProducts(response.data);
+        setTotalPage(response?.paginate?.totalPages);
+      }
+    });
+  };
 
   const handleFilterData = (sendFilterDataToapi) => {
     setProducts([]);
@@ -232,6 +259,26 @@ function StudioBookingDetail({
       dataIndex: "bookingStatus",
       key: "bookingStatus",
       width: "10%",
+      filters: [
+        {
+          text: "Pending",
+          value: "0",
+        },
+        {
+          text: "Completed",
+          value: 1,
+        },
+        {
+          text: "Cancelled",
+          value: 2,
+        },
+        {
+          text: "Payment Pending",
+          value: 3,
+        },
+      ],
+      filterMultiple: false,
+
       render: (status) => (
         <div
           className={style.userProjectStatus}
@@ -241,14 +288,21 @@ function StudioBookingDetail({
                 ? "#FFF3CA"
                 : parseInt(status) == 1
                 ? "#DDFFF3"
+                : parseInt(status) == 3
+                ? "#9c9d9d73"
                 : "#FFDDDD",
+            // : "#FFDDDD",
           }}
         >
           {parseInt(status) === 0
             ? "Pending"
             : parseInt(status) == 1
             ? "Complete"
-            : "Cancelled"}
+            : parseInt(status) == 3
+            ? "Payment Pending"
+            : parseInt(status) == 2
+            ? "Cancelled"
+            : ""}
         </div>
       ),
     },
@@ -256,6 +310,7 @@ function StudioBookingDetail({
       title: "Actions",
       key: "actions",
       width: "10%",
+
       render: (text, record) => (
         <div>
           <Tooltip title="View">
@@ -300,6 +355,7 @@ function StudioBookingDetail({
             columns={columns}
             dataSource={products}
             pagination={false}
+            onChange={handleTableChange}
             rowKey={(record) => record._id}
             // loading={products.length === 0}
             locale={{ emptyText: <ChoiraLoder2 /> }}

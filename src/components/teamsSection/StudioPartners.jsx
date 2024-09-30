@@ -69,17 +69,10 @@ const StudioPartners = ({
 
   const columns = [
     {
-      title: (
-        <div className={style.headingContainer}>
-          S.No.
-          <div className={style.filterBox} onClick={handleSortByClick}>
-            <RiExpandUpDownLine />
-          </div>
-        </div>
-      ),
+      title: "Sr.No.",
       dataIndex: "serialNumber",
       key: "serialNumber",
-      align: "center",
+      sorter: (a, b) => handleSortByClick(),
       render: (text, record, index) => {
         return shortby === "asc"
           ? index + 1 + (pageCount - 1) * perPage

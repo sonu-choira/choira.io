@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Table, Tooltip } from "antd";
 import style from "../../../pages/admin/studios/studio.module.css";
+import { AiFillFilter } from "react-icons/ai";
 
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
@@ -49,8 +50,11 @@ const AllStudioDetail2 = ({
   const [selectedCity, setSelectedCity] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
-  const [priceFilter, setPriceFilter] = useState([]);
-  const [shortby, setShortby] = useState([]);
+  const [priceFilter, setPriceFilter] = useState({
+    minPrice: "",
+    maxPrice: "",
+  });
+  const [shortby, setShortby] = useState("creationTimeStamp:desc");
   const navigate = useNavigate();
   const tableAccess = useContext(AccessContext);
   const [loader, setLoader] = useState(false);
@@ -170,6 +174,66 @@ const AllStudioDetail2 = ({
       },
     });
   };
+  const [showpricefilter, setshowpricefilter] = useState(false);
+  const handelpriceFilter = () => {
+    setshowpricefilter((prevState) => {
+      if (!prevState) {
+        // If toggling to true, set other filters to false
+      }
+      return !prevState;
+    });
+  };
+  const closeAllFilter = () => {
+    setshowpricefilter(false);
+  };
+  useEffect(() => {
+    sendFilterDataToapi.city = selectedCity[0];
+    sendFilterDataToapi.totalRooms = selectedRoom[0];
+    sendFilterDataToapi.active =
+      selectedStatus[0] === "active"
+        ? 1
+        : selectedStatus[0] === "inactive"
+        ? "0"
+        : "";
+    sendFilterDataToapi.minPricePerHour = priceFilter.minPrice;
+    sendFilterDataToapi.maxPricePerHour = priceFilter.maxPrice;
+    // sendFilterDataToapi.creationTimeStamp = selectedDate;
+    sendFilterDataToapi.sortBy = shortby;
+
+    console.log(sendFilterDataToapi);
+  }, [
+    selectedCity,
+    selectedRoom,
+    selectedStatus,
+    priceFilter,
+    // selectedDate,
+    shortby,
+  ]);
+
+  useEffect(() => {
+    setProducts([]);
+    appAndmoreApi
+      .filterData(sendFilterDataToapi)
+      .then((response) => {
+        console.log("filter applied:", response);
+        setProducts(response.studios);
+        setTotalPage(response.paginate.totalPages);
+      })
+      .catch((error) => {
+        console.error("Error filter studio:", error);
+      });
+
+    return () => {
+      setProducts([]);
+    };
+  }, [shortby]);
+  const handelShortbyClick = () => {
+    if (shortby == "creationTimeStamp:asc") {
+      setShortby("creationTimeStamp:desc");
+    } else {
+      setShortby("creationTimeStamp:asc");
+    }
+  };
 
   const gotoShowStudioDetails = (id) => {
     const isEditMode = true;
@@ -190,11 +254,13 @@ const AllStudioDetail2 = ({
       clearTimeout(loading_timeout);
     };
   }, []);
+
   const columns = [
     {
       title: "Studio",
       dataIndex: "fullName",
       key: "fullName",
+      sorter: (a, b) => handelShortbyClick(),
       render: (text, record) => (
         <div style={{ display: "flex", alignItems: "center" }}>
           <div className={style.studioImage}>
@@ -216,7 +282,38 @@ const AllStudioDetail2 = ({
       ),
     },
     {
-      title: "Price",
+      title: (
+        <div className={style.headingContainer}>
+          Price
+          <div
+            className={style.filterBox}
+            style={{
+              backgroundColor:
+                priceFilter.minPrice || priceFilter.maxPrice !== ""
+                  ? "#ffc70133"
+                  : "",
+            }}
+          >
+            <span onClick={handelpriceFilter}>
+              <AiFillFilter style={{ color: "#B1B1B1" }} />
+            </span>
+            {showpricefilter ? (
+              <PriceFilter
+                closeAllFilter={closeAllFilter}
+                priceFilter={priceFilter}
+                setPriceFilter={setPriceFilter}
+                sendFilterDataToapi={sendFilterDataToapi}
+                setProducts={setProducts}
+                setTotalPage={setTotalPage}
+                bookingPageCount={bookingPageCount}
+                setfilterNav={setfilterNav}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+      ),
       dataIndex: ["roomsDetails", "0", "pricePerHour"],
       key: "pricePerHour",
       render: (price) => (
