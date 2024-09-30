@@ -93,9 +93,10 @@ function UserBookingDetails({
     },
     {
       title: "Date",
-      dataIndex: "date",
+      dataIndex: "creationTimeStamp",
       key: "date",
-      render: (text) => moment(text).format("Do MMM  YY, hh:mm a"),
+      render: (creationTimeStamp) =>
+        moment(creationTimeStamp).format("Do MMM  YY, hh:mm a"),
     },
     {
       title: "Time Slot",
