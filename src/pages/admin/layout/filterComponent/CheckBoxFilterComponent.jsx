@@ -77,7 +77,7 @@ const CheckBoxFilterComponent = ({
                 type="checkbox"
                 name={data[key]}
                 id={key}
-                checked={selectedData.includes(data[key])}
+                checked={selectedData == data[key]}
                 onChange={handleCheckboxChange}
               />
               <label htmlFor={key}>{key}</label>

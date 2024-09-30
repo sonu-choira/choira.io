@@ -125,6 +125,7 @@ function StudioBookingDetail({
     Pending: 0,
     Completed: 1,
     Cancelled: 2,
+    P_Payment: -1,
   };
   //  ["active", "cancelled", "completed"];
   const [showstatusFilter, setShowstatusFilter] = useState(false);
@@ -299,14 +300,21 @@ function StudioBookingDetail({
                                 ? "#FFF3CA"
                                 : parseInt(products.bookingStatus) == 1
                                 ? "#DDFFF3"
+                                : parseInt(products.bookingStatus) == 3
+                                ? "#9c9d9d73"
                                 : "#FFDDDD",
+                            // : "#FFDDDD",
                           }}
                         >
                           {parseInt(products.bookingStatus) === 0
                             ? "Pending"
                             : parseInt(products.bookingStatus) == 1
                             ? "Complete"
-                            : "Cancelled"}
+                            : parseInt(products.bookingStatus) == 3
+                            ? "Payment Pending"
+                            : parseInt(products.bookingStatus) == 2
+                            ? "Cancelled"
+                            : ""}
                         </div>
                       </td>
                       <td className={style.tableActionbtn}>
