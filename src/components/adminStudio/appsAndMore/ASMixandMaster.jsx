@@ -185,6 +185,7 @@ function ASMixandMaster({
           columns={columns}
           rowKey="_id"
           pagination={false}
+          locale={{ emptyText: <ChoiraLoder2 /> }}
         />
       </div>
       <div className={style.tabelpaginationDiv}>
