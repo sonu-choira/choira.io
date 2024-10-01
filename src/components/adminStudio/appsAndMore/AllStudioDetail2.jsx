@@ -491,7 +491,7 @@ const AllStudioDetail2 = ({
             rowKey="_id"
             pagination={false} // Disable Ant Design's default pagination
             onChange={handleTableChange}
-            loading={loader}
+            locale={{ emptyText: <ChoiraLoder2 /> }}
           />
 
           {/* Your Custom Pagination Component */}

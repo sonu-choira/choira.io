@@ -228,14 +228,15 @@ function StudioBookingDetail({
       dataIndex: "creationTimeStamp",
       key: "creationTimeStamp",
       width: "10%",
-      render: (text) => moment(text).format("Do MMM YY"),
+      render: (creationTimeStamp) =>
+        moment(creationTimeStamp).format("Do MMM YY"),
     },
     {
       title: "Booking Date",
       dataIndex: "bookingDate",
       key: "bookingDate",
       width: "10%",
-      render: (text) => moment(text).format("Do MMM YY"),
+      render: (bookingDate) => moment(bookingDate).format("Do MMM YY"),
     },
     {
       title: "Time Slot",

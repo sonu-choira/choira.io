@@ -383,6 +383,7 @@ function ShowAllUser() {
                   rowKey="_id"
                   pagination={false} // Disable Ant Design's default pagination
                   onChange={handleTableChange}
+                  locale={{ emptyText: <ChoiraLoder2 /> }}
                   // loading={loader}
                 />
 

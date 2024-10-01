@@ -113,7 +113,8 @@ const ASMusicProduction = ({
       dataIndex: "creationTimeStamp",
       // sorter: (a, b) =>
       //   moment(a.creationTimeStamp) - moment(b.creationTimeStamp),
-      render: (text) => moment(text).format("Do MMM YY, hh:mm a"),
+      render: (creationTimeStamp) =>
+        moment(creationTimeStamp).format("Do MMM YY, hh:mm a"),
     },
     {
       title: "Activity Status",
@@ -165,7 +166,7 @@ const ASMusicProduction = ({
           dataSource={products}
           pagination={false}
           rowKey="_id"
-          loading={!products.length && <ChoiraLoder2 />}
+          locale={{ emptyText: <ChoiraLoder2 /> }}
         />
       </div>
       <div className={style.tabelpaginationDiv}>

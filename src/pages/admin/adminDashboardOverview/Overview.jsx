@@ -187,8 +187,8 @@ function Overview() {
           <PartnerTransChart products={products} />
         ) : (
           <>
-            {/* <ThreeWaveChart products={products} /> */}
-            <DynamicGraph products={products} />
+            <ThreeWaveChart products={products} />
+            {/* <DynamicGraph products={products} /> */}
             <div className={style.overviewPage2}>
               <div>
                 <DoughnutChart products={products} />

@@ -29,11 +29,7 @@ function ChoiraLoder2() {
       ) : (
         <span className={style.parent}>
           <div className={style.child}>
-            <img
-              src={Loader}
-              alt="choira loading"
-              style={{ height: "50px", width: "50px" }}
-            />
+            <img src={Loader} alt="choira loading" />
           </div>
         </span>
       )}
