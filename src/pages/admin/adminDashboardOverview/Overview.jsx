@@ -18,6 +18,7 @@ import chartApi from "../../../services/chartApi";
 import NumberCounter from "../layout/NumberCounter";
 import { partnerAccess } from "../../../config/partnerAccess";
 import PartnerTransChart from "../../../components/charts/PartnerTransChart";
+import DynamicGraph from "../../../components/charts/DynamicGraph";
 // import chartApi from "../../../services/chartApi";
 
 function Overview() {
@@ -186,7 +187,8 @@ function Overview() {
           <PartnerTransChart products={products} />
         ) : (
           <>
-            <ThreeWaveChart products={products} />
+            {/* <ThreeWaveChart products={products} /> */}
+            <DynamicGraph products={products} />
             <div className={style.overviewPage2}>
               <div>
                 <DoughnutChart products={products} />

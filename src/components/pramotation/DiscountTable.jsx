@@ -1,32 +1,27 @@
 import React, { useEffect, useState } from "react";
-import style from "../../pages/admin/studios/studio.module.css";
-import { IoCalendarOutline } from "react-icons/io5";
-import { BiSearchAlt } from "react-icons/bi";
-import ChoiraLoder2 from "../loader/ChoiraLoder2";
-import { RiDeleteBin5Fill } from "react-icons/ri";
-import { GrShare } from "react-icons/gr";
+import { Table, Button, Skeleton } from "antd";
 import { FaPencilAlt, FaRegEye } from "react-icons/fa";
 import promotionApi from "../../services/promotionApi";
-import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
-import Switch from "../../pages/admin/layout/Switch";
+import ChoiraLoder2 from "../loader/ChoiraLoder2";
+import style from "../../pages/admin/studios/studio.module.css";
 import { clearEmptyField } from "../../utils/helperFunction";
+import Switch from "../../pages/admin/layout/Switch";
 
 function DiscountTable({ editData, setEditData }) {
-  const [products, setProducts] = useState("");
-  const [showloader, setShowloader] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
   const [pid, setPid] = useState(0);
 
-  const gotoEditPage = (id) => {
-    console.log(id);
-    setEditData(products.filter((item) => item._id === id)[0]);
-  };
   useEffect(() => {
     promotionApi.getAllDiscount().then((res) => {
-      console.log(res.discounts);
       setProducts(res.discounts);
     });
   }, []);
 
+  const gotoEditPage = (id) => {
+    setEditData(products.find((item) => item._id === id));
+  };
+  const [showloader, setShowloader] = useState(false);
   const updateStatus = (id, status) => {
     setShowloader(true);
     let data = products.find((item) => item._id === id);
@@ -62,86 +57,77 @@ function DiscountTable({ editData, setEditData }) {
       });
   };
 
+  const columns = [
+    {
+      title: "S.No.",
+      dataIndex: "index",
+      key: "index",
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: "Discount Name",
+      dataIndex: "discountName",
+      key: "discountName",
+      render: (text) => <span title={text}>{text}</span>,
+    },
+    {
+      title: "Discount Type",
+      dataIndex: "discountType",
+      key: "discountType",
+    },
+    {
+      title: "Discount Percentage",
+      dataIndex: "discountPercentage",
+      key: "discountPercentage",
+    },
+    {
+      title: "Max. Amount",
+      dataIndex: "maxCapAmount",
+      key: "maxCapAmount",
+    },
+    {
+      title: "Status",
+      dataIndex: "active",
+      key: "active",
+      render: (active, record) => (
+        <Switch
+          status={record.active}
+          isloading={pid === record._id && showloader}
+          onClick={() => {
+            setPid(record._id);
+            updateStatus(record._id, record.active);
+            console.log(record.active, "----------------------->");
+          }}
+        />
+      ),
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (text, record) => (
+        <div className={style.tableActionbtn}>
+          <FaRegEye style={{ cursor: "pointer" }} /> &nbsp; &nbsp;
+          <FaPencilAlt
+            style={{ cursor: "pointer" }}
+            onClick={() => gotoEditPage(record._id)}
+          />
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
-      <div
-        className={style.studioTabelDiv}
-        style={{ width: "100%", height: "100%" }}
-      >
-        <div style={{ display: "none" }}></div>
-        <div style={{ width: "98%", height: "100%" }}>
-          <table>
-            <thead
-              className={style.studiotabelHead}
-              style={{ borderRadius: "100px" }}
-            >
-              <tr>
-                <th style={{ width: "10%" }}>S.No.</th>
-                <th>Discount Name</th>
-                <th>Discount Type</th>
-                <th>discountPercentage</th>
-                <th>Max. Amount</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products?.length === 0 ? (
-                <tr>
-                  <td>
-                    <ChoiraLoder2 />
-                  </td>
-                </tr>
-              ) : (
-                products?.map((discount, i) => (
-                  <tr key={i}>
-                    <td> {i + 1}</td>
-                    {/* <td title={discount.discountName}>
-                      <CopyToClipboard textToCopy={discount?.discountName} />
-                    </td> */}
-                    <td title={discount.discountName}>
-                      {/* <CopyToClipboard textToCopy={discount?.discountName} /> */}
-                      {discount.discountName}
-                    </td>
-                    <td>{discount.discountType}</td>
-                    <td>{discount.discountPercentage}</td>
-
-                    <td>{discount.maxCapAmount}</td>
-                    <td>
-                      <Switch
-                        isloading={pid === discount._id && showloader}
-                        status={discount.active}
-                        onClick={() => {
-                          setPid(discount._id);
-                          updateStatus(discount._id, discount.active);
-                        }}
-                      />
-                    </td>
-
-                    <td className={style.tableActionbtn}>
-                      <div>
-                        <FaRegEye
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            // Add your share logic here
-                          }}
-                        />{" "}
-                        &nbsp; &nbsp;
-                        <FaPencilAlt
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            gotoEditPage(discount._id);
-                          }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {products.length === 0 ? (
+        <Skeleton active />
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={products}
+          rowKey="_id"
+          pagination={false}
+        />
+      )}
     </>
   );
 }

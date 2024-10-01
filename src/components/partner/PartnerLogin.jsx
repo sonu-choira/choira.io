@@ -7,6 +7,7 @@ import google from "../../assets/img/google.png";
 import facebook from "../../assets/img/facebook.png";
 import apple from "../../assets/img/apple.png";
 import SigninNum from "../signin/SigninNum";
+import { useMutation } from "react-query";
 
 import "../../pages/home/home.scss";
 
@@ -34,7 +35,6 @@ import PartnerSignup from "./PartnerSignup";
 
 let loginCheckVerify = true;
 
-let saveIntervalSpotify;
 let storedata;
 
 // console.log(btoa(JSON.stringify(initFirebase)))
@@ -95,32 +95,42 @@ function PartnerLogin() {
     }
   };
 
-  const checkLoginData = () => {
-    setShowBtnLoader(true);
-
-    // const role = mobileNumber === "9898989898" ? "admin" : "user";
-    partnerApi
-      .login(countryCode + mobileNumber, "NUMBER")
-      .then((response) => {
-        setShowBtnLoader(false);
+  const loginMutation = useMutation(
+    ({ phoneNumber }) => partnerApi.login(phoneNumber, "NUMBER"),
+    {
+      onMutate: () => {
+        setShowBtnLoader(true); // Show the button loader before request
+      },
+      onSuccess: (response) => {
+        setShowBtnLoader(false); // Hide the button loader on success
         console.log("res------", response);
         console.log("res------", response.user);
         localStorage.setItem(
           "studio-owner",
           JSON.stringify(response.ownerData || {})
         );
-        handelAuthResponse(response);
-      })
-      .catch((error) => {
-        setShowBtnLoader(false);
-        errorAlert(error.message);
+        handelAuthResponse(response); // Handle auth response
+      },
+      onError: (error) => {
+        setShowBtnLoader(false); // Hide the loader on error
+        errorAlert(error.message); // Display error alert
         console.log(error);
-      });
-  };
+      },
+      onSettled: () => {
+        setShowBtnLoader(false); // Always hide the loader when the mutation is settled
+      },
+    }
+  );
 
   const handleMobileNumberChange = (e) => {
     const value = e.target.value.slice(0, 10);
     setMobileNumber(value ? value : "");
+  };
+
+  // Refactored checkLoginData function
+  const checkLoginData = () => {
+    const phoneNumber = countryCode + mobileNumber;
+    loginMutation.mutate({ phoneNumber });
   };
 
   const gotoBooking = () => {
@@ -163,50 +173,54 @@ function PartnerLogin() {
   const [enteredOTP, setEnteredOTP] = useState("");
 
   const source = axios.CancelToken.source();
+  const handleOtpResponse = (response) => {
+    if (response.status) {
+      TokenService.setData("token", response?.token);
+      localStorage.setItem("userType", "owner");
+      sucessAlret("OTP is Correct!", "Welcome back 😊");
 
-  const check_otp_btn = () => {
-    setShowBtnLoader(true);
+      localStorage.setItem("isSignin", "true");
+      localStorage.setItem("studio-owner", JSON.stringify(response.ownerData));
+      if (!response.newOwner) {
+        gotoBooking();
+      } else {
+        setSign(3);
+      }
+      // setCheckOtp(false);
+    } else {
+      errorAlert("OTP is Incorrect!", "Please try again 😕");
+      console.log("Not get Token");
+    }
+  };
 
-    partnerApi
-      .verifyOtp(countryCode + mobileNumber, enteredOTP)
-      .then((response) => {
+  const verifyOtpMutation = useMutation(
+    ({ phoneNumber, otp }) => partnerApi.verifyOtp(phoneNumber, otp),
+    {
+      onMutate: () => {
+        setShowBtnLoader(true);
+      },
+      onSuccess: (response) => {
         setShowBtnLoader(false);
         console.log("res------", response);
-        if (response.status) {
-          setShowBtnLoader(false);
-          TokenService.setData("token", response?.token);
-          localStorage.setItem("userType", "owner");
-          sucessAlret("OTP is Correct!", "Welcome back 😊");
-
-          localStorage.setItem("isSignin", "true");
-          localStorage.setItem(
-            "studio-owner",
-            JSON.stringify(response.ownerData)
-          );
-          if (!response.newOwner) {
-            gotoBooking();
-          } else {
-            setSign(3);
-          }
-          // setCheckOtp(false);
-        } else {
-          setShowBtnLoader(false);
-          errorAlert("OTP is Incorrect!", "Please try again 😕");
-          console.log("Not get Token");
-        }
-      })
-      .catch((error) => {
+        handleOtpResponse(response);
+      },
+      onError: (error) => {
         setShowBtnLoader(false);
         errorAlert(error.message);
         console.log(error);
-      });
+      },
+      onSettled: () => {
+        setShowBtnLoader(false);
+      },
+    }
+  );
+
+  // Refactored check_otp_btn function
+  const check_otp_btn = () => {
+    const phoneNumber = countryCode + mobileNumber;
+    verifyOtpMutation.mutate({ phoneNumber, otp: enteredOTP });
   };
 
-  // useEffect(() => {
-  //   return () => {
-  //     source.cancel("Operation canceled by the user.");
-  //   };
-  // }, [source]);
   useEffect(() => {
     let signin = localStorage.getItem("isSignin");
     if (signin) {
@@ -251,13 +265,6 @@ function PartnerLogin() {
           onClick={gotoHome}
         />
       </div>
-      {/* <Alert
-        message="Success Tips"
-        description="Detailed description and advice about successful copywriting."
-        type="success"
-        showIcon
-        closable
-      /> */}
 
       <div className={signStyle.wrapper}>
         <form onSubmit={(event) => event.preventDefault()}>
@@ -350,21 +357,11 @@ function PartnerLogin() {
                             : signStyle.visiblity
                         }`}
                       >
-                        <div
-                          style={{ visibility: "hidden" }}
-                          // onClick={() =>
-                          //   handleFirebaseClick(googleProvider, "GOOGLE")
-                          // }
-                        >
+                        <div style={{ visibility: "hidden" }}>
                           <img src={google} alt="Google" />
                           <small>Sign in with Google </small>
                         </div>
-                        <div
-                          style={{ visibility: "hidden" }}
-                          // onClick={() =>
-                          //   handleFirebaseClick(facebookProvider, "FACEBOOK")
-                          // }
-                        >
+                        <div style={{ visibility: "hidden" }}>
                           <img src={facebook} alt="Facebook" />
                         </div>
                         <div style={{ visibility: "hidden" }}>
