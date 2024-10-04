@@ -26,6 +26,7 @@ import Switch from "../../pages/admin/layout/Switch";
 import axios from "axios";
 import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 import { Table, Tooltip } from "antd";
+import { useMutation, useQuery } from "react-query";
 
 let userAllFilterData = {
   sortfield: "",
@@ -37,6 +38,8 @@ let userAllFilterData = {
 function ShowAllUser() {
   const [products, setProducts] = useState([]);
   const [totalResult, setTotalResult] = useState();
+  const [selectedStatus, setSelectedStatus] = useState([]);
+
   const [perPage, setPerPage] = useState(7);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
@@ -59,28 +62,39 @@ function ShowAllUser() {
     });
   };
 
-  const handelFilterApi = (pageCount, userAllFilterData) => {
-    userApi
-      .getAllUser(perPage, pageCount, userAllFilterData)
-      .then((response) => {
-        if (response.users) {
-          setProducts(response.users);
-          setTotalPage(response.paginate.totalPages);
-          setTotalResult(response.paginate.totalResults);
+  const useFilteredUsers = () => {
+    return useMutation(
+      ({ perPage, pageCount, userAllFilterData }) =>
+        userApi.getAllUser(perPage, pageCount, userAllFilterData),
+      {
+        // On success, update the state with the response data
+        onSuccess: (response) => {
+          if (response.users) {
+            setProducts(response.users);
+            setTotalPage(response.paginate.totalPages);
+            setTotalResult(response.paginate.totalResults);
+          }
+        },
+        // Handle any errors that occur during the API request
+        onError: (error) => {
+          console.error("Error fetching users:", error);
+        },
+      }
+    );
+  };
+  const { mutate: fetchFilteredUsers, isLoading, error } = useFilteredUsers();
 
-          // setPageCount(response.paginate.page);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching studios:", error);
-      });
+  // Handle the API call when the filter is applied
+  const handleFilterApi = (pageCount, userAllFilterData) => {
+    fetchFilteredUsers({
+      perPage,
+      pageCount,
+      userAllFilterData,
+    });
   };
 
   useEffect(() => {
-    console.log(" -----");
-    setProducts([]);
-
-    const source = axios.CancelToken.source();
+    setProducts([]); // Clear products on filter/sort change
 
     if (selectedStatus[0]) {
       userAllFilterData.status =
@@ -96,11 +110,7 @@ function ShowAllUser() {
         userAllFilterData.sortfield = dataToSend;
         userAllFilterData.sortDirection =
           userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
-      } else {
-        userAllFilterData.sortDirection =
-          userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
-      }
-      if (shortByEmail) {
+      } else if (shortByEmail) {
         dataToSend = "email";
         userAllFilterData.sortfield = dataToSend;
         userAllFilterData.sortDirection =
@@ -110,34 +120,58 @@ function ShowAllUser() {
           userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
       }
     }
-
-    userApi
-      .getAllUser(perPage, pageCount, userAllFilterData, {
-        cancelToken: source.token,
-      })
-      .then((response) => {
-        console.log(`====================> response `, response);
-        console.log("response.data.users", response.users);
+  }, [
+    selectedStatus,
+    shortByUser,
+    shortByEmail,
+    shortBySrNo,
+    userAllFilterData,
+  ]);
+  const fetchUsers = async ({ queryKey }) => {
+    const [_, perPage, pageCount, userAllFilterData, cancelToken] = queryKey;
+    const response = await userApi.getAllUser(
+      perPage,
+      pageCount,
+      userAllFilterData,
+      { cancelToken }
+    );
+    return response;
+  };
+  const { data, isloading, isFetching } = useQuery(
+    ["users", perPage, pageCount, userAllFilterData],
+    async ({ signal }) => {
+      const source = axios.CancelToken.source();
+      signal.addEventListener("abort", () => {
+        source.cancel();
+      });
+      return fetchUsers({
+        queryKey: [
+          "users",
+          perPage,
+          pageCount,
+          userAllFilterData,
+          source.token,
+        ],
+      });
+    },
+    {
+      keepPreviousData: true, // Keeps previous data to prevent flickering
+      onSuccess: (response) => {
         if (response.users) {
           setProducts(response.users);
           setTotalPage(response.paginate.totalPages);
           setTotalResult(response.paginate.totalResults);
         }
-      })
-      .catch((error) => {
+      },
+      onError: (error) => {
         console.error("Error fetching users:", error);
-      });
-
-    console.log("inside useEffect");
-
-    return () => {
-      source.cancel("Operation canceled by the user.");
-    };
-  }, [pageCount, shortByUser, shortByEmail, shortBySrNo]);
+      },
+      refetchOnWindowFocus: false, // Optional: prevent refetch on window focus
+    }
+  );
 
   const [selectedCity, setSelectedCity] = useState([]);
 
-  const [selectedStatus, setSelectedStatus] = useState([]);
   const [showstatusFilter, setShowstatusFilter] = useState(false);
   const closeAllFilter = () => {
     setShowstatusFilter(false);
@@ -161,7 +195,7 @@ function ShowAllUser() {
   };
   useEffect(() => {
     userAllFilterData.sortDirection = shortBySrNo ? "asc" : "desc";
-    handelFilterApi(pageCount, userAllFilterData);
+    handleFilterApi(pageCount, userAllFilterData);
 
     // setProducts((prev) => [...prev].reverse());
   }, [shortBySrNo]);

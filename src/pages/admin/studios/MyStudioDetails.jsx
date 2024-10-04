@@ -162,6 +162,7 @@ function MyStudioDetails({
                     }}
                   />
                 </Tooltip>
+                &nbsp;
                 <Tooltip title="Edit">
                   <MdEdit
                     style={{ color: "#ffc701", cursor: "pointer" }}
@@ -170,6 +171,7 @@ function MyStudioDetails({
                     }}
                   />
                 </Tooltip>
+                &nbsp;
                 <Tooltip title="Delete">
                   <RiDeleteBin5Fill
                     style={{ color: "red", cursor: "pointer" }}
@@ -198,6 +200,7 @@ function MyStudioDetails({
                   }}
                 />
               </Tooltip>
+              &nbsp;
               <Tooltip title="Edit">
                 <MdEdit
                   style={{ color: "#ffc701", cursor: "pointer" }}
@@ -206,6 +209,7 @@ function MyStudioDetails({
                   }}
                 />
               </Tooltip>
+              &nbsp;
               <Tooltip title="Delete">
                 <RiDeleteBin5Fill style={{ color: "red", cursor: "pointer" }} />
               </Tooltip>

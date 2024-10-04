@@ -31,6 +31,16 @@ function AddNewDiscount({
   };
 
   const hitApi = (sendDataToApi) => {
+    // sendDataToApi.usersList = sendDataToApi.usersList.map((item) => item.value);
+    console.log("sendDataToApi", sendDataToApi);
+    if (
+      sendDataToApi.sendDataToApi == 3 &&
+      sendDataToApi.usersList.length == 0
+    ) {
+      errorAlert("Please select atleast one user");
+      return;
+    }
+
     if (editMode.current) {
       setShowBtnLoader(true);
       promotionApi
@@ -56,6 +66,9 @@ function AddNewDiscount({
         });
     } else {
       setShowBtnLoader(true);
+      // sendDataToApi.usersList = sendDataToApi.usersList.map(
+      //   (item) => item.value
+      // );
       promotionApi
         .createDiscount(sendDataToApi)
         .then((res) => {
@@ -181,6 +194,7 @@ function AddNewDiscount({
     let dataToSend = {
       searchUser: username,
     };
+
     try {
       const response = await userApi.getAllUser(20, 1, dataToSend);
       return response.users.map((user) => ({
@@ -202,6 +216,10 @@ function AddNewDiscount({
       let dataToSend = {
         searchUser: editData.usersList,
       };
+      // if (editData.usersList == "") {
+      //   return [];
+      // }
+
       userApi
         .getAllUser(20, 1, dataToSend)
         .then((res) => {
