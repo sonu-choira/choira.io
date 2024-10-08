@@ -23,11 +23,18 @@ function MixMaster({
   pageCount,
   setPageCount,
   setTotalPage,
+  perPage,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState({});
 
   const columns = [
+    {
+      title: "Sr.No",
+      dataIndex: "srNo",
+      key: "srNo",
+      render: (text, record, index) => index + 1 + (pageCount - 1) * perPage,
+    },
     {
       title: "Booking ID",
       dataIndex: "_id",

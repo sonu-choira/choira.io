@@ -5,7 +5,7 @@ import { partnerAccess } from "../config/partnerAccess";
 
 class Appapi{
   
- getStudios = async (limit,active ,pageCount) => {
+ getStudios = async (limit = 8,active ,pageCount) => {
   let link = ""
   if(partnerAccess){
     link = " /owners/studios/studioId"
@@ -15,7 +15,7 @@ class Appapi{
 
   const response = await api.get(link, {
     params: {
-      limit: 8,
+      limit: limit,
       page :pageCount,
       // active: active
     }
@@ -24,10 +24,10 @@ class Appapi{
   return response.data;
  };
 
- getServices = async (limit, Type, active ,pageCount) => {
+ getServices = async (limit = 8, Type, active ,pageCount) => {
     const response = await api.get(`/services`,{ 
         params: {
-            limit: 8,
+            limit: limit,
             serviceType: Type,
             // active: active,
             page:pageCount,
@@ -93,7 +93,7 @@ class Appapi{
         filteredObject[key] = allfilterData[key];
       }
     }
-      filteredObject.limit = 7;
+      filteredObject.limit = filteredObject.limit || 7;
 
       const response = await api.get("/studios-all",{ 
           params: filteredObject
@@ -110,7 +110,7 @@ class Appapi{
           filteredObject[key] = allserviceFiltrer[key];
         }
       }
-        filteredObject.limit = 5;
+        filteredObject.limit = filteredObject.limit || 5;
       const response = await api.get(`/services`,{ 
           params: filteredObject
       });

@@ -56,6 +56,7 @@ function StudioBookingDetail({
   setPageCount,
   setTotalPage,
   sendFilterDataToapi,
+  perPage,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -188,6 +189,12 @@ function StudioBookingDetail({
   const tableAccess = useContext(AccessContext);
 
   const columns = [
+    {
+      title: "Sr.No",
+      dataIndex: "srNo",
+      key: "srNo",
+      render: (text, record, index) => index + 1 + (pageCount - 1) * perPage,
+    },
     {
       title: "Id",
       dataIndex: "_id",

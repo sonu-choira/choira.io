@@ -40,6 +40,8 @@ function AllStudioPageDetailsPage() {
   const [bookingPageCount, setBookingPageCount] = useState("c0");
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
+  const [totalResult, setTotalResult] = useState();
+  const [perPage, setPerPage] = useState(7);
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
   const [showBtnLoader, setShowBtnLoader] = useState(false);
@@ -141,6 +143,7 @@ function AllStudioPageDetailsPage() {
             console.log("filter applied:", response);
             setProducts(response.services.results);
             setTotalPage(response.paginate.totalPages);
+            setTotalResult(response.paginate.totalResults);
             setfilterNav(true);
           })
           .catch((error) => {
@@ -160,6 +163,7 @@ function AllStudioPageDetailsPage() {
               setProducts(response.services.results);
               console.log("lkasdnflkjsdnf", response.status);
               setTotalPage(response.paginate.totalPages);
+              setTotalResult(response.paginate.totalResults);
             }
           })
           .catch((error) => {
@@ -167,7 +171,7 @@ function AllStudioPageDetailsPage() {
           });
       }
     } else if (bookingPageCount === "c1") {
-      const limit = 64;
+      const perPage = 64;
       const active = 1;
       // const type = bookingPageCount;
       if (partnerAccess) {
@@ -182,12 +186,13 @@ function AllStudioPageDetailsPage() {
             console.log("filter applied:", response);
             setProducts(response.studios);
             setTotalPage(response.paginate.totalPages);
+            setTotalResult(response.paginate.totalResults);
           })
           .catch((error) => {
             console.error("Error filter studio:", error);
           });
       } else {
-        Appapi.getStudios(limit, active, pageCount)
+        Appapi.getStudios(perPage, active, pageCount)
           .then((response) => {
             console.log(
               `====================> response ${bookingPageCount}`,
@@ -199,6 +204,7 @@ function AllStudioPageDetailsPage() {
                 partnerAccess ? response.allBookings : response.studios
               );
               setTotalPage(response.paginate.totalPages);
+              setTotalResult(response.paginate.totalResults);
 
               // setPageCount(response.paginate.page);
             }
@@ -236,7 +242,9 @@ function AllStudioPageDetailsPage() {
             pageCount={pageCount}
             bookingPageCount={bookingPageCount}
             filterNav={filterNav}
+            totalResult={totalResult}
             setfilterNav={setfilterNav}
+            perPage={perPage}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
@@ -250,6 +258,8 @@ function AllStudioPageDetailsPage() {
             bookingPageCount={bookingPageCount}
             filterNav={filterNav}
             sendFilterDataToapi={sendFilterDataToapi}
+            totalResult={totalResult}
+            perPage={perPage}
           />
         ) : bookingPageCount === "c3" ? (
           <ASMixandMaster
@@ -262,6 +272,8 @@ function AllStudioPageDetailsPage() {
             bookingPageCount={bookingPageCount}
             filterNav={filterNav}
             sendFilterDataToapi={sendFilterDataToapi}
+            totalResult={totalResult}
+            perPage={perPage}
           />
         ) : (
           <Artist />

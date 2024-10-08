@@ -24,6 +24,7 @@ const ASMusicProduction = ({
   bookingPageCount,
   setTotalPage,
   sendFilterDataToapi,
+  perPage,
 }) => {
   const [pid, setPid] = useState(0);
   const [showLoader, setShowLoader] = useState(false);
@@ -65,6 +66,12 @@ const ASMusicProduction = ({
   };
 
   const columns = [
+    {
+      title: "Sr.No",
+      dataIndex: "srNo",
+      key: "srNo",
+      render: (text, record, index) => index + 1 + (pageCount - 1) * perPage,
+    },
     {
       title: "Production",
       dataIndex: "fullName",
