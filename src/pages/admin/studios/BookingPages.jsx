@@ -14,7 +14,6 @@ import bookingPageApi from "../../../services/bookingPageApi";
 import { clearEmptyField } from "../../../utils/helperFunction";
 import { partnerAccess } from "../../../config/partnerAccess";
 let sendFilterDataToapi = {
-  limit: 8,
   bookingType: "",
   category: "",
   startDate: "",
@@ -28,6 +27,8 @@ function BookingPages() {
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
+  const [perPage, setPerPage] = useState(8);
+  sendFilterDataToapi.limit = perPage;
   const [showBtnLoader, setShowBtnLoader] = useState(false);
 
   // let { page: paramData } = useParams();
@@ -191,6 +192,7 @@ function BookingPages() {
             pageCount={pageCount}
             totalPage={totalPage}
             sendFilterDataToapi={sendFilterDataToapi}
+            perPage={perPage}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
@@ -204,6 +206,7 @@ function BookingPages() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             totalPage={totalPage}
+            perPage={perPage}
           />
         ) : bookingPageCount === "c3" ? (
           <MixMaster
@@ -216,6 +219,7 @@ function BookingPages() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             totalPage={totalPage}
+            perPage={perPage}
           />
         ) : (
           <Artist />

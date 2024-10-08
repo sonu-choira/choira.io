@@ -40,9 +40,22 @@ function AddNewStudioPartners({ setSelectTab }) {
   console.log(data);
   let isEditMode = data?.state?.isEditMode;
   let showMode = data?.state?.showMode;
-
+  const [showButtonLoader, setShowButtonLoader] = useState(false);
   const hitapi = (partnerData) => {
+    let data = { ...partnerData };
+    delete data.ownerImage;
+    delete data.password;
+    delete data.studioCity;
+    Object.keys(data).forEach((key) => {
+      console.log(data[key]);
+
+      if (data[key] === "") {
+        errorAlert("fill data");
+        return;
+      }
+    });
     if (isEditMode) {
+      setShowButtonLoader(true);
       teamsApi
         .updateStudioPartner(partnerData._id, partnerData)
         .then((response) => {
@@ -51,25 +64,33 @@ function AddNewStudioPartners({ setSelectTab }) {
             sucessAlret(
               response.message || "Studio Partner Updated Successfully"
             );
+            navigate(-1);
+            setShowButtonLoader(false);
             // navigate("/studio/studio-partners");
           }
         })
         .catch((error) => {
           errorAlert(error || "Something went wrong");
+          setShowButtonLoader(false);
         });
     } else {
+      setShowButtonLoader(true);
       teamsApi
         .addStudioPartner(partnerData)
         .then((res) => {
           if (res.status) {
             sucessAlret("Studio Partner Successfully Added");
+            navigate(-1);
+            setShowButtonLoader(false);
           } else {
             errorAlert(res.message);
+            setShowButtonLoader(false);
           }
           console.log(res);
         })
         .catch((err) => {
           errorAlert("something went wrong");
+          setShowButtonLoader(false);
           console.log(err);
         });
     }
@@ -207,7 +228,7 @@ function AddNewStudioPartners({ setSelectTab }) {
                   disabled={showMode}
                 />
                 <CustomInput
-                  type="text"
+                  type="number"
                   id="mobile"
                   placeholder="Mobile Number"
                   label="Enter mobile number"
@@ -243,6 +264,8 @@ function AddNewStudioPartners({ setSelectTab }) {
             // saveOnclick={handleSubmit}
             saveType="submit"
             saveDisabled={showMode}
+            showBtnLoader={showButtonLoader}
+            loaderText={"saving..."}
           />
         </form>
       </div>
