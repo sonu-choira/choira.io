@@ -32,6 +32,7 @@ const StudioPartners = ({
   setShortby,
   perPage,
   totalResult,
+  isFetching,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [activityStatus, setActivityStatus] = useState({});
@@ -55,7 +56,11 @@ const StudioPartners = ({
       },
     });
   };
-
+  useEffect(() => {
+    if (isFetching) {
+      setProducts([]);
+    }
+  }, [isFetching]);
   const handleSwitchChange = (studioId, status) => {
     setActivityStatus((prevStatus) => ({
       ...prevStatus,

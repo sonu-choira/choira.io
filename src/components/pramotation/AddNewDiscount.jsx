@@ -31,13 +31,14 @@ function AddNewDiscount({
   };
 
   const hitApi = (sendDataToApi) => {
+    // alert(sendDataToApi);
     // sendDataToApi.usersList = sendDataToApi.usersList.map((item) => item.value);
     console.log("sendDataToApi", sendDataToApi);
     if (
-      sendDataToApi.sendDataToApi == 3 &&
-      sendDataToApi.usersList.length == 0
+      sendDataToApi.discountType === 3 &&
+      !sendDataToApi.hasOwnProperty("usersList")
     ) {
-      errorAlert("Please select atleast one user");
+      errorAlert("Please select at least one user");
       return;
     }
 
