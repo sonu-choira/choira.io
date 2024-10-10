@@ -18,6 +18,8 @@ import AllStudioDetail2 from "../adminStudio/appsAndMore/AllStudioDetail2";
 import StudioPartners from "./StudioPartners";
 import teamsApi from "../../services/teamsApi";
 import Subadmin from "./Subadmin";
+import { useQuery } from "react-query";
+import { errorAlert } from "../../pages/admin/layout/Alert";
 
 function AllteamDetails() {
   const [products, setProducts] = useState([]);
@@ -49,122 +51,88 @@ function AllteamDetails() {
   // const [products, setProducts] = useState([]);
   let sendFilterDataToapi = {};
   let hasFilter = false;
-  useEffect(() => {
-    console.log("teamsPageCount-----", teamsPageCount);
-    setProducts([]);
-    // checking if filter has any data
-    for (const key in sendFilterDataToapi) {
-      if (sendFilterDataToapi[key]) {
-        hasFilter = true;
-        break;
-      }
+  const fetchStudioOwners = async ({ queryKey }) => {
+    const [
+      _,
+      perPage,
+      idToUse,
+      pageCount,
+      shortby,
+      active,
+      hasFilter,
+      sendFilterDataToapi,
+      isFetching,
+    ] = queryKey;
+
+    if (hasFilter) {
+      // Assuming you need to handle the filter data when `hasFilter` is true
+      const response = await teamsApi.getStudioOwners(
+        perPage,
+        active,
+        pageCount,
+        sendFilterDataToapi
+      );
+      return response;
+    } else if (idToUse) {
+      const response = await teamsApi.getStudioOwners(
+        perPage,
+        idToUse,
+        pageCount,
+        shortby
+      );
+      return response;
     }
+  };
 
-    if (teamsPageCount === "t2" || teamsPageCount === "t3") {
-      // Corrected the id assignments
-      let idToUse = teamsPageCount === "t2" ? "t2" : "t3";
+  // Checking if the filter data has any non-empty values
+  for (const key in sendFilterDataToapi) {
+    if (sendFilterDataToapi[key]) {
+      hasFilter = true;
+      break;
+    }
+  }
 
-      // if (hasFilter) {
-      //   console.log("sendFilterDataToapi", sendFilterDataToapi);
-      //   alert(teamsPageCount);
-      //   console.log(sendFilterDataToapi);
-      //   // alert(JSON.stringify(sendFilterDataToapi));
+  // Determine which ID to use based on `teamsPageCount`
+  const idToUse =
+    teamsPageCount === "t2" ? "t2" : teamsPageCount === "t3" ? "t3" : null;
+  const active = teamsPageCount === "t1" ? 1 : null;
 
-      //   // alert("filter");
-      //   sendFilterDataToapi.page = pageCount;
-      //   sendFilterDataToapi.serviceType = idToUse;
-      //   // teamsApi
-      //   //   .filterServiceData(sendFilterDataToapi)
-      //   //   .then((response) => {
-      //   //     console.log("filter applied:", response);
-      //   //     setProducts(response.services.results);
-      //   //     setTotalPage(response.paginate.totalPages);
-      //   //     setfilterNav(true);
-      //   //   })
-      //   //   .catch((error) => {
-      //   //     console.error("Error filter studio:", error);
-      //   //   });
-      // } else {
-      //   const idToUse = teamsPageCount === "t2" ? "t2" : "t3";
-      //   // alert("main");
-
-      //   teamsApi
-      //     .getStudioOwners("10", idToUse, 1, pageCount)
-      //     .then((response) => {
-      //       console.log(
-      //         `====================> response from team ${response}`,
-      //         response
-      //       );
-      //       if (response.status) {
-      //         setProducts(response.owners);
-      //         console.log("lkasdnflkjsdnf", response.status);
-      //         setTotalPage(response.paginate.totalPages);
-      //       }
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error fetching studios:", error);
-      //     });
-      // }
-      teamsApi
-        .getStudioOwners(perPage, idToUse, pageCount, shortby)
-        .then((response) => {
-          console.log(
-            `====================> response from team ${response}`,
-            response
-          );
-          if (response.status) {
+  // React Query Hook
+  const { data, error, isLoading, isFetching } = useQuery(
+    [
+      "studioOwners",
+      perPage,
+      idToUse,
+      pageCount,
+      shortby,
+      active,
+      hasFilter,
+      sendFilterDataToapi,
+    ],
+    fetchStudioOwners,
+    {
+      enabled: !!teamsPageCount, // Only run query when teamsPageCount is defined
+      onSuccess: (response) => {
+        if (response) {
+          if (teamsPageCount === "t2" || teamsPageCount === "t3") {
             setProducts(response.owners);
-            console.log("lkasdnflkjsdnf", response.status);
-            setTotalPage(response.paginate.totalPages);
-            setTotalResult(response.paginate.totalResults);
+          } else if (teamsPageCount === "t1") {
+            setProducts(response.studios);
           }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
-    } else if (teamsPageCount === "t1") {
-      const active = 1;
-      // const type = teamsPageCount;
-      if (hasFilter) {
-        // delete sendFilterDataToapi.serviceType;
-        // sendFilterDataToapi.page = pageCount;
-        // teamsApi
-        //   .filterData(sendFilterDataToapi)
-        //   .then((response) => {
-        //     console.log("filter applied:", response);
-        //     setProducts(response.studios);
-        //     setTotalPage(response.paginate.totalPages);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error filter studio:", error);
-        //   });
-
-        teamsApi
-          .getStudioOwners(perPage, active, pageCount)
-          .then((response) => {
-            console.log(
-              `====================> response ${teamsPageCount}`,
-              response
-            );
-            console.log("response.data.studios", response.studios);
-            if (response) {
-              setProducts(response.studios);
-              setTotalPage(response.paginate.totalPages);
-              setTotalResult(response.paginate.totalResults);
-
-              // setPageCount(response.paginate.page);
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching studios:", error);
-          });
-      }
-      // else if (teamsPageCount == "t1") {
-
-      // }
+          setTotalPage(response.paginate.totalPages);
+          setTotalResult(response.paginate.totalResults);
+        }
+      },
+      onError: (error) => {
+        errorAlert("Error fetching studios:", error);
+      },
+      // refetchOnWindowFocus: false, // Optional: prevents refetch on window focus
     }
-    console.log(teamsPageCount, "inside useEffect");
-  }, [teamsPageCount, pageCount, shortby]);
+  );
+
+  useEffect(() => {
+    console.log("hello", isFetching);
+  }, [isFetching]);
   return (
     <>
       <div
@@ -210,6 +178,7 @@ function AllteamDetails() {
             totalResult={totalResult}
             setShortBySrNo={setShortBySrNo}
             shortBySrNo={shortBySrNo}
+            isFetching={isFetching}
           />
         ) : currentNav == "Teams" && currentPage == "Artist" ? (
           "t3"

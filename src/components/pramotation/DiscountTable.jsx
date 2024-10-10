@@ -6,38 +6,37 @@ import ChoiraLoder2 from "../loader/ChoiraLoder2";
 import style from "../../pages/admin/studios/studio.module.css";
 import { clearEmptyField } from "../../utils/helperFunction";
 import Switch from "../../pages/admin/layout/Switch";
+import { errorAlert } from "../../pages/admin/layout/Alert";
+import { useMutation, useQuery } from "react-query";
 
 function DiscountTable({ editData, setEditData }) {
   const [products, setProducts] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [pid, setPid] = useState(0);
 
-  useEffect(() => {
-    promotionApi.getAllDiscount().then((res) => {
-      setProducts(res.discounts);
-    });
-  }, []);
+  const { data, error, isLoading, isFetching } = useQuery(
+    "allDiscounts", // The query key
+    promotionApi.getAllDiscount, // The API call function
+    {
+      onSuccess: (response) => {
+        if (response) {
+          setProducts(response.discounts);
+        }
+      },
+      onError: (error) => {
+        errorAlert("Error fetching discounts:", error);
+      },
+    }
+  );
 
   const gotoEditPage = (id) => {
     setEditData(products.find((item) => item._id === id));
   };
   const [showloader, setShowloader] = useState(false);
-  const updateStatus = (id, status) => {
-    setShowloader(true);
-    let data = products.find((item) => item._id === id);
-    if (data.active === 1) {
-      data.active = 0;
-    } else {
-      data.active = 1;
-    }
-    console.log(data);
-    clearEmptyField(data);
-
-    promotionApi
-      .updateDiscount(id, data)
-      .then((res) => {
-        console.log(res);
-
+  const mutation = useMutation(
+    ({ id, updatedData }) => promotionApi.updateDiscount(id, updatedData), // Mutation function
+    {
+      onSuccess: (res, { id }) => {
         setProducts((prev) =>
           prev.map((item) => {
             if (item._id === id) {
@@ -50,11 +49,23 @@ function DiscountTable({ editData, setEditData }) {
           })
         );
         setShowloader(false);
-      })
-      .catch((err) => {
-        console.log(err);
+      },
+      onError: (error) => {
+        console.log("Error updating status:", error);
         setShowloader(false);
-      });
+      },
+    }
+  );
+
+  const updateStatus = (id, status) => {
+    setShowloader(true);
+
+    let data = products.find((item) => item._id === id);
+    data.active = data.active === 1 ? 0 : 1;
+
+    clearEmptyField(data);
+
+    mutation.mutate({ id, updatedData: data });
   };
 
   const columns = [

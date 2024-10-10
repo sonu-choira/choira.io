@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Select, Input, Button, Tooltip } from "antd";
 import { GoEye } from "react-icons/go";
 import { RiDeleteBin5Fill } from "react-icons/ri";
@@ -23,11 +23,17 @@ function MixMaster({
   pageCount,
   setPageCount,
   setTotalPage,
-  perPage,
+
+  isFetching,
+
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState({});
-
+  useEffect(() => {
+    if (isFetching) {
+      setProducts([]);
+    }
+  }, [isFetching]);
   const columns = [
     {
       title: "Sr.No",

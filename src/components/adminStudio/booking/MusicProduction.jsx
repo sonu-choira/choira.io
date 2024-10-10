@@ -29,10 +29,17 @@ function MusicProduction({
   pageCount,
   setPageCount,
   setTotalPage,
-  perPage,
+
+  isFetching,
+
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState({});
+  useEffect(() => {
+    if (isFetching) {
+      setProducts([]);
+    }
+  }, [isFetching]);
 
   const columns = [
     {

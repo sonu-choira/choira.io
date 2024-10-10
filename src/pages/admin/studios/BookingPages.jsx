@@ -13,6 +13,8 @@ import WebDashboard2 from "../../produce/WebDashBoard2";
 import bookingPageApi from "../../../services/bookingPageApi";
 import { clearEmptyField } from "../../../utils/helperFunction";
 import { partnerAccess } from "../../../config/partnerAccess";
+import { useQuery } from "react-query";
+import { errorAlert } from "../layout/Alert";
 let sendFilterDataToapi = {
   bookingType: "",
   category: "",
@@ -22,6 +24,30 @@ let sendFilterDataToapi = {
   pageCount: 1,
 };
 // let hasFilter = false;
+
+const fetchMusicProduction = async ({ limit, category, pageCount }) => {
+  const data = { limit, category, pageCount };
+  const response = await bookingPageApi.musicProduction(data);
+  return response;
+};
+
+// Function to fetch partner or general bookings
+const fetchBookings = async ({
+  category,
+  pageCount,
+  partnerAccess,
+  sendFilterDataToapi,
+}) => {
+  sendFilterDataToapi.category = category;
+  sendFilterDataToapi.pageCount = pageCount;
+
+  clearEmptyField(sendFilterDataToapi);
+
+  const apiMethod = partnerAccess ? "getPartnerBookings" : "getBookings";
+  const response = await bookingPageApi[apiMethod](sendFilterDataToapi);
+
+  return response;
+};
 function BookingPages() {
   const [bookingPageCount, setBookingPageCount] = useState("c0");
   const [products, setProducts] = useState([]);
@@ -96,79 +122,40 @@ function BookingPages() {
   };
 
   // {-------  this code is end of  update color of selected  action ---------}
-  useEffect(() => {
-    console.log("bookingPageCount-----", bookingPageCount);
-    setProducts([]);
-
-    if (bookingPageCount === "c2" || bookingPageCount === "c3") {
-      // Corrected the id assignments
-      const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
-
-      let data = {
-        limit: 8,
-
-        category: idToUse,
-        pageCount: pageCount,
-      };
-
-      bookingPageApi
-        .musicProduction(data)
-        .then((response) => {
-          console.log(
-            `====================> response ${bookingPageCount} `,
-            response
-          );
-          if (response.data) {
-            setProducts(response.data);
-            setTotalPage(response.paginate.totalPages);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
+  const { data, isLoading, error, isFetching } = useQuery(
+    ["bookingData", bookingPageCount, pageCount],
+    () => {
+      if (bookingPageCount === "c2" || bookingPageCount === "c3") {
+        const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
+        return fetchMusicProduction({ limit: 8, category: idToUse, pageCount });
+      } else if (bookingPageCount === "c1") {
+        return fetchBookings({
+          category: bookingPageCount,
+          pageCount,
+          partnerAccess,
+          sendFilterDataToapi,
         });
-    } else if (bookingPageCount === "c1") {
-      // for (const key in sendFilterDataToapi) {
-      //   if (sendFilterDataToapi[key]) {
-      //     hasFilter = true;
-      //     break;
-      //   }
-
-      const limit = 8;
-      // const active = "";
-      const bookingType = 1;
-      const category = bookingPageCount;
-      // let data = {
-      //   limit: 6,
-      //   bookingType: -1,
-      //   category: bookingPageCount,
-      //   pageCount: pageCount,
-      // };
-      sendFilterDataToapi.category = bookingPageCount;
-      sendFilterDataToapi.pageCount = pageCount;
-
-      // const type = bookingPageCount;
-      clearEmptyField(sendFilterDataToapi);
-      let dynamicApi = null;
-      if (partnerAccess) {
-        dynamicApi = "getPartnerBookings";
-      } else {
-        dynamicApi = "getBookings";
       }
-
-      bookingPageApi[dynamicApi](sendFilterDataToapi)
-        .then((response) => {
-          console.log("====================> response C1", response);
-          if (response.data) {
-            setProducts(response.data);
-            setTotalPage(response.paginate.totalPages);
-            console.log("pagekaDetail", response);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
+    },
+    {
+      enabled: !!bookingPageCount, // Only run query if bookingPageCount is not null/undefined
+      onSuccess: (response) => {
+        if (response?.data) {
+          setProducts(response.data);
+          setTotalPage(response.paginate?.totalPages || 0);
+        }
+      },
+      onError: (err) => {
+        errorAlert("Error fetching data:", err);
+      },
     }
-  }, [bookingPageCount, pageCount]);
+  );
+
+  useEffect(() => {
+    if (isFetching) {
+      setProducts([]);
+    }
+  }, [isFetching]);
   return (
     <>
       <div className={style.allStudioDetailsPage}>
@@ -206,7 +193,9 @@ function BookingPages() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             totalPage={totalPage}
-            perPage={perPage}
+
+            isFetching={isFetching}
+
           />
         ) : bookingPageCount === "c3" ? (
           <MixMaster
@@ -219,7 +208,9 @@ function BookingPages() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             totalPage={totalPage}
-            perPage={perPage}
+
+            isFetching={isFetching}
+
           />
         ) : (
           <Artist />

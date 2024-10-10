@@ -7,7 +7,9 @@ function ChoiraLoder2() {
   useEffect(() => {
     let abc = setTimeout(() => {
       setnoDataFound(true);
-    }, 2000);
+
+    }, 8000);
+
 
     return () => {
       clearTimeout(abc);
