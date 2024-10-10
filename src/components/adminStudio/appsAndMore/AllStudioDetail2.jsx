@@ -46,6 +46,8 @@ const AllStudioDetail2 = ({
   filterNav,
   setfilterNav,
   sendFilterDataToapi,
+  perPage,
+  totalResult,
 }) => {
   const [selectedCity, setSelectedCity] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState([]);
@@ -114,11 +116,11 @@ const AllStudioDetail2 = ({
           console.error("Error fetching studios:", error);
         });
     } else if (bookingPageCount === "c1") {
-      const limit = 64;
+      const perPage = 64;
       const active = 1;
 
       appAndmoreApi
-        .getStudios(limit, active)
+        .getStudios(perPage, active)
         .then((response) => {
           console.log(
             `====================> response ${bookingPageCount}`,
@@ -256,6 +258,16 @@ const AllStudioDetail2 = ({
   }, []);
 
   const columns = [
+    {
+      title: "Sr.No",
+      dataIndex: "srNo",
+      key: "srNo",
+      render: (text, record, index) => {
+        return shortby === "creationTimeStamp:desc"
+          ? index + 1 + (pageCount - 1) * perPage
+          : totalResult - pageCount * perPage + perPage - index;
+      },
+    },
     {
       title: "Studio",
       dataIndex: "fullName",

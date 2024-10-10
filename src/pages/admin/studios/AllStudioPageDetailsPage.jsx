@@ -41,6 +41,8 @@ function AllStudioPageDetailsPage() {
   const [bookingPageCount, setBookingPageCount] = useState("c0");
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
+  const [totalResult, setTotalResult] = useState();
+  const [perPage, setPerPage] = useState(7);
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
   const [showBtnLoader, setShowBtnLoader] = useState(false);
@@ -146,6 +148,7 @@ function AllStudioPageDetailsPage() {
         // If filters are applied
         sendFilterDataToapi.page = pageCount;
         sendFilterDataToapi.serviceType = idToUse;
+
         const response = await appAndmoreApi.filterServiceData(
           sendFilterDataToapi
         );
@@ -153,9 +156,10 @@ function AllStudioPageDetailsPage() {
       } else {
         const response = await Appapi.getServices("10", idToUse, 1, pageCount);
         return response;
+
       }
     } else if (bookingPageCount === "c1") {
-      const limit = 64;
+      const perPage = 64;
       const active = 1;
 
       if (
@@ -167,11 +171,13 @@ function AllStudioPageDetailsPage() {
         // If filters are applied
         delete sendFilterDataToapi.serviceType;
         sendFilterDataToapi.page = pageCount;
+
         const response = await appAndmoreApi.filterData(sendFilterDataToapi);
         return response;
       } else {
         const response = await Appapi.getStudios(limit, active, pageCount);
         return response;
+
       }
     }
   };
@@ -225,7 +231,9 @@ function AllStudioPageDetailsPage() {
             pageCount={pageCount}
             bookingPageCount={bookingPageCount}
             filterNav={filterNav}
+            totalResult={totalResult}
             setfilterNav={setfilterNav}
+            perPage={perPage}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
@@ -239,6 +247,8 @@ function AllStudioPageDetailsPage() {
             bookingPageCount={bookingPageCount}
             filterNav={filterNav}
             sendFilterDataToapi={sendFilterDataToapi}
+            totalResult={totalResult}
+            perPage={perPage}
           />
         ) : bookingPageCount === "c3" ? (
           <ASMixandMaster
@@ -251,6 +261,8 @@ function AllStudioPageDetailsPage() {
             bookingPageCount={bookingPageCount}
             filterNav={filterNav}
             sendFilterDataToapi={sendFilterDataToapi}
+            totalResult={totalResult}
+            perPage={perPage}
           />
         ) : (
           <Artist />

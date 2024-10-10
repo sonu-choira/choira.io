@@ -16,7 +16,6 @@ import { partnerAccess } from "../../../config/partnerAccess";
 import { useQuery } from "react-query";
 import { errorAlert } from "../layout/Alert";
 let sendFilterDataToapi = {
-  limit: 8,
   bookingType: "",
   category: "",
   startDate: "",
@@ -54,6 +53,8 @@ function BookingPages() {
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
+  const [perPage, setPerPage] = useState(8);
+  sendFilterDataToapi.limit = perPage;
   const [showBtnLoader, setShowBtnLoader] = useState(false);
 
   // let { page: paramData } = useParams();
@@ -178,6 +179,7 @@ function BookingPages() {
             pageCount={pageCount}
             totalPage={totalPage}
             sendFilterDataToapi={sendFilterDataToapi}
+            perPage={perPage}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
@@ -191,7 +193,9 @@ function BookingPages() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             totalPage={totalPage}
+
             isFetching={isFetching}
+
           />
         ) : bookingPageCount === "c3" ? (
           <MixMaster
@@ -204,7 +208,9 @@ function BookingPages() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             totalPage={totalPage}
+
             isFetching={isFetching}
+
           />
         ) : (
           <Artist />

@@ -32,6 +32,7 @@ function ASMixandMaster({
   bookingPageCount,
   setTotalPage,
   sendFilterDataToapi,
+  perPage,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [showloader, setShowloader] = useState(false);
@@ -90,6 +91,12 @@ function ASMixandMaster({
   };
 
   const columns = [
+    {
+      title: "Sr.No",
+      dataIndex: "srNo",
+      key: "srNo",
+      render: (text, record, index) => index + 1 + (pageCount - 1) * perPage,
+    },
     {
       title: "Production",
       dataIndex: "fullName",
