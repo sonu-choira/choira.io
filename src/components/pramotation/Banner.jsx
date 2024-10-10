@@ -21,6 +21,7 @@ import promotionApi from "../../services/promotionApi";
 import { clearEmptyField } from "../../utils/helperFunction";
 import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
 import noDataFound from "../../components/loader/nodataFound.png";
+import { useMutation } from "react-query";
 let bannerLength = 0;
 function Banner({
   setProducts,
@@ -148,11 +149,11 @@ function Banner({
     event.dataTransfer.setData("type", type);
     event.dataTransfer.setData("id", id);
   };
-  const handelUpdateBanner = (updatedData) => {
-    promotionApi
-      .updateBanner(updatedData)
-      .then((res) => {
-        console.log(res);
+  // Mutation for updating a banner
+  const updateBannerMutation = useMutation(
+    (updatedData) => promotionApi.updateBanner(updatedData),
+    {
+      onSuccess: (res) => {
         if (res.status) {
           sucessAlret("Banner stage Updated Successfully");
           handleBanner();
@@ -160,12 +161,18 @@ function Banner({
         } else {
           errorAlert(res.message || "Error in updating banner stage");
         }
-      })
-      .catch((err) => {
+      },
+      onError: (err) => {
         console.log(err);
         errorAlert("Error in updating banner");
-      });
+      },
+    }
+  );
+
+  const handelUpdateBanner = (updatedData) => {
+    updateBannerMutation.mutate(updatedData);
   };
+
   const handleDrop = (event, index, type, id) => {
     const draggedIndex = event.dataTransfer.getData("index");
     const draggedType = event.dataTransfer.getData("type");
@@ -225,26 +232,30 @@ function Banner({
     setEditData(datatosend);
   };
 
+  // Mutation for deleting a banner
+  const deleteBannerMutation = useMutation(
+    (id) => promotionApi.deleteBanner(id),
+    {
+      onSuccess: (res) => {
+        if (res.status) {
+          sucessAlret("Banner stage Deleted Successfully");
+          handleBanner(); // Refresh or update the banner list
+        } else {
+          errorAlert(res.message || "Error in deleting banner stage");
+        }
+      },
+      onError: (err) => {
+        console.log(err);
+        errorAlert("Error in deleting banner");
+      },
+    }
+  );
+
   const handelDeleteBanner = (id) => {
     confirmAlret("Are you sure you want to delete this banner?").then(
       (result) => {
         if (result.isConfirmed) {
-          promotionApi
-            .deleteBanner(id)
-            .then((res) => {
-              console.log(res);
-
-              if (res.status) {
-                sucessAlret("Banner stage Deleted Successfully");
-                handleBanner();
-              } else {
-                errorAlert(res.message || "Error in deleting banner stage");
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-              errorAlert("Error in deleting banner");
-            });
+          deleteBannerMutation.mutate(id); // Trigger the mutation with the banner id
         }
       }
     );

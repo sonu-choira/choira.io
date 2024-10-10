@@ -17,6 +17,7 @@ import { send } from "react-ga";
 import { useNavigate } from "react-router-dom";
 import MixMaster from "../adminStudio/booking/MixMaster";
 import dynamicNav from "../../utils/dynamicNav";
+import { useMutation } from "react-query";
 // let studioName = "";
 function AddNewBanner({
   setShowAddPage,
@@ -134,52 +135,52 @@ function AddNewBanner({
     }
   }, []);
 
-  const hitapi = (sendDataToApi) => {
-    console.log("Api hit", sendDataToApi);
+  const mutation = useMutation(
+    (sendDataToApi) => {
+      console.log("Api hit", sendDataToApi);
+      if (editMode.current) {
+        // Prepare the data for updating the banner
+        delete sendDataToApi.tempStudioName;
+        sendDataToApi.for = sendDataToApi.forr;
+        delete sendDataToApi.forr;
 
-    if (editMode.current) {
-      setShowBtnLoader(true);
-      delete sendDataToApi.tempStudioName;
-      sendDataToApi.for = sendDataToApi.forr;
-      delete sendDataToApi.forr;
-      promotionApi
-        .updateBanner(sendDataToApi)
-        .then((res) => {
-          console.log(res);
-          if (res.status) {
-            setShowBtnLoader(false);
-            sucessAlret("Banner Updated Successfully");
-          } else {
-            setShowBtnLoader(false);
-            errorAlert(res.message || "Error in updating banner");
-          }
-        })
-        .catch((err) => {
-          setShowBtnLoader(false);
-          console.log(err);
-          errorAlert("Error in updating banner");
-        });
-    } else {
-      setShowBtnLoader(true);
-      console.log("Create Banner");
-      promotionApi
-        .createBanner(sendDataToApi)
-        .then((res) => {
-          console.log(res);
-          if (res.status == true) {
-            setShowBtnLoader(false);
-            sucessAlret("Banner Created Successfully");
-          } else {
-            setShowBtnLoader(false);
-            errorAlert(res.message || "Error in creating banner");
-          }
-        })
-        .catch((err) => {
-          setShowBtnLoader(false);
-          console.log(err);
-          errorAlert(err.message);
-        });
+        return promotionApi.updateBanner(sendDataToApi);
+      } else {
+        console.log("Create Banner");
+        return promotionApi.createBanner(sendDataToApi);
+      }
+    },
+    {
+      onMutate: () => {
+        setShowBtnLoader(true);
+      },
+      onSuccess: (res) => {
+        setShowBtnLoader(false);
+        if (res.status) {
+          sucessAlret(
+            editMode.current
+              ? "Banner Updated Successfully"
+              : "Banner Created Successfully"
+          );
+          // Optionally reset the form or update state after success
+          // setProducts([...]) if necessary
+        } else {
+          errorAlert(res.message || "Error in processing banner");
+        }
+      },
+      onError: (err) => {
+        setShowBtnLoader(false);
+        console.log(err);
+        errorAlert(err.message || "Error in processing banner");
+      },
+      onSettled: () => {
+        setShowBtnLoader(false); // Ensure loader is hidden when the mutation settles
+      },
     }
+  );
+
+  const hitapi = (sendDataToApi) => {
+    mutation.mutate(sendDataToApi);
   };
   const handleFileUpload = (event) => {
     const file = event.target.files[0];

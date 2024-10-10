@@ -12,6 +12,7 @@ import { DiscountSchema } from "../../schemas";
 import promotionApi from "../../services/promotionApi";
 import { errorAlert, sucessAlret } from "../../pages/admin/layout/Alert";
 import dayjs from "dayjs";
+import { useMutation } from "react-query";
 
 function AddNewDiscount({
   editData,
@@ -30,64 +31,102 @@ function AddNewDiscount({
     "Special Session": 3,
   };
 
+  // const ValidateUserList = (sendDataToApi) => {
+  //   if (sendDataToApi.discountType === 3) {
+  //     if (
+  //       sendDataToApi.discountType === 3 &&
+  //       !sendDataToApi.hasOwnProperty("usersList")
+  //     ) {
+  //       errorAlert("Please select at least one user");
+  //       return;
+  //     }
+  //     if (Array.isArray(sendDataToApi.usersList)) {
+  //       if (
+  //         typeof sendDataToApi.usersList[0] === "object" &&
+  //         sendDataToApi.usersList[0]?.value
+  //       ) {
+  //         sendDataToApi.usersList = sendDataToApi.usersList.map(
+  //           (item) => item.value
+  //         );
+  //       }
+  //     }
+  //   }
+  // };
+
+  const updateDiscountMutation = useMutation(
+    ({ id, updatedData }) => promotionApi.updateDiscount(id, updatedData),
+    {
+      onSuccess: (res) => {
+        if (res.status) {
+          sucessAlret("Discount Updated Successfully");
+          setShowTable(true);
+        } else {
+          errorAlert(res.message || "Error in updating discount");
+        }
+        setShowBtnLoader(false);
+      },
+      onError: (err) => {
+        setShowBtnLoader(false);
+        errorAlert("Error in updating discount");
+        setShowTable(true);
+      },
+    }
+  );
+
+  // Mutation for creating a discount
+  const createDiscountMutation = useMutation(
+    (newData) => promotionApi.createDiscount(newData),
+    {
+      onSuccess: (res) => {
+        if (res.status) {
+          sucessAlret("Discount Created Successfully");
+          setShowTable(true);
+        } else {
+          errorAlert(res.message || "Error in creating discount");
+        }
+        setShowBtnLoader(false);
+      },
+      onError: (err) => {
+        setShowBtnLoader(false);
+        errorAlert(err.message || "Error in creating discount");
+      },
+    }
+  );
+
   const hitApi = (sendDataToApi) => {
-    // alert(sendDataToApi);
-    // sendDataToApi.usersList = sendDataToApi.usersList.map((item) => item.value);
     console.log("sendDataToApi", sendDataToApi);
-    if (
-      sendDataToApi.discountType === 3 &&
-      !sendDataToApi.hasOwnProperty("usersList")
-    ) {
-      errorAlert("Please select at least one user");
-      return;
+    // ValidateUserList(sendDataToApi);
+    if (sendDataToApi.discountType === 3) {
+      if (
+        sendDataToApi.discountType === 3 &&
+        !sendDataToApi.hasOwnProperty("usersList")
+      ) {
+        errorAlert("Please select at least one user");
+        return;
+      }
+      if (Array.isArray(sendDataToApi.usersList)) {
+        if (
+          typeof sendDataToApi.usersList[0] === "object" &&
+          sendDataToApi.usersList[0]?.value
+        ) {
+          sendDataToApi.usersList = sendDataToApi.usersList.map(
+            (item) => item.value
+          );
+        }
+      }
     }
 
+    setShowBtnLoader(true);
+
     if (editMode.current) {
-      setShowBtnLoader(true);
-      promotionApi
-        .updateDiscount(editData._id, sendDataToApi)
-        .then((res) => {
-          console.log(res);
-
-          if (res.status) {
-            sucessAlret("Discount Updated Successfully");
-            setShowBtnLoader(false);
-
-            setShowTable(true);
-          } else {
-            setShowBtnLoader(false);
-            errorAlert(res.message || "Error in updating discount");
-          }
-        })
-        .catch((err) => {
-          setShowBtnLoader(false);
-          console.log(err);
-          errorAlert("Error in updating discount");
-          setShowTable(true);
-        });
+      // Update Discount
+      updateDiscountMutation.mutate({
+        id: editData._id,
+        updatedData: sendDataToApi,
+      });
     } else {
-      setShowBtnLoader(true);
-      // sendDataToApi.usersList = sendDataToApi.usersList.map(
-      //   (item) => item.value
-      // );
-      promotionApi
-        .createDiscount(sendDataToApi)
-        .then((res) => {
-          console.log(res);
-          if (res.status) {
-            setShowBtnLoader(false);
-            sucessAlret("Discount Created Successfully");
-            setShowTable(true);
-          } else {
-            setShowBtnLoader(false);
-            errorAlert(res.message || "Error in creating discount");
-          }
-        })
-        .catch((err) => {
-          setShowBtnLoader(false);
-          console.log(err);
-          errorAlert(err.message || "Error in creating discount");
-        });
+      // Create Discount
+      createDiscountMutation.mutate(sendDataToApi);
     }
   };
 
