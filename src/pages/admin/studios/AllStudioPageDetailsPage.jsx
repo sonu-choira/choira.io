@@ -156,7 +156,6 @@ function AllStudioPageDetailsPage() {
       } else {
         const response = await Appapi.getServices("10", idToUse, 1, pageCount);
         return response;
-
       }
     } else if (bookingPageCount === "c1") {
       const perPage = 64;
@@ -175,9 +174,8 @@ function AllStudioPageDetailsPage() {
         const response = await appAndmoreApi.filterData(sendFilterDataToapi);
         return response;
       } else {
-        const response = await Appapi.getStudios(limit, active, pageCount);
+        const response = await Appapi.getStudios(perPage, active, pageCount);
         return response;
-
       }
     }
   };

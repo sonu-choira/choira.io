@@ -193,9 +193,7 @@ function BookingPages() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             totalPage={totalPage}
-
             isFetching={isFetching}
-
           />
         ) : bookingPageCount === "c3" ? (
           <MixMaster
@@ -208,9 +206,7 @@ function BookingPages() {
             setTotalPage={setTotalPage}
             pageCount={pageCount}
             totalPage={totalPage}
-
             isFetching={isFetching}
-
           />
         ) : (
           <Artist />
