@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Table, Tooltip } from "antd";
 import style from "../../../pages/admin/studios/studio.module.css";
+import { AiFillFilter } from "react-icons/ai";
 
 import { GrShare } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
@@ -33,9 +35,7 @@ import { AccessContext } from "../../../utils/context";
 
 import moment from "moment";
 
-let PageSize = 10;
-
-function AllStudioDetail2({
+const AllStudioDetail2 = ({
   products,
   setProducts,
   setPageCount,
@@ -46,42 +46,26 @@ function AllStudioDetail2({
   filterNav,
   setfilterNav,
   sendFilterDataToapi,
-}) {
-  let loading_timeout = null;
+  perPage,
+  totalResult,
+}) => {
+  const [selectedCity, setSelectedCity] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState([]);
+  const [priceFilter, setPriceFilter] = useState({
+    minPrice: "",
+    maxPrice: "",
+  });
+  const [shortby, setShortby] = useState("creationTimeStamp:desc");
   const navigate = useNavigate();
-  const gotoEdit = (id) => {
-    const isEditMode = true;
-    const selectedProduct = products.find((product) => product._id === id);
-    console.log("navigated=======>", selectedProduct);
-
-    navigate(`/studio/edit?id=${id}`, {
-      state: {
-        productData: selectedProduct,
-        navCount: 3,
-        isEditMode: isEditMode,
-      },
-    });
-  };
-  const [currentPage, setCurrentPage] = useState(1);
-  const gotoShowStudioDetails = (id) => {
-    const isEditMode = true;
-    const selectedProduct = products.find((product) => product._id === id);
-    console.log("navigated=======>", selectedProduct);
-    // alert(selectedProduct);
-    navigate(`/studio/edit?id=${id}`, {
-      state: {
-        productData: selectedProduct,
-        navCount: 4,
-        isEditMode: isEditMode,
-        showMode: true,
-      },
-    });
-  };
-
-  // const [activityStatus, setActivityStatus] = useState({});
+  const tableAccess = useContext(AccessContext);
+  const [loader, setLoader] = useState(false);
   const [showloader, setShowloader] = useState(false);
   const [pid, setPid] = useState(0);
 
+  const pageSize = 10; // You can adjust this based on your need
+
+  let loading_timeout = null;
   const handleSwitchChange = (studioId) => {
     setShowloader(true);
     appAndmoreApi
@@ -111,86 +95,99 @@ function AllStudioDetail2({
       });
   };
 
+  const hitallstudioApi = () => {
+    if (bookingPageCount === "c2" || bookingPageCount === "c3") {
+      const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
+
+      appAndmoreApi
+        .getServices("10", idToUse, 1)
+        .then((response) => {
+          console.log(
+            `====================> response ${bookingPageCount}`,
+            response
+          );
+          if (response.status) {
+            setProducts(response.services.results);
+            console.log("lkasdnflkjsdnf", response.status);
+            setTotalPage(response.paginate.totalPages);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
+    } else if (bookingPageCount === "c1") {
+      const perPage = 64;
+      const active = 1;
+
+      appAndmoreApi
+        .getStudios(perPage, active)
+        .then((response) => {
+          console.log(
+            `====================> response ${bookingPageCount}`,
+            response
+          );
+          console.log("response.data.studios", response.studios);
+          if (response.studios) {
+            setProducts(response.studios);
+            setTotalPage(response.paginate.totalPages);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching studios:", error);
+        });
+    } else {
+    }
+  };
+
+  const sendFilterDatatoapi = () => {
+    setProducts([]);
+    setLoader(true);
+    appAndmoreApi
+      .filterData(sendFilterDataToapi)
+      .then((response) => {
+        console.log("filter applied:", response);
+        setProducts(response.studios);
+        setLoader(false);
+        setTotalPage(response.paginate.totalPages);
+      })
+      .catch((error) => {
+        console.error("Error filter studio:", error);
+        setLoader(false);
+      });
+  };
+  const handleTableChange = (pagination, filters, sorter) => {
+    console.log("filters", filters);
+    sendFilterDataToapi.city = filters?.address?.[0];
+    sendFilterDataToapi.totalRooms = filters?.totalRooms?.[0];
+    sendFilterDataToapi.active = filters?.isActive?.[0];
+
+    sendFilterDatatoapi();
+  };
+  const gotoEdit = (id) => {
+    const isEditMode = true;
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
+
+    navigate(`/studio/edit?id=${id}`, {
+      state: {
+        productData: selectedProduct,
+        navCount: 3,
+        isEditMode: isEditMode,
+      },
+    });
+  };
   const [showpricefilter, setshowpricefilter] = useState(false);
   const handelpriceFilter = () => {
     setshowpricefilter((prevState) => {
       if (!prevState) {
         // If toggling to true, set other filters to false
-        setshowloactionfilter(false);
-        setShowRoomFilter(false);
-        setShowstatusFilter(false);
       }
       return !prevState;
     });
   };
   const closeAllFilter = () => {
-    setshowloactionfilter(false);
-    setShowRoomFilter(false);
-    setShowstatusFilter(false);
     setshowpricefilter(false);
   };
-
-  const [showloactionfilter, setshowloactionfilter] = useState(false);
-  const handellocationFilter = () => {
-    setshowloactionfilter((prevState) => {
-      if (!prevState) {
-        // If toggling to true, set other filters to false
-        setshowpricefilter(false);
-        setShowRoomFilter(false);
-        setShowstatusFilter(false);
-      }
-      return !prevState;
-    });
-  };
-
-  const [showRoomFilter, setShowRoomFilter] = useState(false);
-  const handelRoomFilter = () => {
-    setShowRoomFilter((prevState) => {
-      if (!prevState) {
-        // If toggling to true, set other filters to false
-        setshowpricefilter(false);
-        setshowloactionfilter(false);
-        setShowstatusFilter(false);
-      }
-      return !prevState;
-    });
-  };
-
-  const [showstatusFilter, setShowstatusFilter] = useState(false);
-  const handelStatusFilter = () => {
-    setShowstatusFilter((prevState) => {
-      if (!prevState) {
-        // If toggling to true, set other filters to false
-        setshowpricefilter(false);
-        setshowloactionfilter(false);
-        setShowRoomFilter(false);
-      }
-      return !prevState;
-    });
-  };
-
-  const city = ["Mumbai", "Delhi", "Bangalore", "Chennai"];
-  const room = ["1", "2", "3", "4", "5"];
-  const status = ["active", "inactive"];
-
-  const [selectedCity, setSelectedCity] = useState([]);
-  const [shortby, setShortby] = useState("creationTimeStamp:desc");
-  const [selectedRoom, setSelectedRoom] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState([]);
-  // var selectedDate = "";
-  const [priceFilter, setPriceFilter] = useState({
-    minPrice: "",
-    maxPrice: "",
-  });
-
-  const handelShortbyClick = () => {
-    if (shortby == "creationTimeStamp:asc") {
-      setShortby("creationTimeStamp:desc");
-    } else {
-      setShortby("creationTimeStamp:asc");
-    }
-  };
-
   useEffect(() => {
     sendFilterDataToapi.city = selectedCity[0];
     sendFilterDataToapi.totalRooms = selectedRoom[0];
@@ -232,13 +229,257 @@ function AllStudioDetail2({
       setProducts([]);
     };
   }, [shortby]);
+  const handelShortbyClick = () => {
+    if (shortby == "creationTimeStamp:asc") {
+      setShortby("creationTimeStamp:desc");
+    } else {
+      setShortby("creationTimeStamp:asc");
+    }
+  };
 
+  const gotoShowStudioDetails = (id) => {
+    const isEditMode = true;
+    const selectedProduct = products.find((product) => product._id === id);
+    console.log("navigated=======>", selectedProduct);
+    // alert(selectedProduct);
+    navigate(`/studio/edit?id=${id}`, {
+      state: {
+        productData: selectedProduct,
+        navCount: 4,
+        isEditMode: isEditMode,
+        showMode: true,
+      },
+    });
+  };
   useEffect(() => {
     return () => {
       clearTimeout(loading_timeout);
     };
   }, []);
-  const tableAccess = useContext(AccessContext);
+
+  const columns = [
+    {
+      title: "Sr.No",
+      dataIndex: "srNo",
+      key: "srNo",
+      render: (text, record, index) => {
+        return shortby === "creationTimeStamp:desc"
+          ? index + 1 + (pageCount - 1) * perPage
+          : totalResult - pageCount * perPage + perPage - index;
+      },
+    },
+    {
+      title: "Studio",
+      dataIndex: "fullName",
+      key: "fullName",
+      sorter: (a, b) => handelShortbyClick(),
+      render: (text, record) => (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div className={style.studioImage}>
+            {record.studioPhotos ? (
+              <img
+                src={record.studioPhotos[0]}
+                alt=""
+                onError={(e) => {
+                  e.target.src = imageNotFound;
+                }}
+              />
+            ) : (
+              <img src={imageNotFound} alt="" />
+            )}
+          </div>
+          &nbsp;&nbsp;
+          <CopyToClipboard textToCopy={text} />
+        </div>
+      ),
+    },
+    {
+      title: (
+        <div className={style.headingContainer}>
+          Price
+          <div
+            className={style.filterBox}
+            style={{
+              backgroundColor:
+                priceFilter.minPrice || priceFilter.maxPrice !== ""
+                  ? "#ffc70133"
+                  : "",
+            }}
+          >
+            <span onClick={handelpriceFilter}>
+              <AiFillFilter style={{ color: "#B1B1B1" }} />
+            </span>
+            {showpricefilter ? (
+              <PriceFilter
+                closeAllFilter={closeAllFilter}
+                priceFilter={priceFilter}
+                setPriceFilter={setPriceFilter}
+                sendFilterDataToapi={sendFilterDataToapi}
+                setProducts={setProducts}
+                setTotalPage={setTotalPage}
+                bookingPageCount={bookingPageCount}
+                setfilterNav={setfilterNav}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+      ),
+      dataIndex: ["roomsDetails", "0", "pricePerHour"],
+      key: "pricePerHour",
+      render: (price) => (
+        <span>
+          ₹{price || "N/A"} <br />
+          <small>per hour</small>
+        </span>
+      ),
+    },
+    {
+      title: "Location",
+      dataIndex: "address",
+      key: "address",
+      render: (address, record) => (
+        <>
+          <CopyToClipboard textToCopy={address} textLength={30} />
+          <br />
+          <small>
+            <CopyToClipboard textToCopy={record.state} />
+          </small>
+        </>
+      ),
+      filters: [
+        {
+          text: "Mumbai",
+          value: "mumbai",
+        },
+        {
+          text: "Delhi",
+          value: "Delhi",
+        },
+        {
+          text: "Bangalore",
+          value: "Bangalore",
+        },
+        {
+          text: "Chennai",
+          value: "Chennai",
+        },
+      ],
+      filterMultiple: false,
+      // specify the condition of filtering result
+      // here is that finding the name started with `value`
+      // onFilter: (value, record) =>
+      //   console.log("valus is ", value, "record is ", record),
+
+      // onFilter: (value, record) => (
+      //   (sendFilterDataToapi.city = value), sendFilterDatatoapi()
+      // ),
+      reset: () => alert("Reset filters"),
+    },
+    {
+      title: "No. of Rooms",
+      dataIndex: "totalRooms",
+      key: "totalRooms",
+      filters: [
+        {
+          text: "1",
+          value: "1",
+        },
+        {
+          text: "2",
+          value: "2",
+        },
+        {
+          text: "3",
+          value: "3",
+        },
+        {
+          text: "4",
+          value: "4",
+        },
+        {
+          text: "5",
+          value: "5",
+        },
+      ],
+      filterMultiple: false,
+      // specify the condition of filtering result
+      // here is that finding the name started with `value`
+      // onFilter: (value, record) => record.name.indexOf(value) === 0,
+    },
+    {
+      title: "Created on",
+      dataIndex: "creationTimeStamp",
+      key: "creationTimeStamp",
+      render: (timestamp) => moment(timestamp).format("Do MMM YY, hh:mm a"),
+    },
+    {
+      title: "Activity Status",
+      dataIndex: "isActive",
+      key: "isActive",
+      render: (isActive, record) => (
+        <Switch
+          status={record.isActive}
+          isloading={pid === record._id && showloader}
+          onClick={() => {
+            setPid(record._id);
+            handleSwitchChange(record._id);
+          }}
+          disabled={tableAccess?.["app&more"]?.action === "read"}
+        />
+      ),
+      filters: [
+        {
+          text: "active",
+          value: 1,
+        },
+        {
+          text: "inactive",
+          value: "0",
+        },
+      ],
+      filterMultiple: false,
+      // specify the condition of filtering result
+      // here is that finding the name started with `value`
+      // onFilter: (value, record) => record.name.indexOf(value) === 0,
+    },
+
+    {
+      title: "   ",
+      dataIndex: "",
+      key: "",
+      render: (_, record) => (
+        <div>
+          <Tooltip title="view">
+            <GoEye
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                gotoShowStudioDetails(record._id);
+              }}
+            />
+          </Tooltip>
+          &nbsp; &nbsp;
+          <Tooltip title="Edit">
+            <MdEdit
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                gotoEdit(record._id);
+              }}
+            />
+          </Tooltip>
+          &nbsp; &nbsp;
+          <Tooltip title="Delete">
+            <RiDeleteBin5Fill
+              style={{ cursor: "pointer", marginLeft: 8 }}
+              onClick={() => console.log("Delete", record._id)}
+            />
+          </Tooltip>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
       <div className={style.studioTabelDiv}>
@@ -256,310 +497,16 @@ function AllStudioDetail2({
           setShortby={setShortby}
         />
         <div>
-          <table>
-            <thead className={style.studiotabelHead}>
-              <tr>
-                <th>
-                  <div className={style.headingContainer}>
-                    Studio
-                    <div
-                      className={style.filterBox}
-                      onClick={handelShortbyClick}
-                      style={{
-                        backgroundColor:
-                          shortby !== "creationTimeStamp:desc"
-                            ? "#ffc70133"
-                            : "",
-                      }}
-                    >
-                      <RiExpandUpDownLine />
-                    </div>
-                  </div>
-                </th>
-                <th>
-                  <div className={style.headingContainer}>
-                    Price
-                    <div
-                      className={style.filterBox}
-                      style={{
-                        backgroundColor:
-                          priceFilter.minPrice || priceFilter.maxPrice !== ""
-                            ? "#ffc70133"
-                            : "",
-                      }}
-                    >
-                      <span onClick={handelpriceFilter}>
-                        <CiFilter />
-                      </span>
-                      {showpricefilter ? (
-                        <PriceFilter
-                          closeAllFilter={closeAllFilter}
-                          priceFilter={priceFilter}
-                          setPriceFilter={setPriceFilter}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          setfilterNav={setfilterNav}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div>
-                </th>
+          <Table
+            columns={columns}
+            dataSource={products}
+            rowKey="_id"
+            pagination={false} // Disable Ant Design's default pagination
+            onChange={handleTableChange}
+            locale={{ emptyText: <ChoiraLoder2 /> }}
+          />
 
-                <th>
-                  <div className={style.headingContainer}>
-                    Location
-                    <div
-                      className={style.filterBox}
-                      style={{
-                        backgroundColor:
-                          selectedCity.length > 0 ? "#ffc70133" : "",
-                      }}
-                    >
-                      <span onClick={handellocationFilter}>
-                        <CiFilter />
-                      </span>
-                      {showloactionfilter ? (
-                        <CheckboxFilter
-                          data={city}
-                          setSelectedData={setSelectedCity}
-                          selectedData={selectedCity}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          closeAllFilter={closeAllFilter}
-                          setfilterNav={setfilterNav}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div>
-                </th>
-                <th style={{ width: "8%" }}>
-                  <div className={style.headingContainer}>
-                    No. of Rooms
-                    <div
-                      className={style.filterBox}
-                      style={{
-                        backgroundColor:
-                          selectedRoom.length > 0 ? "#ffc70133" : "",
-                      }}
-                    >
-                      <span onClick={handelRoomFilter}>
-                        <CiFilter />
-                      </span>
-                      {showRoomFilter ? (
-                        <CheckboxFilter
-                          data={room}
-                          selectedData={selectedRoom}
-                          setSelectedData={setSelectedRoom}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          setfilterNav={setfilterNav}
-                          closeAllFilter={closeAllFilter}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div>
-                </th>
-                <th style={{ width: "10%" }}>Created on</th>
-                <th>
-                  <div className={style.headingContainer}>
-                    Activity Status
-                    <div
-                      className={style.filterBox}
-                      style={{
-                        backgroundColor:
-                          selectedStatus.length > 0 ? "#ffc70133" : "",
-                      }}
-                    >
-                      <span onClick={handelStatusFilter}>
-                        <CiFilter />
-                      </span>
-                      {showstatusFilter ? (
-                        <CheckboxFilter
-                          data={status}
-                          // cusstyle={{ left: "-355%" }}
-                          disabledsearch={true}
-                          selectedData={selectedStatus}
-                          setSelectedData={setSelectedStatus}
-                          sendFilterDataToapi={sendFilterDataToapi}
-                          setProducts={setProducts}
-                          setTotalPage={setTotalPage}
-                          bookingPageCount={bookingPageCount}
-                          setfilterNav={setfilterNav}
-                          closeAllFilter={closeAllFilter}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div>
-                </th>
-                <th style={{ width: "10%" }}></th>
-              </tr>
-            </thead>
-            <tbody>
-              {products?.length === 0 ? (
-                <tr>
-                  <td>
-                    <ChoiraLoder2 />
-                  </td>
-                </tr>
-              ) : (
-                products?.map((products) => {
-                  return (
-                    <tr key={products._id}>
-                      <td
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          height: "100%",
-                        }}
-                        title={products.fullName}
-                      >
-                        <div className={style.studioImage}>
-                          {products.studioPhotos ? (
-                            <img
-                              src={products.studioPhotos[0]}
-                              alt=""
-                              onError={(e) => {
-                                e.target.src = imageNotFound;
-                              }}
-                            />
-                          ) : (
-                            <img src={imageNotFound} alt="" />
-                          )}
-                        </div>
-                        &nbsp;&nbsp;
-                        <CopyToClipboard textToCopy={products.fullName} />
-                      </td>
-                      <td style={{ padding: "0px 8rem 0px 0px" }}>
-                        ₹{products?.roomsDetails?.[0]?.pricePerHour || "N/A"}
-                        <br />
-                        <small>per hour</small>
-                      </td>
-                      <td title={products.address}>
-                        <CopyToClipboard
-                          textToCopy={products.address}
-                          textLength={30}
-                        />
-                        <br />
-                        <small title={products.state}>
-                          <CopyToClipboard textToCopy={products.state} />
-                        </small>
-                      </td>
-                      <td>{products.totalRooms}</td>
-                      <td>
-                        {moment(products.creationTimeStamp).format(
-                          "Do MMM  YY, hh:mm a"
-                        )}
-                      </td>
-                      <td>
-                        <div>
-                          {tableAccess ? (
-                            tableAccess["app&more"].action === "read" ? (
-                              <Switch
-                                // isloading={pid === products._id && showloader}
-                                status={products.isActive}
-                                // onClick={() => {
-                                //   setPid(products._id);
-                                //   handleSwitchChange(products._id);
-                                // }}
-                                switchDisabled={
-                                  tableAccess["app&more"].action === "read"
-                                }
-                              />
-                            ) : (
-                              <Switch
-                                isloading={pid === products._id && showloader}
-                                status={products.isActive}
-                                onClick={() => {
-                                  setPid(products._id);
-                                  handleSwitchChange(products._id);
-                                }}
-                              />
-                            )
-                          ) : (
-                            <Switch
-                              isloading={pid === products._id && showloader}
-                              status={products.isActive}
-                              onClick={() => {
-                                setPid(products._id);
-                                handleSwitchChange(products._id);
-                              }}
-                            />
-                          )}
-                        </div>
-                      </td>
-                      <td>
-                        {tableAccess ? (
-                          tableAccess["MyStudio"].action === "write" ? (
-                            <div className={style.tableActionbtn}>
-                              <GoEye
-                                style={{ cursor: "pointer" }}
-                                onClick={() => {
-                                  gotoShowStudioDetails(products._id);
-                                }}
-                              />
-                              <MdEdit
-                                style={{
-                                  color: "#ffc701",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() => {
-                                  gotoEdit(products._id);
-                                }}
-                              />
-                              <RiDeleteBin5Fill
-                                style={{ color: "red", cursor: "pointer" }}
-                              />
-                            </div>
-                          ) : (
-                            <div>
-                              <GoEye
-                                style={{ cursor: "pointer" }}
-                                onClick={() => {
-                                  gotoShowStudioDetails(products._id);
-                                }}
-                              />
-                            </div>
-                          )
-                        ) : (
-                          <div className={style.tableActionbtn}>
-                            <GoEye
-                              style={{ cursor: "pointer" }}
-                              onClick={() => {
-                                gotoShowStudioDetails(products._id);
-                              }}
-                            />
-                            <MdEdit
-                              style={{ color: "#ffc701", cursor: "pointer" }}
-                              onClick={() => {
-                                gotoEdit(products._id);
-                              }}
-                            />
-                            <RiDeleteBin5Fill
-                              style={{ color: "red", cursor: "pointer" }}
-                            />
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+          {/* Your Custom Pagination Component */}
         </div>
       </div>
       <div className={style.tabelpaginationDiv}>
@@ -567,11 +514,11 @@ function AllStudioDetail2({
           pageCount={pageCount}
           totalPage={totalPage}
           setPageCount={setPageCount}
-          bookingPageCount={bookingPageCount}
+          bookingPageCount={pageSize} // Page size or items per page
         />
       </div>
     </>
   );
-}
+};
 
 export default AllStudioDetail2;

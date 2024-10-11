@@ -2,9 +2,8 @@
 // import style from "../../../pages/admin/studios/studio.module.css";
 
 // import { GrShare } from "react-icons/gr";
-// import { GoEye } from "react-icons/go";
 // import { MdEdit } from "react-icons/md";
-// import { RiDeleteBin5Fill, RiExpandUpDownLine } from "react-icons/ri";
+// import { RiDeleteBin5Fill } from "react-icons/ri";
 
 // import { IoIosArrowBack } from "react-icons/io";
 // import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
@@ -13,92 +12,34 @@
 // import Switch from "../../../pages/admin/layout/Switch";
 // import Pagination from "../../../pages/admin/studios/Pagination";
 // import { LuFilePlus } from "react-icons/lu";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-// import bookingPageApi from "../../../services/bookingPageApi";
 // import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 // import { IoCalendarOutline } from "react-icons/io5";
 // import { BiSearchAlt } from "react-icons/bi";
-// import moment from "moment";
-// import { CiFilter } from "react-icons/ci";
-// import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
+// import { GoEye } from "react-icons/go";
+// import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+// import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
 // let PageSize = 10;
-// let sendFilterDataToapi = {};
 
-// function StudioBookingDetail({
+// function MixMaster({
 //   products,
 //   setProducts,
 //   handleChange,
 //   getStatusColor,
 //   bookingPageCount,
+//   totalPage,
+//   pageCount,
+//   setPageCount,
+//   setTotalPage,
 // }) {
 //   const [currentPage, setCurrentPage] = useState(1);
-//   const navigate = useNavigate();
-//   // const gotoShowDetails = (id) => {
-//   //   const selectedProduct = products.find((product) => product._id === id);
-//   //   console.log("navigated=======>", selectedProduct);
 
-//   //   navigate(`/service/showBookingDetails?id=${id}`, {
-//   //     state: { productData: selectedProduct },
-//   //   });
-//   // };
+//   // const currentTableData = useMemo(() => {
+//   //   const firstPageIndex = (currentPage - 1) * PageSize;
+//   //   const lastPageIndex = firstPageIndex + PageSize;
+//   //   return products.slice(firstPageIndex, lastPageIndex);
+//   // }, [currentPage, products]);
 
-//   const gotoShowDetails = (id) => {
-//     const isEditMode = true;
-//     const selectedProduct = products.find((product) => product._id === id);
-//     console.log("navigated=======>", selectedProduct);
-
-//     navigate(`/studio/edit?id=${id}`, {
-//       state: {
-//         productData: selectedProduct,
-//         navCount: 4,
-//         isEditMode: isEditMode,
-//         showMode: true,
-//       },
-//     });
-//   };
-//   const currentTableData = useMemo(() => {
-//     const firstPageIndex = (currentPage - 1) * PageSize;
-//     const lastPageIndex = firstPageIndex + PageSize;
-//     return products.slice(firstPageIndex, lastPageIndex);
-//   }, [currentPage, products]);
-
-//   const [selectedStatus, setSelectedStatus] = useState([]);
-
-//   useEffect(() => {
-//     setProducts(products);
-//   }, [products]);
-
-//   const getNoOfhours = (bookingTime) => {
-//     return moment
-//       .duration(
-//         moment(bookingTime?.endTime, "HH:mm").diff(
-//           moment(bookingTime?.startTime, "HH:mm")
-//         )
-//       )
-//       .asHours();
-//   };
-//   const closeAllFilter = () => {
-//     setShowstatusFilter(false);
-//   };
-//   const headers = [
-//     { title: "Id", width: "5%", icon: <RiExpandUpDownLine /> },
-//     { title: "User Name", width: "10%", icon: <RiExpandUpDownLine /> },
-//     { title: "Studio Name", width: "10%", icon: <RiExpandUpDownLine /> },
-//     { title: "Hours", width: "5%", icon: <CiFilter /> },
-//     { title: "Creation Date", width: "10%", icon: <CiFilter /> },
-//     { title: "Booking Date", width: "10%", icon: <CiFilter /> },
-//     { title: "Time Slot", width: "10%", icon: <CiFilter /> },
-//     { title: "Amount", width: "10%", icon: <CiFilter /> },
-//     { title: "Project Status", width: "10%", icon: <CiFilter /> },
-//     { title: "", width: "10%", icon: "" },
-//   ];
-//   const [totalPage, setTotalPage] = useState(0);
-//   const getDynamicStyle = (shortby, criteria) => ({
-//     backgroundColor: shortby !== criteria ? "#ffc70133" : "",
-//   });
-//   const status = ["active", "cancelled", "completed"];
-//   const [showstatusFilter, setShowstatusFilter] = useState(false);
+//   const [selectedStatus, setSelectedStatus] = useState({});
 
 //   return (
 //     <>
@@ -126,111 +67,75 @@
 //           <table>
 //             <thead className={style.studiotabelHead}>
 //               <tr>
-//                 {headers.map((header, index) => (
-//                   <th key={index} style={{ width: header.width }}>
-//                     <div className={style.headingContainer}>
-//                       {header.title}
-//                       <div
-//                         className={header.icon !== "" ? style.filterBox : ""}
-//                         // style={getDynamicStyle(shortby, "creationTimeStamp:desc")}
-//                         onClick={() => {
-//                           if (index == 8) {
-//                             setShowstatusFilter(!showstatusFilter);
-//                           }
-//                         }}
-//                         // onClick={handelShortbyClick}
-//                       >
-//                         <span>{header.icon}</span>
-//                         {index == 8 &&
-//                           (showstatusFilter ? (
-//                             <CheckboxFilter
-//                               data={status}
-//                               cusstyle={{ left: "-355%" }}
-//                               disabledsearch={true}
-//                               selectedData={selectedStatus}
-//                               setSelectedData={setSelectedStatus}
-//                               sendFilterDataToapi={sendFilterDataToapi}
-//                               setProducts={setProducts}
-//                               setTotalPage={setTotalPage}
-//                               bookingPageCount={bookingPageCount}
-//                               closeAllFilter={closeAllFilter}
-//                             />
-//                           ) : (
-//                             ""
-//                           ))}
-//                       </div>
-//                     </div>
-//                   </th>
-//                 ))}
+//                 <th style={{ width: "15%" }}>Booking ID</th>
+//                 <th>User Name</th>
+
+//                 <th style={{ width: "15%" }}> Mobile No.</th>
+//                 <th>Production Name</th>
+//                 <th>Amount</th>
+//                 <th>Project Status</th>
 //               </tr>
 //             </thead>
 //             <tbody>
 //               {products.length === 0 ? (
-//                 <ChoiraLoder2 />
+//                 <tr>
+//                   <td>
+//                     <ChoiraLoder2 />
+//                   </td>
+//                 </tr>
 //               ) : (
-//                 currentTableData.map((products, i) => {
+//                 products.map((products) => {
 //                   return (
-//                     <tr key={i}>
-//                       <td title={products._id}>#{products._id.slice(-4)}</td>
-//                       <td>{products.userName}</td>
-//                       <td>
-//                         {products.studioName}
-//                         <br />
-//                         <small>Room name</small>
+//                     <tr key={products._id}>
+//                       <td style={{ textAlign: "center" }}>
+//                         #{products._id.slice(-5)}
 //                       </td>
-//                       <td>{getNoOfhours(products.bookingTime)}</td>
-//                       <td
-//                         style={{ textAlign: "center" }}
-//                         title={moment(products.creationTimeStamp).format(
-//                           "Do MMM  YY, hh:mm a "
-//                         )}
-//                       >
-//                         {moment(products.creationTimeStamp).format(
-//                           "Do MMM  YY"
-//                         )}
-//                       </td>
-//                       <td
-//                         style={{ textAlign: "center" }}
-//                         title={moment(products.bookingDate).format(
-//                           "Do MMM  YY, hh:mm a "
-//                         )}
-//                       >
-//                         {moment(products.bookingDate).format("Do MMM  YY")}
+//                       <td title={products.userFullName}>
+//                         <CopyToClipboard textToCopy={products?.userFullName} />
 //                       </td>
 
-//                       {/* <td>{products.planId}</td> */}
-//                       <td>
-//                         {`${products?.bookingTime?.startTime} - ${products?.bookingTime?.endTime}`}
+//                       <td title={products.userPhone}>
+//                         <CopyToClipboard textToCopy={products?.userPhone} />
 //                       </td>
-//                       <td>₹{products?.totalPrice}</td>
-//                       <td>
-//                         <div
-//                           className={style.userProjectStatus}
-//                           style={{
-//                             backgroundColor:
-//                               parseInt(products.bookingStatus) === 0
-//                                 ? "#FFF3CA"
-//                                 : parseInt(products.bookingStatus) == 1
-//                                 ? "#DDFFF3"
-//                                 : "#FFDDDD",
-//                           }}
-//                         >
-//                           {parseInt(products.bookingStatus) === 0
-//                             ? "Pending"
-//                             : parseInt(products.bookingStatus) == 1
-//                             ? "Complete"
-//                             : "Cancelled"}
-//                         </div>
+//                       <td title={products.serviceFullName}>
+//                         <CopyToClipboard
+//                           textToCopy={products?.serviceFullName}
+//                         />
+//                       </td>
+//                       <td style={{ textAlign: "start" }}>
+//                         Starting price from ₹{products.totalPrice} <br />
 //                       </td>
 //                       <td className={style.tableActionbtn}>
 //                         <div>
+//                           <select
+//                             value={
+//                               selectedStatus[products._id] ||
+//                               products.bookingStatus
+//                             }
+//                             onChange={(e) => handleChange(products._id, e)}
+//                             style={{
+//                               backgroundColor: getStatusColor(
+//                                 products.bookingStatus
+//                               ),
+//                             }}
+//                           >
+//                             <option value="" disabled>
+//                               Select Status
+//                             </option>
+//                             <option value={0}>Active</option>
+//                             {/* <option value="Pending">Pending</option> */}
+//                             <option value={1}>Complete</option>
+//                             <option value={2}>Cancelled</option>
+//                           </select>
+//                         </div>
+//                         <div style={{ width: "25%" }}>
 //                           <GoEye
 //                             style={{ cursor: "pointer" }}
 //                             onClick={() => {
 //                               // gotoShowDetails(products._id);
 //                             }}
-//                           />{" "}
-//                           &nbsp;
+//                           />
+
 //                           <RiDeleteBin5Fill
 //                             style={{ color: "red", cursor: "pointer" }}
 //                           />
@@ -245,16 +150,15 @@
 //         </div>
 //       </div>
 //       <div className={style.tabelpaginationDiv}>
-//         <Pagination
-//           className="pagination-bar"
-//           currentPage={currentPage}
-//           totalCount={products.length}
-//           pageSize={PageSize}
-//           onPageChange={(page) => setCurrentPage(page)}
+//         <PaginationNav
+//           pageCount={pageCount}
+//           totalPage={totalPage}
+//           setPageCount={setPageCount}
+//           bookingPageCount={bookingPageCount}
 //         />
 //       </div>
 //     </>
 //   );
 // }
 
-// export default StudioBookingDetail;
+// export default MixMaster;

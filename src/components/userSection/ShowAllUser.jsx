@@ -25,6 +25,8 @@ import Switch from "../../pages/admin/layout/Switch";
 
 import axios from "axios";
 import CopyToClipboard from "../../pages/admin/layout/CopyToClipboard ";
+import { Table, Tooltip } from "antd";
+import { useMutation, useQuery } from "react-query";
 
 let userAllFilterData = {
   sortfield: "",
@@ -36,6 +38,8 @@ let userAllFilterData = {
 function ShowAllUser() {
   const [products, setProducts] = useState([]);
   const [totalResult, setTotalResult] = useState();
+  const [selectedStatus, setSelectedStatus] = useState([]);
+
   const [perPage, setPerPage] = useState(7);
   const [totalPage, setTotalPage] = useState();
   const [pageCount, setPageCount] = useState(1);
@@ -58,28 +62,39 @@ function ShowAllUser() {
     });
   };
 
-  const handelFilterApi = (pageCount, userAllFilterData) => {
-    userApi
-      .getAllUser(perPage, pageCount, userAllFilterData)
-      .then((response) => {
-        if (response.users) {
-          setProducts(response.users);
-          setTotalPage(response.paginate.totalPages);
-          setTotalResult(response.paginate.totalResults);
+  const useFilteredUsers = () => {
+    return useMutation(
+      ({ perPage, pageCount, userAllFilterData }) =>
+        userApi.getAllUser(perPage, pageCount, userAllFilterData),
+      {
+        // On success, update the state with the response data
+        onSuccess: (response) => {
+          if (response.users) {
+            setProducts(response.users);
+            setTotalPage(response.paginate.totalPages);
+            setTotalResult(response.paginate.totalResults);
+          }
+        },
+        // Handle any errors that occur during the API request
+        onError: (error) => {
+          console.error("Error fetching users:", error);
+        },
+      }
+    );
+  };
+  const { mutate: fetchFilteredUsers, isLoading, error } = useFilteredUsers();
 
-          // setPageCount(response.paginate.page);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching studios:", error);
-      });
+  // Handle the API call when the filter is applied
+  const handleFilterApi = (pageCount, userAllFilterData) => {
+    fetchFilteredUsers({
+      perPage,
+      pageCount,
+      userAllFilterData,
+    });
   };
 
   useEffect(() => {
-    console.log(" -----");
-    setProducts([]);
-
-    const source = axios.CancelToken.source();
+    setProducts([]); // Clear products on filter/sort change
 
     if (selectedStatus[0]) {
       userAllFilterData.status =
@@ -95,11 +110,7 @@ function ShowAllUser() {
         userAllFilterData.sortfield = dataToSend;
         userAllFilterData.sortDirection =
           userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
-      } else {
-        userAllFilterData.sortDirection =
-          userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
-      }
-      if (shortByEmail) {
+      } else if (shortByEmail) {
         dataToSend = "email";
         userAllFilterData.sortfield = dataToSend;
         userAllFilterData.sortDirection =
@@ -109,34 +120,58 @@ function ShowAllUser() {
           userAllFilterData.sortDirection === "asc" ? "desc" : "asc";
       }
     }
-
-    userApi
-      .getAllUser(perPage, pageCount, userAllFilterData, {
-        cancelToken: source.token,
-      })
-      .then((response) => {
-        console.log(`====================> response `, response);
-        console.log("response.data.users", response.users);
+  }, [
+    selectedStatus,
+    shortByUser,
+    shortByEmail,
+    shortBySrNo,
+    userAllFilterData,
+  ]);
+  const fetchUsers = async ({ queryKey }) => {
+    const [_, perPage, pageCount, userAllFilterData, cancelToken] = queryKey;
+    const response = await userApi.getAllUser(
+      perPage,
+      pageCount,
+      userAllFilterData,
+      { cancelToken }
+    );
+    return response;
+  };
+  const { data, isloading, isFetching } = useQuery(
+    ["users", perPage, pageCount, userAllFilterData],
+    async ({ signal }) => {
+      const source = axios.CancelToken.source();
+      signal.addEventListener("abort", () => {
+        source.cancel();
+      });
+      return fetchUsers({
+        queryKey: [
+          "users",
+          perPage,
+          pageCount,
+          userAllFilterData,
+          source.token,
+        ],
+      });
+    },
+    {
+      keepPreviousData: true, // Keeps previous data to prevent flickering
+      onSuccess: (response) => {
         if (response.users) {
           setProducts(response.users);
           setTotalPage(response.paginate.totalPages);
           setTotalResult(response.paginate.totalResults);
         }
-      })
-      .catch((error) => {
+      },
+      onError: (error) => {
         console.error("Error fetching users:", error);
-      });
-
-    console.log("inside useEffect");
-
-    return () => {
-      source.cancel("Operation canceled by the user.");
-    };
-  }, [pageCount, shortByUser, shortByEmail, shortBySrNo]);
+      },
+      refetchOnWindowFocus: false, // Optional: prevent refetch on window focus
+    }
+  );
 
   const [selectedCity, setSelectedCity] = useState([]);
 
-  const [selectedStatus, setSelectedStatus] = useState([]);
   const [showstatusFilter, setShowstatusFilter] = useState(false);
   const closeAllFilter = () => {
     setShowstatusFilter(false);
@@ -160,7 +195,7 @@ function ShowAllUser() {
   };
   useEffect(() => {
     userAllFilterData.sortDirection = shortBySrNo ? "asc" : "desc";
-    handelFilterApi(pageCount, userAllFilterData);
+    handleFilterApi(pageCount, userAllFilterData);
 
     // setProducts((prev) => [...prev].reverse());
   }, [shortBySrNo]);
@@ -226,6 +261,112 @@ function ShowAllUser() {
         setShowBtnLoader(false);
       });
   };
+  const handleTableChange = (pagination, filters, sorter) => {
+    let selectedData = filters?.status?.[0] || "";
+
+    setProducts([]);
+    setPageCount(1);
+
+    userAllFilterData.status = selectedData;
+
+    userApi
+      .getAllUser(perPage, pageCount, userAllFilterData)
+      .then((response) => {
+        console.log("filter applied:", response);
+        setProducts(response.users);
+        setTotalPage(response.paginate.totalPages);
+      })
+      .catch((error) => {
+        console.error("Error filter studio:", error);
+      });
+  };
+  const columns = [
+    {
+      title: " Sr.No.",
+      dataIndex: "srNo",
+      sorter: (a, b) => handleSortBySrNo(),
+
+      render: (_, __, index) =>
+        !shortBySrNo
+          ? isNaN(totalResult - pageCount * perPage + perPage - index)
+            ? "N/A"
+            : index + 1 + (pageCount - 1) * perPage
+          : isNaN(index + 1 + (pageCount - 1) * perPage)
+          ? "N/A"
+          : totalResult - pageCount * perPage + perPage - index,
+    },
+
+    {
+      title: "Users",
+      dataIndex: "fullName",
+      sorter: (a, b) => handleSortByUser(),
+
+      render(text, record) {
+        return (
+          <>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                className={
+                  record.profileUrl === ""
+                    ? `${style.studioImageNotFound}`
+                    : `${style.studioImage} `
+                }
+              >
+                <img
+                  src={record?.profileUrl || userNotFound}
+                  alt=""
+                  onError={(e) => (e.target.src = userNotFound)}
+                />
+              </div>
+              &nbsp;&nbsp;
+              <CopyToClipboard textToCopy={record.fullName} />
+            </div>
+          </>
+        );
+      },
+    },
+    {
+      title: "Mobile",
+      dataIndex: "phone",
+      render: (phone) => <CopyToClipboard textToCopy={phone} />,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      render: (email) => <CopyToClipboard textToCopy={email} />,
+      sorter: (a, b) => handleSortByEmail(),
+    },
+    {
+      title: "Created on",
+      dataIndex: "creationTimeStamp",
+      render: (creationTimeStamp) =>
+        moment(creationTimeStamp).format("Do MMM  YY, hh:mm a"),
+    },
+    {
+      title: "Activity Status",
+      dataIndex: "status",
+      render: (status) => <Switch status={status} switchDisabled={true} />,
+      filters: [
+        {
+          text: "active",
+          value: 1,
+        },
+        {
+          text: "inactive",
+          value: "0",
+        },
+      ],
+      filterMultiple: false,
+    },
+    {
+      title: "",
+      render: (record) => (
+        <Tooltip title="View Details">
+          <FaRegEye onClick={() => showUserDetails(record._id)} />
+        </Tooltip>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -236,253 +377,62 @@ function ShowAllUser() {
           userid={userid}
         />
       ) : (
-        <div className={style.allStudioDetailsPage}>
-          <div
-            className={style.bookingStudiobtn}
-            style={{ marginBottom: "2%" }}
-          >
-            <div>
-              <div style={{ background: "none" }}>All User</div>
+        <>
+          <div className={style.allStudioDetailsPage}>
+            <div
+              className={style.bookingStudiobtn}
+              style={{ marginBottom: "2%" }}
+            >
+              <div>
+                <div style={{ background: "none" }}>All User</div>
+              </div>
+              <div>
+                <Button
+                  name={"Download"}
+                  icon={<FaDownload />}
+                  style={{ height: "60%", gap: "5%" }}
+                  // disabled={true}
+                  onClick={downloadUserData}
+                  showBtnLoader={showBtnLoader}
+                  loaderText={loaderText}
+                />
+              </div>
             </div>
-            <div>
-              <Button
-                name={"Download"}
-                icon={<FaDownload />}
-                style={{ height: "60%", gap: "5%" }}
-                // disabled={true}
-                onClick={downloadUserData}
-                showBtnLoader={showBtnLoader}
-                loaderText={loaderText}
+            <div className={style.studioTabelDiv}>
+              <DateAndSearchFilter
+                setProducts={setProducts}
+                setTotalPage={setTotalPage}
+                pageCount={pageCount}
+                perPage={perPage}
+                setPageCount={setPageCount}
+                userFiler={userFiler}
+                setUserFilterText={setUserFilterText}
+                userFilterText={userFilterText}
+                userAllFilterData={userAllFilterData}
+              />
+              <div>
+                <Table
+                  columns={columns}
+                  dataSource={products}
+                  rowKey="_id"
+                  pagination={false} // Disable Ant Design's default pagination
+                  onChange={handleTableChange}
+                  locale={{ emptyText: <ChoiraLoder2 /> }}
+                  // loading={loader}
+                />
+
+                {/* Your Custom Pagination Component */}
+              </div>
+            </div>
+            <div className={style.tabelpaginationDiv}>
+              <PaginationNav
+                pageCount={pageCount}
+                totalPage={totalPage}
+                setPageCount={setPageCount}
               />
             </div>
           </div>
-          <div className={style.studioTabelDiv}>
-            <DateAndSearchFilter
-              setProducts={setProducts}
-              setTotalPage={setTotalPage}
-              pageCount={pageCount}
-              perPage={perPage}
-              setPageCount={setPageCount}
-              userFiler={userFiler}
-              setUserFilterText={setUserFilterText}
-              userFilterText={userFilterText}
-              userAllFilterData={userAllFilterData}
-            />
-            <div className={style.tableContainer}>
-              <table>
-                <thead className={style.studiotabelHead}>
-                  <tr>
-                    <th style={{ width: "8%" }}>
-                      <div className={style.headingContainer}>
-                        Sr.No.
-                        <div
-                          className={style.filterBox}
-                          onClick={handleSortBySrNo}
-                          style={{
-                            backgroundColor: shortBySrNo ? "#ffc70133" : "",
-                          }}
-                        >
-                          <RiExpandUpDownLine />
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "20%" }}>
-                      <div className={style.headingContainer}>
-                        Users
-                        <div
-                          className={style.filterBox}
-                          onClick={handleSortByUser}
-                          style={{
-                            backgroundColor: shortByUser ? "#ffc70133" : "",
-                          }}
-                        >
-                          <RiExpandUpDownLine />
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "10%" }}>
-                      <div className={style.headingContainer}>
-                        Mobile
-                        <div
-                          className={style.filterBox}
-                          style={{
-                            visibility: "hidden",
-                          }}
-                        >
-                          <span
-                          //  onClick={handellocationFilter}
-                          >
-                            <RiExpandUpDownLine />
-                          </span>
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "20%" }}>
-                      <div className={style.headingContainer}>
-                        Email
-                        <div
-                          className={style.filterBox}
-                          onClick={handleSortByEmail}
-                          style={{
-                            backgroundColor: shortByEmail ? "#ffc70133" : "",
-                          }}
-                        >
-                          <span
-                          // onClick={handelRoomFilter}
-                          >
-                            <RiExpandUpDownLine />
-                          </span>
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "15%" }}>
-                      <div className={style.headingContainer}>
-                        Created on
-                        <div
-                          className={style.filterBox}
-                          style={{
-                            visibility: "hidden",
-                          }}
-                        >
-                          <span
-                          // onClick={handelRoomFilter}
-                          >
-                            <CiFilter />
-                          </span>
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "10%" }}>
-                      <div className={style.headingContainer}>
-                        Activity Status
-                        <div
-                          className={style.filterBox}
-                          style={{
-                            backgroundColor:
-                              selectedStatus.length > 0 ? "#ffc70133" : "",
-                          }}
-                        >
-                          <span onClick={handelStatusFilter}>
-                            <CiFilter />
-                          </span>
-                          {showstatusFilter && (
-                            <CheckboxFilter
-                              data={status}
-                              cusstyle={{ left: "-355%" }}
-                              disabledsearch={true}
-                              selectedData={selectedStatus}
-                              setSelectedData={setSelectedStatus}
-                              setProducts={setProducts}
-                              setTotalPage={setTotalPage}
-                              pageCount={pageCount}
-                              setPageCount={setPageCount}
-                              closeAllFilter={closeAllFilter}
-                              userFiler={userFiler}
-                              userAllFilterData={userAllFilterData}
-                              perPage={perPage}
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </th>
-                    <th style={{ width: "10%" }}>{""}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.length === 0 ? (
-                    <tr>
-                      <td>
-                        <ChoiraLoder2 />
-                      </td>
-                    </tr>
-                  ) : (
-                    products.map((product, index) => (
-                      <tr key={product._id}>
-                        <td style={{ textAlign: "center" }}>
-                          {!shortBySrNo
-                            ? isNaN(
-                                totalResult -
-                                  pageCount * perPage +
-                                  perPage -
-                                  index
-                              )
-                              ? "N/A"
-                              : index + 1 + (pageCount - 1) * perPage
-                            : isNaN(index + 1 + (pageCount - 1) * perPage)
-                            ? "N/A"
-                            : totalResult -
-                              pageCount * perPage +
-                              perPage -
-                              index}
-                        </td>
-                        <td
-                          title={product.fullName}
-                          style={{ display: "flex", alignItems: "center" }}
-                        >
-                          <div
-                            className={
-                              product.profileUrl === ""
-                                ? `${style.studioImageNotFound}`
-                                : `${style.studioImage} `
-                            }
-                          >
-                            <img
-                              src={product.profileUrl || userNotFound}
-                              alt=""
-                              onError={(e) => (e.target.src = userNotFound)}
-                            />
-                          </div>
-                          &nbsp;&nbsp;
-                          <CopyToClipboard textToCopy={product?.fullName} />
-                        </td>
-                        <td title={product?.phone}>
-                          <CopyToClipboard textToCopy={product?.phone} />
-                        </td>
-                        <td title={product.email}>
-                          <CopyToClipboard textToCopy={product?.email} />
-                        </td>
-                        <td>
-                          {moment(product.creationTimeStamp).format(
-                            "Do MMM  YY, hh:mm a"
-                          )}
-                        </td>
-                        <td style={{ width: "10%" }}>
-                          <Switch
-                            status={product.status}
-                            switchDisabled={true}
-                          />
-                        </td>
-                        <td className={style.tableActionbtn}>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-around",
-                            }}
-                          >
-                            <FaRegEye
-                              style={{ cursor: "pointer" }}
-                              onClick={() => showUserDetails(product._id)}
-                            />
-                            <RiDeleteBin5Fill
-                              style={{ color: "red", cursor: "pointer" }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className={style.tabelpaginationDiv}>
-            <PaginationNav
-              pageCount={pageCount}
-              totalPage={totalPage}
-              setPageCount={setPageCount}
-            />
-          </div>
-        </div>
+        </>
       )}
     </>
   );

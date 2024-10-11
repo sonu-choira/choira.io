@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import tanmay from "../../assets/img/dashboard_img/tanmay.png";
+import adminImg from "../../assets/img/dashboard_img/admin.jpeg";
+
 import { FaPen } from "react-icons/fa6";
 import "../../pages/produce/dashboard.css";
 import user from "../../assets/img/userNotFound.jpg";
@@ -105,8 +107,8 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                     // src={adminData?.Image || tanmay}
                     src={
                       navAccess
-                        ? adminData?.ownerImage || tanmay
-                        : adminData?.Image || tanmay
+                        ? adminData?.ownerImage || adminImg
+                        : adminData?.Image || adminImg
                     }
                     alt="Default"
                     height={"100%"}
@@ -142,7 +144,7 @@ function ProfileEdit({ setEditProfile, editProfile }) {
               <input
                 id="name"
                 type="text"
-                placeholder="Tanmay"
+                placeholder="Your Name"
                 value={
                   navAccess
                     ? adminData?.firstName + " " + adminData?.lastName ||
@@ -159,7 +161,7 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                 name="role"
                 id="role"
                 type="text"
-                placeholder="Tanmay"
+                placeholder="Your Name"
                 value={navAccess ? adminData?.role || "admin" : "admin"}
                 disabled
                 readOnly
@@ -190,7 +192,7 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                     ? adminData?.phone || "1231231230"
                     : adminData?.phoneNumber || "1231231230"
                 }
-                placeholder="Tanmay"
+                placeholder="Your Mobile Number"
                 disabled
                 readOnly
               />
@@ -202,7 +204,7 @@ function ProfileEdit({ setEditProfile, editProfile }) {
                 name="email"
                 id="email"
                 type="email"
-                placeholder="Tanmay"
+                placeholder="Your Email"
                 value={
                   navAccess
                     ? adminData?.email || "sample@gmail.com"

@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 
 const CopyToClipboard = ({
   textToCopy,
-  textLength = 10,
+  textLength = 15,
   showTitle = true,
   customStyle,
 }) => {

@@ -1,26 +1,23 @@
 import React, { useEffect, useMemo, useState } from "react";
-import style from "../../../pages/admin/studios/studio.module.css";
-
+import { Table, Select, Button, Input, Tooltip } from "antd";
 import { GrShare } from "react-icons/gr";
+import style from "../../../pages/admin/studios/studio.module.css";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-
 import { IoIosArrowBack } from "react-icons/io";
 import { FaFilter, FaShare, FaTableCellsLarge } from "react-icons/fa6";
-
-import Button from "../../../pages/admin/layout/Button";
-import Switch from "../../../pages/admin/layout/Switch";
-import Pagination from "../../../pages/admin/studios/Pagination";
 import { LuFilePlus } from "react-icons/lu";
-import axios from "axios";
-import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiSearchAlt } from "react-icons/bi";
 import { GoEye } from "react-icons/go";
+import axios from "axios";
 import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+
+import ChoiraLoder2 from "../../loader/ChoiraLoder2";
 import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
-// import moment from "moment";
-let PageSize = 10;
+import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+
+const { Option } = Select;
 
 function MusicProduction({
   products,
@@ -32,127 +29,129 @@ function MusicProduction({
   pageCount,
   setPageCount,
   setTotalPage,
+  perPage,
+  isFetching,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
-
-  // const currentTableData = useMemo(() => {
-  //   const firstPageIndex = (currentPage - 1) * PageSize;
-  //   const lastPageIndex = firstPageIndex + PageSize;
-  //   return products.slice(firstPageIndex, lastPageIndex);
-  // }, [currentPage, products]);
-
   const [selectedStatus, setSelectedStatus] = useState({});
+  useEffect(() => {
+    if (isFetching) {
+      setProducts([]);
+    }
+  }, [isFetching]);
+
+  const columns = [
+    {
+      title: "Sr.No",
+      dataIndex: "srNo",
+      key: "srNo",
+      render: (text, record, index) => index + 1 + (pageCount - 1) * perPage,
+    },
+    {
+      title: "Booking ID",
+      dataIndex: "_id",
+      key: "_id",
+      render: (text) => `#${text.slice(-5)}`,
+      width: "15%",
+      align: "center",
+    },
+    {
+      title: "User Name",
+      dataIndex: "userFullName",
+      key: "userFullName",
+      render: (text) => <CopyToClipboard textToCopy={text} />,
+    },
+    {
+      title: "Mobile No.",
+      dataIndex: "userPhone",
+      key: "userPhone",
+      render: (text) => <CopyToClipboard textToCopy={text} />,
+    },
+    {
+      title: "Production Name",
+      dataIndex: "serviceFullName",
+      key: "serviceFullName",
+      render: (text) => <CopyToClipboard textToCopy={text} />,
+    },
+    {
+      title: "Amount",
+      dataIndex: "totalPrice",
+      key: "totalPrice",
+      render: (text) => `₹${text}`,
+    },
+    {
+      title: "Project Status",
+      key: "status",
+      render: (record) => (
+        <>
+          <div className={style.tableActionbtn}>
+            <div>
+              <select
+                value={selectedStatus[record._id] || record.bookingStatus}
+                onChange={(e) => handleChange(record._id, e)}
+                style={{
+                  backgroundColor: getStatusColor(record.bookingStatus),
+                }}
+              >
+                <option value="" disabled>
+                  Select Status
+                </option>
+                <option value={0}>Active</option>
+                {/* <option value="Pending">Pending</option> */}
+                <option value={1}>Complete</option>
+                <option value={2}>Cancelled</option>
+              </select>
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <div>
+          <Tooltip title="view">
+            <GoEye style={{ cursor: "pointer" }} onClick={() => {}} />
+          </Tooltip>
+          &nbsp; &nbsp; &nbsp; &nbsp;
+          <Tooltip title="Delete">
+            <RiDeleteBin5Fill style={{ color: "red", cursor: "pointer" }} />
+          </Tooltip>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <>
       <div className={style.studioTabelDiv}>
-        <div className={style.searchDiv}>
-          <div className={style.puredisabled}>
-            <p>Search by Date </p>
-            <label htmlFor="selectDate">
-              <IoCalendarOutline />
-            </label>
-            {/* <input type="date" id="selectDate" style={{ border: "none" }} /> */}
-          </div>
-          <div className={style.puredisabled}>
-            <BiSearchAlt /> <br />
-            <input
-              type="text"
-              placeholder="Search"
-              className={style.puredisabled}
-              disabled
-              readOnly
-            />
-          </div>
-        </div>
+        <DateAndSearchFilter
+          setProducts={setProducts}
+          setTotalPage={setTotalPage}
+          searchDisable={true}
+          dateDisable={true}
+
+          // bookingPageCount={bookingPageCount}
+          // filterNav={filterNav}
+          // setfilterNav={setfilterNav}
+          // sendFilterDataToapi={sendFilterDataToapi}
+          // setSelectedCity={setSelectedCity}
+          // setSelectedRoom={setSelectedRoom}
+          // setSelectedStatus={setSelectedStatus}
+          // setPriceFilter={setPriceFilter}
+          // setShortby={setShortby}
+        />
         <div>
-          <table>
-            <thead className={style.studiotabelHead}>
-              <tr>
-                <th style={{ width: "15%" }}>Booking ID</th>
-                <th>User Name</th>
+          <Table
+            columns={columns}
+            dataSource={products}
+            rowKey="_id"
+            pagination={false} // Disable Ant Design's default pagination
+            locale={{ emptyText: <ChoiraLoder2 /> }}
+          />
 
-                <th> Mobile No.</th>
-                {/* <th>Date</th> */}
-                <th>Production Name.</th>
-                <th>Amount</th>
-                <th>Project Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.length === 0 ? (
-                <tr>
-                  <td>
-                    <ChoiraLoder2 />
-                  </td>
-                </tr>
-              ) : (
-                products.map((prod, i) => {
-                  return (
-                    <tr key={i}>
-                      <td title={prod._id} style={{ textAlign: "center" }}>
-                        #{prod._id.slice(-5)}
-                      </td>
-                      <td title={prod.userFullName}>
-                        <CopyToClipboard textToCopy={prod?.userFullName} />
-                      </td>
-
-                      <td title={prod.userPhone}>
-                        <CopyToClipboard textToCopy={prod?.userPhone} />
-                      </td>
-                      {/* <td>
-                        { moment(prod.bookingDate).format(
-                            "Do MMM  YY, hh:mm a "
-                          )}
-                      </td> */}
-                      <td title={prod.serviceFullName}>
-                        <CopyToClipboard
-                          textToCopy={prod?.serviceFullName}
-                        />
-                      </td>
-                      <td>₹{prod.totalPrice}</td>
-                      <td className={style.tableActionbtn}>
-                        <div>
-                          <select
-                            value={
-                              selectedStatus[prod._id] ||
-                              prod.bookingStatus
-                            }
-                            onChange={(e) => handleChange(prod._id, e)}
-                            style={{
-                              backgroundColor: getStatusColor(
-                                prod.bookingStatus
-                              ),
-                            }}
-                          >
-                            <option value="" disabled>
-                              Select Status
-                            </option>
-                            <option value={0}>Active</option>
-                            {/* <option value="Pending">Pending</option> */}
-                            <option value={1}>Complete</option>
-                            <option value={2}>Cancelled</option>
-                          </select>
-                        </div>
-                        <div style={{ width: "25%" }}>
-                          <GoEye
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              // gotoShowDetails(prod._id);
-                            }}
-                          />
-
-                          <RiDeleteBin5Fill
-                            style={{ color: "red", cursor: "pointer" }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+          {/* Your Custom Pagination Component */}
         </div>
       </div>
       <div className={style.tabelpaginationDiv}>

@@ -11,6 +11,8 @@ import UserAcount from "./UserAcount";
 import teamsApi from "../../services/teamsApi";
 import UserServiceBooking from "./UserServiceBooking";
 import userApi from "../../services/userApi";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 function UserProfile({ userAllDetails, setShowUserProfile, userid }) {
   // const [products, setProducts] = useState([]);
@@ -102,129 +104,72 @@ function UserProfile({ userAllDetails, setShowUserProfile, userid }) {
   // const [products, setProducts] = useState([]);
   let sendFilterDataToapi = {};
   let hasFilter = false;
-  useEffect(() => {
-    console.log("sidebarPageCount-----", sidebarPageCount);
-    setProducts([]);
-    // checking if filter has any data
-    for (const key in sendFilterDataToapi) {
-      if (sendFilterDataToapi[key]) {
-        hasFilter = true;
-        break;
-      }
+  const {
+    data: studioBookingData,
+    isLoading: isStudioLoading,
+    error: studioError,
+  } = useQuery(
+    ["studioBooking", userAllDetails._id, pageCount],
+    async ({ signal }) => {
+      const source = axios.CancelToken.source();
+      signal.addEventListener("abort", () => {
+        source.cancel();
+      });
+      return fetchStudioBooking(userAllDetails._id, pageCount, source.token);
+    },
+    {
+      enabled: sidebarPageCount === 2,
+      onSuccess: (response) => {
+        if (response) {
+          setProducts(response.data.allStudioBooking);
+          setTotalPage(response.data.paginate.totalPages);
+        }
+      },
+      onError: (error) => {
+        console.error("Error fetching studios:", error);
+      },
     }
+  );
+  const fetchStudioBooking = async (userId, pageCount, cancelToken) => {
+    const response = await userApi.getuserStudioBooking(userId, pageCount, {
+      cancelToken,
+    });
+    return response;
+  };
 
-    if (sidebarPageCount === 2) {
-      // Corrected the id assignments
+  const fetchServiceBooking = async (userId, pageCount, cancelToken) => {
+    const response = await userApi.getUserServiceBooking(userId, pageCount, {
+      cancelToken,
+    });
+    return response;
+  };
 
-      const limit = 10;
-      const active = 1;
-
-      // if (hasFilter) {
-      //   console.log("sendFilterDataToapi", sendFilterDataToapi);
-      //   alert(sidebarPageCount);
-      //   console.log(sendFilterDataToapi);
-      //   // alert(JSON.stringify(sendFilterDataToapi));
-
-      //   // alert("filter");
-      //   sendFilterDataToapi.page = pageCount;
-      //   sendFilterDataToapi.serviceType = sidebarPageCount;
-      //   // teamsApi
-      //   //   .filterServiceData(sendFilterDataToapi)
-      //   //   .then((response) => {
-      //   //     console.log("filter applied:", response);
-      //   //     setProducts(response.services.results);
-      //   //     setTotalPage(response.paginate.totalPages);
-      //   //     setfilterNav(true);
-      //   //   })
-      //   //   .catch((error) => {
-      //   //     console.error("Error filter studio:", error);
-      //   //   });
-      // } else {
-      //   const sidebarPageCount = sidebarPageCount === "t2" ? "t2" : "t3";
-      //   // alert("main");
-
-      // teamsApi
-      //   .getuserStudioBooking(limit, active, pageCount)
-      //   .then((response) => {
-      //     console.log(
-      //       `====================> response ${sidebarPageCount}`,
-      //       response
-      //     );
-      //     console.log("response.data.studios", response.studios);
-      //     if (response.studios) {
-      //       setProducts(response.studios);
-      //       setTotalPage(response.paginate.totalPages);
-
-      //       // setPageCount(response.paginate.page);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error fetching studios:", error);
-      //   });
-      userApi
-        .getuserStudioBooking(userAllDetails._id, pageCount)
-        .then((response) => {
-          console.log(
-            `====================> response from studio booking ${response.data.users}`,
-            response
-          );
-          if (response) {
-            setProducts(response.data.allStudioBooking);
-            console.log("lkasdnflkjsdnf", response.status);
-            setTotalPage(response.data.paginate.totalPages);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
-    } else if (sidebarPageCount === 3) {
-      const limit = 10;
-      const active = 1;
-
-      // const type = sidebarPageCount;
-      // if (hasFilter) {
-      // delete sendFilterDataToapi.serviceType;
-      // sendFilterDataToapi.page = pageCount;
-      // teamsApi
-      //   .filterData(sendFilterDataToapi)
-      //   .then((response) => {
-      //     console.log("filter applied:", response);
-      //     setProducts(response.studios);
-      //     setTotalPage(response.paginate.totalPages);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error filter studio:", error);
-      //   });
-      // } else {
-      // console.log(
-      //   userAllDetails._id,
-      //   "Apiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii-------userid"
-      // );
-      userApi
-        .getUserServiceBooking(userAllDetails._id, pageCount)
-        .then((response) => {
-          console.log(
-            `====================> response user service ${sidebarPageCount}`,
-            response
-          );
-          console.log("response.data", response.data);
-          if (response) {
-            setProducts(response.data);
-            setTotalPage(response.paginate.totalPages);
-            console.log(
-              "response.paginate.totalPages",
-              response.paginate.totalPages
-            );
-            // setPageCount(response.paginate.page);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching studios:", error);
-        });
-      // }
+  const {
+    data: serviceBookingData,
+    isLoading: isServiceLoading,
+    error: serviceError,
+  } = useQuery(
+    ["serviceBooking", userAllDetails._id, pageCount],
+    async ({ signal }) => {
+      const source = axios.CancelToken.source();
+      signal.addEventListener("abort", () => {
+        source.cancel();
+      });
+      return fetchServiceBooking(userAllDetails._id, pageCount, source.token);
+    },
+    {
+      enabled: sidebarPageCount === 3,
+      onSuccess: (response) => {
+        if (response) {
+          setProducts(response.data);
+          setTotalPage(response.paginate.totalPages);
+        }
+      },
+      onError: (error) => {
+        console.error("Error fetching services:", error);
+      },
     }
-    console.log(sidebarPageCount, "inside useEffect");
-  }, [sidebarPageCount, pageCount, shortby]);
+  );
 
   const backOnclick = () => {
     setShowUserProfile(false);

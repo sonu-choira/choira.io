@@ -1,429 +1,525 @@
-// import React, { useState, useRef, useEffect } from "react";
-// import { PlusOutlined } from "@ant-design/icons";
-// import { Divider, Input, Select, Space, Button } from "antd";
-// import { MdAddAPhoto, MdOutlineAddBox } from "react-icons/md";
-// import { IoMdAddCircle } from "react-icons/io";
-// import upload from "../../../assets/img/upload.png";
+// import React, { useContext, useEffect, useMemo, useState } from "react";
+// import { Input, Table, Tooltip } from "antd";
 // import style from "../../../pages/admin/studios/studio.module.css";
 
-// import {
-//   FaCheckDouble,
-//   FaFilter,
-//   FaRegBell,
-//   FaRegClock,
-//   FaShare,
-// } from "react-icons/fa6";
-// import StudioFooter from "../StudioFooter";
-// import cross from "../../../assets/cross.svg";
-// import DragAndDropImageDiv from "../../../pages/admin/layout/DragAndDropImageDiv";
-// import { MdCancel } from "react-icons/md";
+// import { GrShare } from "react-icons/gr";
+// import { MdEdit } from "react-icons/md";
+// import { RiDeleteBin5Fill } from "react-icons/ri";
 
-// function AddNewServices2({
-//   setShowServices,
-//   service,
-//   setService,
-//   indexofServices,
-//   isEditMode,
-//   showMode,
-// }) {
-//   const [items, setItems] = useState([
-//     "Wifi",
-//     "AC",
-//     "DJ",
-//     "Piano",
-//     "Drum",
-//     "Banjo",
-//     "Car Parking",
-//   ]);
+// // import Button from "../../../pages/admin/layout/Button";
+// import Switch from "../../../pages/admin/layout/Switch";
+// import Pagination from "../../../pages/admin/studios/Pagination";
+// import { LuFilePlus } from "react-icons/lu";
+// import imageNotFound from "../../../assets/imagesNotFound.png";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// import PaginationNav from "../../../pages/admin/layout/PaginationNav";
+// import ChoiraLoader from "../../loader/ChoiraLoader";
+// import ChoiraLoder2 from "../../loader/ChoiraLoder2";
+// import { IoCalendarOutline } from "react-icons/io5";
+// import { BiSearchAlt } from "react-icons/bi";
+// import { RiExpandUpDownLine } from "react-icons/ri";
+// import { CiFilter } from "react-icons/ci";
+// import { DatePicker, Space } from "antd";
+// import PriceFilter from "../../../pages/admin/layout/filterComponent/PriceFilter";
+// import CheckboxFilter from "../../../pages/admin/layout/filterComponent/CheckboxFilter";
+// import DateAndSearchFilter from "../../../pages/admin/layout/filterComponent/DateAndSearchFilter";
+// import appAndmoreApi from "../../../services/appAndmoreApi";
+// import LoaderUpdating from "../../../pages/admin/layout/LoaderUpdating";
+// import { errorAlert } from "../../../pages/admin/layout/Alert";
+// import { GoEye } from "react-icons/go";
+// import CopyToClipboard from "../../../pages/admin/layout/CopyToClipboard ";
+// import { DownOutlined } from "@ant-design/icons";
+// import { AccessContext } from "../../../utils/context";
 
-//   const inputRef = useRef(null);
+// import moment from "moment";
+// import Button from "../../../pages/admin/layout/Button";
 
-//   const currentServiceData = service[indexofServices] || {};
-//   useEffect(() => {
-//     console.log("currentServiceData-------->", currentServiceData);
-//   }, [currentServiceData]);
+// const AllStudioDetail2 = ({
+//   products,
+//   setProducts,
+//   setPageCount,
+//   pageCount,
+//   totalPage,
+//   bookingPageCount,
+//   setTotalPage,
+//   filterNav,
+//   setfilterNav,
+//   sendFilterDataToapi,
+// }) => {
+//   const [selectedCity, setSelectedCity] = useState([]);
+//   const [selectedRoom, setSelectedRoom] = useState([]);
+//   const [selectedStatus, setSelectedStatus] = useState([]);
+//   const [priceFilter, setPriceFilter] = useState([]);
+//   const [shortby, setShortby] = useState("creationTimeStamp:desc");
+//   const navigate = useNavigate();
+//   const tableAccess = useContext(AccessContext);
+//   const [loader, setLoader] = useState(false);
+//   const [showloader, setShowloader] = useState(false);
+//   const [pid, setPid] = useState(0);
 
-//   const OPTIONS = ["Wifi", "AC", "DJ", "Piano", "Drum", "Banjo", "Car Parking"];
-//   const [selectedItems, setSelectedItems] = useState([]);
+//   const pageSize = 10; // You can adjust this based on your need
 
-//   // useEffect(() => {
-//   //   if (isEditMode) {
-//   //     setSelectedItems(
-//   //       currentServiceData?.amenites?.map((item) => item?.name) || []
-//   //     );
-//   //   }
-//   // }, [isEditMode]);
-
-//   useEffect(() => {
-//     if (isEditMode) {
-//       const tempaminities = currentServiceData?.amenites;
-//       console.log("tempaminities:", tempaminities);
-//       if (tempaminities && tempaminities.length > 0) {
-//         const slectedtempaminities = tempaminities.map(
-//           (item) => item?.name || item
-//         );
-//         console.log("selectedDateNames:", slectedtempaminities);
-//         setSelectedItems(slectedtempaminities);
-//       } else {
-//         setSelectedItems([]);
-//       }
-//     }
-//   }, [isEditMode]);
-
-//   const filteredOptions = OPTIONS.filter((o) => !selectedItems.includes(o));
-//   const [images, setImages] = useState(
-//     currentServiceData ? currentServiceData.photo_url : []
-//   );
-//   const onNameChange = (event) => {
-//     setService((prevService) => {
-//       const updatedService = [...prevService]; // Copy the existing service array
-//       updatedService[indexofServices] = {
-//         ...updatedService[indexofServices], // Copy the existing object
-//         name: event.target.value, // Update the 'name' property
-//       };
-//       return updatedService; // Return the updated array
-//     });
-//   };
-
-//   // useEffect(() => {
-//   //   if()
-
-//   // }, [images])
-
-//   useEffect(() => {
-//     setService((prerooms) => {
-//       prerooms.map((rm, idex) => {
-//         if (idex === indexofServices) {
-//           rm.photo_url = images;
-//         }
-//       });
-//       return prerooms;
-//     });
-//   }, [images]);
-//   useEffect(() => {
-//     setService((prerooms) => {
-//       prerooms.map((rm, idex) => {
-//         if (idex === indexofServices) {
-//           rm.amenites = selectedItems;
-//         }
-//       });
-//       return prerooms;
-//     });
-//   }, [selectedItems.length]);
-
-//   const handleImageChange = (event) => {
-//     const selectedImages = Array.from(event.target.files);
-//     const newImages = [
-//       ...currentServiceData.photo_url,
-//       ...selectedImages.slice(0, 5 - currentServiceData.photo_url.length),
-//     ];
-
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...currentServiceData,
-//         photo_url: newImages,
-//       };
-//       return updatedService;
-//     });
-//   };
-
-//   const handleRemoveImage = (index) => {
-//     const newImages = [...currentServiceData.photo_url];
-//     newImages.splice(index, 1);
-
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...currentServiceData,
-//         photo_url: newImages,
-//       };
-//       return updatedService;
-//     });
-//   };
-
-//   const handlePriceChange = (event) => {
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...updatedService[indexofServices],
-//         price: event.target.value,
-//       };
-//       return updatedService;
-//     });
-//   };
-
-//   const handleAboutChange = (event) => {
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...updatedService[indexofServices],
-//         about: event.target.value,
-//       };
-//       return updatedService;
-//     });
-//   };
-
-//   const handleAmenitiesChange = (selectedAmenities) => {
-//     setService((prevService) => {
-//       const updatedService = [...prevService];
-//       updatedService[indexofServices] = {
-//         ...updatedService[indexofServices],
-//         amenities: selectedAmenities,
-//       };
-//       return updatedService;
-//     });
-//   };
-
-//   const [countryWithPrice, setCountryWithPrice] = useState([
-//     { "India(₹)": "" },
-//     { "USA($)": "" },
-//     { "Japan(¥)": "" },
-//   ]);
-//   const [addMultiplePriceDiv, setAddMultiplePriceDiv] = useState([[]]);
-//   // const [filteredCountryData, setFilteredCountryData] = useState([
-//   //   { "India(₹)": "" },
-//   //   { "USA($)": "" },
-//   //   { "Japan(¥)": "" },
-//   // ]);
-
-//   const [filteredCountryData, setFilteredCountryData] = useState([
-//     "India(₹)",
-//     "USA($)",
-//     "Japan(¥)",
-//   ]);
-
-//   const [countryWithPrice2, setCountryWithPrice2] = useState([
-//     { "India(₹)": "" },
-//     { "USA($)": "" },
-//     { "Japan(¥)": "" },
-//   ]);
-
-//   const handelMultipleCountryPriceDiv = () => {
-//     setAddMultiplePriceDiv((prev) => {
-//       return [...prev, []];
-//     });
-//   };
-//   useEffect(() => {
-//     console.log(addMultiplePriceDiv);
-//   }, [addMultiplePriceDiv]);
-
-//   // Function to handle country selection
-//   const [selectedCountry, setSelectedCountry] = useState([]);
-//   useEffect(() => {
-//     console.log(selectedCountry);
-//   }, [selectedCountry]);
-
-//   const [countryPrice, setCountryPrice] = useState([]);
-
-//   const handleCountrySelect = (fnselectedCountry, index) => {
-//     console.log("------------");
-//     setSelectedCountry((prev) => {
-//       prev[index] = fnselectedCountry;
-//       return [...prev];
-//     });
-//   };
-
-//   const handleCancelcountry = (index) => {
-//     if (addMultiplePriceDiv.length > 1) {
-//       const newdata = [...addMultiplePriceDiv];
-//       newdata.splice(index, 1);
-//       setAddMultiplePriceDiv(newdata);
-//       let newCountyData = [...selectedCountry];
-//       newCountyData.splice(index, 1);
-//       setSelectedCountry(newCountyData);
-
-//       let newPrice = [...countryPrice];
-//       newPrice.splice(index, 1);
-//       setCountryPrice(newPrice);
-//     }
-//   };
-//   const handelCountryPrice = (value, index) => {
-//     setCountryPrice((prev) => {
-//       prev[index] = value;
-//       return [...prev];
-//     });
-//   };
-//   useEffect(() => {
-//     console.log("countryPrice", countryPrice);
-//   }, [countryPrice]);
-//   let countryWithPriceobj = {};
-//   useEffect(() => {
-//     selectedCountry.map((name, index) => {
-//       return (countryWithPriceobj[name] = countryPrice[index]);
-//     });
-//   }, [countryPrice, selectedCountry]);
-
-//   useEffect(() => {
-//     console.log("countryWithPriceobj", countryWithPriceobj);
-//   }, [countryWithPriceobj]);
-
-//   useEffect(() => {
-//     if (countryWithPriceobj && Object.keys(countryWithPriceobj).length > 0) {
-//       setService((prevService) => {
-//         return prevService.map((item, index) => {
-//           if (index === indexofServices) {
-//             return {
-//               ...item,
-//               pricing: {
-//                 ...(item.pricing || {}), // Ensure pricing object is defined
-//                 USA: {
-//                   ...(item.pricing?.USA || {}), // Ensure USA object is defined
-//                   basePrice: countryWithPriceobj["USA($)"] || 0,
-//                 },
-//                 IN: {
-//                   ...(item.pricing?.IN || {}), // Ensure IN object is defined
-//                   basePrice: countryWithPriceobj["India(₹)"] || 0,
-//                 },
-//                 JP: {
-//                   ...(item.pricing?.JP || {}), // Ensure JP object is defined
-//                   basePrice: countryWithPriceobj["Japan(¥)"] || 0,
-//                 },
-//               },
-//             };
-//           } else {
-//             return item;
-//           }
+//   let loading_timeout = null;
+//   const handleSwitchChange = (studioId) => {
+//     setShowloader(true);
+//     appAndmoreApi
+//       .updateStudioStatus(studioId)
+//       .then((response) => {
+//         console.log("response=======>", response.studio);
+//         setProducts((prevState) => {
+//           return prevState.map((product) => {
+//             if (product._id === studioId) {
+//               return {
+//                 ...product,
+//                 isActive: response.studio.isActive,
+//               };
+//             }
+//             return product;
+//           });
 //         });
+
+//         loading_timeout = setTimeout(() => {
+//           setShowloader(false);
+//         }, 700);
+//       })
+//       .catch((error) => {
+//         console.log("error=======>", error);
+//         errorAlert(error.message || "Something went wrong");
+//         setShowloader(false);
 //       });
+//   };
+//   let data = "";
+//   const hitallstudioApi = () => {
+//     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
+//       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
+
+//       appAndmoreApi
+//         .getServices("10", idToUse, 1)
+//         .then((response) => {
+//           console.log(
+//             `====================> response ${bookingPageCount}`,
+//             response
+//           );
+//           if (response.status) {
+//             setProducts(response.services.results);
+//             console.log("lkasdnflkjsdnf", response.status);
+//             setTotalPage(response.paginate.totalPages);
+//           }
+//         })
+//         .catch((error) => {
+//           console.error("Error fetching studios:", error);
+//         });
+//     } else if (bookingPageCount === "c1") {
+//       const limit = 64;
+//       const active = 1;
+
+//       appAndmoreApi
+//         .getStudios(limit, active)
+//         .then((response) => {
+//           console.log(
+//             `====================> response ${bookingPageCount}`,
+//             response
+//           );
+//           console.log("response.data.studios", response.studios);
+//           if (response.studios) {
+//             setProducts(response.studios);
+//             setTotalPage(response.paginate.totalPages);
+//           }
+//         })
+//         .catch((error) => {
+//           console.error("Error fetching studios:", error);
+//         });
+//     } else {
 //     }
-//   }, [countryPrice, selectedCountry]);
+//   };
+
+//   const sendFilterDatatoapi = () => {
+//     setProducts([]);
+//     setLoader(true);
+//     appAndmoreApi
+//       .filterData(sendFilterDataToapi)
+//       .then((response) => {
+//         console.log("filter applied:", response);
+//         setProducts(response.studios);
+//         setLoader(false);
+//         setTotalPage(response.paginate.totalPages);
+//       })
+//       .catch((error) => {
+//         console.error("Error filter studio:", error);
+//         setLoader(false);
+//       });
+//   };
+//   const handleTableChange = (pagination, filters, sorter) => {
+//     console.log("filters", filters);
+//     sendFilterDataToapi.city = filters?.address?.[0];
+//     sendFilterDataToapi.totalRooms = filters?.totalRooms?.[0];
+//     sendFilterDataToapi.active = filters?.isActive?.[0];
+
+//     sendFilterDatatoapi();
+//   };
+//   const gotoEdit = (id) => {
+//     const isEditMode = true;
+//     const selectedProduct = products.find((product) => product._id === id);
+//     console.log("navigated=======>", selectedProduct);
+
+//     navigate(`/studio/edit?id=${id}`, {
+//       state: {
+//         productData: selectedProduct,
+//         navCount: 3,
+//         isEditMode: isEditMode,
+//       },
+//     });
+//   };
+//   useEffect(() => {
+//     sendFilterDataToapi.city = selectedCity[0];
+//     sendFilterDataToapi.totalRooms = selectedRoom[0];
+//     sendFilterDataToapi.active =
+//       selectedStatus[0] === "active"
+//         ? 1
+//         : selectedStatus[0] === "inactive"
+//         ? "0"
+//         : "";
+//     sendFilterDataToapi.minPricePerHour = priceFilter.minPrice;
+//     sendFilterDataToapi.maxPricePerHour = priceFilter.maxPrice;
+//     // sendFilterDataToapi.creationTimeStamp = selectedDate;
+//     sendFilterDataToapi.sortBy = shortby;
+
+//     console.log(sendFilterDataToapi);
+//   }, [
+//     selectedCity,
+//     selectedRoom,
+//     selectedStatus,
+//     priceFilter,
+//     // selectedDate,
+//     shortby,
+//   ]);
+
+//   useEffect(() => {
+//     setProducts([]);
+//     appAndmoreApi
+//       .filterData(sendFilterDataToapi)
+//       .then((response) => {
+//         console.log("filter applied:", response);
+//         setProducts(response.studios);
+//         setTotalPage(response.paginate.totalPages);
+//       })
+//       .catch((error) => {
+//         console.error("Error filter studio:", error);
+//       });
+
+//     return () => {
+//       setProducts([]);
+//     };
+//   }, [shortby]);
+//   const handelShortbyClick = () => {
+//     if (shortby == "creationTimeStamp:asc") {
+//       setShortby("creationTimeStamp:desc");
+//     } else {
+//       setShortby("creationTimeStamp:asc");
+//     }
+//   };
+
+//   const gotoShowStudioDetails = (id) => {
+//     const isEditMode = true;
+//     const selectedProduct = products.find((product) => product._id === id);
+//     console.log("navigated=======>", selectedProduct);
+//     // alert(selectedProduct);
+//     navigate(`/studio/edit?id=${id}`, {
+//       state: {
+//         productData: selectedProduct,
+//         navCount: 4,
+//         isEditMode: isEditMode,
+//         showMode: true,
+//       },
+//     });
+//   };
+//   useEffect(() => {
+//     return () => {
+//       clearTimeout(loading_timeout);
+//     };
+//   }, []);
+
+//   const [startPrice, setStartPrice] = useState();
+//   const [endPrice, setEndPrice] = useState();
+//   const [filteredData, setFilteredData] = useState(data);
+
+//   // Apply price filter
+//   const handleApply = () => {
+//     const filtered = data.filter((item) => {
+//       const itemPrice = item.price;
+//       const isWithinRange =
+//         (!startPrice || itemPrice >= Number(startPrice)) &&
+//         (!endPrice || itemPrice <= Number(endPrice));
+//       return isWithinRange;
+//     });
+//     setFilteredData(filtered);
+//   };
+
+//   // Reset price filter
+//   const handleReset = () => {
+//     setStartPrice();
+//     setEndPrice();
+//     setFilteredData(data); // Reset to original data
+//   };
+
+//   const priceFilters = (
+//     <div style={{ padding: 10 }}>
+//       <div>
+//         <label>Start Price</label>
+//         <Input
+//           value={startPrice}
+//           onChange={(e) => setStartPrice(e.target.value)}
+//           prefix="₹"
+//           placeholder="Enter start price"
+//           type="number" // Set input type as number
+//           style={{ marginBottom: 8 }}
+//         />
+//       </div>
+//       <div>
+//         <label>End Price</label>
+//         <Input
+//           value={endPrice}
+//           onChange={(e) => setEndPrice(e.target.value)}
+//           prefix="₹"
+//           placeholder="Enter end price"
+//           type="number" // Set input type as number
+//           style={{ marginBottom: 8 }}
+//         />
+//       </div>
+//       <div style={{ display: "flex", justifyContent: "space-between" }}>
+//         <Button onClick={handleReset} size="small">
+//           Reset
+//         </Button>
+//         <Button onClick={handleApply} type="primary" size="small">
+//           OK
+//         </Button>
+//       </div>
+//     </div>
+//   );
+//   const columns = [
+//     {
+//       title: "Studio",
+//       dataIndex: "fullName",
+//       key: "fullName",
+//       sorter: (a, b) => handelShortbyClick(),
+//       render: (text, record) => (
+//         <div style={{ display: "flex", alignItems: "center" }}>
+//           <div className={style.studioImage}>
+//             {record.studioPhotos ? (
+//               <img
+//                 src={record.studioPhotos[0]}
+//                 alt=""
+//                 onError={(e) => {
+//                   e.target.src = imageNotFound;
+//                 }}
+//               />
+//             ) : (
+//               <img src={imageNotFound} alt="" />
+//             )}
+//           </div>
+//           &nbsp;&nbsp;
+//           <CopyToClipboard textToCopy={text} />
+//         </div>
+//       ),
+//     },
+//     {
+//       title: "Price",
+//       dataIndex: ["roomsDetails", "0", "pricePerHour"],
+//       key: "pricePerHour",
+//       filterDropdown: () => priceFilters, // Dropdown for custom price filter
+//       filterIcon: () => <DownOutlined />, // Filter icon
+//       render: (price) => (
+//         <span>
+//           ₹{price || "N/A"} <br />
+//           <small>per hour</small>
+//         </span>
+//       ),
+//     },
+//     {
+//       title: "Location",
+//       dataIndex: "address",
+//       key: "address",
+//       render: (address, record) => (
+//         <>
+//           <CopyToClipboard textToCopy={address} textLength={30} />
+//           <br />
+//           <small>
+//             <CopyToClipboard textToCopy={record.state} />
+//           </small>
+//         </>
+//       ),
+//       filters: [
+//         {
+//           text: "Mumbai",
+//           value: "mumbai",
+//         },
+//         {
+//           text: "Delhi",
+//           value: "Delhi",
+//         },
+//         {
+//           text: "Bangalore",
+//           value: "Bangalore",
+//         },
+//         {
+//           text: "Chennai",
+//           value: "Chennai",
+//         },
+//       ],
+//       filterMultiple: false,
+//       // specify the condition of filtering result
+//       // here is that finding the name started with `value`
+//       // onFilter: (value, record) =>
+//       //   console.log("valus is ", value, "record is ", record),
+
+//       // onFilter: (value, record) => (
+//       //   (sendFilterDataToapi.city = value), sendFilterDatatoapi()
+//       // ),
+//       reset: () => alert("Reset filters"),
+//     },
+//     {
+//       title: "No. of Rooms",
+//       dataIndex: "totalRooms",
+//       key: "totalRooms",
+//       filters: [
+//         {
+//           text: "1",
+//           value: "1",
+//         },
+//         {
+//           text: "2",
+//           value: "2",
+//         },
+//         {
+//           text: "3",
+//           value: "3",
+//         },
+//         {
+//           text: "4",
+//           value: "4",
+//         },
+//         {
+//           text: "5",
+//           value: "5",
+//         },
+//       ],
+//       filterMultiple: false,
+//       // specify the condition of filtering result
+//       // here is that finding the name started with `value`
+//       // onFilter: (value, record) => record.name.indexOf(value) === 0,
+//     },
+//     {
+//       title: "Created on",
+//       dataIndex: "creationTimeStamp",
+//       key: "creationTimeStamp",
+//       render: (timestamp) => moment(timestamp).format("Do MMM YY, hh:mm a"),
+//     },
+//     {
+//       title: "Activity Status",
+//       dataIndex: "isActive",
+//       key: "isActive",
+//       render: (isActive, record) => (
+//         <Switch
+//           status={record.isActive}
+//           isloading={pid === record._id && showloader}
+//           onClick={() => {
+//             setPid(record._id);
+//             handleSwitchChange(record._id);
+//           }}
+//           disabled={tableAccess?.["app&more"]?.action === "read"}
+//         />
+//       ),
+//       filters: [
+//         {
+//           text: "active",
+//           value: 1,
+//         },
+//         {
+//           text: "inactive",
+//           value: "0",
+//         },
+//       ],
+//       filterMultiple: false,
+//       // specify the condition of filtering result
+//       // here is that finding the name started with `value`
+//       // onFilter: (value, record) => record.name.indexOf(value) === 0,
+//     },
+
+//     {
+//       title: "   ",
+//       dataIndex: "",
+//       key: "",
+//       render: (_, record) => (
+//         <div>
+//           <Tooltip title="view">
+//             <GoEye
+//               style={{ cursor: "pointer" }}
+//               onClick={() => {
+//                 gotoShowStudioDetails(record._id);
+//               }}
+//             />
+//           </Tooltip>
+//           &nbsp; &nbsp;
+//           <Tooltip title="Edit">
+//             <MdEdit
+//               style={{ cursor: "pointer" }}
+//               onClick={() => {
+//                 gotoEdit(record._id);
+//               }}
+//             />
+//           </Tooltip>
+//           &nbsp; &nbsp;
+//           <Tooltip title="Delete">
+//             <RiDeleteBin5Fill
+//               style={{ cursor: "pointer", marginLeft: 8 }}
+//               onClick={() => console.log("Delete", record._id)}
+//             />
+//           </Tooltip>
+//         </div>
+//       ),
+//     },
+//   ];
 
 //   return (
 //     <>
-//       <div className={style.addNewStudioTitle}>Add New Services</div>
-//       <div className={style.addNewStudioPage}>
-//         <div style={{ height: "90%" }}>
-//           <div
-//             style={{
-//               position: showMode ? "relative" : "",
-//               overflow: "hidden",
-//             }}
-//           >
-//             {showMode ? <p className={style.showmode}></p> : ""}
-//             <div className={style.addNewStudioinputBox}>
-//               <label htmlFor="serviceName">Service Name</label>
-//               <input
-//                 type="text"
-//                 id="serviceName"
-//                 placeholder="Enter Service Name"
-//                 value={currentServiceData.name}
-//                 onChange={onNameChange}
-//               />
-//             </div>
+//       <div className={style.studioTabelDiv}>
+//         <DateAndSearchFilter
+//           setProducts={setProducts}
+//           setTotalPage={setTotalPage}
+//           bookingPageCount={bookingPageCount}
+//           filterNav={filterNav}
+//           setfilterNav={setfilterNav}
+//           sendFilterDataToapi={sendFilterDataToapi}
+//           setSelectedCity={setSelectedCity}
+//           setSelectedRoom={setSelectedRoom}
+//           setSelectedStatus={setSelectedStatus}
+//           setPriceFilter={setPriceFilter}
+//           setShortby={setShortby}
+//         />
+//         <div>
+//           <Table
+//             columns={columns}
+//             dataSource={products}
+//             rowKey="_id"
+//             pagination={false} // Disable Ant Design's default pagination
+//             onChange={handleTableChange}
+//             loading={loader}
+//           />
 
-//             {addMultiplePriceDiv.map((el, index) => (
-//               <div className={style.addPriceAndCountryInput}>
-//                 <div>
-//                   <select
-//                     name="price"
-//                     id=""
-//                     onChange={(e) => handleCountrySelect(e.target.value, index)}
-//                     value={selectedCountry[index]}
-//                     style={{
-//                       color: selectedCountry[index] ? "black" : "#757575",
-//                     }}
-//                   >
-//                     {selectedCountry[index] ? (
-//                       <option value={selectedCountry[index]}>
-//                         {selectedCountry[index]}
-//                       </option>
-//                     ) : (
-//                       <option value="" default>
-//                         select County
-//                       </option>
-//                     )}
-
-//                     {filteredCountryData.map((country, index) => {
-//                       if (!selectedCountry.includes(country)) {
-//                         return (
-//                           <option key={index} value={country}>
-//                             {country}
-//                           </option>
-//                         );
-//                       }
-//                     })}
-//                   </select>
-//                 </div>
-//                 {countryPrice.map((price, index) => {})}
-
-//                 <div>
-//                   <input
-//                     type="text"
-//                     placeholder="Enter Price"
-//                     onChange={(event) => {
-//                       handelCountryPrice(event.target.value, index);
-//                     }}
-//                     value={countryPrice[index]}
-//                   />
-//                 </div>
-//                 {addMultiplePriceDiv.length > 1 && (
-//                   <span
-//                     style={{ cursor: "pointer", top: "-15%", right: "-1.5%" }}
-//                     className={style.cancelTeamDetailUpload}
-//                     onClick={() => handleCancelcountry(index)}
-//                   >
-//                     <MdCancel
-//                       style={{ fontSize: "1.2vmax", color: "#7575759a" }}
-//                     />
-//                   </span>
-//                 )}
-//               </div>
-//             ))}
-
-//             {addMultiplePriceDiv.length <= 2 && (
-//               <span
-//                 className={style.addTeamDetailbtn}
-//                 onClick={handelMultipleCountryPriceDiv}
-//               >
-//                 <MdOutlineAddBox /> &nbsp;<div>Add new country</div>
-//               </span>
-//             )}
-
-//             <div className={style.addNewStudioinputBox2}>
-//               <label htmlFor="serviceDetails">Service Details</label>
-//               <textarea
-//                 type="text"
-//                 id="serviceDetails"
-//                 placeholder="Enter Service Details"
-//                 value={currentServiceData.about}
-//                 onChange={handleAboutChange}
-//               />
-//             </div>
-//           </div>
-
-//           <div>
-//             <DragAndDropImageDiv
-//               images={images}
-//               setImages={setImages}
-//               isEditMode={isEditMode}
-//             />
-//             <div className={style.addNewStudioinputBox}>
-//               <label htmlFor="Amenities">Amenities</label>
-
-//               <Select
-//                 id="Amenities"
-//                 mode="multiple"
-//                 placeholder="Select one or more Amenities"
-//                 value={selectedItems}
-//                 onChange={setSelectedItems}
-//                 // style={customStyles}
-//                 options={filteredOptions.map((item) => ({
-//                   value: item,
-//                   label: item,
-//                 }))}
-//               />
-//             </div>
-//           </div>
+//           {/* Your Custom Pagination Component */}
 //         </div>
 //       </div>
-//       <StudioFooter
-//         backOnclick={() => {
-//           setShowServices(false);
-//         }}
-//       />
+//       <div className={style.tabelpaginationDiv}>
+//         <PaginationNav
+//           pageCount={pageCount}
+//           totalPage={totalPage}
+//           setPageCount={setPageCount}
+//           bookingPageCount={pageSize} // Page size or items per page
+//         />
+//       </div>
 //     </>
 //   );
-// }
+// };
 
-// export default AddNewServices2;
+// export default AllStudioDetail2;

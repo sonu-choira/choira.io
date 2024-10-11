@@ -7,7 +7,9 @@ function ChoiraLoder2() {
   useEffect(() => {
     let abc = setTimeout(() => {
       setnoDataFound(true);
-    }, 3000);
+
+    }, 8000);
+
 
     return () => {
       clearTimeout(abc);
@@ -32,7 +34,7 @@ function ChoiraLoder2() {
             <img
               src={Loader}
               alt="choira loading"
-              style={{ height: "50px", width: "50px" }}
+              style={{ height: "100%", width: "100%" }}
             />
           </div>
         </span>

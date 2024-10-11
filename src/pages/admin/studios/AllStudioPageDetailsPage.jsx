@@ -24,6 +24,7 @@ import { useLocation } from "react-router-dom";
 import Appapi from "../../../services/appAndmoreApi";
 import appAndmoreApi from "../../../services/appAndmoreApi";
 import { partnerAccess } from "../../../config/partnerAccess";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 let sendFilterDataToapi = {
   minPricePerHour: "",
@@ -40,6 +41,8 @@ function AllStudioPageDetailsPage() {
   const [bookingPageCount, setBookingPageCount] = useState("c0");
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState();
+  const [totalResult, setTotalResult] = useState();
+  const [perPage, setPerPage] = useState(7);
   const [pageCount, setPageCount] = useState(1);
   const [filterNav, setfilterNav] = useState(false);
   const [showBtnLoader, setShowBtnLoader] = useState(false);
@@ -70,145 +73,135 @@ function AllStudioPageDetailsPage() {
   };
 
   let hasFilter = false;
+  const downloadServiceData = async (data) => {
+    const response = await appAndmoreApi.downloadServiceData(data);
+    return response;
+  };
 
-  useEffect(() => {
-    console.log("sendFilterDataToapi", sendFilterDataToapi);
-  }, [sendFilterDataToapi]);
+  const downloadData = async (data) => {
+    const response = await appAndmoreApi.downloadData(data);
+    return response;
+  };
 
-  let downloadAllData = () => {
+  const { mutate: downloadService, isLoading: isDownloadingService } =
+    useMutation(downloadServiceData, {
+      onSuccess: (response) => {
+        console.log("Service data download:", response);
+        setShowBtnLoader(false);
+      },
+      onError: (error) => {
+        console.error("Error downloading service data:", error);
+        setShowBtnLoader(false);
+      },
+    });
+
+  // Mutation for downloading general data
+  const { mutate: downloadGeneralData, isLoading: isDownloadingGeneral } =
+    useMutation(downloadData, {
+      onSuccess: (response) => {
+        console.log("General data download:", response);
+        setShowBtnLoader(false);
+      },
+      onError: (error) => {
+        console.error("Error downloading general data:", error);
+        setShowBtnLoader(false);
+      },
+    });
+
+  // Function to handle download logic
+  const downloadAllData = () => {
+    let tempData = { ...sendFilterDataToapi };
+
     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
-      // Corrected the id assignments
+      // Determine which data to fetch based on bookingPageCount
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
-      let tempData = { ...sendFilterDataToapi };
 
+      // Prepare data for download
       delete tempData.serviceType;
       tempData.type = idToUse;
+
       setShowBtnLoader(true);
-      appAndmoreApi
-        .downloadServiceData(tempData)
-        .then((response) => {
-          console.log("data download", response);
-          setShowBtnLoader(false);
-        })
-        .catch((error) => {
-          console.error("Error download studio:", error);
-          setShowBtnLoader(false);
-        });
+      downloadService(tempData); // Trigger service data download
     } else {
-      let tempData = { ...sendFilterDataToapi };
+      // Prepare data for general download
       delete tempData.sortBy;
       delete tempData.page;
+
       setShowBtnLoader(true);
-
-      appAndmoreApi
-        .downloadData(tempData)
-        .then((response) => {
-          setShowBtnLoader(false);
-
-          console.log("data download:", response);
-        })
-        .catch((error) => {
-          setShowBtnLoader(false);
-
-          console.error("Error filter studio:", error);
-        });
+      downloadGeneralData(tempData); // Trigger general data download
     }
   };
 
-  useEffect(() => {
-    console.log("bookingPageCount-----", bookingPageCount);
-    setProducts([]);
-    // checking if filter has any data
-    for (const key in sendFilterDataToapi) {
-      if (sendFilterDataToapi[key]) {
-        hasFilter = true;
-        break;
-      }
-    }
+  const queryClient = useQueryClient();
 
+  const fetchServiceData = async (
+    bookingPageCount,
+    pageCount,
+    sendFilterDataToapi
+  ) => {
     if (bookingPageCount === "c2" || bookingPageCount === "c3") {
-      // Corrected the id assignments
       const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
 
-      if (hasFilter) {
-        console.log("sendFilterDataToapi", sendFilterDataToapi);
-        // alert("filter");
+      if (
+        Object.keys(sendFilterDataToapi).some((key) => sendFilterDataToapi[key])
+      ) {
+        // If filters are applied
         sendFilterDataToapi.page = pageCount;
         sendFilterDataToapi.serviceType = idToUse;
-        appAndmoreApi
-          .filterServiceData(sendFilterDataToapi)
-          .then((response) => {
-            console.log("filter applied:", response);
-            setProducts(response.services.results);
-            setTotalPage(response.paginate.totalPages);
-            setfilterNav(true);
-          })
-          .catch((error) => {
-            console.error("Error filter studio:", error);
-          });
-      } else {
-        const idToUse = bookingPageCount === "c2" ? "c2" : "c3";
-        // alert("main");
 
-        Appapi.getServices("10", idToUse, 1, pageCount)
-          .then((response) => {
-            console.log(
-              `====================> response ${bookingPageCount}`,
-              response
-            );
-            if (response.status) {
-              setProducts(response.services.results);
-              console.log("lkasdnflkjsdnf", response.status);
-              setTotalPage(response.paginate.totalPages);
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching studios:", error);
-          });
+        const response = await appAndmoreApi.filterServiceData(
+          sendFilterDataToapi
+        );
+        return response;
+      } else {
+        const response = await Appapi.getServices("10", idToUse, 1, pageCount);
+        return response;
       }
     } else if (bookingPageCount === "c1") {
-      const limit = 64;
+      const perPage = 64;
       const active = 1;
-      // const type = bookingPageCount;
-      if (partnerAccess) {
-        hasFilter = false;
-      }
-      if (hasFilter) {
+
+      if (
+        Object.keys(sendFilterDataToapi).some(
+          (key) => sendFilterDataToapi[key]
+        ) &&
+        !partnerAccess
+      ) {
+        // If filters are applied
         delete sendFilterDataToapi.serviceType;
         sendFilterDataToapi.page = pageCount;
-        appAndmoreApi
-          .filterData(sendFilterDataToapi)
-          .then((response) => {
-            console.log("filter applied:", response);
-            setProducts(response.studios);
-            setTotalPage(response.paginate.totalPages);
-          })
-          .catch((error) => {
-            console.error("Error filter studio:", error);
-          });
-      } else {
-        Appapi.getStudios(limit, active, pageCount)
-          .then((response) => {
-            console.log(
-              `====================> response ${bookingPageCount}`,
-              response
-            );
-            console.log("response.data.studios", response.studios);
-            if (response.studios) {
-              setProducts(
-                partnerAccess ? response.allBookings : response.studios
-              );
-              setTotalPage(response.paginate.totalPages);
 
-              // setPageCount(response.paginate.page);
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching studios:", error);
-          });
+        const response = await appAndmoreApi.filterData(sendFilterDataToapi);
+        return response;
+      } else {
+        const response = await Appapi.getStudios(perPage, active, pageCount);
+        return response;
       }
     }
-  }, [bookingPageCount, pageCount]);
+  };
+
+  const { isLoading, isError, error } = useQuery(
+    ["services", bookingPageCount, pageCount, sendFilterDataToapi],
+    () => fetchServiceData(bookingPageCount, pageCount, sendFilterDataToapi),
+    {
+      keepPreviousData: true, // Keep the previous data while loading new data
+      onSuccess: (response) => {
+        if (response) {
+          if (bookingPageCount === "c2" || bookingPageCount === "c3") {
+            setProducts(response.services.results);
+          } else if (bookingPageCount === "c1") {
+            setProducts(
+              partnerAccess ? response.allBookings : response.studios
+            );
+          }
+          setTotalPage(response.paginate.totalPages);
+        }
+      },
+      onError: (error) => {
+        console.error("Error fetching data:", error);
+      },
+    }
+  );
   const pagetype = "apps";
 
   return (
@@ -236,7 +229,9 @@ function AllStudioPageDetailsPage() {
             pageCount={pageCount}
             bookingPageCount={bookingPageCount}
             filterNav={filterNav}
+            totalResult={totalResult}
             setfilterNav={setfilterNav}
+            perPage={perPage}
           />
         ) : // <AllStudioDetail />
         bookingPageCount === "c2" ? (
@@ -250,6 +245,8 @@ function AllStudioPageDetailsPage() {
             bookingPageCount={bookingPageCount}
             filterNav={filterNav}
             sendFilterDataToapi={sendFilterDataToapi}
+            totalResult={totalResult}
+            perPage={perPage}
           />
         ) : bookingPageCount === "c3" ? (
           <ASMixandMaster
@@ -262,6 +259,8 @@ function AllStudioPageDetailsPage() {
             bookingPageCount={bookingPageCount}
             filterNav={filterNav}
             sendFilterDataToapi={sendFilterDataToapi}
+            totalResult={totalResult}
+            perPage={perPage}
           />
         ) : (
           <Artist />
